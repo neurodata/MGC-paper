@@ -1,4 +1,4 @@
-Please see RDC.pdf for more explanation.
+The draft is named as RDC.pdf in the draft folder.
 
 
 TibsSimu2Dim is the Matlab code for the first numerical section in RDC.
@@ -8,9 +8,9 @@ canoncorr suppress the full-rank warning for the above two codes; but it is not 
 
 They are for the independence test of
 
-y=f(Ax)+eps,
+y=f(Cx)+eps,
 
-where f includes 10 types of functions, x is d*n, A is 1*d transformation, eps is 1*n white noise.
+where f includes 10 types of functions, x is d*n, C is 1*d transformation, eps is 1*n white noise.
 
 
 

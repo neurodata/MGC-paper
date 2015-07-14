@@ -1,6 +1,6 @@
-title: Two-Sample Testing for Everything
+title: Multimodal Two-Sample Testing
 
-authors: sigma(Cencheng Shen, cep, mauro, jovo)
+authors: sigma(Cencheng Shen, cep, mauro?, jovo)
 
 
 # Introduction
@@ -54,25 +54,48 @@ is 1/*n noise.
 ## Simulated Results
 
 
-### 1D Simulations
+### 1D Simulations, n=30, 50
 
-#### A)   for 1D simulations designed to highlight HHG, n=30 & 50:
+#### A)  no noise
 
-HHG \> rdcorr \> mdcorr, dcorr
+ * for 1D simulations designed to highlight HHG, n=30 & 50:
 
-#### B)   for the other 10 1D functions, for n=30 & 50
+$$
+HHG > rdcorr > mdcorr, dcorr
+$$
 
-rdcorr \\approx mdcorr,dcorr \> HHG
+ * for the other 10 1D functions, for n=30 & 50
+
+$$
+rdcorr \approx mdcorr,dcorr > HHG
+$$
+
+
+#### B)  additive noise
+
+?
+
+#### C)  multiplicative noise
+
+?
 
 ### n-D Simulations, n=50, d=1:500
 
-#### A)   for the nD settings, no noise,
+#### A)    no noise,
 
+$$
 rdcorr \approx mdcorr \> HHG
+$$
 
-#### B)   for the nD settings, multivariate noise, for n=50, d=1:500
+#### B)  additive  multivariate noise 
 
-rdcorr \>= mdcorr \> dcorr,HHG
+$$
+rdcorr \geq mdcorr \> dcorr,HHG
+$$
+
+#### C)  multiplicative  multivariate noise 
+
+??
 
 ### non-Euclidean settings
 
@@ -89,11 +112,14 @@ Real Data Results
 
 ####  A)  in real data setting of CxP we have
 
-p-value(rdcorr(k\*) \<\< p-value(rdcorr) \\approx p-value(HHG) \\approx 0.3 \<
-p-value(mdcorr/dcorr)
+$$
+pval(rdcorr(k\*) < pval(rdcorr) \approx pval(HHG) \approx 0.3 <
+pval(mdcorr/dcorr)
+$$
 
 ####  B)   in real data settings of shapes and diseases
 
+?
 
 # Discussion
 
@@ -103,7 +129,7 @@ p-value(mdcorr/dcorr)
 
 1. faster (approximate) algorithms
 
-1. choose optimal k-neighborhood, improve speed and perforamnce
+1. choose optimal k-neighborhood, improve speed and performance
 
 1.  address conditional dependencies
 

@@ -38,48 +38,38 @@ Simulated Results
 
 -   for 1D simulations designed to highlight HHG, n=30 & 50:
 
-$$
-HHG > rdcorr > mdcorr, dcorr
-$$
+>   HHG \> rdcorr \> mdcorr, dcorr
 
--  for the other 10 1D functions, for n=30 & 50
+-   for the other 10 1D functions, for n=30 & 50
 
-$$
-rdcorr \\approx mdcorr,dcorr > HHG
-$$
+rdcorr \\approx mdcorr,dcorr \> HHG
 
 ### n-D Simulations, n=50, d=1:500
 
--  for the nD settings, no noise,
+-   for the nD settings, no noise,
 
-$$
-rdcorr \approx mdcorr > HHG
-$$
+rdcorr \approx mdcorr \> HHG
 
--  for the nD settings, multivariate noise, for n=50, d=1:500
+-   for the nD settings, multivariate noise, for n=50, d=1:500
 
-$$
-rdcorr >= mdcorr > dcorr,HHG
-$$
+rdcorr \>= mdcorr \> dcorr,HHG
 
 ### for the settings in which only rdcorr makes sense,
 
--  graphs and covariates
+-   graphs and covariates
 
 **rdcorr works?**
 
--  shapes and disease
+-   shapes and disease
 
-$$rdcorr works?$$
+rdcorr works?
 
 Real Data Results
 -----------------
 
--  in real data setting of CxP we have
+-   in real data setting of CxP we have
 
-$$
 p-value(rdcorr(k\*) \<\< p-value(rdcorr) \\approx p-value(HHG) \\approx 0.3 \<
 p-value(mdcorr/dcorr)
-$$
 
--  in real data settings of shapes and diseases
+-   in real data settings of shapes and diseases

@@ -42,7 +42,7 @@ HHG \> rdcorr \> mdcorr, dcorr
 
 B)   for the other 10 1D functions, for n=30 & 50
 
-rdcorr \\approx mdcorr,dcorr \> HHG
+**rdcorr \\approx mdcorr,dcorr \> HHG**
 
 ### n-D Simulations, n=50, d=1:500
 

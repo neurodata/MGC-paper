@@ -36,11 +36,11 @@ Simulated Results
 
 ### 1D Simulations
 
--   for 1D simulations designed to highlight HHG, n=30 & 50:
+A)   for 1D simulations designed to highlight HHG, n=30 & 50:
 
->   HHG \> rdcorr \> mdcorr, dcorr
+HHG \> rdcorr \> mdcorr, dcorr
 
--   for the other 10 1D functions, for n=30 & 50
+B)   for the other 10 1D functions, for n=30 & 50
 
 rdcorr \\approx mdcorr,dcorr \> HHG
 

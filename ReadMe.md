@@ -21,36 +21,65 @@ Gaussian noise at d=1 (which is similar to the Tibs comments) 4) the 10 test
 with respect to Gaussian noise at d=300, which are not included in the pdf
 write-up yet.
 
- 
+Results
+=======
 
-1A) for 1D simulations designed to highlight HHG, n=30 & 50:
+Theoretical Results
+-------------------
 
-**HHG \> rdcorr \> mdcorr, dcorr**
+1.  rdcorr test stat = 0 iff F(XY) = F(X) F(Y)
 
-1B) for the other 10 1D functions, for n=30 & 50
+2.  dcorr is O(N\^2), HHG is O(N\^2 log N), rdcorr is ?  
 
-**rdcorr \\approx mdcorr,dcorr \> HHG**
+Simulated Results
+-----------------
 
-2A) for the nD settings, no noise, for n=50, d=1:500
+### 1D Simulations
 
-**rdcorr \\approx mdcorr \> HHG**
+-   for 1D simulations designed to highlight HHG, n=30 & 50:
 
-2B) for the nD settings, multivariate noise, for n=50, d=1:500
+$$
+HHG > rdcorr > mdcorr, dcorr
+$$
 
-**rdcorr \>= mdcorr \> dcorr,HHG**
+-  for the other 10 1D functions, for n=30 & 50
 
-3A) for the settings in which only rdcorr makes sense, eg, graphs and covariates
+$$
+rdcorr \\approx mdcorr,dcorr > HHG
+$$
+
+### n-D Simulations, n=50, d=1:500
+
+-  for the nD settings, no noise,
+
+$$
+rdcorr \approx mdcorr > HHG
+$$
+
+-  for the nD settings, multivariate noise, for n=50, d=1:500
+
+$$
+rdcorr >= mdcorr > dcorr,HHG
+$$
+
+### for the settings in which only rdcorr makes sense,
+
+-  graphs and covariates
 
 **rdcorr works?**
 
-3B) for another setting in which only rdocrr makes sense, eg, shapes and
-covariates (not sure we need this)
+-  shapes and disease
 
-**rdcorr works?**
+$$rdcorr works?$$
 
-4A) in real data setting of CxP we have
+Real Data Results
+-----------------
 
-**p-value(rdcorr(k\*) \<\< p-value(rdcorr) \\approx p-value(HHG) \\approx 0.3 \<
-p-value(mdcorr/dcorr)**
+-  in real data setting of CxP we have
 
-4B) in real data settings of shapes and diseases
+$$
+p-value(rdcorr(k\*) \<\< p-value(rdcorr) \\approx p-value(HHG) \\approx 0.3 \<
+p-value(mdcorr/dcorr)
+$$
+
+-  in real data settings of shapes and diseases

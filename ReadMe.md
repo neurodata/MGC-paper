@@ -185,6 +185,9 @@ Extensions
 
 3.  address conditional dependencies
 
+4.  incorporate  "Modified distance covariance statistics" from Szekeley et al, 2013 to work in metric data, which might be better?
+
+
 Appendix
 ========
 

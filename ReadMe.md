@@ -41,7 +41,7 @@ $$
 y=f(Cx)+eps,
 $$
 
-where f includes 10+ types of functions, x is $d \times n$, C is $1\times d$
+where f includes 20 types of functions, x is $d \times n$, C is $1\times d$
 transformation, eps is 1/\*n noise.
 
 
@@ -92,7 +92,7 @@ Theoretical Results
 
 1.  rdcorr test stat = 0 iff F(XY) = F(X) F(Y)
 
-2.  dcorr is O(N\^2), HHG is O(N\^2 log N), rdcorr is ?  
+2.  dcorr is O(N\^2), HHG is O(N\^2 log N), rdcorr is O(N\^2 log N), 
 
 Simulated Results
 -----------------
@@ -199,21 +199,33 @@ Proof 2
 
 etc.
 
-Other Misc Notes
+Cencheng's Temporary Notes
 ================
 
-The draft is named as RDC.pdf in the draft folder.
+The draft is named as RDC.pdf in the draft folder, which is not yet updated.
 
-TibsSimu2Dim is the Matlab code for the first numerical section in RDC.
-TibsSimu2Noise is the Matlab code for the second numerical section in RDC.
-canoncorr suppress the full-rank warning for the above two codes; but it is not
-really used to compare rankdCorr and dCorr.
+The data folder includes:
 
-The pdf and the figures include 1) the 10 tests with respect to dimension from
-d=1:1000 without noise (a noisy version looks similar), 2) the 10 test with
-respect to Gaussian noise at d=500,
+CorrIndTest is the main Matlab code for independence test at fixed dimension and increasing sample size. It returns the testing powers for dCorr, rank dCorr, modified dCorr, and HHG, which are implemented separately.
 
-for comparison, the figures further include 3) the 10 test with respect to
-Gaussian noise at d=1 (which is similar to the Tibs comments) 4) the 10 test
-with respect to Gaussian noise at d=300, which are not included in the pdf
-write-up yet.
+CorrPermTest is the main Matlab code for permutation test at fixed dimension and increasing sample size. It returns the p-value. (The figures are not included yet)
+
+CorrIndTestDim is the Matlab code for independence test at fixed sample size and increasing dimension.
+
+CorrIndTestNoise is the Matlab code for independence test at fixed sample size & dimension with increasing noise.
+
+The subfolders in the data folder contain the figures for the respective tests. CorrPermTest & CorrIndTestNoise plots will be included later.
+
+
+Numerical Summary:
+
+The code includes 20 simulation types, including 10 similar to Tibshirani comment 2011 (some of them are in high-dimensional setting), 7 from Wikipedia correlation figure/Heller 2012 Table 3, and 3 from Szeley 2007 example 1-3. 
+All numerical plots are very comparable to existing plots from the above papers, though the exact experiment set-up is a bit different.
+
+In our numerical experiments, rank dCorr shows robust performance against high-dimensional data and nonlinear data, which usually attains close to optimal powers among all 4 statistics, if not the best. 
+
+For rank dCorr, Type 13/20 are the only two cases where rank dCorr appears significantly lower than the best statistic; but rank dCorr is still much better than dCorr/modified dCorr in those two cases
+
+HHG appears to work well for nonlinear data, but it is usually the worst statistic for high-dimensional data. Examples include type 1-3, 8-9, as well as type 18, which is a simple joint normal distribution.
+
+dCorr and modified dCorr usually perform well for high-dimensional data and linear relationship, but not so much when nonlinearity comes into play. They perform significantly worse than rank dCorr and HHG in type 4-7, type 10-16, type 19-20.

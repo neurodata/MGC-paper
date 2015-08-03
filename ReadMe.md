@@ -172,7 +172,7 @@ Summary
 Related Work
 ------------
 
-[@Heller12]
+[@Heller2012, @Josee2014]
 
  
 

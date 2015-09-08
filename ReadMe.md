@@ -220,12 +220,15 @@ The subfolders in the data folder contain the figures for the respective tests. 
 Numerical Summary:
 
 The code includes 20 simulation types, including 10 similar to Tibshirani comment 2011 (some of them are in high-dimensional setting), 7 from Wikipedia correlation figure/Heller 2012 Table 3, and 3 from Szeley 2007 example 1-3. 
+
 All numerical plots are very comparable to existing plots from the above papers, though the exact experiment set-up is a bit different.
 
-In our numerical experiments, rank dCorr shows robust performance against high-dimensional data and nonlinear data, which usually attains close to optimal powers among all 4 statistics, if not the best. 
+Folder '1' is for CorrIndTest, including 20 simulation types for increasing sample size at fixed dimension m. It compares rank dcorr with knn, dcorr, mdcorr, and HHG. It also plots the performance profile at n=40 for all simulations (m is different though), clearly rdcorr is the best.
 
-For rank dCorr, Type 13/20 are the only two cases where rank dCorr appears significantly lower than the best statistic; but rank dCorr is still much better than dCorr/modified dCorr in those two cases
+Folder '1 with neighbor' is based on the same results, but plots the power with respect to increasing neighborhood at fixed n and fixed dimension. We observe that for linear datasets the optimal k=n-1, and for nonlinear datasets the optimal k<n-1.
 
-HHG appears to work well for nonlinear data, but it is usually the worst statistic for high-dimensional data. Examples include type 1-3, 8-9, as well as type 18, which is a simple joint normal distribution.
+Folder '2' and '2 with neighbor repeats the same plots', but add knn to dcorr and mdcorr as well. We can see mdcorr is comparable to rdcorr this time, both are better than dcorr and HHG. Two performance profiles are n=40 and n=n_{max}/2 are provided. In this sense, if we cannot work out the consistency of rdcorr, mdcorr with knn is still a method with theoretical consistency and huge performance improvement; although the emphasize of the paper may be different if we chose to go that route.
 
-dCorr and modified dCorr usually perform well for high-dimensional data and linear relationship, but not so much when nonlinearity comes into play. They perform significantly worse than rank dCorr and HHG in type 4-7, type 10-16, type 19-20.
+For RealData1, it includes the p-value for Brain CxP, and Shape vs Disease. Clearly rdcorr is the superior method.
+
+For RealData2, it considers dcorr and mdcorr with knn again. All three methods perform quite well now, although rdcorr is still the only method of significance for brain CxP. 

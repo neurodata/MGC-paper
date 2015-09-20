@@ -11,9 +11,9 @@ for i=1:n
     mX(i,i)=0;
     mY(i,i)=0;
 end
-VXY=abs(sum(sum(mX.*(mY))));
-VXX=abs(sum(sum(mX.*(mX))));
-VYY=abs(sum(sum(mY.*(mY))));
+VXY=(sum(sum(mX.*(mY))));
+VXX=(sum(sum(mX.*(mX))));
+VYY=(sum(sum(mY.*(mY))));
 meanX=sum(sum(X))/n^2;
 meanY=sum(sum(Y))/n^2;
 for i=1:n

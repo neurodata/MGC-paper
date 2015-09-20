@@ -3,12 +3,13 @@ function corr = HHG(X,Y) %calculate HHG statistic
 % Implements the HHG statistic from Heller 2012
 n=size(X,1);
 S=zeros(n,n);
+
 for i=1:n
     for j=1:n
         if (j~=i)
             tmp1=(X(i,:) <= X(i,j));
             tmp2=(Y(i,:) <= Y(i,j));
-            t11=sum(tmp1.*tmp2);
+            t11=sum(tmp1.*tmp2)-2;
             t12=sum(tmp1.*(1-tmp2));
             t21=sum((1-tmp1).*tmp2);
             t22=sum((1-tmp1).*(1-tmp2));
@@ -19,4 +20,5 @@ for i=1:n
         end
     end
 end
+
 corr=sum(sum(S)); %HHG is always non-negative

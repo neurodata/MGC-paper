@@ -6,4 +6,8 @@ H=eye(n)-(1/n)*ones(n,n);
 X=H*X*H;
 Y=H*Y*H;
 corr=sum(sum(X.*(Y)));  %dist covariance is always non-negative
-corr=sqrt(corr/(norm(X,'fro')*norm(Y,'fro')));
+if corr<0
+    corr=0;
+else
+    corr=sqrt(corr/(norm(X,'fro')*norm(Y,'fro')));
+end

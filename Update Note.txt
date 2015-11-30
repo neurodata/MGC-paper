@@ -1,0 +1,11 @@
+Updated 11/30:
+
+All matlab code and data are updated; mantel test is now included as a benchmark.
+
+The tex & figure contains all tex files (including the main paper, appendix, and a presentation slides), 
+the bib database I use, and updaed figures.
+
+The draft folder contains the generated pdfs.
+
+TBA:
+R code

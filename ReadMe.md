@@ -1,11 +1,11 @@
-title: Multimodal Two-Sample Testing authors: sigma(Cencheng Shen, cep, mauro,
-jovo)
+---
+title: Local Independence Testing
+author: sigma(Cencheng Shen, cep, mauro, jovo)
+---
 
 # Abstract
 
-
 Understanding and discovering dependence between multiple properties or measurements of our world is a fundamental task not just in science, but also policy, commerce, and other domains. In the past hundred years, people have developed many different measures of dependence that can be applied in a wide variety of settings.  An ideal dependence measure would have the following properties. (1) Strong theoretical support, guaranteeing rejecting independence no matter what the dependence structure is. (2) Strong empirical support on a wide variety of low- and high-dimensional simulation settings. (3) Provides insight into the local scale in which dependency is strongest. (4) Detects dependence when it exists, and fails to detect dependence when it does not exist, on real data. No existing test satisfies all of these properties. We develop a novel dependence statistic and test called "Local Graph Dependence" that does. We can therefore use this test in a variety of settings in which previous tests failed to detect signal or provide insight.
-
 
 # Outline
 

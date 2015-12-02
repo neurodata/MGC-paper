@@ -1,8 +1,56 @@
-title: Multimodal Two-Sample Testing authors: sigma(Cencheng Shen, cep, mauro?,
+title: Multimodal Two-Sample Testing authors: sigma(Cencheng Shen, cep, mauro,
 jovo)
 
-Introduction
-============
+# Abstract
+
+
+Understanding and discovering dependence between multiple properties or measurements of our world is a fundamental task not just in science, but also policy, commerce, and other domains. In the past hundred years, people have developed many different measures of dependence that can be applied in a wide variety of settings.  An ideal dependence measure would have the following properties. (1) Strong theoretical support, guaranteeing rejecting independence no matter what the dependence structure is. (2) Strong empirical support on a wide variety of low- and high-dimensional simulation settings. (3) Provides insight into the local scale in which dependency is strongest. (4) Detects dependence when it exists, and fails to detect dependence when it does not exist, on real data. No existing test satisfies all of these properties. We develop a novel dependence statistic and test called "Local Graph Dependence" that does. We can therefore use this test in a variety of settings in which previous tests failed to detect signal or provide insight.
+
+
+# Outline
+
+GAP: It is easy to collect many different measurements/views/features on different datasets, such as height & weight, genome & personality, structural & functional connectome. 
+Lots of work on independence tests, including tests that work on linear data, nonlinear data, and high-dimensional data.
+However, there is no test that has all the following properties:
+A. strong theoretical support
+B. empirically outperforms others on low-dimensional settings
+C. empirically outperforms others on high-dimensional settings
+D. provides insight into local structure of data.
+E. empirically outperforms other stuff on real data
+
+
+CLAIM: we have a test  that satisfies A-E.
+
+Figure 1: On 20 different simulation settings, using the exact parameters proposed in previous papers, our method empirically achieves as high or higher power than competing approaches for nearly all sample sizes on nearly all problems (CLAIM B).
+
+Figure 2: Quantitatively evaluating the performance of the various algorithms on the 20 benchmarks into a single number, it is clear that our method is overall much better, both (A) for a given sample size for 1D,  (B) across all sample sizes for 1D (CLAIM B), (C) for all dimensions for fixed sample size, and all dimensions and all sample sizes (CLAIM C).
+
+Figure 3: On the "same" 20 different simulation settings, but now increasing the dimensionality from 1 up to 1000, our method empirically achieves as high or higher power than competing approaches for nearly all dimensions on nearly all problems (CLAIM C).
+
+Figure 4: For each of the 20 different simulations, our method (and only our method) provides an estimate of the local scales that encodes the dependence structure.
+
+Figure 5:  On 4 different real data examples, our methods achieves the expected outcome, whereas the others do not.  This means obtaining a significant p-value on 3 settings where we expect dependence should exist (but had never previously been detected), and a 4th where we expect it should not (but previous tests indeed detected a signal). (CLAIM D)
+
+Supp Figure 1: workflow
+Supp Figure 2: Example of 100 samples from the 20 different functions (1D variants) for visualization purposes.
+
+Each figure has a single declarative sentence with a verb that establishes what that figure offers to the world.
+
+# Results Subsection Titles:
+
+## Theoretical Claims
+
+## 1D Simulation Results
+
+## High-dimensional Simulation Results
+
+## Local Structure
+
+## Benchmark Data
+
+
+
+# Introduction
 
 -   **O** - Information age, lots of data, lots of questions. Data are often
     high-dimensional or non-Euclidean. Often want to test whether one
@@ -84,11 +132,11 @@ for all i in [n]
 end
 ````
 
-Results
-=======
+# Results
 
-Theoretical Results
--------------------
+
+## Theoretical Results
+
 
 1.  rdcorr test stat = 0 iff F(XY) = F(X) F(Y)
 

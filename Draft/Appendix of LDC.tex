@@ -58,7 +58,7 @@ Local distance correlation is consistent for testing independence against all al
 \begin{proof}
 The power of local distance correlation satisfies
 \begin{equation}
-\beta=\max_{k,l}\{\beta(dCorr_{kl}), k,l\in [1,\ldots,n]\} \geq \beta(dCorr_{n}).
+\beta=\max_{k,l}\{\beta(dCorr_{kl}), k,l\in [2,\ldots,n]\} \geq \beta(dCorr_{n}).
 \end{equation}
 
 When testing independence against any alternative, as $n \rightarrow \infty$ we have $\beta(dCorr_{n}) \rightarrow 1$ by \cite{SzekelyRizzoBakirov2007}. It follows that $\beta \rightarrow 1$, and local distance correlation is also consistent.
@@ -66,7 +66,7 @@ When testing independence against any alternative, as $n \rightarrow \infty$ we 
 Note that local modified distance correlation $\{mdCorr_{kl}\}$ is also consistent, by the consistency of global modified distance correlation in \cite{SzekelyRizzo2013a}.
 \end{proof}
 
-Next we prove a number of useful propositions for local distance correlation.
+Next we prove a number of useful propositions for local distance correlation. In particular, proposition 1-4 indicate that one should fix neighborhood ratio $(\frac{k}{n},\frac{l}{n})$ rather than neighborhood size $(k,l)$ when determining the optimal neighborhood.
 \begin{prop}
 \label{prop1}
 1. For any $k,l$ we have
@@ -238,7 +238,7 @@ Suppose $Y=cX$ for a non-zero scalar $c$, then for any $n$ we always have
 \label{equ1}
 \beta(dCorr_{n}) \geq \beta(dCorr_{kl})
 \end{equation}
-for all $k,l=1,\ldots,n$, where $\beta$ is the permutation test power at a given type $1$ error $\alpha$.
+for all $k,l=2,\ldots,n$, where $\beta$ is the permutation test power at a given type $1$ error $\alpha$.
 
 Thus local distance correlation is no better than global distance correlation under linear dependency.
 \end{thm}
@@ -273,24 +273,22 @@ for some $(k,l) \neq (n,n)$, where $\beta$ is the permutation test power at the 
 Thus local distance correlation can be better than global distance correlation under certain nonlinear dependency.
 \end{thm}
 \begin{proof}
-We give a simple discrete example of $f_{XY}$ at $n=5$ such that the p-value of $dCov_{kl}$ for $(k,l) \neq (n,n)$ is always lower than the p-value of $dCov_{n}$, which is equivalent to say the permutation test power $\beta(dCov_{n})$ is smaller than $\beta(dCov_{kl})$ at an appropriate type $1$ error level $\alpha$.
+We give a simple discrete example of $f_{XY}$ at $n=6$ such that the p-value of $dCov_{kl}$ for $(k,l) \neq (n,n)$ is always lower than the p-value of $dCov_{n}$, which is equivalent to say the permutation test power $\beta(dCov_{n})$ is smaller than $\beta(dCov_{kl})$ at an appropriate type $1$ error level $\alpha$.
 
 Suppose under the alternative, $f_{XY}$ is distributed as follows:
 \begin{align*} 
-X &\in \{-1,-0.5,0,0.5,1\} \mbox{ without replacement}, \\
+X &\in \{-1,-0.6,-0.2,0.2,0.6,1\} \mbox{ without replacement}, \\
 Y &= X^2,
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-In this example we can easily consider all possibilities of $A^{H}_{ij}$ and $B^{H}_{ij}$, and calculate $dCov_{kl}(\mathcal{X}, \mathcal{Y})$ and $\{dCov_{kl}(\mathcal{X}, \mathcal{Y}P)\}$ for all $k,l=1,\ldots,5$ and all permutation matrices. It follows that $dCov_{5}(\mathcal{X}, \mathcal{Y})=\frac{7}{5}$, $dCov_{15}(\mathcal{X}, \mathcal{Y})=\frac{47}{25}$, and similarly all possible permuted test statistics.
+In this example we can easily consider all possibilities of $A^{H}_{ij}$ and $B^{H}_{ij}$, and calculate $dCov_{kl}(\mathcal{X}, \mathcal{Y})$ and $\{dCov_{kl}(\mathcal{X}, \mathcal{Y}P)\}$ for all $k,l=2,\ldots,6$ and all permutation matrices. For example, $dCov_{6}(\mathcal{X}, \mathcal{Y})=\frac{128}{75}$, $dCov_{26}(\mathcal{X}, \mathcal{Y})=\frac{399}{212}$, and similarly all possible permuted test statistics. It follows that the p-value of $dCov_{26}$ is $\frac{4}{15}$, while the p-value of $dCov_{6}$ is $\frac{53}{90}$. 
 
-Then the p-value of $dCov_{15}$ is $0.3$, while the p-value of $dCov_{5}$ is $23/30$. 
+Note that although the p-value of $dCov_{kl}$ is less than $dCov_{n}$ in the above example, neither p-value are very significant. In fact, we can always consider equally spaced sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with smaller p-values. Say at $n=9$, the p-value of $dCov_{29}$ is $0.056$ while the p-value of $dCov_{9}$ is $0.4264$. But the computation of all possible permuted test statistics becomes much more time-consuming as $n$ increases, and only approximate p-values can be derived with random permutations for larger $n$.
 
-Note that although the p-value of $dCov_{kl}$ is less than $dCov_{n}$ in the above example, neither p-value are very significant. In fact, we can always consider equally spaced sample points in $[-1,1]$ for $X$, then increase $n$ and reach the same conclusion with smaller p-values. For example, at $n=8$, the p-value of $dCov_{18}$ equals $\frac{3}{70}$ while the p-value of $dCov_{8}$ is $\frac{317}{630}$, so the former is significant at level $0.05$ while the latter is not. But the computation of all possible permuted test statistics becomes much more time-consuming as $n$ increases.
+Therefore we have an example of $f_{XY}$ and $n$ such that $\beta(dCov_{n}) < \beta(dCov_{kl})$ for some $(k,l) \neq (n,n)$: by choosing $\alpha=0.3$, at $n=6$ we have $0=\beta(dCov_{6}) < \beta(dCov_{26})=1$; by choosing $\alpha=0.06$, at $n=9$ we have $0=\beta(dCov_{9}) < \beta(dCov_{29})=1$; 
 
-Therefore we have an example of $f_{XY}$ and $n$ such that $\beta(dCov_{n}) < \beta(dCov_{kl})$ for some $(k,l) \neq (n,n)$: by choosing $\alpha=0.3$, at $n=5$ we have $0=\beta(dCov_{5}) < \beta(dCov_{15})=1$; and similarly at $n=8$ we also have $0=\beta(dCov_{8}) < \beta(dCov_{18})=1$ at $\alpha=0.05$.
-
-It follows that Equation~\ref{equ2} holds by Proposition 6), and local distance correlation $\{dCorr_{kl}\}$ can be better than the global distance correlation $dCorr_{n}$ under certain nonlinear dependency. 
+It follows that Equation~\ref{equ2} holds by Proposition 6), since local distance correlation is equivalent to local distance covariance in the permutation test. Thus local distance correlation $\{dCorr_{kl}\}$ can be better than the global distance correlation $dCorr_{n}$ under certain nonlinear dependency. 
 \end{proof}
 
 \section{Simulations Set-Up}
@@ -344,19 +342,33 @@ The noiseless distribution for each type is listed below, where we may use $Z, U
 
 For each distribution, $X$ and $Y$ are dependent under the alternative (except type 17). By generating the sample data and calculating the sample test statistic for sufficiently many Monte-Carlo replicates, we obtain the empirical distribution of the test statistic under the alternative. For the empirical distribution under the null, we first generate $(X,Y)$ by the same joint distribution, then independently generate $X'$ by the same marginal distribution, followed by calculating the test statistic between $(X',Y)$. Since $X'$ distributes the same as $X$, the independence test is an approximation of the permutation test.
 
-Note that in the simulation code, appropriate level of white noise may be added to $Y$ so that it is more difficult to test independence on the sample data sets. This is because in the absence of noise, certain dependency such as linear at dimension $1$ is very easy to be detected: the testing power of all methods is $1$ at very small $n$, and we cannot meaningfully compare the methods
+Note that in the simulation code, appropriate level of white noise may be added to $Y$ so that it is more difficult to test independence on the sample data sets. This is because in the absence of noise, certain dependency such as linear at dimension $1$ is very easy to be detected: the testing power of all methods is $1$ at very small $n$, and we cannot meaningfully compare the methods.
 
-Also note that for the performance profiles in the simulation, we have chosen two thresholds $0.8$ and $0.5$ for both scenarios to illustrate the advantage of local distance correlation. The same advantage in fact holds for any other threshold choices as well, and in Figure~\ref{figSim4} we plot the area under curve of performance profiles against the threshold choice, i.e., the threshold $0.8$ and $0.5$ in both scenarios now take value from $0$ to $1$, and we calculate the performance profiles and take their AUC as the y-axis. This figure yields a similar interpretation as the performance profiles figure in the main paper, i.e., local distance correlation significantly improves over global distance correlation, and local modified distance correlation is the most reliable method.
+To see that local distance correlation are strongly dependent for adjacent neighbors, in Figure~\ref{figSim2} we show how the powers of local distance correlation change with respect to increasing neighborhood $k$, by plotting $\max_{l=2,\ldots,n} \{\beta(dCorr_{kl})\}$ as the y-axis for each $k$. They are plotted at a fixed sample size and a fixed dimension for the two scenarios in the main paper, using the same thresholds as the performance profiles figure there. Clearly for consecutive neighborhoods, the testing powers are very close to each other, which is also the case if we instead plot the powers with respect to neighborhood $l$, or look at the surface plot. This implies that it is usually fine when a sub-optimal neighborhood choice is picked (say it is determined by minimizing the p-value from a permutation test), because such a choice is likely close to the optimal choice and still yields very good testing power.
+
+For the performance profiles in the simulation, we have chosen two thresholds $0.8$ and $0.5$ for both scenarios to illustrate the advantage of local distance correlation. The same advantage in fact holds for any other threshold choices as well, and in Figure~\ref{figSim4} we plot the area under curve of performance profiles against the threshold choice, i.e., the threshold $0.8$ and $0.5$ in both scenarios now take value from $0$ to $1$, and we calculate the performance profiles and take their AUC as the y-axis. This figure yields a similar interpretation as the performance profiles figure in the main paper, i.e., local distance correlation significantly improves over global distance correlation, and local modified distance correlation is the most reliable method.
 
 \begin{figure}[htbp]
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{Fig4}
+\includegraphics[width=1.0\textwidth]{../Figures/Fig2}
 }
 \hfil
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{Fig8}
+\includegraphics[width=1.0\textwidth]{../Figures/Fig6}
 }
-\caption{Performance Profiles AUC Summary for 20 Simulations}
+\caption{Testing Power for 20 Simulations with respect to Increasing Neighborhoods}
+\label{figSim2}
+\end{figure}
+
+\begin{figure}[htbp]
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/Fig4}
+}
+\hfil
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/Fig8}
+}
+\caption{Area under Curve of Performance Profiles for 20 Simulations}
 \label{figSim4}
 \end{figure}
 

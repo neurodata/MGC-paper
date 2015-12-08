@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx,psfrag,epsf}
@@ -10,17 +10,36 @@
 \usepackage{subfig}
 \usepackage{authblk}
 \usepackage{verbatim} %used to comment out unnecessary contents
+\usepackage{helvet}
+\usepackage{fullpage,fancyhdr}
+\renewcommand{\familydefault}{\sfdefault}
 
 %\pdfminorversion=4
 % NOTE: To produce blinded version, replace "0" with "1" below.
 \newcommand{\blind}{0}
 
-% DON'T change margins - should be 1 inch all around.
-\addtolength{\oddsidemargin}{-.5in}%
-\addtolength{\evensidemargin}{-.5in}%
-\addtolength{\textwidth}{1in}%
-\addtolength{\textheight}{-.3in}%
-\addtolength{\topmargin}{-.8in}%
+% % DON'T change margins - should be 1 inch all around.
+% \addtolength{\oddsidemargin}{-.5in}%
+% \addtolength{\evensidemargin}{-.5in}%
+% \addtolength{\textwidth}{1in}%
+% \addtolength{\textheight}{-.3in}%
+% \addtolength{\topmargin}{-.8in}%
+
+
+\pagestyle{fancy}
+% \oddsidemargin=-0.5in 
+% \evensidemargin=-0.5in
+\textwidth=6.5in 
+\headwidth=6.5in
+\textheight=9.0in 
+\headheight=0.0pt
+\topmargin=0.0in
+\headsep=0.0in
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
 
 %environment
 \newtheorem{thm}{Theorem}
@@ -68,7 +87,14 @@ Many recent methods have been proposed to identify the existence of potential re
 
 Despite of current progress in the area, it remains a difficult problem to test dependency on real data; and even the best method in theory may suffer from one or more real challenges underlying the data, such as small sample size, high dimensionality, non-linearity, noise, etc. For example, although distance correlation is consistent against all alternatives for testing independence on Euclidean data, the sample distance correlation (dcorr) under-performs in many high-dimensional or non-linear dependencies for finite-sample testing. The modified distance correlation (mcorr) from \cite{SzekelyRizzo2013a} adjusts the high-dimensional bias, but is still sub-optimal for non-linear dependencies. In comparison, the HHG statistic developed in \cite{HellerGorfine2013} performs much better for testing on non-linear data of small sample size, but it may lose some testing power for linear and high-dimensional dependency.
 
-In a complementary literature, nearest-neighbor graphs have been used as a key computational primitive in many statistical approaches, ranging from classification and regression \cite{Stone1970} to data compression to recommender systems \cite{Sarwar2000}. Most relevant to our work, a number of approaches to two-sample and dependence testing have utilizing nearest-beighbor graphs \cite{David1966,Friedman1983,Schilling1986,Dumcke2014}.  These approaches have the advantage of naturally operating on any kind of data, including categorical and structured data, as well as strong theoretical guarantees.  Perhaps more importantly, they focus only on local distances, rather than global distances, enabling them to be robust to nonlinear and high-dimensional dependence structures.  However, none of the previous nearest-neighbor based methods provided an automatic method for choosing the neighborhood size, therefore leaving a crucial tuning parameter unspecified, and impairing its finite sample performance. Moroever, they largely focused on two-sample testing, rather than dependence testing.  
+In a complementary literature, nearest-neighbor graphs have been used as a key computational primitive in many statistical approaches, ranging from classification and regression \cite{Stone1970} to data compression to recommender systems \cite{Sarwar2000}. 
+More recently, nearest-neighbor has been an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap in \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, LLE in \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps in \cite{BelkinNiyogi2003}, among many others. Furthermore, we have successfully applied joint neighborhood to unfold the non-linearity in multiple data sets in \cite{ShenVogelsteinPriebe2015}, which shows that a good choice of joint neighborhood can better match the nonlinear data sets. 
+
+
+Most relevant to our work, a number of approaches to two-sample and dependence testing have utilizing nearest-beighbor graphs \cite{David1966,Friedman1983,Schilling1986,Dumcke2014}.  These approaches have the advantage of naturally operating on any kind of data, including categorical and structured data, as well as strong theoretical guarantees.  Perhaps more importantly, they focus only on local distances, rather than global distances, enabling them to be robust to nonlinear and high-dimensional dependence structures.  However, none of the previous nearest-neighbor based methods provided an automatic method for choosing the neighborhood size, therefore leaving a crucial tuning parameter unspecified, and impairing its finite sample performance. Moroever, they largely focused on two-sample testing, rather than dependence testing.  
+
+
+% Our local distance correlation shares a similar concept: by considering the inter-point distances limited to the $k$-nearest points, the local test statistic is naturally more informative than the global statistic for nonlinear dependency; while for close to linear dependency, the global statistic should still be the best.
 
 
 In this paper we propose graph correlation (GC), in order to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the local test statistic naturally inherits the advantages of the  distance correlation, such as being consistent, but also inherits properties of graph dependence structures, such as robustness in high-dimensional dependency.  
@@ -78,68 +104,13 @@ LDC significantly improves the finite-sample testing power over dcorr, for testi
 
 % The paper is organized as follows: Section~\ref{main1} reviews the original distance correlation and the modified distance correlation. In Section~\ref{main2} we formulate the local distance correlation for both the original distance correlation and the modified distance correlation. Section~\ref{main3} discusses the evaluation procedure of testing independence, and in Section~\ref{main4} we show some theoretical advantages of local distance correlation. The simulation results are shown in Section~\ref{numer1} to demonstrate the numerical advantages of the local test statistic in various simulated relationships, and Section~\ref{numer2} illustrates its performance on real data sets. We conclude the paper in Section~\ref{conclu}, with proofs, additional propositions, and detailed simulation settings included in the appendix. The Matlab/R code for our method and the simulation is available on github\footnote{\url{https://github.com/jovo/RankdCorr/}}. 
 
-\section{Distance Correlation}
-\label{main}
-\subsection{Global Distance Correlation}
-\label{main1}
-Suppose we are given two data sets $\mathcal{X}=[X_{1},\cdots, X_{n}] \in \mathcal{R}^{m_{X} \times n}$ and $\mathcal{Y}=[Y_{1},\cdots, Y_{n}] \in \mathcal{R}^{m_{Y} \times n}$, where $n$ is the sample size, $m_{X}$ and $m_{Y}$ are the dimensions for each data set. Under the classical hypothesis testing framework, we assume that $X_{i}, i=1,\ldots,n$ are identically independently distributed (i.i.d.) as $X$, similarly $Y_{i} \stackrel{i.i.d.}{\sim} Y$. Throughout the paper, we always assume that $X$ and $Y$ have finite second moments, which is a necessary assumption to guarantee the consistency of distance correlation.
+\section{Results}
 
-For testing independence between $X$ and $Y$, the null and the alternative hypothesis are
-\begin{align*}
-& H_{0}: X \mbox{ is independent of } Y, i.e., f_{XY}=f_{X}f_{Y},\\
-& H_{A}: f_{XY} \neq f_{X}f_{Y},
-\end{align*}
-where $f_{XY}$ denotes the joint distribution of $(X,Y) \in \mathcal{R}^{m_{X}+m_{Y}}$, and $f_{X}$ and $f_{Y}$ are the marginal distributions. 
+\subsection{Intuition}
 
-To test independence by distance correlation on sample data, we first calculate two Euclidean distance matrices $A, B \in \mathcal{R}^{n \times n}$ for $\mathcal{X}$ and $\mathcal{Y}$ respectively, i.e., $A_{ij}=\|X_{i}-X_{j}\|_{2}$. The sample distance covariance is defined as
-\begin{equation}
-\label{dCovEqu}
-dCov_{n}(\mathcal{X},\mathcal{Y})=\frac{1}{n^2}\sum_{i,j=1}^{n}A^{H}_{ij}B^{H}_{ij},
-\end{equation}
-where $A^{H}=HAH$, $B^{H}=HBH$ with $H=I_{n}-\frac{J_{n}}{n}$. Then the sample distance variance is defined as
-\begin{align*}
-dVar_{n}(\mathcal{X}) &=\frac{1}{n^2}\sum_{i,j=1}^{n}A^{H}_{ij}A^{H}_{ij}\\
-dVar_{n}(\mathcal{Y}) &=\frac{1}{n^2}\sum_{i,j=1}^{n}B^{H}_{ij}B^{H}_{ij}.
-\end{align*}
-The squared sample distance correlation is obtained by normalizing the distance covariance
-\begin{equation}
-\label{dCorrEqu}
-dCorr_{n}(\mathcal{X},\mathcal{Y})=\frac{dCov_{n}(\mathcal{X},\mathcal{Y})}{\sqrt{dVar_{n}(\mathcal{X}) \cdot dVar_{n}(\mathcal{Y})}},
-\end{equation}
-where all of $dCov_{n}, dVar_{n}, dCorr_{n}$ are always non-negative. Note that the $dCor_{n}/dCorr_{n}$ above is actually the square of distance covariance/correlation in \cite{SzekelyRizzoBakirov2007}; but for simplicity we drop the square in the name throughout this paper.
 
-It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $dCorr_{n}(\mathcal{X},\mathcal{Y}) \rightarrow dCorr(X,Y) \geq 0$, where $dCorr(X,Y)$ is the population distance correlation of $X$ and $Y$ defined by their characteristic functions. The population distance correlation is $0$ if and only if $X$ and $Y$ are independent, so that the sample distance correlation is a consistent test for independence, i.e., the testing power converges to $1$ as $n$ increases, at any fixed type $1$ error level. Note that in this paper distance correlation always means the sample statistic rather than the population statistic, unless otherwise mentioned.
 
-However, in case of high-dimensional data where the dimension $m_{X}$ or $m_{Y}$ increases with the sample size $n$, the original distance correlation $dCorr_{n}$ is no longer appropriate. For example, even for independent Gaussian distribution, $dCorr_{n} \rightarrow 1$ as $m_{X}, m_{Y} \rightarrow \infty$, such that it is no longer a consistent test in high dimension. This problem is solved by the modified distance correlation proposed in \cite{SzekelyRizzo2013a}:
-\begin{equation}
-\label{mdCovEqu}
-mdCov_{n}(\mathcal{X},\mathcal{Y})=\frac{1}{n(n-3)}(\sum_{i,j=1}^{n}A^{H*}_{ij}B^{H*}_{ij}-\frac{n}{n-2}\sum_{i=1}^{n}A^{H*}_{ii}B^{H*}_{ii}),
-\end{equation}
-where $A^{H*}_{ij}$ adjusts the entries of $A^{H}$ by
-\[A^{H*}_{ij} = \left\{
-  \begin{array}{lr}
-    \frac{n}{n-1}(A^{H}_{ij}-\frac{A_{ij}}{n}), & \mbox{ if } i \neq j \\
-    \frac{n}{n-1}(\frac{\sum_{i}A_{ij}}{n}-\frac{\sum_{i,j}A_{ij}}{n^2}), &\mbox{ if } i = j
-  \end{array}
-\right.
-\] and similarly for $B^{H*}_{ij}$. Then $mdVar_{n}(\mathcal{X})$ can be defined by replacing all $B^{H*}_{ij}$ in Equation~\ref{mdCovEqu} by $A^{H*}_{ij}$, similarly define $mdVar_{n}(\mathcal{Y})$. 
 
-If $mdVar_{n}(\mathcal{X}) \cdot mdVar_{n}(\mathcal{Y}) \leq 0$, the modified distance correlation is set to $0$; otherwise it is defined as
-\begin{equation}
-\label{mdCorrEqu}
-mdCorr_{n}(\mathcal{X},\mathcal{Y})=\frac{mdCov_{n}(\mathcal{X},\mathcal{Y})}{\sqrt{mdVar_{n}(\mathcal{X}) \cdot mdVar_{n}(\mathcal{Y})}}.
-\end{equation}
-It is shown in \cite{SzekelyRizzo2013a} that $mdCorr_{n}(\mathcal{X},\mathcal{Y}) \rightarrow dCorr(X,Y) \geq 0$, and is an unbiased estimator of the population distance correlation $dCorr(X,Y)$; furthermore, $mdCorr_{n}$ is approximately normal even if $m_{X},m_{Y} \rightarrow \infty$. Thus it is a consistent test of independence for high-dimension data.
-
-To summarize this subsection, both the distance correlation and modified distance correlation are great for testing independence of Euclidean data due to their theoretical consistency, with the modified test statistic being more robust against high-dimensionality. Indeed it is a flourishing concept by a series of papers \cite{BakirovRizzoSzekely2006, SzekelyRizzoBakirov2007, SzekelyRizzo2009, BickelXu2009, Kosorok2009, Remillard2009, LiZhongZhu2012, SzekelyRizzo2013a, SzekelyRizzo2013b, SzekelyRizzo2014}; and the test statistic is not limited to the Euclidean metric as shown in \cite{Lyons2013}. 
-
-However, the required sample size for achieving a good testing power very much depends on the type of dependency underlying the given data, e.g. for perfect linear relationship, sample distance correlation usually requires less than $10$ points for a permutation test to declare significance; but for some nonlinear relationships like circle, sample distance correlation yields no significance even at $n=100$. Because real data rarely exhibits perfect linear relationship, and in practice large amount of data may not always be available, a better finite-sample method is of tremendous value: it not only yields a better testing power for the same sample size, but may also requires much less sample data for the permutation test to declare significance, which in turn saves the running time and data collection process. 
-
-There exists another distance-based method that is consistent and works particularly well for nonlinear dependencies, which is called the HHG statistics in \cite{HellerGorfine2013}. It applies Pearson's chi-square test to ranks of distances within each column rather than directly summing up the products of distances, and is shown to be better than distance correlation and other methods for finite-sample testing of many common nonlinear relationships in \cite{GorfineHellerHeller2012} and \cite{HellerGorfine2013}. However, in our numerical simulations HHG seems to fall a bit short when testing against high-dimensional or close to linear dependency, but is otherwise a strong competitor of the global distance correlation. 
-
-The other method we use as the benchmark in the numerical section is the Mantel test, which simply applies Pearson's correlation to the distance matrices, see in \cite{Mantel1967}. Despite its lack of theoretical guarantee (for example, unlike distance correlation and HHG, it is not consistent against all alternatives), it has been a very popular method so far and commonly used in biology and ecology. In our numerical simulations we will observe that the Mantel test is not consistent for many nonlinear dependencies, and is sub-optimal in almost all types of dependency we consider.
-
-Since there has not been a method that perform well against all possible alternatives in finite-sample testing, it motivates us to propose a local distance correlation that is concurrently robust against small sample size, high-dimensionality, linearity or non-linearity in the following subsection.
 
 \subsection{Local Distance Correlation}
 \label{main2}
@@ -173,7 +144,7 @@ then $mdCorr_{kl}$ is obtained by normalizing each $mdCov_{kl}(\mathcal{X},\math
 
 Because $\{mdCorr_{kl}\}$ has the same asymptotic properties as $\{dCorr_{kl}\}$ other than its robustness against high-dimensionality, we will mostly use $\{dCorr_{kl}\}$ for explanation purposes in Section~\ref{main}. Indeed in the numerical section, local modified distance correlation has almost the same numerical performance as the local original distance correlation at dimension $1$, but much more superior at higher dimensions due to its bias adjustment.
 
-Note that the idea of $k$-nearest neighbor has been an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap in \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, LLE in \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps in \cite{BelkinNiyogi2003}, among many others. Furthermore, we have successfully applied joint neighborhood to unfold the non-linearity in multiple data sets in \cite{ShenVogelsteinPriebe2015}, which shows that a good choice of joint neighborhood can better match the nonlinear data sets. Our local distance correlation shares a similar concept: by considering the inter-point distances limited to the $k$-nearest points, the local test statistic is naturally more informative than the global statistic for nonlinear dependency; while for close to linear dependency, the global statistic should still be the best.
+
 
 Moreover, testing dependency by local distance correlation can be a more elegant solution than nonlinear embedding: choosing the optimal neighborhood size in nonlinear algorithms is usually a difficult question, but it is not necessary to pick the best neighborhood in the framework of local distance correlation. In fact, once the distance matrices $A$ and $B$ are sorted within column, computing $\{dCorr_{kl}, k,l=1,\ldots,n\}$ has the same running time as computing any individual $dCorr_{kl}$. Therefore, we use the whole family $\{dCorr_{kl}\}$ to test independence; and the overall computation always takes $O(n^2 \log(n))$, which comes from sorting. 
 
@@ -283,7 +254,7 @@ We can clearly see from Figure~\ref{figSim3} that local distance correlation is 
 \label{figSim1}
 \end{figure}
 
-\begin{comment}
+% \begin{comment}
 \begin{figure}[htbp]
 \subfloat[]{
 \includegraphics[width=1.0\textwidth]{../Figures/Fig2}
@@ -295,7 +266,7 @@ We can clearly see from Figure~\ref{figSim3} that local distance correlation is 
 \caption{Testing Power for 20 Simulations of Increasing Neighborhood at Fixed Sample Size and Dimension}
 \label{figSim2}
 \end{figure}
-\end{comment}
+% \end{comment}
 
 \begin{figure}[htbp]
 \subfloat[]{
@@ -366,6 +337,71 @@ This work was partially supported by National Security Science and Engineering F
  Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT COE), and the
  XDATA program of the Defense Advanced Research Projects Agency (DARPA) administered through Air Force Research Laboratory contract FA8750-12-2-0303.
 
+
+\appendix
+
+\section{Distance Correlation}
+\label{main}
+\subsection{Global Distance Correlation}
+\label{main1}
+Suppose we are given two data sets $\mathcal{X}=[X_{1},\cdots, X_{n}] \in \mathcal{R}^{m_{X} \times n}$ and $\mathcal{Y}=[Y_{1},\cdots, Y_{n}] \in \mathcal{R}^{m_{Y} \times n}$, where $n$ is the sample size, $m_{X}$ and $m_{Y}$ are the dimensions for each data set. Under the classical hypothesis testing framework, we assume that $X_{i}, i=1,\ldots,n$ are identically independently distributed (i.i.d.) as $X$, similarly $Y_{i} \stackrel{i.i.d.}{\sim} Y$. Throughout the paper, we always assume that $X$ and $Y$ have finite second moments, which is a necessary assumption to guarantee the consistency of distance correlation.
+
+For testing independence between $X$ and $Y$, the null and the alternative hypothesis are
+\begin{align*}
+& H_{0}: X \mbox{ is independent of } Y, i.e., f_{XY}=f_{X}f_{Y},\\
+& H_{A}: f_{XY} \neq f_{X}f_{Y},
+\end{align*}
+where $f_{XY}$ denotes the joint distribution of $(X,Y) \in \mathcal{R}^{m_{X}+m_{Y}}$, and $f_{X}$ and $f_{Y}$ are the marginal distributions. 
+
+To test independence by distance correlation on sample data, we first calculate two Euclidean distance matrices $A, B \in \mathcal{R}^{n \times n}$ for $\mathcal{X}$ and $\mathcal{Y}$ respectively, i.e., $A_{ij}=\|X_{i}-X_{j}\|_{2}$. The sample distance covariance is defined as
+\begin{equation}
+\label{dCovEqu}
+dCov_{n}(\mathcal{X},\mathcal{Y})=\frac{1}{n^2}\sum_{i,j=1}^{n}A^{H}_{ij}B^{H}_{ij},
+\end{equation}
+where $A^{H}=HAH$, $B^{H}=HBH$ with $H=I_{n}-\frac{J_{n}}{n}$. Then the sample distance variance is defined as
+\begin{align*}
+dVar_{n}(\mathcal{X}) &=\frac{1}{n^2}\sum_{i,j=1}^{n}A^{H}_{ij}A^{H}_{ij}\\
+dVar_{n}(\mathcal{Y}) &=\frac{1}{n^2}\sum_{i,j=1}^{n}B^{H}_{ij}B^{H}_{ij}.
+\end{align*}
+The squared sample distance correlation is obtained by normalizing the distance covariance
+\begin{equation}
+\label{dCorrEqu}
+dCorr_{n}(\mathcal{X},\mathcal{Y})=\frac{dCov_{n}(\mathcal{X},\mathcal{Y})}{\sqrt{dVar_{n}(\mathcal{X}) \cdot dVar_{n}(\mathcal{Y})}},
+\end{equation}
+where all of $dCov_{n}, dVar_{n}, dCorr_{n}$ are always non-negative. Note that the $dCor_{n}/dCorr_{n}$ above is actually the square of distance covariance/correlation in \cite{SzekelyRizzoBakirov2007}; but for simplicity we drop the square in the name throughout this paper.
+
+It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $dCorr_{n}(\mathcal{X},\mathcal{Y}) \rightarrow dCorr(X,Y) \geq 0$, where $dCorr(X,Y)$ is the population distance correlation of $X$ and $Y$ defined by their characteristic functions. The population distance correlation is $0$ if and only if $X$ and $Y$ are independent, so that the sample distance correlation is a consistent test for independence, i.e., the testing power converges to $1$ as $n$ increases, at any fixed type $1$ error level. Note that in this paper distance correlation always means the sample statistic rather than the population statistic, unless otherwise mentioned.
+
+However, in case of high-dimensional data where the dimension $m_{X}$ or $m_{Y}$ increases with the sample size $n$, the original distance correlation $dCorr_{n}$ is no longer appropriate. For example, even for independent Gaussian distribution, $dCorr_{n} \rightarrow 1$ as $m_{X}, m_{Y} \rightarrow \infty$, such that it is no longer a consistent test in high dimension. This problem is solved by the modified distance correlation proposed in \cite{SzekelyRizzo2013a}:
+\begin{equation}
+\label{mdCovEqu}
+mdCov_{n}(\mathcal{X},\mathcal{Y})=\frac{1}{n(n-3)}(\sum_{i,j=1}^{n}A^{H*}_{ij}B^{H*}_{ij}-\frac{n}{n-2}\sum_{i=1}^{n}A^{H*}_{ii}B^{H*}_{ii}),
+\end{equation}
+where $A^{H*}_{ij}$ adjusts the entries of $A^{H}$ by
+\[A^{H*}_{ij} = \left\{
+  \begin{array}{lr}
+    \frac{n}{n-1}(A^{H}_{ij}-\frac{A_{ij}}{n}), & \mbox{ if } i \neq j \\
+    \frac{n}{n-1}(\frac{\sum_{i}A_{ij}}{n}-\frac{\sum_{i,j}A_{ij}}{n^2}), &\mbox{ if } i = j
+  \end{array}
+\right.
+\] and similarly for $B^{H*}_{ij}$. Then $mdVar_{n}(\mathcal{X})$ can be defined by replacing all $B^{H*}_{ij}$ in Equation~\ref{mdCovEqu} by $A^{H*}_{ij}$, similarly define $mdVar_{n}(\mathcal{Y})$. 
+
+If $mdVar_{n}(\mathcal{X}) \cdot mdVar_{n}(\mathcal{Y}) \leq 0$, the modified distance correlation is set to $0$; otherwise it is defined as
+\begin{equation}
+\label{mdCorrEqu}
+mdCorr_{n}(\mathcal{X},\mathcal{Y})=\frac{mdCov_{n}(\mathcal{X},\mathcal{Y})}{\sqrt{mdVar_{n}(\mathcal{X}) \cdot mdVar_{n}(\mathcal{Y})}}.
+\end{equation}
+It is shown in \cite{SzekelyRizzo2013a} that $mdCorr_{n}(\mathcal{X},\mathcal{Y}) \rightarrow dCorr(X,Y) \geq 0$, and is an unbiased estimator of the population distance correlation $dCorr(X,Y)$; furthermore, $mdCorr_{n}$ is approximately normal even if $m_{X},m_{Y} \rightarrow \infty$. Thus it is a consistent test of independence for high-dimension data.
+
+To summarize this subsection, both the distance correlation and modified distance correlation are great for testing independence of Euclidean data due to their theoretical consistency, with the modified test statistic being more robust against high-dimensionality. Indeed it is a flourishing concept by a series of papers \cite{BakirovRizzoSzekely2006, SzekelyRizzoBakirov2007, SzekelyRizzo2009, BickelXu2009, Kosorok2009, Remillard2009, LiZhongZhu2012, SzekelyRizzo2013a, SzekelyRizzo2013b, SzekelyRizzo2014}; and the test statistic is not limited to the Euclidean metric as shown in \cite{Lyons2013}. 
+
+However, the required sample size for achieving a good testing power very much depends on the type of dependency underlying the given data, e.g. for perfect linear relationship, sample distance correlation usually requires less than $10$ points for a permutation test to declare significance; but for some nonlinear relationships like circle, sample distance correlation yields no significance even at $n=100$. Because real data rarely exhibits perfect linear relationship, and in practice large amount of data may not always be available, a better finite-sample method is of tremendous value: it not only yields a better testing power for the same sample size, but may also requires much less sample data for the permutation test to declare significance, which in turn saves the running time and data collection process. 
+
+There exists another distance-based method that is consistent and works particularly well for nonlinear dependencies, which is called the HHG statistics in \cite{HellerGorfine2013}. It applies Pearson's chi-square test to ranks of distances within each column rather than directly summing up the products of distances, and is shown to be better than distance correlation and other methods for finite-sample testing of many common nonlinear relationships in \cite{GorfineHellerHeller2012} and \cite{HellerGorfine2013}. However, in our numerical simulations HHG seems to fall a bit short when testing against high-dimensional or close to linear dependency, but is otherwise a strong competitor of the global distance correlation. 
+
+The other method we use as the benchmark in the numerical section is the Mantel test, which simply applies Pearson's correlation to the distance matrices, see in \cite{Mantel1967}. Despite its lack of theoretical guarantee (for example, unlike distance correlation and HHG, it is not consistent against all alternatives), it has been a very popular method so far and commonly used in biology and ecology. In our numerical simulations we will observe that the Mantel test is not consistent for many nonlinear dependencies, and is sub-optimal in almost all types of dependency we consider.
+
+Since there has not been a method that perform well against all possible alternatives in finite-sample testing, it motivates us to propose a local distance correlation that is concurrently robust against small sample size, high-dimensionality, linearity or non-linearity in the following subsection.
 
 \bibliographystyle{chicago}
 \bibliography{references}

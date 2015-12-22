@@ -1,4 +1,4 @@
-function [power1, power2, power3, power4]=CorrIndTest(type,n,dim,lim,rep, noise)
+function [power1, power2, power3, power4]=CorrIndTest(type,n,dim,lim,rep, noise,option)
 % Author: Cencheng Shen
 % Independence Tests for identifying dependency, returning empirical testing power with respect to increasing sample size at a fixed dimension.
 % The output are the powers of local original dCorr, local modified
@@ -6,16 +6,19 @@ function [power1, power2, power3, power4]=CorrIndTest(type,n,dim,lim,rep, noise)
 %
 % Parameters:
 % type specifies the type of distribution,
-% n is the sample size, dim is the dimension
+% n is the sample size, dim is the dimension,
 % lim specifies the number of intervals in the sample size,
-% rep specifies the number of MC-replicates;
-% noise specifies the noise level, by default 0.
+% rep specifies the number of MC-replicates,
+% noise specifies the noise level, by default 0,
+% option specifies whether each test statistic is calculated or not.
 if nargin<6
     noise=1; % Default noise level
 end
+if nargin<7
+    option=[1,1,1,1]; % Default option
+end
 K=n;
 alpha=0.05; % Type 1 error level
-option1=0; option2=1; option3=1; option4=1; % Control whether to calculate the respective correlation statistic or not.
 
 if lim==0
     numRange=n; % Test at sample size n only
@@ -54,16 +57,16 @@ for i=1:lim
         C=DataN(1:nn,1:nn,r);
         P=DataN(1:nn,n+1:n+nn,r);
         disRank=[disToRanks(C) disToRanks(P)];
-        if option1~=0
+        if option(1)~=0
             dCor1N(1:nn,1:nn,r)=localDCorr(C,P,0,disRank);
         end
-        if option2~=0
+        if option(2)~=0
             dCor2N(1:nn,1:nn,r)=localDCorr(C,P,1,disRank);
         end
-        if option3~=0
+        if option(3)~=0
             dCor3N(r)=HHG(C,P);
         end
-        if option4~=0
+        if option(4)~=0
             dCor4N(r)=Mantel(C,P);
         end
     end
@@ -73,16 +76,16 @@ for i=1:lim
         C=DataA(1:nn,1:nn,r);
         P=DataA(1:nn,n+1:n+nn,r);
         disRank=[disToRanks(C) disToRanks(P)];
-        if option1~=0
+        if option(1)~=0
             dCor1A(1:nn,1:nn,r)=localDCorr(C,P,0,disRank);
         end
-        if option2~=0
+        if option(2)~=0
             dCor2A(1:nn,1:nn,r)=localDCorr(C,P,1,disRank);
         end
-        if option3~=0
+        if option(3)~=0
             dCor3A(r)=HHG(C,P);
         end
-        if option4~=0
+        if option(4)~=0
             dCor4A(r)=Mantel(C,P);
         end
     end
@@ -110,9 +113,9 @@ end
 
 % Save the results
 filename=strcat('CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
-save(filename,'power1','power2','power3','power4','type','n','numRange','rep','lim','dim','noise');
+save(filename,'power1','power2','power3','power4','type','n','numRange','rep','lim','dim','noise','option');
 
-%%% Display and save picture. By default do not display.
+% %% Display and save picture. By default do not display.
 % for i=1:length(numRange)
 %     power1L(i)=power1(numRange(i),numRange(i),i);
 %     power2L(i)=power2(numRange(i),numRange(i),i);
@@ -130,4 +133,4 @@ save(filename,'power1','power2','power3','power4','type','n','numRange','rep','l
 % ylim([0 1]);
 % %titleStr = strcat('Independence Test for ', titlechar,' up to n=', num2str(n), ' at m= ',num2str(dim));
 % %title(titleStr,'FontSize',15);
-% %saveas(gcf,filename,'jpeg');
+% % %saveas(gcf,filename,'jpeg');

@@ -30,10 +30,12 @@ end
 % Generate x by uniform distribution first, which is the distribution used by half
 % of the distributions; store the weighted summation in xA.
 x=unifrnd(-1,1,n,d);
+%x=random('norm',0,1,n,d);
 xA=x*A;
 % Generate x independently by uniform if the null hypothesis is true, i.e., x is independent of y.
 if optionAlt==0
     x=unifrnd(-1,1,n,d);
+    %x=random('norm',0,1,n,d);
 end
 
 switch type % In total 20 types of dependency

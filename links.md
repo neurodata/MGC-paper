@@ -1,13 +1,4 @@
-# Local Graph Correlation
-
-This repo has:
-
-- Code: folder containing MATLAB & R code to reproduce all results in the manuscript
-- Draft: submitted draft
-- Figures: all figures that the code generates
-- Data: data used for real data experiments
-
-some related links:
+here are some related links:
 
  - http://emotion.technion.ac.il/~gorfinm/files/science6.pdf - shows that HHG > MIC
  - http://bib.oxfordjournals.org/content/early/2013/08/20/bib.bbt051.short shows again that HHG is the best

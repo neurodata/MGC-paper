@@ -1,4 +1,4 @@
-function [power1, power2, power3, power4]=CorrIndTestDim(type,n,dim,lim,rep, noise)
+function [power1, power2, power3, power4]=CorrIndTestDim(type,n,dim,lim,rep, noise,option)
 % Author: Cencheng Shen
 % Independence Tests for identifying dependency, returning empirical testing power with respect to increasing dimension at a fixed sample size.
 % The output are the powers of local original dCorr, local modified
@@ -6,16 +6,19 @@ function [power1, power2, power3, power4]=CorrIndTestDim(type,n,dim,lim,rep, noi
 %
 % Parameters:
 % type specifies the type of distribution,
-% n is the sample size, dim is the dimension
+% n is the sample size, dim is the dimension,
 % lim specifies the number of intervals in the sample size,
-% rep specifies the number of MC-replicates;
-% noise specifies the noise level, by default 0.
+% rep specifies the number of MC-replicates,
+% noise specifies the noise level, by default 0,
+% option specifies whether each test statistic is calculated or not.
 if nargin<6
     noise=0; % Default noise level
 end
+if nargin<7
+    option=[1,1,1,1]; % Default option
+end
 K=n;
 alpha=0.05; % Type 1 error level
-option1=1; option2=1; option3=1; option4=1; % Control whether to calculate the respective correlation statistic or not.
 
 if lim==0
     dimRange=dim; % Test at dim only
@@ -43,16 +46,16 @@ for i=1:lim
         C=squareform(pdist(x));
         P=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(P)];
-        if option1~=0
+        if option(1)~=0
             dCor1N(:,:,r)=localDCorr(C,P,0,disRank);
         end
-        if option2~=0
+        if option(2)~=0
             dCor2N(:,:,r)=localDCorr(C,P,1,disRank);
         end
-        if option3~=0
+        if option(3)~=0
             dCor3N(r)=HHG(C,P);
         end
-        if option4~=0
+        if option(4)~=0
             dCor4N(r)=Mantel(C,P);
         end
     end
@@ -66,16 +69,16 @@ for i=1:lim
         C=squareform(pdist(x));
         P=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(P)];
-        if option1~=0
+        if option(1)~=0
             dCor1A(:,:,r)=localDCorr(C,P,0,disRank);
         end
-        if option2~=0
+        if option(2)~=0
             dCor2A(:,:,r)=localDCorr(C,P,1,disRank);
         end
-        if option3~=0
+        if option(3)~=0
             dCor3A(r)=HHG(C,P);
         end
-        if option4~=0
+        if option(4)~=0
             dCor4A(r)=Mantel(C,P);
         end
     end
@@ -103,9 +106,10 @@ end
 
 % Save the results
 filename=strcat('CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
-save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise');
+%save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option');
+save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option','dCor2A','dCor2N','dCor1A','dCor1N');
 
-%%% Display and save picture. By default do not display.
+% %% Display and save picture. By default do not display.
 % % Plot figure
 % for i=1:length(dimRange)
 %     power1M(i)=max(max(power1(:,:,i)));

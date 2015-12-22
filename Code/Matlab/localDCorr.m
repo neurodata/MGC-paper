@@ -1,9 +1,9 @@
-function [corrXY,varX,varY] = localDCorr(X,Y,optionModi, disRank) % Calculate local dCorr
+function [corrXY,varX,varY] = localDCorr(X,Y,optionModified, disRank) % Calculate local dCorr
 % Author: Cencheng Shen
 % Implements local distance correlation from Shen, Jovo, CEP 2015.
-% By specifying optionModi=0 or 1, it incorporates knn into original dcorr and modified dcorr
+% By specifying optionModified=0 or 1, it incorporates knn into original dcorr and modified dcorr
 if nargin < 3
-    optionModi=1; % By default use modified dCorr
+    optionModified=0; % By default use original dCorr
 end
 if nargin<4
     disRank=[disToRanks(X) disToRanks(Y)]; % Sort distances within columns, if the ranks are not provided
@@ -20,7 +20,7 @@ H=eye(n)-(1/n)*ones(n,n);
 XH=H*X*H;
 YH=H*Y*H;
 % Adjust the centering for modified dCorr
-if optionModi==(1)
+if optionModified==(1)
     XH=n/(n-1)*(XH-X/n);
     YH=n/(n-1)*(YH-Y/n);
     for i=1:n
@@ -31,13 +31,13 @@ end
 
 % Summing up the product of distances, which yields dCov and dVar
 for i=1:n
-    if optionModi==0
+    if optionModified==0
         corrXY=corrXY+XH(i,i)*YH(i,i);
         varX=varX+XH(i,i)*XH(i,i);
         varY=varY+YH(i,i)*YH(i,i);
     end
     for j=1:n
-        if i~=j
+        if RX(j,i)>0&&RY(j,i)>0%i~=j
             tmp1=RX(j,i)+1;
             tmp2=RY(j,i)+1;
             corrXY(tmp1:end, tmp2:end)=corrXY(tmp1:end, tmp2:end)+XH(j,i)*YH(j,i);
@@ -48,7 +48,7 @@ for i=1:n
 end
 
 % Further adjust the diagonal products of modified dCov
-if optionModi==1
+if optionModified==1
     meanX=sum(sum(X))/n^2;
     meanY=sum(sum(Y))/n^2;
     for i=1:n
@@ -63,9 +63,9 @@ if optionModi==1
     varY=varY/n/(n-3);
 end
 % Normalizing dCov by dVar yields dCorr
-corrXY=corrXY./sqrt(varX*varY'); 
+corrXY=corrXY./real(sqrt(varX*varY'));
 
-% Set dCorr to 0 if any dVar is no larger than 0.
+% Set dCorr to 0 if any dVar is no larger than 0
 for i=1:n-1
     if varX(i)<=0
         corrXY(i,:)=0;
@@ -75,6 +75,6 @@ for i=1:n-1
     end
 end
 % The original dCorr is defined as the square root of the previous calculated dCorr; but square root or not does not affect testing at all.
-if optionModi==0 
-    corrXY=sqrt(corrXY);
+if optionModified==0
+    corrXY=real(sqrt(corrXY));
 end

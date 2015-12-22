@@ -131,7 +131,7 @@ Note that the consistency holds for both the local original distance correlation
 
 Although global distance correlation is already consistent against all alternatives, it may not always yield a good finite-sample testing power for a particular dependency type; while our local distance correlation is able to improve the testing power by choosing the best neighborhood for a given joint distribution. 
 
-The advantage of using k-nearest-neighbor in local distance correlation, lies in its capability to exclude the product of small distances in one data set and large distances in the other data set: after double centering, the centered small distance is usually negative and the centered large distance is usually positive, and including such product reduces the magnitude of local distance covariance under the alternative. While excluding such product by k-nearest-neighbor can increase the magnitude of local distance covariance under the alternative, albeit at the cost of increasing its magnitude under the null as well. 
+The advantage of using k-nearest-neighbor in local distance correlation, lies in its capability to exclude the product of small distances in one data set and large distances in the other data set: after double centering, the centered small distance is usually negative and the centered large distance is usually positive, and including such product reduces the magnitude of local distance covariance under the alternative. XXX i don't understand how knn can exclude the small distances? XXX While excluding such product by k-nearest-neighbor can increase the magnitude of local distance covariance under the alternative, albeit at the cost of increasing its magnitude under the null as well. 
 
 For linear dependency, local distance correlation does not benefit from the above trade-off; but for nonlinear dependency, $dCorr_{kl}$ for $(k,l) \neq (n,n)$ may enjoy a better finite-sample testing power. We characterize the behaviors in the following two theorems.
 
@@ -156,9 +156,11 @@ There exists $f_{XY}$, $n$ and $\alpha$ such that
 \end{equation}
 for some $(k,l) \neq (n,n)$, where $\beta$ is the permutation test power at the type $1$ error $\alpha$.
 
+XXX thm3: equality goes the wrong direction? XXX
+
 Thus local distance correlation can be better than global distance correlation under certain nonlinear dependency.
 \end{thm}
-Note that Theorem~\ref{thm2} and the example used in the proof of Theorem~\ref{thm3} correspond to the linear and quadratic relationship in the simulation. Indeed in Figure~\ref{figSim1} we observe the global distance correlation has the best empirical testing power for linear dependency, while local distance correlation yields a better power for the quadratic relationship.
+Note that Theorem~\ref{thm2} and the example used in the proof of Theorem~\ref{thm3} correspond to the linear and quadratic relationship in the simulation. Indeed in Figures~\ref{fig:1D} and~\ref{fig:nD} we observe the global distance correlation has the best empirical testing power for linear dependency, while local distance correlation yields a better power for the quadratic relationship, for both low and high dimensional settings.
 
 \section{Numerical Experiments}
 \label{numer}
@@ -401,7 +403,14 @@ However, the required sample size for achieving a good testing power very much d
 
 There exists another distance-based method that is consistent and works particularly well for nonlinear dependencies, which is called the HHG statistics in \cite{HellerGorfine2013}. It applies Pearson's chi-square test to ranks of distances within each column rather than directly summing up the products of distances, and is shown to be better than distance correlation and other methods for finite-sample testing of many common nonlinear relationships in \cite{GorfineHellerHeller2012} and \cite{HellerGorfine2013}. However, in our numerical simulations HHG seems to fall a bit short when testing against high-dimensional or close to linear dependency, but is otherwise a strong competitor of the global distance correlation. 
 
+\subsection{Mantel Test}
+\label{sec:hhg}
+
+
+
 The other method we use as the benchmark in the numerical section is the Mantel test, which simply applies Pearson's correlation to the distance matrices, see in \cite{Mantel1967}. Despite its lack of theoretical guarantee (for example, unlike distance correlation and HHG, it is not consistent against all alternatives), it has been a very popular method so far and commonly used in biology and ecology. In our numerical simulations we will observe that the Mantel test is not consistent for many nonlinear dependencies, and is sub-optimal in almost all types of dependency we consider.
+
+XXX where does the null distribution come from? XXX
 
 Since there has not been a method that perform well against all possible alternatives in finite-sample testing, it motivates us to propose a local distance correlation that is concurrently robust against small sample size, high-dimensionality, linearity or non-linearity in the following subsection.
 

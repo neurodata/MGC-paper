@@ -1,5 +1,12 @@
 # Local Graph Correlation
 
+This repo has:
+
+- Code: folder containing MATLAB & R code to reproduce all results in the manuscript
+- Draft: submitted draft
+- Figures: all figures that the code generates
+- Data: data used for real data experiments
+
 some related links:
 
  - http://emotion.technion.ac.il/~gorfinm/files/science6.pdf - shows that HHG > MIC

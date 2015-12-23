@@ -61,7 +61,7 @@
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
 
-\title{\bf Dependence Discovery from Multimodal Data via Local Graph Correlation}
+\title{\bf Dependence Discovery across Scales from Multimodal Data via Local Graph Correlation}
 \author[1]{Cencheng Shen\thanks{cshen@temple.edu}}
 \author[2]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
 \author[3]{Carey E. Priebe\thanks{cep@jhu.edu}}
@@ -120,7 +120,7 @@ LGC significantly improves the finite-sample testing power over dcorr, for testi
 
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, high-dimensional nonlinear manifolds can be approximated by loca linear spaces.  Combining these two ideas yields our measure, the local graph correlation.  Perhaps the first realization that pairwise properties can characterize a joint distribution come from a pair of founding fathers of statistics, Francis Galton and Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}:
 
-$$sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}, $$
+$$\sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}, $$
 
 where $a_{ij}$ is the correlation between $x_i$ and $x_j$, and $b_{ij}$ is defined similarly for $y$.  Most dependence measures since then have generalized $a$ and $b$.  For example, Spearman and Kendall let $a_{ij}$ equal rank$(x_i)$-rank$(x_j)$ and sign$(x_i-x_j)$ \cite{KendallBook}, respectively.  More recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} replace moments with distances, letting  $a_{ij}=(x_i-x_j)$.  A subset of those authors then proved that with this minor modification, followed by double centering the distances (so that each row and column of the distance matrix has zero mean), that their ``distance correlation'' statistic yielded a consistent test---a test whose power approaches 1 as sample size approaches infinity---for any possibly joint distribution of finite dimension \cite{SzekelyRizzo2009}. This is in contrast to the Mantel test \cite{Mantel1967}---which simply uses Pearson's correlation as a test statistics---for which consistency proofs are still unavailable.
  Even more recently Szekeley and Rizzo proved that by further modifying $a_{ij}$ to normalize the off-diagonal and diagonal elements differently, the resulting test is consisent even as the dimensionality of $X$ and $Y$ approach infinity.  However, in all of the above cases $a_{ij}$ and $b_{ij}$ use all the distance pairs, including those from points that are far from one another.
@@ -129,12 +129,12 @@ where $a_{ij}$ is the correlation between $x_i$ and $x_j$, and $b_{ij}$ is defin
 
  Local graph correlation (LGC), combines modified distance correlation with local graph distances.  Speficially, let rank$(a_{ij})$  be the ``rank'' of $x_j$ relative to $x_i$; that is, rank$(a_{ij})=k$ if $x_j$ is the $k^{th}$ closest point (or ``neighbor'') to $x_i$.  In that case, we can define \emph{local} variants of any of the above test statistics:
 \begin{equation}
-    \mt{a}_{ij}^k=
+    a_{ij}^k=
     \begin{cases}
       a_{ij}, & \text{if rank}(a_{ij}) < k \\
       0, & \text{otherwise}.
     \end{cases}, \qquad \qquad
-    \mt{b}_{ij}^l=
+    a_{ij}^l=
     \begin{cases}
       b_{ij}, & \text{if rank}(b_{ij}) < l \\
       0, & \text{otherwise}.
@@ -158,8 +158,8 @@ First, local graph correlation is consistent since it is built on distance corre
 Local graph correlation is consistent for testing independence against all alternatives, i.e., the testing power $\beta(g_{kl}) \rightarrow 1$ as $n \rightarrow \infty$. 
 \end{thm}
 %Note that the consistency holds for both the local original distance correlation and the local modified distance correlation.
-where $\beta$ is the permutation test power at the type $1$ error $\alpha$.
-For nonlinear dependency, $g_{kl}$ for $(k,l) \neq (n,n)$ may enjoy a better finite-sample testing power than its global counterpart. 
+where $\beta(g_{kl})$ is the testing power using $g_{kl}$ as the statistic, at the type $1$ error $\alpha$.
+For nonlinear dependency, $g_{kl}$ for $(k,l) \leq (n,n)$ may enjoy a better finite-sample testing power than its global counterpart. 
 
 
 \begin{thm}
@@ -180,7 +180,7 @@ The proof of Theorem~\ref{thm3} is a constructive one, in particular, local dist
 % \section{Numerical Experiments}
 % \label{numer}
 
-\subsection{Simulations}
+\subsection{Low Dimensional Simulation Experiments}
 \label{numer1}
 
 XXX i removed the above section heading, and moved the below 2 paragraphs, because the journal wants a single ``results'' section.  XXX
@@ -206,6 +206,21 @@ For either scenario, $\mathcal{X}$ and $\mathcal{Y}$ are generated accordingly, 
 
 For the dimension $1$ scenario, one may observe that for dependencies that are close to linear, LGC and dcorr always yield similar testing powers, which are better than HHG and Mantel; for the remaining nonlinear dependencies, HHG is usually much better than dcorr and Mantel, while our LGC performs similarly or even better than HHG in most cases due to its significant improvement over the respective global version. Note that for all distributions other than the independent clouds, the empirical powers eventually increase to $1$ as the sample size increases, implying that all methods are consistent (the only exception is the Mantel test, whose powers stay low in many nonlinear dependencies); and for the independent relationship, all testing powers should be exactly the type $1$ error level, which approximately holds for the empirical testing powers. 
 
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{../Figures/Fig1}
+\caption{
+Power of different methods on 20 different one-dimensional simulation settings, estimated on the basis of  10000 Monte-Carlo replicates.
+Each panel shows empirical testing power on the absicca, and sample size on the ordinate.
+LGC empirically achieves as high or higher power than the previous state of the art approaches for nearly all sample sizes on nearly all problems.}
+\label{fig:1D}
+\end{figure}
+
+
+\subsection{High Dimensional Simulation Experiments}
+\label{numer1}
+
+
 For the increasing dimension scenario, LGC significantly surpasses all other methods: for dependencies that are close to linear, the powers of both dcorr and LGC deteriorate much slower than others; and for the remaining nonlinear dependencies, LGC is much better than all other methods including the mcorr, due to its capability to better handle non-linearity and high-dimensionality at the same time. Note that a quarter of the distributions (e.g. sine period, square, diamond) cannot be detected by any method at dimension higher than $1$, since all testing powers quickly degrade to around $\alpha$.
 
 To intuitively summarize the simulation performance of each method in all settings, we apply the performance profiles introduced by \cite{DolanMore2002} to the testing powers, which is an evaluation tool to compare different algorithms throughout all given settings. Suppose there are $S$ methods and $T$ different settings, and we denote the respective powers as $\beta_{s}^{t}$ for $s=1,\ldots,S$ and $t=1,\ldots,T$. Then the relative performance for each method is defined as follows:
@@ -214,19 +229,7 @@ performance_{s}(x) &= \frac{1}{T} \sum_{t=1}^{T} I((\beta_{*}^{t}-\beta_{s}^{t})
 \end{align*}
 where $x \in [0,1]$ and $\beta_{*}^{t} =\max_{s} \beta_{s}^{t}$ denotes the best testing power in the $t$th setting. Namely $x$ stands for the difference with respect to the best power, and the performance profile of each method equals the proportion of simulations that the method is worse than the best method by no more than $x$. For example, at $x=0.1$, LGC has a relative performance of $0.75$ if and only if there are $15$ out of $20$ simulations that LGC is worse than the best method by no more than $0.1$ in testing power; the relative performance at $x=0$ stands for the proportion of simulations that the method has the best power; and the performance profile curve always increases to $1$ at $x=1$. The best method should have a similar or higher curve than others; and we also show the area under curve for each profile profile in the legend, which is a numerical way of viewing the advantage of each method.
 
-In Figure~\ref{fig:pp} we show the performance profiles at fixed dimension and sample size that are determined by a power threshold, for both the dimension $1$ and increasing dimension scenarios: for the dimension $1$ scenario, the dimension is always fixed at $1$, so the sample size is determined by the first sample size that any method has a power of $0.8$ (otherwise pick the largest sample size); and for the increasing dimension scenario, the sample size is already fixed at $100$, so we determine the dimension choice by the first dimension that any method has a power that is lower than $0.5$ (otherwise pick the smallest dimension). The advantage of LGC does not change much with respect to the threshold choice, which can be seen from the AUC plot of performance profiles against the power threshold.
-
-We can clearly see from Figure~\ref{fig:pp} that LGC is indeed the most reliable method in finite-sample testing, in accordance with the individual power plots in Figure~\ref{fig:1D} and Figure~\ref{fig:nD}: for the dimension $1$ scenario the performance profiles of LGC is clearly better than others, and for the increasing dimension scenario the advantage is even larger. Note that HHG is slightly better than dcorr in the performance profiles, because there are more nonlinear distributions than linear in the $20$ dependencies, and HHG has a larger advantage for nonlinear dependency than its disadvantage in linear dependency when compared to dcorr; and the Mantel test has the lowest performance profile in both scenarios. 
-
-\begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/Fig1}
-\caption{
-Power of different methods on 20 different one-dimensional simulation settings---estimated on the basis of YYY 10000 Monte-Carlo replicates YYY---including those used in \cite{HellerGorfine2013} and \cite{Reshef2011}. 
-Each panel shows empirical testing power on the absicca, and sample size on the ordinate.
-Our method empirically achieves as high or higher power than the previous state of the art approaches for nearly all sample sizes on nearly all problems.}
-\label{fig:1D}
-\end{figure}
-
+In Figure~\ref{fig:pp} we show the performance profiles at fixed dimension and sample size that are determined by a power threshold, for both the dimension $1$ and increasing dimension scenarios. For the dimension $1$ scenario, the dimension is always fixed at $1$, so the sample size is determined by the first sample size that any method has a power of $0.8$ (otherwise pick the largest sample size); and for the increasing dimension scenario, the sample size is already fixed at $100$, so we determine the dimension choice by the first dimension that any method has a power that is lower than $0.5$ (otherwise pick the smallest dimension). The advantage of LGC does not change much with respect to the threshold choice, which can be seen from the AUC plot of performance profiles against the power threshold.
 
 
 \begin{figure}[htbp]
@@ -246,13 +249,17 @@ Our method empirically achieves as high or higher power than the previous state 
 \includegraphics[width=0.5\textwidth]{../Figures/Fig8}
 }
 \caption{Quantitative comparisons of the power of the various algorithms across all simulations into a single number.  
-(a) Performance profile plots comparing the different algorithms on all 1-dimensional problems at YYY a fixed sample size where any testing power exceeds the power threshold 0.8 YYY. The legend provides the Area-Under-the-Curve (AUC) for each method; larger is better.
+(a) Performance profile plots comparing the different algorithms on all 1-dimensional problems at a fixed sample size where any testing power exceeds the power threshold 0.8. The legend provides the Area-Under-the-Curve (AUC) for each method; larger is better.
 (b) AUC for each method sweeping over all different power thresholds.
-(c) Same as (a) but for the high-dimensional simulations, YYY at a fixed dimension where any testing power drops below the power threshold 0.5 YYY.
+(c) Same as (a) but for the high-dimensional simulations, YYY at a fixed dimension where any testing power drops below the power threshold 0.5 YYY XXX the previous clause is not clear to me XXX.
 (d) Same as (b) but for the high-dimensional simulations.
 It is clear that our method outperforms the previous state of the art, regardless of function, sample size, and dimensionality.}
 \label{fig:pp}
 \end{figure}
+
+We can clearly see from Figure~\ref{fig:pp} that LGC is indeed the most reliable method in finite-sample testing, in accordance with the individual power plots in Figure~\ref{fig:1D} and Figure~\ref{fig:nD}. For the dimension $1$ scenario the performance profiles of LGC is clearly better than others, and for the increasing dimension scenario the advantage is even larger. Note that HHG is slightly better than dcorr in the performance profiles, because there are more nonlinear distributions than linear in the $20$ dependencies, and HHG has a larger advantage for nonlinear dependency than its disadvantage in linear dependency when compared to dcorr; and the Mantel test has the lowest performance profile in both scenarios. 
+
+
 
 
 \begin{figure}[htbp]
@@ -264,6 +271,8 @@ Again, our method empirically achieves as high or higher power than the previous
 \end{figure}
 
 
+
+\subsection{Discovery of Dependency Across Scales}
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig6s}
@@ -288,9 +297,9 @@ The first experiment is to detect the relationship between the brain connectome 
 
 To apply our method, two distance measures are required for the two different data sources: for the personality data, the distance matrix $A$ is formed by the Euclidean distance directly; for the connectome data, we run a spectrum analysis for each region, bandpass and normalize it, then calculate the Kullback-Leibler divergence among regions and use the normalized Hellinger distance as the distance matrix $B$. Once the distance matrices $A$ and $B$ are obtained, we apply the permutation test in Section~\ref{main3} for $r=10000$ random permutations, and derive the p-values of LGC, dcorr, mcorr, and Mantel. 
 
-The p-value by LGC is $0.0384$, for which the estimated neighborhood choice is $k=12, l=6$ based on $10000$ MC replicates. No other method yields significant (less than $0.05$) p-value, although HHG is quite close: dcorr has a p-value of 0.5863, mcorr has a p-value of 0.3217, HHG has a p-value of $0.0619$, and the Mantel test has a p-value of $0.9888$. We also show the p-value of LGC with respect to all possible neighborhood choice by heat map in the first plot of Figure\~ref{figReal}, and we can clearly see a local structure in the data that yield significant p-values for adjacent neighborhoods.
+The p-value by LGC is $0.0384$, for which the estimated neighborhood choice is $k=12, l=6$ based on $10000$ MC replicates. No other method yields significant (less than $0.05$) p-value, although HHG is quite close: dcorr has a p-value of 0.5863, mcorr has a p-value of 0.3217, HHG has a p-value of $0.0619$, and the Mantel test has a p-value of $0.9888$. We also show the p-value of LGC with respect to all possible neighborhood choice by heat map in the first plot of Figure~\ref{figReal}, and we can clearly see a local structure in the data that yield significant p-values for adjacent neighborhoods.
 
-Note that if we use LGC based on dcorr rather than mcorr, the p-value becomes $0.4348$ achieved at $k=42, l=33$, which is no longer significant: this implies a high-dimensional structure in the dependency, which is indeed the case for the connectome data. Also note that the distance transformation (especially for the connectome data) may not be the most appropriate for detecting dependency, so it is possible that HHG and mcorr may yield better p-values for a different transformation. 
+Note that if we use LGC based on dcorr rather than mcorr, the p-value becomes $0.4348$ achieved at $k=42, l=33$, which is no longer significant: this implies a high-dimensional structure in the dependency, which is indeed the case for the connectome data. Also note that the distance transformation (especially for the connectome data) may not be the most appropriate for detecting dependency, so it is possible that HHG and mcorr may yield better p-values for a different transformation.  XXX what do you mean distance ``transformation''?  seems like you mean ``distance''? or ``metric''? XXX
 
 
 \begin{figure}[htbp]
@@ -312,16 +321,18 @@ Note that if we use LGC based on dcorr rather than mcorr, the p-value becomes $0
 \label{figReal}
 \end{figure}
 
-Next we carry out the same testing procedure on another experiment regarding brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by very high resolution MRI scans on the hippocampus; and we also have available a categorical vector containing the disease information, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the data. 
+Next we carry out the same testing procedure on another experiment regarding brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by  high resolution MRI scans on the hippocampus; and we also have available a categorical vector containing the disease information, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the data. 
 
 The brain data is transformed into two dissimilarity matrices $LML$ and $LMR$, representing the left and right hippocampus data based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing); and the label vector is transformed into its Euclidean distance matrix $D$, where $D(i,j)=0$ if and only if the $i$th subject has a different label from the $j$th subject. We consider two permutation tests: testing dependency between $LML$ and $D$, and testing dependency between $LMR$ and $D$.
 
-For testing between the left brain and the disease, the p-value of LGC is $0.0010$ after $10000$ random permutations, and the estimated neighborhood choice is $k=105,l=91$ based on $10000$ MC replicates; dcorr has a p-value of $0.0448$, mcorr has a p-value of $0.0396$, HHG has a p-value of $0.0391$, and the Mantel test has a p-value of $0.0471$, so all benchmarks have larger p-values than LGC but are still significant at $0.05$. Note that the heat map of LGC with respect to different neighborhood choices is available in the second plot of Figure~\ref{figReal}; and if we use LGC based on dcorr instead, the p-value of LGC is still $0.0010$ at $k=106,l=92$ with a very similar heat map.
+For testing between the left brain and the disease, the p-value of LGC is $0.0010$ after $10$,$000$ random permutations, and the estimated neighborhood choice is $k=105,l=91$ based on $10$,$000$ MC replicates; dcorr has a p-value of $0.0448$, mcorr has a p-value of $0.0396$, HHG has a p-value of $0.0391$, and the Mantel test has a p-value of $0.0471$, so all benchmarks have larger p-values than LGC but are still significant at $0.05$. Note that the heat map of LGC with respect to different neighborhood choices is available in the second plot of Figure~\ref{figReal}; and if we use LGC based on dcorr instead, the p-value of LGC is still $0.0010$ at $k=106,l=92$ with a very similar heat map.
 
 For testing between the right brain and the disease, the p-value of LGC is $0.0018$ with the estimated neighborhood choice being $k=106,l=91$; dcorr has a p-value of $0.0750$, mcorr has a p-value of $0.0758$, HHG has a p-value of $0.0859$, and the Mantel test has a p-value of $0.0765$, so all benchmarks are not significant at $0.05$. Note that the heat map of LGC with respect to different neighborhood choices is available in the third plot of Figure~\ref{figReal}; and if we use LGC based on dcorr instead, the p-value of LGC becomes $0.0016$ at $k=105,l=92$.
 
+XXX Insert a table showing the p-value for each of the methods across each of the settings. XXX
+
 We can observe from the heat map of LGC that there is a clear threshold in the local structure most neighborhood choices after certain threshold yields significant p-values, and LGC with mcorr performs similarly as LGC with dcorr. They imply that the dependency between the brain data and the disease data is probably cross-region, close to linear and low-dimensional. Furthermore, the left brain seems to be more correlated with the disease than the right brain, as testing between $LML$ and $D$ yields smaller p-values than testing between $LMR$ and $D$.
-YYY cross-region means: if we limit our observation within a small region in this data, there won't be any dependency; and there is a significant jump in p-value after certain neighborhood threshold YYY
+YYY cross-region means: if we limit our observation within a small region in this data, there won't be any dependency; and there is a significant jump in p-value after certain neighborhood threshold YYY XXX i don't understand why you believe these results imply anything about cross-regional dependencies? because k,l are large? so we need to incorporate distances that are big? i think it might be a cool insight, i just don't understand it. XXX
 
 Note that the p-value is always $0$ for any test statistic when testing independence between $LML$ and $LMR$, implying strong linear dependency between the left and right brain.
 
@@ -340,11 +351,19 @@ one-sample, two-sample, group testing, anova, regressing out other covariates (l
 different test statistics: there are many possible ways to generate the null distribution, including permutation, but also t-test (as in the mdcorr paper and the asymptotic distribution derived from Gretton et al 2009), wilcoxon signed rank test, etc..
 
 
+scaling up via FlashX?
+
 \section*{Acknowledgment}
 \addcontentsline{toc}{section}{Acknowledgment}
-This work was partially supported by National Security Science and Engineering Faculty Fellowship (NSSEFF), Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT COE), and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) administered through Air Force Research Laboratory contract FA8750-12-2-0303.
-
-SIMPLEX.
+This work was partially supported by 
+% 
+National Security Science and Engineering Faculty Fellowship (NSSEFF), 
+% 
+Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT COE), 
+% 
+Defense Advanced Research Projects Agency's (DARPA) SIMPLEX program through SPAWAR contract N66001-15-C-4041, 
+% 
+and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) administered through Air Force Research Laboratory contract FA8750-12-2-0303.
 
 
 
@@ -367,6 +386,9 @@ SIMPLEX.
 \caption{Testing Power Heat-map of Local Graph Correlation for Dimension 1}
 \label{figSim2}
 \end{figure}
+
+
+\section{Data Collection}
 
 
 \section{Dependence Measures}

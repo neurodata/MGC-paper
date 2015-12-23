@@ -134,8 +134,8 @@ where $a_{ij}$ is the correlation between $x_i$ and $x_j$, and $b_{ij}$ is defin
     \begin{cases}
       a_{ij}, & \text{if }rank(a_{ij}) < k, \\
       0, & \text{otherwise};
-    \end{cases}, \qquad \qquad
-    a_{ij}^l=
+    \end{cases} \qquad \qquad
+    b_{ij}^l=
     \begin{cases}
       b_{ij}, & \text{if }rank(b_{ij}) < l, \\
       0, & \text{otherwise}.
@@ -613,6 +613,8 @@ We evaluate our algorithm by statistical testing powers on known joint distribut
 When the true joint distribution $f_{XY}$ is known, we can repeatedly generate $\mathcal{X}$ and $\mathcal{Y}$ using $f_{XY}$ by $r$ Monte-Carlo replicates, based on which we can estimate the empirical distribution of $LGC_{kl}$ under the alternative; then we generate $\mathcal{Y}^{''}$ independently from the marginal distribution, from which we can estimate the empirical distribution of $LGC_{kl}$ under the null.
 
 From the above empirical distributions, we estimate the testing power of $LGC_{kl}$ at type 1 error level $\alpha$, and take the maximal power $\hat{\beta}{LGC}=\max{\hat{\beta}(LGC_{kl}), k,l=2, \ldots,n}$ as the empirical power of LGC. 
+
+XXX please clarify in the above ``how'' you get power from those two distributions. XXX
 
 We call the above evaluation procedure as the independence test, which approximates the bootstrap procedure in step 3 of the algorithm: because the empirical distribution of the re-sampled data approximates the true distribution for sufficiently large $r$, the testing power of LGC based on the independence test approximates the testing power of LGC from the permutation test.
 

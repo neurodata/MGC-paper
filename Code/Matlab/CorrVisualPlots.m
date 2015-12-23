@@ -115,7 +115,7 @@ for type=1:20
         case 12 %Square, dim=1, n=200
             u=unifrnd(-1,1,n,d)*A;
             v=unifrnd(-1,1,n,d)*A;
-            theta=-pi/8;
+            theta=0; %-pi/8;
             tmp=[cos(theta) -sin(theta); sin(theta) cos(theta)];
             uv=[u v] * tmp;
             x=uv(:,1);
@@ -168,5 +168,6 @@ for type=1:20
     end
     plot(x,y,'.')
     title(titlechar);
+%     axis('square')
 end
 suptitle('Visualization for 20 Simulated Dependencies')

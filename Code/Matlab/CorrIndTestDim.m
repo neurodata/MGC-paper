@@ -28,11 +28,11 @@ else
 end
 
 % Intermediate results
-dCor1N=zeros(K,K,rep);dCor2N=zeros(K,K,rep);dCor3N=zeros(1,rep);dCor4N=zeros(1,rep);
-dCor1A=zeros(K,K,rep);dCor2A=zeros(K,K,rep);dCor3A=zeros(1,rep);dCor4A=zeros(1,rep);
+dCor1N=zeros(K,K,rep);dCor2N=zeros(K,K,rep);dCor3N=zeros(K,K,rep);dCor4N=zeros(1,rep);
+dCor1A=zeros(K,K,rep);dCor2A=zeros(K,K,rep);dCor3A=zeros(K,K,rep);dCor4A=zeros(1,rep);
 
 % Output
-power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(1,lim);power4=zeros(1,lim);% Powers for dCorr, mdCorr, HHG, and Mantel
+power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(K,K,lim);power4=zeros(1,lim);% Powers for dCorr, mdCorr, HHG, and Mantel
 
 % Iterate through all dimension choices
 for i=1:lim
@@ -47,16 +47,16 @@ for i=1:lim
         P=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(P)];
         if option(1)~=0
-            dCor1N(:,:,r)=localDCorr(C,P,0,disRank);
+            dCor1N(:,:,r)=LocalGraphCorr(C,P,1,disRank);
         end
         if option(2)~=0
-            dCor2N(:,:,r)=localDCorr(C,P,1,disRank);
+            dCor2N(:,:,r)=LocalGraphCorr(C,P,2,disRank);
         end
         if option(3)~=0
-            dCor3N(r)=HHG(C,P);
+            dCor3N(:,:,r)=LocalGraphCorr(C,P,3,disRank);
         end
         if option(4)~=0
-            dCor4N(r)=Mantel(C,P);
+            dCor4N(r)=HHG(C,P);
         end
     end
     
@@ -70,16 +70,16 @@ for i=1:lim
         P=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(P)];
         if option(1)~=0
-            dCor1A(:,:,r)=localDCorr(C,P,0,disRank);
+            dCor1A(:,:,r)=LocalGraphCorr(C,P,1,disRank);
         end
         if option(2)~=0
-            dCor2A(:,:,r)=localDCorr(C,P,1,disRank);
+            dCor2A(:,:,r)=LocalGraphCorr(C,P,2,disRank);
         end
         if option(3)~=0
-            dCor3A(r)=HHG(C,P);
+            dCor3A(:,:,r)=LocalGraphCorr(C,P,3,disRank);
         end
         if option(4)~=0
-            dCor4A(r)=Mantel(C,P);
+            dCor4A(r)=HHG(C,P);
         end
     end
     
@@ -94,20 +94,23 @@ for i=1:lim
             dCorT=sort(dCor2N(k,k2,:),'descend');
             cut2=dCorT(ceil(rep*alpha));
             power2(k,k2,i)=mean(dCor2A(k,k2,:)>cut2);
+            
+            dCorT=sort(dCor3N(k,k2,:),'descend');
+            cut3=dCorT(ceil(rep*alpha));
+            power3(k,k2,i)=mean(dCor3A(k,k2,:)>cut3);
         end
     end
-    dCorT=sort(dCor3N,'descend');
-    cut3=dCorT(ceil(rep*alpha));
-    power3(i)=mean(dCor3A>cut3);
     dCorT=sort(dCor4N,'descend');
     cut4=dCorT(ceil(rep*alpha));
     power4(i)=mean(dCor4A>cut4);
+%     dCorT=sort(dCor4N,'descend');
+%     cut4=dCorT(ceil(rep*alpha));
+%     power4(i)=mean(dCor4A>cut4);
 end
 
 % Save the results
 filename=strcat('CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
-%save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option');
-save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option','dCor2A','dCor2N','dCor1A','dCor1N');
+save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option');
 
 % %% Display and save picture. By default do not display.
 % % Plot figure

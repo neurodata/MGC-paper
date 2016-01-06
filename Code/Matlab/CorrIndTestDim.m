@@ -1,8 +1,7 @@
 function [power1, power2, power3, power4]=CorrIndTestDim(type,n,dim,lim,rep, noise,option)
 % Author: Cencheng Shen
-% Independence Tests for identifying dependency, returning empirical testing power with respect to increasing dimension at a fixed sample size.
-% The output are the powers of local original dCorr, local modified
-% dCorr, HHG, and Mantel test.
+% Independence Tests for identifying dependency, with respect to increasing dimension at a fixed sample size.
+% The output are the empirical powers of LGC by mcorr/dcorr/Mantel, and HHG.
 %
 % Parameters:
 % type specifies the type of distribution,
@@ -32,7 +31,7 @@ dCor1N=zeros(K,K,rep);dCor2N=zeros(K,K,rep);dCor3N=zeros(K,K,rep);dCor4N=zeros(1
 dCor1A=zeros(K,K,rep);dCor2A=zeros(K,K,rep);dCor3A=zeros(K,K,rep);dCor4A=zeros(1,rep);
 
 % Output
-power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(K,K,lim);power4=zeros(1,lim);% Powers for dCorr, mdCorr, HHG, and Mantel
+power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(K,K,lim);power4=zeros(1,lim);% Powers for LGC by mcorr/dcorr/Mantel, HHG.
 
 % Iterate through all dimension choices
 for i=1:lim
@@ -103,9 +102,6 @@ for i=1:lim
     dCorT=sort(dCor4N,'descend');
     cut4=dCorT(ceil(rep*alpha));
     power4(i)=mean(dCor4A>cut4);
-%     dCorT=sort(dCor4N,'descend');
-%     cut4=dCorT(ceil(rep*alpha));
-%     power4(i)=mean(dCor4A>cut4);
 end
 
 % Save the results

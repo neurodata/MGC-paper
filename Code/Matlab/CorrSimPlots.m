@@ -37,9 +37,9 @@ ylabel('Empirical Testing Power','position',[-520 3],'FontSize',20);
 suptitle('Testing Powers of 20 Simulated Dependencies for Dimension 1 with Increasing Sample Size')
 switch optionA
     case 1
-        legend('LGC with mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');    
+        legend('LGC by mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');    
     case 2
-        legend('LGC with mcorr','LGC with dcorr','LGC with Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
+        legend('LGC by mcorr','LGC by dcorr','LGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
 end
 
 figure
@@ -133,10 +133,10 @@ sumP=ceil(mean(profile,2)*1000)/1000;
 switch optionA
     case 1
         plot(xaxis,profile(1,:),'r.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        legend(strcat('LGC with mcorr, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+        legend(strcat('LGC by mcorr, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
     case 2
         plot(xaxis,profile(1,:),'r.-',xaxis,profile(6,:),'b.-',xaxis,profile(7,:),'c.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        legend(strcat('LGC with mcorr, AUC=', num2str(sumP(1))),strcat('LGC with dcorr, AUC=', num2str(sumP(6))),strcat('LGC with Mantel, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+        legend(strcat('LGC by mcorr, AUC=', num2str(sumP(1))),strcat('LGC by dcorr, AUC=', num2str(sumP(6))),strcat('LGC by Mantel, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
 end
 xlabel('Difference with the Best Method','FontSize',13);
 ylabel('Relative Performance','FontSize',13);
@@ -188,10 +188,10 @@ xaxis=1/limN:1/limN:1;
 switch optionA
     case 1
         plot(xaxis,sumP(1,:),'r.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        legend('LGC with mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+        legend('LGC by mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
     case 2
         plot(xaxis,sumP(1,:),'r.-',xaxis,sumP(6,:),'b.-',xaxis,sumP(7,:),'c.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        legend('LGC with mcorr','LGC with dcorr','LGC with Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+        legend('LGC by mcorr','LGC by dcorr','LGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
 end
 xlabel('Threshold of Power','FontSize',13);
 ylabel('Area Under Curve','FontSize',13);
@@ -202,6 +202,9 @@ title(titleStr,'FontSize',12);
 
 
 %Plot 5-8
+clear
+optionA=1;
+total=20;
 figure
 s=4;
 t=5;
@@ -230,14 +233,14 @@ for j=1:total
     ylim([0 1]);
     title(titlechar);
 end
-xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
-ylabel('Empirical Testing Power','position',[-520 3],'FontSize',20);
+xlabel('Dimension','position',[-180 -0.2],'FontSize',20);
+ylabel('Empirical Testing Power','position',[-490 3],'FontSize',20);
 suptitle('Testing Powers of 20 Simulated Dependencies for Increasing Dimension with Fixed Sample Size')
 switch optionA
     case 1
-        legend('LGC with mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
+        legend('LGC by mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
     case 2
-        legend('LGC with mcorr','LGC with dcorr','LGC with Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
+        legend('LGC by mcorr','LGC by dcorr','LGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
 end
 
 figure
@@ -282,7 +285,7 @@ if optionA==1
 else
     tstring=' by Mantel ';
 end
-suptitle(strcat('Testing Power of Local Graph Dependency',tstring,' for Increasing Dimension');
+suptitle(strcat('Testing Power of Local Graph Dependency',tstring,' for Increasing Dimension'));
 
 %%%performance profile
 figure
@@ -323,10 +326,10 @@ sumP=ceil(mean(profile,2)*1000)/1000;
 switch optionA
     case 1
         plot(xaxis,profile(1,:),'r.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        legend(strcat('LGC with mcorr, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+        legend(strcat('LGC by mcorr, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
     case 2
         plot(xaxis,profile(1,:),'r.-',xaxis,profile(6,:),'b.-',xaxis,profile(7,:),'c.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        legend(strcat('LGC with mcorr, AUC=', num2str(sumP(1))),strcat('LGC with dcorr, AUC=', num2str(sumP(6))),strcat('LGC with Mantel, AUC=', num2str(sumP(7))),strcat('mcorr AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+        legend(strcat('LGC by mcorr, AUC=', num2str(sumP(1))),strcat('LGC by dcorr, AUC=', num2str(sumP(6))),strcat('LGC by Mantel, AUC=', num2str(sumP(7))),strcat('mcorr AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
 end
 xlabel('Difference with the Best Method','FontSize',13);
 ylabel('Relative Performance','FontSize',13);
@@ -378,10 +381,10 @@ xaxis=1/limN:1/limN:1;
 switch optionA
     case 1
         plot(xaxis,sumP(1,:),'r.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        legend('LGC with mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+        legend('LGC by mcorr','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
     case 2
         plot(xaxis,sumP(1,:),'r.-',xaxis,sumP(6,:),'b.-',xaxis,sumP(7,:),'c.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        legend('LGC with mcorr','LGC with dcorr','LGC with Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+        legend('LGC by mcorr','LGC by dcorr','LGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
 end
 xlabel('Threshold of Power','FontSize',13);
 ylabel('Area Under Curve','FontSize',13);

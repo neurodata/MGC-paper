@@ -1,21 +1,22 @@
-function [x, y]=CorrSampleGenerator(type,n,dim,optionAlt, noise)
+function [x, y]=CorrSampleGenerator(type,n,dim,dependent, noise)
 % Author: Cencheng Shen
-% Output sample data x and y for testing independence based on given type.
+% Generate sample data x and y for testing independence based on given
+% distribution.
 %
 % Parameters:
 % type specifies the type of distribution,
 % n is the sample size, dim is the dimension
-% optionAlt specifies the null or the alternative hypothesis, by default 1
+% dependent specifies whether the data are dependent or not, by default 1
 % noise specifies the noise level, by default 0.
 if nargin<4
-    optionAlt=1; %by default generate dependent samples
+    dependent=1; % by default generate dependent samples
 end
 if nargin<5
-    noise=0; %default noise level
+    noise=0; % default noise level
 end
 
 if noise~=0
-    eps=mvnrnd(0,1,n); %Gaussian noise added to Y
+    eps=mvnrnd(0,1,n); % Gaussian noise added to Y
 else
     eps=zeros(n,1);
 end
@@ -27,15 +28,12 @@ for d=1:dim
     A(d)=A(d)/d; %fixed decay
 end
 
-% Generate x by uniform distribution first, which is the distribution used by half
-% of the distributions; store the weighted summation in xA.
+% Generate x by uniform distribution first, which is the default distribution used by many types; store the weighted summation in xA.
 x=unifrnd(-1,1,n,d);
-%x=random('norm',0,1,n,d);
 xA=x*A;
 % Generate x independently by uniform if the null hypothesis is true, i.e., x is independent of y.
-if optionAlt==0
+if dependent==0
     x=unifrnd(-1,1,n,d);
-    %x=random('norm',0,1,n,d);
 end
 
 switch type % In total 20 types of dependency
@@ -48,7 +46,7 @@ switch type % In total 20 types of dependency
     case 4 %Exponential
         x=unifrnd(0,3,n,d);
         y=exp(x*A)+10*noise*eps;
-        if optionAlt==0
+        if dependent==0
             x=unifrnd(0,3,n,d);
         end
     case 5 %Joint Normal; note that the covariance matrix for dim>10 is no longer positive semi-definite
@@ -58,7 +56,7 @@ switch type % In total 20 types of dependency
         cov=[cov1' cov2'];
         x=mvnrnd(zeros(n,2*d),cov,n);
         y=x(:,d+1:2*d)+0.5*noise*repmat(eps,1,d);
-        if optionAlt==0
+        if dependent==0
             x=mvnrnd(zeros(n,2*d),cov,n);
         end
         x=x(:,1:d);
@@ -73,14 +71,14 @@ switch type % In total 20 types of dependency
     case 10 %Log(X^2)
         x=mvnrnd(zeros(n, d),eye(d));
         y=log(x.^2)+3*noise*repmat(eps,1,d);
-        if optionAlt==0
+        if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));
         end
     case 11 %Circle
         x=unifrnd(0,1,n,d);
         xA=x*A;
         y=((binornd(1,0.5,n,1)*2-1).*abs(1-(xA/max(xA)*2-1).^2).^0.5+1)/2+0.1*noise*eps;
-        if optionAlt==0
+        if dependent==0
             x=unifrnd(0,1,n,d);
         end
     case 12 %Ellipse
@@ -88,7 +86,7 @@ switch type % In total 20 types of dependency
         yc=1;
         z=unifrnd(-1,1,n,d);
         y=yc*cos(z*pi)*A+noise*mvnrnd(0,1,n)/3;
-        if optionAlt==0
+        if dependent==0
             z=unifrnd(-1,1,n,d);
         end
         x=xc*sin(z*pi)*A+noise*mvnrnd(0,1,n)/8;
@@ -98,7 +96,7 @@ switch type % In total 20 types of dependency
         xA=x*A;
         y=xA.*(cos(x)*A)+0.4*noise*eps;
         x=xA.*(sin(x)*A);
-        if optionAlt==0
+        if dependent==0
             x=unifrnd(0,20,n,d);
             x=x*A.*(sin(x)*A);
         end
@@ -110,7 +108,7 @@ switch type % In total 20 types of dependency
         uv=[u v] * tmp;
         x=uv(:,1);
         y=uv(:,2);%+noise*eps;
-        if optionAlt==0
+        if dependent==0
             u=unifrnd(-1,1,n,d)*A;
             v=unifrnd(-1,1,n,d)*A;
             uv=[u v] * tmp;
@@ -124,7 +122,7 @@ switch type % In total 20 types of dependency
         uv=[u v] * tmp;
         x=uv(:,1);
         y=uv(:,2);%+noise*eps;
-        if optionAlt==0
+        if dependent==0
             u=unifrnd(-1,1,n,d)*A;
             v=unifrnd(-1,1,n,d)*A;
             uv=[u v] * tmp;
@@ -134,19 +132,19 @@ switch type % In total 20 types of dependency
         y=sin(4*pi*xA/max(xA))+1*noise*eps;
     case 17 %Sine 1/8
         y=sin(16*pi*xA/max(xA))+0.5*noise*eps;
-    case 18 %Uncorrelated Binomial
-        x=binornd(1,0.5,n,d);
-        y=(binornd(1,0.5,n,d)*2-1)*A;
-        y=x*A.*y+0.6*noise*eps;
-        if optionAlt==0
-            x=binornd(1,0.5,n,d);
-        end
-    case 19 %Multiplicative Noise
+    case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, 1),eye(1));
         y=x.*repmat(y,1,d)+0.5*noise*repmat(eps,1,d);
-        if optionAlt==0
+        if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));
+        end
+    case 19 %Uncorrelated Binomial
+        x=binornd(1,0.5,n,d);
+        y=(binornd(1,0.5,n,1)*2-1);
+        y=x*A.*y+0.6*noise*eps;
+        if dependent==0
+            x=binornd(1,0.5,n,d);
         end
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)*A/3+(binornd(1,0.5,n,1)-0.5)*2;

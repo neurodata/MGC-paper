@@ -1,8 +1,7 @@
 function [power1, power2, power3, power4]=CorrIndTest(type,n,dim,lim,rep, noise,option)
 % Author: Cencheng Shen
-% Independence Tests for identifying dependency, returning empirical testing power with respect to increasing sample size at a fixed dimension.
-% The output are the powers of local original dCorr, local modified
-% dCorr, HHG, and Mantel test.
+% Independence Tests for identifying dependency, with respect to increasing sample size at a fixed dimension.
+% The output are the empirical powers of LGC by mcorr/dcorr/Mantel, and HHG.
 %
 % Parameters:
 % type specifies the type of distribution,
@@ -34,7 +33,7 @@ DataN=zeros(n,2*n,rep); DataA=zeros(n,2*n,rep);
 d=dim;
 
 % Output
-power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(K,K,lim);power4=zeros(1,lim);% Powers for dCorr, mdCorr, HHG, and Mantel
+power1=zeros(K,K,lim);power2=zeros(K,K,lim);power3=zeros(K,K,lim);power4=zeros(1,lim);% Powers for LGC by mcorr/dcorr/Mantel, HHG.
 
 for r=1:rep
     % Generate independent sample data and form the distance matrices
@@ -110,9 +109,6 @@ for i=1:lim
     dCorT=sort(dCor4N,'descend');
     cut4=dCorT(ceil(rep*alpha));
     power4(i)=mean(dCor4A>cut4);
-%     dCorT=sort(dCor4N,'descend');
-%     cut4=dCorT(ceil(rep*alpha));
-%     power4(i)=mean(dCor4A>cut4);
 end
 
 % Save the results

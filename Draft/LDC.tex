@@ -251,7 +251,7 @@ LGC empirically achieves as high or higher power than the previous state of the 
 
 
 \subsection{High Dimensional Simulation Experiments}
-\label{numer1}
+\label{numer2}
 In this subsection we consider the same $20$ distributions and the same testing procedures, but in an increasing dimension setting. The sample size is fixed at $n=100$, with increasing $d_{x}$ and no noise in this simulation; $d_{y}$ is either fixed at $1$ or increases together with $d_{x}$, depending on the particular distribution. The empirical testing powers based on $r=10000$ Monte-Carlo replicates at $\alpha=0.05$ is plotted in Figure~\ref{fig:nD} against the dimension $d_{x}$.
 
 Similarly, we provide the performance profiles in the third and fourth panel of Figure~\ref{fig:pp} for the increasing dimension scenario: the third panel draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and the fourth panel plots the area under curve of the performance profiles against the power threshold.
@@ -301,19 +301,26 @@ Again, our method empirically achieves as high or higher power than the previous
 
 
 XXX add discussion about discovering dependency across scales. XXX
+YYY below paragraph used to be in appendix; moved here after I notice you put the corresponding figures in this section YYY
+
+In Figure~\ref{figSim2} we show how the powers of $g_{kl}$ change with respect to increasing neighborhood $k$ and $l$, for the low-dimension and high-dimension simulations. They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures. We can clearly see that for consecutive neighborhoods, the local testing powers are very close to each other, since the local tests are strongly correlated with each other. This implies that the optimal neighborhood choice of LGC can be reasonably estimated by bootstrap.
 
 \begin{figure}[htbp]
+\subfloat[]{
+\includegraphics[width=1.0\textwidth]{../Figures/Fig2}
+}
+\hfil
+\subfloat[]{
 \includegraphics[width=1.0\textwidth]{../Figures/Fig6}
-\caption{Testing Power Heatmap of Local Graph Correlation for Increasing Dimension.
+}
+\caption{Testing Power Heat-map of Local Graph Correlation for Dimension 1 and Increasing Dimension.
 % Understanding how dependence varies with the local scale of the dependence.  
 For each of the 20 panels, the abscissa denotes the number of neighbors for $X$, and the ordinate denotes the number of neighbors for $Y$.  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
 \label{figSim2}
 \end{figure}
-% \end{comment}
-%this was in the previous description, but not accurate: In almost all simulations, LDC outperforms the global special case.
 
 \subsection{Real Data}
-\label{numer2}
+\label{numer3}
 Here we apply LGC to test independence between brain features and personal characteristics from two different experiments, for which the data sets are relatively small in sample size due to the expensive data collection process. We report the p-values of all test statistics from the permutation test; and the optimal neighborhood size of LGC is estimated by bootstrap, based on the main algorithm in Section~\ref{main3} of the appendix.
 
 The first experiment is to detect the relationship between the brain connectome and personality from \cite{AdelsteinEtAl2011}. The sample size is $n=42$, and each person has a $5$ dimensional personality data based on questionnaires and the five-factor personality model. Then the brain activity of each person is measured by fMRI for $197$ brain regions and $194$ time steps. Thus the brain connectome feature is high-dimensional while the personality data is low-dimensional. There seems to exist certain correlation between the brain activity and personality as experimentally shown in \cite{AdelsteinEtAl2011}, but whether the dependency can be detected from the raw data is the question here.
@@ -452,9 +459,9 @@ For the purpose of the increasing dimension scenario, we denote $w$ as a size $1
 
 17. Sine Period 1/8: $\mb{x} \sim uniform(-1,1)^{d_{x}}$, $\mb{y}=sin(16\pi \frac{w\mb{x}}{\max(w\mb{x})})+0.5c\epsilon$.    
 
-18. Uncorrelated Binomial: $\mb{x} \sim Bernoulli(0.5)^{d_{x}}$, $\mb{u} \sim Bernoulli(0.5)^{d_{x}}$, $\mb{y}=w\mb{x} \cdot w(2\mb{u}-1)+0.6c\epsilon$.
+18. Multiplicative Noise: $\mb{x} \sim normal(0, 1)^{d_{x}}$, $\mb{u} \sim normal(0, 1)$, $\mb{y}=\mb{x} \cdot \mb{u}+0.5c\epsilon$.
 
-19. Multiplicative Noise: $\mb{x} \sim normal(0, 1)^{d_{x}}$, $\mb{u} \sim normal(0, 1)$, $\mb{y}=\mb{x} \cdot \mb{u}+0.5c\epsilon$.
+19. Uncorrelated Binomial: $\mb{x} \sim Bernoulli(0.5)^{d_{x}}$, $\mb{u} \sim Bernoulli(0.5)$, $\mb{y}=w\mb{x} \cdot (2\mb{u}-1)+0.6c\epsilon$.
 
 20. Independent Clouds: Let $\mb{u} \sim normal(0,1)^{d_{x}}$, $\mb{v} \sim normal(0,1)^{d_{y}}$, $\epsilon_{1} \sim Bernoulli(0.5)$, $\epsilon_{2} \sim Bernoulli(0.5)$. Then we set $d_{x}=d_{y}$, and take $\mb{x}=w\mb{u}/3+\epsilon_{1}, \mb{y}=w\mb{v}/3+\epsilon_{2}$.
 
@@ -474,21 +481,7 @@ The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, as the
 
 \section{Supplementary Figures}
 
-In Figure~\ref{figSim2} we show how the powers of $g_{kl}$ change with respect to increasing neighborhood $k$ and $l$, for the low-dimension and high-dimension simulations. They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures. We can clearly see that for consecutive neighborhoods, the local testing powers are very close to each other, since the local tests are strongly correlated with each other. This implies that the optimal neighborhood choice of LGC can be reasonably estimated by bootstrap.
-
 In Figure~\ref{fig:D2} and Figure~\ref{fig:pp2} we add the testing powers and performance profiles of LGC by dcorr and LGC by Mantel, for the same low-dimensional and high-dimensional scenarios in the main paper. Overall, LGC by dcorr and LGC by Mantel also improve over the respective global test statistics. Specifically, for the dimension 1 scenario, LGC by Mantel is overall slightly better than LGC by dcorr/mcorr due to its significant advantage for type 11-13; and for the increasing dimension scenario, LGC by Mantel/dcorr is similar to but slightly inferior to LGC by mcorr, due to the advantage of mcorr against high dimensional dependencies.
-
-\begin{figure}[htbp]
-\subfloat[]{
-\includegraphics[width=1.0\textwidth]{../Figures/Fig2}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=1.0\textwidth]{../Figures/Fig6}
-}
-\caption{Testing Power Heat-map of Local Graph Correlation for Dimension 1 and Increasing Dimension}
-\label{figSim2}
-\end{figure}
 
 \begin{figure}[htbp]
 \subfloat[]{
@@ -562,7 +555,7 @@ YYY
 In this section, we review the Mantel test, distance correlation, modified distance correlation, and the HHG test in order.
 
 \subsection{(Global) Mantel Test}
-\label{sec:hhg}
+\label{sec:mantel}
 For Mantel/dcorr/mcorr, they all start with two Euclidean distance matrices $C=(c_{ij}), D=(d_{ij}) \in \Real^{n \times n}$, where $c_{ij}=\|x_{i}-x_{j}\|_{2}$ and $d_{ij}=\|y_{i}-y_{j}\|_{2}$. 
 
 Then the Mantel coefficient \cite{Mantel1967} is defined as 

@@ -1,80 +1,74 @@
 library(ggplot2)
 library(reshape2)
+library(lattice)
 source("PermutationTest.R")
+source("IndependenceTest.R")
 source("verifyNeighbors.R")
 
 CorrPermDistTest <- function(type,rep,cv,titlechar,allP,option){
   # Author: Cencheng Shen
-  # Permutation Tests for identifying dependency, returning p-value of given data
-  # The output are the p-values of local original dCorr, local modified dCorr, HHG, and Mantel test.
+  # Permutation Tests for identifying dependency.
+  # The output are the p-values of LGC by mcorr/dcorr/Mantel, and HHG;
+  # followed by the estimated optimal neighborhood for LGC by
+  # mcorr/dcorr/Mantel.
+  # Note that the local family include the global test at the last entry.
   
   # Parameters:
   # type should be a n*2n matrix, a concatenation of two distance matrices,
   # rep specifies the number of random permutations to use,
-  # cv specifies the number of bootstrap samples to use for neighborhood validation
+  # cv specifies the number of bootstrap samples to use for neighborhood validation,
   # set allP to non-zero will use all permutations instead,
   # option specifies whether each test statistic is calculated or not.
   if (missing(rep)){
-    rep=1000; # By default use 1000 random permutations
+    rep=1000; # Default random permutation numbers
   }
   if (missing(allP)){
-    allP=0; # By default do not use all permutations
+    allP=0; # If set to other value, will override rep and use all permutations; unfeasible for n large
   }
   if (missing(titlechar)){
     titlechar="Data";
   }
   if (missing(cv)){
-    cv=0;
+    cv=1000; # Default bootstrap replicates to estimate the optimal neighborhood 
   }
   if (missing(option)){
-    option=c(1,1,1,1); # Control whether to calculate the respective correlation statistic or not.
+    option=c(1,1,1,1);  # Default option. Setting any to 0 to disable the calculation of mcorr/dcorr/Mantel/HHG.
   }
   
   n=nrow(type);
   C=type[, 1:n];
   P=type[, (n+1):(2*n)];
   
+  # If cv is not 0, use resampling to estimate the optimal neighborhood by the testing powers
   ps1=matrix(0,n,n);ps2=matrix(0,n,n);
   if (cv!=0){
-    ratio=0.5;
-    optionCV=option;
-    optionCV[3:4]=rep(0,2);
-    for (i in (1:cv)){
-      noise=rnorm(n,0,1);
-      noise=as.matrix(dist(noise));
-      noise=noise/norm(noise,'f')*norm(P,'f')*ratio;
-      Pa=P+noise;
-      #per=sample(n,n,replace=TRUE);
-      per=(1:n);
-      testP=PermutationTest(C[per,per],Pa[per,per],rep,allP,optionCV);
-      ps1=ps1+testP$ldcorr/cv;
-      ps2=ps2+testP$lmdcorr/cv;
-    }
+    testP=IndependenceTest(C,P,cv);
+    neighbor1=verifyNeighbors(1-testP$power1);
+    neighbor2=verifyNeighbors(1-testP$power2);
+    neighbor3=verifyNeighbors(1-testP$power3);
   }
+  # Return p-values from the permutation test
   testP=PermutationTest(C,P,rep,allP,option);
   if (cv==0){
-    ps1=ps1+testP$ldcorr;
-    ps2=ps2+testP$lmdcorr;
+    neighbor1=verifyNeighbors(testP$p1);
+    neighbor2=verifyNeighbors(testP$p2);
+    neighbor3=verifyNeighbors(testP$p3);
   }
-  neighbor1=verifyNeighbors(ps1);
-  neighbor2=verifyNeighbors(ps2);
   
-  output=list(titlechar=titlechar,ldcorr=testP$ldcorr,lmdcorr=testP$lmdcorr,HHG=testP$HHG,Mantel=testP$Mantel,dcorr=testP$dcorr,mdcorr=testP$mdcorr,dcorrNeighbor=neighbor1,mdcorrNeighbor=neighbor2,n=n,rep=rep,allP=allP,option=option);
+  # Plot level plot
+  max=0.2;p=testP$LGCmcorr;
+  p[which(p>max)]=max;
+  myAt=seq(0,max,0.02);
+  interval=5;
+  ckey=list(at=myAt,labels=list(cex=2));
+  col.l <- colorRampPalette(c('red', 'orange', 'yellow', 'green', 'cyan', 'blue'))
+  ckey=list(labels=list(cex=2));
+  lplot=levelplot(p,zscaleLog="e",col.regions = terrain.colors(100),at=myAt,scales=list(x=list(at=seq(interval,n,interval), cex=2), y=list(at=seq(interval,n,interval), cex=2)),xlab=list(label="Neighborhood Choice of X",cex=2),ylab=list(label="Neighborhood Choice of Y",cex=2),main=list(label="Permutation Test P-Value",cex=2),colorkey=ckey)
   
-  # Plot the p-value w.r.t. neighborhood
-  n=output$n;
-  p1=rep(0,n);p2=rep(0,n);p3=rep(output$dcorr,n);p4=rep(output$mdcorr,n);p5=rep(output$HHG[1],n);p6=rep(output$Mantel,n);
-  for (i in (1:n)){
-     p1[i]=min(output$ldcorr[i,]);
-     p2[i]=min(output$lmdcorr[i,]);
-  }
-  plotData=data.frame(LDcorr=p1,LMDcorr=p2,DCorr=p3,MDCorr=p4,HHG=p5,Mantel=p6,Neighborhood=(1:n));
-  plotData <- melt(plotData,id="Neighborhood");
-  colnames(plotData) <- c("Neighborhood","Method","value");
-  p=ggplot(data=plotData,aes(x=Neighborhood,y=value,color=Method,linetype=Method))+geom_line()+geom_point()+scale_y_log10()+scale_linetype_manual(values = c(rep("solid", 2), rep("dashed", 4)))+scale_colour_manual(values=c("blue","red","blue","red","green","cyan"))+ylab("P-Value")+ggtitle("Permutation Test for Brain Data")+theme(plot.title = element_text(size=20,face="bold"),legend.title = element_text(size=16, face="bold"),legend.text = element_text(size=12),axis.text=element_text(size=16),axis.title=element_text(size=16,face="bold"));
-
+  # Output
+  output=list(titlechar=titlechar,LGCmcorr=mean(testP$LGCmcorr[neighbor1]),LGCdcorr=mean(testP$LGCdcorr[neighbor2]),LGCMantel=mean(testP$LGCMantel[neighbor3]),HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,levelPlot=lplot);
+  #output=list(titlechar=titlechar,LGCmcorr=testP$LGCmcorr,LGCdcorr=testP$LGCdcorr,LGCMantel=testP$LGCMantel,HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,neighbor1=neighbor1,neighbor2=neighbor2,neighbor3=neighbor3);
   
-  # Save the results
   filename = paste("CorrPermDistTestType", titlechar,".RData",sep = "");
   save(output,file = filename);
   return(output);

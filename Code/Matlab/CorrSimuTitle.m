@@ -1,5 +1,5 @@
 function titlechar=CorrSimuTitle(type)
-
+%%%Used to call the character names of each dependency in the simulation
 switch type
     case 1
         titlechar=' 1.Linear';
@@ -36,9 +36,9 @@ switch type
     case 17
         titlechar=' 17.Sine Period 1/8';
     case 18
-        titlechar=' 18.Uncorrelated Binomial';
+        titlechar=' 18.Multiplicative Noise';
     case 19
-        titlechar=' 19.Multiplicative Noise';
+        titlechar=' 19.Uncorrelated Binomial';
     case 20
         titlechar=' 20.Independent Clouds';
 end

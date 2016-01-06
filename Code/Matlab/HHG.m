@@ -1,6 +1,7 @@
 function corr = HHG(X,Y) % Calculate HHG statistic
 % Author: Cencheng Shen
-% Implements the HHG statistic from Heller 2012
+% Implements the HHG statistic from Heller 2012 in a naive way; a faster
+% version exists in the R package
 n=size(X,1);
 S=zeros(n,n);
 

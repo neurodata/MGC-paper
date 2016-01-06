@@ -173,6 +173,7 @@ for r=1:rep
     
     % Random permutation
     perN=randperm(n);
+    perN=per(perN);
     Pa=P(perN,perN);
     disRank=[disRankC(per,per) disRankP(perN,perN)];
     % Calculate the test statistics under the null

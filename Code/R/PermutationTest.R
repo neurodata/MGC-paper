@@ -6,33 +6,27 @@ library(combinat)
 
 PermutationTest <-function(C,P,rep,allP,option){
   # Author: Cencheng Shen
-  # Permutation Tests for identifying dependency, returning p-value of given data
-  # The output are the p-values of local original dCorr, local modified dCorr, HHG, and Mantel test.
-  
-  # Parameters:
-  # C and P are two distance matrices of same size for testing,
-  # rep specifies the number of random permutations to use,
-  # set allP to non-zero will use all permutations instead,
-  # option specifies whether each test statistic is calculated or not.
+  # The permutation Test for given data, an auxiliary function of the main
+  # CorrPermDIstTest function
   if (missing(rep)){
-    rep=1000; # By default use 1000 random permutations
+    rep=1000;
   }
   if (missing(allP)){
-    allP=0; # By default do not use all permutations
+    allP=0; 
   }
   if (missing(option)){
-    option=c(1,1,1,1); # Control whether to calculate the respective correlation statistic or not.
+    option=c(1,1,1,1); 
   }
   if (allP!=0){
-    PALL=permn(n); # By default do not use all permutations
+    PALL=permn(n); 
     rep=length(PALL);
   }
   
-  # P-values for local original dCorr, local modified dCorr, HHG, and Mantel test
+  # P-values for LGC by mcorr, LGC by dcorr, LGC by Mantel, and HHG
   n=nrow(C);
   p1=matrix(0,n,n); p2=matrix(0,n,n);p3=matrix(0,n,n);p4=0;
   
-  # Calculate the test statistics for the given data sets
+  # Calculate the observed test statistics for the given data sets
   disRankC=disToRanks(C);
   disRankP=disToRanks(P);
   disRank=cbind(disRankC,disRankP);
@@ -83,13 +77,6 @@ PermutationTest <-function(C,P,rep,allP,option){
   p2=1-p2;
   p3=1-p3;
   p4=1-p4;
-  # Treat the p-value of local methods in neighborhood 0 as 1
-  p1[1,]=rep(1,n);
-  p2[1,]=rep(1,n);
-  p3[1,]=rep(1,n);
-  p1[,1]=rep(1,n);
-  p2[,1]=rep(1,n);
-  p3[,1]=rep(1,n);
   
   result=list(LGCmcorr=p1,LGCdcorr=p2,LGCMantel=p3,HHG=p4,mcorr=p1[n,n],dcorr=p2[n,n],Mantel=p3[n,n]);
   return(result);

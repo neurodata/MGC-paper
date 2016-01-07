@@ -20,25 +20,21 @@ IndependenceTest <-function(C,P,rep){
   # Powers for LGC by mcorr/dcorr/Mantel
   power1=matrix(0,n,n);power2=matrix(0,n,n);power3=matrix(0,n,n);
   
-  # Calculate the rank matrices for given data 
-  disRankC=disToRanks(C);
-  disRankP=disToRanks(P);
   for (r in (1:rep)){
     # Random sampling with replacement
     per=sample(n,replace=TRUE);
     Ca=C[per,per];
     Pa=P[per,per];
-    disRank=cbind(disRankC[per,per],disRankP[per, per]);
+    disRank=cbind(disToRanks(Ca),disToRanks(Pa));
     # Calculate the test statistics under the alternative
     dCor1A[,,r]=localGraphCorr(Ca,Pa,1,disRank)$corr;
     dCor2A[,,r]=localGraphCorr(Ca,Pa,2,disRank)$corr;
     dCor3A[,,r]=localGraphCorr(Ca,Pa,3,disRank)$corr;
     
-    # Random permutation
-    perN=sample(n);
-    perN=per[perN];
+    # A different random sampling
+    perN=sample(n,replace=TRUE);
     Pa=P[perN,perN];
-    disRank=cbind(disRankC[per,per],disRankP[perN, perN]);
+    disRank=cbind(disToRanks(Ca),disToRanks(Pa));
     # Calculate the test statistics under the null
     dCor1N[,,r]=localGraphCorr(Ca,Pa,1,disRank)$corr;
     dCor2N[,,r]=localGraphCorr(Ca,Pa,2,disRank)$corr;

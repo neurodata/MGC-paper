@@ -55,19 +55,19 @@ CorrPermDistTest <- function(type,rep,cv,titlechar,allP,option){
     neighbor3=verifyNeighbors(testP$p3);
   }
   
-  # Plot level plot
-  max=0.2;p=testP$LGCmcorr;
-  p[which(p>max)]=max;
-  myAt=seq(0,max,0.02);
-  interval=5;
-  ckey=list(at=myAt,labels=list(cex=2));
-  col.l <- colorRampPalette(c('red', 'orange', 'yellow', 'green', 'cyan', 'blue'))
-  ckey=list(labels=list(cex=2));
-  lplot=levelplot(p,zscaleLog="e",col.regions = terrain.colors(100),at=myAt,scales=list(x=list(at=seq(interval,n,interval), cex=2), y=list(at=seq(interval,n,interval), cex=2)),xlab=list(label="Neighborhood Choice of X",cex=2),ylab=list(label="Neighborhood Choice of Y",cex=2),main=list(label="Permutation Test P-Value",cex=2),colorkey=ckey)
-  
+#   # Plot level plot
+#   max=0.2;p=testP$LGCmcorr;
+#   p[which(p>max)]=max;
+#   myAt=seq(0,max,0.02);
+#   interval=5;
+#   ckey=list(at=myAt,labels=list(cex=2));
+#   col.l <- colorRampPalette(c('red', 'orange', 'yellow', 'green', 'cyan', 'blue'))
+#   ckey=list(labels=list(cex=2));
+#   lplot=levelplot(p,zscaleLog="e",col.regions = terrain.colors(100),at=myAt,scales=list(x=list(at=seq(interval,n,interval), cex=2), y=list(at=seq(interval,n,interval), cex=2)),xlab=list(label="Neighborhood Choice of X",cex=2),ylab=list(label="Neighborhood Choice of Y",cex=2),main=list(label="Permutation Test P-Value",cex=2),colorkey=ckey)
+#   
   # Output
-  output=list(titlechar=titlechar,LGCmcorr=mean(testP$LGCmcorr[neighbor1]),LGCdcorr=mean(testP$LGCdcorr[neighbor2]),LGCMantel=mean(testP$LGCMantel[neighbor3]),HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,levelPlot=lplot);
-  #output=list(titlechar=titlechar,LGCmcorr=testP$LGCmcorr,LGCdcorr=testP$LGCdcorr,LGCMantel=testP$LGCMantel,HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,neighbor1=neighbor1,neighbor2=neighbor2,neighbor3=neighbor3);
+  #output=list(titlechar=titlechar,LGCmcorr=mean(testP$LGCmcorr[neighbor1]),LGCdcorr=mean(testP$LGCdcorr[neighbor2]),LGCMantel=mean(testP$LGCMantel[neighbor3]),HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,levelPlot=lplot);
+  output=list(titlechar=titlechar,LGCmcorr=testP$LGCmcorr,LGCdcorr=testP$LGCdcorr,LGCMantel=testP$LGCMantel,HHG=testP$HHG, mcorr=testP$mcorr,dcorr=testP$dcorr,Mantel=testP$Mantel,n=n,rep=rep,allP=allP,option=option,neighbormcorr=neighbor1,neighbordcorr=neighbor2,neighborMantel=neighbor3);
   
   filename = paste("CorrPermDistTestType", titlechar,".RData",sep = "");
   save(output,file = filename);

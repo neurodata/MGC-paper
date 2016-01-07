@@ -1,4 +1,6 @@
 Draft/LDC.pdf
+*.brf
+*.out
 *.aux
 *.bbl
 *.toc
@@ -7,4 +9,4 @@ Draft/LDC.pdf
 *.fls
 *.log
 *.synctex*
-
+*.m~

@@ -32,7 +32,7 @@ P=type(:, n+1:2*n);
 % the testing powers
 ps1=zeros(n,n);ps2=zeros(n,n);ps3=zeros(n,n);
 if cv~=0
-    [p1, p2,p3]=IndependenceTest(C,P,cv);
+    [p1,p2,p3]=IndependenceTest(C,P,cv);
     neighbor1=verifyNeighbors(1-p1,0);
     neighbor2=verifyNeighbors(1-p2,0);
     neighbor3=verifyNeighbors(1-p3,0);
@@ -157,25 +157,21 @@ dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for LGC by mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
 
-% Calculate the rank matrices for given data 
-disRankC=disToRanks(C);
-disRankP=disToRanks(P);
 for r=1:rep
     % Random sampling with replacement
     per=randsample(n,n,true);
     Ca=C(per,per);
     Pa=P(per,per);
-    disRank=[disRankC(per,per) disRankP(per,per)];
+    disRank=[disToRanks(Ca) disToRanks(Pa)];
     % Calculate the test statistics under the alternative
     dCor1A(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
     dCor2A(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
     dCor3A(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
     
-    % Random permutation
-    perN=randperm(n);
-    perN=per(perN);
+    % A different random sampling
+    perN=randsample(n,n,true);
     Pa=P(perN,perN);
-    disRank=[disRankC(per,per) disRankP(perN,perN)];
+    disRank=[disToRanks(Ca) disToRanks(Pa)];
     % Calculate the test statistics under the null
     dCor1N(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
     dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);

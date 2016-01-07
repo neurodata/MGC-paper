@@ -691,7 +691,7 @@ Transform $X$ and $Y$ into two $n \times n$ distance matrices $C$ and $D$.
 
 First we generate a random resampling of size $n$, apply the same resampling to both $X$ and $Y$, and denote the re-sampled data as $X^{'}$ and $Y^{'}$. Then calculate $g_{kl}(X^{'}, Y^{'})$ for all $k,l=2,\ldots,n$ by Equation~\eqref{localCoef}. 
 
-We further generate a random permutation matrix $Q$, and calculate $g_{kl}(X^{'}, Y^{'}Q)$ for all $k,l=2,\ldots,n$. (Alternatively, we can resample again to give an independent $Y^{''}$, and calculate $g_{kl}(X^{'}, Y^{''})$ instead.)
+We further generate a different resampling, apply it to $Y$ only. The re-sampled data is denoted as $Y^{''}$, which is independent of $X^{'}$. Calculate $g_{kl}(X^{'}, Y^{''})$ for all $k,l=2,\ldots,n$. 
 
 Repeat the above procedure for $r$ independent replicates, which yields the empirical distributions of $g_{kl}$ under the alternative and under the null respectively. 
 

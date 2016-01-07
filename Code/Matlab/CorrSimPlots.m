@@ -10,7 +10,7 @@ figure
 s=4;
 t=5;
 for j=1:total
-    filename=strcat('CorrIndTestType',num2str(j),'N100Dim1.mat');
+    filename=strcat('../../Data/CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);power1L=zeros(length(numRange),1);power2L=zeros(length(numRange),1);power3L=zeros(length(numRange),1);power1M=zeros(length(numRange),1);power2M=zeros(length(numRange),1);power3M=zeros(length(numRange),1);
@@ -24,7 +24,7 @@ for j=1:total
     end
     switch optionA
         case 1
-            plot(numRange,power1M,'ro-',numRange,power1L,'r.:',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);           
+            plot(numRange,power1M,'ro-',numRange,power1L,'r.: ',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);           
         case 2
             plot(numRange,power1M,'ro-',numRange,power2M,'bx-',numRange,power3M,'c+-',numRange,power1L,'r.:',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);
     end
@@ -41,7 +41,12 @@ switch optionA
     case 2
         legend('LGC by mcorr','LGC by dcorr','LGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthOutside');
 end
+%%
+F.fname=['../../Figures/jovo_Fig',num2str(optionA)];
+F.wh=[6.5 4]*2;
+print_fig(gcf,F)
 
+%%
 figure
 s=4;
 t=5;

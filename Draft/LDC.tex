@@ -150,6 +150,7 @@ where
 \end{equation}
 \jv{i dont' see why we need the middle case?}
 \cs{The reason is in Section F, pg 29, second paragraph. For example, say $x_i=x_j$, then $rank(a_{ij})=rank(a_{jj})=0$; but mcorr or Mantel will treat them differently, due to their diagonal adjustment. If we do not use the middle case, mcorr and Mantel will suffer from repeating data in testing, for both local and global tests.}
+\jv{you'll have to explain to me in person}
 Thus $g_{nn}$ is the corresponding global test statistic, and $\{g_{kl}\}$ becomes our family of multiscale/local test statistics, which includes the global one. Clearly the optimal local test exists, is distribution dependent, and may not be unique; the optimal neighborhood choice can be determined by calculating and maximizing the testing power of the multiscale family for given dependent distribution, or estimated by resampling on the given data of unknown distribution; more details are in Section~\ref{main3} of the appendix.
 
 The running time of multiscale graph correlation consists of two parts: sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
@@ -165,6 +166,7 @@ Below we demonstrate that our local modification yields tests that preserve cons
 
 \jv{do we compute actual running times? shall we?}
 \cs{Not the actual running time. We can, but LGC will be the slowest (though not much), in either R or Matlab version. If it can be efficiently implemented in FlashR, it may be worthwhile to add it.}
+\jv{ok, let's make an explicit ``running times'' subsubsection in the theory section (by just moving the paragraph over there, and wordsmithing as appropriate.)}
 
 \subsection{Theoretical Properties}
 \label{main4}
@@ -177,8 +179,6 @@ Let us first set-up the testing framework: suppose we are given two data sets $X
 \end{align*}
 where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y}) \in \Real^{d_{x} + d_{y}}$. 
 
-\jv{i don't quite get $y_ \sim \mb{y}$, i think i know what you mean, but why not write $\mb{y} \sim f_y$, since we define $f_y$ as the marginal distribution below? then, $x_i$ are \emph{realizations} of $\mb{x} \sim f_x$}
-\cs{Done}
 
 A consistent test statistic has power $1$ asymptotically, i.e., in case of a global correlation coefficient, the test statistic $g_{nn}$ under the alternative should be asymptotically larger than $g_{nn}$ under the null (note that dcorr/mcorr/Mantel/HHG are all one-sided in testing dependency).
 
@@ -223,8 +223,6 @@ Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by 
 
 The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that local tests is likely to outperform global tests on a wide variety of nonlinear functions; indeed, the following sections demonstrate improved finite sample performance of local tests over global ones on a suite of benchmarks taken from the literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}.
 
-\jv{taylor series is sufficiently standard that we can find a good citation for it :)}
-\cs{I added Rudin's real analysis book; let me know if you want something else :)}
 
 
 % \section{Numerical Experiments}
@@ -361,8 +359,6 @@ Right Brain vs Disorder & $\textbf{0.0117}$ & $0.1139$ & $0.1055$  & $0.0766$ & 
 }
 \end{table*}
 
-\jv{i think we shold remove MGC by dcorr and by Mantel from this table, we can just mention in the text that  local variants are better than all non-local variants, including for local dcorr and local mantel?}
-\cs{Done}
 
 
 \begin{figure}[htbp]
@@ -435,10 +431,6 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \label{appen:a}
 
 Here we list the distributions of the $20$ dependencies used in the simulation sections, which are based on a combination of the numerical simulations in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}, with the inclusion of noise for some simulations and an extra weight vector for the increasing dimensional scenario.
-
-\jv{explain whether we change any parameters from their settings, and if so, why.}
-\cs{There is no parameter change for the old settings; but type 3,12,13,19 are our own addition based on their old setting. The main difference is the weight vector, and the noise level, described above.}
-
 For the purpose of the increasing dimension scenario, we denote $w$ as a size $1 \times d_{x}$ vector with $w_{i}=\frac{1}{i}$. So $w\mb{x}$ is a dimension $1$ random variable that is a decaying weighted summation of $\mb{x}$, which equals $\mb{x}$ when $d_{x}=1$. In the following, $\mb{u}, \mb{v}$ are auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\epsilon$ denotes the standard normal distribution for white noise unless mentioned otherwise. The resulting pair of random variables $(\mb{x},\mb{y})$ are used to generate sample data for testing dependency.
 
 \setcounter{equation}{0}
@@ -460,7 +452,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y} &=exp(w\mb{x})+10c\epsilon.
 \end{align*}
-\item Joint normal: Let $\rho=\frac{1}{2d_{x}}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(\mb{x},\mb{u}) \sim \mc{N}(0, \Sigma)$ and $\mb{y}=\mb{u}+0.5c\epsilon$. 
+\item Joint normal: Let $\rho=\frac{1}{2d_{x}}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(\mb{x},\mb{u}) \sim \mc{N}(0, \Sigma)$ and $$\mb{y}=\mb{u}+0.5c\epsilon.$$ 
 \item Quadratic: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
 \mb{y}&=(w\mb{x})^2+0.5c\epsilon.
@@ -481,6 +473,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y}&=log(\mb{x}^2)+3c\epsilon.
 \end{align*}
+\jv{why no ``w'' above?}
 \item Circle: $\mb{x} \sim \mc{U}(0,1)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
 \mb{y}&=((2\mb{u}-1) \cdot |1-(2\frac{w\mb{x}}{\max(w\mb{x})}-1)^2|^{\frac{1}{2}}+1)/2+0.1c\epsilon.
@@ -490,6 +483,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \mb{x}&=5w\sin(\pi \mb{u})+\frac{\epsilon_{1}}{8},\\
 \mb{y}&=w\cos(\pi \mb{u})+\frac{\epsilon_{2}}{3}.
 \end{align*}
+
 \item Spiral: $\mb{u} \sim \mc{U}(0,20)^{d_{x}}$,
 \begin{align*}
 \mb{x}&=w\mb{u}w\sin(\mb{u}),\\
@@ -509,6 +503,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y}&=sin(4\pi \frac{w\mb{x}}{\max(w\mb{x})})+c\epsilon.
 \end{align*}
+\jv{use a $\left($ or $\bigg($ or something to make the parens the right size.}
 \item Sine Period 1/8: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
 \mb{y}&=sin(16\pi \frac{w\mb{x}}{\max(w\mb{x})})+0.5c\epsilon.
@@ -517,6 +512,8 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y}&=\mb{x} \cdot \mb{u}+0.5c\epsilon.
 \end{align*}
+\jv{did you really mean $\cdot$? u is a scalar? you seem to use $ab$ to denote times.}
+
 \item Uncorrelated Binomial: $\mb{x} \sim \mc{B}(0.5)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
 \mb{y}&=w\mb{x} \cdot (2\mb{u}-1)+0.6c\epsilon.
@@ -530,17 +527,22 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig0}
-\caption{Visualization of 20 dependencies at dimension $1$. The blue points are generated with noise (c=1) for $n=100$ to show the actual sample data in testing, and the red points are generated with no noise (c=0) for $n=1000$ to highlight each underlying dependency.}
+\caption{Visualization of 20 dependencies at dimension $1$. The blue points are generated with noise (c=1) for $n=100$ to show the actual sample data in testing, and the red points are generated with no noise (c=0) for $n=1000$ to highlight each underlying dependency.
+\jv{crop fig0 using latex to make it wider (ie, remove whitespaces)}
+}
 \label{fig0}
 \end{figure}
 
 
-For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 20). For the testing purpose, we can easily generate dependent pair $(X, Y)$, as well as independent pair $X$ and $Y^{'}$ from the same marginal distributions, by independently generating another pair $(X^{'},Y^{'})$.
+
+For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 20). For the testing purpose, we can easily generate dependent pair $(X, Y)$, as well as independent pair $X$ and $Y^{'}$ from the same marginal distributions, by independently generating another pair $(X',Y')$.
 \jv{explain how. most you set $w$ to zero, but not all.}
 \cs{Explained above}
+\jv{i don't see where.}
 
 Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the constant before $c$ is tuned for each dependency type such that the testing power neither increases too fast or too slow, otherwise certain dependency in the absence of noise is very easy to be detected: say for type 1 linear, the testing powers of all methods converge to $1$ at very small $n$, such that we cannot meaningfully compare the methods. \jv{what is the constant ``before $c$''?}
 \cs{say for type 2 cubic, there is a 80 before $c$...}
+\jv{oh, ok, specify precisely which equations that refers to.}
 
 The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, as the testing task is much more difficult for higher dimensions such that we no longer need additional noise to better compare different methods. Note that we can replace the fixed decaying vector $w$ by random decay, which still yields similar plots.
 

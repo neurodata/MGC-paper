@@ -75,7 +75,7 @@ save(filename,'titlechar','p1','p2','p3','p4','neighbor1','neighbor2','neighbor3
 % ylim([c*kmin,c*K]);
 % 
 % % Figure title/labels
-% titleStr = strcat('P-value of LGC for ', titlechar);
+% titleStr = strcat('P-value of MGC for ', titlechar);
 % title(titleStr,'FontSize',13);
 % filename=strcat('CorrPermDistTest',titlechar);
 % saveas(gcf,filename,'jpeg');

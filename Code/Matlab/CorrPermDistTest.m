@@ -16,7 +16,7 @@ if nargin<3
     cv=1000; % Default bootstrap replicates to estimate the optimal neighborhood 
 end
 if nargin<4
-    titlechar=' Real Data';
+    titlechar='Real Data';
 end
 if nargin<5
     allP=0; % If set to other value, will override rep and use all permutations; unfeasible for n large.
@@ -48,37 +48,6 @@ end
 % Save the results
 filename=strcat('CorrPermDistTestType',titlechar);
 save(filename,'titlechar','p1','p2','p3','p4','neighbor1','neighbor2','neighbor3','type','n','rep','allP','option');
-
-% %% Plot heatmap
-% figure
-% K=n;
-% kmin=1;
-% if n>50
-%         c=2;
-%         K=ceil(K/2);
-%     else
-%         c=1;
-%         kmin=2;
-% end
-% xaxis=kmin:K;
-% yaxis=kmin:K;
-% [X,Y]=meshgrid(c*xaxis,c*yaxis);
-% ph=p1(c*xaxis,c*yaxis)';
-% surf(X,Y,ph);
-% view(2)
-% colormap(flipud(colormap))
-% caxis([min(min(ph)) 0.1])
-% colorbar
-% xlabel('Neighborhood Choice of X','FontSize',15);
-% ylabel('Neighborhood Choice of Y','FontSize',15);
-% xlim([c*kmin,c*K]);
-% ylim([c*kmin,c*K]);
-% 
-% % Figure title/labels
-% titleStr = strcat('P-value of MGC for ', titlechar);
-% title(titleStr,'FontSize',13);
-% filename=strcat('CorrPermDistTest',titlechar);
-% saveas(gcf,filename,'jpeg');
 
 function  [p1, p2, p3, p4]=PermutationTest(C,P,rep,allP,option)
 % The permutation Test for given data, an auxiliary function of the main

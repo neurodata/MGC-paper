@@ -151,8 +151,8 @@ where
 \jv{i dont' see why we need the middle case?}
 \cs{The reason is in Section F, pg 29, second paragraph. For example, say $x_i=x_j$, then $rank(a_{ij})=rank(a_{jj})=0$; but mcorr or Mantel will treat them differently, due to their diagonal adjustment. If we do not use the middle case, mcorr and Mantel will suffer from repeating data in testing, for both local and global tests.}
 \jv{you'll have to explain to me in person}
+\cs{ok}
 Thus $g_{nn}$ is the corresponding global test statistic, and $\{g_{kl}\}$ becomes our family of multiscale/local test statistics, which includes the global one. Clearly the optimal local test exists, is distribution dependent, and may not be unique; the optimal neighborhood choice can be determined by calculating and maximizing the testing power of the multiscale family for given dependent distribution, or estimated by resampling on the given data of unknown distribution; more details are in Section~\ref{main3} of the appendix.
-
 
 When $a_{ij}$ is the Pearson's correlation, $g_{kl}$ is a local Pearson's correlation;
 Wwen $a_{ij}$ is the Spearman or Kendall's rank correlation, $g_{kl}$ is a local rank correlation;
@@ -188,8 +188,9 @@ Note that the consistency of MGC in Theorem~\ref{thm1} is not applicable to MGC 
 
 In addition to theoretical consistency, MGC also is computationally efficient. The running time of multiscale graph correlation consists of \jv{three parts: computing the distance between all points which takes $O(n^2)$,} sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
 
+The running time of multiscale graph correlation consists of two parts: sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
 
-
+\cs{The running time is moved here; but I am not sure whether it worth a new subsection.}
 % \section{Numerical Experiments}
 % \label{numer}
 
@@ -442,7 +443,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y} &=exp(w\mb{x})+10c\epsilon.
 \end{align*}
-\item Joint normal: Let $\rho=\frac{1}{2d_{x}}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(\mb{x},\mb{u}) \sim \mc{N}(0, \Sigma)$ and $$\mb{y}=\mb{u}+0.5c\epsilon.$$ 
+\item Joint normal: Let $\rho=\frac{1}{2d_{x}}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(\mb{x},\mb{u}) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,and $$\mb{y}=\mb{u}+0.5c\epsilon.$$ 
 \item Quadratic: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
 \mb{y}&=(w\mb{x})^2+0.5c\epsilon.
@@ -459,11 +460,10 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y}&=|w\mb{x}|^\frac{1}{4}+\frac{c}{4}\epsilon.
 \end{align*}
-\item Logarithmic: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$,
+\item Logarithmic: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$
 \begin{align*}
 \mb{y}&=log(\mb{x}^2)+3c\epsilon.
 \end{align*}
-\jv{why no ``w'' above?}
 \item Circle: $\mb{x} \sim \mc{U}(0,1)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
 \mb{y}&=((2\mb{u}-1) \cdot |1-(2\frac{w\mb{x}}{\max(w\mb{x})}-1)^2|^{\frac{1}{2}}+1)/2+0.1c\epsilon.
@@ -491,22 +491,19 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \end{align*}
 \item Sine Period 1/2: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
-\mb{y}&=sin(4\pi \frac{w\mb{x}}{\max(w\mb{x})})+c\epsilon.
+\mb{y}&=sin \bigg( 4\pi \frac{w\mb{x}}{\max(w\mb{x})} \bigg)+c\epsilon.
 \end{align*}
-\jv{use a $\left( \right)$ or $\bigg($ or something to make the parens the right size.}
 \item Sine Period 1/8: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
-\mb{y}&=sin(16\pi \frac{w\mb{x}}{\max(w\mb{x})})+0.5c\epsilon.
+\mb{y}&=sin\bigg(16\pi \frac{w\mb{x}}{\max(w\mb{x})}\bigg)+0.5c\epsilon.
 \end{align*}
-\item Multiplicative Noise: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\mb{u} \sim \mc{N}(0, 1)$,
+\item Multiplicative Noise: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\mb{u} \sim \mc{N}(0, 1)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
-\mb{y}&=\mb{x} \cdot \mb{u}+0.5c\epsilon.
+\mb{y}&=\mb{u}\mb{x}+0.5c\epsilon.
 \end{align*}
-\jv{did you really mean $\cdot$? u is a scalar? you seem to use $ab$ to denote times.}
-
 \item Uncorrelated Binomial: $\mb{x} \sim \mc{B}(0.5)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
-\mb{y}&=w\mb{x} \cdot (2\mb{u}-1)+0.6c\epsilon.
+\mb{y}&=(2\mb{u}-1)w\mb{x}+0.6c\epsilon.
 \end{align*}
 \item Independent Clouds: Let $\mb{u} \sim \mc{N}(0,I_{d_{x}})$, $\mb{v} \sim \mc{N}(0,I_{d_{x}})$, $\epsilon_{1} \sim \mc{B}(0.5)$, $\epsilon_{2} \sim \mc{B}(0.5)$. Then
 \begin{align*}
@@ -516,9 +513,8 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \end{compactenum}
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/Fig0}
+\includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{../Figures/Fig0}
 \caption{Visualization of 20 dependencies at dimension $1$. The blue points are generated with noise (c=1) for $n=100$ to show the actual sample data in testing, and the red points are generated with no noise (c=0) for $n=1000$ to highlight each underlying dependency.
-\jv{crop fig0 using latex to make it wider (ie, remove whitespaces)}
 }
 \label{fig0}
 \end{figure}
@@ -529,12 +525,15 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 
 \jv{explain how. most you set $w$ to zero, but not all.}
 \cs{Explained above}
 \jv{i don't see where.}
+\cs{maybe I didn't get your question; let us chat on this.}
 
-Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the constant before $c$ is tuned for each dependency type such that the testing power neither increases too fast or too slow, otherwise certain dependency in the absence of noise is very easy to be detected: say for type 1 linear, the testing powers of all methods converge to $1$ at very small $n$, such that we cannot meaningfully compare the methods. \jv{what is the constant ``before $c$''?}
+Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the parameter before $c$ of each dependency (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for each dependency type, such that the testing power neither increases too fast nor too slow. Otherwise certain dependency in the absence of noise at dimension $1$ is very easy to be detected: say for type 1 linear with no noise, the testing powers of all methods converge to $1$ at very small $n$, such that we cannot meaningfully compare the methods. And it is more meaningful to consider noisy scenarios in practice. \jv{what is the constant ``before $c$''?}
 \cs{say for type 2 cubic, there is a 80 before $c$...}
 \jv{oh, ok, specify precisely which equations that refers to.}
+\cs{ok, I have put an example above for this constant.}
+\jv{the confusion is the word ``each''.  there is not a constant before each, only some.  so i recommend removing the word ``each''. ps - i write this stuff instead of doing it myself because i'm trying to show you.  i can just make the changes myself if you prefer.}
 
-The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, as the testing task is much more difficult for higher dimensions such that we no longer need additional noise to better compare different methods. Note that we can replace the fixed decaying vector $w$ by random decay, which still yields similar plots.
+The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$. As the testing task becomes more difficult as $d_{x}$ increases, and the decaying vector $w$ essentially treats later dimensions as small perturbations, we no longer need additional noise to better compare different methods. Note that we can replace the fixed decaying vector $w$ by random decay, which yields similar plots.
 
 
 \section{Supplementary Figures}

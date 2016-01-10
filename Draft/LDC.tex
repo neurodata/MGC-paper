@@ -115,7 +115,7 @@ Those advantages make our new test statistic the best method thus far for detect
 
 \section{Results}
 
-\subsection{Intuition}
+\subsection{Multiscale Graph Correlation Description}
 
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, high-dimensional nonlinear manifolds can be approximated by local linear spaces.  Combining these two ideas yields our statistic,  Multiscale Graph Correlation (MGC).  Perhaps the first realization that pairwise properties can characterize a joint distribution comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}:
 \begin{equation}
@@ -153,7 +153,6 @@ where
 \jv{you'll have to explain to me in person}
 Thus $g_{nn}$ is the corresponding global test statistic, and $\{g_{kl}\}$ becomes our family of multiscale/local test statistics, which includes the global one. Clearly the optimal local test exists, is distribution dependent, and may not be unique; the optimal neighborhood choice can be determined by calculating and maximizing the testing power of the multiscale family for given dependent distribution, or estimated by resampling on the given data of unknown distribution; more details are in Section~\ref{main3} of the appendix.
 
-The running time of multiscale graph correlation consists of two parts: sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
 
 When $a_{ij}$ is the Pearson's correlation, $g_{kl}$ is a local Pearson's correlation;
 Wwen $a_{ij}$ is the Spearman or Kendall's rank correlation, $g_{kl}$ is a local rank correlation;
@@ -164,11 +163,8 @@ It turns out MGC by any of the above implementation can improve over the corresp
 
 Below we demonstrate that our local modification yields tests that preserve consistency regardless of the functional dependency and dimensionality, both in theory and in simulations, as while as being the most superior method for simulations and real data experiments.
 
-\jv{do we compute actual running times? shall we?}
-\cs{Not the actual running time. We can, but LGC will be the slowest (though not much), in either R or Matlab version. If it can be efficiently implemented in FlashR, it may be worthwhile to add it.}
-\jv{ok, let's make an explicit ``running times'' subsubsection in the theory section (by just moving the paragraph over there, and wordsmithing as appropriate.)}
 
-\subsection{Theoretical Properties}
+\subsection{Theoretical Consistency and Efficiency for Any Dependence Structure}
 \label{main4}
 In this subsection we present the theoretical advantages of multiscale graph correlation. All proofs and detailed testing procedures are provided in the appendix. 
 
@@ -180,12 +176,7 @@ Let us first set-up the testing framework: suppose we are given two data sets $X
 where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y}) \in \Real^{d_{x} + d_{y}}$. 
 
 
-A consistent test statistic has power $1$ asymptotically, i.e., in case of a global correlation coefficient, the test statistic $g_{nn}$ under the alternative should be asymptotically larger than $g_{nn}$ under the null (note that dcorr/mcorr/Mantel/HHG are all one-sided in testing dependency).
-
-\jv{the issue with theorem 2 being in the main paper, is that it doesn't contribute to the main arguement of the paper, it is secondary, at least, that is how i see it.  if you can explain why it is primary, then it makes sense to leave here.}
-\cs{I get it. Feel free to move it then.}
-
-Denote the type 1 error level as $\alpha$, the testing power of MGC as $\beta_{\alpha}(g)$, and the power of the respective global test as $\beta_{\alpha}(g_{nn})$, we have the following theorem regarding the consistency of MGC:
+A consistent test statistic has power $1$ asymptotically, i.e., in case of a global correlation coefficient, the test statistic $g_{nn}$ under the alternative should be asymptotically larger than $g_{nn}$ under the null (note that dcorr/mcorr/Mantel/HHG are all one-sided in testing dependency). Denote the type 1 error level as $\alpha$, the testing power of MGC as $\beta_{\alpha}(g)$, and the power of the respective global test as $\beta_{\alpha}(g_{nn})$, and the local variant $\beta_{\alpha}(g)$, we have the following theorem regarding the consistency of MGC:
 \begin{thm}
 \label{thm1}
 Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(g_{nn}) \rightarrow 1$ as $n \rightarrow \infty$ for given $f_{xy}$ and $\alpha$, then $\beta_{\alpha}(g) \rightarrow 1$ as well.
@@ -193,35 +184,9 @@ Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(g_{nn}) \rightarrow 1$ 
 Therefore, multiscale graph correlation is consistent against all dependent alternatives of finite second moments, when it is built on distance correlation or modified distance correlation.
 \end{thm}
 
-\jv{ why $\beta_\alpha(g)$, rahter than $\beta_\alpha{g_{kl}}$? i don't think we ever defined the latter term, explicitly?}
-\cs{ We do not need the individual powers in the theorems, since individual local test is not always consistent; and it looks more elegant to use $\beta_\alpha(g)$ only. The latter term is used only in the appendix.}
-
 Note that the consistency of MGC in Theorem~\ref{thm1} is not applicable to MGC by Mantel, since the global Mantel coefficient is not consistent against all dependent alternatives \cite{JosseHolmes2013}. 
 
-Furthermore, the testing power of MGC equals the testing power of the global test statistic under linear dependency; but under nonlinear dependency, the multiscale test statistic may enjoy a better finite-sample testing power. We characterize the behavior by the permutation test powers in the next two theorems.
-
-\begin{thm}
-\label{thm2}
-Suppose $\mb{y}=c\mb{x}$ for a non-zero scalar $c$. Then for any $n$ and $\alpha$ it always holds that
-\begin{equation}
-\beta_{\alpha}(g) = \beta_{\alpha}(g_{nn}).
-\end{equation}
-
-Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
-\end{thm}
-
-\begin{thm}
-\label{thm3}
-There exists $f_{xy}$, $n$ and $\alpha$ such that 
-\begin{equation}
-\beta_{\alpha}(g) > \beta_{\alpha}(g_{nn}).
-\end{equation}
-
-Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
-\end{thm}
-Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by any of mcorr/dcorr/Mantel.
-
-The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that local tests is likely to outperform global tests on a wide variety of nonlinear functions; indeed, the following sections demonstrate improved finite sample performance of local tests over global ones on a suite of benchmarks taken from the literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}.
+In addition to theoretical consistency, MGC also is computationally efficient. The running time of multiscale graph correlation consists of \jv{three parts: computing the distance between all points which takes $O(n^2)$,} sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
 
 
 
@@ -324,6 +289,31 @@ For dependencies that are close to linear (type 1-5), the best neighborhood choi
 For each of the 20 panels, the abscissa denotes the number of neighbors for $X$, and the ordinate denotes the number of neighbors for $Y$.  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
 \label{figSim2}
 \end{figure}
+
+Furthermore, the testing power of MGC equals the testing power of the global test statistic under linear dependency; but under nonlinear dependency, the multiscale test statistic may enjoy a better finite-sample testing power. We characterize the behavior by the permutation test powers in the next two theorems.
+
+\begin{thm}
+\label{thm2}
+Suppose $\mb{y}=c\mb{x}$ for a non-zero scalar $c$. Then for any $n$ and $\alpha$ it always holds that
+\begin{equation}
+\beta_{\alpha}(g) = \beta_{\alpha}(g_{nn}).
+\end{equation}
+
+Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
+\end{thm}
+
+\begin{thm}
+\label{thm3}
+There exists $f_{xy}$, $n$ and $\alpha$ such that 
+\begin{equation}
+\beta_{\alpha}(g) > \beta_{\alpha}(g_{nn}).
+\end{equation}
+
+Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
+\end{thm}
+Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by any of mcorr/dcorr/Mantel.
+
+The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that local tests is likely to outperform global tests on a wide variety of nonlinear functions; indeed, the following sections demonstrate improved finite sample performance of local tests over global ones on a suite of benchmarks taken from the literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}.
 
 \subsection{Real Data}
 \label{numer3}
@@ -503,7 +493,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \begin{align*}
 \mb{y}&=sin(4\pi \frac{w\mb{x}}{\max(w\mb{x})})+c\epsilon.
 \end{align*}
-\jv{use a $\left($ or $\bigg($ or something to make the parens the right size.}
+\jv{use a $\left( \right)$ or $\bigg($ or something to make the parens the right size.}
 \item Sine Period 1/8: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
 \mb{y}&=sin(16\pi \frac{w\mb{x}}{\max(w\mb{x})})+0.5c\epsilon.
@@ -535,7 +525,7 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 
 
 
-For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 20). For the testing purpose, we can easily generate dependent pair $(X, Y)$, as well as independent pair $X$ and $Y^{'}$ from the same marginal distributions, by independently generating another pair $(X',Y')$.
+For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 20). For the testing purpose, we can easily generate dependent pair $(X, Y)$, as well as an independent pair $X^{'}$ and $Y^{'}$ from the same marginal distributions, by independently generating another pair $(X^{'i},Y^{''})$.
 \jv{explain how. most you set $w$ to zero, but not all.}
 \cs{Explained above}
 \jv{i don't see where.}

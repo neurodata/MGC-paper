@@ -155,7 +155,7 @@ where
 Thus $g_{nn}$ is the corresponding global test statistic, and $\{g_{kl}\}$ becomes our family of multiscale/local test statistics, which includes the global one. Clearly the optimal local test exists, is distribution dependent, and may not be unique; the optimal neighborhood choice can be determined by calculating and maximizing the testing power of the multiscale family for given dependent distribution, or estimated by resampling on the given data of unknown distribution; more details are in Section~\ref{main3} of the appendix.
 
 When $a_{ij}$ is the Pearson's correlation, $g_{kl}$ is a local Pearson's correlation;
-Wwen $a_{ij}$ is the Spearman or Kendall's rank correlation, $g_{kl}$ is a local rank correlation;
+When $a_{ij}$ is the Spearman or Kendall's rank correlation, $g_{kl}$ is a local rank correlation;
 when $a_{ij}$ is the centered distances, $g_{kl}$ is the local Mantel correlation;
 when $a_{ij}$ is the doubly centered distances, $g_{kl}$ is a local distance correlation;
 when $a_{ij}$ is the doubly centered distances modified for the high-dimensional bias, $g_{kl}$ is a local modified distance correlation.  
@@ -166,7 +166,7 @@ Below we demonstrate that our local modification yields tests that preserve cons
 
 \subsection{Theoretical Consistency and Efficiency for Any Dependence Structure}
 \label{main4}
-In this subsection we present the theoretical advantages of multiscale graph correlation. All proofs and detailed testing procedures are provided in the appendix. 
+In this subsection we present the theoretical advantages of multiscale graph correlation. The proofs and detailed testing procedures are provided in the appendix. 
 
 Let us first set-up the testing framework: suppose we are given two data sets $X=[x_{1},\cdots, x_{n}] \in \Real^{d_{x} \times n}$ and $Y=[y_{1},\cdots, y_{n}] \in \Real^{d_{y} \times n}$, where $n$ is the sample size, $d_{x}$ and $d_{y}$ are the dimensions for each data set. Under the classical hypothesis testing framework, we assume that $x_{i}, i=1,\ldots,n$ are identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of $\mb{x}$; similarly for $y_{i}$, which are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
 \begin{align*}
@@ -186,11 +186,8 @@ Therefore, multiscale graph correlation is consistent against all dependent alte
 
 Note that the consistency of MGC in Theorem~\ref{thm1} is not applicable to MGC by Mantel, since the global Mantel coefficient is not consistent against all dependent alternatives \cite{JosseHolmes2013}. 
 
-In addition to theoretical consistency, MGC also is computationally efficient. The running time of multiscale graph correlation consists of \jv{three parts: computing the distance between all points which takes $O(n^2)$,} sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
+In addition to theoretical consistency, MGC also is computationally efficient. The running time of multiscale graph correlation consists of three parts: computing the distance between all points takes $O(n^2)$, sorting the distance matrices within each column takes $O(n^2\log(n))$, and computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are comparable in running time to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG also take $O(n^2\log(n))$ due to sorting. 
 
-The running time of multiscale graph correlation consists of two parts: sorting the distance matrices within each column takes $O(n^2\log(n))$, then computing $g_{kl}$ for all scales takes only $O(n^2)$. Therefore the local statistics are not expensive to compute comparing to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$. This also allows the optimal scale of MGC to be chosen without too much computation cost.
-
-\cs{The running time is moved here; but I am not sure whether it worth a new subsection.}
 % \section{Numerical Experiments}
 % \label{numer}
 
@@ -200,7 +197,7 @@ In this subsection and the next, we show the numerical advantage of multiscale g
 
 %Overall, we observe that Multiscale Graph Correlation combines the best aspects of dcorr, mcorr and HHG: it performs similarly to dcorr for dependencies that are close to linear, yields similar or better power than HHG in most nonlinear dependencies, and outperforms mcorr in high-dimensional simulations. 
 
-In total we consider $20$ different distributions of $f_{xy}$: they consist of various linear and close to linear dependencies (type 1-5), polynomial-based nonlinear relationships (type 6-10), trigonometry-based nonlinear dependencies (type 11-17), two uncorrelated dependencies (type 18-19), and an independence relationship (type 20) to show that MGC will not detect signal in the absence of dependency. The exact simulation distributions are given in appendix Section~\ref{appen:a}, with a visualization of each dependency follows in Supplementary Figure~\ref{fig0}.
+In total we consider $20$ different distributions of $f_{xy}$ taken from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}: they consist of various linear and close to linear dependencies (type 1-5), polynomial-based nonlinear relationships (type 6-10), trigonometry-based nonlinear dependencies (type 11-17), two uncorrelated dependencies (type 18-19), and an independence relationship (type 20) to show that MGC will not detect signal in the absence of dependency. The exact simulation distributions are given in appendix Section~\ref{appen:a}, with a visualization of each dependency follows in Supplementary Figure~\ref{fig0}.
 
 We first experiment on a dimension $1$ scenario with increasing sample size by setting $d_{x}=d_{y}=1$, so as to observe how fast the testing power of each method converges to $1$ for different dependencies. The testing power of each method is estimated through the empirical distributions of the respective test under the null and the alternative, by $r=10$,$000$ Monte-Carlo replicates at $\alpha=0.05$; and the resulting empirical power is plotted against the sample size in Figure~\ref{fig:1D}. Note that appropriate level of white noise are added to $Y$ depending on the distribution type, otherwise the power can quickly converge to $1$ at very small sample size for certain dependencies like linear.
 
@@ -272,10 +269,7 @@ Again, our method empirically achieves as high or higher power than the previous
 
 In Figure~\ref{figSim2} we show how the powers of $g_{kl}$ change with respect to increasing neighborhood $k$ and $l$, for the low-dimension and high-dimension simulations. They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures. We can clearly see that for consecutive neighborhoods, the local testing powers are very close to each other, since the local tests are strongly correlated with each other. This implies that the optimal neighborhood choice of MGC can be reasonably estimated by bootstrap.
 
-For dependencies that are close to linear (type 1-5), the best neighborhood choice is approximately at the largest scale, i.e., $k=l=n$, which is in accordance with theorem~\ref{main2}. But for all other nonlinear dependencies (type 6-19), MGC always favors a smaller scale, which is data dependent. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, and the best scales of both are very similar to each other; type 9 and 10 have different functions but share similar dependencies from appendix Figure~\ref{fig0}, and their best scales are also close to each other; there also exists similar scale patterns between type 16 and 17.
-
-\jv{the point of this section is to convey to the reader that we can assess which scales contain dependencies, unlike others, and justify the results as having some intuition, eg, for the circle and spiral, or the nearly linear ones.  in fact, maybe theorem 2 goes in here?}
-\cs{ok; and based on your description I have added a few sentences; feel free to change/discard them. }
+For dependencies that are close to linear (type 1-5), the best neighborhood choice is approximately at the largest scale, i.e., $k=l=n$. But for all other nonlinear dependencies (type 6-19), MGC always favors a smaller scale, which is data dependent. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, and the best scales of both are very similar to each other; type 9 and 10 have different functions but share similar dependencies from appendix Figure~\ref{fig0}, and their best scales are also close to each other; there also exists similar scale patterns between type 16 and 17.
 
 \begin{figure}[htbp]
 \subfloat[]{
@@ -291,7 +285,7 @@ For each of the 20 panels, the abscissa denotes the number of neighbors for $X$,
 \label{figSim2}
 \end{figure}
 
-Furthermore, the testing power of MGC equals the testing power of the global test statistic under linear dependency; but under nonlinear dependency, the multiscale test statistic may enjoy a better finite-sample testing power. We characterize the behavior by the permutation test powers in the next two theorems.
+To characterize the above behaviors, in the following theorems we show that the testing power of MGC (by the permutation test) equals the testing power of the global test statistic under linear dependency, i.e., the optimal scale of MGC is at the largest; but under nonlinear dependency, the optimal scale may be small such that MGC enjoys a better finite-sample testing power than the corresponding global test. 
 
 \begin{thm}
 \label{thm2}
@@ -314,7 +308,7 @@ Thus multiscale graph correlation can be better than its global correlation coef
 \end{thm}
 Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by any of mcorr/dcorr/Mantel.
 
-The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that local tests is likely to outperform global tests on a wide variety of nonlinear functions; indeed, the following sections demonstrate improved finite sample performance of local tests over global ones on a suite of benchmarks taken from the literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}.
+The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that MGC is likely to outperform global tests on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations.
 
 \subsection{Real Data}
 \label{numer3}
@@ -527,11 +521,12 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 
 \jv{i don't see where.}
 \cs{maybe I didn't get your question; let us chat on this.}
 
-Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the parameter before $c$ of each dependency (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for each dependency type, such that the testing power neither increases too fast nor too slow. Otherwise certain dependency in the absence of noise at dimension $1$ is very easy to be detected: say for type 1 linear with no noise, the testing powers of all methods converge to $1$ at very small $n$, such that we cannot meaningfully compare the methods. And it is more meaningful to consider noisy scenarios in practice. \jv{what is the constant ``before $c$''?}
+Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the parameter before $c$ of some dependency (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter, such that the testing power neither increases too fast nor too slow for many dependency types. This is because in the absence of noise and dimension $1$, certain dependency like linear is very easy to be detected so that the testing powers of all methods converge to $1$ at very small $n$, which causes difficulty in comparing the methods; it is also more meaningful to consider noisy scenarios in practice. \jv{what is the constant ``before $c$''?}
 \cs{say for type 2 cubic, there is a 80 before $c$...}
 \jv{oh, ok, specify precisely which equations that refers to.}
 \cs{ok, I have put an example above for this constant.}
 \jv{the confusion is the word ``each''.  there is not a constant before each, only some.  so i recommend removing the word ``each''. ps - i write this stuff instead of doing it myself because i'm trying to show you.  i can just make the changes myself if you prefer.}
+\cs{tried again :-)}
 
 The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$. As the testing task becomes more difficult as $d_{x}$ increases, and the decaying vector $w$ essentially treats later dimensions as small perturbations, we no longer need additional noise to better compare different methods. Note that we can replace the fixed decaying vector $w$ by random decay, which yields similar plots.
 

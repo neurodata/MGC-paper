@@ -4,11 +4,11 @@ function []=CorrRealPlots(pre1,pre2)
 
 if nargin<1
     pre1='../../Data/'; % The folder to locate data
-    %pre1='News_1/';
+    %pre1='Results_All/';
 end
 if nargin<2
     pre2='../../Figures/JovoFigReal'; % The folder to save figures
-    %pre2='News_1/FigReal';
+    %pre2='Results_All/Fig';
 end
 
 % Plot heatmap
@@ -42,24 +42,24 @@ for i=1:total
     ylim([c*kmin,c*K]);
     
     % Figure title/labels
-    titleStr = strcat('P-value of MGC for ', titleStr);
+    titleStr = strcat('P-values of Local Tests for ', titleStr);
     title(titleStr,'FontSize',13);
     
-    F.fname=[strcat(pre2, num2str(i))];
-    F.wh=[3 2.5]*2;
-    print_fig(gcf,F)
+%     F.fname=[strcat(pre2, num2str(i))];
+%     F.wh=[3 2.5]*2;
+%     print_fig(gcf,F)
 end
 
 function [str, title]=CorrRealDataName(i)
 str='CorrPermDistTestType';
 switch i
     case 1
-        str=strcat(str,'BrainCxP.mat');
+        str=strcat(str,'BrainCxPAll.mat');
         title=' Connectome vs Personality';
     case 2
-        str=strcat(str,'BrainLMLxY.mat');
+        str=strcat(str,'BrainLMLxYAll.mat');
         title=' Left Brain Shape vs Disorder';
     case 3
-        str=strcat(str,'BrainLMRxY.mat');
+        str=strcat(str,'BrainLMRxYAll.mat');
         title=' Right Brain Shape vs Disorder';
 end

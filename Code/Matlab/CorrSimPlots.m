@@ -5,8 +5,7 @@ function []=CorrSimPlots(optionA, total,pre1,pre2)
 % Note that there are still some problems for fig2&6 plot size, so these
 % two should be manually saved...
 
-
-% optionA can be 1 or 2. Use 1 for paper figures, which include MGC by mcorr and all global test; 
+% optionA can be 1 or 2. Use 1 for paper figures, which include MGC by mcorr and all global test;
 % use 2 for appendix figures, which will further include MGC by dcorr/Mantel.
 %
 % total is usually 20.
@@ -21,11 +20,11 @@ if nargin<2
 end
 if nargin<3
     pre1='../../Data/'; % The folder to locate data
-    %pre1='News_1/';
+    %pre1='Results/';
 end
 if nargin<4
     pre2='../../Figures/JovoFig'; % The folder to save figures
-    %pre2='News_1/Fig';
+    %pre2='Results/Fig';
 end
 
 %figure1-4
@@ -37,23 +36,15 @@ figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
 for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+    filename=strcat(pre1,'CorrIndTestCVType',num2str(j),'N100Dim1.mat');
     load(filename)
     subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);power1L=zeros(length(numRange),1);power2L=zeros(length(numRange),1);power3L=zeros(length(numRange),1);power1M=zeros(length(numRange),1);power2M=zeros(length(numRange),1);power3M=zeros(length(numRange),1);
-    for i=1:length(numRange)
-        power1L(i)=power1(numRange(i),numRange(i),i);
-        power2L(i)=power2(numRange(i),numRange(i),i);
-        power3L(i)=power3(numRange(i),numRange(i),i);
-        power1M(i)=max(max(power1(2:end,2:end,i)));
-        power2M(i)=max(max(power2(2:end,2:end,i)));
-        power3M(i)=max(max(power3(2:end,2:end,i)));
-    end
+    titlechar=CorrSimuTitle(j);
     switch optionA
         case 1
-            plot(numRange,power1M,'ro-',numRange,power1L,'r.: ',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);           
+            plot(numRange,power1,'ro-',numRange,power4,'r.: ',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
         case 2
-            plot(numRange,power1M,'ro-',numRange,power2M,'bx-',numRange,power3M,'c+-',numRange,power1L,'r.:',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);
+            plot(numRange,power1,'ro-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
@@ -66,7 +57,7 @@ set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
 switch optionA
     case 1
-        h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);    
+        h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
     case 2
         h=legend('MGC by mcorr','MGC by dcorr','MGC by Mantel','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
 end
@@ -85,7 +76,7 @@ figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
 for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1All.mat');
     load(filename)
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
@@ -132,7 +123,7 @@ if optionA==1
 else
     tstring=' by Mantel ';
 end
-h=suptitle(strcat('Testing Power of Multiscale Graph Dependency',tstring, ' for Dimension 1'));
+h=suptitle(strcat('Testing Powers of Local Tests',tstring, ' for Dimension 1'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
 % F.fname=[strcat(pre2, figNumber)];
@@ -150,24 +141,16 @@ xaxis=a:interval:b;
 profile=zeros(7,length(xaxis));
 %load data
 for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+    filename=strcat(pre1,'CorrIndTestCVType',num2str(j),'N100Dim1.mat');
     load(filename)
-    for i=1:length(numRange)
-        power1L(i)=power1(numRange(i),numRange(i),i);
-        power2L(i)=power2(numRange(i),numRange(i),i);
-        power3L(i)=power3(numRange(i),numRange(i),i);
-        power1M(i)=max(max(power1(2:end,2:end,i)));
-        power2M(i)=max(max(power2(2:end,2:end,i)));
-        power3M(i)=max(max(power3(2:end,2:end,i)));
-    end
     thres=0.8;
-    ind=[find(power1M>=thres,1) find(power2L>=thres,1) find(power3L>=thres,1) find(power4>=thres,1) lim];
+    ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
     pos=min(ind);
     switch optionA
         case 1
-            power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos)];            
+            power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
         case 2
-            power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos),power2M(pos),power3M(pos)];
+            power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
     end
     pmax=max(power);
     for k=1:length(power)
@@ -214,21 +197,13 @@ for ll=1:limN
     for j=1:total
         filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
         load(filename)
-        for i=1:length(numRange)
-            power1L(i)=power1(numRange(i),numRange(i),i);
-            power2L(i)=power2(numRange(i),numRange(i),i);
-            power3L(i)=power3(numRange(i),numRange(i),i);
-            power1M(i)=max(max(power1(2:end,2:end,i)));
-            power2M(i)=max(max(power2(2:end,2:end,i)));
-            power3M(i)=max(max(power3(2:end,2:end,i)));
-        end
-        ind=[find(power1M>=thres,1) find(power2L>=thres,1) find(power3L>=thres,1) find(power4>=thres,1) lim];
+        ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
         pos=min(ind);
         switch optionA
             case 1
-                power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos)];               
+                power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
             case 2
-                power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos),power2M(pos),power3M(pos)];
+                power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
         end
         pmax=max(power);
         for k=1:length(power)
@@ -275,20 +250,11 @@ for j=1:total
     numRange=dimRange;
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
-    power1M=zeros(length(dimRange),1);power2M=zeros(length(dimRange),1);power3M=zeros(length(dimRange),1);power1L=zeros(length(dimRange),1);power2L=zeros(length(dimRange),1);power3L=zeros(length(dimRange),1);
-    for i=1:length(dimRange)
-        power1L(i)=power1(n,n,i);
-        power2L(i)=power2(n,n,i);
-        power3L(i)=power3(n,n,i);
-        power1M(i)=max(max(power1(2:end,2:end,i)));
-        power2M(i)=max(max(power2(2:end,2:end,i)));      
-        power3M(i)=max(max(power3(2:end,2:end,i)));
-    end
     switch optionA
         case 1
-            plot(numRange,power1M,'ro-',numRange,power1L,'r.:',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);           
+            plot(numRange,power1,'ro-',numRange,power4,'r.: ',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
         case 2
-            plot(numRange,power1M,'ro-',numRange,power2M,'bx-',numRange,power3M,'c+-',numRange,power1L,'r.:',numRange,power2L,'b.:',numRange,power3L,'c.:',numRange,power4,'g.:','LineWidth',2);
+            plot(numRange,power1,'ro-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
@@ -311,6 +277,7 @@ F.fname=[strcat(pre2, figNumber)];
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
+
 figNumber='6';
 if optionA~=1
     figNumber=strcat(figNumber,'b');
@@ -319,7 +286,7 @@ figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
 for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
+    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100DimAll.mat');
     load(filename)
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
@@ -357,7 +324,7 @@ if optionA==1
 else
     tstring=' by Mantel ';
 end
-h=suptitle(strcat('Testing Power of Multiscale Graph Dependency',tstring,' for Increasing Dimension'));
+h=suptitle(strcat('Testing Powers of Local Tests',tstring,' for Increasing Dimension'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
 % F.fname=[strcat(pre2, figNumber)];
@@ -377,23 +344,14 @@ profile=zeros(7,length(xaxis));
 for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
-    power1M=zeros(length(dimRange),1);power2M=zeros(length(dimRange),1);power3M=zeros(length(dimRange),1);power1L=zeros(length(dimRange),1);power2L=zeros(length(dimRange),1);power3L=zeros(length(dimRange),1);
-    for i=1:length(dimRange)
-        power1L(i)=power1(n,n,i);
-        power2L(i)=power2(n,n,i);
-        power3L(i)=power3(n,n,i);
-        power1M(i)=max(max(power1(2:end,2:end,i)));
-        power2M(i)=max(max(power2(2:end,2:end,i)));
-        power3M(i)=max(max(power3(2:end,2:end,i)));
-    end
     thres=0.5;
-    ind=[find(power1M>=thres,1,'last') find(power2L>=thres,1,'last') find(power3L>=thres,1,'last') find(power4>=thres,1,'last') 1];
+    ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
     pos=max(ind);
     switch optionA
         case 1
-            power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos)];
+            power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
         case 2
-            power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos),power2M(pos),power3M(pos)];
+            power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
     end
     pmax=max(power);
     for k=1:length(power)
@@ -440,22 +398,13 @@ for ll=1:limN
     for j=1:total
         filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
         load(filename)
-        power1M=zeros(length(dimRange),1);power2M=zeros(length(dimRange),1);power3M=zeros(length(dimRange),1);power1L=zeros(length(dimRange),1);power2L=zeros(length(dimRange),1);power3L=zeros(length(dimRange),1);
-        for i=1:length(dimRange)
-            power1L(i)=power1(n,n,i);
-            power2L(i)=power2(n,n,i);
-            power3L(i)=power3(n,n,i);
-            power1M(i)=max(max(power1(2:end,2:end,i)));
-            power2M(i)=max(max(power2(2:end,2:end,i)));
-            power3M(i)=max(max(power3(2:end,2:end,i)));
-        end
-        ind=[find(power1M>=thres,1,'last') find(power2L>=thres,1,'last') find(power3L>=thres,1,'last') find(power4>=thres,1,'last') 1];
+        ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
         pos=max(ind);
         switch optionA
             case 1
-                power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos)];            
+                power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
             case 2
-                power=[power1M(pos), power1L(pos), power2L(pos), power3L(pos),power4(pos),power2M(pos),power3M(pos)];
+                power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
         end
         pmax=max(power);
         for k=1:length(power)

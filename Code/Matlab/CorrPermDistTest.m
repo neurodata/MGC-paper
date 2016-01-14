@@ -46,7 +46,8 @@ if rep1==0
 else
     tmpC='';
 end
-filename=strcat('CorrPermDistTestType',titlechar,tmpC);
+pre1='../../Data/'; 
+filename=strcat(pre1,'CorrPermDistTestType',titlechar,tmpC);
 save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','type','n','rep1','rep2','allP','option');
 
 function  [p1, p2, p3, p4,p5,p6,p7]=PermutationTest(C,P,rep,allP,option,neighborhoods)

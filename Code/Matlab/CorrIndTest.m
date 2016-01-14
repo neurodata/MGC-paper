@@ -57,7 +57,8 @@ if rep1==0
 else
     tmpC='';
 end
-filename=strcat('CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim),tmpC);
+pre1='../../Data/'; 
+filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim),tmpC);
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','option','numRange','neighborhoods');
 
 %Plot

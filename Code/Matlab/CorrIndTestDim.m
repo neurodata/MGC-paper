@@ -57,7 +57,8 @@ if rep1==0
 else
     tmpC='';
 end
-filename=strcat('CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim',tmpC);
+pre1='../../Data/'; 
+filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim',tmpC);
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','option','dimRange','neighborhoods');
 % numRange=1:lim;
 % plot(numRange,power1,'ro-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);

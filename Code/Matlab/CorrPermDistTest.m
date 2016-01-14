@@ -25,26 +25,24 @@ C=type(:, 1:n);
 P=type(:, n+1:2*n);
 
 neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
-    
+
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
     [power1,power2,power3]=IndependenceTest(C,P,rep1);
-    neighbor1=verifyNeighbors(1-power1);
-    neighbor2=verifyNeighbors(1-power2);
-    neighbor3=verifyNeighbors(1-power3);
-    neighborhoods=[neighbor1(end),neighbor2(end),neighbor3(end)];
+    neighborhoods(1)=verifyNeighbors(1-power1);
+    neighborhoods(2)=verifyNeighbors(1-power2);
+    neighborhoods(3)=verifyNeighbors(1-power3);
 end
 % Return the permutation test to return the p-values
 [p1, p2, p3, p4,p5,p6,p7]=PermutationTest(C,P,rep2,allP,option,neighborhoods);
 if rep1==0
-    neighbor1=verifyNeighbors(p1);
-    neighbor2=verifyNeighbors(p2);
-    neighbor3=verifyNeighbors(p3);
-    neighborhoods=[neighbor1(end),neighbor2(end),neighbor3(end)];
+    neighborhoods(1)=verifyNeighbors(p1);
+    neighborhoods(2)=verifyNeighbors(p2);
+    neighborhoods(3)=verifyNeighbors(p3);
 end
 % Save the results
 if rep1==0
-    tmpC='All'; 
+    tmpC='All';
 else
     tmpC='';
 end

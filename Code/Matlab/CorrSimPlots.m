@@ -23,7 +23,7 @@ if nargin<3
     %pre1='Results/';
 end
 if nargin<4
-    pre2='../../Figures/JovoFig'; % The folder to save figures
+    pre2='../../Figures/Fig'; % The folder to save figures
     %pre2='Results/Fig';
 end
 
@@ -63,7 +63,7 @@ switch optionA
 end
 set(h,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
@@ -126,7 +126,7 @@ end
 h=suptitle(strcat('Testing Powers of Local Tests',tstring, ' for Dimension 1'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
-% F.fname=[strcat(pre2, figNumber)];
+% F.fname=strcat(pre2, figNumber);
 % F.wh=[8 4]*2;
 % print_fig(gcf,F)
 
@@ -176,7 +176,7 @@ ylim([0 1]);
 titleStr = strcat('Performance Profiles for Dimension 1');
 title(titleStr,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
 
@@ -231,7 +231,7 @@ ylim([0 1]);
 titleStr = strcat('Area Under Curve of Performance Profiles for Dimension 1');
 title(titleStr,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
 
@@ -273,7 +273,7 @@ switch optionA
 end
 set(h,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
@@ -327,7 +327,7 @@ end
 h=suptitle(strcat('Testing Powers of Local Tests',tstring,' for Increasing Dimension'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
-% F.fname=[strcat(pre2, figNumber)];
+% F.fname=strcat(pre2, figNumber);
 % F.wh=[8 4]*2;
 % print_fig(gcf,F)
 
@@ -377,7 +377,7 @@ ylim([0 1]);
 titleStr = strcat('Performance Profiles for Increasing Dimension');
 title(titleStr,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
 
@@ -432,6 +432,6 @@ ylim([0 1]);
 titleStr = strcat('Area Under Curve of Performance Profiles for Increasing Dimension');
 title(titleStr,'FontSize',12);
 %
-F.fname=[strcat(pre2, figNumber)];
+F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)

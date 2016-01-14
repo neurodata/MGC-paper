@@ -34,21 +34,23 @@ neighborhoods=zeros(3,lim); % Estimated optimal neighborhoods at each sample siz
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
     [p1,p2,p3]=IndependenceTest(type,n,dim,lim,rep1, noise);
-    % Find the best scale, and take the last one when there exists more than one optimal scale
+    % Find the best scale at each sample size
     for i=1:lim
-        [neighbor1]=verifyNeighbors(1-p1(1:numRange(i),1:numRange(i),i));
-        neighborhoods(1,i)=neighbor1(end);
-        
-        [neighbor2]=verifyNeighbors(1-p2(1:numRange(i),1:numRange(i),i));
-        neighborhoods(2,i)=neighbor2(end);
-        
-        [neighbor3]=verifyNeighbors(1-p3(1:numRange(i),1:numRange(i),i));
-        neighborhoods(3,i)=neighbor3(end);
+        neighborhoods(1,i)=verifyNeighbors(1-p1(1:numRange(i),1:numRange(i),i));
+        neighborhoods(2,i)=verifyNeighbors(1-p2(1:numRange(i),1:numRange(i),i));
+        neighborhoods(3,i)=verifyNeighbors(1-p3(1:numRange(i),1:numRange(i),i));
     end
 end
 
 % Run the independence test again for the testing powers
 [power1, power2, power3, power4,power5,power6,power7]=IndependenceTest(type,n,dim,lim,rep2, noise,option,neighborhoods);
+if rep1==0
+    for i=1:lim
+        neighborhoods(1,i)=verifyNeighbors(1-power1(1:numRange(i),1:numRange(i),i));
+        neighborhoods(2,i)=verifyNeighbors(1-power2(1:numRange(i),1:numRange(i),i));
+        neighborhoods(3,i)=verifyNeighbors(1-power3(1:numRange(i),1:numRange(i),i));
+    end
+end
 % Save the results
 if rep1==0
     tmpC='All';

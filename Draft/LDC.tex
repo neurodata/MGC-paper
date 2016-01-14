@@ -255,7 +255,7 @@ The powers are plotted in Figure~\ref{fig:nD} against the dimension $d_{x}$. And
 
 Like the dimension $1$ scenario, MGC also surpasses all the benchmarks for the increasing dimension scenario: for close to linear dependencies from type 1-5, MGC is as good as mcorr, whose power deteriorates much slower than the others; and for the remaining nonlinear dependencies (especially type 6-11 and type 18-19), MGC has a significant advantage comparing to others, due to its capability to better handle nonlinearity and high-dimensionality at the same time. The performance profiles of MGC in Figure~\ref{fig:pp}(c)(d) clearly reflect its superiority.
 
-Note that in one third of the high dimensional simulations (e.g. sine period, square, diamond), the testing powers quickly degrade to around $\alpha$ as the dimension increases for all methods, which imply that those dependencies are too obscure to be detected. Furthermore, the powers and performance profiles of MGC by dcorr/Mantel in the high dimensional simulations are also provided in the appendix Section~\ref{appen:figure}, which are no better than MGC by mcorr but still significantly surpass all global tests.
+Note that in one third of the high dimensional simulations (e.g. sine period, square, diamond), the testing powers quickly degrade to around $\alpha$ as the dimension increases for all methods, which imply that these complex dependencies at larger dimensions become too obscure to be detected at the limited sample size. Furthermore, the powers and performance profiles of MGC by dcorr/Mantel in the high dimensional simulations are also provided in the appendix Section~\ref{appen:figure}, which are no better than MGC by mcorr but still significantly surpass all global tests.
 
 
 \begin{figure}[htbp]
@@ -320,7 +320,7 @@ The first experiment is to detect the relationship between the brain connectome 
 
 To apply our method, two distance measures are required for the two different data sources: for the personality data, the distance matrix is formed by the Euclidean distance directly; for the connectome data, we run a spectrum analysis for each region, bandpass and normalize it, then calculate the Kullback-Leibler divergence among regions and use the normalized Hellinger distance. Once the distance matrices are obtained, we apply the permutation test for $r=10$,$000$ random permutations, and show the p-values (the percentage that the test statistic between the permuted data is larger than the observed test statistic) of MGC, dcorr, mcorr, Mantel, and HHG in the first row of Table~\ref{table1}, with the smallest p-value highlighted in the table. 
 
-In this experiment, only MGC yields significant p-value that is less than $0.05$, and the estimated optimal neighborhood choice is $k^{*}=8, l^{*}=4$ based on bootstrap using $1$,$000$ resamplings. No other method yields significant p-value, although HHG is quite close. We also show the p-value heat map of all local tests with respect to different choices of neighborhoods in Figure~\ref{figReal}(a), and we can clearly see a local structure in the data that yield significant p-values for adjacent scales.
+In this experiment, only MGC yields significant p-value that is less than $0.05$, and the estimated optimal neighborhood choice is $k^{*}=10, l^{*}=4$ based on bootstrap using $1$,$000$ resamplings. No other method yields significant p-value, although HHG is quite close. We also show the p-value heat map of all local tests with respect to different choices of neighborhoods in Figure~\ref{figReal}(a), and we can clearly see a local structure in the data that yield significant p-values for adjacent scales.
 
 %Note that if we use MGC by dcorr rather than mcorr, the p-value is no longer significant: this implies a high-dimensional structure in the dependency, which is indeed the case for the connectome data. 
 
@@ -334,19 +334,17 @@ In this experiment, only MGC yields significant p-value that is less than $0.05$
 \hline
 Testing Method & MGC & mcorr & dcorr & Mantel & HHG \\
 \hline
-Connectome x Personality & $\textbf{0.0391}$ & $0.3242$ & $0.6594$ & $0.9837$  & $0.0576$ \\
+Connectome x Personality & $\textbf{0.0345}$ & $0.3303$ & $0.6637$ & $0.9846$  & $0.0632$ \\
 \hline
-Left Brain vs Disorder  & $\textbf{0.0382}$ & $0.0817$ & $0.0732$ & $\textbf{0.0382}$ & $0.0383$ \\
+Left Brain vs Disorder  & $\textbf{0.0263}$ & $0.0907$ & $0.0824$ & $0.0387$ & $0.0385$ \\
 \hline
-Right Brain vs Disorder & $\textbf{0.0117}$ & $0.1139$ & $0.1055$  & $0.0766$ & $0.0861$\\
+Right Brain vs Disorder & $\textbf{0.0077}$ & $0.1129$ & $0.1049$  & $0.0848$ & $0.0870$\\
 \hline
 \end{tabular}
 \caption{The Empirical P-Values in the Permutation Test}
 \label{table1}
 }
 \end{table*}
-
-
 
 \begin{figure}[htbp]
 \centering
@@ -373,7 +371,7 @@ The brain data is transformed into two dissimilarity matrices representing the l
 
 We consider two hypothesis tests: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. The resulting p-values are reported in the second and third rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC/HHG/Mantel yield significant p-values with dcorr/mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, with all global tests higher than significance. Note that if we use MGC by dcorr or Mantel, they also yield significant p-values similar to MGC by mcorr here; and if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain;
 
-The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(b)(c), where we may observe that there exist many scales that are close to optimal. Indeed, in either hypothesis test, the estimated optimal scale of MGC is not unique, so we randomly pick one optimal scale and report the p-value; but in fact all optimal scales yield exactly the same p-values in this experiment.
+The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(b)(c), where we observe that there exist many scales that are close to optimal. Indeed, in either hypothesis test, the estimated optimal scale of MGC is not unique, and we picked the largest optimal scale (i.e., among all optimal scales, use the scale that maximizes $k^{*}l^{*}$) to report the p-value. The largest optimal scales for MGC in left brain testing and right brain testing are at $k^{*}=38,l^{*}=114$ and $k^{*}=31,l^{*}=114$ respectively; and if we assume that the left brain data distributes the same as the right brain data such that one optimal scale should be applicable for both testing tasks, then either $(38,114)$ or $(31,114)$ can yield significant p-values in both tasks as observed from Figure~\ref{figReal}(b)(c).
 
 %We can observe from the heat map of MGC that there is a clear threshold in the local structure most neighborhood choices after certain threshold yields significant p-values, and MGC with mcorr performs similarly as MGC with dcorr. They imply that the dependency between the brain data and the disease data is probably cross-region, close to linear and low-dimensional. Furthermore, the left brain seems to be more correlated with the disease than the right brain, as testing between $LML$ and $D$ yields smaller p-values than testing between $LMR$ and $D$.
 
@@ -731,7 +729,7 @@ The optimal scale is the neighborhood choice that maximizes the power:
 \label{power2}
 (k^{*},l^{*})=\arg\max_{k,l}\{\hat{\beta}_{\alpha}(g_{kl}), k,l\in [2,\ldots,n]\}.
 \end{equation}
-If there are more than one optimal neighborhood choices, it suffices to randomly pick one scale; alternatively, we can take all optimal scales and output the mean p-value from the next step.
+If there are more than one optimal neighborhood choices, we take one optimal scale that maximizes $k^{*}l^{*}$. 
 
 \State 3. \textbf{Calculate the p-value of Multiscale Graph Correlation}: 
 

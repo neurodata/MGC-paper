@@ -7,7 +7,7 @@ if nargin<1
     %pre1='Results_All/';
 end
 if nargin<2
-    pre2='../../Figures/JovoFigReal'; % The folder to save figures
+    pre2='../../Figures/FigReal'; % The folder to save figures
     %pre2='Results_All/Fig';
 end
 
@@ -45,9 +45,9 @@ for i=1:total
     titleStr = strcat('P-values of Local Tests for ', titleStr);
     title(titleStr,'FontSize',13);
     
-%     F.fname=[strcat(pre2, num2str(i))];
-%     F.wh=[3 2.5]*2;
-%     print_fig(gcf,F)
+    F.fname=strcat(pre2, num2str(i));
+    F.wh=[3 2.5]*2;
+    print_fig(gcf,F)
 end
 
 function [str, title]=CorrRealDataName(i)

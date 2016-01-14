@@ -1,4 +1,4 @@
-function [corrXY,varX,varY] = LocalGraphCorr(X,Y,option, neighbor,disRank) % Calculate local graph correlation, for mcorr/dcorr/Mantel
+function [corrXY,varX,varY] = LocalGraphCorr2(X,Y,option, neighbor,disRank) % Calculate local graph correlation, for mcorr/dcorr/Mantel
 % Author: Cencheng Shen
 % Implements local graph correlation from Shen, Jovo, CEP 2016.
 %
@@ -17,10 +17,17 @@ end
 n=size(disRank,1);
 RX=disRank(1:n,1:n); % The ranks for X
 RY=disRank(1:n,n+1:2*n); % The ranks for Y
+if neighbor==0 || neighbor>n^2
+    indD=n;
+else
+    indD=1;
+    l=ceil(neighbor/n);
+    k=neighbor-(l-1)*n;
+end
 
-corrXY=zeros(n,n); 
-varX=zeros(n,1);
-varY=zeros(n,1);
+corrXY=zeros(indD,indD); 
+varX=zeros(indD,1);
+varY=zeros(indD,1);
 
 % Depending on the choice of global test, calculate the entries of A and B
 % accordingly for late multiplication.
@@ -57,6 +64,8 @@ else
     end
 end
 
+% Use different implementations for one local test or all local tests
+if neighbor==0
     % Summing up the entriwise product of A and B based on the ranks, which
     % yields the local family of covariance and variances
     for j=1:n
@@ -72,18 +81,23 @@ end
             end
             tmp1=RX(i,j)+1;
             tmp2=RY(i,j)+1;
-            corrXY(tmp1,tmp2)=corrXY(tmp1,tmp2)+a*b;
-            varX(tmp1)=varX(tmp1)+a^2;
-            varY(tmp2)=varY(tmp2)+b^2;
+            corrXY(tmp1:end, tmp2:end)=corrXY(tmp1:end, tmp2:end)+a*b;
+            varX(tmp1:end)=varX(tmp1:end)+a^2;
+            varY(tmp2:end)=varY(tmp2:end)+b^2;
         end
     end
-    for j=1:n-1
-        varX(j+1)=varX(j)+varX(j+1);
-        varY(j+1)=varY(j)+varY(j+1);
-        for i=1:n-1
-            corrXY(i+1,j+1)=corrXY(i+1,j)+corrXY(i,j+1)+corrXY(i+1,j+1)-corrXY(i,j);
-        end
+else
+    % It is faster to just calculate one local test
+    for j=1:n
+        A(RX(:,j)==0,j)=A(j,j);
+        A(RX(:,j)>=k,j)=0;
+        B(RY(:,j)==0,j)=B(j,j);
+        B(RY(:,j)>=l,j)=0;
     end
+    corrXY=sum(sum(A.*B));
+    varX=sum(sum(A.*A));
+    varY=sum(sum(B.*B));
+end
 % Normalizing the covariance by the variances yields the local correlation.
 corrXY=corrXY./real(sqrt(varX*varY'));
 
@@ -95,14 +109,6 @@ for j=1:length(varX)
     if varY(j)<=0
         corrXY(:,j)=0;
     end
-end
-
-if neighbor~=0;
-    l=ceil(neighbor/n);
-    k=neighbor-(l-1)*n;
-    corrXY=corrXY(k,l);
-    varX=varX(k);
-    varY=varY(l);
 end
 % % The original dCorr is defined as the square root of the previous calculated dCorr; but square root or not does not affect testing at all.
 % if option==2

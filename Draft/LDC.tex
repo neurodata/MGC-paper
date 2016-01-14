@@ -188,7 +188,7 @@ Therefore, multiscale graph correlation is consistent against all dependent alte
 
 Note that the consistency of MGC in Theorem~\ref{thm1} is not applicable to MGC by Mantel, since the global Mantel coefficient is not consistent against all dependent alternatives \cite{JosseHolmes2013}. 
 
-In addition to theoretical consistency, MGC also is computationally efficient. Computing the distance between all points takes $O(n^2)$, sorting the distance matrices within each column takes $O(n^2\log(n))$, computing $g_{kl}$ at the optimal scale takes $O(n^2)$, and computing $\{g_{kl}\}$ for all scales can be implemented in $O(n^2\log(n))$. In practice, computing $\{g_{kl}\}$ for all scales is the only costly part, but is only needed for small number of resamplings to estimate the optimal scale. Therefore MGC is comparable in running time to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$.
+In addition to theoretical consistency, MGC also is computationally efficient. Computing the distance between all points takes $O(n^2)$, sorting the distance matrices within each column takes $O(n^2\log(n))$, computing $\{g_{kl}\}$ at one given scale or all scales can be implemented in $O(n^2)$, which allows the optimal scale of MGC to be quickly estimated. Therefore MGC is comparable in running time to the global tests, e.g., dcorr and mcorr take $O(n^2)$, while rank correlation and HHG take $O(n^2\log(n))$ due to sorting.
 
 % \section{Numerical Experiments}
 % \label{numer}
@@ -716,7 +716,7 @@ Transform $X$ and $Y$ into two $n \times n$ distance matrices $C$ and $D$.
 
 \State 2. \textbf{Estimate the optimal scale of MGC}:
 
-Firstly, we generate a random resampling of size $n$, apply the same resampling to both $X$ and $Y$, denote the re-sampled data as $X^{'}$ and $Y^{'}$, and calculate $g_{kl}(X^{'}, Y^{'})$ for all $k,l=2,\ldots,n$ by Equation~\eqref{localCoef}. Secondly, we generate a different resampling, apply it to $Y$ only, denote the re-sampled data as $Y^{''}$ (which is independent of $X^{'}$), and calculate $g_{kl}(X^{'}, Y^{''})$ for all $k,l=2,\ldots,n$. Repeat the above procedure for $r_{e}$ independent replicates, which yields the empirical distributions of $g_{kl}$ under the alternative and under the null respectively; and we denote them by $\hat{F}_{kl}^{A}$ and $\hat{F}_{kl}^{N}$.
+First, we generate a random resampling of size $n$, apply the same resampling to both $X$ and $Y$, denote the re-sampled data as $X^{'}$ and $Y^{'}$, and calculate $g_{kl}(X^{'}, Y^{'})$ for all $k,l=2,\ldots,n$ by Equation~\eqref{localCoef}. Second, we generate a different resampling, apply it to $Y$ only, denote the re-sampled data as $Y^{''}$ (which is independent of $X^{'}$), and calculate $g_{kl}(X^{'}, Y^{''})$ for all $k,l=2,\ldots,n$. Repeat the above procedure for $r_{e}$ independent replicates, which yields the empirical distributions of $g_{kl}$ under the alternative and under the null respectively; and we denote them by $\hat{F}_{kl}^{A}$ and $\hat{F}_{kl}^{N}$.
 
 Then we can estimate the testing power of all local tests at the type 1 error level $\alpha$ from their empirical distributions: at each $k,l$, the critical value $\hat{\mu}_{kl}$ can be calculated by $1-\alpha=Prob(\hat{F}_{kl}^{N}<\hat{\mu}_{kl})$, and the empirical power of each local test equals 
 \begin{equation}
@@ -727,7 +727,7 @@ Then we can estimate the testing power of all local tests at the type 1 error le
 The optimal scale is the neighborhood choice that maximizes the power:
 \begin{equation}
 \label{power2}
-(k^{*},l^{*})=\arg\max_{k,l}\{\hat{\beta}_{\alpha}(g_{kl}), k,l\in [2,\ldots,n]\}.
+(k^{*},l^{*})=\arg\max_{k,l \in [2,\ldots,n] }\{\hat{\beta}_{\alpha}(g_{kl})\}.
 \end{equation}
 If there are more than one optimal neighborhood choices, we take one optimal scale that maximizes $k^{*}l^{*}$. 
 
@@ -777,7 +777,7 @@ Therefore, multiscale graph correlation is consistent against all dependent alte
 \begin{proof}
 The power of multiscale graph correlation satisfies
 \begin{equation}
-\beta_{\alpha}(g)=\max_{k,l}\{\beta_{\alpha}(g_{kl}), k,l\in [2,\ldots,n]\} \geq \beta_{\alpha}(g_{nn}).
+\beta_{\alpha}(g)=\max_{k,l \in [2,\ldots,n]}\{\beta_{\alpha}(g_{kl})\} \geq \beta_{\alpha}(g_{nn}).
 \end{equation}
 So if $\beta_{\alpha}(g_{nn}) \rightarrow 1$, we also have $\beta_{\alpha}(g) \rightarrow 1$.
 

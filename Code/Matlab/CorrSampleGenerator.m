@@ -37,6 +37,10 @@ if dependent==0
 end
 
 switch type % In total 20 types of dependency
+    case 0 %Linear
+        u=(binornd(1,0.95,n,1));
+        x=(u>0).*(x)+(u==0).*mvnrnd(10,1,n);
+        y=(u>0).*(x+1*noise*eps) + (u==0).*mvnrnd(-10,1,n);
     case 1 %Linear
         y=xA+1*noise*eps;
     case 2 %Cubic
@@ -147,6 +151,6 @@ switch type % In total 20 types of dependency
             x=binornd(1,0.5,n,d);
         end
     case 20 %Independent clouds
-        x=mvnrnd(zeros(n,d),eye(d),n)*A/3+(binornd(1,0.5,n,1)-0.5)*2;
-        y=mvnrnd(zeros(n,d),eye(d),n)*A/3+(binornd(1,0.5,n,1)-0.5)*2;
+        x=mvnrnd(zeros(n,d),eye(d),n)/3;
+        y=mvnrnd(zeros(n,d),eye(d),n)/3;
 end

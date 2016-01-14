@@ -19,7 +19,7 @@ for i=1:total
     load(filename);
     figure
     K=n;
-    kmin=1;
+    kmin=2;
     if n>50
         c=2;
         K=ceil(K/2);

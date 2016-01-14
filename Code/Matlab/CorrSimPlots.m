@@ -35,20 +35,41 @@ end
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
+area1=zeros(total,1);area2=zeros(total,1);area3=zeros(total,1);
+area4=zeros(total,1);area5=zeros(total,1);area6=zeros(total,1);
+area7=zeros(total,1);
 for j=1:total
-    filename=strcat(pre1,'CorrIndTestCVType',num2str(j),'N100Dim1.mat');
+    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
+    power1W=zeros(lim,1);power2W=zeros(lim,1);power3W=zeros(lim,1);power7=power4;power4=zeros(lim,1);power5=zeros(lim,1);power6=zeros(lim,1);
+    for i=1:lim
+        nn=numRange(i);
+        power1W(i)=max(max(power1(1:nn,1:nn,i)));
+        power2W(i)=max(max(power2(1:nn,1:nn,i)));
+        power3W(i)=max(max(power3(1:nn,1:nn,i)));
+        power4(i)=power1(nn,nn,i);
+        power5(i)=power2(nn,nn,i);
+        power6(i)=power3(nn,nn,i);
+    end
+    power1=power1W;power2=power2W;power3=power3W;
     switch optionA
         case 1
-            plot(numRange,power1,'ro-',numRange,power4,'r.: ',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
+            plot(numRange,power1,'r-',numRange,power4,'r.: ',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
         case 2
-            plot(numRange,power1,'ro-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
+            plot(numRange,power1,'r-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
     title(titlechar);
+    area1(j)=mean(power1);
+    area2(j)=mean(power2);
+    area3(j)=mean(power3);
+    area4(j)=mean(power4);
+    area5(j)=mean(power5);
+    area6(j)=mean(power6);
+    area7(j)=mean(power7);
 end
 xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-520 3],'FontSize',20);
@@ -62,376 +83,7 @@ switch optionA
         h=legend('MGC by mcorr','MGC by dcorr','MGC by Mantel','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
 end
 set(h,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
-print_fig(gcf,F)
+% figure
 
 %
-figNumber='2';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1All.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
-    if optionA==1
-    else
-        power1=power3;
-    end
-    for i=1:length(numRange)
-        p1(i,:)=max(power1(2:end,:,i),[],1);
-        %         p2(i,:)=max(power2(2:end,:,i),[],1);
-        %         %         p1(i,:)=power1(i,numRange(i),:);%
-        %         %         p2(i,:)=power2(i,numRange(i),:);%
-        %         %         p3(i,:)=power3(i,numRange(i),:);%check
-        %         power1L(i)=power1(numRange(i),numRange(i),i);
-        %         power2L(i)=power2(numRange(i),numRange(i),i);
-    end
-    K=n;kmin=1;thres=0.8;
-    %ind=[find(max(power1,[],2)>thres,1) find(max(power2,[],2)>thres,1) find(power3>thres,1) find(power4>thres,1) lim];
-    ind=[find(max(p1,[],2)>=thres,1) lim];
-    lim=min(ind);
-    if numRange(lim)>50
-        c=2;
-        lim=floor(lim/2);
-    else
-        c=1;
-        kmin=2;
-    end
-    xaxis=kmin:numRange(lim);
-    yaxis=kmin:numRange(lim);
-    [X,Y]=meshgrid(c*xaxis,c*yaxis);
-    ph=power1(c*xaxis,c*yaxis,c*lim)';
-    surf(X,Y,ph);
-    view(2)
-    caxis([0 thres])
-    xlim([c*kmin c*numRange(lim)]);
-    ylim([c*kmin c*numRange(lim)]);
-    title(titlechar);
-end
-xlabel('Neighborhood Choice of X','position',[-200 -25],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-530 300],'FontSize',20);
-colorbar
-if optionA==1
-    tstring=' by mcorr ';
-else
-    tstring=' by Mantel ';
-end
-h=suptitle(strcat('Testing Powers of Local Tests',tstring, ' for Dimension 1'));
-set(h,'FontSize',20,'FontWeight','normal');
-%
-% F.fname=strcat(pre2, figNumber);
-% F.wh=[8 4]*2;
-% print_fig(gcf,F)
 
-%%%performance profile
-figNumber='3';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure
-a=0;b=1;interval=0.01;
-xaxis=a:interval:b;
-profile=zeros(7,length(xaxis));
-%load data
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestCVType',num2str(j),'N100Dim1.mat');
-    load(filename)
-    thres=0.8;
-    ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
-    pos=min(ind);
-    switch optionA
-        case 1
-            power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
-        case 2
-            power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
-    end
-    pmax=max(power);
-    for k=1:length(power)
-        tmp=(pmax-power(k));
-        tmpInd=ceil(tmp/interval)+1;
-        profile(k,tmpInd:end)=profile(k,tmpInd:end)+1;
-    end
-end
-profile=profile./total;
-sumP=ceil(mean(profile,2)*1000)/1000;
-switch optionA
-    case 1
-        plot(xaxis,profile(1,:),'r.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        h=legend(strcat('MGC, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
-    case 2
-        plot(xaxis,profile(1,:),'r.-',xaxis,profile(6,:),'b.-',xaxis,profile(7,:),'c.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        h=legend(strcat('MGC by mcorr, AUC=', num2str(sumP(1))),strcat('MGC by dcorr, AUC=', num2str(sumP(6))),strcat('MGC by Mantel, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
-end
-set(h,'FontSize',12);
-xlabel('Difference with the Best Method','FontSize',13);
-ylabel('Relative Performance','FontSize',13);
-ylim([0 1]);
-titleStr = strcat('Performance Profiles for Dimension 1');
-title(titleStr,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
-
-%%%performance profile AUC for n
-figNumber='4';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure
-a=0;b=1;interval=0.01;
-xaxis=a:interval:b;
-limN=10;
-sumP=zeros(7,limN);
-%load data
-for ll=1:limN
-    profile=zeros(7,length(xaxis));
-    thres=ll/limN;
-    for j=1:total
-        filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-        load(filename)
-        ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
-        pos=min(ind);
-        switch optionA
-            case 1
-                power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
-            case 2
-                power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
-        end
-        pmax=max(power);
-        for k=1:length(power)
-            tmp=(pmax-power(k));
-            tmpInd=ceil(tmp/interval)+1;
-            profile(k,tmpInd:end)=profile(k,tmpInd:end)+1;
-        end
-    end
-    profile=profile./total;
-    sumP(:,ll)=ceil(mean(profile,2)*1000)/1000;
-end
-xaxis=1/limN:1/limN:1;
-switch optionA
-    case 1
-        plot(xaxis,sumP(1,:),'r.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
-    case 2
-        plot(xaxis,sumP(1,:),'r.-',xaxis,sumP(6,:),'b.-',xaxis,sumP(7,:),'c.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        h=legend('MGC by mcorr','MGC by dcorr','MGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
-end
-set(h,'FontSize',12);
-xlabel('Threshold of Power','FontSize',16);
-ylabel('Area Under Curve','FontSize',16);
-ylim([0 1]);
-titleStr = strcat('Area Under Curve of Performance Profiles for Dimension 1');
-title(titleStr,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
-
-
-%Plot 5-8
-figNumber='5';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
-    load(filename)
-    numRange=dimRange;
-    subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
-    switch optionA
-        case 1
-            plot(numRange,power1,'ro-',numRange,power4,'r.: ',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
-        case 2
-            plot(numRange,power1,'ro-',numRange,power2,'bx-',numRange,power3,'c+-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
-    end
-    xlim([numRange(1) numRange(end)]);
-    ylim([0 1]);
-    title(titlechar);
-end
-xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
-ylabel('Empirical Testing Power','position',[-520 3],'FontSize',20);
-h=suptitle('Testing Powers of 20 Simulated Dependencies for Increasing Dimension with Fixed Sample Size');
-set(h,'FontSize',20,'FontWeight','normal');
-lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
-switch optionA
-    case 1
-        h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
-    case 2
-        h=legend('MGC by mcorr','MGC by dcorr','MGC by Mantel','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
-end
-set(h,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
-print_fig(gcf,F)
-
-
-figNumber='6';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100DimAll.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
-    p1=zeros(length(dimRange),n);
-    if optionA==1;
-    else
-        power1=power3;
-    end
-    for i=1:length(dimRange)
-        p1(i,:)=max(power1(2:end,:,i),[],1);
-        %         p2(i,:)=max(power2(2:end,:,i),[],1);
-        %         power1L(i)=power1(end,end,i);
-        %         power2L(i)=power2(end,end,i);
-    end
-    K=n;kmin=1;thres=0.5;
-    ind=[find(max(p1,[],2)>=thres,1,'last'),1];
-    lim=max(ind);
-    numLim=50;
-    xaxis=kmin:numLim;
-    yaxis=kmin:numLim;
-    [X,Y]=meshgrid(2*xaxis,2*yaxis);
-    ph=power1(2*xaxis,2*yaxis,lim)';
-    surf(X,Y,ph);
-    view(2)
-    caxis([0 thres])
-    xlim([2*kmin 2*numLim]);
-    ylim([2*kmin 2*numLim]);
-    title(titlechar);
-end
-xlabel('Neighborhood Choice of X','position',[-200 -25],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-530 300],'FontSize',20);
-colorbar
-if optionA==1
-    tstring=' by mcorr ';
-else
-    tstring=' by Mantel ';
-end
-h=suptitle(strcat('Testing Powers of Local Tests',tstring,' for Increasing Dimension'));
-set(h,'FontSize',20,'FontWeight','normal');
-%
-% F.fname=strcat(pre2, figNumber);
-% F.wh=[8 4]*2;
-% print_fig(gcf,F)
-
-%%%performance profile
-figNumber='7';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure
-a=0;b=1;interval=0.01;
-xaxis=a:interval:b;
-profile=zeros(7,length(xaxis));
-%load data
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
-    load(filename)
-    thres=0.5;
-    ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
-    pos=max(ind);
-    switch optionA
-        case 1
-            power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
-        case 2
-            power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
-    end
-    pmax=max(power);
-    for k=1:length(power)
-        tmp=(pmax-power(k));
-        tmpInd=ceil(tmp/interval)+1;
-        profile(k,tmpInd:end)=profile(k,tmpInd:end)+1;
-    end
-end
-profile=profile./total;
-sumP=ceil(mean(profile,2)*1000)/1000;
-switch optionA
-    case 1
-        plot(xaxis,profile(1,:),'r.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        h=legend(strcat('MGC, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
-    case 2
-        plot(xaxis,profile(1,:),'r.-',xaxis,profile(6,:),'b.-',xaxis,profile(7,:),'c.-',xaxis,profile(2,:),'r.:',xaxis, profile(3,:),'b.:',xaxis,profile(4,:),'c.:',xaxis,profile(5,:),'g.:','LineWidth',2);
-        h=legend(strcat('MGC by mcorr, AUC=', num2str(sumP(1))),strcat('MGC by dcorr, AUC=', num2str(sumP(6))),strcat('MGC by Mantel, AUC=', num2str(sumP(7))),strcat('mcorr AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
-end
-set(h,'FontSize',12);
-xlabel('Difference with the Best Method','FontSize',16);
-ylabel('Relative Performance','FontSize',16);
-ylim([0 1]);
-titleStr = strcat('Performance Profiles for Increasing Dimension');
-title(titleStr,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
-
-%%%performance profile
-figNumber='8';
-if optionA~=1
-    figNumber=strcat(figNumber,'b');
-end
-figure
-a=0;b=1;interval=0.01;
-xaxis=a:interval:b;
-limN=10;
-sumP=zeros(7,limN);
-%load data
-for ll=1:limN
-    profile=zeros(7,length(xaxis));
-    thres=ll/limN;
-    for j=1:total
-        filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
-        load(filename)
-        ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
-        pos=max(ind);
-        switch optionA
-            case 1
-                power=[power1(pos), power4(pos), power5(pos), power6(pos),power7(pos)];
-            case 2
-                power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
-        end
-        pmax=max(power);
-        for k=1:length(power)
-            tmp=(pmax-power(k));
-            tmpInd=ceil(tmp/interval)+1;
-            profile(k,tmpInd:end)=profile(k,tmpInd:end)+1;
-        end
-    end
-    profile=profile./total;
-    sumP(:,ll)=ceil(mean(profile,2)*1000)/1000;
-end
-xaxis=1/limN:1/limN:1;
-switch optionA
-    case 1
-        plot(xaxis,sumP(1,:),'r.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
-    case 2
-        plot(xaxis,sumP(1,:),'r.-',xaxis,sumP(6,:),'b.-',xaxis,sumP(7,:),'c.-',xaxis, sumP(2,:),'r.:',xaxis,sumP(3,:),'b.:',xaxis, sumP(4,:),'c.:',xaxis,sumP(5,:),'g.:','LineWidth',2);
-        h=legend('MGC by mcorr','MGC by dcorr','MGC by Mantel','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
-end
-set(h,'FontSize',12);
-xlabel('Threshold of Power','FontSize',16);
-ylabel('Area Under Curve','FontSize',16);
-ylim([0 1]);
-titleStr = strcat('Area Under Curve of Performance Profiles for Increasing Dimension');
-title(titleStr,'FontSize',12);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)

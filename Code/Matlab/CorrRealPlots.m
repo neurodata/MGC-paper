@@ -4,11 +4,9 @@ function []=CorrRealPlots(pre1,pre2)
 
 if nargin<1
     pre1='../../Data/'; % The folder to locate data
-    %pre1='Results_All/';
 end
 if nargin<2
     pre2='../../Figures/FigReal'; % The folder to save figures
-    %pre2='Results_All/Fig';
 end
 
 % Plot heatmap
@@ -19,7 +17,7 @@ for i=1:total
     load(filename);
     figure
     K=n;
-    kmin=2;
+    kmin=1;
     if n>50
         c=2;
         K=ceil(K/2);
@@ -30,11 +28,11 @@ for i=1:total
     xaxis=kmin:K;
     yaxis=kmin:K;
     [X,Y]=meshgrid(c*xaxis,c*yaxis);
-    ph=p1(c*xaxis,c*yaxis)';
+    ph=p1All(c*xaxis,c*yaxis)';
     surf(X,Y,ph);
     view(2)
     colormap(flipud(colormap))
-    caxis([0 0.1])
+    caxis([0.01 0.1])
     colorbar
     xlabel('Neighborhood Choice of X','FontSize',16);
     ylabel('Neighborhood Choice of Y','FontSize',16);
@@ -42,7 +40,7 @@ for i=1:total
     ylim([c*kmin,c*K]);
     
     % Figure title/labels
-    titleStr = strcat('P-values of Local Tests for ', titleStr);
+    titleStr = strcat('P-values of All Local Tests for ', titleStr);
     title(titleStr,'FontSize',13);
     
     F.fname=strcat(pre2, num2str(i));
@@ -54,12 +52,12 @@ function [str, title]=CorrRealDataName(i)
 str='CorrPermDistTestType';
 switch i
     case 1
-        str=strcat(str,'BrainCxPAll.mat');
+        str=strcat(str,'BrainCxP.mat');
         title=' Connectome vs Personality';
     case 2
-        str=strcat(str,'BrainLMLxYAll.mat');
+        str=strcat(str,'BrainLMLxY.mat');
         title=' Left Brain Shape vs Disorder';
     case 3
-        str=strcat(str,'BrainLMRxYAll.mat');
+        str=strcat(str,'BrainLMRxY.mat');
         title=' Right Brain Shape vs Disorder';
 end

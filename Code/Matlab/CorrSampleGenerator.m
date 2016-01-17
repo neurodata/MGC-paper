@@ -38,9 +38,16 @@ end
 
 switch type % In total 20 types of dependency
     case 0 %Linear
-        u=(binornd(1,0.95,n,1));
-        x=(u>0).*(x)+(u==0).*mvnrnd(10,1,n);
-        y=(u>0).*(x+1*noise*eps) + (u==0).*mvnrnd(-10,1,n);
+        pp=0.8;
+        u=(binornd(1,pp,n,1));
+        y=(u>0).*(x) + (u==0).*mvnrnd(-5,1,n);
+        u=(binornd(1,pp,n,1));
+        x=(u>0).*(x)+(u==0).*mvnrnd(5,1,n);
+        if dependent==0
+            u=(binornd(1,pp,n,1));
+            x=unifrnd(-1,1,n,d);
+            x=(u>0).*(x)+(u==0).*mvnrnd(5,1,n);
+        end
     case 1 %Linear
         y=xA+1*noise*eps;
     case 2 %Cubic
@@ -89,53 +96,64 @@ switch type % In total 20 types of dependency
         xc=5;
         yc=1;
         z=unifrnd(-1,1,n,d);
-        y=yc*cos(z*pi)*A+noise*mvnrnd(0,1,n)/3;
+        x=xc*sin(z*pi);        
+        y=(binornd(1,0.5,n,1)*2-1).*abs(1-(x*A/max(x*A)).^2).^0.5;
+        %y=yc*cos(z*pi);
         if dependent==0
             z=unifrnd(-1,1,n,d);
-        end
-        x=xc*sin(z*pi)*A+noise*mvnrnd(0,1,n)/8;
+            x=xc*sin(z*pi);        
+        end    
+%         xc=5;
+%         yc=1;
+%         z=unifrnd(-1,1,n,d);
+%         y=yc*cos(z*pi)*A+noise*eps/3;
+%         if dependent==0
+%             z=unifrnd(-1,1,n,d);
+%         end
+%         x=xc*sin(z*pi)*A+noise*mvnrnd(0,1,n)/8;
     case 13 %Spiral
-        %y=( xA.^2  + unifrnd(0,1,n,1))/2+0.2*noise*eps;
-        x=unifrnd(0,20,n,d);
-        xA=x*A;
-        y=xA.*(cos(x)*A)+0.4*noise*eps;
-        x=xA.*(sin(x)*A);
+        u=unifrnd(0,20,n,d);
+        x=u.*(sin(u));
+        y=u.*(cos(u));
         if dependent==0
-            x=unifrnd(0,20,n,d);
-            x=x*A.*(sin(x)*A);
+            u=unifrnd(0,20,n,d);
+            x=u.*(sin(u));
         end
+%         %y=( xA.^2  + unifrnd(0,1,n,1))/2+0.2*noise*eps;
+%         x=unifrnd(0,20,n,d);
+%         xA=x*A;
+%         y=xA.*(cos(x)*A)+0.4*noise*eps;
+%         x=xA.*(sin(x)*A);
+%         if dependent==0
+%             x=unifrnd(0,20,n,d);
+%             x=x*A.*(sin(x)*A);
+%         end
     case 14 %Square Shape
-        u=unifrnd(-1,1,n,d)*A;
-        v=unifrnd(-1,1,n,d)*A;
+        u=unifrnd(-1,1,n,d);
+        v=unifrnd(-1,1,n,d);
         theta=-pi/8;
-        tmp=[cos(theta) -sin(theta); sin(theta) cos(theta)];
-        uv=[u v] * tmp;
-        x=uv(:,1);
-        y=uv(:,2);%+noise*eps;
+        x=u*cos(theta)+v*sin(theta);
+        y=-u*sin(theta)+v*cos(theta);
         if dependent==0
-            u=unifrnd(-1,1,n,d)*A;
-            v=unifrnd(-1,1,n,d)*A;
-            uv=[u v] * tmp;
-            x=uv(:,1);
+            u=unifrnd(-1,1,n,d);
+            v=unifrnd(-1,1,n,d);
+            x=u*cos(theta)+v*sin(theta);
         end
     case 15 %Diamond Shape
-        u=unifrnd(-1,1,n,d)*A;
-        v=unifrnd(-1,1,n,d)*A;
+        u=unifrnd(-1,1,n,d);
+        v=unifrnd(-1,1,n,d);
         theta=-pi/4;
-        tmp=[cos(theta) -sin(theta); sin(theta) cos(theta)];
-        uv=[u v] * tmp;
-        x=uv(:,1);
-        y=uv(:,2);%+noise*eps;
+        x=u*cos(theta)+v*sin(theta);
+        y=-u*sin(theta)+v*cos(theta);
         if dependent==0
-            u=unifrnd(-1,1,n,d)*A;
-            v=unifrnd(-1,1,n,d)*A;
-            uv=[u v] * tmp;
-            x=uv(:,1);
+            u=unifrnd(-1,1,n,d);
+            v=unifrnd(-1,1,n,d);
+            x=u*cos(theta)+v*sin(theta);
         end
     case 16 %Sine 1/2
-        y=sin(4*pi*xA/max(xA))+1*noise*eps;
+        y=sin(4*pi*x)+1*noise*repmat(eps,1,d);
     case 17 %Sine 1/8
-        y=sin(16*pi*xA/max(xA))+0.5*noise*eps;
+        y=sin(16*pi*x)+0.5*noise*repmat(eps,1,d);
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, 1),eye(1));
@@ -151,6 +169,6 @@ switch type % In total 20 types of dependency
             x=binornd(1,0.5,n,d);
         end
     case 20 %Independent clouds
-        x=mvnrnd(zeros(n,d),eye(d),n)/3;
-        y=mvnrnd(zeros(n,d),eye(d),n)/3;
+        x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
+        y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
 end

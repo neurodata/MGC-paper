@@ -1,28 +1,23 @@
-function [corrXY,varX,varY] = LocalGraphCorr(X,Y,option, neighbor,disRank) % Calculate local graph correlation, for mcorr/dcorr/Mantel
+function [corrXY,varX,varY] = LocalGraphCorr(X,Y,option,disRank) % Calculate local variants of mcorr/dcorr/Mantel
 % Author: Cencheng Shen
 % Implements local graph correlation from Shen, Jovo, CEP 2016.
 %
-% By specifying option=1, 2, or 3, it calculates the local tests by mcorr, dcorr, and Mantel
-% By specifying a neighbor, it calculates one local test at that neighbor
-% Specifying the rank matrix by disRank can save the sorting.
+% By specifying option=1, 2, or 3, it calculates all local correlations of mcorr, dcorr, and Mantel
+% Specifying the rank matrix by a size n * 2n disRank can save the sorting.
 if nargin < 3
     option=1; % By default use mcorr
 end
 if nargin < 4
-    neighbor=0; % By default calculate all local tests
-end
-if nargin < 5
     disRank=[disToRanks(X) disToRanks(Y)]; % Sort distances within columns, if the ranks are not provided
 end
 n=size(disRank,1);
 RX=disRank(1:n,1:n); % The ranks for X
 RY=disRank(1:n,n+1:2*n); % The ranks for Y
 
-corrXY=zeros(n,n); 
-varX=zeros(n,1);
-varY=zeros(n,1);
+% The output contains the local variants of correlations and variances
+corrXY=zeros(n,n); varX=zeros(n,1); varY=zeros(n,1);
 
-% Depending on the choice of global test, calculate the entries of A and B
+% Depending on the choice of the global test, calculate the entries of A and B
 % accordingly for late multiplication.
 if option~=3
     % Double centering for mcorr/dcorr
@@ -57,33 +52,38 @@ else
     end
 end
 
-    % Summing up the entriwise product of A and B based on the ranks, which
-    % yields the local family of covariance and variances
-    for j=1:n
-        for i=1:n
-            a=A(i,j);
-            b=B(i,j);
-            % If there are ties, set all rank 0 entries to the diagonal entry
-            if (RX(i,j)==0)
-                a=A(j,j);
-            end
-            if (RY(i,j)==0)
-                b=B(j,j);
-            end
-            tmp1=RX(i,j)+1;
-            tmp2=RY(i,j)+1;
-            corrXY(tmp1,tmp2)=corrXY(tmp1,tmp2)+a*b;
-            varX(tmp1)=varX(tmp1)+a^2;
-            varY(tmp2)=varY(tmp2)+b^2;
+% Summing up the entrywise product of A and B based on the ranks, which
+% yields the local family of covariance and variances
+for j=1:n
+    for i=1:n
+        a=A(i,j);
+        b=B(i,j);
+        % If there are ties, set all rank 0 entries to the diagonal entry
+        if (RX(i,j)==0)
+            a=A(j,j);
         end
-    end
-    for j=1:n-1
-        varX(j+1)=varX(j)+varX(j+1);
-        varY(j+1)=varY(j)+varY(j+1);
-        for i=1:n-1
-            corrXY(i+1,j+1)=corrXY(i+1,j)+corrXY(i,j+1)+corrXY(i+1,j+1)-corrXY(i,j);
+        if (RY(i,j)==0)
+            b=B(j,j);
         end
+        tmp1=RX(i,j)+1;
+        tmp2=RY(i,j)+1;
+        corrXY(tmp1,tmp2)=corrXY(tmp1,tmp2)+a*b;
+        varX(tmp1)=varX(tmp1)+a^2;
+        varY(tmp2)=varY(tmp2)+b^2;
     end
+end
+for j=1:n-1
+    corrXY(1,j+1)=corrXY(1,j)+corrXY(1,j+1);
+    corrXY(j+1,1)=corrXY(j,1)+corrXY(j+1,1);
+    varX(j+1)=varX(j)+varX(j+1);
+    varY(j+1)=varY(j)+varY(j+1);
+end
+for j=1:n-1
+    for i=1:n-1
+        corrXY(i+1,j+1)=corrXY(i+1,j)+corrXY(i,j+1)+corrXY(i+1,j+1)-corrXY(i,j);
+    end
+end
+
 % Normalizing the covariance by the variances yields the local correlation.
 corrXY=corrXY./real(sqrt(varX*varY'));
 
@@ -96,15 +96,3 @@ for j=1:length(varX)
         corrXY(:,j)=0;
     end
 end
-
-if neighbor~=0;
-    l=ceil(neighbor/n);
-    k=neighbor-(l-1)*n;
-    corrXY=corrXY(k,l);
-    varX=varX(k);
-    varY=varY(l);
-end
-% % The original dCorr is defined as the square root of the previous calculated dCorr; but square root or not does not affect testing at all.
-% if option==2
-%     corrXY=real(sqrt(corrXY));
-% end

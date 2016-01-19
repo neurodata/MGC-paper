@@ -98,7 +98,7 @@ CorrIndTestDim(1,n,dim,lim,rep1,rep2);
 CorrIndTestDim(2,n,dim,lim,rep1,rep2);
 CorrIndTestDim(3,n,dim,lim,rep1,rep2);
 CorrIndTestDim(4,n,dim,lim,rep1,rep2);
-dim=10;lim=10;
+dim=10;lim=20;
 CorrIndTestDim(5,n,dim,lim,rep1,rep2);
 dim=40;lim=20;
 CorrIndTestDim(6,n,dim,lim,rep1,rep2);
@@ -140,13 +140,13 @@ CorrPermDistTest([C1 P2],rep2,rep2,'BNU112');
 clear
 load('ccidiff-Tmat-org')
 n=109; lim=1; rep1=1; rep2=2000;
-CorrPermDistTest([C1 T1],rep2,rep2,'CT');
+CorrPermDistTest(C1,T1,rep2,rep2,'CT');
 
 %%%use dcorr to find the optimal neighborhood size
 clear
 load('BrainCP') 
 n=42; lim=1; rep1=2000; rep2=10000;
-CorrPermDistTest([distC distP],rep1,rep2,'BrainCxP');
+CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
 pre1='../../Data/'; % The folder to locate data
 load(strcat(pre1,'CorrPermDistTestTypeBrainCxP.mat'));
 % mean(p1(neighbor1))

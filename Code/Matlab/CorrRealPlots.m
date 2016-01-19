@@ -8,6 +8,7 @@ end
 if nargin<2
     pre2='../../Figures/FigReal'; % The folder to save figures
 end
+map2 = brewermap(128,'GnBu'); % brewmap
 
 % Plot heatmap
 total=3;
@@ -16,28 +17,14 @@ for i=1:total
     filename=strcat(pre1,filename);
     load(filename);
     figure
-    K=n;
-    kmin=1;
-    if n>50
-        c=2;
-        K=ceil(K/2);
-    else
-        c=1;
-        kmin=2;
-    end
-    xaxis=kmin:K;
-    yaxis=kmin:K;
-    [X,Y]=meshgrid(c*xaxis,c*yaxis);
-    ph=p1All(c*xaxis,c*yaxis)';
-    surf(X,Y,ph);
-    view(2)
-    colormap(flipud(colormap))
+    kmin=2;
+    imagesc(p1All(kmin:n,kmin:n)');
+    set(gca,'YDir','normal')
+    colormap(flipud(map2))
     caxis([0.01 0.1])
     colorbar
     xlabel('Neighborhood Choice of X','FontSize',16);
     ylabel('Neighborhood Choice of Y','FontSize',16);
-    xlim([c*kmin,c*K]);
-    ylim([c*kmin,c*K]);
     
     % Figure title/labels
     titleStr = strcat('P-values of All Local Tests for ', titleStr);

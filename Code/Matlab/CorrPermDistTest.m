@@ -1,4 +1,4 @@
-function [p1, p2, p3, p4,p5,p6,p7]=CorrPermDistTest(type,rep1,rep2,titlechar, allP, alpha,option)
+function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(X,Y,rep1,rep2,titlechar, neighborhoods,allP, alpha,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by mcorr/dcorr/Mantel, and global mcorr/dcorr/Mantel/HHG.
@@ -11,37 +11,60 @@ function [p1, p2, p3, p4,p5,p6,p7]=CorrPermDistTest(type,rep1,rep2,titlechar, al
 % set allP to non-zero will use all permutations instead,
 % alpha specifies the type 1 error level,
 % option specifies whether each test statistic is calculated or not.
-if nargin<4
+if nargin<5
     titlechar='Real Data';
 end
-if nargin<5
-    allP=0; % If set to other value, will override rep and use all permutations; unfeasible for n large.
-end
 if nargin<6
-    alpha=0.05; % Default type 1 error level
+    neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
 end
 if nargin<7
-    option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC by mcorr/dcorr/Mantel, global mcorr/dcorr/Mantel, HHG, in order.
+    allP=0; % If set to other value, will override rep and use all permutations; unfeasible for n large.
 end
-n=size(type,1);
-C=type(:, 1:n);
-P=type(:, n+1:2*n);
+if nargin<8
+    alpha=0.05; % Default type 1 error level
+end
+if nargin<9
+    option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC by mcorr/dcorr/Mantel, global mcorr/dcorr/Mantel, HHG, in order; set the first three
+end
+n=size(X,1);
+%C=type(:, 1:n);
+%P=type(:, n+1:2*n);
 
-neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
-
+p1=0;p2=0;p3=0;p4=0;p5=0;p6=0;p7=0;
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
-    [power1All,power2All,power3All]=IndependenceTest(C,P,rep1,alpha);
+    [power1All,power2All,power3All]=IndependenceTest(X,Y,rep1,alpha);
+    if neighborhoods(1)==0
     neighborhoods(1)=verifyNeighbors(1-power1All);
+    end
+    if neighborhoods(2)==0
     neighborhoods(2)=verifyNeighbors(1-power2All);
+    end
+    if neighborhoods(3)==0
     neighborhoods(3)=verifyNeighbors(1-power3All);
+    end
 end
+
 % Return the permutation test to return the p-values
-[p1All, p2All, p3All, p7]=PermutationTest(C,P,rep2,allP,option);
+if rep2~=0
+[p1All, p2All, p3All, p7]=PermutationTest(X,Y,rep2,allP,option);
+end
 if rep1==0
-    neighborhoods(1)=verifyNeighbors(p1All);
-    neighborhoods(2)=verifyNeighbors(p2All);
-    neighborhoods(3)=verifyNeighbors(p3All);
+    if option(1)~=0
+        neighborhoods(1)=option(1);
+    else
+        neighborhoods(1)=verifyNeighbors(p1All);
+    end
+    if option(2)~=0
+        neighborhoods(2)=option(2);
+    else
+        neighborhoods(2)=verifyNeighbors(p2All);
+    end
+    if option(3)~=0
+        neighborhoods(3)=option(3);
+    else
+        neighborhoods(3)=verifyNeighbors(p3All);
+    end
 end
 % From the p-values of all local tests,  get the p-values of MGC based on the optimal neighborhood estimation, and the p-values of the respective global test
 p1=p1All(neighborhoods(1));p4=p1All(end);

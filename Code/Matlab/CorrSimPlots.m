@@ -23,13 +23,42 @@ if nargin<4
     pre2='../../Figures/Fig'; % The folder to save figures
 end
 
-% Set colors
-cmap = brewermap(4,'Dark2');
+%% Set colors
 map1=zeros(7,3);
-map1(1,:)=cmap(1,:);map1(4,:)=cmap(1,:); % The color for MGC{mcorr} and global mcorr.
-map1(2,:)=cmap(2,:);map1(5,:)=cmap(2,:); % The color for MGC{dcorr} and global dcorr.
-map1(3,:)=cmap(3,:);map1(6,:)=cmap(3,:); % The color for MGC{Mantel} and global Mantel.
-map1(7,:)=cmap(4,:); % The color for HHG
+cm = 3;
+
+switch cm
+    case 1
+        cmap = brewermap(8,'Dark2');
+    case 2
+        cmap = brewermap(8,'Set2');
+    case 3
+        gr = [0,1,0];
+        ma = [1,0,1];
+        cy = [0,1,1];
+        cmap(1,:) = gr;
+        cmap(2,:) = ma;
+        cmap(3,:) = cy;
+        cmap(7,:) = [0 0 0];
+    case 4
+        cmap(1,:) = [166,206,227]/255;
+        cmap(2,:) = [31,120,180]/255;
+        cmap(3,:) = [178,223,138]/255;
+    case 5
+        cmap(1,:) = [102,194,165]/255;
+        cmap(2,:) = [ 252,141,98]/255;
+        camp(3,:) = [141,160,203]/255;
+end
+
+mcorr = cmap(1,:);
+dcorr = cmap(2,:);
+mante = cmap(3,:);
+HHG   = [0,0,0];
+
+map1(1,:)=mcorr; map1(4,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
+map1(2,:)=dcorr; map1(5,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
+map1(3,:)=mante; map1(6,:)=mante; % The color for MGC{Mantel} and global Mantel.
+map1(7,:)=HHG; % The color for HHG
 if optionA==1
     map1=map1([1,4:7],:); % Take out MGC{dcorr} and MGC{Mantel} color when they are not needed.
 end
@@ -51,9 +80,9 @@ for j=1:total
     titlechar=CorrSimuTitle(j);
     switch optionA
         case 1
-            plot(numRange,power1,'.-',numRange,power4,'.: ',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.:','LineWidth',2);
+            plot(numRange,power1,'.-',numRange,power4,'.: ',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
         case 2
-            plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.:','LineWidth',2);
+            plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
@@ -76,11 +105,11 @@ switch optionA
 end
 set(h,'FontSize',12);
 %
-F.fname=strcat(pre2, figNumber);
+F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
-%
+%%
 figNumber='2';
 if optionA~=1
     figNumber=strcat(figNumber,'b');
@@ -129,7 +158,7 @@ F.fname=strcat(pre2, figNumber);
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
-%%%performance profile
+%% %performance profile
 figNumber='3';
 if optionA~=1
     figNumber=strcat(figNumber,'b');

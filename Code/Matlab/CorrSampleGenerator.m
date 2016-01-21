@@ -35,7 +35,7 @@ xA=x*A;
 if dependent==0
     x=unifrnd(-1,1,n,d);
 end
-pp=0.8;
+pp=0.2;
 mix=zeros(n,1);
 mix(1:ceil(n*pp))=1;
 u=mix;
@@ -43,13 +43,13 @@ u=mix;
 switch type % In total 20 types of dependency
     case 0 %Linear
         %u=(binornd(1,pp,n,1));
-        y=(u>0).*(x+0*noise*eps) + (u==0).*mvnrnd(-5,1,n);
+        y=repmat((u>0),1,d).*(x) + repmat((u==0),1,d).*mvnrnd(-50*ones(n, d),eye(d));
         %u=(binornd(1,pp,n,1));
-        x=(u>0).*(x)+(u==0).*mvnrnd(5,1,n);
+        x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(50*ones(n, d),eye(d));
         if dependent==0
             %u=(binornd(1,pp,n,1));
             x=unifrnd(-1,1,n,d);
-            x=(u>0).*(x)+(u==0).*mvnrnd(5,1,n);
+            x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(50*ones(n, d),eye(d));
         end
     case 1 %Linear
         y=xA+1*noise*eps;
@@ -101,7 +101,7 @@ switch type % In total 20 types of dependency
         z=unifrnd(-1,1,n,d);
         x=xc*sin(z*pi);        
         y=(binornd(1,0.5,n,1)*2-1).*abs(1-(x*A/max(x*A)).^2).^0.5+0.3*noise*eps;
-        %y=yc*cos(z*pi)+0.3*noise*eps;
+        %y=yc*cos(z*pi);%+0.3*noise*eps;
         if dependent==0
             z=unifrnd(-1,1,n,d);
             x=xc*sin(z*pi);        
@@ -116,11 +116,19 @@ switch type % In total 20 types of dependency
 %         x=xc*sin(z*pi)*A+noise*mvnrnd(0,1,n)/8;
     case 13 %Spiral
         u=unifrnd(0,20,n,d);
-        x=u.*(sin(u));
-        y=u.*(cos(u))+0.3*noise*repmat(eps,1,d);
+        %u=repmat(unifrnd(0,20,n,1),1,d)+5*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+        x=u(:,1).*(sin(u(:,1)));
+        if d>1
+            x=[x';u(:,2:end)']'*A;
+        end
+        y=u(:,1).*(cos(u(:,1)))+0.3*noise*eps;%repmat(eps,1,d);
         if dependent==0
             u=unifrnd(0,20,n,d);
-            x=u.*(sin(u));
+            %u=repmat(unifrnd(0,20,n,1),1,d)+5*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+            x=u(:,1).*(sin(u(:,1)));
+            if d>1
+                x=[x';u(:,2:end)']'*A;
+            end
         end
 %         %y=( xA.^2  + unifrnd(0,1,n,1))/2+0.2*noise*eps;
 %         x=unifrnd(0,20,n,d);
@@ -132,36 +140,38 @@ switch type % In total 20 types of dependency
 %             x=x*A.*(sin(x)*A);
 %         end
     case 14 %Square Shape
-        u=unifrnd(-1,1,n,d);
-        v=unifrnd(-1,1,n,d);
+        u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+        v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
         theta=-pi/8;
         x=u*cos(theta)+v*sin(theta);
         y=-u*sin(theta)+v*cos(theta)+0.1*noise*repmat(eps,1,d);
         if dependent==0
-            u=unifrnd(-1,1,n,d);
-            v=unifrnd(-1,1,n,d);
+            u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+            v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
             x=u*cos(theta)+v*sin(theta);
         end
     case 15 %Diamond Shape
-        u=unifrnd(-1,1,n,d);
-        v=unifrnd(-1,1,n,d);
+        u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+        v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
         theta=-pi/4;
         x=u*cos(theta)+v*sin(theta);
         y=-u*sin(theta)+v*cos(theta)+0.1*noise*repmat(eps,1,d);
         if dependent==0
-            u=unifrnd(-1,1,n,d);
-            v=unifrnd(-1,1,n,d);
+            u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+            v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
             x=u*cos(theta)+v*sin(theta);
         end
     case 16 %Sine 1/2
-        y=sin(4*pi*x)*A+1*noise*eps;%repmat(eps,1,d);
+        x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+        y=sin(4*pi*x)+1*noise*repmat(eps,1,d);
         if dependent==0
-            x=unifrnd(-1,1,n,d);
+            x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
         end
     case 17 %Sine 1/8
-        y=sin(16*pi*x)*A+0.5*noise*eps;%repmat(eps,1,d);
+        x=repmat(unifrnd(-1,1,n,1),1,d)+0.01*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
+        y=sin(16*pi*x)+0.5*noise*repmat(eps,1,d);
         if dependent==0
-            x=unifrnd(-1,1,n,d);
+            x=repmat(unifrnd(-1,1,n,1),1,d)+0.01*(d-1)*mvnrnd(zeros(n,d),eye(d),n);
         end
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));

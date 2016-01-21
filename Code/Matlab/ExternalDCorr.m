@@ -2,6 +2,9 @@
 n=7;
 x=-1:2/(n-1):1;
 y=x.^2;
+x=unifrnd(1,2,1,n);
+x=[-x,x];
+y=abs(x);
 %x=unifrnd(-1,1,1,n);
 %y=x;
 optionModi=1;
@@ -98,7 +101,7 @@ CorrIndTestDim(1,n,dim,lim,rep1,rep2);
 CorrIndTestDim(2,n,dim,lim,rep1,rep2);
 CorrIndTestDim(3,n,dim,lim,rep1,rep2);
 CorrIndTestDim(4,n,dim,lim,rep1,rep2);
-dim=10;lim=20;
+dim=10;lim=10;
 CorrIndTestDim(5,n,dim,lim,rep1,rep2);
 dim=40;lim=20;
 CorrIndTestDim(6,n,dim,lim,rep1,rep2);
@@ -147,8 +150,6 @@ clear
 load('BrainCP') 
 n=42; lim=1; rep1=2000; rep2=10000;
 CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
-pre1='../../Data/'; % The folder to locate data
-load(strcat(pre1,'CorrPermDistTestTypeBrainCxP.mat'));
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))
 %%%ind trial
@@ -170,8 +171,8 @@ end
 yind=unifrnd(0,3,n,1);
 yind=squareform(pdist(ceil(yind)));
 %yind=(yind>0);
-CorrPermDistTest([LMLS y],rep1,rep2,'BrainLMLxY');
-CorrPermDistTest([LMRS y],rep1,rep2, 'BrainLMRxY');
+CorrPermDistTest(LMLS,y,rep1,rep2,'BrainLMLxY');
+CorrPermDistTest(LMRS,y,rep1,rep2, 'BrainLMRxY');
 CorrPermDistTest([LMLS LMRS],rep1,rep2,'BrainLMLxLMR');
 %%%ind trial
 CorrPermDistTest([LMLS yind], rep1,rep2,'BrainLMLxYInd');

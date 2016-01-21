@@ -47,7 +47,7 @@ switch cm
     case 5
         cmap(1,:) = [102,194,165]/255;
         cmap(2,:) = [ 252,141,98]/255;
-        camp(3,:) = [141,160,203]/255;
+        cmap(3,:) = [141,160,203]/255;
 end
 
 mcorr = cmap(1,:);
@@ -192,10 +192,10 @@ profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 switch optionA
     case 1
-        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.:',xaxis, profile(3,:),'.:',xaxis,profile(4,:),'.:',xaxis,profile(5,:),'.:','LineWidth',2);
+        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.:',xaxis, profile(3,:),'.:',xaxis,profile(4,:),'.:',xaxis,profile(5,:),'.--','LineWidth',2);
         h=legend(strcat('MGC, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
     case 2
-        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.:','LineWidth',2);
+        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
         h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(6))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
 end
 set(h,'FontSize',12);
@@ -248,10 +248,10 @@ end
 xaxis=1/limN:1/limN:1;
 switch optionA
     case 1
-        plot(xaxis,sumP(1,:),'.-',xaxis, sumP(2,:),'.:',xaxis,sumP(3,:),'.:',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:','LineWidth',2);
+        plot(xaxis,sumP(1,:),'.-',xaxis, sumP(2,:),'.:',xaxis,sumP(3,:),'.:',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.--','LineWidth',2);
         h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
     case 2
-        plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.:','LineWidth',2);
+        plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.--','LineWidth',2);
         h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
 end
 set(h,'FontSize',12);
@@ -283,14 +283,14 @@ for j=1:total
     titlechar=CorrSimuTitle(j);
     switch optionA
         case 1
-            plot(numRange,power1,'.-',numRange,power4,'.: ',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.:','LineWidth',2);
+            plot(numRange,power1,'.-',numRange,power4,'.: ',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',2);
         case 2
-            plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.:','LineWidth',2);
+            plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',2);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
     if j~=16 % Remove x&y axis ticks except type 16, which is at the left bottom
-        set(gca,'XTick',[]); % Remove x axis ticks
+        %set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
     end
     title(titlechar);
@@ -394,10 +394,10 @@ profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 switch optionA
     case 1
-        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.:',xaxis, profile(3,:),'.:',xaxis,profile(4,:),'.:',xaxis,profile(5,:),'.:','LineWidth',2);
+        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.:',xaxis, profile(3,:),'.:',xaxis,profile(4,:),'.:',xaxis,profile(5,:),'.--','LineWidth',2);
         h=legend(strcat('MGC, AUC=', num2str(sumP(1))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
     case 2
-        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.:','LineWidth',2);
+        plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
         h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(6))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
 end
 set(h,'FontSize',12);
@@ -450,10 +450,10 @@ end
 xaxis=1/limN:1/limN:1;
 switch optionA
     case 1
-        plot(xaxis,sumP(1,:),'.-',xaxis, sumP(2,:),'.:',xaxis,sumP(3,:),'.:',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:','LineWidth',2);
+        plot(xaxis,sumP(1,:),'.-',xaxis, sumP(2,:),'.:',xaxis,sumP(3,:),'.:',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.--','LineWidth',2);
         h=legend('MGC','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
     case 2
-        plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.:','LineWidth',2);
+        plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.--','LineWidth',2);
         h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
 end
 set(h,'FontSize',12);

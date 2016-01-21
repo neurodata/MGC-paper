@@ -1,4 +1,4 @@
-function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(X,Y,rep1,rep2,titlechar, neighborhoods,allP, alpha,option)
+function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,P,rep1,rep2,titlechar, neighborhoods,allP, alpha,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by mcorr/dcorr/Mantel, and global mcorr/dcorr/Mantel/HHG.
@@ -12,7 +12,7 @@ function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(X,Y,rep1,rep2,
 % alpha specifies the type 1 error level,
 % option specifies whether each test statistic is calculated or not.
 if nargin<5
-    titlechar='Real Data';
+    titlechar='RealData';
 end
 if nargin<6
     neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
@@ -26,14 +26,13 @@ end
 if nargin<9
     option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC by mcorr/dcorr/Mantel, global mcorr/dcorr/Mantel, HHG, in order; set the first three
 end
-n=size(X,1);
-%C=type(:, 1:n);
-%P=type(:, n+1:2*n);
-
+n=size(C,1);
+% C=type(:, 1:n);
+% P=type(:, n+1:2*n);
 p1=0;p2=0;p3=0;p4=0;p5=0;p6=0;p7=0;
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
-    [power1All,power2All,power3All]=IndependenceTest(X,Y,rep1,alpha);
+    [power1All,power2All,power3All]=IndependenceTest(C,P,rep1,alpha);
     if neighborhoods(1)==0
     neighborhoods(1)=verifyNeighbors(1-power1All);
     end
@@ -47,7 +46,7 @@ end
 
 % Return the permutation test to return the p-values
 if rep2~=0
-[p1All, p2All, p3All, p7]=PermutationTest(X,Y,rep2,allP,option);
+[p1All, p2All, p3All, p7]=PermutationTest(C,P,rep2,allP,option);
 end
 if rep1==0
     if option(1)~=0
@@ -73,7 +72,7 @@ p3=p3All(neighborhoods(3));p6=p3All(end);
 % Save the results
 pre1='../../Data/'; 
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','type','n','rep1','rep2','allP','alpha','option','p1All','p2All','p3All');
+save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','n','rep1','rep2','allP','alpha','option','p1All','p2All','p3All');
 
 function  [power1, power2, power3]=IndependenceTest(C,P,rep,alpha)
 % Author: Cencheng Shen
@@ -84,6 +83,8 @@ function  [power1, power2, power3]=IndependenceTest(C,P,rep,alpha)
 % It generates dependent and independent data from resampling, 
 % calculate the test statistics under the null and the alternative, 
 % then estimate the testing power of each method.
+% C=squareform(pdist(X));
+% P=squareform(pdist(Y));
 n=size(C,1);
 % Test statiscs under the null and the alternative
 dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
@@ -141,6 +142,8 @@ function  [p1, p2, p3, p4]=PermutationTest(C,P,rep,allP,option)
 if nargin<5
     option=[1,1,1,1];  % Default option. Setting each entry to 0 to disable the calculation of local mcorr/dcorr/Mantel, or HHG.
 end
+% C=squareform(pdist(X));
+% P=squareform(pdist(Y));
 n=size(C,1);
 if allP~=0 
     PAll=perms(1:n);

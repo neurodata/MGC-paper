@@ -247,11 +247,11 @@ Note that the powers and performance profiles of MGC$\{$dcorr$\}$ and MGC$\{$Man
 
 \subsection{High Dimensional Simulation Experiments}
 \label{numer2}
-In this subsection we consider the same $20$ distributions and the same testing procedures as in Section~\ref{numer1}, but in an increasing dimension setting. The sample size is fixed at $n=100$, with $d_{x}$ increasing and $d_{y}$ either increases with $d_{x}$ or fixed at $1$ depending on the particular distribution. The empirical testing powers are based on $r=10$,$000$ Monte-Carlo replicates at $\alpha=0.05$, and the optimal scale of MGC is estimated by repeated sampling from given distribution using $2$,$000$ MC replicates. 
+In this subsection we consider the same $20$ distributions and the same testing procedures as in Section~\ref{numer1}, but in an increasing dimension setting. The sample size is fixed at $n=100$, with $d_{x}$ increasing and $d_{y}$ equals $d_{x}$ or $1$ depending on the particular distribution. The empirical testing powers are based on $r=10$,$000$ Monte-Carlo replicates at $\alpha=0.05$, and the optimal scale of MGC is estimated by repeated sampling from given distribution using $2$,$000$ MC replicates. 
 
 The powers are plotted in Figure~\ref{fig:nD} against the dimension $d_{x}$. And the performance profiles are provided in Figure~\ref{fig:pp}(c)(d) for the increasing dimension scenario: Figure~\ref{fig:pp}(c) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and Figure~\ref{fig:pp}(d) plots the area under curve of the performance profiles against the power threshold.
 
-Like the dimension $1$ scenario, MGC also surpasses all the benchmarks for the increasing dimension scenario: for close to linear dependencies from type 1-5, MGC is as good as mcorr, whose power deteriorates much slower than the others; and for the remaining nonlinear dependencies (especially type 6-11 and type 18-19), MGC has a significant advantage comparing to others, due to its capability to better handle nonlinearity and high-dimensionality at the same time. The performance profiles of MGC in Figure~\ref{fig:pp}(c)(d) clearly reflect its superiority.
+Like the dimension $1$ scenario, MGC also surpasses all the benchmarks for the increasing dimension scenario: for close to linear dependencies from type 1-5, MGC is as good as mcorr, whose power deteriorates much slower than the others; and for the remaining nonlinear dependencies (especially type 6-11 and type 18-19), MGC almost always has a significant advantage comparing to others, due to its capability to better handle nonlinearity and high-dimensionality at the same time. The performance profiles of MGC in Figure~\ref{fig:pp}(c)(d) clearly reflect its superiority.
 
 %Note that in one third of the high dimensional simulations (e.g. sine period, square, diamond), the testing powers quickly degrade to around $\alpha$ as the dimension increases for all methods, which imply that these complex dependencies at larger dimensions become too obscure to be detected at the limited sample size. Furthermore, the powers and performance profiles of MGC$\{$dcorr$\}$ and MGC $\{$Mantel$\}$ in the high dimensional simulations are also provided in the appendix Section~\ref{appen:figure}, which are no better than MGC$\{$mcorr$\}$ but still significantly surpass all global tests.
 
@@ -412,9 +412,9 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \section{Functions}
 \label{appen:function}
 
-Here we list the distributions of the $20$ dependencies used in the simulation sections, which are based on a combination of the numerical simulations in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}, with the inclusion of noise for some simulations and an extra weight vector for the increasing dimensional scenario.
+Here we list the distributions of the $20$ dependencies used in the simulation sections, which are based on a combination of the numerical simulations in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} with some adjustments (such as the inclusion of additional noise and an extra weight vector) to better compare all methods in low and high dimension scenarios.
 
-For the purpose of the increasing dimension scenario, we denote $w$ as a size $1 \times d_{x}$ row vector with $w_{i}=\frac{1}{i}$. So $w\mb{x}$ is a dimension $1$ random variable that is a decaying weighted summation of $\mb{x}$, which equals $\mb{x}$ when $d_{x}=1$. In the following, $\mb{u}, \mb{v}$ are auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\epsilon$ denotes the standard normal distribution for white noise unless mentioned otherwise. The resulting pair of random variables $(\mb{x},\mb{y})$ are used to generate sample data for testing dependency.
+For the purpose of the increasing dimension scenario, we denote $\mb{x}_{i}$ as the $i$th dimension of $\mb{x}$, and denote $w$ as a size $1 \times d_{x}$ row vector with $w_{i}=\frac{1}{i}$. So $w\mb{x}$ is a dimension $1$ random variable that is a decaying weighted summation of $\mb{x}=[\mb{x}_{1},\ldots,\mb{x}_{d_{x}}]$; and $w\mb{x}$ equals $\mb{x}$ when $d_{x}=1$. In the following, $\mb{u}, \mb{v}$ are auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\epsilon$ denotes the standard normal distribution for white noise unless mentioned otherwise. The resulting pair of random variables $(\mb{x},\mb{y})$ are used to generate sample data for testing dependency.
 
 \setcounter{equation}{0}
 \begin{compactenum}
@@ -458,36 +458,41 @@ where $\hat{E}(w\mb{x})$ denotes the sample mean of $w\mb{x}$ and $\mb{I}$ is th
 \end{align*}
 \item Circle: $\mb{x} \sim \mc{U}(0,1)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
-\mb{y}&=((2\mb{u}-1) \cdot |1-(2\frac{w\mb{x}}{\max(w\mb{x})}-1)^2|^{\frac{1}{2}}+1)/2+0.1c\epsilon.
+\mb{y}&=((2\mb{u}-1) \cdot |1-\bigg(2\frac{w\mb{x}}{\max(w\mb{x})}-1\bigg)^2|^{\frac{1}{2}}+1)/2+0.1c\epsilon.
 \end{align*}
-\item Ellipse: Let $\mb{u} \sim \mc{U}(-1,1)^{d_{x}}$, $v \sim \mc{N}(0,1)$. Then
+\item Ellipse: Let $\mb{v} \sim \mc{U}(-1,1)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$. Then
 \begin{align*}
-\mb{x}&=5w\sin(\pi \mb{u})+\frac{v}{8},\\
-\mb{y}&=w\cos(\pi \mb{u})+\frac{\epsilon}{3}.
+\mb{x}&=5\sin(\pi \mb{v}),\\
+\mb{y}&=(2\mb{u}-1) \cdot |1-\bigg(\frac{w\mb{x}}{\max(w\mb{x})}\bigg)^2|^{\frac{1}{2}}+0.3c\epsilon.
 \end{align*}
 
-\item Spiral: $\mb{u} \sim \mc{U}(0,20)^{d_{x}}$,
+\item Spiral: Let $\mb{u} \sim \mc{U}(0,20)$, $\mb{v} \sim \mc{U}(0,20)^{d_{x}-1}$. Then
 \begin{align*}
-\mb{x}&=w\mb{u}w\sin(\mb{u}),\\
-\mb{y}&=w\mb{u}w\cos(\mb{u})+0.4c\epsilon.
+\mb{x}_{1}&=\mb{u}\sin(\mb{u}),\\
+\mb{x}_{i}&=w_{i}\mb{v}_{i-1} \mbox{ for $i=2,\ldots,d_{x}$},\\
+\mb{y}&=\mb{u}\cos(\mb{u})+0.3c\epsilon.
 \end{align*}
-\item Square: Let $\mb{u} \sim \mc{U}(-1,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
+\item Square: Let $\mb{u} \sim \mc{U}(-1,1)$, $\mb{u}' \sim \mc{N}(0,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)$, $\mb{v}' \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
 \begin{align*}
-\mb{x}&=w\mb{u} \cos(\theta) + w\mb{v} \sin(\theta),\\
-\mb{y}&=-w\mb{u} \sin(\theta) + w\mb{v} \cos(\theta).
+\mb{x}_{i}&=(\mb{u}+0.05\mb{u}'_{i}) \cos(\theta) + (\mb{v}+0.05\mb{v}'_{i}) \sin(\theta),\\
+\mb{y}_{i}&=-(\mb{u}+0.05\mb{u}'_{i}) \sin(\theta) + (\mb{v}+0.05\mb{v}'_{i}) \cos(\theta),
 \end{align*}
-\item Diamond: Let $\mb{u} \sim \mc{U}(-1,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)^{d_{x}}$, $\theta=-\frac{\pi}{4}$. Then
+for $i=1,\ldots,d_{x}$.
+\item Diamond: Let $\mb{u} \sim \mc{U}(-1,1)$, $\mb{u}' \sim \mc{N}(0,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)$, $\mb{v}' \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{4}$. Then
 \begin{align*}
-\mb{x}&=w\mb{u} \cos(\theta) + w\mb{v} \sin(\theta),\\
-\mb{y}&=-w\mb{u} \sin(\theta) + w\mb{v} \cos(\theta).
+\mb{x}_{i}&=(\mb{u}+0.05\mb{u}'_{i}) \cos(\theta) + (\mb{v}+0.05\mb{v}'_{i}) \sin(\theta),\\
+\mb{y}_{i}&=-(\mb{u}+0.05\mb{u}'_{i}) \sin(\theta) + (\mb{v}+0.05\mb{v}'_{i}) \cos(\theta),
 \end{align*}
-\item Sine Period 1/2: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
+for $i=1,\ldots,d_{x}$.
+\item Sine Period 1/2: $\mb{u} \sim \mc{U}(-1,1)$, $\mb{v} \sim \mc{N}(0,1)^{d_{x}}$,
 \begin{align*}
-\mb{y}&=sin \bigg( 4\pi \frac{w\mb{x}}{\max(w\mb{x})} \bigg)+c\epsilon.
+\mb{x}_{i}&=\mb{u}+0.02 d_{x} \mb{v}_{i} \mbox{ for $i=1,\ldots,d_{x}$}, \\
+\mb{y}&=\sin ( 4\pi \mb{x} )+c\epsilon.
 \end{align*}
-\item Sine Period 1/8: $\mb{x} \sim \mc{U}(-1,1)^{d_{x}}$,
+\item Sine Period 1/8: $\mb{u} \sim \mc{U}(-1,1)$, $\mb{v} \sim \mc{N}(0,1)^{d_{x}}$,
 \begin{align*}
-\mb{y}&=sin\bigg(16\pi \frac{w\mb{x}}{\max(w\mb{x})}\bigg)+0.5c\epsilon.
+\mb{x}_{i}&=\mb{u}+0.01 d_{x} \mb{v}_{i} \mbox{ for $i=1,\ldots,d_{x}$}, \\
+\mb{y}&=\sin ( 16\pi \mb{x} )+0.5c\epsilon.
 \end{align*}
 \item Multiplicative Noise: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\mb{u} \sim \mc{N}(0, 1)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
@@ -515,8 +520,7 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 
 
 Our low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the parameter before $c$ of some dependency (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter, such that the testing power neither increases too fast nor too slow for many dependency types. This is because in the absence of noise and dimension $1$, certain dependency like linear is very easy to be detected so that the testing powers of all methods converge to $1$ at very small $n$, which causes difficulty in comparing the methods; it is also more meaningful to consider noisy scenarios in practice. 
 
-The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$; $d_{y}=d_{x}$ for type $5,10,18,20$ in the absence of $w$, otherwise $1$. As the testing task becomes more difficult as $d_{x}$ increases, and the decaying vector $w$ essentially treats later dimensions as small perturbations, we no longer need additional noise to better compare different methods. Note that we can replace the fixed decaying vector $w$ by random decay, which will yield similar plots.
-
+The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, with $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. In order to compare the methods in a meaningful way, the decaying vector $w$ is used to treat later dimensions as small perturbation, such that the independence testing becomes more difficult as $d_{x}$ increases; but for some complex dependencies like sine period/square/diamond, the test is already very difficult so $w$ is not used.
 
 \section{Supplementary Figures}
 \label{appen:figure}

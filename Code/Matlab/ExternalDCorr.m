@@ -69,7 +69,7 @@ end
 
 %%Sims
 %Ind
-n=100; dim=1; lim=10; rep1=1000;rep2=1000;
+n=100; dim=1; lim=20; rep1=2000;rep2=10000;
 CorrIndTest(1,n,dim,lim,rep1,rep2);
 CorrIndTest(2,n,dim,lim,rep1,rep2);
 CorrIndTest(3,n,dim,lim,rep1,rep2);
@@ -81,7 +81,7 @@ CorrIndTest(8,n,dim,lim,rep1,rep2);
 CorrIndTest(9,n,dim,lim,rep1,rep2);
 CorrIndTest(10,n,dim,lim,rep1,rep2);
 
-n=100; dim=1; lim=10; rep1=1000;rep2=1000;
+n=100; dim=1; lim=20; rep1=2000;rep2=10000;
 CorrIndTest(11,n,dim,lim,rep1,rep2);
 CorrIndTest(12,n,dim,lim,rep1,rep2);
 CorrIndTest(13,n,dim,lim,rep1,rep2);
@@ -96,7 +96,7 @@ CorrIndTest(20,n,dim,lim,rep1,rep2);
 
 
 %IndDim
-n=100; dim=1000; lim=20; rep1=1000;rep2=1000;
+n=100; dim=1000; lim=20; rep1=2000;rep2=10000;
 CorrIndTestDim(1,n,dim,lim,rep1,rep2);
 CorrIndTestDim(2,n,dim,lim,rep1,rep2);
 CorrIndTestDim(3,n,dim,lim,rep1,rep2);
@@ -112,18 +112,19 @@ CorrIndTestDim(9,n,dim,lim,rep1,rep2);
 dim=100;
 CorrIndTestDim(10,n,dim,lim,rep1,rep2);
 
-n=100; dim=100; lim=20; rep1=1000;rep2=1000;
+n=100; dim=100; lim=20; rep1=2000;rep2=10000;
 CorrIndTestDim(11,n,dim,lim,rep1,rep2);
 dim=20;
 CorrIndTestDim(12,n,dim,lim,rep1,rep2);
-dim=20;
+dim=10;lim=10;
 CorrIndTestDim(13,n,dim,lim,rep1,rep2);
+dim=20;lim=20;
 CorrIndTestDim(14,n,dim,lim,rep1,rep2);
 CorrIndTestDim(15,n,dim,lim,rep1,rep2);
 CorrIndTestDim(16,n,dim,lim,rep1,rep2);
 dim=20;
 CorrIndTestDim(17,n,dim,lim,rep1,rep2);
-dim=40;
+dim=100;
 CorrIndTestDim(18,n,dim,lim,rep1,rep2);
 dim=100;
 CorrIndTestDim(19,n,dim,lim,rep1,rep2);

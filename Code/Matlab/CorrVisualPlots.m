@@ -31,7 +31,7 @@ for type=1:total
     end
     hold on
     plot(x1,y1,'r.','MarkerSize',sz);
-    plot(x,y,'.');
+    plot(x,y,'b.');
     % Specify the axis limit for each type
     switch type
         case 1

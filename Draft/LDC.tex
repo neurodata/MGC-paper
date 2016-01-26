@@ -203,7 +203,7 @@ In total we consider $20$ different distributions of $f_{xy}$ taken from existin
 We first experiment on a dimension $1$ scenario at $d_{x}=d_{y}=1$. To observe how fast the testing power of each method converges to $1$ for different dependencies, the testing powers are calculated against increasing $n$ from $5$ to $100$. The empirical powers based on $r=10$,$000$ Monte-Carlo replicates are plotted in Figure~\ref{fig:1D} at type $1$ error level $\alpha=0.05$, and we use $2$,$000$ MC replicates to estimate the optimal scale of MGC. %Note that appropriate level of white noise are added to $Y$ depending on the distribution type, otherwise the power can quickly converge to $1$ at very small sample size for certain dependencies like linear.
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/Fig1}
+\includegraphics[width=1.0\textwidth]{../Figures/Fig1b}
 \caption{
 Power of different methods on 20 different one-dimensional simulation settings, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates.
 Each panel shows empirical testing power on the absicca, and sample size on the ordinate.
@@ -218,19 +218,19 @@ Note that for all distributions other than the independent clouds, the empirical
 To better summarize the overall performance in the dimension $1$ simulations, we use the performance profiles \cite{DolanMore2002}, which provides an intuitive way for directly comparing a set of algorithms on a set of problems.  Briefly, each curve (profile) shows the relative performance of a given algorithm as a function of how far from the best algorithm it performed; therefore, higher curves and larger area under curve are better; a more detailed description is in appendix Section~\ref{appen:profiles}. For the dimension $1$ scenario, we fix the sample size by a power threshold, and draw the corresponding performance profiles of all methods in Figure~\ref{fig:pp}(a). To compare the performance profiles of each method with respect to different threshold choices, we also provide the area under curve of the performance profiles against the power threshold in Figure~\ref{fig:pp}(b).
 \begin{figure}[htbp]
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig3}
+\includegraphics[width=0.5\textwidth]{../Figures/Fig3b}
 }
 \hfil
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig4}
+\includegraphics[width=0.5\textwidth]{../Figures/Fig4b}
 }
 \hfil
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig7}
+\includegraphics[width=0.5\textwidth]{../Figures/Fig7b}
 }
 \hfil
 \subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig8}
+\includegraphics[width=0.5\textwidth]{../Figures/Fig8b}
 }
 \caption{Quantitative comparisons of the power of the various algorithms across all simulations into a single number.  
 (a) Performance profile plots comparing the different algorithms on all 1-dimensional problems at the first sample size $n$ of any testing power to exceed the power threshold 0.8. The legend provides the Area-Under-the-Curve (AUC) for each method; larger is better.
@@ -258,7 +258,7 @@ Like the dimension $1$ scenario, MGC also surpasses all the benchmarks in the in
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/Fig5}
+\includegraphics[width=1.0\textwidth]{../Figures/Fig5b}
 \caption{Power of different methods on 20 different simulation settings, for dimensionality ranging from 1 to 1000.  Details as in Figure~\ref{fig:1D}.
 Again, our method empirically achieves as high or higher power than the previous state of the art approaches for nearly all sample sizes on nearly all problems and dimensions.
 }
@@ -312,6 +312,7 @@ Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by 
 The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances and local statistics outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that MGC is likely to outperform the corresponding global statistic on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations.
 
 \cs{Now I think the taylor expansion paragraph above is not right: any function can be approximated by polynomial expansion, does not imply the optimal scale is smaller than $n$.}
+\jv{its not just that, its that even if you \emph{only} have to add a 2nd order term, already local beats global. }
 
 \subsection{Real Data}
 \label{numer3}
@@ -534,43 +535,43 @@ The low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a vis
 
 The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, with $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. For most dependencies, we use the decaying vector $w$ to treat later dimensions as small perturbation, such that the independence testing becomes more difficult as $d_{x}$ increases; but for some complex dependencies especially like square/diamond/sine period, the testing is already very difficult and $w$ is not used.
 
-\section{Supplementary Figures}
-\label{appen:figure}
-In Figure~\ref{fig:D2} and Figure~\ref{fig:pp2} we include the testing powers and performance profiles of MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$, for the low-dimensional and high-dimensional simulations in the main paper. Overall, both MGC implementations also improve over the respective global test statistics. Specifically, for the dimension 1 scenario, MGC$\{$Mantel$\}$ is overall slightly better than the other two due to its advantage for type 11-13; and for the increasing dimension scenario, MGC$\{$mcorr$\}$ is still the best due to the advantage of mcorr against high dimensional dependencies.
+% \section{Supplementary Figures}
+% \label{appen:figure}
+% In Figure~\ref{fig:D2} and Figure~\ref{fig:pp2} we include the testing powers and performance profiles of MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$, for the low-dimensional and high-dimensional simulations in the main paper. Overall, both MGC implementations also improve over the respective global test statistics. Specifically, for the dimension 1 scenario, MGC$\{$Mantel$\}$ is overall slightly better than the other two due to its advantage for type 11-13; and for the increasing dimension scenario, MGC$\{$mcorr$\}$ is still the best due to the advantage of mcorr against high dimensional dependencies.
 
-\begin{figure}[htbp]
-\subfloat[]{
-\includegraphics[width=1.0\textwidth]{../Figures/Fig1b}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=1.0\textwidth]{../Figures/Fig5b}
-}
-\caption{Same Figures as Figure~\ref{fig:1D} and Figure~\ref{fig:nD} but including MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$}
-\label{fig:D2}
-\end{figure}
+% \begin{figure}[htbp]
+% \subfloat[]{
+% \includegraphics[width=1.0\textwidth]{../Figures/Fig1b}
+% }
+% \hfil
+% \subfloat[]{
+% \includegraphics[width=1.0\textwidth]{../Figures/Fig5b}
+% }
+% \caption{Same Figures as Figure~\ref{fig:1D} and Figure~\ref{fig:nD} but including MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$}
+% \label{fig:D2}
+% \end{figure}
 
-\begin{figure}[htbp]
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig3b}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig4b}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig7b}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{../Figures/Fig8b}
-}
-\caption{Same Figures as Figure~\ref{fig:pp} but including MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$}
-\label{fig:pp2}
-\end{figure}
-
-\section{Data Collection}
+% \begin{figure}[htbp]
+% \subfloat[]{
+% \includegraphics[width=0.5\textwidth]{../Figures/Fig3b}
+% }
+% \hfil
+% \subfloat[]{
+% \includegraphics[width=0.5\textwidth]{../Figures/Fig4b}
+% }
+% \hfil
+% \subfloat[]{
+% \includegraphics[width=0.5\textwidth]{../Figures/Fig7b}
+% }
+% \hfil
+% \subfloat[]{
+% \includegraphics[width=0.5\textwidth]{../Figures/Fig8b}
+% }
+% \caption{Same Figures as Figure~\ref{fig:pp} but including MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$}
+% \label{fig:pp2}
+% \end{figure}
+% 
+% \section{Data Collection}
 
 
 

@@ -21,49 +21,40 @@ pv=1-pv/size(per,1);
 %%%ind trial
 clear
 load('BrainCP') 
-n=42;
-alpha=0.05; rep2=100;repp=100;
+n=10;
+alpha=0.05; rep2=1000;repp=1000;
 dim=1;type=20;
-power1=0;power2=0;power3=0;power4=0;power5=0;power6=0;power7=0;power8=0;
+power=zeros(7,1);
+p=zeros(7,1);
 for i=1:rep2;
-    %x=random('norm',0,1,n,dim);
-    %y=random('norm',0,1,n,dim);
-    %y=x.^2;
-    %[x, y]=CorrSampleGenerator(type,n,dim,1,0);
-    y=mvnrnd(zeros(n,dim),eye(dim),n);
-    distPInd=squareform(pdist(y));
-    [p1, p2, p3, p4,n1,n2,n3]=CorrPermDistTest([distC distPInd],repp,repp,'BrainCxPInd');
+      x=random('norm',0,1,n,dim);
+      y=random('norm',0,1,n,dim);
+%        %y=x.^2;
+%     %[x, y]=CorrSampleGenerator(type,n,dim,1,0);
+%     %y=mvnrnd(zeros(n,dim),eye(dim),n);
 %     distC=squareform(pdist(x));
-%     distP=squareform(pdist(y));
-%     [p1, p2, p3, p4,n1,n2,n3]=CorrPermDistTest([distC distP],rep2,repp);
-    %if i==1
-        neighbor1=n1;
-        neighbor2=n2;
-        neighbor3=n3;
-    %end
-    if mean(p1(neighbor1))<alpha
-        power1=power1+1/rep2;
-    end
-    if mean(p2(neighbor2))<alpha
-        power2=power2+1/rep2;
-    end
-    if mean(p3(neighbor3))<alpha
-        power3=power3+1/rep2;
-    end
-    if p1(end,end)<alpha
-        power4=power4+1/rep2;
-    end
-    if p2(end,end)<alpha
-        power5=power5+1/rep2;
-    end
-    if p3(end,end)<alpha
-        power6=power6+1/rep2;
-    end
-    if p4<alpha
-        power7=power7+1/rep2;
-    end
-    if min(min(p2))<alpha
-        power8=power8+1/rep2;
+%     distPInd=squareform(pdist(y));
+%     [power1,power2,power3]=CorrPermDistTest(distC,distPInd,repp,0,'BrainIndTmp');
+%     neighbor=zeros(3,1);
+%     neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+%     x=random('norm',0,1,n,dim);
+%     %y=random('norm',0,1,n,dim);
+%     distC=squareform(pdist(x));
+%     %distPInd=squareform(pdist(y));
+%     [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,0,repp,'BrainCxPInd',neighbor);
+%     for j=1:7
+%         if p(j)<alpha
+%             power(j)=power(j)+1/rep2;
+%         end
+%     end
+   
+    distC=squareform(pdist(x));
+    distPInd=squareform(pdist(y));
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,repp,repp,'BrainCxPInd');
+    for j=1:7
+        if p(j)<alpha
+            power(j)=power(j)+1/rep2;
+        end
     end
 end
 
@@ -130,16 +121,6 @@ dim=100;
 CorrIndTestDim(19,n,dim,lim,rep1,rep2);
 CorrIndTestDim(20,n,dim,lim,rep1,rep2);
 
-
-%%%Reals
-clear
-load('BrainBNU1.mat') 
-C1=Corr1(:,:,1);
-P1=Corr2(:,:,1);
-P2=Corr2(:,:,2);rep2=50;
-CorrPermDistTest([C1 P1],rep2,rep2,'BNU111');
-CorrPermDistTest([C1 P2],rep2,rep2,'BNU112');
-
 %%%%
 clear
 load('ccidiff-Tmat-org')
@@ -150,31 +131,56 @@ CorrPermDistTest(C1,T1,rep2,rep2,'CT');
 clear
 load('BrainCP') 
 n=42; lim=1; rep1=2000; rep2=10000;
-CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
+[p1,p2,p3,~,~,~,~,neighbor]=CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))
-%%%ind trial
-d=1;
-y=mvnrnd(zeros(n,d),eye(d),n);
-distPInd=squareform(pdist(y));
-CorrPermDistTest([distC distPInd],rep1,rep2,'BrainCxPInd');
 
 %%%
 clear
 load('BrainHippoShape')
-n=114;lim=1; rep1=2000;rep2=10000;
+n=114;lim=1; rep1=2000;rep2=10000;alpha=0.05;
 y=squareform(pdist(Label));
 %y=(y>0)+1;
 y=y+1;
 for i=1:n
     y(i,i)=0;
 end
-yind=unifrnd(0,3,n,1);
-yind=squareform(pdist(ceil(yind)));
-%yind=(yind>0);
-CorrPermDistTest(LMLS,y,rep1,rep2,'BrainLMLxY');
-CorrPermDistTest(LMRS,y,rep1,rep2, 'BrainLMRxY');
-CorrPermDistTest([LMLS LMRS],rep1,rep2,'BrainLMLxLMR');
+%estimate optimal scale interchangeably
+[power1,power2,power3]=CorrPermDistTest(LMLS,y,rep1,0,'BrainTmp');
+neighbor=zeros(3,1);
+neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+CorrPermDistTest(LMRS,y,0,rep2,'BrainLMRxYJ',neighbor);
+
+[power1,power2,power3]=CorrPermDistTest(LMRS,y,rep1,0,'BrainTmp');
+neighbor=zeros(3,1);
+neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+CorrPermDistTest(LMLS,y,0,rep2,'BrainLMLxYJ',neighbor);
+%estimate optimal scale separately
+[p1,p2,p3,~,~,~,~,neighbor]=CorrPermDistTest(LMLS,y,rep1,rep2,'BrainLMLxY');
+[p1,p2,p3,~,~,~,~,neighbor]=CorrPermDistTest(LMRS,y,rep1,rep2, 'BrainLMRxY');
+CorrPermDistTest(LMLS,LMRS,rep1,rep2,'BrainLMLxLMR');
 %%%ind trial
-CorrPermDistTest([LMLS yind], rep1,rep2,'BrainLMLxYInd');
-CorrPermDistTest([LMRS yind], rep1,rep2,'BrainLMRxYInd');
+rep1=100;rep2=100;powerL=zeros(7,1);powerR=zeros(7,1);
+for i=1:rep2;
+    yind=unifrnd(0,3,n,1);
+    yind=squareform(pdist(ceil(yind)));
+    [power1,power2,power3]=CorrPermDistTest(LMLS,yind,rep1,0,'BrainIndTmp');
+    neighbor=zeros(3,1);
+    neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(LMRS,yind,0,rep1,'BrainLMRxYIndJ',neighbor);
+    for j=1:7
+        if p(j)<alpha
+            powerR(j)=powerR(j)+1/rep2;
+        end
+    end
+    
+    [power1,power2,power3]=CorrPermDistTest(LMRS,yind,rep1,0,'BrainIndTmp');
+    neighbor=zeros(3,1);
+    neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(LMLS,yind,0,rep1,'BrainLMLxYIndJ',neighbor);
+    for j=1:7
+        if p(j)<alpha
+            powerL(j)=powerL(j)+1/rep2;
+        end
+    end
+end

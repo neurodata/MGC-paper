@@ -295,8 +295,8 @@ for j=1:total
     end
     title(titlechar);
 end
-xlabel('Dimension','position',[-180 -0.2],'FontSize',20);
-ylabel('Empirical Testing Power','position',[-480 3],'FontSize',20);
+xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
+ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers of 20 Simulated Dependencies for Increasing Dimension with Fixed Sample Size');
 set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position

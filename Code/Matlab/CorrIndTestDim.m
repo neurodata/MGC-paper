@@ -20,7 +20,7 @@ if nargin<8
     alpha=0.05; % Default type 1 error level
 end
 if nargin<9
-    option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} global mcorr/dcorr/Mantel, HHG, in order.
+    option=[1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -110,19 +110,19 @@ for i=1:lim
         [x,y]=CorrSampleGenerator(type,n,d,0, noise);
         % Form the distance matrix and calculate all test statistics under the null
         C=squareform(pdist(x));
-        P=squareform(pdist(y));
-        disRank=[disToRanks(C) disToRanks(P)];
+        D=squareform(pdist(y));
+        disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1N(:,:,r)=LocalGraphCorr(C,P,1,disRank);
+            dCor1N(:,:,r)=LocalGraphCorr(C,D,1,disRank);
         end
         if option(2)~=0
-            dCor2N(:,:,r)=LocalGraphCorr(C,P,2,disRank);
+            dCor2N(:,:,r)=LocalGraphCorr(C,D,2,disRank);
         end
         if option(3)~=0
-            dCor3N(:,:,r)=LocalGraphCorr(C,P,3,disRank);
+            dCor3N(:,:,r)=LocalGraphCorr(C,D,3,disRank);
         end
         if option(4)~=0
-            dCor4N(r)=HHG(C,P);
+            dCor4N(r)=HHG(C,D);
         end
     end
     
@@ -133,19 +133,19 @@ for i=1:lim
         [x,y]=CorrSampleGenerator(type,n,d,1, noise);
         % Form the distance matrix and calculate all test statistics under the alternative
         C=squareform(pdist(x));
-        P=squareform(pdist(y));
-        disRank=[disToRanks(C) disToRanks(P)];
+        D=squareform(pdist(y));
+        disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1A(:,:,r)=LocalGraphCorr(C,P,1,disRank);
+            dCor1A(:,:,r)=LocalGraphCorr(C,D,1,disRank);
         end
         if option(2)~=0
-            dCor2A(:,:,r)=LocalGraphCorr(C,P,2,disRank);
+            dCor2A(:,:,r)=LocalGraphCorr(C,D,2,disRank);
         end
         if option(3)~=0
-            dCor3A(:,:,r)=LocalGraphCorr(C,P,3,disRank);
+            dCor3A(:,:,r)=LocalGraphCorr(C,D,3,disRank);
         end
         if option(4)~=0
-            dCor4A(r)=HHG(C,P);
+            dCor4A(r)=HHG(C,D);
         end
     end
     
@@ -157,13 +157,10 @@ for i=1:lim
     power4=calculatePower(power4,i,dCor4N,dCor4A,alpha,rep);
 end
 
-% % Save the results
-% if saveOpt~=0
-%     filename=strcat('CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
-%     save(filename,'power1','power2','power3','power4','type','n','dimRange','rep','lim','dim','noise','option');
-% end
+% Set the powers of all local tests at rank 0 to 0
+ power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-function   power1=calculatePower(power1,ind,dCor1N,dCor1A,alpha,rep)
+function power1=calculatePower(power1,ind,dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of
 % the test statistic under the null and the alternative.
 n=size(dCor1N,1);

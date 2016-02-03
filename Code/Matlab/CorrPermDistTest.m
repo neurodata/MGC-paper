@@ -1,4 +1,4 @@
-function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,P,rep1,rep2,titlechar,neighborhoods,allP,alpha,option)
+function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,D,rep1,rep2,titlechar,neighborhoods,allP,alpha,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by mcorr/dcorr/Mantel, and global mcorr/dcorr/Mantel/HHG.
@@ -29,7 +29,7 @@ end
 
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
-    [p1,p2,p3]=IndependenceTest(C,P,rep1,alpha);
+    [p1,p2,p3]=IndependenceTest(C,D,rep1,alpha);
     if neighborhoods(1)==0
         neighborhoods(1)=verifyNeighbors(1-p1);
     end
@@ -44,7 +44,7 @@ end
 
 % Return the permutation test to return the p-values
 if rep2~=0
-    [p1All, p2All, p3All, p7]=PermutationTest(C,P,rep2,allP,option);
+    [p1All, p2All, p3All, p7]=PermutationTest(C,D,rep2,allP,option);
     if rep1==0
         if neighborhoods(1)==0
             neighborhoods(1)=verifyNeighbors(p1All);
@@ -66,14 +66,13 @@ if rep2~=0
     save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','rep1','rep2','allP','alpha','option','p1All','p2All','p3All');
 end
 
-% Smooth Bootstrap
-function  [power1, power2, power3]=IndependenceTest(C,P,rep,alpha)
+function  [power1, power2, power3]=IndependenceTest(C,D,rep,alpha)
 % Author: Cencheng Shen
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of mcorr/dcorr/Mantel, in order to locate the optimal
 % scale of MGC.
 %
-% It generates dependent and independent data from smooth bootstrap samples,
+% It generates dependent and independent data from noisy samples of the original data,
 % calculate the test statistics under the null and the alternative,
 % then estimate the testing power of each method.
 n=size(C,1);
@@ -82,43 +81,98 @@ dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
 dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for all local tests of mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
-ratio=1/n;
-    
+ratio=100; % noise ratio
+
+% % disRankC=disToRanks(C);
+% % disRankP=disToRanks(P);
+% for r=1:rep
+%     % Generate an independent distance matrix to add to the first distance matrix
+%     noise1=random('norm',0,1,n,1);
+%     noise1=squareform(pdist(noise1));
+%     noise1=noise1/norm(noise1,'fro')*norm(C,'fro');
+%     Ca=C+noise1*ratio;
+%     disRankC=disToRanks(C+noise1/sqrt(n));
+%     noise1=random('norm',0,1,n,1);
+%     noise1=squareform(pdist(noise1));
+%     noise1=noise1/norm(noise1,'fro')*norm(P,'fro');
+%     Pa=P+noise1*ratio;
+%     %Pa=P;
+%     disRankP=disToRanks(P+noise1/sqrt(n));
+%     disRank=[disRankC disRankP];
+%     % Calculate the test statistics under the alternative for the noisy dependent pairs
+%     dCor1A(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
+%     dCor2A(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
+%     dCor3A(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
+%     
+%     % Generate a random sampling to resample the second data
+%     perN=randsample(n,n,true);
+%     Pa=Pa(perN,perN);
+%     disRank=[disRankC disToRanks(P(perN,perN)+noise1/sqrt(n))];
+%     % Calculate the test statistics under the null for the independent pairs
+%     dCor1N(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
+%     dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
+%     dCor3N(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
+% end
+% 
+% disRankC=disToRanks(C);
+% disRankD=disToRanks(D);
+% for r=1:rep
+%     noise1=random('norm',0,1,n,1);
+%     noise1=squareform(pdist(noise1));
+%     disRankE=disToRanks(noise1);
+%     disRank1=[disRankC disRankD];
+%     disRank2=[disRankE disRankD];
+%     tt1=LocalGraphCorr(noise1,D,1,disRank2);
+%     tt2=LocalGraphCorr(noise1,D,2,disRank2);
+%     tt3=LocalGraphCorr(noise1,D,3,disRank2);
+%     dCor1A(:,:,r)=LocalGraphCorr(C,D,1,disRank1)+tt1*ratio;
+%     dCor2A(:,:,r)=LocalGraphCorr(C,D,2,disRank1)+tt2*ratio;
+%     dCor3A(:,:,r)=LocalGraphCorr(C,D,3,disRank1)+tt3*ratio;
+%     
+%     % Generate a random sampling to resample the second data
+% %     noise1=random('norm',0,1,n,1);
+% %     noise1=squareform(pdist(noise1));
+%     perN=randsample(n,n,true);
+%     DN=D(perN,perN);
+%     disRank1=[disRankC disToRanks(D(perN,perN))];
+%     disRank2=[disRankE disToRanks(D(perN,perN))];
+%     tt1=LocalGraphCorr(noise1,DN,1,disRank2);
+%     tt2=LocalGraphCorr(noise1,DN,2,disRank2);
+%     tt3=LocalGraphCorr(noise1,DN,3,disRank2);
+%     % Calculate the test statistics under the null for the independent pairs
+%     dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
+%     dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
+%     dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
+% end
+% 
+
 for r=1:rep
-    % Random sampling with replacement
-    per=randsample(n,n,true);
-    noise1=random('norm',0,1,n,1);
-    noise1=squareform(pdist(noise1));
-    noise1=noise1/norm(noise1,'fro')/norm(C,'fro');
-    Ca=C(per,per);
-    %Ca=sqrt(Ca.^2+noise1.^2*ratio+Ca.*noise1*2*sqrt(ratio));
-    Ca=Ca+noise1*sqrt(ratio);
-%     noise2=noise1/norm(noise1,'fro')/norm(P,'fro');
-%     P=sqrt(P.^2+noise2.^2*ratio+P.*noise2*2*sqrt(ratio));
-    %Ca=C(per,per);
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
-%     noise1=noise1/norm(noise1,'fro')/norm(P,'fro');
-    Pa=P(per,per); 
-%     Pa=sqrt(Pa.^2+noise1.^2*ratio+Pa.*noise1*2*sqrt(ratio));
-    disRank=[disToRanks(Ca) disToRanks(Pa)];
-    % Calculate the test statistics under the alternative
-    dCor1A(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-    dCor2A(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-    dCor3A(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
+   per=randsample(n,n,true);
+   CA=C(per,per);
+   DA=D(per,per);
+    disRank1=[disToRanks(CA) disToRanks(DA)];
+    dCor1A(:,:,r)=LocalGraphCorr(CA,DA,1,disRank1);
+    dCor2A(:,:,r)=LocalGraphCorr(CA,DA,2,disRank1);
+    dCor3A(:,:,r)=LocalGraphCorr(CA,DA,3,disRank1);
     
-    % A different random sampling
+    % Generate a random sampling to resample the second data
     perN=randsample(n,n,true);
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
-%     noise2=noise1/norm(noise1,'fro')/norm(P,'fro');
-%     P=sqrt(P.^2+noise2.^2/n+P.*noise2*2/sqrt(n));
-    Pa=Pa(perN,perN);
-    disRank=[disToRanks(Ca) disToRanks(Pa)];
-    % Calculate the test statistics under the null
-    dCor1N(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-    dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-    dCor3N(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
+    DN=D(perN,perN);
+    disRank1=[disToRanks(CA) disToRanks(D(perN,perN))];
+    %      tt1=LocalGraphCorr(noise1,DN,1,disRank2);
+    %     % Calculate the test statistics under the null for the independent pairs
+    %     dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
+    %     dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
+    %     dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
+    tt1=LocalGraphCorr(CA,DN,1,disRank1);
+    tt2=LocalGraphCorr(CA,DN,2,disRank1);
+    tt3=LocalGraphCorr(CA,DN,3,disRank1);
+    dCor1N(:,:,r)=tt1*ratio;
+    dCor2N(:,:,r)=tt2*ratio;
+    dCor3N(:,:,r)=tt3*ratio;
+    dCor1A(:,:,r)=dCor1A(:,:,r)+tt1*(ratio-1);
+    dCor2A(:,:,r)=dCor2A(:,:,r)+tt2*(ratio-1);
+    dCor3A(:,:,r)=dCor3A(:,:,r)+tt3*(ratio-1);   
 end
 
 % For each local test, estimate the critical value from the test statistics under the null,
@@ -139,65 +193,10 @@ for i=1:n
     end
 end
 
-% Usual Bootstrap
-function  [power1, power2, power3]=IndependenceTest2(C,P,rep,alpha)
-% Author: Cencheng Shen
-% This is an auxiliary function of the main function to calculate the powers of
-% all local tests of mcorr/dcorr/Mantel, in order to locate the optimal
-% scale of MGC.
-%
-% It generates dependent and independent data from bootstrap samples,
-% calculate the test statistics under the null and the alternative,
-% then estimate the testing power of each method.
-n=size(C,1);
-% Test statiscs under the null and the alternative
-dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
-dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
-% Powers for all local tests of mcorr/dcorr/Mantel
-power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
-for r=1:rep
-    % Random sampling with replacement
-    per=randsample(n,n,true);
-    Ca=C(per,per);
-    Pa=P(per,per);
-    disRank=[disToRanks(Ca) disToRanks(Pa)];
-    % Calculate the test statistics under the alternative
-    dCor1A(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-    dCor2A(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-    dCor3A(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
-    
-    % A different random sampling
-    perN=randsample(n,n,true);
-    Pa=P(perN,perN);
-    disRank=[disToRanks(Ca) disToRanks(Pa)];
-    % Calculate the test statistics under the null
-    dCor1N(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-    dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-    dCor3N(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
-end
+% Set the powers of all local tests at rank 0 to 0
+ power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-% For each local test, estimate the critical value from the test statistics under the null,
-% then estimate the power from the test statistics under the alternative.
-for i=1:n
-    for j=1:n;
-        dCorT=sort(dCor1N(i,j,:),'descend');
-        cut1=dCorT(ceil(rep*alpha));
-        power1(i,j)=mean(dCor1A(i,j,:)>cut1);
-        
-        dCorT=sort(dCor2N(i,j,:),'descend');
-        cut2=dCorT(ceil(rep*alpha));
-        power2(i,j)=mean(dCor2A(i,j,:)>cut2);
-        
-        dCorT=sort(dCor3N(i,j,:),'descend');
-        cut3=dCorT(ceil(rep*alpha));
-        power3(i,j)=mean(dCor3A(i,j,:)>cut3);
-    end
-end
-%
-% % Set the powers of all local tests at rank 0 to alpha
-% power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
-
-function  [p1, p2, p3, p4]=PermutationTest(C,P,rep,allP,option)
+function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,allP,option)
 % Author: Cencheng Shen
 % This is an auxiliary function of the main function to calculate the p-values of
 % all local tests of mcorr/dcorr/Mantel, the p-value of HHG in the
@@ -217,19 +216,19 @@ p4=0; % P-values for HHG
 
 % Calculate the observed test statistics for the given data sets
 disRankC=disToRanks(C);
-disRankP=disToRanks(P);
+disRankP=disToRanks(D);
 disRank=[disRankC disRankP];
 if option(1)~=0
-    cut1=LocalGraphCorr(C,P,1,disRank);
+    cut1=LocalGraphCorr(C,D,1,disRank);
 end
 if option(2)~=0
-    cut2=LocalGraphCorr(C,P,2,disRank);
+    cut2=LocalGraphCorr(C,D,2,disRank);
 end
 if option(3)~=0
-    cut3=LocalGraphCorr(C,P,3,disRank);
+    cut3=LocalGraphCorr(C,D,3,disRank);
 end
 if option(4)~=0
-    cut4=HHG(C,P);
+    cut4=HHG(C,D);
 end
 
 % Now Permute the second dataset for rep times, and calculate the p-values
@@ -239,22 +238,22 @@ for r=1:rep
     if allP~=0
         per=PAll(r,:);
     end
-    Pa=P(per,per);
+    DN=D(per,per);
     disRank=[disRankC disRankP(per, per)];
     if option(1)~=0
-        dCor1=LocalGraphCorr(C,Pa,1,disRank);
+        dCor1=LocalGraphCorr(C,DN,1,disRank);
         p1=p1+(dCor1<cut1)/rep;
     end
     if option(2)~=0
-        dCor2=LocalGraphCorr(C,Pa,2,disRank);
+        dCor2=LocalGraphCorr(C,DN,2,disRank);
         p2=p2+(dCor2<cut2)/rep;
     end
     if option(3)~=0
-        dCor3=LocalGraphCorr(C,Pa,3,disRank);
+        dCor3=LocalGraphCorr(C,DN,3,disRank);
         p3=p3+(dCor3<cut3)/rep;
     end
     if option(4)~=0
-        dCor4=HHG(C,Pa);
+        dCor4=HHG(C,DN);
         p4=p4+(dCor4<cut4)/rep;
     end
 end

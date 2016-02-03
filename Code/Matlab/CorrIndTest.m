@@ -20,7 +20,7 @@ if nargin<8
     alpha=0.05; % Default type 1 error level
 end
 if nargin<9
-    option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} global mcorr/dcorr/Mantel, HHG, in order.
+    option=[1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -32,6 +32,7 @@ lim=length(numRange);
 
 power1=zeros(1,lim);power2=zeros(1,lim);power3=zeros(1,lim);% Powers for MGC{mcorr/dcorr/Mantel}
 power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global mcorr/dcorr/Mantel.
+power7=0;
 neighborhoods=zeros(3,lim); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
 
 % Run the independence test to first estimate the optimal scale of MGC
@@ -46,12 +47,14 @@ if rep1~=0
 end
 
 % Run the independence test again for the testing powers
-[power1All, power2All, power3All, power7]=IndependenceTest(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of mcorr/dcorr/Mantel, and HHG
-if rep1==0
-    for i=1:lim
-        neighborhoods(1,i)=verifyNeighbors(1-power1All(1:numRange(i),1:numRange(i),i));
-        neighborhoods(2,i)=verifyNeighbors(1-power2All(1:numRange(i),1:numRange(i),i));
-        neighborhoods(3,i)=verifyNeighbors(1-power3All(1:numRange(i),1:numRange(i),i));
+if rep2~=0
+    [power1All, power2All, power3All, power7]=IndependenceTest(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of mcorr/dcorr/Mantel, and HHG
+    if rep1==0
+        for i=1:lim
+            neighborhoods(1,i)=verifyNeighbors(1-power1All(1:numRange(i),1:numRange(i),i));
+            neighborhoods(2,i)=verifyNeighbors(1-power2All(1:numRange(i),1:numRange(i),i));
+            neighborhoods(3,i)=verifyNeighbors(1-power3All(1:numRange(i),1:numRange(i),i));
+        end
     end
 end
 
@@ -109,15 +112,15 @@ power4=zeros(1,lim);% Powers for HHG
 for r=1:rep
     % Generate independent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,0, noise);
-    C1=squareform(pdist(x));
-    P1=squareform(pdist(y));
-    DataN(:,:,r)=[C1 P1];
+    C=squareform(pdist(x));
+    D=squareform(pdist(y));
+    DataN(:,:,r)=[C D];
     
     % Generate dependent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,1, noise);
-    C1=squareform(pdist(x));
-    P1=squareform(pdist(y));
-    DataA(:,:,r)=[C1 P1];
+    C=squareform(pdist(x));
+    D=squareform(pdist(y));
+    DataA(:,:,r)=[C D];
 end
 
 % Iterate through all sample sizes
@@ -126,38 +129,38 @@ for i=1:lim
     % First estimate the distribution of the test statistics under the null
     for r=1:rep
         C=DataN(1:nn,1:nn,r);
-        P=DataN(1:nn,n+1:n+nn,r);
-        disRank=[disToRanks(C) disToRanks(P)];
+        D=DataN(1:nn,n+1:n+nn,r);
+        disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1N(1:nn,1:nn,r)=LocalGraphCorr(C,P,1,disRank);
+            dCor1N(1:nn,1:nn,r)=LocalGraphCorr(C,D,1,disRank);
         end
         if option(2)~=0
-            dCor2N(1:nn,1:nn,r)=LocalGraphCorr(C,P,2,disRank);
+            dCor2N(1:nn,1:nn,r)=LocalGraphCorr(C,D,2,disRank);
         end
         if option(3)~=0
-            dCor3N(1:nn,1:nn,r)=LocalGraphCorr(C,P,3,disRank);
+            dCor3N(1:nn,1:nn,r)=LocalGraphCorr(C,D,3,disRank);
         end
         if option(4)~=0
-            dCor4N(r)=HHG(C,P);
+            dCor4N(r)=HHG(C,D);
         end
     end
     
     % Then estimate the distribution of the test statistics under the alternative
     for r=1:rep
         C=DataA(1:nn,1:nn,r);
-        P=DataA(1:nn,n+1:n+nn,r);
-        disRank=[disToRanks(C) disToRanks(P)];
+        D=DataA(1:nn,n+1:n+nn,r);
+        disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1A(1:nn,1:nn,r)=LocalGraphCorr(C,P,1,disRank);
+            dCor1A(1:nn,1:nn,r)=LocalGraphCorr(C,D,1,disRank);
         end
         if option(2)~=0
-            dCor2A(1:nn,1:nn,r)=LocalGraphCorr(C,P,2,disRank);
+            dCor2A(1:nn,1:nn,r)=LocalGraphCorr(C,D,2,disRank);
         end
         if option(3)~=0
-            dCor3A(1:nn,1:nn,r)=LocalGraphCorr(C,P,3,disRank);
+            dCor3A(1:nn,1:nn,r)=LocalGraphCorr(C,D,3,disRank);
         end
         if option(4)~=0
-            dCor4A(r)=HHG(C,P);
+            dCor4A(r)=HHG(C,D);
         end
     end
     
@@ -169,11 +172,10 @@ for i=1:lim
     power4=calculatePower(power4,i,numRange,dCor4N,dCor4A,alpha,rep);
 end
 
-% % Save the results
-% filename=strcat('CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
-% save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','numRange','rep','lim','dim','noise','option');
+% Set the powers of all local tests at rank 0 to 0
+ power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-function   power1=calculatePower(power1,ind,numRange,dCor1N,dCor1A,alpha,rep)
+function power1=calculatePower(power1,ind,numRange,dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of
 % the test statistic under the null and the alternative.
 n=size(dCor1N,1);

@@ -135,7 +135,7 @@ for r=1:rep
 
     disRankE=disToRanks(noise1);
     disRank2=[disRankE disRankD];
-    tt1=LocalGraphCorr(noise1,DA,1,disRank2);
+    tt1=LocalGraphCorr(noise1,D,1,disRank2);
     %tt2=LocalGraphCorr(noise1,D,2,disRank2);
     %tt3=LocalGraphCorr(noise1,D,3,disRank2);
     dCor1A(:,:,r)=st1+tt1*ratio;
@@ -147,16 +147,15 @@ for r=1:rep
 %     noise1=squareform(pdist(noise1));
     perN=randsample(n,n,true);
     DN=D(perN,perN);
-    disRankD=disToRanks(DN);
-    disRank1=[disRankC disRankD];
-    disRank2=[disRankE disRankD];
+    disRank1=[disRankC disToRanks(D(perN,perN))];
+    disRank2=[disRankE disToRanks(D(perN,perN))];
     tt1=LocalGraphCorr(noise1,DN,1,disRank2);
     %tt2=LocalGraphCorr(noise1,DN,2,disRank2);
     %tt3=LocalGraphCorr(noise1,DN,3,disRank2);
     % Calculate the test statistics under the null for the independent pairs
-    dCor1N(:,:,r)=LocalGraphCorr(CA,DN,1,disRank1)+tt1*ratio;
-    dCor2N(:,:,r)=LocalGraphCorr(CA,DN,2,disRank1)+tt1*ratio;
-    dCor3N(:,:,r)=LocalGraphCorr(CA,DN,3,disRank1)+tt1*ratio;
+    dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
+    dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
+    dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
 end
 
 % 

@@ -1,4 +1,4 @@
-function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,D,rep1,rep2,titlechar,neighborhoods,allP,alpha,option)
+function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,D,rep1,rep2,titlechar,ratio,neighborhoods,alpha,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by mcorr/dcorr/Mantel, and global mcorr/dcorr/Mantel/HHG.
@@ -15,10 +15,10 @@ if nargin<5
     titlechar='RealData';
 end
 if nargin<6
-    neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
+    ratio=10; % If set to other value, will override rep and use all permutations; unfeasible for n large.
 end
 if nargin<7
-    allP=0; % If set to other value, will override rep and use all permutations; unfeasible for n large.
+    neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
 end
 if nargin<8
     alpha=0.05; % Default type 1 error level
@@ -29,7 +29,7 @@ end
 
 % Run the independence test to first estimate the optimal scale of MGC
 if rep1~=0
-    [p1,p2,p3]=IndependenceTest(C,D,rep1,alpha);
+    [p1,p2,p3]=IndependenceTest(C,D,rep1,ratio,alpha);
     if neighborhoods(1)==0
         neighborhoods(1)=verifyNeighbors(1-p1);
     end
@@ -44,7 +44,7 @@ end
 
 % Return the permutation test to return the p-values
 if rep2~=0
-    [p1All, p2All, p3All, p7]=PermutationTest(C,D,rep2,allP,option);
+    [p1All, p2All, p3All, p7]=PermutationTest(C,D,rep2,option);
     if rep1==0
         if neighborhoods(1)==0
             neighborhoods(1)=verifyNeighbors(p1All);
@@ -63,10 +63,10 @@ if rep2~=0
     % Save the results
     pre1='../../Data/';
     filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-    save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','rep1','rep2','allP','alpha','option','p1All','p2All','p3All');
+    save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','rep1','rep2','ratio','alpha','option','p1All','p2All','p3All');
 end
 
-function  [power1, power2, power3]=IndependenceTest(C,D,rep,alpha)
+function  [power1, power2, power3]=IndependenceTest(C,D,rep,ratio,alpha)
 % Author: Cencheng Shen
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of mcorr/dcorr/Mantel, in order to locate the optimal
@@ -81,7 +81,7 @@ dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
 dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for all local tests of mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
-ratio=100; % noise ratio
+%ratio=0; % noise ratio
 
 % % disRankC=disToRanks(C);
 % % disRankP=disToRanks(P);
@@ -210,7 +210,7 @@ end
 % Set the powers of all local tests at rank 0 to 0
  power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,allP,option)
+function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,option)
 % Author: Cencheng Shen
 % This is an auxiliary function of the main function to calculate the p-values of
 % all local tests of mcorr/dcorr/Mantel, the p-value of HHG in the
@@ -219,10 +219,6 @@ if nargin<5
     option=[1,1,1,1];  % Default option. Setting each entry to 0 to disable the calculation of local mcorr/dcorr/Mantel, or HHG.
 end
 n=size(C,1);
-if allP~=0
-    PAll=perms(1:n);
-    rep=size(PAll,1);
-end
 
 % P-values of all local tests of mcorr/dcorr/Mantel
 p1=zeros(n,n); p2=zeros(n,n);p3=zeros(n,n);
@@ -249,9 +245,6 @@ end
 for r=1:rep
     % Use random permutations; if allP is not 0, use all possible permutations
     per=randperm(n);
-    if allP~=0
-        per=PAll(r,:);
-    end
     DN=D(per,per);
     disRank=[disRankC disRankP(per, per)];
     if option(1)~=0

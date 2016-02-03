@@ -24,43 +24,39 @@ load('BrainCP')
 n=10;
 alpha=0.05; rep2=200;repp=200;ratio=[0;1;10;100];
 dim=1;type=20;
-power=zeros(7,length(ratio));
+power=zeros(7,ratio);
 p=zeros(7,1);
 
-power=zeros(n,n,length(ratio));
 for i=1:rep2;
-    x=random('norm',0,1,n,dim);
-    y=random('norm',0,1,n,dim);
-    z=random('norm',0,1,n,dim)/n;
-    x=unifrnd(-1,1,n,1);
-            y=x.^2;
-    %     %[x, y]=CorrSampleGenerator(type,n,dim,1,0);
-    %     %y=mvnrnd(zeros(n,dim),eye(dim),n);
-    %     distC=squareform(pdist(x));
-    %     distPInd=squareform(pdist(y));
-    %     [power1,power2,power3]=CorrPermDistTest(distC,distPInd,repp,0,'BrainIndTmp');
-    %     neighbor=zeros(3,1);
-    %     neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
-    %     [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,0,repp,'BrainCxPInd',neighbor);
-    %     for j=1:7
-    %         if p(j)<alpha
-    %             power(j)=power(j)+1/rep2;
-    %         end
-    %     end
-    
-    distC=squareform(pdist(x));
-    distPInd=squareform(pdist(y));
-    for r=1:length(ratio)
-        [p]=CorrPermDistTest(distC,distPInd,repp,0,'BrainCxPInd',ratio(r),zeros(3,1),alpha,[1;0;0;0]);
-        power(:,:,r)=power(:,:,r)+p/rep2;
-            
-        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,repp,repp,'BrainCxPInd',ratio(r));
-        for j=1:7
-            if p(j)<alpha
-                power(j,r)=power(j,r)+1/rep2;
-            end
+      x=random('norm',0,1,n,dim);
+      y=random('norm',0,1,n,dim);
+      z=random('norm',0,1,n,dim)/n;
+      x=unifrnd(-1,1,n,1);
+%        y=x.^2;
+%     %[x, y]=CorrSampleGenerator(type,n,dim,1,0);
+%     %y=mvnrnd(zeros(n,dim),eye(dim),n);
+%     distC=squareform(pdist(x));
+%     distPInd=squareform(pdist(y));
+%     [power1,power2,power3]=CorrPermDistTest(distC,distPInd,repp,0,'BrainIndTmp');
+%     neighbor=zeros(3,1);
+%     neighbor(1)=verifyNeighbors(1-power1);neighbor(2)=verifyNeighbors(1-power2);neighbor(3)=verifyNeighbors(1-power3);
+%     [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,0,repp,'BrainCxPInd',neighbor);
+%     for j=1:7
+%         if p(j)<alpha
+%             power(j)=power(j)+1/rep2;
+%         end
+%     end
+   
+distC=squareform(pdist(x));
+distPInd=squareform(pdist(y));
+for r=1:length(ratio)
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,repp,repp,'BrainCxPInd',ratio(r));
+    for j=1:7
+        if p(j)<alpha
+            power(j)=power(j)+1/rep2;
         end
     end
+end
 end
 
 %%Sims

@@ -55,6 +55,8 @@
 
 %environment
 \newtheorem{thm}{Theorem}
+\newtheorem{appThm}{Theorem}
+\setcounter{appThm}{0}
 \newtheorem{lem}{Lemma}
 \newtheorem{cor}{Corollary}
 \newtheorem*{defi*}{Properties}
@@ -480,11 +482,8 @@ where $\hat{E}(w\T \mb{x})$ denotes the sample mean of $w\T \mb{x}$ and $\mb{I}$
 \end{align*}
 \item Ellipse: Same as above except $r=5$.
 
-\item Spiral: $\mb{u} \sim \mc{U}(0,20)^{d_{x}}$,
-\begin{align*}
-\mb{x}&=\mb{u}\sin(\mb{u}),\\
-\mb{y}&=\mb{u}_{1}\cos(\mb{u}_{1})+0.3c\mb{\epsilon}.
-\end{align*}
+\item Spiral: Same as circle, but we change $\mb{u}$ and $r$ such that $r=\mb{u}_{d}=\mb{v}$ for all $d$, where $\mb{v} \sim \mc{U}(0,20)$.
+
 \item Square: Let $\mb{u} \sim \mc{U}(-1,1)$, $\mb{u}' \sim \mc{N}(0,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)$, $\mb{v}' \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
 \begin{align*}
 \mb{x}_{d}&=(\mb{u}+0.02 d_{x}\mb{u}'_{d}) \cos(\theta) + (\mb{v}+0.02 d_{x}\mb{v}'_{d}) \sin(\theta),\\
@@ -498,10 +497,11 @@ for $d=1,\ldots,d_{x}$.
 \mb{y}&=\sin ( \theta \mb{x} )+c\mb{\epsilon}.
 \end{align*}
 \item Sine Period 1/8: Same as above except $\theta=16\pi$ and the noise is changed to $0.5c\mb{\epsilon}$.
-\item Multiplicative Noise: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\mb{u} \sim \mc{N}(0, 1)$, $\mb{\epsilon} \sim \mc{N}(0, I_{d_{x}})$,
+\item Multiplicative Noise: $\mb{x} \sim \mc{N}(0, I_{d_{x}})$, $\mb{u} \sim \mc{N}(0, I_{d_{x}})$, $\mb{\epsilon} \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
-\mb{y}&=\mb{u}\mb{x}+0.5c\mb{\epsilon}.
+\mb{y}_{d}&=\mb{u}_{d}\mb{x}_{d}+0.5c\mb{\epsilon}_{d},
 \end{align*}
+for $d=1,\ldots,d_{x}$.
 \item Uncorrelated Binomial: $\mb{x} \sim \mc{B}(0.5)^{d_{x}}$, $\mb{u} \sim \mc{B}(0.5)$,
 \begin{align*}
 \mb{y}&=(2\mb{u}-1)w\T \mb{x}+0.6c\mb{\epsilon}.
@@ -792,20 +792,11 @@ In Algorithm~\ref{algPower}, when we estimate the optimal scale of MGC for given
 
 But the question is whether the optimal scale based on the noisy samples is equivalent to the true optimal scale based on the underlying joint distribution. The next theorem shows that the optimal scale is invariant to the noise, which justified algorithm~\ref{algPower}.
 
-\begin{thm}
-\label{thm4}
-Suppose $f_{xy}$ is the true underlying distribution of the given data $(X,Y)$.
-
-Then in algorithm~\ref{algPower}, the testing power estimated by the noisy samples can be arbitrarily close to the testing power based on the underlying distribution as the number of replicates increases.
-
-Thus the optimal scale estimated by the noisy samples approximates the true optimal scale.
-\end{thm}
-
-Rather than using large noise (the noise in algorithm~\ref{algPower} is set to have the same Frobenius norm as the signal), it is tempting to estimate the optimal scale by smaller noise level, or more simply by resampling the given data without noise. Both choices are still valid under Theorem~\ref{thm4} for estimating the optimal scale, but may introduce additional bias in the following step in estimating the MGC p-value or testing power: if the optimal scale is estimated by resamples of given data, the optimal scale is dependent on the data while the follow-on permutation test is also dependent on the given data, such that the resulting p-value can be biased, e.g., the MGC p-value can be too low and the MGC testing power can be higher than the type $1$ error level under independence.
+Rather than using large noise (the noise in algorithm~\ref{algPower} is set to have the same Frobenius norm as the signal), it is tempting to estimate the optimal scale by smaller noise level, or more simply by resampling the given data without noise. Both choices are still valid for estimating the optimal scale, but may introduce additional bias in the following step in estimating the MGC p-value or testing power: if the optimal scale is estimated by resamples of given data, the optimal scale is dependent on the data while the follow-on permutation test is also dependent on the given data, such that the resulting p-value can be biased, e.g., the MGC p-value can be too low and the MGC testing power can be higher than the type $1$ error level under independence.
 
 In comparison, when the optimal scale is estimated based on repeated simulating samples of $f_{xy}$, the optimal scale is estimated independently of the MGC p-value or testing power in the following step. This is the most ideal way to estimate the optimal scale, which does not introduce any bias; but it is in general difficult to fit a model for given observations.
 
-By Theorem~\ref{thm4}, no matter how large the noise level, the optimal scale can always be reasonably estimated, while small or no noise level may introduce additional bias into the p-value and testing power. Therefore in algorithm~\ref{algPower} the noise level is set to be the same as the signal, in order to diminish the dependency between the optimal scale estimation and the permutation test on the given data. For example, in the real data experiment on testing non-existent stimulus, the MGC testing power is very close to the type $1$ error level $0.05$; but if we reduce the noise level or simply use bootstrap resamples, the MGC testing power will be inflated to around $0.1$. 
+No matter how large the noise level, the optimal scale can always be reasonably estimated, while small or no noise level may introduce additional bias into the p-value and testing power. Therefore in algorithm~\ref{algPower} the noise level is set to be the same as the signal, in order to diminish the dependency between the optimal scale estimation and the permutation test on the given data. For example, in the real data experiment on testing non-existent stimulus, the MGC testing power is very close to the type $1$ error level $0.05$; but if we reduce the noise level or simply use bootstrap resamples, the MGC testing power will be inflated to around $0.1$. 
 
 \section{Proofs}
 \label{appen:proofs}
@@ -813,11 +804,11 @@ By Theorem~\ref{thm4}, no matter how large the noise level, the optimal scale ca
 
 %The advantage of using k-nearest-neighbor in distance matrices, lies in its capability to exclude the product of small distances in one data set and large distances in the other data set: after double centering, the centered small distance is usually negative and the centered large distance is usually positive, and including such product reduces the magnitude of local distance covariance under the alternative. While excluding such product by k-nearest-neighbor can increase the magnitude of local distance covariance under the alternative, albeit at the cost of increasing its magnitude under the null as well. 
 
-\begin{thm}
+\begin{appThm}
 Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(g_{nn}) \rightarrow 1$ as $n \rightarrow \infty$ for given $f_{xy}$ and $\alpha$, then $\beta_{\alpha}(g) \rightarrow 1$ as well.
 
 Therefore, multiscale graph correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
-\end{thm}
+\end{appThm}
 \begin{proof}
 The power of multiscale graph correlation satisfies
 \begin{equation}
@@ -828,14 +819,14 @@ So if $\beta_{\alpha}(g_{nn}) \rightarrow 1$, we also have $\beta_{\alpha}(g) \r
 Since dcorr and mcorr are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}, clearly their multiscale graph correlations are also consistent.
 \end{proof}
 
-\begin{thm}
+\begin{appThm}
 Suppose $\mb{y}=c\mb{x}$ for a non-zero scalar $c$. Then for any $n$ and $\alpha$ it always holds that
 \begin{equation}
 \beta_{\alpha}(g) = \beta_{\alpha}(g_{nn}).
 \end{equation}
 
 Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
-\end{thm}
+\end{appThm}
 \begin{proof}
 To show that MGC is no better than its global correlation coefficient, it suffices to show the p-value of $g_{kl}$ is always no less than the p-value of $g_{nn}$ for all $k,l$.
 
@@ -854,14 +845,14 @@ Therefore for any $k,l$, we must have $\beta_{\alpha}(g_{kl}) \leq \beta_{\alpha
 Note that this theorem holds for MGC based on any of mcorr/dcorr/Mantel.
 \end{proof}
 
-\begin{thm}
+\begin{appThm}
 There exists $f_{xy}$, $n$ and $\alpha$ such that 
 \begin{equation}
 \beta_{\alpha}(g) > \beta_{\alpha}(g_{nn}).
 \end{equation}
 
 Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
-\end{thm}
+\end{appThm}
 \begin{proof}
 We give a simple discrete example of $f_{xy}$ at $n=7$, such that the p-value of $g_{kl}$ for some $(k,l) \neq (n,n)$ is strictly lower than the p-value of $g_{nn}$. This is equivalent to say the permutation test power $\beta_{\alpha}(g)$ is larger than $\beta_{\alpha}(g_{nn})$ at an appropriate type $1$ error level $\alpha$.
 
@@ -878,47 +869,6 @@ Therefore we have an example of $f_{xy}$ and $n$ such that $\beta_{\alpha}(g_{kl
 
 Note that we can always consider equally spaced sample points (or randomly sampled points) in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with smaller p-values; but the computation of all possible permuted test statistics becomes much more time-consuming as $n$ increases. Furthermore, the same conclusion holds for MGC based on dcorr or Mantel using the same example.
 \end{proof}
-
-\begin{thm}
-Suppose $f_{xy}$ is the true underlying distribution of the given data $(X,Y)$.
-
-Then in algorithm~\ref{algPower}, the testing power estimated by the noisy samples can be arbitrarily close to the testing power based on the underlying distribution as the number of replicates increases.
-
-Thus the optimal scale estimated by the noisy samples approximates the true optimal scale.
-\end{thm}
-\begin{proof}
-For given known joint distribution $f_{xy}$, the testing power of $g_{kl}$ is based on the distance matrices $(C,D)$ of the repeated simulating samples $(X,Y)$ generated by $f_{xy}$. 
-
-Take distance correlation for example, 
-
-\begin{align*}
-\label{localCoef}
-g_{kl}^{'} &= \sum_{i,j=1}^n (a_{ij}+e_{ij}) b_{ij} I_{rank(a_{ij}+\epsilon_{a})<k} I_{rank(b_{ij}+\epsilon_{b})<l}  \\
-& \rightarrow \sum_{i,j=1}^n (a_{ij}+e_{ij}) b_{ij} I_{rank(a_{ij})<k} I_{rank(b_{ij})<l}  \\
-& = \sum_{i,j=1}^n a_{ij}b_{ij} I_{rank(a_{ij})<k} I_{rank(b_{ij})<l}  + \sum_{i,j=1}^n e_{ij}b_{ij} I_{rank(a_{ij})<k} I_{rank(b_{ij})<l}  \\
-& = g_{kl} + g_{kl}^{''}
-\end{align*}
-since $E$ is independent of $A$ and $B$, $g_{kl}^{''}$
-
-
-\begin{equation}
-\label{dcovEqu}
-dcov(X,Y)=\frac{1}{n^2}\sum_{i,j=1}^{n}c^{H}_{ij}d^{H}_{ij},
-\end{equation}
-where $C^{H}=HCH$, $D^{H}=HDH$ with $H=I_{n}-\frac{J_{n}}{n}$. Then the sample distance variance is defined as
-
-
-\begin{equation}
-\label{localCoef}
-g_{kl}=\frac{\sum_{i,j=1}^n a_{ij}^k b_{ij}^l}{\sqrt{\sum_{i,j=1}^n  a_{ij}^{k} a_{ij}^{k} \sum_{i,j=1}^n b_{ij}^{l} b_{ij}^{l}}},
-\end{equation}
-
-
-In algorithm~\ref{algPower}, the testing power of $g_{kl}$ is based on the distance matrices $(C,D)$ generated by repeated simulating samples $(X,Y)$ of the known joint distribution $f_{xy}$
-
-
-\end{proof}
-
 
 \bibliographystyle{alpha}
 \bibliography{references}

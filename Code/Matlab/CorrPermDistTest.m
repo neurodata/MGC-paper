@@ -15,7 +15,7 @@ if nargin<5
     titlechar='RealData';
 end
 if nargin<6
-    ratio=10; % If set to other value, will override rep and use all permutations; unfeasible for n large.
+    ratio=100; % If set to other value, will override rep and use all permutations; unfeasible for n large.
 end
 if nargin<7
     neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
@@ -113,81 +113,75 @@ power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
 %     dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
 %     dCor3N(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
 % end
+% 
+% for r=1:rep
+%     noise1=random('norm',0,1,n,1);
+%     noise1=squareform(pdist(noise1));
+%     per=randsample(n,n,true);
+%     CA=C(per,per);
+%     DA=D(per,per);
+%     disRankC=disToRanks(CA);
+%     disRankD=disToRanks(DA);
+%     disRank1=[disRankC disRankD];
+%     st1=LocalGraphCorr(CA,DA,1,disRank1);
+%     st2=LocalGraphCorr(CA,DA,2,disRank1);
+%     st3=LocalGraphCorr(CA,DA,3,disRank1);
+% 
+%     disRankE=disToRanks(noise1);
+%     disRank2=[disRankE disRankD];
+%     tt1=LocalGraphCorr(noise1,DA,1,disRank2);
+%      tt2=LocalGraphCorr(noise1,DA,2,disRank2);
+%      tt3=LocalGraphCorr(noise1,DA,3,disRank2);
+%     dCor1A(:,:,r)=st1+tt1*ratio;
+%     dCor2A(:,:,r)=st2+tt2*ratio;
+%     dCor3A(:,:,r)=st3+tt3*ratio;
+%     
+%     % Generate a random sampling to resample the second data
+% %     noise1=random('norm',0,1,n,1);
+% %     noise1=squareform(pdist(noise1));
+%     perN=randsample(n,n,true);
+%     DN=D(perN,perN);
+%     disRankD=disToRanks(DN);
+%     disRank1=[disRankC disRankD];
+%     disRank2=[disRankE disRankD];
+%     tt1=LocalGraphCorr(noise1,DN,1,disRank2);
+%      tt2=LocalGraphCorr(noise1,DN,2,disRank2);
+%      tt3=LocalGraphCorr(noise1,DN,3,disRank2);
+%     % Calculate the test statistics under the null for the independent pairs
+%     dCor1N(:,:,r)=LocalGraphCorr(CA,DN,1,disRank1)+tt1*ratio;
+%     dCor2N(:,:,r)=LocalGraphCorr(CA,DN,2,disRank1)+tt2*ratio;
+%     dCor3N(:,:,r)=LocalGraphCorr(CA,DN,3,disRank1)+tt3*ratio;
+% end
 
-% disRankC=disToRanks(C);
-% disRankD=disToRanks(D);
-% disRank1=[disRankC disRankD];
-% st1=LocalGraphCorr(C,D,1,disRank1);
-% st2=LocalGraphCorr(C,D,2,disRank1);
-% st3=LocalGraphCorr(C,D,3,disRank1);
+
 for r=1:rep
-    noise1=random('norm',0,1,n,1);
-    noise1=squareform(pdist(noise1));
     per=randsample(n,n,true);
     CA=C(per,per);
     DA=D(per,per);
-    disRankC=disToRanks(CA);
-    disRankD=disToRanks(DA);
-    disRank1=[disRankC disRankD];
-    st1=LocalGraphCorr(CA,DA,1,disRank1);
-    st2=LocalGraphCorr(CA,DA,2,disRank1);
-    st3=LocalGraphCorr(CA,DA,3,disRank1);
-
-    disRankE=disToRanks(noise1);
-    disRank2=[disRankE disRankD];
-    tt1=LocalGraphCorr(noise1,DA,1,disRank2);
-    %tt2=LocalGraphCorr(noise1,D,2,disRank2);
-    %tt3=LocalGraphCorr(noise1,D,3,disRank2);
-    dCor1A(:,:,r)=st1+tt1*ratio;
-    dCor2A(:,:,r)=st2+tt1*ratio;
-    dCor3A(:,:,r)=st3+tt1*ratio;
+    disRank1=[disToRanks(CA) disToRanks(DA)];
+    dCor1A(:,:,r)=LocalGraphCorr(CA,DA,1,disRank1);
+    dCor2A(:,:,r)=LocalGraphCorr(CA,DA,2,disRank1);
+    dCor3A(:,:,r)=LocalGraphCorr(CA,DA,3,disRank1);
     
     % Generate a random sampling to resample the second data
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
     perN=randsample(n,n,true);
     DN=D(perN,perN);
-    disRankD=disToRanks(DN);
-    disRank1=[disRankC disRankD];
-    disRank2=[disRankE disRankD];
-    tt1=LocalGraphCorr(noise1,DN,1,disRank2);
-    %tt2=LocalGraphCorr(noise1,DN,2,disRank2);
-    %tt3=LocalGraphCorr(noise1,DN,3,disRank2);
-    % Calculate the test statistics under the null for the independent pairs
-    dCor1N(:,:,r)=LocalGraphCorr(CA,DN,1,disRank1)+tt1*ratio;
-    dCor2N(:,:,r)=LocalGraphCorr(CA,DN,2,disRank1)+tt1*ratio;
-    dCor3N(:,:,r)=LocalGraphCorr(CA,DN,3,disRank1)+tt1*ratio;
+    disRank1=[disToRanks(CA) disToRanks(DN)];
+    %      tt1=LocalGraphCorr(noise1,DN,1,disRank2);
+    %     % Calculate the test statistics under the null for the independent pairs
+    %     dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
+    %     dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
+    %     dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
+    tt1=LocalGraphCorr(CA,DN,1,disRank1);
+    tt2=LocalGraphCorr(CA,DN,2,disRank1);
+    tt3=LocalGraphCorr(CA,DN,3,disRank1);
+    dCor1N(:,:,r)=tt1*ratio;
+    dCor2N(:,:,r)=tt2*ratio;
+    dCor3N(:,:,r)=tt3*ratio;
+    dCor1A(:,:,r)=dCor1A(:,:,r)+tt1*(ratio-1);
+    dCor2A(:,:,r)=dCor2A(:,:,r)+tt2*(ratio-1);
+    dCor3A(:,:,r)=dCor3A(:,:,r)+tt3*(ratio-1);
 end
-
-% 
-% for r=1:rep
-%    per=randsample(n,n,true);
-%    CA=C(per,per);
-%    DA=D(per,per);
-%     disRank1=[disToRanks(CA) disToRanks(DA)];
-%     dCor1A(:,:,r)=LocalGraphCorr(CA,DA,1,disRank1);
-%     dCor2A(:,:,r)=LocalGraphCorr(CA,DA,2,disRank1);
-%     dCor3A(:,:,r)=LocalGraphCorr(CA,DA,3,disRank1);
-%     
-%     % Generate a random sampling to resample the second data
-%     perN=randsample(n,n,true);
-%     DN=D(perN,perN);
-%     disRank1=[disToRanks(CA) disToRanks(D(perN,perN))];
-%     %      tt1=LocalGraphCorr(noise1,DN,1,disRank2);
-%     %     % Calculate the test statistics under the null for the independent pairs
-%     %     dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
-%     %     dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
-%     %     dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
-%     tt1=LocalGraphCorr(CA,DN,1,disRank1);
-%     tt2=LocalGraphCorr(CA,DN,2,disRank1);
-%     tt3=LocalGraphCorr(CA,DN,3,disRank1);
-%     dCor1N(:,:,r)=tt1*ratio;
-%     dCor2N(:,:,r)=tt2*ratio;
-%     dCor3N(:,:,r)=tt3*ratio;
-%     dCor1A(:,:,r)=dCor1A(:,:,r)+tt1*(ratio-1);
-%     dCor2A(:,:,r)=dCor2A(:,:,r)+tt2*(ratio-1);
-%     dCor3A(:,:,r)=dCor3A(:,:,r)+tt3*(ratio-1);   
-% end
 
 % For each local test, estimate the critical value from the test statistics under the null,
 % then estimate the power from the test statistics under the alternative.

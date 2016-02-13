@@ -36,7 +36,7 @@ xA=x*A;
 if dependent==0
     x=unifrnd(-1,1,n,d);
 end
-pp=0.2;
+pp=0.5;
 mix=zeros(n,1);
 mix(1:ceil(n*pp))=1;
 u=mix;
@@ -44,9 +44,9 @@ u=mix;
 switch type % In total 20 types of dependency
     case 0 %Test Outlier Model
         %u=(binornd(1,pp,n,1));
-        y=repmat((u>0),1,d).*(x) + repmat((u==0),1,d).*mvnrnd(-50*ones(n, d),eye(d));
+        y=repmat((u>0),1,d).*(x) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
         %u=(binornd(1,pp,n,1));
-        x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(50*ones(n, d),eye(d));
+        x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         if dependent==0
             %u=(binornd(1,pp,n,1));
             x=unifrnd(-1,1,n,d);
@@ -95,15 +95,18 @@ switch type % In total 20 types of dependency
         end
         cc=0.4;
         if type==11
-            rx=ones(n,1);
+            rx=ones(n,d);
         end
         if type==12
-            rx=5*ones(n,1);
+            rx=5*ones(n,d);
         end
+        
         if type==13
-            rx=unifrnd(0,20,n,1);
-            z=repmat(rx,1,d);
+            rx=unifrnd(0,5,n,1);
             ry=rx;
+            rx=repmat(rx,1,d);
+            z=rx;
+            %cc=1;
         else
             z=unifrnd(-1,1,n,d);
             ry=ones(n,1);
@@ -113,12 +116,18 @@ switch type % In total 20 types of dependency
             x(:,i+1)=x(:,i).*cos(z(:,i+1)*pi);
             x(:,i)=x(:,i).*sin(z(:,i+1)*pi);
         end
-        x=rx.*(x+cc*noise*mvnrnd(zeros(n, d),eye(d)));
+        x=rx.*x;
         y=ry.*sin(z(:,1)*pi);
+        if type==13
+            y=y+cc*(dim-1)*noise*mvnrnd(zeros(n, 1),eye(1));
+        else
+            x=x+cc*noise*rx.*mvnrnd(zeros(n, d),eye(d));
+        end
         if dependent==0
             if type==13
-                rx=unifrnd(0,20,n,1);
-                z=repmat(rx,1,d);
+                rx=unifrnd(0,5,n,1);
+                rx=repmat(rx,1,d);
+                z=rx;
             else
                 z=unifrnd(-1,1,n,d);
             end
@@ -127,7 +136,11 @@ switch type % In total 20 types of dependency
                 x(:,i+1)=x(:,i).*cos(z(:,i+1)*pi);
                 x(:,i)=x(:,i).*sin(z(:,i+1)*pi);
             end
-            x=rx.*(x+cc*noise*mvnrnd(zeros(n, d),eye(d)));
+            x=rx.*x;
+            if type==13
+            else
+                x=x+cc*noise*rx.*mvnrnd(zeros(n, d),eye(d));
+            end
         end
     case {14,15} %Square & Diamond
         u=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);

@@ -19,7 +19,7 @@ for i=1:total
     figure
     kmin=2;
     imagesc(p1All(kmin:n,kmin:n)');
-    set(gca,'YDir','normal')
+    %set(gca,'YDir','normal')
     colormap(flipud(map2))
     caxis([0.01 0.1])
     colorbar

@@ -1,6 +1,7 @@
 function []=CorrVisualPlots(n,dim,noise,pre2)
 % Author: Cencheng Shen
 % CorrVisualPlots()
+% CorrVisualPlots(100,2)
 % Used to plot figure 0 in the files
 if nargin<1
     n=100;
@@ -16,9 +17,12 @@ if nargin<4
 end
 
 total=20;
-figure('units','normalized','position',[0 0 1 1])
+%figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
+if dim>1
+    noise=0;
+end
 for type=1:total
     subplot(s,t,type);
     titlechar=CorrSimuTitle(type);
@@ -30,8 +34,13 @@ for type=1:total
         sz=2;
     end
     hold on
-    plot(x1,y1,'r.','MarkerSize',sz);
-    plot(x,y,'b.');
+    if dim==1
+        plot(x1,y1,'r.','MarkerSize',sz);
+        plot(x,y,'b.');
+    else
+        plot3(x1(:,1),x1(:,2),y1(:,1),'r.','MarkerSize',sz);
+        plot3(x(:,1),x(:,2),y(:,1),'b.');
+    end
     % Specify the axis limit for each type
     switch type
         case 1
@@ -75,10 +84,10 @@ for type=1:total
         case 20
             a=[-3,3];b=[-3,3];
     end
-    xlim(a);
-    ylim(b);
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+%     xlim(a);
+%     ylim(b);
+%     set(gca,'XTick',[]); % Remove x axis ticks
+%     set(gca,'YTick',[]); % Remove y axis ticks
     hold off
     title(titlechar);
 end

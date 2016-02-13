@@ -317,7 +317,42 @@ The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local di
 \cs{Now I think the taylor expansion paragraph above is not right: any function can be approximated by polynomial expansion, does not imply the optimal scale is smaller than $n$.}
 \jv{its not just that, its that even if you \emph{only} have to add a 2nd order term, already local beats global. }
 
-\subsection{Real Data}
+
+\subsection{Robustness against Outliers}
+\label{main4}
+The global correlation coefficient may suffer from outliers in the data, but MGC is robust against outliers by choosing the appropriate scale.
+
+We consider a mixture model: let $\mb{x}=\rho \mb{u} + (1-\rho) \mb{\epsilon}_{1}$, $y=\rho \mb{u} + (1-\rho) \mb{\epsilon}_{2}$, where $\mb{u}$ is uniformly distributed in $(-1,1)$, $\mb{\epsilon}_{1}$ and $\mb{\epsilon}_{2}$ are independently normally distributed with mean $-10$ and $10$ respectively and variance $1$, $\rho$ is Bernoulli distributed with probability $p$. Condition on $\rho$, we repeatedly generate simulating data $(X,Y)$ at $n=100$ and evaluate the testing power at $\alpha=0.05$.
+
+Based on the mixture model, about $pn$ observations in $X$ are the same as the corresponding observations in $Y$; but the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One generated sample pair $(X,Y)$ at $p=0.5$ is shown in Figure~\ref{figSim3}(a), and the testing power of all possible local tests by mcorr is shown in Figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively.
+
+We can clearly observe that the local testing powers can be much higher than global mcorr under this outlier model. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the probability $p$: although there exists multiple optimal scales, $k^{*}$ and $l^{*}$ are clearly bounded above by $\min(pn,(1-p)n)$; and a consistent optimal scale appears to be $k^{*}=l^{*}=\min(pn,(1-p)n)-1$, which excludes the distances between observations from different mixture components. Therefore, MGC is able to automatically separate the independent outliers from the dependent observations in testing, which makes it robust against outliers.
+
+The same robustness still holds as the dimension or sample size increases, or the underlying dependency changes from linear to other types. Such robustness makes MGC more advantageous in practice. 
+
+\begin{figure}[htbp]
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/FigOut0}
+}
+\hfil
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/FigOut1}
+}
+\hfil
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/FigOut2}
+}
+\hfil
+\subfloat[]{
+\includegraphics[width=0.5\textwidth]{../Figures/FigOut3}
+}
+\caption{Testing Power Heat map of Local Statistics with respect to Neighborhood Choices for Dimension 1 and Increasing Dimension.
+% Understanding how dependence varies with the local scale of the dependence.  
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$, and the ordinate denotes the number of neighbors for $Y$.  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
+\label{figSim3}
+\end{figure}
+
+\subsection{Real Data Experiment}
 \label{numer3}
 Here we apply MGC to test independence between brain features and personal characteristics from two different experiments, for which the data sets are relatively small in sample size due to the expensive data collection process. Based on the evaluation procedure in Section~\ref{appen:tests}, we report the p-value of each method from the permutation test, with the optimal scale of MGC estimated by repeated noisy samples of the given observations. Note that among the three MGC implementations, we only report the p-value of MGC$\{$mcorr$\}$ because MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$ yield similar results.
 
@@ -345,8 +380,6 @@ Connectome x Personality & $\textbf{0.2723}$ & $0.3203$ & $0.6606$ & $0.9869$  &
 Left Brain vs Disorder  & $\textbf{0.0192}$ & $0.0880$ & $0.0784$ & $0.0387$ & $0.0371$ \\
 \hline
 Right Brain vs Disorder & $\textbf{0.0084}$ & $0.1197$ & $0.1123$  & $0.0812$ & $0.0878$\\
-\hline
-Voxel vs non-existent Stimulus & $0.0570$ & $0.0503$ & $0.0495$  & $0.0671$ & $0.0312$\\
 \hline
 \end{tabular}
 \caption{The Empirical P-Values in the Permutation Test}
@@ -743,6 +776,7 @@ Note that all three algorithms can be used for global mcorr/dcorr/Mantel/HHG, by
 \State $power(i,j)=mean(testA(i,j,:)>cut)$; \Comment{estimate the power}
 \EndFor
 \EndFor
+%\State $scale=find(power==max(power))$; \Comment{find the optimal local scale}
 \State \Return $power$.
 \EndFunction
 \end{algorithmic}

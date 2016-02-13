@@ -22,18 +22,18 @@ pv=1-pv/size(per,1);
 clear
 load('BrainCP') 
 n=10;
-alpha=0.05; rep2=200;repp=200;ratio=[0;1;10;100];
+alpha=0.05; rep2=200;repp=200;ratio=[0;1;20];
 dim=1;type=20;
 power=zeros(7,length(ratio));
 p=zeros(7,1);
 
-power=zeros(n,n,length(ratio));
+%power=zeros(n,n,length(ratio));
 for i=1:rep2;
     x=random('norm',0,1,n,dim);
     y=random('norm',0,1,n,dim);
     z=random('norm',0,1,n,dim)/n;
-    x=unifrnd(-1,1,n,1);
-            y=x.^2;
+    %x=unifrnd(-1,1,n,1);
+    %y=x.^2;
     %     %[x, y]=CorrSampleGenerator(type,n,dim,1,0);
     %     %y=mvnrnd(zeros(n,dim),eye(dim),n);
     %     distC=squareform(pdist(x));
@@ -51,10 +51,10 @@ for i=1:rep2;
     distC=squareform(pdist(x));
     distPInd=squareform(pdist(y));
     for r=1:length(ratio)
-        [p]=CorrPermDistTest(distC,distPInd,repp,0,'BrainCxPInd',ratio(r),zeros(3,1),alpha,[1;0;0;0]);
-        power(:,:,r)=power(:,:,r)+p/rep2;
+%         [p]=CorrPermDistTest(distC,distPInd,repp,0,'BrainCxPInd',ratio(r),zeros(3,1),alpha,[1;0;0;0]);
+%         power(:,:,r)=power(:,:,r)+p/rep2;
             
-        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,repp,repp,'BrainCxPInd',ratio(r));
+        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,rep2,repp,'BrainCxPInd',ratio(r));
         for j=1:7
             if p(j)<alpha
                 power(j,r)=power(j,r)+1/rep2;
@@ -111,11 +111,10 @@ CorrIndTestDim(10,n,dim,lim,rep1,rep2);
 n=100; dim=20; lim=20; rep1=2000;rep2=10000;
 CorrIndTestDim(11,n,dim,lim,rep1,rep2);
 CorrIndTestDim(12,n,dim,lim,rep1,rep2);
-dim=10;lim=10;
 CorrIndTestDim(13,n,dim,lim,rep1,rep2);
-dim=20;lim=20;
 CorrIndTestDim(14,n,dim,lim,rep1,rep2);
 CorrIndTestDim(15,n,dim,lim,rep1,rep2);
+dim=10;lim=10;
 CorrIndTestDim(16,n,dim,lim,rep1,rep2);
 dim=10;lim=10;
 CorrIndTestDim(17,n,dim,lim,rep1,rep2);
@@ -138,6 +137,15 @@ n=42; lim=1; rep1=2000; rep2=10000;
 [p1,p2,p3,~,~,~,~,neighbor]=CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))
+
+%%%
+clear
+load('semipar')
+n=109; lim=1; rep1=1000; rep2=1000;ratio=1;
+distCCI=squareform(pdist(cci));
+[power1,power2,power3]=CorrPermDistTest(distMigrain(ind,ind),distCCI(ind,ind),rep1,rep2,'MigrainxCCI',ratio);
+[power1,power2,power3]=CorrPermDistTest(distM2g(ind,ind),distCCI(ind,ind),rep1,rep2,'M2gxCCI',ratio);
+[power1,power2,power3]=CorrPermDistTest(distM2g(ind,ind),distMigrain(ind,ind),rep1,rep2,'M2gxMigrain',ratio);
 
 %%%
 clear

@@ -106,13 +106,13 @@ Many recent methods have been proposed to identify the existence of potential re
 Despite  current progress in the area, it remains a difficult problem to test dependency on real data; and even the best method in theory may suffer from one or more real challenges underlying the data, such as small sample size, high dimensionality, nonlinearity, noise, etc. For example, although distance correlation is consistent against all dependent alternatives for testing on Euclidean data, the sample distance correlation (dcorr) under-performs in many high-dimensional or nonlinear dependencies for finite-sample testing. The modified distance correlation (mcorr) from \cite{SzekelyRizzo2013a} adjusts the high-dimensional bias, but is still sub-optimal for many common nonlinear dependencies. In comparison, the HHG statistic developed in \cite{HellerGorfine2013} performs much better on nonlinear data of small sample size, but loses some testing power under certain noisy linear and high-dimensional dependencies.
 
 In a complementary literature, nearest-neighbor graphs have been used as a key computational primitive in many statistical tasks, ranging from classification and regression \cite{Stone1977} to data compression to recommender systems \cite{Sarwar2000}. 
-More recently, nearest-neighbor has been an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others; and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2015}.
+More recently, nearest-neighbor has been an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others; and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2016}.
 
 Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs \cite{David1966,Friedman1983,Schilling1986,Dumcke2014}.  These approaches have the advantage of naturally operating on any kind of data, including categorical and structured data, as well as strong theoretical guarantees.  Perhaps more importantly, they focus only on local distances, rather than global distances, enabling them to be robust to nonlinear and high-dimensional dependence structures.  However, none of the previous nearest-neighbor based methods provide a convenient or automatic method for choosing the neighborhood size, therefore leaving a crucial tuning parameter unspecified, and impairing its finite sample performance and practical usage. Moreover, they largely focused on two-sample testing, rather than dependence testing.  
 
-In this paper we propose Multiscale Graph Correlation (MGC) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently locate the optimal scale within a family of local statistics, naturally inherits the advantages of the distance correlation, such as being consistent, and also inherits properties of graph dependence structures, such as better performance in high-dimension and strongly nonlinear dependencies. In practice, MGC can be used for testing dependence by the p-value from the permutation test; and the optimal scale can be estimated by repeated samples from given joint distribution or given data plus noise. 
+In this paper we propose Multiscale Graph Correlation (MGC) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently locate the optimal scale within a family of local statistics, naturally inherits the advantages of the distance correlation, such as being consistent, and also inherits properties of graph dependence structures, such as better performance in high-dimension and strongly nonlinear dependencies. %In practice, MGC can be used for testing dependence by the p-value from the permutation test; and the optimal scale can be estimated by repeated samples from given joint distribution or given data plus noise. 
 
-Those advantages make our new test statistic the best method thus far for detecting dependency on complex simulated dependencies and real data. Indeed, in our comprehensive simulation setting, MGC is able to achieve a superior finite-sample testing power for data sets of nonlinearity, noise, and/or small sample size, comparing to existing popular methods like dcorr/mcorr/Mantel/HHG; and in the real data experiment, MGC also returns the lowest p-value for testing dependency between human brain and human characteristics,  and does not detect false signals when the dependencies are not there in a set of brain imaging experiments. Thus, we expect MGC to find value in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of MGC, and incorporate into FlashR.
+Those advantages make our new test statistic the best method thus far for detecting dependency on complex simulated dependencies and real data. Indeed, in our comprehensive simulation setting, MGC is able to achieve a superior finite-sample testing power for data sets of nonlinearity, noise, and/or small sample size, comparing to existing popular methods like dcorr/mcorr/Mantel/HHG; and in the real data experiment, MGC returns significant p-values when testing between dependent data sets,  and does not detect false signals when the dependencies are not there in a set of brain imaging experiments. Thus, we expect MGC to find value in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of MGC, and incorporate into FlashR.
 
 \section{Results}
 \label{main}
@@ -160,9 +160,16 @@ when $a_{ij}$ is the centered distances, $g_{kl}$ is the local Mantel correlatio
 when $a_{ij}$ is the doubly centered distances, $g_{kl}$ is a local distance correlation;
 when $a_{ij}$ is the doubly centered distances modified for the high-dimensional bias, $g_{kl}$ is a local modified distance correlation, etc.
 
-In the family of local statistics $\{g_{kl}\}$, the optimal local test statistic is dubbed the multiscale graph correlation. Clearly the optimal scale exists (optimal with respect to the testing power), is distribution dependent, and may not be unique. But different from a manifold learning task, the optimal scale within the dependence testing framework can be efficiently estimated by maximizing the empirical testing powers in the local family, based on repeated simulating samples from known distributions or repeated noisy samples from given data. Once the optimal scale is determined, MGC can be used in testing by the p-value of a permutation test. The detailed procedure for estimating the optimal scale and testing independence by MGC can be found in appendix Section~\ref{appen:tests}.
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{../Figures/FigA}
+\caption{
+Flowchart of Global to Local Distance Correlation: Column 1: $(X,Y)$ have a quadratic relationship with some noise. Column 2: the distance matrix heatmaps for $X$ and $Y$. Column 3: Doubly-centered distance matrix heatmaps, i.e., $\{a_{ij}\}$ and $\{b_{ij}\}$, which can be used to calculate the global distance correlation. Column 4: Local doubly-centered distance matrix heatmaps, where we estimated the optimal scale and all non-local entries are shaded white. Column 5: The entry-wise product heatmap of column 4; summing over the product yields the local distance covariance. }
+\label{fig:A}
+\end{figure}
 
-MGC can be implemented by any global statistics in the form of the generalized correlation coefficient. It is no worse than the global counterpart, and usually enjoys better testing powers under high-dimensional and nonlinear dependencies while loses little under linear dependencies. Note that different MGC implementations may vary slightly in performance, and some may do particularly well for certain dependency, depending on the property of the respective global statistic. For example, since mcorr performs the best under high-dimensional dependencies, MGC implemented by mcorr also empirically performs better than other implementations of MGC under high-dimensional linear dependencies. %In the paper we mainly use MGC$\{$mcorr$\}$ for illustration, and additional figures are provided in the appendix to include the simulation performance of MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$. 
+In the family of local statistics $\{g_{kl}\}$, the optimal local test statistic is dubbed the multiscale graph correlation. Clearly the optimal scale exists (optimal with respect to the testing power), is distribution dependent, and may not be unique. But different from a manifold learning task, the optimal scale within the dependence testing framework can be efficiently estimated by maximizing the empirical testing powers in the local family, based on repeated simulating samples from known distributions or given data (for given data, we use kernel density estimation \cite{BotevEtAl2010} on the distance matrices). Once the optimal scale is determined, we can derive the p-value of MGC in the permutation test to test the significance of dependency. We provide a flowchart of how the test statistic is calculated in Figure~\ref{fig:A}; and the detailed algorithms for estimating the optimal scale and testing independence by MGC can be found in appendix Section~\ref{appen:tests}.
+
+MGC can be implemented by any global statistics in the form of the generalized correlation coefficient. By the optimal scale estimation, MGC is no worse than the global counterpart, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies while loses little under linear dependencies. Different MGC implementations may vary slightly in performance, and some may do particularly well for certain dependency, depending on the property of the respective global statistic. For example, since mcorr performs the best under high-dimensional dependencies, MGC implemented by mcorr also empirically performs better than other implementations of MGC under high-dimensional linear dependencies. %In the paper we mainly use MGC$\{$mcorr$\}$ for illustration, and additional figures are provided in the appendix to include the simulation performance of MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$. 
 
 Below we demonstrate that our local modification yields tests that preserve consistency regardless of the functional dependency and dimensionality, improve the testing powers under nonlinear and high-dimensional dependencies, both in theory and in simulations, as while as being the most superior method for simulations and real data experiments.
 
@@ -202,7 +209,7 @@ In this subsection and the next, we show the numerical advantage of multiscale g
 
 In total we consider $20$ different distributions of $f_{xy}$ taken from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}: they consist of various linear and close to linear dependencies (type 1-5), polynomial-based nonlinear relationships (type 6-12), trigonometry-based nonlinear dependencies (type 13-17), two uncorrelated dependencies (type 18-19), and an independent relationship (type 20) to show that MGC does not detect signal in the absence of dependency. The exact simulation distributions are given in appendix Section~\ref{appen:function}, with a visualization of each dependency follows in Supplementary Figure~\ref{fig0}.
 
-We first experiment on a dimension $1$ scenario at $d_{x}=d_{y}=1$. To observe how fast the testing power of each method converges to $1$ for different dependencies, the testing powers are calculated with respect to the increasing sample size $n$ from $5$ to $100$. The empirical powers based on $r=10$,$000$ Monte-Carlo replicates are plotted in Figure~\ref{fig:1D} at type $1$ error level $\alpha=0.05$, and we use $2$,$000$ MC replicates to estimate the optimal scale of MGC. Note that the optimal scale of MGC for each implementation is estimated separately. 
+We first experiment on a dimension $1$ scenario at $d_{x}=d_{y}=1$. To observe how fast the testing power of each method converges to $1$ for different dependencies, the testing powers are calculated with respect to the increasing sample size $n$ from $5$ to $100$. The empirical powers based on $r=10$,$000$ Monte-Carlo replicates are plotted in Figure~\ref{fig:1D} at type $1$ error level $\alpha=0.05$, and we use $2$,$000$ MC replicates to estimate the optimal scale of MGC. Note that the MGC optimal scale for dcorr/mcorr/Mantel are estimated separately. 
 %Note that appropriate level of white noise are added to $Y$ depending on the distribution type, otherwise the power can quickly converge to $1$ at very small sample size for certain dependencies like linear.
 
 \begin{figure}[htbp]
@@ -271,7 +278,7 @@ Again, our method empirically achieves as high or higher power than the previous
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}
 
-In Figure~\ref{figSim2} we show how the powers of local statistics $\{g_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the low-dimension and high-dimension simulations. They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures in Figure~\ref{fig:pp}(a)(c). We can clearly see that for nearby neighborhoods, the powers of local tests can be very close, since the local statistics are strongly correlated with each other. %This implies that the optimal scale of MGC can be reasonably estimated by bootstrap; and even if the estimated scale is not the true optimal, it usually yields close to optimal testing power for MGC.
+In Figure~\ref{figSim2} we show how the powers of local statistics $\{g_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the low-dimension and high-dimension simulations. They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures in Figure~\ref{fig:pp}(a)(c). We can clearly see that for nearby neighborhoods, the powers of local tests can be very close, since the local statistics are strongly correlated with each other. This implies that even if the estimated scale of MGC is not the true optimal, it should be close to optimal in general.
 
 For dependencies that are close to linear (type 1-5), the best neighborhood choice is approximately at the largest scale, i.e., $k=l=n$. But for all other nonlinear dependencies (type 6-19), MGC almost always chooses a smaller scale, which is data dependent. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, and the optimal scales of both are very similar to each other; type 9 and 10 have different functions but share similar dependencies from appendix Figure~\ref{fig0}, and their best scales are also close to each other; there also exists similar patterns between type 16 and 17.
 
@@ -285,7 +292,7 @@ For dependencies that are close to linear (type 1-5), the best neighborhood choi
 }
 \caption{Testing Power Heat map of Local Statistics with respect to Neighborhood Choices for Dimension 1 and Increasing Dimension.
 % Understanding how dependence varies with the local scale of the dependence.  
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$, and the ordinate denotes the number of neighbors for $Y$.  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from top to bottom).  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
 \label{figSim2}
 \end{figure}
 
@@ -316,17 +323,23 @@ The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local di
 
 \cs{Now I think the taylor expansion paragraph above is not right: any function can be approximated by polynomial expansion, does not imply the optimal scale is smaller than $n$.}
 \jv{its not just that, its that even if you \emph{only} have to add a 2nd order term, already local beats global. }
+\cs{yes this one I agree; but not the Taylor expansion :-) also, if we add a 3rd order term, or change the 2nd order term coefficient so it is close to linear, local and global can still be similar. }
 
 
 \subsection{Robustness against Outliers}
 \label{main4}
 The global correlation coefficient may suffer from outliers in the data, but MGC is robust against outliers by choosing the appropriate scale.
 
-We consider a mixture model: let $\mb{x}=\rho \mb{u} + (1-\rho) \mb{\epsilon}_{1}$, $y=\rho \mb{u} + (1-\rho) \mb{\epsilon}_{2}$, where $\mb{u}$ is uniformly distributed in $(-1,1)$, $\mb{\epsilon}_{1}$ and $\mb{\epsilon}_{2}$ are independently normally distributed with mean $-10$ and $10$ respectively and variance $1$, $\rho$ is Bernoulli distributed with probability $p$. Condition on $\rho$, we repeatedly generate simulating data $(X,Y)$ at $n=100$ and evaluate the testing power at $\alpha=0.05$.
+Let us consider a mixture model: let 
+\begin{align*}
+\mb{x} &= \rho \mb{u} + (1-\rho) \mb{\epsilon}_{1}, \\
+\mb{y} &= \rho \mb{u} + (1-\rho) \mb{\epsilon}_{2}, 
+\end{align*}
+where $\mb{u}$ is uniformly distributed in $(-1,1)$, $\mb{\epsilon}_{1}$ and $\mb{\epsilon}_{2}$ are independently normally distributed with mean $-5$ and $5$ respectively and variance $1$, $\rho$ is Bernoulli distributed with probability $p$. Condition on $\rho$, we repeatedly generate simulating data $(X,Y)$ at $n=100$ and evaluate the testing power at $\alpha=0.05$.
 
-Based on the mixture model, about $pn$ observations in $X$ are the same as the corresponding observations in $Y$; but the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One generated sample pair $(X,Y)$ at $p=0.5$ is shown in Figure~\ref{figSim3}(a), and the testing power of all possible local tests by mcorr is shown in Figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively.
+Based on the mixture model, there are $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; but the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ is plotted in Figure~\ref{figSim3}(a), and the testing power of all possible local tests by mcorr is shown in Figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively.
 
-We can clearly observe that the local testing powers can be much higher than global mcorr under this outlier model. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the probability $p$: although there exists multiple optimal scales, $k^{*}$ and $l^{*}$ are clearly bounded above by $\min(pn,(1-p)n)$; and a consistent optimal scale appears to be $k^{*}=l^{*}=\min(pn,(1-p)n)-1$, which excludes the distances between observations from different mixture components. Therefore, MGC is able to automatically separate the independent outliers from the dependent observations in testing, which makes it robust against outliers.
+We can clearly observe that the local mcorr at the optimal scale is much better than global mcorr. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the probability $p$, and at least one of $k^{*}$ and $l^{*}$ should be bounded above by $\min(pn,(1-p)n)$ to achieve good testing powers. Therefore, MGC is able to automatically separate the independent outliers from the dependent observations in testing, which makes it robust against outliers.
 
 The same robustness still holds as the dimension or sample size increases, or the underlying dependency changes from linear to other types. Such robustness makes MGC more advantageous in practice. 
 
@@ -346,26 +359,21 @@ The same robustness still holds as the dimension or sample size increases, or th
 \subfloat[]{
 \includegraphics[width=0.5\textwidth]{../Figures/FigOut3}
 }
-\caption{Testing Power Heat map of Local Statistics with respect to Neighborhood Choices for Dimension 1 and Increasing Dimension.
-% Understanding how dependence varies with the local scale of the dependence.  
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$, and the ordinate denotes the number of neighbors for $Y$.  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data.}
+\caption{Testing Power Heat map of Local Statistics with respect to Neighborhood Choices under the Outlier Model.}
 \label{figSim3}
 \end{figure}
 
 \subsection{Real Data Experiment}
 \label{numer3}
-Here we apply MGC to test independence between brain features and personal characteristics from two different experiments, for which the data sets are relatively small in sample size due to the expensive data collection process. Based on the evaluation procedure in Section~\ref{appen:tests}, we report the p-value of each method from the permutation test, with the optimal scale of MGC estimated by repeated noisy samples of the given observations. Note that among the three MGC implementations, we only report the p-value of MGC$\{$mcorr$\}$ because MGC$\{$dcorr$\}$ and MGC$\{$Mantel$\}$ yield similar results.
+Here we apply MGC to test independence between data sets. Based on the evaluation procedure in Section~\ref{appen:tests}, we report the p-value of each method from the permutation test. In the real data experiment, we will concentrate on MGC$\{$mcorr$\}$ among the three MGC implementations.
 
-The first experiment is to detect the relationship between the brain connectome and personality from \cite{AdelsteinEtAl2011}. The sample size is $n=42$, and each person has a $5$ dimensional personality data based on questionnaires and the five-factor personality model. Then the brain activity of each person is measured by fMRI for $197$ brain regions and $194$ time steps. Thus the brain connectome feature is high-dimensional while the personality data is low-dimensional. There seems to exist certain correlation between the brain activity and personality as experimentally shown in \cite{AdelsteinEtAl2011}, but whether the dependency can be detected from the raw data is the question here.
+The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus, for both the left brain and the right brain; and we also have available a categorical vector containing the disorder information, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the raw data. 
 
-To apply our method, two distance measures are required for the two different data sources: for the personality data, the distance matrix is formed by the Euclidean distance directly; for the connectome data, we run a spectrum analysis for each region, bandpass and normalize it, then calculate the Kullback-Leibler divergence among regions and use the normalized Hellinger distance. Once the distance matrices are obtained, we apply the permutation test for $r=10$,$000$ random permutations, and show the p-values (the percentage that the test statistic between the permuted data is larger than the observed test statistic) of MGC, dcorr, mcorr, Mantel, and HHG in the first row of Table~\ref{table1}, with the smallest p-value highlighted in the table. 
+To apply our method, we need to transform different data sets into certain distance measures. For the brain data, we obtain two dissimilarity matrices representing the left and right hippocampus data based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing). For the disorder information vector, it is transformed into its Euclidean distance with all off-diagonal entries added by $1$, i.e., only the diagonals are zero, and subjects of the same disorder status have smaller distance than subjects of different disorder status. 
 
-In this experiment, only MGC yields significant p-value that is less than $0.05$, and the estimated optimal neighborhood choice is $k^{*}=9, l^{*}=4$ based on $2$,$000$ repeated noisy samples. No other method yields significant p-value, although HHG is quite close. We also show the p-value heat map of all local tests with respect to different choices of neighborhoods in Figure~\ref{figReal}(a), and we can clearly see a local structure in the data that yield significant p-values for adjacent scales.
+We consider two hypothesis tests: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. Based on $r=10$,$000$ random permutations, the resulting p-values are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC/HHG/Mantel yield significant p-values with dcorr/mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, with all global tests higher than significance. 
 
-\cs{we should replace the above experiment by others, or just abandon it; since the MGC p-value is now 0.15 for connectome vs personality, after the current bias adjustment, which is higher than HHG; and no method yields significance for this data set now.}
-%Note that if we use MGC by dcorr rather than mcorr, the p-value is no longer significant: this implies a high-dimensional structure in the dependency, which is indeed the case for the connectome data. 
-
-%Note that the distance measure (especially for the connectome data) may not be the most appropriate for detecting dependency, and it is possible that HHG and dcorr may yield better p-values under different metrics.
+The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(a)(b), where we observe that there exist many scales that are close to optimal; and the estimated largest optimal scales are $k^{*}=67,l^{*}=50$ and $k^{*}=66,l^{*}=50$ respectively, based on $2,000$ MC replicates. Note that the p-values of local test statistics at a given $k$ are the same throughout any $l \in [3,114]$, because we use minimum rank for ties and the largest rank is $2$ for the disorder distance matrix; so it suffices to use $k^{*}=67/66$ and let $l^{*}$ equal any number larger than $2$ for the optimal scale. %and if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain.
 
 \begin{table*}[!t]
 \footnotesize
@@ -375,11 +383,13 @@ In this experiment, only MGC yields significant p-value that is less than $0.05$
 \hline
 Testing Method & MGC & mcorr & dcorr & Mantel & HHG \\
 \hline
-Connectome x Personality & $\textbf{0.2723}$ & $0.3203$ & $0.6606$ & $0.9869$  & $0.0583$ \\
+Left Brain vs Disorder  & $0.0282$ & $0.0815$ & $0.0743$ & $0.0412$ & $0.0391$ \\
 \hline
-Left Brain vs Disorder  & $\textbf{0.0192}$ & $0.0880$ & $0.0784$ & $0.0387$ & $0.0371$ \\
+Right Brain vs Disorder & $0.0180$ & $0.1180$ & $0.1095$  & $0.0761$ & $0.0848$\\
 \hline
-Right Brain vs Disorder & $\textbf{0.0084}$ & $0.1197$ & $0.1123$  & $0.0812$ & $0.0878$\\
+Migrain vs CCI & $0.0147$ & $0.0109$ & $0.0100$  & $0.0079$ & $0.0350$\\
+\hline
+M2g vs CCI & $0.1079$ & $0.0530$ & $0.0732$  & $0.3026$ & $0.6644$\\
 \hline
 \end{tabular}
 \caption{The Empirical P-Values in the Permutation Test}
@@ -402,29 +412,27 @@ Right Brain vs Disorder & $\textbf{0.0084}$ & $0.1197$ & $0.1123$  & $0.0812$ & 
 \subfloat[]{
 \includegraphics[width=0.48\textwidth]{../Figures/FigReal3}
 }
-\caption{P-Value Heat map of Local Tests with respect to Different Neighborhood Choice.  In the real data, for the Connectome vs. personality, global structure is inadequate to reveal any dependence between the two modalities.  For the brain shape vs. disorder status,  global distances are close to adequate, and most neighborhoods yield significant p-values.}
+\hfil
+\centering
+\subfloat[]{
+\includegraphics[width=0.48\textwidth]{../Figures/FigReal4}
+}
+\caption{P-Value Heat map of Local Tests with respect to Different Neighborhood Choices.  In the real data, for the Connectome vs. personality, global structure is inadequate to reveal any dependence between the two modalities.  For the brain shape vs. disorder status,  global distances are close to adequate, and most neighborhoods yield significant p-values.}
 \label{figReal}
 \end{figure}
 
-Next we carry out the same testing procedure on another experiment regarding brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus; and we also have available a categorical vector containing the disorder information, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the data. 
+Next we experiment on Migrain vs CCI and M2g vs CCI.
+\cs{add data description; and feel free to discard M2g vs CCI if necessary.}
 
-The brain data is transformed into two dissimilarity matrices representing the left and right hippocampus data based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing). The disorder information vector is transformed into its Euclidean distance with all off-diagonal entries added by $1$, so that only the diagonals are zero, and subjects of the same disorder status have smaller distance than subjects of different disorder status. 
+Using the same test procedure as the previous experiment, the resulting p-values for Migrain vs CCI and M2g vs CCI are reported in the last two rows of Table~\ref{table1}, with the local p-value heat maps provided in Figure~\ref{figReal}(c)(d). The dependency between Migrain and CCI are very clear, with all methods returning significant p-values; but the dependency between M2g and CCI is no longer significant after processing, and no method returns significant p-values. The optimal scale for migrain vs cci is $k^{*}=60,l^{*}=63$, for m2g vs cci it is $k^{*}=70,l^{*}=63$. Note that there exists many local scale indicating significant dependency in Figure~\ref{figReal}(c); but only a few such scale in Figure~\ref{figReal}(d), none of which is the optimal scale.
 
-We consider two hypothesis tests: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. The resulting p-values are reported in the second and third rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC/HHG/Mantel yield significant p-values with dcorr/mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, with all global tests higher than significance. Note that if we use MGC$\{$dcorr$\}$ or MGC$\{$Mantel$\}$, they also yield significant p-values similar to MGC$\{$mcorr$\}$.
+The last experiment uses MGC to test independence between brain voxel activities and non-existent stimulus, similar to the experiment in \cite{EklundKnutsson2012}. We take the CORR data sets, and test dependency for the first fMRI scan of each data set. Take BNU1 for example: there are two fMRI scans for a total of $50$ persons, including $200$ regions of interest for $200$ time steps; then we generate an independent stimulus by a standard normal distribution with respect to the time scales, i.e., the stimulus is the same for all brain regions and all persons at a given time steps, and test dependency between the first fMRI scan and the random stimulus.
 
-The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(b)(c), where we observe that there exist many scales that are close to optimal; and the estimated largest optimal scales are $k^{*}=44,l^{*}=114$ and $k^{*}=37,l^{*}=114$ respectively. Note that the p-values of local test statistics at a given $k$ are the same throughout any $l \in [3,114]$, because we use minimum rank for ties and the largest rank is $2$ for the disorder distance matrix; and if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain.
+\cs{what should we add for the CORR data sets description? the size/timestep of each data set, and what else?}
 
-% Furthermore, if we assume that the left brain shape and the right brain shape have the same underlying distribution, we may pick a consistent optimal scale by maximizing the sum of local testing powers. In this case the optimal scale becomes $k^{*}=37, l^{*}=114$, and the MGC p-values become $0.0224$ and $0.0092$ respectively, which are in fact lower than the MGC p-values in Table~\ref{table1} using separate optimal scales.
+For each region, we can form a $200 \times 200$ distance matrices by the Euclidean distance with respect to the time steps; and we can form another distance matrix for the stimulus, and test independence between each region and the stimulus for significance. By using $1000$ replicates to estimate the optimal scale and $1000$ permutations to calculate the p-value, each voxel is declared significant when the p-value is less than $\alpha=0.05$. 
 
-% and if we assume that the left brain data distributes the same as the right brain data such that one optimal scale should be used for both testing tasks, then either $(23,114)$ or $(20,114)$ can yield significant p-values as observed from Figure~\ref{figReal}(b)(c).
-
-%We can observe from the heat map of MGC that there is a clear threshold in the local structure most neighborhood choices after certain threshold yields significant p-values, and MGC with mcorr performs similarly as MGC with dcorr. They imply that the dependency between the brain data and the disease data is probably cross-region, close to linear and low-dimensional. Furthermore, the left brain seems to be more correlated with the disease than the right brain, as testing between $LML$ and $D$ yields smaller p-values than testing between $LMR$ and $D$.
-
-The last experiment uses MGC to test independence between brain voxel activities and non-existent stimulus, similar to the experiment in \cite{EklundKnutsson2012}; and we take the BNU1 data for illustration. Two fMRI scans are done for a total of $50$ persons, including $200$ regions of interest for $200$ time steps; then we generate an independent stimulus by a standard normal distribution with respect to the time scales, i.e., the stimulus is the same for all brain regions and all persons at a given time steps.
-
-We use the first scan for testing. For each region, we can form a $200 \times 200$ distance matrices by the Euclidean distance with respect to the time steps; and we can form another distance matrix for the stimulus, and test independence between each region and the stimulus for significance. By using $10000$ permutations to yield the p-value, each voxel is declared significant when the p-value is less than $\alpha=0.05$. 
-
-Since the stimulus is independent, the testing power, i.e., the percentage of brain regions declared significant, should be close to $\alpha$. Indeed, all methods including MGC return power no larger than $0.07$ as shown in Table~\ref{table1}.
+Since the stimulus is independent, the testing power, i.e., the percentage of brain regions declared significant, should be close to $\alpha$ for each data set. This is indeed the case as shown in Table~\ref{table2}
 
 \section{Discussion}
 \label{conclu}
@@ -465,7 +473,7 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 
 Here we list the distributions of the $20$ dependencies used in the simulation sections, which are based on a combination of the numerical simulations in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} with some adjustments (such as the inclusion of additional noise and an extra weight vector) to better compare all methods in our low and high dimension scenarios.
 
-For the purpose of the increasing dimension scenario, we denote $\mb{x}_{d}$ as the $d$th dimension of $\mb{x}$, and denote $w$ as a size $d_{x} \times 1$ vector with $w_{d}=\frac{1}{d}$. So $w\T \mb{x}$ is a dimension $1$ random variable that is a decaying weighted summation of $\mb{x}=[\mb{x}_{1};\ldots;\mb{x}_{d_{x}}]$; and $w\T \mb{x}$ equals $\mb{x}$ when $d_{x}=1$. In the following, $\mb{u}, \mb{v}$ are auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\mb{\epsilon}$ denotes the standard normal distribution for white noise unless mentioned otherwise. The resulting pair of random variables $(\mb{x},\mb{y})$ are used to generate sample data for testing dependency.
+For the purpose of the increasing dimension scenario, we denote $\mb{x}_{d}$ as the $d$th dimension of $\mb{x}$, and denote $w$ as a size $d_{x} \times 1$ vector with $w_{d}=\frac{1}{d}$. So $w\T \mb{x}$ is a dimension $1$ random variable that is a decaying weighted summation of $\mb{x}=[\mb{x}_{1};\ldots;\mb{x}_{d_{x}}]$; and $w\T \mb{x}$ equals $\mb{x}$ when $d_{x}=1$. In the following, $\mb{u}, \mb{v}$ are auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\mb{\epsilon}$ denotes the standard normal distribution for white noise unless mentioned otherwise. The resulting pair of random variables $(\mb{x},\mb{y})$ are used to generate sample data $(X,Y)$ for testing dependency.
 
 \setcounter{equation}{0}
 \begin{compactenum}
@@ -515,7 +523,12 @@ where $\hat{E}(w\T \mb{x})$ denotes the sample mean of $w\T \mb{x}$ and $\mb{I}$
 \end{align*}
 \item Ellipse: Same as above except $r=5$.
 
-\item Spiral: Same as circle, but we change $\mb{u}$ and $r$ such that $r=\mb{u}_{d}=\mb{v}$ for all $d$, where $\mb{v} \sim \mc{U}(0,20)$.
+\item Spiral: $\mb{u} \sim \mc{U}(0,5)$, $\mb{\epsilon} \sim \mc{N}(0, 1)$, 
+\begin{align*}
+\mb{x}_{d}&=\mb{u} \sin(\pi \mb{u})  \cos^{d}(\pi \mb{u}) \mbox{ for $d=1,\ldots,d_{x}-1$},\\
+\mb{x}_{d_{x}}&=\mb{u} \cos^{d_{x}}(\pi \mb{u}),\\
+\mb{y}&= \mb{u} \sin(\pi \mb{u}) +0.4 (d_{x}-1)\mb{\epsilon}.
+\end{align*}
 
 \item Square: Let $\mb{u} \sim \mc{U}(-1,1)$, $\mb{u}' \sim \mc{N}(0,1)^{d_{x}}$, $\mb{v} \sim \mc{U}(-1,1)$, $\mb{v}' \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
 \begin{align*}
@@ -557,7 +570,7 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent (except type 
 
 The low-dimensional simulation is based on $d_{x}=d_{y}=1$ and $c=1$, with a visualization of all dependencies given in Figure~\ref{fig0}. Note that the parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, such that the testing power neither increases too fast nor too slow for given distribution: in the absence of noise and at dimension $1$, certain dependency like linear is very easy to be detected so that the testing powers of all methods converge to $1$ at very small $n$, which causes difficulty in comparing the methods; it is also more meaningful to consider noisy scenarios in practice. 
 
-The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, with $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. For most dependencies, we use the decaying vector $w$ to treat later dimensions as small perturbation, such that the independence testing becomes more difficult as $d_{x}$ increases; but for some complex dependencies especially like square/diamond/sine period, the testing is already very difficult and $w$ is not used.
+The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, with $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. For most dependencies, we use the decaying vector $w$ to treat later dimensions as small perturbation, such that the independence testing becomes more difficult as $d_{x}$ increases; but for some complex dependencies like square/diamond/sine period, the testing is already very difficult and $w$ is not used.
 
 \section{Performance Profiles}
 \label{appen:profiles}
@@ -660,7 +673,7 @@ where $H_{1 \cdot}=H_{11}+H_{12}$, $H_{2 \cdot}=H_{21}+H_{22}$, $H_{\cdot 1}=H_{
 
 It is clear that the HHG statistic is structurally different from Mantel/dcorr/mcorr, and cannot be expressed in terms of the general correlation coefficient in Equation~\ref{generalCoef}. Thus multiscale graph correlation cannot be directly implemented by HHG.
 
-In our numerical simulations, HHG falls a bit short when testing against high-dimensional or close to linear dependencies, and it is quite sensitive to noises and perturbations. But it is much more advantageous than other global statistics under most nonlinear dependencies, which makes it a strong competitor. %However, Multiscale Graph Correlation is able to approximate or surpass its performances in most cases.
+In our numerical simulations, HHG falls a bit short when testing against high-dimensional or close to linear dependencies; but it is much more advantageous than other global statistics under many nonlinear dependencies, which makes it a strong competitor. %However, Multiscale Graph Correlation is able to approximate or surpass its performances in most cases.
 
 \section{Multiscale Graph Correlation}
 \label{appen:MGC}
@@ -679,7 +692,7 @@ There exists another problem for ties, which is of particular importance for MGC
 
 The tie problem is handled by taking minimal rank among ties, and let $a_{ij}$ equal $a_{jj}$ whenever $x_{i}=x_{j}$ (or any $x_{i}$ that is rank zero) in Equation~\ref{localCoef2}. This is necessary for any global correlation coefficient that $a_{jj}$ can be different from $a_{ij}$ when $x_{i}=x_{j}$, such as Mantel or mcorr; but does not matter for dcorr, for which $a_{jj}=a_{ij}$ always holds when $x_{i}=x_{j}$. As long as $a_{ij}$ is handled properly when $x_{i}=x_{j}$, in practice one can break the ties randomly or use min/average/max ranks without affecting the power of MGC.
 
-Last but not least, in the local family of statistics it suffices to exclude $g_{1l}$ and $g_{k1}$: since $g_{1l}=g_{k1}=g_{11}$, they do not consider any neighbor, merely count the diagonal terms in the distance matrices, and are not meaningful for testing purpose. Therefore they are not considered in our main algorithm.
+Last but not least, in the local family of statistics it suffices to exclude $g_{1l}$ and $g_{k1}$: since $g_{1l}=g_{k1}=g_{11}$, they do not consider any neighbor, merely count the diagonal terms in the distance matrices, and are not meaningful for testing purpose. Therefore they should not be considered in general.
 
 \section{Testing Procedure}
 \label{appen:tests}
@@ -696,7 +709,7 @@ The three algorithms are implemented in Matlab and R, with the pseudo-code shown
 
 The first algorithm is the core to evaluate MGC in all other algorithms, which computes all local correlations based on given distance matrices $C$ and $D$. The function calculates Equation~\ref{localCoef} for all scales, which is clear in concept; but some matrix manipulations are required to efficiently implement it. Note that a priori assumption is a global function that returns $\{a_{ij}\},\{b_{ij}\}$ and the ranks, according to the choice of the global coefficient coefficient.
 
-The second algorithm computes the testing powers of all local statistics, by either repeated simulating samples generated by the joint distribution $f_{xy}$, or bootstrap samples of the given observations $(X, Y)$ with smoothing. This algorithm is required for MGC to estimate the optimal scale among all neighborhoods by maximizing the powers among all local statistics; and we explain and validate the smoothing technique in Section~\ref{appen:justi}.
+The second algorithm computes the testing powers of all local statistics, by repeated simulating samples generated by the joint distribution $f_{xy}$ or the given observations $(X, Y)$. In case of known $f_{xy}$, it is easy to generate sample data under the null and the alternative; in case of given data with unknown $f_{xy}$, we use kernel density estimation on the upper-diagonal distance entries, and generate sample distance matrices under the null and the alternative. This algorithm is required for MGC to estimate the optimal scale among all neighborhoods by maximizing the powers among all local statistics, which is further explained in Section~\ref{appen:eval}.
 
 The third algorithm computes the p-values of all local statistics by the permutation test. This algorithm is straightforward to implement, and is used to output the p-values of all local tests for given real data.
 
@@ -752,21 +765,21 @@ Note that all three algorithms can be used for global mcorr/dcorr/Mantel/HHG, by
 \begin{algorithmic}
 \Function{TestingPowers}{$X$,$Y$,$f_{xy}$,$r$,$\alpha$,option} 
 \State initialize two $n \times n \times r$ array $testN$ and $testA$ to store the local test statistics under the null and the alternative, and an $n \times n$ matrix $power$ to store the empirical power of all local tests at type 1 error level $\alpha$;
+\If{$f_{xy}$ is not given}
+\State $f_{CD}=kernelEstimation(upper(dist(X)),upper(dist(Y)))$; \Comment{kernel density estimation on the upper diagonal non-zero distance entries}
+\EndIf
 \For{$m=1,\ldots,r$} 
 \If{$f_{xy}$ is given}
-\State $(X_{1},Y_{1})=generateData(f_{xy})$; \Comment{generate dependent $(X_{1},Y_{1})$}
-\State $(X_{2},Y_{2})=generateData(f_{xy})$; \Comment{generate an independent $Y_{2}$}
-\State $C_{1}=dist(X_{1})$; $D_{1}=dist(Y_{1})$; $D_{2}=dist(Y_{2})$;\Comment{calculate the distance matrices}
+\State $(X_{1},Y_{1})=generateData(f_{xy},'dependent')$; \Comment{generate dependent data}
+\State $(X_{2},Y_{2})=generateData(f_{xy},'independent')$; \Comment{generate independent data}
+\State $C_{A}=dist(X_{1})$; $D_{A}=dist(Y_{1})$; 
+\State $C_{N}=dist(X_{2})$; $D_{N}=dist(Y_{2})$; \Comment{calculate the distance matrices}
 \Else
-\State $perA=randsampling(n)$;
-\State $C_{1}=dist(X(:,perA))$; $D_{1}=dist(Y(:,perA))$; \Comment{dependent distance matrices}
-\State $perN=randsampling(n)$;
-\State $D_{2}=dist(Y(:,perN))$; \Comment{re-sample the second data}
-\State $Z=generateData('normal')$;\Comment{generate a matrix of size $n \times 1$ by standard normal distribution}
-\State $E_{1}=dist(Z)$;
+\State $(C_{A},D_{A})=generateDistance(f_{CD},'dependent')$; 
+\State $(C_{N},D_{N})=generateDistance(f_{CD},'independent')$; 
 \EndIf
-\State $testA(:,:,m)=LGC(C_{1},D_{1},option)+LGC(E_{1},D_{1},option)*100$; 
-\State $testN(:,:,m)=LGC(C_{1},D_{2},option)+LGC(E_{1},D_{2},option)*100$;
+\State $testA(:,:,m)=LGC(C_{A},D_{N},option)$; 
+\State $testN(:,:,m)=LGC(C_{N},D_{N},option)$;
 \EndFor
 
 \For{$j=1,\ldots,n$}
@@ -814,23 +827,13 @@ To evaluate MGC in simulations or real data, we first need to estimate the optim
 \label{power}
 (k^{*},l^{*})=\arg\max_{k,l \in [2,\ldots,n] }\{\hat{\beta}_{\alpha}(g_{kl})\}.
 \end{equation}
-If there are more than one optimal neighborhood choices, we take one optimal scale that maximizes $k^{*}l^{*}$; alternatively we can use all optimal scales and output the mean power/p-value. 
+If there are more than one optimal neighborhood choices, we pick the scale that maximizes the mean difference of the test statistic under the null and the alternative.
+
+Note that in case of given data set of unknown distribution, we use kernel density estimation on the two distance matrices: we essentially pool all upper-diagonal non-zero distance entries into a vector, and estimate the joint distribution of two vectors by a normal kernel from the method in \cite{BotevEtAl2010}. This allows us to generate distance matrices that are independent of the given data for optimal scale estimation; and if the kernel density estimation fails, one may use random sampling on the distance entries instead.
 
 Once the optimal scale is estimated, the p-value of MGC can be calculated by running Algorithm~\ref{algPerm} at the optimal scale $(k^{*},l^{*})$. The testing power of MGC can be quickly determined by running Algorithm~\ref{algPower} again to estimate the power at the optimal scale $(k^{*},l^{*})$. 
 
-We can apply the same procedures to evaluate the p-values and powers for global correlations like dcorr/mcorr/Mantel/HHG, by excluding the first step for estimating the optimal scale.
-
-\subsection{Justification of MGC on using Noisy Samples}
-\label{appen:justi}
-In Algorithm~\ref{algPower}, when we estimate the optimal scale of MGC for given data of unknown distribution, we repeatedly add independent white noise to the given observations, and use the noisy samples to derive the testing power: for given distance matrix pair $(C,D)$, the testing power is derived by comparing $g_{kl}(C+E,D)$ to $g_{kl}(C+E,D')$, where $E$ is a distance matrix of $z$ that is independently generated by the normal distribution, and $D'$ is a random sample of $D$. 
-
-But the question is whether the optimal scale based on the noisy samples is equivalent to the true optimal scale based on the underlying joint distribution. The next theorem shows that the optimal scale is invariant to the noise, which justified algorithm~\ref{algPower}.
-
-Rather than using large noise (the noise in algorithm~\ref{algPower} is set to have the same Frobenius norm as the signal), it is tempting to estimate the optimal scale by smaller noise level, or more simply by resampling the given data without noise. Both choices are still valid for estimating the optimal scale, but may introduce additional bias in the following step in estimating the MGC p-value or testing power: if the optimal scale is estimated by resamples of given data, the optimal scale is dependent on the data while the follow-on permutation test is also dependent on the given data, such that the resulting p-value can be biased, e.g., the MGC p-value can be too low and the MGC testing power can be higher than the type $1$ error level under independence.
-
-In comparison, when the optimal scale is estimated based on repeated simulating samples of $f_{xy}$, the optimal scale is estimated independently of the MGC p-value or testing power in the following step. This is the most ideal way to estimate the optimal scale, which does not introduce any bias; but it is in general difficult to fit a model for given observations.
-
-No matter how large the noise level, the optimal scale can always be reasonably estimated, while small or no noise level may introduce additional bias into the p-value and testing power. Therefore in algorithm~\ref{algPower} the noise level is set to be the same as the signal, in order to diminish the dependency between the optimal scale estimation and the permutation test on the given data. For example, in the real data experiment on testing non-existent stimulus, the MGC testing power is very close to the type $1$ error level $0.05$; but if we reduce the noise level or simply use bootstrap resamples, the MGC testing power will be inflated to around $0.1$. 
+We can apply the same procedures to evaluate the p-values and powers for global correlations like dcorr/mcorr/Mantel/HHG, by excluding the first step for estimating the optimal scale. 
 
 \section{Proofs}
 \label{appen:proofs}

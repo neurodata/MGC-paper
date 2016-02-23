@@ -11,11 +11,12 @@ end
 map2 = brewermap(128,'GnBu'); % brewmap
 
 % Plot heatmap
-total=3;
+total=4;
 for i=1:total
     [filename, titleStr]=CorrRealDataName(i);
     filename=strcat(pre1,filename);
     load(filename);
+    n=size(p1All,1);
     figure
     kmin=2;
     imagesc(p1All(kmin:n,kmin:n)');
@@ -27,7 +28,7 @@ for i=1:total
     ylabel('Neighborhood Choice of Y','FontSize',16);
     
     % Figure title/labels
-    titleStr = strcat('P-values of All Local Tests for ', titleStr);
+    titleStr = strcat('Local Tests P-value for ', titleStr);
     title(titleStr,'FontSize',13);
     
     F.fname=strcat(pre2, num2str(i));
@@ -38,13 +39,19 @@ end
 function [str, title]=CorrRealDataName(i)
 str='CorrPermDistTestType';
 switch i
+%     case 1
+%         str=strcat(str,'BrainCxP.mat');
+%         title=' Connectome vs Personality';
     case 1
-        str=strcat(str,'BrainCxP.mat');
-        title=' Connectome vs Personality';
-    case 2
         str=strcat(str,'BrainLMLxY.mat');
         title=' Left Brain Shape vs Disorder';
-    case 3
+    case 2
         str=strcat(str,'BrainLMRxY.mat');
         title=' Right Brain Shape vs Disorder';
+    case 3
+        str=strcat(str,'MigrainxCCI.mat');
+        title=' Migrain vs CCI';
+    case 4
+        str=strcat(str,'M2gxCCI.mat');
+        title=' M2g vs CCI';
 end

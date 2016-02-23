@@ -13,6 +13,12 @@ function [power1All, power2All, power3All, power4,power5,power6,power7]=CorrIndT
 % noise specifies the noise level, by default 1,
 % alpha specifies the type 1 error level,
 % option specifies whether each test statistic is calculated or not.
+if nargin<5 || rep1<=0;
+    rep1=1000;
+end
+if nargin<6 || rep2<=0;
+    rep2=1000;
+end
 if nargin<7
     noise=0; % Default noise level
 end
@@ -31,28 +37,12 @@ else
 end
 power1=zeros(1,lim);power2=zeros(1,lim);power3=zeros(1,lim);% Powers for MGC{mcorr/dcorr/Mantel}
 power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global mcorr/dcorr/Mantel.
-neighborhoods=zeros(3,lim); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
 
 % Run the independence test to first estimate the optimal scale of MGC
-if rep1~=0
-    [power1All,power2All,power3All]=IndependenceTestDim(type,n,dim,lim,rep1, noise,alpha); % Powers for all local tests of mcorr/dcorr/Mantel
-    % Find the best scale at each dimension
-    for i=1:lim
-        neighborhoods(1,i)=verifyNeighbors(1-power1All(:,:,i));
-        neighborhoods(2,i)=verifyNeighbors(1-power2All(:,:,i));
-        neighborhoods(3,i)=verifyNeighbors(1-power3All(:,:,i));
-    end
-end
+[~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
 
 % Run the independence test again for the testing powers
 [power1All, power2All, power3All, power7]=IndependenceTestDim(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of mcorr/dcorr/Mantel, and HHG
-if rep1==0
-    for i=1:lim
-        neighborhoods(1,i)=verifyNeighbors(1-power1All(:,:,i));
-        neighborhoods(2,i)=verifyNeighbors(1-power2All(:,:,i));
-        neighborhoods(3,i)=verifyNeighbors(1-power3All(:,:,i));
-    end
-end
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
@@ -70,16 +60,14 @@ filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
 % numRange=1:lim;
 % plot(numRange,power1,'r.-',numRange,power2,'b.-',numRange,power3,'c.-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
-%
 
-function [power1, power2, power3, power4]=IndependenceTestDim(type,n,dim,lim,rep, noise,alpha,option)
-% Author: Cencheng Shen
+function [power1, power2, power3, power4,neighbor]=IndependenceTestDim(type,n,dim,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of
-% all local tests of mcorr/dcorr/Mantel, the power of HHG.
+% all local tests of mcorr/dcorr/Mantel, and the power of HHG.
 %
 % It first generates dependent and independent data from simulation
-% distributions, calculate the test statistics under the null and the
-% alternative, then estimate the testing power of each method.
+% distributions, then calculate the test statistics under the null and the
+% alternative, and estimate the testing power of each method.
 if nargin<8
     option=[1,1,1,0]; % Default option. Setting each entry to 0 to disable the calculation of local mcorr/dcorr/Mantel, or HHG.
 end
@@ -99,6 +87,7 @@ dCor4N=zeros(1,rep);dCor4A=zeros(1,rep);
 % Powers
 power1=zeros(n,n,lim);power2=zeros(n,n,lim);power3=zeros(n,n,lim);%Powers for all local tests of mcorr/dcorr/Mantel
 power4=zeros(1,lim);% Powers for HHG
+neighbor=zeros(3,lim); % Optimal neighborhoods for local mcorr/dcorr/Mantel
 
 % Iterate through all dimension choices
 for i=1:lim
@@ -150,30 +139,34 @@ for i=1:lim
     end
     
     % Based on the emprical test statistics under the null and the alternative,
-    % calculate the emprical powers at type 1 error level alpha
-    power1=calculatePower(power1,i,dCor1N,dCor1A,alpha,rep);
-    power2=calculatePower(power2,i,dCor2N,dCor2A,alpha,rep);
-    power3=calculatePower(power3,i,dCor3N,dCor3A,alpha,rep);
-    power4=calculatePower(power4,i,dCor4N,dCor4A,alpha,rep);
+    % calculate the emprical powers and the best scale at type 1 error level alpha
+    [power1(:,:,i),neighbor(1,i)]=calculatePower(dCor1N,dCor1A,alpha,rep);
+    [power2(:,:,i),neighbor(2,i)]=calculatePower(dCor2N,dCor3A,alpha,rep);
+    [power3(:,:,i),neighbor(3,i)]=calculatePower(dCor3N,dCor3A,alpha,rep);
+    power4(i)=calculatePower(dCor4N,dCor4A,alpha,rep);
 end
 
 % Set the powers of all local tests at rank 0 to 0
- power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
+% power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-function power1=calculatePower(power1,ind,dCor1N,dCor1A,alpha,rep)
+function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of
-% the test statistic under the null and the alternative.
-n=size(dCor1N,1);
+% the test statistic under the null and the alternative, and calculate the
+% optimal scale from the estimated power
+[n]=size(dCor1N,1);
+power1=zeros(n,n);
 if n>1
     for i=1:n;
         for j=1:n;
             dCorT=sort(dCor1N(i,j,:),'descend');
             cut1=dCorT(ceil(rep*alpha));
-            power1(i,j,ind)=mean(dCor1A(i,j,:)>cut1);
+            power1(i,j)=mean(dCor1A(i,j,:)>cut1);
         end
     end
+    n1=maxNeighbors(power1,dCor1N,dCor1A);
 else
     dCorT=sort(dCor1N,'descend');
     cut1=dCorT(ceil(rep*alpha));
-    power1(ind)=mean(dCor1A>cut1);
+    power1=mean(dCor1A>cut1);
+    n1=0;
 end

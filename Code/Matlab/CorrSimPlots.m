@@ -64,6 +64,7 @@ for j=1:total
     load(filename)
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
+    %
     plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
@@ -108,8 +109,8 @@ for j=1:total
     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar);
 end
-xlabel('Neighborhood Choice of X','position',[-200 -20],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-535 300],'FontSize',20);
+xlabel('Neighborhood Choice of X','position',[-220 120],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-540 -200],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1'));
@@ -257,8 +258,8 @@ for j=1:total
     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar);
 end
-xlabel('Neighborhood Choice of X','position',[-200 -25],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-535 300],'FontSize',20);
+xlabel('Neighborhood Choice of X','position',[-220 120],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-540 -200],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Testing Powers of All Local Tests',tstring,' for Increasing Dimension'));

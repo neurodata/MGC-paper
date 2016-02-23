@@ -1,19 +1,20 @@
 function []=CorrSimPlotsA(type,n,dim,noise,pre1,pre2)
 
-% type=6;n=20;dim=1;noise=0;pre1='../../Data/'; 
+% type=6;n=100;dim=1;noise=1;pre1='../../Data/'; 
 % CorrSimPlotsA(type,n,dim,noise,pre1);
+% Used to generate figure A in the files
 
 if nargin<1
-    type=6; % Usually 20, but can be changed in case of new simulations
+    type=6; 
 end
 if nargin<2
-    n=20; % Usually 20, but can be changed in case of new simulations
+    n=100; 
 end
 if nargin<3
-    dim=1; % Usually 20, but can be changed in case of new simulations
+    dim=1; 
 end
 if nargin<4
-    noise=0; % Usually 20, but can be changed in case of new simulations
+    noise=1; 
 end
 if nargin<5
     pre1='../../Data/'; % The folder to locate data
@@ -22,21 +23,19 @@ if nargin<6
     pre2='../../Figures/Fig'; % The folder to save figures
 end
 
-%%%performance profile
-figNumber='A';
-%figure('units','normalized','position',[0 0 1 1])
-%set(groot,'defaultAxesColorOrder',map1);
-s=2;
-t=2;
-tryy=2;
-
-% A1
+% Generate data
 [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-%[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-% figure
-% plot(x,y,'b.',x1,y1,'r.');
+[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
+% A1: scatter plot
+figure
+plot(x,y,'b.',x1,y1,'r.');
+xlabel('X','FontSize',16)
+ylabel('Y','FontSize',16);
+title('Scatter Plot of (X,Y)','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
         
-% A2
+% Get distance matrix
 [x,ind]=sort(x,'ascend');
 y=y(ind);
 C=squareform(pdist(x));
@@ -47,48 +46,66 @@ map2 = brewermap(128,'GnBu'); % brewmap
 H=eye(n)-(1/n)*ones(n,n);
 A=H*C*H;
 B=H*D*H;
-% For mcorr, further adjust the double centered matrices to remove high-dimensional bias
-A=A-C/n;
-B=B-D/n;
-for j=1:n
-    A(j,j)=0;
-    B(j,j)=0;
-end
+% % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
+% A=A-C/n;
+% B=B-D/n;
+% for j=1:n
+%     A(j,j)=0;
+%     B(j,j)=0;
+% end
 
 %global stat
-mcorr=sum(sum(A.*B))/norm(A,'fro')/norm(B,'fro');
+mcorrH=A.*B;
 
-if tryy==1
-   minC=min(min([A,B]));maxC=max(max([A,B]));
-   minD=minC;maxD=maxC;
-   C=A;
-   D=B;
-else
-   maxC=max(max(C));
-   maxD=max(max(D));
-   minC=0;
-   minD=0;
-end
-subplot(s,t,1)
+% A2: heatmaps of the distance matrices
+maxC=max(max(C));
+maxD=max(max(D));
+maxC=max(maxC,maxD);
+figure
 imagesc(C');
 colormap(map2)
-colorbar
-caxis([minC,maxC]);
-title('Global Distance Heatmap of X')
-subplot(s,t,2)
+caxis([0,maxC]);
+title('Distance Heatmap of X','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
+%subplot(s,t,6)
+figure
 imagesc(D');
+set(gca,'FontSize',16)
 colormap(map2)
-colorbar
-caxis([minD,maxD]);
-title('Global Distance Heatmap of Y')
+h=colorbar;
+set(h,'FontSize',16);
+caxis([0,maxC]);
+title('Distance Heatmap of Y','FontSize',16)
 
-% A3
+% A3: heatmaps of the doubly centered distance matrices
+minC=min(min([A,B]));maxC=max(max([A,B]));
+minD=minC;maxD=maxC;
+C=A;
+D=B;
+figure
+imagesc(C');
+colormap(map2)
+caxis([minC,maxC]);
+title('Doubly-Centered Distance Heatmap of X','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
+figure
+imagesc(D');
+set(gca,'FontSize',16)
+colormap(map2)
+h=colorbar;
+set(h,'FontSize',16);
+caxis([minD,maxD]);
+title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
+
+% Local distance matrices
 if n~=100 || noise~=1
     CorrIndTest(type,n,1,1,0, 1000,noise,0.05,[1,0,0,0]);
 end
 filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim1.mat');
-load(filename,'power1All');
-neighbor=verifyNeighbors(1-power1All(:,:,end));
+load(filename,'neighborhoods');
+neighbor=neighborhoods(1,end);
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 dC=(dC<k);
@@ -96,30 +113,31 @@ dD=(dD<l);
 ind=(dC.*dD==0);
 A(ind)=0;
 B(ind)=0;
-% figure
-% gplot(1-ind,[x,y],':or');
-% h=findobj('type','line');
-% set(h,'MarkerSize',10)
 
-% A4
-C(ind)=0;
-D(ind)=0;
-subplot(s,t,3)
+% A4: heatmaps of the local doubly centered distance matrices
+C(ind)=minC;
+D(ind)=minD;
+figure
 imagesc(C');
 colormap(map2)
-colorbar
 caxis([minC,maxC]);
-title('Local Distance Heatmap of X')
-subplot(s,t,4)
+title('Local Doubly-Centered Distance Heatmap of X','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
+figure
 imagesc(D');
+set(gca,'FontSize',16)
 colormap(map2)
-colorbar
 caxis([minD,maxD]);
-title('Local Distance Heatmap of Y')
+title('Local Doubly-Centered Distance Heatmap of Y','FontSize',16)
 
-%local stat
-lmcorr=sum(sum(A.*B))/norm(A,'fro')/norm(B,'fro');
-
-%F.fname=strcat(pre2, figNumber);
-%F.wh=[3 2.5]*2;
-%print_fig(gcf,F)
+% A4: heatmaps of the distance covariance entries
+figure
+mcorrH(ind)=0;
+imagesc(mcorrH');
+set(gca,'FontSize',16)
+colormap(map2)
+h=colorbar;
+set(h,'FontSize',16);
+caxis([0,1]);
+title('Local Distance Covariance of (X, Y)','FontSize',16)

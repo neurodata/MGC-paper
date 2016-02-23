@@ -7,7 +7,7 @@ function [x, y]=CorrSampleGenerator(type,n,dim,dependent, noise)
 % type specifies the type of distribution,
 % n is the sample size, dim is the dimension
 % dependent specifies whether the data are dependent or not, by default 1
-% noise specifies the noise level, by default 0.
+% noise specifies the noise level, by default 0. 
 if nargin<4
     dependent=1; % by default generate dependent samples
 end
@@ -36,21 +36,22 @@ xA=x*A;
 if dependent==0
     x=unifrnd(-1,1,n,d);
 end
-pp=0.5;
+
+% The following paramter is used for the type 0 outlier model only.
+% Note that the mixture probability is specified by noise, which should be
+% in [0,1].
+pp=noise;
 mix=zeros(n,1);
 mix(1:ceil(n*pp))=1;
 u=mix;
 
-switch type % In total 20 types of dependency
+switch type % In total 20 types of dependency + the type 0 outlier model
     case 0 %Test Outlier Model
-        %u=(binornd(1,pp,n,1));
         y=repmat((u>0),1,d).*(x) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-        %u=(binornd(1,pp,n,1));
         x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         if dependent==0
-            %u=(binornd(1,pp,n,1));
             x=unifrnd(-1,1,n,d);
-            x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(50*ones(n, d),eye(d));
+            x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         end
     case 1 %Linear
         y=xA+1*noise*eps;
@@ -100,13 +101,12 @@ switch type % In total 20 types of dependency
         if type==12
             rx=5*ones(n,d);
         end
-        
+ 
         if type==13
             rx=unifrnd(0,5,n,1);
             ry=rx;
             rx=repmat(rx,1,d);
             z=rx;
-            %cc=1;
         else
             z=unifrnd(-1,1,n,d);
             ry=ones(n,1);
@@ -170,8 +170,6 @@ switch type % In total 20 types of dependency
         end
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
-%         y=mvnrnd(zeros(n, 1),eye(1));
-%         y=x.*repmat(y,1,d)+0.5*noise*repmat(eps,1,d);
         y=mvnrnd(zeros(n, d),eye(d));
         y=x.*y+0.5*noise*repmat(eps,1,d);
         if dependent==0

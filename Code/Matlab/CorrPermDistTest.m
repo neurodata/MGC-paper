@@ -1,190 +1,149 @@
-function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,D,rep1,rep2,titlechar,ratio,neighborhoods,alpha,option)
+function [p1, p2, p3, p4,p5,p6,p7,neighborhoods]=CorrPermDistTest(C,D,rep1,rep2,titlechar,alpha,option,neighborhoods)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by mcorr/dcorr/Mantel, and global mcorr/dcorr/Mantel/HHG.
 
 % Parameters:
-% type should be a n*2n matrix, a concatenation of two distance matrices,
-% rep1 specifies the number of bootstrap samples for optimal scale estimation
+% C & D should be two n*n distance matrices,
+% rep1 specifies the number of independent samples for optimal scale estimation
 % in MGC; if 0, the estimation step is skipped.
 % rep2 specifies the number of random permutations to use for the permutation test,
-% set allP to non-zero will use all permutations instead,
 % alpha specifies the type 1 error level,
-% option specifies whether each test statistic is calculated or not.
+% option specifies whether each test statistic is calculated or not,
+% neighborhood can be specified beforehand so as to skip the optimal scale
+% estimation.
 if nargin<5
     titlechar='RealData';
 end
 if nargin<6
-    ratio=100; % If set to other value, will override rep and use all permutations; unfeasible for n large.
-end
-if nargin<7
-    neighborhoods=zeros(3,1); % Estimated optimal neighborhoods at each sample size. At 0, MGC of all scales are calculated
-end
-if nargin<8
     alpha=0.05; % Default type 1 error level
 end
-if nargin<9
+if nargin<7
     option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC by mcorr/dcorr/Mantel, global mcorr/dcorr/Mantel, HHG, in order; set the first three
+end
+if nargin<8
+    neighborhoods=ones(3,1);
 end
 
 % Run the independence test to first estimate the optimal scale of MGC
-if rep1~=0
-    [p1,p2,p3]=IndependenceTest(C,D,rep1,ratio,alpha);
-    if neighborhoods(1)==0
-        neighborhoods(1)=verifyNeighbors(1-p1);
-    end
-    if neighborhoods(2)==0
-        neighborhoods(2)=verifyNeighbors(1-p2);
-    end
-    if neighborhoods(3)==0
-        neighborhoods(3)=verifyNeighbors(1-p3);
-    end
+if rep1~=0 && mean(neighborhoods-1)<=0
+    [p1,p2,p3,n1,n2,n3]=IndependenceTest(C,D,rep1,option,alpha);
+    neighborhoods=[n1;n2;n3];
     p4=0;p5=0;p6=0;p7=0;
 end
 
-% Return the permutation test to return the p-values
+% Run the permutation test to return the p-values
 if rep2~=0
     [p1All, p2All, p3All, p7]=PermutationTest(C,D,rep2,option);
-    if rep1==0
-        if neighborhoods(1)==0
-            neighborhoods(1)=verifyNeighbors(p1All);
-        end
-        if neighborhoods(2)==0
-            neighborhoods(2)=verifyNeighbors(p2All);
-        end
-        if neighborhoods(3)==0
-            neighborhoods(3)=verifyNeighbors(p3All);
-        end
-    end
     % From the p-values of all local tests,  get the p-values of MGC based on the optimal neighborhood estimation, and the p-values of the respective global test
-    p1=p1All(neighborhoods(1));p4=p1All(end);
-    p2=p2All(neighborhoods(2));p5=p2All(end);
-    p3=p3All(neighborhoods(3));p6=p3All(end);
+    if mean(neighborhoods-1)>0
+        p1=p1All(neighborhoods(1));
+        p2=p2All(neighborhoods(2));
+        p3=p3All(neighborhoods(3));
+    else
+        p1=0;p2=0;p3=0;
+    end
+    p4=p1All(end);p5=p2All(end);p6=p3All(end);
     % Save the results
     pre1='../../Data/';
     filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-    save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','rep1','rep2','ratio','alpha','option','p1All','p2All','p3All');
+    save(filename,'titlechar','p1','p2','p3','p4','p5','p6','p7','neighborhoods','rep1','rep2','alpha','option','p1All','p2All','p3All');
 end
 
-function  [power1, power2, power3]=IndependenceTest(C,D,rep,ratio,alpha)
-% Author: Cencheng Shen
+function  [power1, power2, power3,n1,n2,n3]=IndependenceTest(C,D,rep,option,alpha)
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of mcorr/dcorr/Mantel, in order to locate the optimal
 % scale of MGC.
 %
-% It generates dependent and independent data from noisy samples of the original data,
-% calculate the test statistics under the null and the alternative,
-% then estimate the testing power of each method.
+% By kernel density estimation on the upper-diagonal entries of the distance
+% matrices, it independently generates paired distance matrices that
+% distribute similarly as the given pair (C,D). Then the test statistics under the null and the
+% alternative can be calculated to estimate the testing power.
 n=size(C,1);
 % Test statiscs under the null and the alternative
 dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
 dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for all local tests of mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
-%ratio=0; % noise ratio
 
-% % disRankC=disToRanks(C);
-% % disRankP=disToRanks(P);
-% for r=1:rep
-%     % Generate an independent distance matrix to add to the first distance matrix
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
-%     noise1=noise1/norm(noise1,'fro')*norm(C,'fro');
-%     Ca=C+noise1*ratio;
-%     disRankC=disToRanks(C+noise1/sqrt(n));
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
-%     noise1=noise1/norm(noise1,'fro')*norm(P,'fro');
-%     Pa=P+noise1*ratio;
-%     %Pa=P;
-%     disRankP=disToRanks(P+noise1/sqrt(n));
-%     disRank=[disRankC disRankP];
-%     % Calculate the test statistics under the alternative for the noisy dependent pairs
-%     dCor1A(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-%     dCor2A(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-%     dCor3A(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
-%     
-%     % Generate a random sampling to resample the second data
-%     perN=randsample(n,n,true);
-%     Pa=Pa(perN,perN);
-%     disRank=[disRankC disToRanks(P(perN,perN)+noise1/sqrt(n))];
-%     % Calculate the test statistics under the null for the independent pairs
-%     dCor1N(:,:,r)=LocalGraphCorr(Ca,Pa,1,disRank);
-%     dCor2N(:,:,r)=LocalGraphCorr(Ca,Pa,2,disRank);
-%     dCor3N(:,:,r)=LocalGraphCorr(Ca,Pa,3,disRank);
-% end
-% 
-% for r=1:rep
-%     noise1=random('norm',0,1,n,1);
-%     noise1=squareform(pdist(noise1));
-%     per=randsample(n,n,true);
-%     CA=C(per,per);
-%     DA=D(per,per);
-%     disRankC=disToRanks(CA);
-%     disRankD=disToRanks(DA);
-%     disRank1=[disRankC disRankD];
-%     st1=LocalGraphCorr(CA,DA,1,disRank1);
-%     st2=LocalGraphCorr(CA,DA,2,disRank1);
-%     st3=LocalGraphCorr(CA,DA,3,disRank1);
-% 
-%     disRankE=disToRanks(noise1);
-%     disRank2=[disRankE disRankD];
-%     tt1=LocalGraphCorr(noise1,DA,1,disRank2);
-%      tt2=LocalGraphCorr(noise1,DA,2,disRank2);
-%      tt3=LocalGraphCorr(noise1,DA,3,disRank2);
-%     dCor1A(:,:,r)=st1+tt1*ratio;
-%     dCor2A(:,:,r)=st2+tt2*ratio;
-%     dCor3A(:,:,r)=st3+tt3*ratio;
-%     
-%     % Generate a random sampling to resample the second data
-% %     noise1=random('norm',0,1,n,1);
-% %     noise1=squareform(pdist(noise1));
-%     perN=randsample(n,n,true);
-%     DN=D(perN,perN);
-%     disRankD=disToRanks(DN);
-%     disRank1=[disRankC disRankD];
-%     disRank2=[disRankE disRankD];
-%     tt1=LocalGraphCorr(noise1,DN,1,disRank2);
-%      tt2=LocalGraphCorr(noise1,DN,2,disRank2);
-%      tt3=LocalGraphCorr(noise1,DN,3,disRank2);
-%     % Calculate the test statistics under the null for the independent pairs
-%     dCor1N(:,:,r)=LocalGraphCorr(CA,DN,1,disRank1)+tt1*ratio;
-%     dCor2N(:,:,r)=LocalGraphCorr(CA,DN,2,disRank1)+tt2*ratio;
-%     dCor3N(:,:,r)=LocalGraphCorr(CA,DN,3,disRank1)+tt3*ratio;
-% end
-
+% Kernal density estimation on the upper-diagonal non-zero entries of the distance matrices
+CU=triu(C);DU=triu(D);
+ind=((CU~=0) & (DU~=0));CU=CU(ind);DU=DU(ind);
+[bandwidth]=kde2d([CU, DU],256,[0,0],[max(CU),max(DU)]);
+% If the kernal density estimation fails, use random resampling instead
+if isnan(bandwidth)
+    %disp('Kernal density estimation failed; use random sampling instead');
+    bandwidth=[0;0];
+end
+sz1=size(CU,1);
+sz2=n*(n-1)/2;
 
 for r=1:rep
-    per=randsample(n,n,true);
-    CA=C(per,per);
-    DA=D(per,per);
+    % Generate an independent pair of the upper diagonal distance entries
+    aa=rand(sz2,1);bb=randn(sz2,1);
+    CAU = CU(ceil(sz1*aa)) + bandwidth(1)*bb;
+    DAU = DU(ceil(sz1*aa)) + bandwidth(2)*bb;
+    % Re-form the symmetric distance matrices. The triangle inequality may
+    % not hold though.
+    CA=zeros(n,n);DA=zeros(n,n);
+    for i=2:n;
+        for j=1:i-1;
+            indd=(i-1)*(i-2)/2;
+            CA(i,j)=CAU(indd+j);
+            DA(i,j)=DAU(indd+j);
+            CA(j,i)=CA(i,j);
+            DA(j,i)=DA(i,j);
+        end
+    end
+    %     per=randsample(n,n,true);
+    %     CA=C(per,per);
+    %     DA=D(per,per);
+    % Calculate the test statistics under the alternative
     disRank1=[disToRanks(CA) disToRanks(DA)];
-    dCor1A(:,:,r)=LocalGraphCorr(CA,DA,1,disRank1);
-    dCor2A(:,:,r)=LocalGraphCorr(CA,DA,2,disRank1);
-    dCor3A(:,:,r)=LocalGraphCorr(CA,DA,3,disRank1);
+    if option(1)~=0
+        dCor1A(:,:,r)=LocalGraphCorr(CA,DA,1,disRank1);
+    end
+    if option(2)~=0
+        dCor2A(:,:,r)=LocalGraphCorr(CA,DA,2,disRank1);
+    end
+    if option(3)~=0
+        dCor3A(:,:,r)=LocalGraphCorr(CA,DA,3,disRank1);
+    end
     
-    % Generate a random sampling to resample the second data
-    perN=randsample(n,n,true);
-    DN=D(perN,perN);
-    disRank1=[disToRanks(CA) disToRanks(DN)];
-    %      tt1=LocalGraphCorr(noise1,DN,1,disRank2);
-    %     % Calculate the test statistics under the null for the independent pairs
-    %     dCor1N(:,:,r)=LocalGraphCorr(C,DN,1,disRank1)+tt1*ratio;
-    %     dCor2N(:,:,r)=LocalGraphCorr(C,DN,2,disRank1)+tt1*ratio;
-    %     dCor3N(:,:,r)=LocalGraphCorr(C,DN,3,disRank1)+tt1*ratio;
-    tt1=LocalGraphCorr(CA,DN,1,disRank1);
-    tt2=LocalGraphCorr(CA,DN,2,disRank1);
-    tt3=LocalGraphCorr(CA,DN,3,disRank1);
-    dCor1N(:,:,r)=tt1*ratio;
-    dCor2N(:,:,r)=tt2*ratio;
-    dCor3N(:,:,r)=tt3*ratio;
-    dCor1A(:,:,r)=dCor1A(:,:,r)+tt1*(ratio-1);
-    dCor2A(:,:,r)=dCor2A(:,:,r)+tt2*(ratio-1);
-    dCor3A(:,:,r)=dCor3A(:,:,r)+tt3*(ratio-1);
+    % Generate another independent second distance matrix
+    aa=rand(sz2,1);bb=randn(sz2,1);
+    CNU = CU(ceil(sz1*aa)) + bandwidth(1)*bb;
+    aa=rand(sz2,1);bb=randn(sz2,1);
+    DNU = DU(ceil(sz1*aa)) + bandwidth(2)*bb;
+    CN=zeros(n,n);DN=zeros(n,n);
+    for i=2:n;
+        for j=1:i-1;
+            indd=(i-1)*(i-2)/2;
+            DN(i,j)=CNU(indd+j);
+            DN(i,j)=DNU(indd+j);
+            CN(j,i)=CN(i,j);
+            DN(j,i)=DN(i,j);
+        end
+    end
+    %per=randsample(n,n,true);    
+%     per=randperm(n);
+%     DN=DA(per,per);
+%     CN=C;
+    % Calculate the test statistics under the null
+    disRank1=[disToRanks(CN) disToRanks(DN)];
+    if option(1)~=0
+        dCor1N(:,:,r)=LocalGraphCorr(CN,DN,1,disRank1);
+    end
+    if option(2)~=0
+        dCor2N(:,:,r)=LocalGraphCorr(CN,DN,2,disRank1);
+    end
+    if option(3)~=0
+        dCor3N(:,:,r)=LocalGraphCorr(CN,DN,3,disRank1);
+    end
 end
 
-% For each local test, estimate the critical value from the test statistics under the null,
-% then estimate the power from the test statistics under the alternative.
+% % For each local test, estimate the critical value from the test statistics under the null,
+% % then estimate the power from the test statistics under the alternative.
 for i=1:n
     for j=1:n;
         dCorT=sort(dCor1N(i,j,:),'descend');
@@ -200,12 +159,16 @@ for i=1:n
         power3(i,j)=mean(dCor3A(i,j,:)>cut3);
     end
 end
-
 % Set the powers of all local tests at rank 0 to 0
- power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
+power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
+
+n1=maxNeighbors(power1,dCor1N,dCor1A);
+n2=maxNeighbors(power2,dCor2N,dCor2A);
+n3=maxNeighbors(power3,dCor3N,dCor3A);
+
+%save('tmp.mat','dCor1N','dCor1A','dCor2N','dCor2A','dCor3N','dCor3A','n1','n2','n3','power1','power2','power3');
 
 function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,option)
-% Author: Cencheng Shen
 % This is an auxiliary function of the main function to calculate the p-values of
 % all local tests of mcorr/dcorr/Mantel, the p-value of HHG in the
 % permutation test.
@@ -240,21 +203,22 @@ for r=1:rep
     % Use random permutations; if allP is not 0, use all possible permutations
     per=randperm(n);
     DN=D(per,per);
-    disRank=[disRankC disRankP(per, per)];
+    CN=C;
+    disRank=[disRankC disToRanks(DN)];
     if option(1)~=0
-        dCor1=LocalGraphCorr(C,DN,1,disRank);
+        dCor1=LocalGraphCorr(CN,DN,1,disRank);
         p1=p1+(dCor1<cut1)/rep;
     end
     if option(2)~=0
-        dCor2=LocalGraphCorr(C,DN,2,disRank);
+        dCor2=LocalGraphCorr(CN,DN,2,disRank);
         p2=p2+(dCor2<cut2)/rep;
     end
     if option(3)~=0
-        dCor3=LocalGraphCorr(C,DN,3,disRank);
+        dCor3=LocalGraphCorr(CN,DN,3,disRank);
         p3=p3+(dCor3<cut3)/rep;
     end
     if option(4)~=0
-        dCor4=HHG(C,DN);
+        dCor4=HHG(CN,DN);
         p4=p4+(dCor4<cut4)/rep;
     end
 end

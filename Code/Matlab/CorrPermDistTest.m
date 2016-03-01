@@ -66,9 +66,14 @@ dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for all local tests of mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
 
-% % Kernal density estimation on the upper-diagonal non-zero entries of the distance matrices
-CU=triu(C);DU=triu(D);
-ind=((CU~=0) & (DU~=0));CU=CU(ind);DU=DU(ind);
+% % Kernal density estimation on the lower-diagonal entries of the distance matrices
+ind=zeros(n*(n-1)/2,1);
+for i=1:n;
+    for j=1:i-1;
+        ind((i-1)*(i-2)/2+j)=n*(j-1)+i;
+    end
+end
+CU=C(ind);DU=D(ind);
 mC=mean(CU);mD=mean(DU);
 varC=std(CU)^2;varD=std(DU)^2;
 [bandwidth]=kde2d([CU, DU],256);
@@ -82,21 +87,21 @@ sz2=n*(n-1)/2;
 
 for r=1:rep
     %     % Generate an independent pair of the upper diagonal distance entries
-        aa=rand(sz2,1);bb=randn(sz2,1);
-        CAU = mC+(CU(ceil(sz1*aa)) -mC + bandwidth(1)*bb)/sqrt(1+bandwidth(1)^2/varC);
-        DAU = mD+(DU(ceil(sz1*aa)) -mD + bandwidth(2)*bb)/sqrt(1+bandwidth(2)^2/varD);
-        % Re-form the symmetric distance matrices. The triangle inequality may
-        % not hold though.
-        CA=zeros(n,n);DA=zeros(n,n);
-        for i=2:n;
-            for j=1:i-1;
-                indd=(i-1)*(i-2)/2;
-                CA(i,j)=CAU(indd+j);
-                DA(i,j)=DAU(indd+j);
-                CA(j,i)=CA(i,j);
-                DA(j,i)=DA(i,j);
-            end
+    aa=rand(sz2,1);bb=randn(sz2,1);
+    CAU = mC+(CU(ceil(sz1*aa)) -mC + bandwidth(1)*bb)/sqrt(1+bandwidth(1)^2/varC);
+    DAU = mD+(DU(ceil(sz1*aa)) -mD + bandwidth(2)*bb)/sqrt(1+bandwidth(2)^2/varD);
+    % Re-form the symmetric distance matrices. The triangle inequality may
+    % not hold though.
+    CA=zeros(n,n);DA=zeros(n,n);
+    for i=2:n;
+        for j=1:i-1;
+            indd=(i-1)*(i-2)/2;
+            CA(i,j)=CAU(indd+j);
+            DA(i,j)=DAU(indd+j);
+            CA(j,i)=CA(i,j);
+            DA(j,i)=DA(i,j);
         end
+    end
     % Calculate the test statistics under the alternative
     disRank1=[disToRanks(CA) disToRanks(DA)];
     if option(1)~=0
@@ -146,7 +151,6 @@ for i=1:n
 end
 % Set the powers of all local tests at rank 0 to 0
 power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
-
 n1=maxNeighbors(power1,dCor1N,dCor1A);
 n2=maxNeighbors(power2,dCor2N,dCor2A);
 n3=maxNeighbors(power3,dCor3N,dCor3A);

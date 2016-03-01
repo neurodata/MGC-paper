@@ -34,8 +34,10 @@ if length(ind)>1 && testMean==true
     meanInd=meanInd(ind);
     pmax=max(meanInd);
     ind2=find(meanInd==pmax);
-    ind2=ind2(1);
-    ind=ind(ind2);
+    if (isempty(ind2)==false)
+        ind2=ind2(1);
+        ind=ind(ind2);
+    end
 end
 
 % n1 is the linear indexing of the matrix power1,

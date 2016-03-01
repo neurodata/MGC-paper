@@ -380,7 +380,7 @@ To apply our method, we need to transform different data sets into certain dista
 
 We consider two hypothesis tests: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. Based on $r=10$,$000$ random permutations, the resulting p-values are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC/HHG/Mantel yield significant p-values with dcorr/mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, with all global tests higher than significance. 
 
-The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(a)(b), where we observe that there exist many scales that are close to optimal; and the estimated optimal scales are $k^{*}=66,l^{*}=49$ and $k^{*}=64,l^{*}=49$ respectively, based on $2,000$ MC replicates. Note that the p-values of local test statistics at a given $k$ are the same throughout any $l \in [3,114]$, because we use minimum rank for ties and the largest rank is $2$ for the disorder distance matrix; so it suffices to use $k^{*}=64/66$ and let $l^{*}$ equal any number larger than $2$ for the optimal scale. And if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain.
+The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(a)(b), where we observe that there exist many scales that are close to optimal; and the estimated optimal scales are $k^{*}=65,l^{*}=49$ and $k^{*}=64,l^{*}=49$ respectively, based on $2,000$ MC replicates. Note that the p-values of local test statistics at a given $k$ are the same throughout any $l \in [3,114]$, because we use minimum rank for ties and the largest rank is $2$ for the disorder distance matrix; so it suffices to use $k^{*}=65/64$ and let $l^{*}$ equal any number larger than $2$ for the optimal scale. And if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain.
 
 \begin{table*}[!t]
 \footnotesize
@@ -390,13 +390,13 @@ The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(a)
 \hline
 Testing Method & MGC & mcorr & dcorr & Mantel & HHG \\
 \hline
-Left Brain vs Disorder  & $0.0224$ & $0.0795$ & $0.0726$ & $0.0359$ & $0.0352$ \\
+Left Brain vs Disorder  & $0.0222$ & $0.0839$ & $0.0765$ & $0.0415$ & $0.0367$ \\
 \hline
-Right Brain vs Disorder & $0.0147$ & $0.1124$ & $0.1024$  & $0.0752$ & $0.0872$\\
+Right Brain vs Disorder & $0.0160$ & $0.1130$ & $0.1037$  & $0.0823$ & $0.0824$\\
 \hline
-Migrain vs CCI & $0.0108$ & $0.0112$ & $0.0116$  & $0.0107$ & $0.0301$\\
+Migrain vs CCI & $0.0088$ & $0.0103$ & $0.0101$  & $0.0090$ & $0.0328$\\
 \hline
-M2g vs CCI & $0.1079$ & $0.0530$ & $0.0732$  & $0.3026$ & $0.6644$\\
+M2g vs CCI & $0.1486$ & $0.0538$ & $0.0760$  & $0.3017$ & $0.6518$\\
 \hline
 \end{tabular}
 \caption{The Empirical P-Values in the Permutation Test}
@@ -715,7 +715,7 @@ The three algorithms are implemented in Matlab and R, with the pseudo-code shown
 
 The first algorithm is the core to evaluate MGC in all other algorithms, which computes all local correlations based on given distance matrices $C$ and $D$. The function calculates Equation~\ref{localCoef} for all scales, which is clear in concept; but some matrix manipulations are required to efficiently implement it. Note that a priori assumption is a global function that returns $\{a_{ij}\},\{b_{ij}\}$ and the ranks, according to the choice of the global coefficient coefficient.
 
-The second algorithm computes the testing powers of all local statistics, by repeated simulating samples generated from the joint distribution $f_{xy}$ or the given observations $(X, Y)$. In case of known $f_{xy}$, it is easy to generate sample data under the null and the alternative; in case of given data of unknown $f_{xy}$, we treat the upper-diagonal distance entries as vectors, use kernal density estimation \cite{BotevEtAl2010} to repeatedly generate sample distance matrices under the alternative, then use random re-samples to generate distance matrices under the null. By estimating all local powers and maximizing the power, this algorithm can be used to either estimate the optimal scale of MGC or estimate the testing power of MGC.
+The second algorithm computes the testing powers of all local statistics, by repeated simulating samples generated from the joint distribution $f_{xy}$ or the given observations $(X, Y)$. In case of known $f_{xy}$, it is easy to generate sample data under the null and the alternative; in case of given data of unknown $f_{xy}$, we treat the upper-diagonal distance entries as vectors, use kernel density estimation \cite{BotevEtAl2010} to repeatedly generate sample distance matrices under the alternative, then use random re-samples to generate distance matrices under the null. By estimating all local powers and maximizing the power, this algorithm can be used to either estimate the optimal scale of MGC or estimate the testing power of MGC.
 
 The third algorithm computes the p-values of all local statistics by the permutation test. This algorithm is straightforward to implement, and is used to output the p-values of all local tests for given real data. The p-value at the optimal scale equals the p-value of MGC.
 
@@ -841,7 +841,7 @@ Once the optimal scale is estimated, the p-value of MGC can be calculated by run
 
 We can apply the same procedures to evaluate the p-values and powers for global correlations like dcorr/mcorr/Mantel/HHG, by excluding the first step for estimating the optimal scale. 
 
-Note that if there is only one pair of given observations, the optimal scale estimation and MGC p-value calculation (i.e., Algorithm~\ref{algPower} and ~\ref{algPerm}) may have to use the same observations, such that the resulting MGC p-value can be biased and smaller than necessary. This is the reason that instead of random re-samples on given observations, we use kernel density estimation in Algorithm~\ref{algPower}: we essentially pool all upper-diagonal non-zero distance entries into a vector, and estimate the joint distribution of two vectors by a normal kernel using the method in \cite{BotevEtAl2010}. This allows us to efficiently generate distance matrices that are independent of the given observations for optimal scale estimation, which largely reduces the MGC p-value bias calculated in Algorithm~\ref{algPerm}. 
+Note that if there is only one pair of given observations, the optimal scale estimation and MGC p-value calculation (i.e., Algorithm~\ref{algPower} and ~\ref{algPerm}) may have to use the same observations, such that the resulting MGC p-value can be biased and smaller than necessary. This is the reason that instead of random re-samples on given observations, we use kernel density estimation in Algorithm~\ref{algPower}: we essentially pool all upper-diagonal distance entries into a vector, and estimate the joint distribution of two vectors by a normal kernel using the method in \cite{BotevEtAl2010}. This allows us to efficiently generate distance matrices that are independent of the given observations for optimal scale estimation, which largely reduces the MGC p-value bias calculated in Algorithm~\ref{algPerm}. 
 
 Alternatively, there are often multiple dependent $(X,Y)$ that have similar dependency structures (such as the data sets used in our real data experiments), in which case we can more easily eliminate the bias: to derive the MGC p-value on one pair of data sets, we can estimate the optimal scale on another pair; or we can use the optimal scale that maximizes the sum of testing powers from Algorithm~\ref{algPower} on each pair of $(X,Y)$. Both can eliminate the MGC p-value bias and still attain the MGC power. For example, we can observe from the p-value heat-maps in the real data experiment that if we use the optimal scale estimated from left brain vs disease for the MGC p-value between right brain vs disease, the MGC p-value is still significant than all other benchmarks, and vice versa; and if we use a consistent optimal scale to use in both tests, the MGC p-values are also significant in both tests. 
 

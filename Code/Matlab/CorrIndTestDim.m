@@ -141,7 +141,7 @@ for i=1:lim
     % Based on the emprical test statistics under the null and the alternative,
     % calculate the emprical powers and the best scale at type 1 error level alpha
     [power1(:,:,i),neighbor(1,i)]=calculatePower(dCor1N,dCor1A,alpha,rep);
-    [power2(:,:,i),neighbor(2,i)]=calculatePower(dCor2N,dCor3A,alpha,rep);
+    [power2(:,:,i),neighbor(2,i)]=calculatePower(dCor2N,dCor2A,alpha,rep);
     [power3(:,:,i),neighbor(3,i)]=calculatePower(dCor3N,dCor3A,alpha,rep);
     power4(i)=calculatePower(dCor4N,dCor4A,alpha,rep);
 end

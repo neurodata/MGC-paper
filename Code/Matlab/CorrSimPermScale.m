@@ -1,6 +1,10 @@
 function [power]=CorrSimPermScale(n,dim,type,rep1,rep2,noise,alpha)
 % Author: Cencheng Shen
-% n=100;dim=1;rep1=100;rep2=100;noise=1;type=1:1;
+% n=30;dim=1;rep1=100;rep2=500;noise=1;type=1:10;
+% [p1]=CorrSimPermScale(n,dim,type,rep1,rep2,noise);
+% n=30;dim=1;rep1=100;rep2=500;noise=0;type=11:20;
+% [p2]=CorrSimPermScale(n,dim,type,rep1,rep2,noise);
+% n=30;dim=10;rep1=100;rep2=500;noise=0;type=1:19;
 % [p1]=CorrSimPermScale(n,dim,type,rep1,rep2,noise);
 % Used to compute the permutation test power for the 20 type of simulations
 if nargin<1

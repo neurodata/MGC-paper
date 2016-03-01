@@ -21,8 +21,8 @@ pv=1-pv/size(per,1);
 %%%ind trial
 clear
 load('BrainCP')
-n=10;
-alpha=0.05; rep1=100;rep2=100;
+n=20;
+alpha=0.05; rep1=300;rep2=300;
 dim=1;type=20;
 power=zeros(7,1);
 p=zeros(7,1);

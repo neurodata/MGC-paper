@@ -41,7 +41,7 @@ if rep2~=0
         p2=p2All(neighborhoods(2));
         p3=p3All(neighborhoods(3));
     else
-        p1=0;p2=0;p3=0;
+        p1=min(min(p1All));p2=min(min(p2All));p3=min(min(p3All));
     end
     p4=p1All(end);p5=p2All(end);p6=p3All(end);
     % Save the results
@@ -66,10 +66,12 @@ dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 % Powers for all local tests of mcorr/dcorr/Mantel
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
 
-% Kernal density estimation on the upper-diagonal non-zero entries of the distance matrices
+% % Kernal density estimation on the upper-diagonal non-zero entries of the distance matrices
 CU=triu(C);DU=triu(D);
 ind=((CU~=0) & (DU~=0));CU=CU(ind);DU=DU(ind);
-[bandwidth]=kde2d([CU, DU],256,[0,0],[max(CU),max(DU)]);
+mC=mean(CU);mD=mean(DU);
+varC=std(CU)^2;varD=std(DU)^2;
+[bandwidth]=kde2d([CU, DU],256);
 % If the kernal density estimation fails, use random resampling instead
 if isnan(bandwidth)
     %disp('Kernal density estimation failed; use random sampling instead');
@@ -79,25 +81,22 @@ sz1=size(CU,1);
 sz2=n*(n-1)/2;
 
 for r=1:rep
-    % Generate an independent pair of the upper diagonal distance entries
-    aa=rand(sz2,1);bb=randn(sz2,1);
-    CAU = CU(ceil(sz1*aa)) + bandwidth(1)*bb;
-    DAU = DU(ceil(sz1*aa)) + bandwidth(2)*bb;
-    % Re-form the symmetric distance matrices. The triangle inequality may
-    % not hold though.
-    CA=zeros(n,n);DA=zeros(n,n);
-    for i=2:n;
-        for j=1:i-1;
-            indd=(i-1)*(i-2)/2;
-            CA(i,j)=CAU(indd+j);
-            DA(i,j)=DAU(indd+j);
-            CA(j,i)=CA(i,j);
-            DA(j,i)=DA(i,j);
+    %     % Generate an independent pair of the upper diagonal distance entries
+        aa=rand(sz2,1);bb=randn(sz2,1);
+        CAU = mC+(CU(ceil(sz1*aa)) -mC + bandwidth(1)*bb)/sqrt(1+bandwidth(1)^2/varC);
+        DAU = mD+(DU(ceil(sz1*aa)) -mD + bandwidth(2)*bb)/sqrt(1+bandwidth(2)^2/varD);
+        % Re-form the symmetric distance matrices. The triangle inequality may
+        % not hold though.
+        CA=zeros(n,n);DA=zeros(n,n);
+        for i=2:n;
+            for j=1:i-1;
+                indd=(i-1)*(i-2)/2;
+                CA(i,j)=CAU(indd+j);
+                DA(i,j)=DAU(indd+j);
+                CA(j,i)=CA(i,j);
+                DA(j,i)=DA(i,j);
+            end
         end
-    end
-    %     per=randsample(n,n,true);
-    %     CA=C(per,per);
-    %     DA=D(per,per);
     % Calculate the test statistics under the alternative
     disRank1=[disToRanks(CA) disToRanks(DA)];
     if option(1)~=0
@@ -111,24 +110,10 @@ for r=1:rep
     end
     
     % Generate another independent second distance matrix
-    aa=rand(sz2,1);bb=randn(sz2,1);
-    CNU = CU(ceil(sz1*aa)) + bandwidth(1)*bb;
-    aa=rand(sz2,1);bb=randn(sz2,1);
-    DNU = DU(ceil(sz1*aa)) + bandwidth(2)*bb;
-    CN=zeros(n,n);DN=zeros(n,n);
-    for i=2:n;
-        for j=1:i-1;
-            indd=(i-1)*(i-2)/2;
-            DN(i,j)=CNU(indd+j);
-            DN(i,j)=DNU(indd+j);
-            CN(j,i)=CN(i,j);
-            DN(j,i)=DN(i,j);
-        end
-    end
-    %per=randsample(n,n,true);    
-%     per=randperm(n);
-%     DN=DA(per,per);
-%     CN=C;
+    per1=randsample(n,n,true);
+    per2=randsample(n,n,true);
+    DN=D(per1,per1);
+    CN=C(per2,per2);
     % Calculate the test statistics under the null
     disRank1=[disToRanks(CN) disToRanks(DN)];
     if option(1)~=0
@@ -165,8 +150,7 @@ power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1
 n1=maxNeighbors(power1,dCor1N,dCor1A);
 n2=maxNeighbors(power2,dCor2N,dCor2A);
 n3=maxNeighbors(power3,dCor3N,dCor3A);
-
-%save('tmp.mat','dCor1N','dCor1A','dCor2N','dCor2A','dCor3N','dCor3A','n1','n2','n3','power1','power2','power3');
+%save('tmp.mat','dCor1N','dCor2N','dCor3N','dCor1A','dCor2A','dCor3A','power1','power2','power3','n1','n2','n3');
 
 function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,option)
 % This is an auxiliary function of the main function to calculate the p-values of
@@ -200,11 +184,12 @@ end
 
 % Now Permute the second dataset for rep times, and calculate the p-values
 for r=1:rep
-    % Use random permutations; if allP is not 0, use all possible permutations
+    % Use random permutations;
     per=randperm(n);
+%     per=randsample(n,n,true);
     DN=D(per,per);
     CN=C;
-    disRank=[disRankC disToRanks(DN)];
+    disRank=[disToRanks(CN) disToRanks(DN)];
     if option(1)~=0
         dCor1=LocalGraphCorr(CN,DN,1,disRank);
         p1=p1+(dCor1<cut1)/rep;

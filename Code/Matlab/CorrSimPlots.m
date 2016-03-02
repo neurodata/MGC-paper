@@ -145,7 +145,7 @@ end
 profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
-h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(6))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('mcorr, AUC=', num2str(sumP(4))),strcat('dcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);
@@ -294,7 +294,7 @@ end
 profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
-h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(6))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(7))),strcat('mcorr, AUC=', num2str(sumP(2))),strcat('dcorr, AUC=', num2str(sumP(3))),strcat('Mantel, AUC=', num2str(sumP(4))),strcat('HHG, AUC=', num2str(sumP(5))),'Location','SouthEast');
+h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('mcorr, AUC=', num2str(sumP(4))),strcat('dcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);

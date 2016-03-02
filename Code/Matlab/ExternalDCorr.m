@@ -179,3 +179,14 @@ for i=1:rep2;
         end
     end
 end
+
+
+%%%knn trial
+clear
+load('BrainHippoShape')
+n=114;lim=1; rep1=2000;rep2=10000;alpha=0.05;
+error=CorrKNN(LMLS,Label);
+
+
+
+load('Wiki_Data')

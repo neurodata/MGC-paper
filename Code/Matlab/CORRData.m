@@ -7,7 +7,7 @@ function []=CORRData(aList,rep1,rep2,pre1,alpha)
 % aList= {'SWU1','SWU2','SWU3','SWU4'};
 % aList= {'UM','UPSM1'};
 % aList= {'Utah1','UWM','XHCUMS'};
-% CORRData(aList,100,100)
+% CORRData(aList)
 
 if nargin<1
     aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
@@ -30,7 +30,7 @@ for l=1:length(aList);
     fileDir=strcat(pre1,str1,'/');
     allFiles = dir( fileDir );
     allNames = { allFiles.name };
-    indStr = strfind(allNames,'session_1_');
+    indStr = strfind(allNames,'session_1');
     indStr = find(~cellfun(@isempty,indStr));
     allNames=allNames(indStr);
     
@@ -48,7 +48,7 @@ for l=1:length(aList);
     for j=1:n
         fileName=allNames(j);
         load(strcat(fileDir,fileName{1,1}));
-        X(j,:,:)=roi_data';
+        X(j,:,:)=roi_data(:,1:timestep)';
     end
     
     %%% Estimate optimal scales separately

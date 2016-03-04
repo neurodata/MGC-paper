@@ -93,18 +93,19 @@ DataN=zeros(n,2*n,rep);DataA=zeros(n,2*n,rep);
 power1=zeros(n,n,lim);power2=zeros(n,n,lim);power3=zeros(n,n,lim);% Powers for all local tests of mcorr/dcorr/Mantel
 power4=zeros(1,lim);% Powers for HHG
 neighbor=zeros(3,lim); % Optimal neighborhoods for local mcorr/dcorr/Mantel
+dm='euclidean';
 
 for r=1:rep
     % Generate independent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,0, noise);
-    C=squareform(pdist(x));
-    D=squareform(pdist(y));
+    C=squareform(pdist(x,dm));
+    D=squareform(pdist(y,dm));
     DataN(:,:,r)=[C D];
     
     % Generate dependent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,1, noise);
-    C=squareform(pdist(x));
-    D=squareform(pdist(y));
+    C=squareform(pdist(x,dm));
+    D=squareform(pdist(y,dm));
     DataA(:,:,r)=[C D];
 end
 

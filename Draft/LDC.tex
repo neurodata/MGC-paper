@@ -77,7 +77,7 @@
 \affil[1]{Department of Statistics, Temple University}
 \affil[2]{Department of Applied Mathematics and Statistics, Johns Hopkins University}
 \affil[2]{Department of Mathematics, Duke University}
-\affil[4]{Department of Biomedical Engineering,  Institute of Computational Medicine, Johns Hopkins University}
+\affil[4]{Department of Biomedical Engineering and Institute for Computational Medicine, Johns Hopkins University}
 \maketitle
 \pagestyle{empty}
 
@@ -435,12 +435,49 @@ Using the same testing procedure as the previous experiment, the resulting p-val
 
 Therefore in this exploration task, Migrain is a better representation than M2g: although they are strongly dependent with each other, Migrain is more related to CCI than M2g, because M2g is a transformation of Migrain without consideration of CCI. Our MGC statistic identifies the better representation of the two, and reveals the local dependency loss from the p-value heat maps. Therefore MGC can be used to find the most relevant representation/variable and provide valuable insights into the difference.
 
-In the last experiment, we uses MGC to test independence between brain voxel activities and non-existent stimulus, similar to the experiment in \cite{EklundKnutsson2012}. We take the $20$ data sets from CORR (the data details are in the appendix), and test dependency using the first fMRI scan of each data set. Take BNU1 for example: there are two fMRI scans for a total of $50$ persons, including $200$ regions of interest for $200$ time steps; then we generate an independent stimulus by a standard normal distribution with respect to the time scales, i.e., the stimulus is the same for all brain regions and all persons at a given time steps, and test dependency between the first fMRI scan and the random stimulus.
+In the last experiment, we uses MGC to test independence between brain voxel activities and non-existent stimulus, similar to the experiment in \cite{EklundKnutsson2012}. We take the $20$ data sets from an open data source (\cs{add CORR and optimal pipeline description}); and test dependency using the first fMRI scan of each data set. Take BNU1 for example: there are two fMRI scans for a total of $50$ persons, including $200$ regions of interest for $200$ time steps; then we generate an independent stimulus by a standard normal distribution with respect to the time scales, i.e., the stimulus is the same for all brain regions and all persons at a given time steps, and test dependency between the first fMRI scan and the random stimulus.
 
-For each region, we can form a $200 \times 200$ distance matrices by the Euclidean distance with respect to the time steps; and we can form another distance matrix for the stimulus, and test independence between each region and the stimulus for significance. By using $1000$ replicates to estimate the optimal scale and $1000$ permutations to calculate the p-value, each voxel is declared significant when the p-value is less than $\alpha=0.05$. 
+For each region, we can form a $200 \times 200$ distance matrices by the Euclidean distance with respect to the time steps; and we can form another distance matrix for the stimulus, and test independence between each region and the stimulus for significance. The p-value of each method is calculated by $1000$ permutations, and each brain region is declared significant when the p-value is less than $\alpha=0.05$; MGC uses $1000$ replicates to estimate the optimal scale. 
 
-Since the stimulus is independent, the testing power, i.e., the percentage of brain regions declared significant, should be close to $\alpha$ for each data set. This is indeed the case for MGC and all other methods, as shown in the percentage histogram in Figure~\ref{figReal2}.
-\cs{I will add the histogram for mcorr and data details in appendix}
+Since the stimulus is independent, the testing power, i.e., the percentage of brain regions declared significant, should be close to $\alpha$ for each data set. As shown in Table~\ref{table2}, although MGC selects the optimal scale that maximizes the testing power, it does not detect false signals.
+
+\begin{table*}[!t]
+\footnotesize
+\renewcommand{\arraystretch}{0.5}
+\centering
+{\begin{tabular}{|c||c|c|c|c|c|c|c|}
+\hline
+Data Sets & MGC & mcorr & dcorr & Mantel & HHG \\
+\hline
+BNU1  & $0.05$ & $0.02$ & $0.02$ & $0.04$ & $0.075$ \\
+\hline
+BNU2 & $0.09$ & $0.08$ & $0.09$  & $0.03$ & $0.035$\\
+\hline
+BNU3 & $0.02$ & $0$ & $0.005$  & $0.07$ & $0.03$\\
+\hline
+IACAS & $0.04$ & $0.04$ & $0.035$  & $0.095$ & $0.055$\\
+\hline
+JHNU  & $0.045$ & $0.04$ & $0.04$ & $0.025$ & $0.055$ \\
+\hline
+UM & $0.01$ & $0.005$ & $0$  & $0.005$ & $0.025$\\
+\hline
+UPSM & $0.03$ & $0.01$ & $0.005$  & $0.075$ & $0.03$\\
+\hline
+Utah1 & $0.02$ & $0.025$ & $0.02$  & $0.04$ & $0.025$\\
+\hline
+UWM & $0.155$ & $0.145$ & $0.14$  & $0.085$ & $0.065$\\
+\hline
+XHCUMS & $0.045$ & $0.035$ & $0.04$  & $0.015$ & $0.065$\\
+\hline
+Average & $0.0505 \pm 0.0429$ & $0.04 \pm 0.0435$ & $0.0395 \pm 0.0439$  & $0.048 \pm 0.0311$ & $0.046 \pm 0.0190$\\
+\hline
+\end{tabular}
+\caption{Testing Power of Brain Scan versus Non-Existent Stimulus. 
+Each row contains the percentage of brain region that are tested significant for a particular data set.
+The last row shows the average percentages and the standard deviation.}
+\label{table2}
+}
+\end{table*}
 
 \section{Discussion}
 \label{conclu}

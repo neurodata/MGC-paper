@@ -161,6 +161,8 @@ end
 % Set the powers of all local tests at rank 0 to 0
 % power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
+%save('tmp.mat','dCor1N','dCor1A','dCor2N','dCor2A','dCor3N','dCor3A','dCor4N','dCor4A','power1','power2','power3','power4');
+
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of
 % the test statistic under the null and the alternative, and calculate the

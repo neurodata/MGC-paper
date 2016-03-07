@@ -87,7 +87,7 @@ Understanding and discovering dependence between multiple properties or measurem
 \end{abstract}
 
 \noindent%
-{\it Keywords: distance correlation, k-nearest-neighbor, testing independence, permutation test}  
+{\it Keywords: testing independence, distance correlation, k-nearest-neighbor, permutation test}  
 \vfill
 
 \clearpage
@@ -114,7 +114,7 @@ Most relevant to our work, a number of approaches to two-sample and dependence t
 
 In this paper we propose Multiscale Graph Correlation (MGC) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently locate the optimal scale within a family of local statistics, naturally inherits the advantages of the distance correlation, such as being consistent, and also inherits properties of graph dependence structures, such as better performance in high-dimension and strongly nonlinear dependencies. %In practice, MGC can be used for testing dependence by the p-value from the permutation test; and the optimal scale can be estimated by repeated samples from given joint distribution or given data plus noise. 
 
-Those advantages make our new test statistic the best method thus far for detecting dependency on complex simulated dependencies and real data. Indeed, in our comprehensive simulation setting, MGC is able to achieve a superior finite-sample testing power for data sets of nonlinearity, noise, and/or small sample size, comparing to existing popular methods like dcorr/mcorr/Mantel/HHG; and in the real data experiment, MGC returns significant p-values when testing between dependent data sets,  and does not detect false signals when the dependencies are not there in a set of brain imaging experiments. Thus, we expect MGC to find value in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of MGC, and incorporate into FlashR.
+Those advantages make our new test statistic the best method thus far for detecting dependency on complex simulated dependencies and real data. Indeed, in our comprehensive simulation setting, MGC is able to achieve a superior finite-sample testing power for data sets of nonlinearity, noise, and/or small sample size, comparing to existing popular methods like dcorr / mcorr / Mantel / HHG; and in the real data experiment, MGC returns significant p-values when testing between dependent data sets,  and does not detect false signals when the dependencies are not there in a set of brain imaging experiments. Thus, we expect MGC to find value in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of MGC, and incorporate into FlashR.
 
 \section{Results}
 \label{main}

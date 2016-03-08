@@ -69,11 +69,11 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         rho=1/(d*2);
         cov1=[eye(d) rho*ones(d)];
         cov2=[rho*ones(d) eye(d)];
-        cov=[cov1' cov2'];
-        x=mvnrnd(zeros(n,2*d),cov,n);
+        covT=[cov1' cov2'];
+        x=mvnrnd(zeros(n,2*d),covT,n);
         y=x(:,d+1:2*d)+0.5*noise*repmat(eps,1,d);
         if dependent==0
-            x=mvnrnd(zeros(n,2*d),cov,n);
+            x=mvnrnd(zeros(n,2*d),covT,n);
         end
         x=x(:,1:d);
     case 6 %Quadratic
@@ -186,3 +186,7 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
         y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
 end
+
+%affine invariant
+%x=x*cov(x)^(-0.5);
+%y=y*cov(y)^(-0.5);

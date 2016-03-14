@@ -58,7 +58,7 @@ end
 % Save the results
 pre1='../../Data/'; 
 filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
-save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','power1All','power2All','power3All');
+%save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','power1All','power2All','power3All');
 
 % numRange=1:lim;
 % plot(numRange,power1,'r.-',numRange,power2,'b.-',numRange,power3,'c.-',numRange,power4,'r.:',numRange,power5,'b.:',numRange,power6,'c.:',numRange,power7,'g.:','LineWidth',2);
@@ -93,19 +93,18 @@ DataN=zeros(n,2*n,rep);DataA=zeros(n,2*n,rep);
 power1=zeros(n,n,lim);power2=zeros(n,n,lim);power3=zeros(n,n,lim);% Powers for all local tests of mcorr/dcorr/Mantel
 power4=zeros(1,lim);% Powers for HHG
 neighbor=zeros(3,lim); % Optimal neighborhoods for local mcorr/dcorr/Mantel
-dm='euclidean';
 
 for r=1:rep
     % Generate independent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,0, noise);
-    C=squareform(pdist(x,dm));
-    D=squareform(pdist(y,dm));
+    C=squareform(pdist(x));
+    D=squareform(pdist(y));
     DataN(:,:,r)=[C D];
     
     % Generate dependent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,1, noise);
-    C=squareform(pdist(x,dm));
-    D=squareform(pdist(y,dm));
+    C=squareform(pdist(x));
+    D=squareform(pdist(y));
     DataA(:,:,r)=[C D];
 end
 
@@ -161,7 +160,7 @@ end
 % Set the powers of all local tests at rank 0 to 0
 % power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1)=0;
 
-%save('tmp.mat','dCor1N','dCor1A','dCor2N','dCor2A','dCor3N','dCor3A','dCor4N','dCor4A','power1','power2','power3','power4');
+%save('tmpInd.mat','dCor1N','dCor1A','dCor2N','dCor2A','dCor3N','dCor3A','dCor4N','dCor4A','power1','power2','power3','power4');
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of

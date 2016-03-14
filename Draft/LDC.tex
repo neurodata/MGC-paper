@@ -277,7 +277,7 @@ For dependencies that are close to linear (type 1-5), the best neighborhood choi
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig6}
 \caption{Testing Power Heat map of Local Statistics with respect to Neighborhood Choices for High Dimension.
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from top to bottom).  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. \jv{let's makek the bottom left corner (1,1), rather than the top left corner, for these heatmaps?}}
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top).  Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. \jv{let's makek the bottom left corner (1,1), rather than the top left corner, for these heatmaps?} \cs{done;a piece of cake :-)}}
 \label{figSim2}
 \end{figure}
 
@@ -306,10 +306,8 @@ Note that Theorem~\ref{thm2} and Theorem~\ref{thm3} hold for MGC implemented by 
 
 The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local distances and local statistics outperform global ones even for the most modest nonlinear functions, such as a quadratic.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{thm3} suggests that MGC is likely to outperform the corresponding global statistic on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations.
 
-\cs{Now I think the taylor expansion paragraph above is not right: any function can be approximated by polynomial expansion, does not imply the optimal scale is smaller than $n$.}
-\jv{its not just that, its that even if you \emph{only} have to add a 2nd order term, already local beats global. }
-\cs{yes this one I agree; but not the Taylor expansion :-) also, if we add a 3rd order term, or change the 2nd order term coefficient so it is close to linear, local and global can still be similar. }
 \jv{ok, propose a modified paragraph that is correct?}
+\cs{now I begin to think the above paragraph is actually fine, depending on how I look at it...so I keep it for now}
 
 \subsection{Robustness against Outliers}
 \label{main4}
@@ -317,12 +315,13 @@ The global correlation coefficient may suffer from outliers in the data, but MGC
 
 Let us consider a mixture model: let 
 \begin{align*}
-\mb{x} &= \rho \mb{u} + (1-\rho) \mb{\epsilon}_{1}, \\
-\mb{y} &= \rho \mb{u} + (1-\rho) \mb{\epsilon}_{2}, 
+\mb{x} &= p \mb{u} + (1-p) \mb{\epsilon}_{1}, \\
+\mb{y} &= p \mb{u} + (1-p) \mb{\epsilon}_{2}, 
 \end{align*}
-where $\mb{u}$ is uniformly distributed in $(-1,1)$, $\mb{\epsilon}_{1}$ and $\mb{\epsilon}_{2}$ are independently normally distributed with mean $-5$ and $5$ respectively and variance $1$, $\rho$ is Bernoulli distributed with probability $p$. Given $\rho$, the simulating sample pairs $(X,Y)$ at $n=100$ are repeatedly generated to estimate the testing powers at $\alpha=0.05$. \jv{can you explicitly write the mixture model, ie, F = F1 + F2, and specify both F1 and F2? this will make it more clearly a mixture model, and in particular, a mixture of a linear function and an independent function.}
+where $\mb{u}$ is uniformly distributed in $(-1,1)$, $\mb{\epsilon}_{1}$ and $\mb{\epsilon}_{2}$ are independently normally distributed with mean $-5$ and $5$ respectively and variance $1$, and $p$ is the prior probability. Given $p$, the simulating sample pairs $(X,Y)$ at $n=100$ are repeatedly generated to estimate the testing powers at $\alpha=0.05$. \jv{can you explicitly write the mixture model, i.e., F = F1 + F2, and specify both F1 and F2? this will make it more clearly a mixture model, and in particular, a mixture of a linear function and an independent function.}
+\cs{isn't the above formulation already in the form of F=p F1+(1-p)F2, where $p$ is the mixture weight, and $\mb{u}$ is the linear function common in both models?}
 
-Based on the mixture model, there are about $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; but the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ is plotted in Figure~\ref{figSim3}(a), and the testing powers of all local tests by mcorr are shown in Figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively, using the same procedure as the simulation steps in section~\ref{numer1}.
+For sample data generated under the mixture model, there are $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ is plotted in Figure~\ref{figSim3}(a), and the testing powers of all local tests by mcorr are shown in Figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively, using the same procedure as the simulation steps in section~\ref{numer1}.
 
 The local mcorr at the optimal scale is clearly much better than global mcorr. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the probability $p$, and at least one of $k^{*}$ and $l^{*}$ should be bounded above by $\min(pn,(1-p)n)$ to achieve optimal testing powers. Therefore, MGC is able to automatically separate the independent outliers from the dependent observations in testing, which makes it robust against outliers.
 
@@ -365,8 +364,12 @@ To apply the methods, the respective data set needs to be transformed into a dis
 
 Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. Based on $r=10$,$000$ random permutations, the resulting p-values are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC / HHG / Mantel yield significant p-values with dcorr / mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, with all global tests higher than significance. 
 
-The p-value heat maps of all local tests are provided in Figure~\ref{figReal}(a)(b), where we observe that there exist many scales that are close to optimal; and the estimated optimal scales are $k^{*}=65,l^{*}=49$ and $k^{*}=64,l^{*}=49$ respectively, based on $2,000$ MC replicates. \jv{make a comment about how the optimal scales are the same, and what this means? i don't know what it means, something about the same "model" is appropriate for both hemispheres, which is what we would hope} Note that the p-values of local test statistics at a given $k$ are the same throughout any $l \in [3,114]$. This is because the minimum rank is used for ties and the largest rank is $2$ for the disorder distance matrix. So it suffices to use $k^{*}=65/64$ and let $l^{*}$ equal any number larger than $2$ for the optimal scale. And if we test dependency between the left and right brain, all p-values become $0$, indicating a strong linear dependency between the left and right brain.
+The p-value curves of the local tests are provided in Figure~\ref{figReal}(a) with respect to the choice of $k$ at $l=4$. We only show the curves at $l=4$ because the p-values of local test statistics at a given $k$ are the same throughout any $l \in [4,114]$ (the largest rank is $3$ for the disorder distance matrix), and the scales at $l<4$ are neither optimal nor yield significant p-values. The estimated optimal scales are $k^{*}=65$ and $k^{*}=64$ (and $l^{*}$ can be any number larger than $3$) respectively for left brain and right brain vs disease, based on $2,000$ MC replicates. As the optimal scales are very similar, it indicates the left brain and the right brain may have similar dependence structures when testing against the disease.
+
+\jv{make a comment about how the optimal scales are the same, and what this means? i don't know what it means, something about the same "model" is appropriate for both hemispheres, which is what we would hope}
+\cs{ok I added it above.}
 \jv{i don't think it makes sense to show a matrix for neighborhood choice of Y.  there are only 2 different choices, because Y is binary.  just show the 2 curves?}
+\cs{Y is not binary, but the largest rank is $3$. So I replace the heatmaps by p-value curves wrt k at $l=4$}
 
 
 \begin{table*}[!t]
@@ -411,7 +414,11 @@ Right Brain vs Disorder & $0.0160$ & $0.1130$ & $0.1037$  & $0.0823$ & $0.0824$\
 \subfloat[]{
 \includegraphics[width=0.48\textwidth]{../Figures/FigReal4}
 }
-\caption{P-Value Heat map of Local Tests with respect to Different Neighborhood Choices. In the real data, for the Connectome vs. personality, global structure is inadequate to reveal any dependence between the two modalities.  For the brain shape vs. disorder status,  global distances are close to adequate, and most neighborhoods yield significant p-values.}
+\caption{
+(a) Local Tests P-value Curves with respect to $k$ at $l=4$ for brain vs disease. 
+(b) MGC p-value scatter plots for brain vs noise.
+(c) Local Tests P-value Heat map with respect to $k$ and $l$ for brain Migrain vs disease. 
+(d) Local Tests P-value Heat map with respect to $k$ and $l$ for brain M2g vs disease. }
 \label{figReal}
 \end{figure}
 
@@ -419,7 +426,15 @@ Right Brain vs Disorder & $0.0160$ & $0.1130$ & $0.1037$  & $0.0823$ & $0.0824$\
 
 Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried both to determine which worked better for this particular task.
 
-Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}, with the local p-value heat maps provided in Figure~\ref{figReal}(c)(d). The dependency between \Migraine~and CCI are very clear, with all methods returning significant p-values. But there is a loss of dependency between \mtg~and CCI, and no method returns significant p-values; and our MGC does not inflate the p-value either. The optimal scale for \Migraine~vs CCI is $k^{*}=56,l^{*}=63$; for \mtg~vs CCI it is $k^{*}=67,l^{*}=63$. \jv{is it the same l because y is the same for the two? did it have to be the same l?} Note that there exists many local scale indicating significant dependency in Figure~\ref{figReal}(c); but only a few such scale in Figure~\ref{figReal}(d), none of which is the optimal scale \jv{i don't understand this comment.  optimal scale is the one with the smallest p-value? or estimated higher power? what is the smaller p-value?}. If we test dependency between \Migraine~vs \mtg, all p-values become $0$, indicating a strong linear dependency \jv{why does this indicate strong \emph{linear} dependency?}. 
+Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}, with the local p-value heat maps provided in Figure~\ref{figReal}(c)(d). The dependency between \Migraine~and CCI are very clear, with all methods returning significant p-values. But there is a loss of dependency between \mtg~and CCI, and no method returns significant p-values; and our MGC does not inflate the p-value either. The optimal scale for \Migraine~vs CCI is $k^{*}=56,l^{*}=63$; for \mtg~vs CCI it is $k^{*}=67,l^{*}=63$. 
+\jv{is it the same l because y is the same for the two? did it have to be the same l?}
+\cs{not necessarily. If y is the same, but x differs a lot, then l won't be the same. But Migrain and M2g is similar to each other, so the scales are similar; the same phenomenon holds for brain vs disease.} 
+Note that there exists many local scale indicating significant dependency in Figure~\ref{figReal}(c); but only a few such scale in Figure~\ref{figReal}(d), none of which is the optimal scale for testing power.
+\jv{i don't understand this comment.  optimal scale is the one with the smallest p-value? or estimated higher power? what is the smaller p-value?}
+\cs{optimal scale is the one with the highest power. The optimal scale that has the highest power means it is the most reliable scale for testing: more likely to reject ind hypothesis if and only if dependent. For example, a scale that has a smaller p-value may also has a low power, which means the p-value is not so reliable.}
+If we test dependency between \Migraine~vs \mtg, all p-values become $0$, indicating a strong dependency. 
+\jv{why does this indicate strong \emph{linear} dependency?}
+\cs{\emph{linear} is deleted; since it can cause confusion...}
 
 Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly dependent with each other, \Migraine~is more related to CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our MGC statistic identifies the better representation of the two, and reveals the local dependency loss from the p-value heat maps. Therefore MGC can be used to find the most relevant representation / variable and provide valuable insights into the difference.
 
@@ -430,74 +445,9 @@ two resting state data for the same person. We used CPAC to estimate regional ti
 
 For each brain region, denote $x_{\cdot t}$ as the observation vector at timestep $t$ for all persons, then the distance matrix with respect to time is calculated by $dist(s,t)=\|x_{\cdot s}-x_{\cdot t}\|$. We generate an independent stimulus by sampling from a standard normal at each time step, whose Euclidean distance matrix can be easily calculated. Using the two distance matrices, the dependency between each brain region and the stimulus can be tested by our methods. The p-value of each method is calculated using $1000$ permutations (MGC uses $1000$ replicates to estimate the optimal scale), and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
-For each data set, the above testing is carried out for each brain region with the percentage of significant brain regions shown in Table~\ref{table2} and Figure X \jv{let's move the table to the appendix, and add just a jittered scatter plot of MGC false positive rate, to include in the other real data figure?}. Because the stimulus is in fact independent from the brain activities, the percentage of significant brain regions should be close to $\alpha=0.05$ for each data set. Clearly MGC does not detect false signals from this experiment. This is in contrast to standard methods previous proposed in the literature \cite{EklundKnutsson2012}.
-
-\begin{table*}[!t]
-\footnotesize
-\renewcommand{\arraystretch}{0.5}
-\centering
-{\begin{tabular}{|c||c|c|c|c|c|c|c|}
-\hline
-Data Set & MGC & mcorr & dcorr & Mantel & HHG \\
-\hline
-BNU1  & $0.05$ & $0.02$ & $0.02$ & $0.04$ & $0.075$ \\
-\hline
-BNU2 & $0.09$ & $0.08$ & $0.09$  & $0.03$ & $0.035$\\
-\hline
-BNU3 & $0.02$ & $0$ & $0.005$  & $0.07$ & $0.03$\\
-\hline
-DC1 & $0.03$ & $0.035$ & $0.03$  & $0.035$ & $0.04$\\
-\hline
-HNU1 & $0.015$ & $0.01$ & $0.015$  & $0.24$ & $0.11$\\
-\hline
-IACAS & $0.04$ & $0.04$ & $0.035$  & $0.095$ & $0.055$\\
-\hline
-IBATRT & $0.06$ & $0.12$ & $0.13$  & $0.085$ & $0.04$\\
-\hline
-IPCAS1 & $0.11$ & $0.065$ & $0.065$  & $0.04$ & $0.055$\\
-\hline
-IPCAS2 & $0.045$ & $0.06$ & $0.055$  & $0.035$ & $0.045$\\
-\hline
-IPCAS5 & $0.02$ & $0.03$ & $0.025$  & $0.025$ & $0.09$\\
-\hline
-JHNU  & $0.045$ & $0.04$ & $0.04$ & $0.025$ & $0.055$ \\
-\hline
-KKI21  & $0.03$ & $0.055$ & $0.055$ & $0.035$ & $0.155$ \\
-\hline
-LMU3  & $0.035$ & $0.025$ & $0.025$ & $0.155$ & $0.06$ \\
-\hline
-MPG1  & $0.06$ & $0.06$ & $0.06$ & $0.015$ & $0.06$ \\
-\hline
-MRN  & $0.075$ & $0.09$ & $0.095$ & $0.06$ & $0.01$ \\
-\hline
-NYU1  & $0.065$ & $0.04$ & $0.04$ & $0.035$ & $0.04$ \\
-\hline
-NYU2  & $0.015$ & $0.035$ & $0.025$ & $0$ & $0.075$ \\
-\hline
-SWU3  & $0.03$ & $0.02$ & $0.02$ & $0.03$ & $0.03$ \\
-\hline
-SWU4  & $0.005$ & $0.02$ & $0.02$ & $0.155$ & $0.055$ \\
-\hline
-UM & $0.01$ & $0.005$ & $0$  & $0.005$ & $0.025$\\
-\hline
-UPSM & $0.03$ & $0.01$ & $0.005$  & $0.075$ & $0.03$\\
-\hline
-Utah1 & $0.02$ & $0.025$ & $0.02$  & $0.04$ & $0.025$\\
-\hline
-UWM & $0.155$ & $0.145$ & $0.14$  & $0.085$ & $0.065$\\
-\hline
-XHCUMS & $0.045$ & $0.035$ & $0.04$  & $0.015$ & $0.065$\\
-\hline
-\hline
-Average & $0.0458 \pm 0.0347$ & $0.0444 \pm 0.0356$ & $0.0440 \pm 0.0372$  & $0.0594 \pm 0.0559$ & $0.0552 \pm 0.0310$\\
-\hline
-\end{tabular}
-\caption{Testing Power of fMRI Brain Activity versus Independent Stimulus. 
-Each row displays the percentage of brain region that are tested significant for a particular data set.
-The last row shows the mean and the standard deviation. \jv{this caption is wrong, right? this isn't power, it is false positive rate?}}
-\label{table2}
-}
-\end{table*}
+For each data set, the above testing is carried out for each brain region with the false positive rate of MGC shown in Figure~\ref{figReal}(b) (the rates of other test statistics are included in Appendix Tabl~\ref{table2}). Because the stimulus is in fact independent from the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. Clearly MGC does not detect false signals from this experiment. This is in contrast to standard methods previous proposed in the literature \cite{EklundKnutsson2012}.
+\jv{let's move the table to the appendix, and add just a jittered scatter plot of MGC false positive rate, to include in the other real data figure?}
+\cs{done; let me know if you want a better looking scatter plot}
 
 \section{Discussion}
 \label{conclu}
@@ -506,6 +456,7 @@ The last row shows the mean and the standard deviation. \jv{this caption is wron
 
 In short, we propose multiscale graph correlation to test independence between data sets, which has been shown to be perform well for testing independence on data of small sample size, high-dimensionality, linearity or nonlinearity. It not only enjoys theoretical guarantee such as being consistent in testing independence, but also exhibits superior numerical performances in a comprehensive simulation setting and real data experiments, comparing to other popular methods.
 
+\cs{I feel it is not necessary to include next steps in the paper. For example, although the idea to extend two-sample test by local variant is similar to MGC, we shouldn't be too optimistic in this paper before we tried them; also if it does work, probably we don't want to tell others yet :-)}
 
 \paragraph{Next Steps}
 
@@ -772,7 +723,7 @@ In this section we elaborate on the testing procedure by multiscale graph correl
 
 Three essential algorithms are presented in section~\ref{appen:algorithms}: given the choice of any global correlation coefficient, the first algorithm computes all local correlations between two sample data sets; the second algorithm estimates the testing powers of all local correlations based on given joint distribution or given observations, which can be further used to estimate the optimal scale; and the third algorithm computes the p-value of the local statistics by a random permutation test. 
 
-Section~\ref{appen:eval} shows how the three core algorithms are combined to yield the testing powers of MGC in the simulations and the p-values of MGC in the real data experiment. And section~\ref{appen:discuss} offers discussions regarding the optimal scale estimation of MGC in practice.
+Section~\ref{appen:eval} shows how the three core algorithms are combined to yield the testing powers of MGC in the simulations and the p-values of MGC in the real data experiment. And section~\ref{appen:discuss} offers more detailed discussions regarding the optimal scale estimation of MGC.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -780,7 +731,10 @@ The three algorithms are implemented in Matlab and R, with the pseudo-code shown
 
 The first algorithm is the core to evaluate MGC in all other algorithms, which computes all local correlations based on given distance matrices $C$ and $D$. The function calculates Equation~\ref{localCoef} for all scales, which is clear in concept; but some matrix manipulations are required to efficiently implement it. Note that a priori assumption is a global function that returns $\{a_{ij}\},\{b_{ij}\}$ and the ranks, according to the choice of the global coefficient coefficient.
 
-The second algorithm computes the testing powers of all local statistics, by repeated simulating samples generated from the joint distribution $f_{xy}$ or the given observations $(X, Y)$. In case of known $f_{xy}$, it is easy to generate sample data under the null and the alternative; in case of given data of unknown $f_{xy}$, we treat the upper-diagonal distance entries as vectors \jv{this isn't quite right, and it is confusing.  we treat those as independent scalar samples.  please clarify here and later below in the discussion of this choice}, use kernel density estimation \cite{BotevEtAl2010} to repeatedly generate sample distance matrices under the alternative, then use random re-samples to generate distance matrices under the null. By estimating all local powers and maximizing the power, this algorithm can be used to either estimate the optimal scale of MGC or estimate the testing power of MGC.
+The second algorithm computes the testing powers of all local statistics, by repeated simulating samples generated from the joint distribution $f_{xy}$ or the given observations $(X, Y)$. In case of known $f_{xy}$, it is easy to generate sample data under the null and the alternative; in case of given data of unknown $f_{xy}$, we treat the upper-diagonal entries of the doubly-centered distance matrices as independent scalar samples, 
+\jv{this isn't quite right, and it is confusing.  we treat those as independent scalar samples.  please clarify here and later below in the discussion of this choice}
+\cs{yes! it is all changed accordingly}
+use kernel density estimation \cite{BotevEtAl2010} to estimate and repeatedly generate sample distance matrices under the alternative. By estimating all local powers and maximizing the power, this algorithm can be used to either estimate the optimal scale of MGC or estimate the testing power of MGC.
 
 The third algorithm computes the p-values of all local statistics by the permutation test. This algorithm is straightforward to implement, and is used to output the p-values of all local tests for given real data. The p-value at the optimal scale equals the p-value of MGC.
 
@@ -837,8 +791,9 @@ Note that all three algorithms can be used for global mcorr / dcorr / Mantel / H
 \Function{TestingPowers}{$X$,$Y$,$f_{xy}$,$r$,$\alpha$,option} 
 \State initialize two $n \times n \times r$ array $testN$ and $testA$ to store the local test statistics under the null and the alternative, and an $n \times n$ matrix $power$ to store the empirical power of all local tests at type 1 error level $\alpha$;
 \If{$f_{xy}$ is not given}
-\State $C=dist(X)$; $D=dist(Y)$;
-\State $f_{CD}=kernelDensity(vector(upper(C)),vector(upper(D)))$; \Comment{kernel density estimation on the two vectors of upper-diagonal distance entries}
+\State $C=dist(X)$; $D=dist(Y)$; $H=diag(n)-ones(n)/n$; 
+\State $meanC=C- H \times C \times H $; $meanD=D- H \times D \times H$; 
+\State $f_{CD}=kernelDensity(upper(C-meanC),upper(D-meanD))$; \Comment{kernel density estimation on the upper-diagonal doubly-centered distance entries}
 \EndIf
 \For{$m=1,\ldots,r$} 
 \If{$f_{xy}$ is given}
@@ -847,8 +802,9 @@ Note that all three algorithms can be used for global mcorr / dcorr / Mantel / H
 \State $C_{A}=dist(X_{1})$; $D_{A}=dist(Y_{1})$; 
 \State $C_{N}=dist(X_{2})$; $D_{N}=dist(Y_{2})$; \Comment{calculate the distance matrices}
 \Else
-\State $(C_{A},D_{A})=generateData(f_{CD},'dependent')$; \Comment{generate dependent sample distance matrices}
-\State $per1=randsampling(n)$; $per2=randsampling(n)$; 
+\State $(C_{A},D_{A})=generateData(f_{CD},'dependent')$; \Comment{generate dependent doubly-centered distance matrices}
+\State $C_{A}=C_{A}+meanC$; $D_{A}=D_{A}+meanD$; \Comment{add back the means to form dependent sample distance matrices}
+\State $per1=randsample(n)$; $per2=randsample(n)$; 
 \State $C_{N}=C(per1,per1)$; $D_{N}=D(per2,per2)$; \Comment{generate independent sample distance matrices}
 \EndIf
 \State $testA(:,:,m)=LGC(C_{A},D_{A},option)$; 
@@ -908,14 +864,89 @@ The same procedures can be applied to evaluate the p-values and powers for globa
 
 \subsection{Discussions on Optimal Scale Estimation}
 \label{appen:discuss}
-If there is only one pair of given observations, the optimal scale estimation and MGC p-value calculation (i.e., Algorithm~\ref{algPower} and ~\ref{algPerm}) may have to use the same observations, such that the resulting MGC p-value can be biased and smaller than necessary. This is the reason that instead of random re-samples on given observations, we use kernel density estimation in Algorithm~\ref{algPower}: all upper-diagonal distance entries are pooled into a vector, and estimate the joint distribution of two vectors by a normal kernel using the method in \cite{BotevEtAl2010}. This allows us to efficiently generate distance matrices that are independent of the given observations for optimal scale estimation, which largely reduces the MGC p-value bias calculated in Algorithm~\ref{algPerm}. 
+If only one pair of observations $(X,Y)$ are given with the underlying joint distribution being unknown, the optimal scale estimation (i.e., Algorithm~\ref{algPower}) has to rely on the given data; and to estimating the testing power of local test statistics, we need to repeatedly generate dependent distance matrices $(C_{A},D_{A})$ for the alternative statistics, and two independent distance matrices $(C_{N},D_{N})$ for the null statistics.
 
-Alternatively, there are often multiple dependent $(X,Y)$ that have similar dependency structures (such as the data sets used in our real data experiments), in which case the bias can be more easily eliminated: to derive the MGC p-value on one pair of data sets, we either estimate the optimal scale on another pair, or use the optimal scale that maximizes the sum of testing powers from Algorithm~\ref{algPower} on each pair of $(X,Y)$ \jv{why are we maximizing a sum of testing powers? summing over what? monte carlo? samples?}. Both approaches can eliminate the MGC p-value bias and still attain the MGC power. For example, we can observe from the p-value heat maps in the real data experiment that if the optimal scale estimated from left brain vs disease is used for the MGC p-value between right brain vs disease, the MGC p-value is still significant than all other benchmarks, and vice versa; and if a consistent optimal scale is used in both tests, the MGC p-values are also significant in both tests. 
+The independent distance matrices can be easily generated by using two independent re-samples of $X$ and $Y$. To generate dependent distance matrices, the simplest way is to use the same re-samples for both $X$ and $Y$, which may cause some bias in MGC p-value calculation: since the permutation test is also carried out on $(X,Y)$, the MGC p-value calculation is not independent of optimal scale estimation based on re-samples of $(X,Y)$, such that the estimated p-value can be smaller than the true MGC p-value (i.e., the true MGC p-value equals the p-value at the optimal scale based on the joint distribution). 
 
-The above approach also offers a fast way to test dependency on large amount of data. For example, although distance correlation are consistent, under certain dependencies it may require too large a sample size to reliably test independence (i.e., achieve a good testing power), for which the running time can be a major issue. Sub-sampling of the large data can improve the running time but may have a very low testing power. In this case, MGC is a much better alternative: we may use two independent sub-samples, one to estimate the optimal scale by bootstrap, the other to calculate the MGC p-value. This approach yields an unbiased p-value, enjoys a higher testing power \jv{higher than what?}, and is still efficient in running time. Therefore MGC can be an invaluable tool for big data.
+Therefore, we use kernel density estimation in Algorithm~\ref{algPower} to generate dependent distance matrices rather than re-samples: the upper-diagonal entries of the doubly-centered distance entries are treated as independent scalar samples, and the joint distribution of the paired entries is estimated by normal kernels using the method in \cite{BotevEtAl2010}. This allows us to efficiently generate distance matrices that are independent of the given observations $(C,D)$ for optimal scale estimation. Comparing to the naive re-sampling method, using kernel density estimation to generate dependent distance entries for optimal scale estimation can almost eliminate the MGC p-value bias at the cost of slightly reduced testing power. 
+
+Alternatively, it is possible to use the naive re-sampling method to estimate the testing power without bias, if at least two pairs of dependent data of similar dependency structures are given: one pair of observations can be used to estimate the optimal scale, while the other pair can be used to derive the MGC p-value. Take the brain vs disease experiment for example, we can observe from the p-value curves that if the optimal scale estimated from left brain vs disease is used for MGC testing between right brain vs disease, the resulting MGC p-value is still significant than all other benchmarks, and vice versa.  
+\jv{why are we maximizing a sum of testing powers? summing over what? monte carlo? samples?}
+\cs{this could be confusing; so I deleted this part.}
+
+As a side note, our approach also offers a fast and reliable way to test dependency on large amount of data. For example, although distance correlation are consistent, under certain dependencies it may require too large a sample size to reliably test independence (i.e., achieve a good testing power), for which the running time can be a major issue; sub-sampling of the large data followed by distance correlation can improve the running time, but may have a lower testing power. MGC is an ideal choice in this scenario: we may take two independent sub-samples from the population, one to estimate the optimal scale by simple re-samples, and the other to calculate the MGC p-value. This approach yields an unbiased p-value, enjoys an equivalent or higher testing power than distance correlation using sub-sampling, and is still efficient in running time. Therefore MGC can be an invaluable tool for big data.
 
 \jv{we should plot k.hat vs k.star and l.hat vs l.star for at least a few examples (maybe all 20 of them), to see whether our estimation procedure is finding the right answer?
 alternatively, we can plot power.hat vs actual power for all (k,l), for each setting, which might be more informative? i remain a bit worried about our procedure without ever seeing how well it actually estimates k and l.}
+\cs{I have roughly checked the power.hat vs actual power for 300 MC replicates: power.hat is usually close to or a little lower than the actual power under some dependencies; but it is still higher than or the same as global dcorr and HHG in most cases. One problem is that deriving power.hat directly from a permutation test is not efficient and very time consuming for large $n$ or large number of replicates, comparing to the actual power from independence test; the other problem is that providing power.hat may make our MGC less attractive than providing the true power, though the true power may not be attainable if only one pair of data is provided. If the reviewers ask for this, we can certainly provide it then; and we may want to investigate and prove better ways to estimate the optimal scale, if ever possible... }
+
+\begin{table*}[!t]
+\footnotesize
+\renewcommand{\arraystretch}{0.5}
+\centering
+{\begin{tabular}{|c||c|c|c|c|c|c|c|}
+\hline
+Data Set & MGC & mcorr & dcorr & Mantel & HHG \\
+\hline
+BNU1  & $0.05$ & $0.02$ & $0.02$ & $0.04$ & $0.075$ \\
+\hline
+BNU2 & $0.09$ & $0.08$ & $0.09$  & $0.03$ & $0.035$\\
+\hline
+BNU3 & $0.02$ & $0$ & $0.005$  & $0.07$ & $0.03$\\
+\hline
+DC1 & $0.03$ & $0.035$ & $0.03$  & $0.035$ & $0.04$\\
+\hline
+HNU1 & $0.015$ & $0.01$ & $0.015$  & $0.24$ & $0.11$\\
+\hline
+IACAS & $0.04$ & $0.04$ & $0.035$  & $0.095$ & $0.055$\\
+\hline
+IBATRT & $0.06$ & $0.12$ & $0.13$  & $0.085$ & $0.04$\\
+\hline
+IPCAS1 & $0.11$ & $0.065$ & $0.065$  & $0.04$ & $0.055$\\
+\hline
+IPCAS2 & $0.045$ & $0.06$ & $0.055$  & $0.035$ & $0.045$\\
+\hline
+IPCAS5 & $0.02$ & $0.03$ & $0.025$  & $0.025$ & $0.09$\\
+\hline
+JHNU  & $0.045$ & $0.04$ & $0.04$ & $0.025$ & $0.055$ \\
+\hline
+KKI21  & $0.03$ & $0.055$ & $0.055$ & $0.035$ & $0.155$ \\
+\hline
+LMU3  & $0.035$ & $0.025$ & $0.025$ & $0.155$ & $0.06$ \\
+\hline
+MPG1  & $0.06$ & $0.06$ & $0.06$ & $0.015$ & $0.06$ \\
+\hline
+MRN  & $0.075$ & $0.09$ & $0.095$ & $0.06$ & $0.01$ \\
+\hline
+NYU1  & $0.065$ & $0.04$ & $0.04$ & $0.035$ & $0.04$ \\
+\hline
+NYU2  & $0.015$ & $0.035$ & $0.025$ & $0$ & $0.075$ \\
+\hline
+SWU3  & $0.03$ & $0.02$ & $0.02$ & $0.03$ & $0.03$ \\
+\hline
+SWU4  & $0.005$ & $0.02$ & $0.02$ & $0.155$ & $0.055$ \\
+\hline
+UM & $0.01$ & $0.005$ & $0$  & $0.005$ & $0.025$\\
+\hline
+UPSM & $0.03$ & $0.01$ & $0.005$  & $0.075$ & $0.03$\\
+\hline
+Utah1 & $0.02$ & $0.025$ & $0.02$  & $0.04$ & $0.025$\\
+\hline
+UWM & $0.155$ & $0.145$ & $0.14$  & $0.085$ & $0.065$\\
+\hline
+XHCUMS & $0.045$ & $0.035$ & $0.04$  & $0.015$ & $0.065$\\
+\hline
+\hline
+Average & $0.0458 \pm 0.0347$ & $0.0444 \pm 0.0356$ & $0.0440 \pm 0.0372$  & $0.0594 \pm 0.0559$ & $0.0552 \pm 0.0310$\\
+\hline
+\end{tabular}
+\caption{False Positive Rate of fMRI Brain Activity versus Independent Stimulus. 
+Each row displays the percentage of brain region that are tested significant for a particular data set.
+The last row shows the mean and the standard deviation. \jv{this caption is wrong, right? this isn't power, it is false positive rate?}
+\cs{yes;changed}}
+\label{table2}
+}
+\end{table*}
 
 \section{Proofs}
 \label{appen:proofs}

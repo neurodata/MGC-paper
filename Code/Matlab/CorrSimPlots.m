@@ -102,7 +102,7 @@ for j=1:total
     kmin=2;
     ph=power1All(kmin:numRange(lim),kmin:numRange(lim),lim)';
     imagesc(ph);
-    %set(gca,'YDir','normal')
+    set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
     set(gca,'XTick',[]); % Remove x axis ticks
@@ -251,7 +251,7 @@ for j=1:total
 %         ph=ph/max(max(ph))*thres; % in cas
 %     end
     imagesc(ph);
-    %set(gca,'YDir','normal')
+    set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
     set(gca,'XTick',[]); % Remove x axis ticks

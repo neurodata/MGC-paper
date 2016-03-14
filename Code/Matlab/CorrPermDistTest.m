@@ -41,6 +41,7 @@ if rep2~=0
         p2=p2All(neighborhoods(2));
         p3=p3All(neighborhoods(3));
     else
+        neighborhoods(1)=maxNeighbors(1-p1All);neighborhoods(2)=maxNeighbors(1-p2All);neighborhoods(3)=maxNeighbors(1-p3All);
         p1=min(min(p1All));p2=min(min(p2All));p3=min(min(p3All));
     end
     p4=p1All(end);p5=p2All(end);p6=p3All(end);
@@ -67,13 +68,17 @@ dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 power1=zeros(n,n);power2=zeros(n,n);power3=zeros(n,n);
 
 % % Kernal density estimation on the lower-diagonal entries of the distance matrices
+CU=C;DU=D;
+H=eye(n)-(1/n)*ones(n,n);
+CU=H*C*H;DU=H*D*H;
+meanC=C-CU; meanD=D-DU;
 ind=zeros(n*(n-1)/2,1);
 for i=1:n;
     for j=1:i-1;
         ind((i-1)*(i-2)/2+j)=n*(j-1)+i;
     end
 end
-CU=C(ind);DU=D(ind);
+CU=CU(ind);DU=DU(ind);
 mC=mean(CU);mD=mean(DU);
 varC=std(CU)^2;varD=std(DU)^2;
 [bandwidth]=kde2d([CU, DU],256);
@@ -86,7 +91,7 @@ sz1=size(CU,1);
 sz2=n*(n-1)/2;
 
 for r=1:rep
-    %     % Generate an independent pair of the upper diagonal distance entries
+    % Generate an independent pair of the upper diagonal distance entries
     aa=rand(sz2,1);bb=randn(sz2,1);
     CAU = mC+(CU(ceil(sz1*aa)) -mC + bandwidth(1)*bb)/sqrt(1+bandwidth(1)^2/varC);
     DAU = mD+(DU(ceil(sz1*aa)) -mD + bandwidth(2)*bb)/sqrt(1+bandwidth(2)^2/varD);
@@ -102,6 +107,7 @@ for r=1:rep
             DA(j,i)=DA(i,j);
         end
     end
+    CA=CA+meanC;DA=DA+meanD;
     % Calculate the test statistics under the alternative
     disRank1=[disToRanks(CA) disToRanks(DA)];
     if option(1)~=0
@@ -115,8 +121,10 @@ for r=1:rep
     end
     
     % Generate another independent second distance matrix
-    per1=randsample(n,n,true);
-    per2=randsample(n,n,true);
+%     per1=randsample(n,n,true);
+%     per2=randsample(n,n,true);
+    per1=randperm(n);
+    per2=randperm(n);
     DN=D(per1,per1);
     CN=C(per2,per2);
     % Calculate the test statistics under the null
@@ -154,7 +162,7 @@ power1(1,:)=0;power1(:,1)=0;power2(1,:)=0;power2(:,1)=0;power3(1,:)=0;power3(:,1
 n1=maxNeighbors(power1,dCor1N,dCor1A);
 n2=maxNeighbors(power2,dCor2N,dCor2A);
 n3=maxNeighbors(power3,dCor3N,dCor3A);
-%save('tmp.mat','dCor1N','dCor2N','dCor3N','dCor1A','dCor2A','dCor3A','power1','power2','power3','n1','n2','n3');
+%save('tmpPerm.mat','dCor1N','dCor2N','dCor3N','dCor1A','dCor2A','dCor3A','power1','power2','power3','n1','n2','n3');
 
 function  [p1, p2, p3, p4]=PermutationTest(C,D,rep,option)
 % This is an auxiliary function of the main function to calculate the p-values of
@@ -190,7 +198,6 @@ end
 for r=1:rep
     % Use random permutations;
     per=randperm(n);
-%     per=randsample(n,n,true);
     DN=D(per,per);
     CN=C;
     disRank=[disToRanks(CN) disToRanks(DN)];

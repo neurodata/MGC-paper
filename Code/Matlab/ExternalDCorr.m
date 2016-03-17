@@ -130,7 +130,7 @@ n=42; lim=1; rep1=2000; rep2=10000;
 %%%
 clear
 load('semipar')
-n=109; lim=1; rep1=2000; rep2=10000;
+n=109; lim=1; rep1=1000; rep2=1000;
 distCCI=squareform(pdist(cci));
 [power1,power2,power3]=CorrPermDistTest(distMigrain(ind,ind),distCCI(ind,ind),rep1,rep2,'MigrainxCCI');
 [power1,power2,power3]=CorrPermDistTest(distM2g(ind,ind),distCCI(ind,ind),rep1,rep2,'M2gxCCI');
@@ -139,7 +139,7 @@ distCCI=squareform(pdist(cci));
 %%%
 clear
 load('BrainHippoShape')
-n=114;lim=1; rep1=2000;rep2=10000;alpha=0.05;
+n=114;lim=1; rep1=1000;rep2=1000;alpha=0.05;
 y=squareform(pdist(Label));
 %y=(y>0)+1;
 y=y+1;

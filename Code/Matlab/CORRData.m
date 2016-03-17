@@ -1,11 +1,12 @@
 function []=CORRData(aList,rep1,rep2,pre1,alpha)
 
-% aList = {'BNU1','BNU2','BNU3','DC1','HNU1'};
-% aList = {'IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8'};
-% aList= {'JHNU','KKI21','LMU3','MPG1','MRN'};
-% aList= {'NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2'};
-% aList= {'SWU1','SWU2','SWU3','SWU4'};
-% aList= {'UM','UPSM1'};
+% aList = {'BNU1','BNU2','BNU3'};
+% aList =  {'DC1','HNU1','IACAS'};
+% aList= {'IBATRT','IPCAS1','IPCAS2'};
+% aList= {'IPCAS5','JHNU','KKI21'}; 
+% aList= {'LMU3','MPG1','MRN'};
+% aList= {'NYU1','NYU2','SWU3','SWU1'};
+% aList=  {'SWU4','UM','UPSM1','SWU2'};
 % aList= {'Utah1','UWM','XHCUMS'};
 % CORRData(aList)
 

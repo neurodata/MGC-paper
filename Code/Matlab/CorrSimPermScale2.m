@@ -48,17 +48,17 @@ for tt=type
     CorrIndTest(tt,n,dim,1,rep2,0);
     for r1=1:rep1
         [x, y]=CorrSampleGenerator(tt,n,dim,1, noise);
-        [~,~,~,~,~,~,~,neighborP]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),0,rep2,'PermInd',alpha,option);
+        [~,~,~,~,~,~,~,neighborP]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),rep2,0,'PermInd',alpha,option);
         
         [x, y]=CorrSampleGenerator(tt,n,dim,1, noise);
-        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),rep2,rep2,'PermInd',alpha,option,neighborP);
+        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),0,rep2,'PermInd',alpha,option,neighborP);
         for j=1:7
             if p(j)<alpha
                 powerP(j,tt)=powerP(j,tt)+1/rep1;
             end
         end
         
-        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),rep2,rep2,'PermInd',alpha,option,neighbor);
+        [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(squareform(pdist(x)),squareform(pdist(y)),0,rep2,'PermInd',alpha,option,neighbor);
         for j=1:7
             if p(j)<alpha
                 powerI(j,tt)=powerI(j,tt)+1/rep1;

@@ -12,7 +12,11 @@ else
 end
 n=size(power1,1);
 pmax=max(max(power1)); % Maximal power
-ind=find(power1==pmax);
+if pmax<0.2
+    ind=n^2;
+else
+    ind=find(power1==pmax);
+end
 % n1=ind(1);
 
 % if length(ind)>1
@@ -33,12 +37,17 @@ if length(ind)>1 && testMean==true
     meanInd=mean(dCor1A,3)-mean(dCor1N,3);
     meanInd=meanInd(ind);
     pmax=max(meanInd);
-    ind2=find(meanInd==pmax);
-    if (isempty(ind2)==false)
-        ind2=ind2(1);
-        ind=ind(ind2);
+    if pmax<=0;
+        ind=n^2;
+    else
+        ind2=find(meanInd==pmax);
+        if (isempty(ind2)==false)
+            ind2=ind2(1);
+            ind=ind(ind2);
+        end
     end
 end
+
 
 % n1 is the linear indexing of the matrix power1,
 % [k,l] is the row and column subscript of n1.

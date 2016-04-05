@@ -24,15 +24,15 @@ set(groot,'defaultAxesColorOrder',map1);
 [filename, titleStr]=CorrRealDataName(1);
 filename=strcat(pre1,filename);
 load(filename);
-n=size(p1All,1);
+n=size(p2All,1);
 kmin=2;
 xa=kmin:n;
-pp1=p1All(xa,4);
+pp1=p2All(xa,4);
 [filename, titleStr]=CorrRealDataName(2);
 filename=strcat(pre1,filename);
 load(filename);
-n=size(p1All,1);
-pp2=p1All(xa,4);
+n=size(p2All,1);
+pp2=p2All(xa,4);
 figure
 plot(xa,pp1,'.-',xa,pp2,'.-','LineWidth',2)
 xlabel('Neighborhood Choice of X','FontSize',16);
@@ -52,10 +52,10 @@ for i=3:total
     [filename, titleStr]=CorrRealDataName(i);
     filename=strcat(pre1,filename);
     load(filename);
-    n=size(p1All,1);
+    n=size(p2All,1);
     figure
     kmin=2;
-    imagesc(p1All(kmin:n,kmin:n)');
+    imagesc(p2All(kmin:n,kmin:n)');
     set(gca,'YDir','normal')
     colormap(flipud(map2))
     caxis([0.01 0.1])

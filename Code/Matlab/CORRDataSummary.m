@@ -12,6 +12,7 @@ allNames=allNames(indStr);
 n=length(allNames);
 
 p=zeros(n,7);
+str=
 for j=1:n
     fileName=allNames(j);
     load(strcat(fileDir,fileName{1,1}),'power');
@@ -20,10 +21,9 @@ end
 pmean=mean(p);
 pstd=std(p);
 
-x=ones(n,1);
-x=x+rand(size(x));
+x=1:n;
 plot(x,p(:,1),'ob') %Jittered data
-xlim([0.8,2.2])
+%xlim([0.8,2.2])
 ylim([0,0.2])
 set(gca,'XTick',[]); % Remove x axis ticks
 title('MGC False Positive Rate Scatter Plot for Brain vs Noise','FontSize',13);

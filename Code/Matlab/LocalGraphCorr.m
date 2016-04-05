@@ -2,10 +2,10 @@ function [corrXY,varX,varY] = LocalGraphCorr(X,Y,option,disRank) % Calculate loc
 % Author: Cencheng Shen
 % Implements local graph correlation from Shen, Jovo, CEP 2016.
 %
-% By specifying option=1, 2, or 3, it calculates all local correlations of mcorr, dcorr, and Mantel
+% By specifying option=1, 2, or 3, it calculates all local correlations of dcorr, mcorr, and Mantel
 % Specifying the rank matrix by a size n * 2n disRank can save the sorting.
 if nargin < 3
-    option=1; % By default use mcorr
+    option=1; % By default use dcorr
 end
 if nargin < 4
     disRank=[disToRanks(X) disToRanks(Y)]; % Sort distances within columns, if the ranks are not provided
@@ -20,23 +20,22 @@ corrXY=zeros(n,n); varX=zeros(n,1); varY=zeros(n,1);
 % Depending on the choice of the global test, calculate the entries of A and B
 % accordingly for late multiplication.
 if option~=3
-    % Double centering for mcorr/dcorr
-    H=eye(n)-(1/n)*ones(n,n);
-    A=H*X*H;
-    B=H*Y*H;
+    % Double centering for dcorr/mcorr
+    A=doubleCentering(X);
+    B=doubleCentering(Y);
     % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
-    if option==1
+    if option==2
         A=A-X/n;
         B=B-Y/n;
-        % meanX=sum(sum(X))/n^2;
-        % meanY=sum(sum(Y))/n^2;
+        meanX=sum(sum(X))/n^2;
+        meanY=sum(sum(Y))/n^2;
         % The diagonals of mcorr are set to zero, instead of the original formulation of mcorr
         for j=1:n
-            A(j,j)=0;
-            B(j,j)=0;
+%             A(j,j)=0;
+%             B(j,j)=0;
             % The original diagonal modification of mcorr
-            % A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;
-            % B(j,j)=sqrt(2/(n-2))*(mean(Y(:,j))-meanY)*1i;
+            A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;
+            B(j,j)=sqrt(2/(n-2))*(mean(Y(:,j))-meanY)*1i;
         end
     end
 else
@@ -96,3 +95,12 @@ for j=1:length(varX)
         corrXY(:,j)=0;
     end
 end
+
+function A=doubleCentering(X)
+%H=eye(n)-(1/n)*ones(n,n);
+%A=H*X*H;
+n=size(X,1);
+A=mean(X,1);
+A=repmat(A,n,1)+repmat(mean(X,2),1,n)-mean(A);
+%A=repmat(A,n,1)+repmat(A',1,n)-mean(A);
+A=X-A;

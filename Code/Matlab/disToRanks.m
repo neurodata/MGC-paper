@@ -7,8 +7,8 @@ disRank=zeros(n,n);
 for i=1:n
     [~,~,a]=unique(dis(:,i));
     disRank(:,i)=a-1;
-    % Alternative average rank
-    % v=floor(tiedrank(dis(:,i)));
-    % v(v==v(i))=1;
-    % disRank(:,i)=v-1;
+%     % Alternative average rank
+%     v=floor(tiedrank(dis(:,i)));
+%     v(v==v(i))=1;
+%     disRank(:,i)=v-1;
 end

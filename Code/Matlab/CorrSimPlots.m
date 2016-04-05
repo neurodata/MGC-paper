@@ -42,13 +42,13 @@ switch cm
         cmap(3,:) = [141,160,203]/255;
 end
 
-mcorr = cmap(1,:);
-dcorr = cmap(2,:);
+dcorr = cmap(1,:);
+mcorr = cmap(2,:);
 mante = cmap(3,:);
 HHG   = [0,0,0];
 
-map1(1,:)=mcorr; map1(4,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
-map1(2,:)=dcorr; map1(5,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
+map1(1,:)=dcorr; map1(4,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
+map1(2,:)=mcorr; map1(5,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
 map1(3,:)=mante; map1(6,:)=mante; % The color for MGC{Mantel} and global Mantel.
 map1(7,:)=HHG; % The color for HHG
 map2 = brewermap(128,'GnBu'); % brewmap
@@ -79,7 +79,7 @@ ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers of 20 Simulated Dependencies for Dimension 1 with Increasing Sample Size');
 set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
-h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
+h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
 set(h,'FontSize',12);
 %
 F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
@@ -97,10 +97,10 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     K=n;kmin=1;thres=0.8;
-    ind=[find(max(power1,[],1)>=thres,1) lim];
+    ind=[find(max(power2,[],1)>=thres,1) lim];
     lim=min(ind);
     kmin=2;
-    ph=power1All(kmin:numRange(lim),kmin:numRange(lim),lim)';
+    ph=power2All(kmin:numRange(lim),kmin:numRange(lim),lim)';
     imagesc(ph);
     set(gca,'YDir','normal')
     colormap(map2)
@@ -109,11 +109,83 @@ for j=1:total
     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar);
 end
-xlabel('Neighborhood Choice of X','position',[-220 120],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-540 -200],'FontSize',20);
+xlabel('Neighborhood Choice of X','position',[-210 -20],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-540 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1'));
+set(h,'FontSize',20,'FontWeight','normal');
+%
+F.fname=strcat(pre2, figNumber);
+F.wh=[8 4]*2;
+print_fig(gcf,F)
+
+%%
+figNumber='2b';
+figure('units','normalized','position',[0 0 1 1])
+s=4;
+t=5;
+for j=1:total
+    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+    load(filename)
+    subplot(s,t,j)
+    titlechar=CorrSimuTitle(j);
+    K=n;kmin=1;thres=0.8;
+    ind=[find(max(power2,[],1)>=thres,1) lim];
+    lim=10;
+    kmin=2;
+    ph=power2All(kmin:numRange(lim),kmin:numRange(lim),lim)';
+    imagesc(ph);
+    set(gca,'YDir','normal')
+    colormap(map2)
+    if j==20
+    caxis([0 1])
+    end
+    set(gca,'XTick',[]); % Remove x axis ticks
+    set(gca,'YTick',[]); % Remove y axis ticks
+    title(titlechar);
+end
+xlabel('Neighborhood Choice of X','position',[-103 -10],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-265 150],'FontSize',20);
+% colorbar
+tstring=' of mcorr ';
+h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1 at n=50'));
+set(h,'FontSize',20,'FontWeight','normal');
+%
+F.fname=strcat(pre2, figNumber);
+F.wh=[8 4]*2;
+print_fig(gcf,F)
+
+%%
+figNumber='2c';
+figure('units','normalized','position',[0 0 1 1])
+s=4;
+t=5;
+for j=1:total
+    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+    load(filename)
+    subplot(s,t,j)
+    titlechar=CorrSimuTitle(j);
+    K=n;kmin=1;thres=0.8;
+    ind=[find(max(power2,[],1)>=thres,1) lim];
+    lim=5;
+    kmin=2;
+    ph=power2All(kmin:numRange(lim),kmin:numRange(lim),lim)';
+    imagesc(ph);
+    set(gca,'YDir','normal')
+    colormap(map2)
+    if j==20
+    caxis([0 1])
+    end
+    set(gca,'XTick',[]); % Remove x axis ticks
+    set(gca,'YTick',[]); % Remove y axis ticks
+    title(titlechar);
+end
+xlabel('Neighborhood Choice of X','position',[-50 -5],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-130 75],'FontSize',20);
+% colorbar
+tstring=' of mcorr ';
+h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1 at n=25'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -132,7 +204,7 @@ for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
     thres=0.8;
-    ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
+    ind=[find(power2>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
     pos=min(ind);
     power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
     pmax=max(power);
@@ -145,7 +217,7 @@ end
 profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
-h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('mcorr, AUC=', num2str(sumP(4))),strcat('dcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
+h=legend(strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('dcorr, AUC=', num2str(sumP(4))),strcat('mcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);
@@ -172,7 +244,7 @@ for ll=1:limN
     for j=1:total
         filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
         load(filename)
-        ind=[find(power1>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
+        ind=[find(power2>=thres,1) find(power4>=thres,1) find(power5>=thres,1) find(power6>=thres,1) find(power7>=thres,1) lim];
         pos=min(ind);
         power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
         pmax=max(power);
@@ -187,7 +259,7 @@ for ll=1:limN
 end
 xaxis=1/limN:1/limN:1;
 plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.--','LineWidth',2);
-h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Threshold of Power','FontSize',16);
 ylabel('Area Under Curve','FontSize',16);
@@ -226,7 +298,7 @@ ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers of 20 Simulated Dependencies for Increasing Dimension with Fixed Sample Size');
 set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
-h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location',lgdPosition);
+h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
 set(h,'FontSize',12);
 %
 F.fname=strcat(pre2, figNumber);
@@ -244,9 +316,12 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     kmin=1;thres=0.5;
-    ind=[find(max(power1,[],1)>=thres,1,'last'),1];
+    ind=[find(max(power2,[],1)>=thres,1,'last'),1];
     lim=max(ind);
-    ph=power1All(kmin:n,kmin:n,lim)';
+    if j==11 || j==12
+        lim=lim+1;
+    end
+    ph=power2All(kmin:n,kmin:n,lim)';
 %     if max(max(ph))>thres
 %         ph=ph/max(max(ph))*thres; % in cas
 %     end
@@ -258,8 +333,8 @@ for j=1:total
     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar);
 end
-xlabel('Neighborhood Choice of X','position',[-220 120],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-540 -200],'FontSize',20);
+xlabel('Neighborhood Choice of X','position',[-210 -20],'FontSize',20);
+ylabel('Neighborhood Choice of Y','position',[-540 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Testing Powers of All Local Tests',tstring,' for Increasing Dimension'));
@@ -281,7 +356,7 @@ for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
     thres=0.5;
-    ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
+    ind=[find(power2>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
     pos=max(ind);
     power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
     pmax=max(power);
@@ -294,7 +369,7 @@ end
 profile=profile./total;
 sumP=ceil(mean(profile,2)*1000)/1000;
 plot(xaxis,profile(1,:),'.-',xaxis,profile(2,:),'.-',xaxis,profile(3,:),'.-',xaxis,profile(4,:),'.:',xaxis, profile(5,:),'.:',xaxis,profile(6,:),'.:',xaxis,profile(7,:),'.--','LineWidth',2);
-h=legend(strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('mcorr, AUC=', num2str(sumP(4))),strcat('dcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
+h=legend(strcat('MGC\{dcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{mcorr\}, AUC=', num2str(sumP(1))),strcat('MGC\{Mantel\}, AUC=', num2str(sumP(3))),strcat('dcorr, AUC=', num2str(sumP(4))),strcat('mcorr, AUC=', num2str(sumP(5))),strcat('Mantel, AUC=', num2str(sumP(6))),strcat('HHG, AUC=', num2str(sumP(7))),'Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);
@@ -321,7 +396,7 @@ for ll=1:limN
     for j=1:total
         filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
         load(filename)
-        ind=[find(power1>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
+        ind=[find(power2>=thres,1,'last') find(power4>=thres,1,'last') find(power5>=thres,1,'last') find(power6>=thres,1,'last') find(power7>=thres,1,'last') 1];
         pos=max(ind);
         power=[power1(pos), power2(pos), power3(pos), power4(pos),power5(pos),power6(pos),power7(pos)];
         pmax=max(power);
@@ -336,7 +411,7 @@ for ll=1:limN
 end
 xaxis=1/limN:1/limN:1;
 plot(xaxis,sumP(1,:),'.-',xaxis,sumP(2,:),'.-',xaxis,sumP(3,:),'.-',xaxis, sumP(4,:),'.:',xaxis,sumP(5,:),'.:',xaxis, sumP(6,:),'.:',xaxis,sumP(7,:),'.--','LineWidth',2);
-h=legend('MGC\{mcorr\}','MGC\{dcorr\}','MGC\{Mantel\}','mcorr','dcorr','Mantel','HHG','Location','SouthEast');
+h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location','SouthEast');
 set(h,'FontSize',12);
 xlabel('Threshold of Power','FontSize',16);
 ylabel('Area Under Curve','FontSize',16);

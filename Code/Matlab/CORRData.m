@@ -3,7 +3,7 @@ function []=CORRData(aList,rep1,rep2,pre1,alpha)
 % aList = {'BNU1','BNU2','BNU3'};
 % aList =  {'DC1','HNU1','IACAS'};
 % aList= {'IBATRT','IPCAS1','IPCAS2'};
-% aList= {'IPCAS5','JHNU','KKI21'}; 
+% aList= {'IPCAS5','JHNU','KKI21'};
 % aList= {'LMU3','MPG1','MRN'};
 % aList= {'NYU1','NYU2','SWU3','SWU1'};
 % aList=  {'SWU4','UM','UPSM1','SWU2'};
@@ -17,7 +17,7 @@ if nargin<2
     rep1=5;
 end
 if nargin<3
-    rep2=50;
+    rep2=60;
 end
 if nargin<4
     pre1='../../../../Data/CORR/';
@@ -25,7 +25,7 @@ end
 if nargin<5
     alpha=0.05;
 end
-option=[1,2,0,0];
+option=[1,0,0,0];
 for l=1:length(aList);
     str1=aList(l);str1=str1{1,1};
     fileDir=strcat(pre1,str1,'/');
@@ -39,13 +39,13 @@ for l=1:length(aList);
     fileName=allNames(1);
     load(strcat(fileDir,fileName{1,1}));
     [region,timestep]=size(roi_data);
-
+    
     X=zeros(n,timestep,region);
     Y=mvnrnd(0,1,timestep);
     distP=squareform(pdist(Y));
     power=zeros(7,1);
     p1=zeros(7,1);
-       
+    
     for j=1:n
         fileName=allNames(j);
         load(strcat(fileDir,fileName{1,1}));
@@ -63,7 +63,7 @@ for l=1:length(aList);
             end
         end
     end
-
+    
     fileS=strcat(pre1,str1,'FalseDetection.mat');
     save(fileS,'power','alpha','n','timestep','region','str1');
 end

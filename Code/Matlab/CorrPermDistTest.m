@@ -16,75 +16,47 @@ if nargin<5
     titlechar='RealData';
 end
 if nargin<6
-    option=[1,2,0,0]; % Default option. Setting any to 0 to disable the calculation of MGC by dcorr/mcorr/Mantel, global dcorr/mcorr/Mantel, HHG, in order; set the first three
+    option=[1,2,3,4]; % Default option. Setting any to 0 to disable the calculation of MGC by dcorr/mcorr/Mantel, global dcorr/mcorr/Mantel, HHG, in order; set the first three
 end
 n=size(C,1);
 ratio1=0.5;
 nn=floor(n*ratio1);
-
-if rep1~=0
-    % % Run the permutation test to return the p-values
-    ind1=splitPermutation(C,D,nn,rep1,rep2,option(1));
-    ind2=splitPermutation(C,D,nn,rep1,rep2,option(2));
-    ind3=splitPermutation(C,D,nn,rep1,rep2,option(3));
-end
 
 % Global Correlations
 [p1All]=PermutationTest(C,D,rep2,option(1));
 [p2All]=PermutationTest(C,D,rep2,option(2));
 [p3All]=PermutationTest(C,D,rep2,option(3));
 [p7]=PermutationTest(C,D,rep2,option(4));
-p4=p1All(end);p5=p2All(end);p6=p3All(end);
+p4=p1All(end);
+p5=p2All(end);
+p6=p3All(end);
 if rep1==0;
     ind1=maxNeighbors(1-p1All);ind2=maxNeighbors(1-p2All);ind3=maxNeighbors(1-p3All);
+else
+    % % Run the permutation test to return the p-values
+    if rep2>1000
+        rr=floor(rep2/rep1);
+    else
+        rr=rep2;
+    end
+    ind1=splitPermutation(C,D,nn,rep1,rr,option(1));
+    ind2=splitPermutation(C,D,nn,rep1,rr,option(2));
+    ind3=splitPermutation(C,D,nn,rep1,rr,option(3));
 end
-% p1=median(p1All(ind1));p2=median(p2All(ind2));p3=median(p3All(ind3));
-% p1=max(p1All(ind1));p2=max(p2All(ind2));p3=max(p3All(ind3));
-p1=mean(p1All(ind1));p2=mean(p2All(ind2));p3=mean(p3All(ind3));
+% p1=median(p1All(ind1));
+% p2=median(p2All(ind2));
+% p3=median(p3All(ind3));
+p1=min(p1All(ind1));
+p2=min(p2All(ind2));
+p3=min(p3All(ind3));
+if min(p1,p4)<0.05
+    p1
+    p4
+end
 % Save the results
 pre1='../../Data/';
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
 save(filename,'titlechar','rep2','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3');
-
-function ind=splitPermutation2(C,D,nn,rep1,rep2,option)
-ind=[];
-indi=zeros(nn,nn);
-ratio2=0.75;
-if option==0;
-    return;
-end
-n=size(C,1);
-for r=1:rep1
-        per=randperm(n);
-    pMean=zeros(nn,nn); pMean(1,:)=1; pMean(:,1)=1;
-    pStd=ones(nn,nn); 
-    dCorA=ones(nn,nn,floor(n/nn));
-    for rr=1:floor(n/nn)
-        pa1=per((rr-1)*nn+1:rr*nn);
-        [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        %tmp=tmp-min(min(tmp(2:end,2:end)));
-        dCorA(:,:,rr)=tmp; 
-    end
-    for i=2:nn
-        for j=2:nn
-            tmp=reshape(dCorA(i,j,:),1,floor(n/nn));
-            pMean(i,j)=mean(tmp);
-            pStd(i,j)=std(tmp);
-        end
-    end
-    
-    crM=sort(pMean(2:end,2:end),'ascend');
-    crM=crM(ceil(length(crM)*0.05));
-    crStd=sort(pStd(2:end,2:end),'ascend');
-    crStd=crStd(ceil(length(crStd)*0.05));
-    indi=indi+(pMean<=crM).*(pStd<=crStd);
-end
-if max(max(indi))<round(rep1*ratio2)
-    ind=n^2;
-else
-    ind=find(indi==max(max(indi)));
-    ind=ratioScale(ind,nn,n);
-end
 
 function ind=splitPermutation(C,D,nn,rep1,rep2,option)
 ind=[];
@@ -92,51 +64,84 @@ if option==0;
     return;
 end
 n=size(C,1);
+epsilon=0.2;
+ind=1:nn^2;
 for r=1:rep1
     per=randperm(n);
-    indi=zeros(nn,nn);
-    pMean=zeros(nn,nn); pMean(1,:)=1; pMean(:,1)=1;
-    pStd=ones(nn,nn);
-    dCorA=ones(nn,nn,floor(n/nn));
+    l1=length(ind);
     for rr=1:floor(n/nn)
         pa1=per((rr-1)*nn+1:rr*nn);
         [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        tmp=tmp-min(min(tmp(2:end,2:end)));
-        dCorA(:,:,rr)=tmp;
+        ind=ind(tmp(ind)-min(min(tmp))<epsilon);
     end
-    for i=2:nn
-        for j=2:nn
-            tmp=reshape(dCorA(i,j,:),1,floor(n/nn));
-            pMean(i,j)=mean(tmp);
-            pStd(i,j)=std(tmp);
-        end
+    length(ind)
+    if length(ind)<5;
+        ind=[];
+        break;
     end
-    
-    crM=sort(pMean(2:end,2:end),'ascend');
-    crM=crM(ceil(length(crM)*0.02));
-    crStd=sort(pStd(2:end,2:end),'ascend');
-    crStd=crStd(ceil(length(crStd)*0.05));
-%     indi=indi+(pMean<=crM).*(pStd<=crStd);
-    indi=indi+(pMean==min(min(pMean))).*(pStd<=crStd);
-    if max(max(indi))==0
-        tmpInd=n^2;
-    else
-        tmpInd=find(indi==max(max(indi)));
-%         tmpInd=tmpInd((pMean(tmpInd)==min(min(pMean(tmpInd)))));
-        tmpInd=ratioScale(tmpInd,nn,n);
+    if length(ind)==l1
+        break;
     end
-    ind=[ind tmpInd];
 end
-% ind
+if isempty(ind);
+    ind=n^2;
+else
+    ind=ratioScale(ind,nn,n);
+end
 
-function [ind,indK,indL]=ratioScale(indn,nn,n)
+function ind=splitPermutation2(C,D,nn,rep1,rep2,option)
+ind=[];
+if option==0;
+    return;
+end
+n=size(C,1);
+for r=1:rep1
+    per=randperm(n);
+    pMean=zeros(nn,nn);
+    %     pStd=ones(nn,nn);
+    %dCorA=ones(nn,nn,floor(n/nn));
+    for rr=1:floor(n/nn)
+        pa1=per((rr-1)*nn+1:rr*nn);
+        [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
+        %         tmp=tmp-min(min(tmp(2:end,2:end)));
+        pMean=pMean+tmp/floor(n/nn);
+    end
+    %     for i=2:nn
+    %         for j=2:nn
+    %             tmp=reshape(dCorA(i,j,:),1,floor(n/nn));
+    %             pMean(i,j)=mean(tmp);
+    % %             pStd(i,j)=std(tmp);
+    %         end
+    %     end
+    
+    %     crStd=sort(pStd(2:end,2:end),'ascend');
+    %     crStd=crStd(ceil(length(crStd)*0.3));
+    if r==1
+        ind=find(pMean-min(min(pMean))<0.05);
+    else
+        ind=ind(pMean(ind)-min(min(pMean))<0.1);
+    end
+    length(ind)
+    %     ind=ind(pStd(ind)<0.2);
+    if isempty(ind)
+        length(ind)
+        break
+    end
+end
+% length(ind)
+if isempty(ind);
+    length(ind)
+    ind=n^2;
+else
+    ind=ratioScale(ind,nn,n);
+end
+
+function [ind]=ratioScale(indn,nn,n)
 % nn=size(p1All,1);
 % indn=maxNeighbors(1-p1All,0);
 % indn=maxNeighbors(p1All,0);
 indLength=length(indn);
 ind=[];
-indK=[];
-indL=[];
 % ratio=(n-1)/(nn-1);
 for i=1:indLength;
     [k,l]=ind2sub([nn,nn],indn(i));
@@ -151,15 +156,13 @@ for i=1:indLength;
     lt=floor(l*(n-1)/(nn-1))+1;
     for kk=kb:kt
         for ll=lb:lt
-            indK=[indK kk];
-            indL=[indL ll];
             tmp=sub2ind([n,n], kk, ll);
             ind=[ind tmp];
         end
     end
 end
 
-function  [p1,cut1,dCor1]=PermutationTest(C,D,rep,option)
+function  [p1]=PermutationTest(C,D,rep,option)
 % This is an auxiliary function of the main function to calculate the p-values of
 % all local tests of dcorr/mcorr/Mantel, the p-value of HHG in the
 % permutation test.

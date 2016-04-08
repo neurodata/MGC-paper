@@ -30,12 +30,13 @@ if dim>1
     noise=0;
     dimInd=dim;
 end
-repp=5;
+repp=10;
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(6,20);
-option=[1,0,0,0];
+option=[1,2,0,0];
 for tt=type
+    neighbor=[];
     if dim==1
         filename=strcat(pre1,'CorrIndTestType',num2str(tt),'N',num2str(100),'Dim',num2str(dim));
         load(filename,'neighborhoods','numRange','power1All','power2All','power3All','power4','power5','power6','power7');
@@ -64,19 +65,23 @@ for tt=type
         [x, y]=CorrSampleGenerator(tt,n,dim,1, noise);
         C=squareform(pdist(x));
         D=squareform(pdist(y));
-        [pp1,pp2,~,p1,p2]=CorrPermDistTest(C,D,repp,rep2,'PermInd',option);
+        [pp1,pp2,~,p1,p2,~,~,p1All,p2All]=CorrPermDistTest(C,D,repp,rep2,'PermInd',option);
         p(1)=p(1)+(pp1<alpha)/rep1;
         p(2)=p(2)+(p1<alpha)/rep1;
-%         p(5)=p(5)+(pp2<alpha)/rep1;
-%         p(6)=p(6)+(p2<alpha)/rep1;
+        p(3)=p(3)+(pp2<alpha)/rep1;
+        p(4)=p(4)+(p2<alpha)/rep1;
+        if isempty(neighbor)==false
+        p(5)=p(5)+(mean(p1All(neighbor(1)))<alpha)/rep1;
+        p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
+        end
     end
     powerP(1,tt)=p(1);
     powerP(2,tt)=p(2);
-%     powerP(5,tt)=p(5);
-%     powerP(6,tt)=p(6);
-    if n<=100
-        powerP(3,tt)=max(max(power1All));
-        powerP(4,tt)=power1All(end,end);
+    powerP(3,tt)=p(3);
+    powerP(4,tt)=p(4);
+    if isempty(neighbor)==false
+        powerP(5,tt)=p(5);
+        powerP(6,tt)=p(6);
     end
 end
 filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'N',num2str(n),'Dim',num2str(dim));
@@ -84,8 +89,14 @@ save(filename,'powerP','n','rep1','rep2','dim','noise','alpha');
 
 figure
 x=1:20;
-p1=powerP;
-plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-',x,p1(4,:),'cx--')
-legend('Estimated MGC{dcorr}','Estimated dcorr', 'True MGC{dcorr}','True dcorr');
+a=1;
+if a==1
+    ind=[1,2,5];
+else
+    ind=[3,4,6];
+end
+p1=powerP(ind,:);
+plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
+legend('Estimated MGC','Global Method', 'True MGC');
 ylim([0,1]);
 title('Testing Power Comparison for dimension 1 simulation at n=50');

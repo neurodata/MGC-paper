@@ -34,24 +34,25 @@ if rep1==0;
     ind1=maxNeighbors(1-p1All);ind2=maxNeighbors(1-p2All);ind3=maxNeighbors(1-p3All);
 else
     % % Run the permutation test to return the p-values
-    if rep2>1000
-        rr=floor(rep2/rep1);
-    else
-        rr=rep2;
-    end
+    rr=ceil(rep2/rep1);
+    rr=max(100,rr);
     ind1=splitPermutation(C,D,nn,rep1,rr,option(1));
     ind2=splitPermutation(C,D,nn,rep1,rr,option(2));
     ind3=splitPermutation(C,D,nn,rep1,rr,option(3));
 end
-% p1=median(p1All(ind1));
-% p2=median(p2All(ind2));
-% p3=median(p3All(ind3));
-p1=min(p1All(ind1));
-p2=min(p2All(ind2));
-p3=min(p3All(ind3));
+p1=median(p1All(ind1));
+p2=median(p2All(ind2));
+p3=median(p3All(ind3));
+
 if min(p1,p4)<0.05
+    length(ind1)
     p1
     p4
+end
+if min(p2,p5)<0.05
+    length(ind2)
+    p2
+    p5
 end
 % Save the results
 pre1='../../Data/';
@@ -61,10 +62,11 @@ save(filename,'titlechar','rep2','option','p1All','p2All','p3All','p4','p5','p6'
 function ind=splitPermutation(C,D,nn,rep1,rep2,option)
 ind=[];
 if option==0;
+    ind=1;
     return;
 end
 n=size(C,1);
-epsilon=0.2;
+epsilon=0.25;
 ind=1:nn^2;
 for r=1:rep1
     per=randperm(n);
@@ -74,14 +76,16 @@ for r=1:rep1
         [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
         ind=ind(tmp(ind)-min(min(tmp))<epsilon);
     end
-    length(ind)
-    if length(ind)<5;
-        ind=[];
-        break;
-    end
+    ind= verifyAdjacency(ind,nn);
     if length(ind)==l1
         break;
     end
+    if length(ind)<nn/20;
+        ind=[];
+        break;
+    end
+%     ind= verifyAdjacency(ind,nn);
+%     length(ind)
 end
 if isempty(ind);
     ind=n^2;
@@ -89,6 +93,19 @@ else
     ind=ratioScale(ind,nn,n);
 end
 
+function ind=verifyAdjacency(ind,nn)
+
+if length(ind)<20
+    AdjInd=[];
+    for i=1:length(ind)
+        tt=ind(i);
+        if sum(ind==tt+1)+sum(ind==tt-1)+sum(ind==tt+nn)+sum(ind==tt-nn)>0
+            AdjInd=[AdjInd i];
+        end
+    end
+    ind=ind(AdjInd);
+end
+        
 function ind=splitPermutation2(C,D,nn,rep1,rep2,option)
 ind=[];
 if option==0;

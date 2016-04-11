@@ -27,6 +27,8 @@ pstd=std(p);
 
 x=1:n;
 plot(x,p(:,2),'ob',x,p(:,5),'xr'); %Jittered data
+h=legend('MGC\{mcorr\}','mcorr','Location','NorthEast');
+set(h,'FontSize',12);
 % strNames=['J';'F';'M';'A';'M'];
 set(gca,'XTickLabel',strNames,'XTick',1:numel(strNames));
 %xlim([0.8,2.2])

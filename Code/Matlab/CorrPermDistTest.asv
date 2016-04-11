@@ -21,6 +21,8 @@ end
 n=size(C,1);
 ratio1=0.5;
 nn=floor(n*ratio1);
+rl=50;
+epsilon=0.5;
 
 % Global Correlations
 [p1All]=PermutationTest(C,D,rep2,option(1));
@@ -35,57 +37,95 @@ if rep1==0;
 else
     % % Run the permutation test to return the p-values
     rr=ceil(rep2/rep1);
-    rr=max(100,rr);
-    ind1=splitPermutation(C,D,nn,rep1,rr,option(1));
-    ind2=splitPermutation(C,D,nn,rep1,rr,option(2));
-    ind3=splitPermutation(C,D,nn,rep1,rr,option(3));
+    rr=max(rl,rr);
+    ind1=splitPermutation(C,D,nn,rep1,rr,epsilon,option(1));
+    ind2=splitPermutation(C,D,nn,rep1,rr,epsilon,option(2));
+    ind3=splitPermutation(C,D,nn,rep1,rr,epsilon,option(3));
 end
-p1=median(p1All(ind1));
-p2=median(p2All(ind2));
-p3=median(p3All(ind3));
+% % p1=median(p1All(ind1));
+% % p2=median(p2All(ind2));
+% % p3=median(p3All(ind3));
+p1=mean(p1All(ind1));
+p2=mean(p2All(ind2));
+p3=mean(p3All(ind3));
+% p1=min(p1All(ind1));
+% p2=min(p2All(ind2));
+% p3=min(p3All(ind3));
 
-if min(p1,p4)<0.05
-    length(ind1)
-    p1
-    p4
-end
-if min(p2,p5)<0.05
-    length(ind2)
-    p2
-    p5
-end
+% if min(p1,p4)<0.05
+%     length(ind1)
+%     p1
+%     p4
+% end
+% if min(p2,p5)<0.05
+%     length(ind2)
+%     p2
+%     p5
+% end
 % Save the results
 pre1='../../Data/';
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
 save(filename,'titlechar','rep2','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3');
 
-function ind=splitPermutation(C,D,nn,rep1,rep2,option)
+function ind=splitPermutation(C,D,nn,rep1,rep2,epsilon,option)
 ind=[];
 if option==0;
     ind=1;
     return;
 end
 n=size(C,1);
-epsilon=0.25;
 ind=1:nn^2;
+repeatInd=0;
+dCorA=zeros(nn,nn,floor(n/nn)*rep1);
 for r=1:rep1
     per=randperm(n);
     l1=length(ind);
     for rr=1:floor(n/nn)
         pa1=per((rr-1)*nn+1:rr*nn);
         [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        ind=ind(tmp(ind)-min(min(tmp))<epsilon);
+%         tmp=tmp-min(min(tmp));
+        eps=min(min(min(tmp))+epsilon,0.8);
+        ind=ind(tmp(ind)<eps);
+        dCorA(:,:,(r-1)+rr)=tmp;
     end
-    ind= verifyAdjacency(ind,nn);
-    if length(ind)==l1
+%     if length(ind)<round(nn);
+%         ind=verifyAdjacency(ind,nn);
+%     end
+if length(ind)==l1
+    repeatInd=repeatInd+1;
+end
+if length(ind)~=l1
+    repeatInd=0;
+end
+if repeatInd==rep1/10;
+    repeatInd=0;
+end
+    switch repeatInd
+        case 0
+            if length(ind)==l1
+                repeatInd=1;
+            end
+        case 1
+            if length(ind)==l1
+                repeatInd=2;
+            else
+                repeatInd=0;
+            end
+        case 2
+            if length(ind)==l1
+                break;
+            else
+                repeatInd=0;
+            end
+    end
+    if length(ind)<nn;
+        ind=verifyAdjacency(ind,nn);
         break;
     end
-    if length(ind)<nn/20;
-        ind=[];
-        break;
-    end
-%     ind= verifyAdjacency(ind,nn);
-%     length(ind)
+%     if length(ind)<nn/10;%round(0.1*nn);
+%         ind=[];
+%         break;
+%     end
 end
 if isempty(ind);
     ind=n^2;
@@ -95,63 +135,83 @@ end
 
 function ind=verifyAdjacency(ind,nn)
 
-if length(ind)<20
-    AdjInd=[];
-    for i=1:length(ind)
-        tt=ind(i);
-        if sum(ind==tt+1)+sum(ind==tt-1)+sum(ind==tt+nn)+sum(ind==tt-nn)>0
-            AdjInd=[AdjInd i];
-        end
-    end
-    ind=ind(AdjInd);
+% if length(ind)<nn
+ll=length(ind);
+row=zeros(ll,1);
+col=zeros(ll,1);
+for i=1:ll
+    [k,l]=ind2sub([nn,nn],ind(i));
+    row(i)=k;
+    col(i)=l;
 end
-        
-function ind=splitPermutation2(C,D,nn,rep1,rep2,option)
+[km,ck]=mode(row);
+[lm,cl]=mode(col);
+tt=false;
+if ck>ll/1.5 && ck>cl
+    pos=(row==km);
+    ind=ind(pos);
+    tt=true;
+end
+if cl>ll/1.5
+    pos=(col==lm);
+    ind=ind(pos);    
+    tt=true;
+end
+% length(ind)
+if length(ind)<nn/5 || tt==false
+    ind=[];
+end
+
+function ind=splitPermutation2(C,D,nn,rep1,rep2,epsilon,option)
 ind=[];
 if option==0;
+    ind=1;
     return;
 end
 n=size(C,1);
+ind=1:nn^2;
+dCorA=zeros(floor(n/nn)*rep1,nn,nn);
 for r=1:rep1
     per=randperm(n);
-    pMean=zeros(nn,nn);
-    %     pStd=ones(nn,nn);
-    %dCorA=ones(nn,nn,floor(n/nn));
     for rr=1:floor(n/nn)
         pa1=per((rr-1)*nn+1:rr*nn);
         [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        %         tmp=tmp-min(min(tmp(2:end,2:end)));
-        pMean=pMean+tmp/floor(n/nn);
-    end
-    %     for i=2:nn
-    %         for j=2:nn
-    %             tmp=reshape(dCorA(i,j,:),1,floor(n/nn));
-    %             pMean(i,j)=mean(tmp);
-    % %             pStd(i,j)=std(tmp);
-    %         end
-    %     end
-    
-    %     crStd=sort(pStd(2:end,2:end),'ascend');
-    %     crStd=crStd(ceil(length(crStd)*0.3));
-    if r==1
-        ind=find(pMean-min(min(pMean))<0.05);
-    else
-        ind=ind(pMean(ind)-min(min(pMean))<0.1);
-    end
-    length(ind)
-    %     ind=ind(pStd(ind)<0.2);
-    if isempty(ind)
-        length(ind)
-        break
+%         tmp=tmp-min(min(tmp));
+%         ind=ind(tmp(ind)<epsilon);
+        dCorA(floor(n/nn)*(r-1)+rr,:,:)=tmp;
     end
 end
-% length(ind)
-if isempty(ind);
-    length(ind)
+
+bench=dCorA(:,end,end);
+h=zeros(nn,nn);
+unif=0:0.01:1;
+if kstest2(unif,bench,'Tail','larger')==1;
+    bench=unif;
+end
+for i=1:nn
+    for j=1:nn
+       [~,h(i,j)]=kstest2(dCorA(:,i,j),bench,'Tail','larger');
+    end
+end
+ind=find(h<0.05);
+
+pos=[];
+tmp=1;
+for i=1:length(ind)
+    [k,l]=ind2sub([nn,nn],ind(i));
+    tmp=min(tmp,max(dCorA(:,k,l)));
+    if max(dCorA(:,k,l))<epsilon
+        pos=[pos i];
+    end
+end
+tmp
+if isempty(pos)
     ind=n^2;
 else
+    ind=ind(pos);
     ind=ratioScale(ind,nn,n);
 end
+% end
 
 function [ind]=ratioScale(indn,nn,n)
 % nn=size(p1All,1);

@@ -1,8 +1,8 @@
 function [powerP]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise,alpha)
-% Author: Cencheng Shen
-% n=50;dim=1;rep1=50;rep2=300;noise=1;type=1:20;
+% % Author: Cencheng Shen
+% n=50;dim=1;rep1=50;rep2=100;noise=1;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
-% n=100;dim=10;rep1=50;rep2=300;noise=0;type=1:20;
+% n=100;dim=10;rep1=50;rep2=100;noise=0;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
 % Used to compute the permutation test power for the 20 type of simulations
 if nargin<1
@@ -15,10 +15,10 @@ if nargin<3
     type=1:20;
 end
 if nargin<4
-    rep1=50;
+    rep1=100;
 end
 if nargin<5
-    rep2=300;
+    rep2=200;
 end
 if nargin<6
     noise=1;
@@ -30,11 +30,11 @@ if dim>1
     noise=0;
     dimInd=dim;
 end
-repp=10;
+repp=50;
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(6,20);
-option=[1,2,0,0];
+option=[0,2,0,0];
 for tt=type
     neighbor=[];
     if dim==1
@@ -71,17 +71,26 @@ for tt=type
         p(3)=p(3)+(pp2<alpha)/rep1;
         p(4)=p(4)+(p2<alpha)/rep1;
         if isempty(neighbor)==false
-        p(5)=p(5)+(mean(p1All(neighbor(1)))<alpha)/rep1;
-        p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
+            if option(1)==1
+                p(5)=p(5)+(mean(p1All(neighbor(1)))<alpha)/rep1;
+            end
+            if option(2)==2
+                p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
+            end
         end
+%         p
     end
     powerP(1,tt)=p(1);
     powerP(2,tt)=p(2);
     powerP(3,tt)=p(3);
     powerP(4,tt)=p(4);
     if isempty(neighbor)==false
-        powerP(5,tt)=p(5);
-        powerP(6,tt)=p(6);
+        if option(1)==1
+            powerP(5,tt)=p(5);
+        end
+        if option(2)==1
+            powerP(6,tt)=p(6);
+        end
     end
 end
 filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'N',num2str(n),'Dim',num2str(dim));

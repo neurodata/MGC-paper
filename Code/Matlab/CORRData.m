@@ -14,10 +14,10 @@ if nargin<1
     aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
 end
 if nargin<2
-    rep1=30;
+    rep1=50;
 end
 if nargin<3
-    rep2=300;
+    rep2=200;
 end
 if nargin<4
     pre1='../../../../Data/CORR/';

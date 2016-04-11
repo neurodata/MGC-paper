@@ -88,7 +88,7 @@ for tt=type
         if option(1)==1
             powerP(5,tt)=p(5);
         end
-        if option(2)==1
+        if option(2)==2
             powerP(6,tt)=p(6);
         end
     end

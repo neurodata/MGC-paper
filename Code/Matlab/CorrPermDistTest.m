@@ -22,7 +22,7 @@ n=size(C,1);
 ratio1=0.5;
 nn=floor(n*ratio1);
 rl=50;
-epsilon=0.5;
+epsilon=0.45;
 
 % Global Correlations
 [p1All]=PermutationTest(C,D,rep2,option(1));
@@ -81,21 +81,16 @@ end
 n=size(C,1);
 ind=1:nn^2;
 repeatInd=0;
-dCorA=zeros(nn,nn,floor(n/nn)*rep1);
+% dCorA=[];
 for r=1:rep1
     per=randperm(n);
     l1=length(ind);
     for rr=1:floor(n/nn)
         pa1=per((rr-1)*nn+1:rr*nn);
         [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        %         tmp=tmp-min(min(tmp));
         eps=min(min(min(tmp))+epsilon,0.8);
         ind=ind(tmp(ind)<eps);
-        dCorA(:,:,(r-1)+rr)=tmp;
     end
-    %     if length(ind)<round(nn);
-    %         ind=verifyAdjacency(ind,nn);
-    %     end
     if length(ind)==l1
         repeatInd=repeatInd+1;
     end
@@ -109,11 +104,8 @@ for r=1:rep1
         ind=verifyAdjacency(ind,nn);
         break;
     end
-    %     if length(ind)<nn/10;%round(0.1*nn);
-    %         ind=[];
-    %         break;
-    %     end
 end
+
 if isempty(ind);
     ind=n^2;
 else
@@ -121,8 +113,6 @@ else
 end
 
 function ind=verifyAdjacency(ind,nn)
-
-% if length(ind)<nn
 ll=length(ind);
 row=zeros(ll,1);
 col=zeros(ll,1);
@@ -134,17 +124,16 @@ end
 [km,ck]=mode(row);
 [lm,cl]=mode(col);
 tt=false;
-if ck>ll/1.5 && ck>cl
+if ck>ll*0.75 && ck>cl
     pos=(row==km);
     ind=ind(pos);
     tt=true;
 end
-if cl>ll/1.5
+if cl>ll*0.75
     pos=(col==lm);
     ind=ind(pos);    
     tt=true;
 end
-% length(ind)
 if length(ind)<nn/5 || tt==false
     ind=[];
 end

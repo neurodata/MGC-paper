@@ -126,7 +126,7 @@ CorrPermDistTest(C1,T1,rep2,rep2,'BrainCxT');
 %%%use dcorr to find the optimal neighborhood size
 clear
 load('BrainCP')
-n=42; lim=1; rep1=10; rep2=3000;
+n=42; lim=1; rep1=50; rep2=10000;
 CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))

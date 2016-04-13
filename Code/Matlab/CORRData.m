@@ -14,10 +14,10 @@ if nargin<1
     aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
 end
 if nargin<2
-    rep1=50;
+    rep1=25;
 end
 if nargin<3
-    rep2=200;
+    rep2=100;
 end
 if nargin<4
     pre1='../../../../Data/CORR/';
@@ -53,7 +53,7 @@ for l=1:length(aList);
     end
     
     for r=1:region
-        r
+%         r
         distC=squareform(pdist(X(:,:,r)'));
         %distP=squareform(pdist(X2(:,:,i)));
         [p1(1), p1(2), p1(3), p1(4),p1(5),p1(6),p1(7)]=CorrPermDistTest(distC,distP,rep1,rep2,'tmp',option);

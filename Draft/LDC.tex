@@ -115,13 +115,13 @@ More recently, nearest-neighbor has been an invaluable tool in unfolding nonline
 
 Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs \cite{David1966,Friedman1983,Schilling1986,Dumcke2014}.  These approaches have the advantage of naturally operating on any kind of data, including categorical and structured data, as well as strong theoretical guarantees.  Perhaps more importantly, they focus only on local distances, rather than global distances, enabling them to be robust to nonlinear and high-dimensional dependence structures.  However, none of the previous nearest-neighbor based methods provide a convenient or automatic method for choosing the neighborhood size, therefore leaving a crucial tuning parameter unspecified, and impairing its finite sample performance and practical usage. Moreover, they largely focused on two-sample testing, rather than dependence testing.  
 
-In this paper we propose Multiscale Graph Correlation (MGC) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently locate the optimal scale within a family of local statistics, naturally inherits the advantages of the distance correlation such as being consistent, enjoys the properties of graph dependence structures such as better performance in high-dimension and strongly nonlinear dependencies, and is a scalable and better method on big data. 
+In this paper we propose Multiscale Graph Correlation (MGC) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently locate the optimal scales within a family of local statistics, naturally inherits the advantages of the distance correlation such as being consistent, enjoys the properties of graph dependence structures such as better performance in high-dimension and strongly nonlinear dependencies, and is a scalable and better method on big data. 
 
 Those advantages make our new test statistic the best method thus far for detecting dependency on complex simulated dependencies and real data. Indeed, in our comprehensive simulation setting, MGC is able to achieve a superior finite-sample testing power for data sets of nonlinearity, noise, and/or small sample size, comparing to existing popular methods like dcorr / mcorr / Mantel / HHG; and in the real data experiment, MGC is able to identify significant p-values when testing between dependent data sets,  and does not detect false signals when the dependencies are not there in a set of brain imaging experiments. Thus, we expect MGC to find values in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of MGC, and incorporate into FlashR.
 
 \section{Results}
 \label{main}
-\subsection{Multiscale Graph Correlation Description}
+\subsection{Description of Multiscale Graph Correlation}
 \label{main1}
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, high-dimensional nonlinear manifolds can be approximated by local linear spaces.  Combining these two ideas yields our statistic,  Multiscale Graph Correlation (MGC).  
 
@@ -168,17 +168,17 @@ when $a_{ij}$ is the doubly centered distances modified for the high-dimensional
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigA}
 \caption{
-Flowchart of Global to Local Distance Correlation: Column 1: $(X,Y)$ have a quadratic relationship with some noise. Column 2: the distance matrix heat maps for $X$ and $Y$. Column 3: Doubly-centered distance matrix heat maps, i.e., $\{a_{ij}\}$ and $\{b_{ij}\}$, which can be used to calculate the global distance correlation. Column 4: Local doubly-centered distance matrix heat maps, where the optimal scale is already estimated with all non-local entries set to $0$ and shaded white. Column 5: The entry-wise product heat map of column 4. Summing over all entries in Column 5 yields the un-normalized MGC statistic (for dcorr); divide it by the product of the Frobenius norm of each matrix in Column 4 yields the MGC statistic. }
+Flowchart of Global to Local Distance Correlation: Column 1: $(X,Y)$ have a quadratic relationship with some noise. Column 2: the distance matrix heat maps for $X$ and $Y$. Column 3: Doubly-centered distance matrix heat maps, i.e., $\{a_{ij}\}$ and $\{b_{ij}\}$, which can be used to calculate the global distance correlation. Column 4: Local doubly-centered distance matrix heat maps, where an optimal scale is already estimated with all non-local entries set to $0$ and shaded white. Column 5: The entry-wise product heat map of column 4. Summing over all entries in Column 5 yields the un-normalized MGC statistic (for dcorr); divide it by the product of the Frobenius norm of each matrix in Column 4 yields the MGC statistic. }
 \label{fig:A}
 \end{figure}
 
-In the family of local statistics $\{g_{kl}\}$, the optimal local test statistic is dubbed the multiscale graph correlation. Clearly the optimal scale exists (optimal with respect to the testing power), is distribution dependent, and may not be unique. But different from a manifold learning task, the optimal scale within the dependence testing framework can be efficiently estimated depending on the given scenario: if the underlying joint distribution is known, the true optimal scale can be derived by maximizing the testing powers of all local tests; if there is only one pair of observations of unknown model, the optimal scale can be approximately estimated and verified by the p-values of random sub-samples of the data. %if the sample size is too large such that dependency testing is only carried out on a sub-sample of the given data, the optimal scale can be estimated by another independent sub-sample. 
+In the family of local statistics $\{g_{kl}\}$, the optimal local test statistic is dubbed the multiscale graph correlation. Clearly the optimal scale exists (optimal with respect to the testing power), is distribution dependent, and may not be unique. But different from a manifold learning task, the optimal scale within the dependence testing framework can be efficiently estimated: if the underlying joint distribution is known, the true optimal scale can be derived by maximizing the testing powers among all local tests; if there is only one pair of observations with unknown underlying model, the optimal scale can be approximated and verified by the p-values of random sub-samples of the data. %if the sample size is too large such that dependency testing is only carried out on a sub-sample of the given data, the optimal scale can be estimated by another independent sub-sample. 
 
-Once the optimal scale is determined, the local statistic at the estimated optimal scale is used as the MGC statistic. The p-value of MGC is then calculated by the permutation test, and we declare significant dependency if the p-value is sufficiently low (e.g., less than $0.05$). A flowchart of how to calculate the MGC statistic is provided in Figure~\ref{fig:A}, and more details on optimal scale estimation and MGC evaluation are provided in appendix section~\ref{appen:tests}.
+Once the optimal scale is determined, the local statistic at the estimated optimal scale is used as the MGC statistic. Then the p-value of MGC is calculated by the permutation test for a given pair of data, and we declare significant dependency if the p-value is sufficiently low (e.g., less than $0.05$). A flowchart on how to calculate the MGC statistic is provided in Figure~\ref{fig:A}, and more details on optimal scale estimation and MGC evaluation are provided in appendix section~\ref{appen:tests}.
 
-MGC can be implemented by any global statistics in the form of the generalized correlation coefficient. By the optimal scale estimation, MGC is theoretically no worse than the global counterpart, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies. Different MGC implementations may vary slightly in performance, and some may do particularly well for certain dependency, depending on the property of the respective global statistic. For example, since mcorr performs the best under high-dimensional dependencies, MGC implemented by mcorr also empirically performs better than other implementations of MGC under high-dimensional linear dependencies. 
+MGC can be implemented by any global statistics in the form of the generalized correlation coefficient. By the optimal scale estimation, MGC is no worse than the global counterpart, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies. Different MGC implementations may vary slightly in performance, and some may do particularly well under certain dependency, depending on the properties of the respective global statistic. For example, since mcorr performs the best under high-dimensional dependencies, MGC implemented by mcorr also empirically performs better than other implementations of MGC under high-dimensional linear dependencies. 
 
-Below we demonstrate that our local modification yields tests that preserve consistency regardless of the functional dependency and dimensionality, improve the testing powers under nonlinear and high-dimensional dependencies, both in theory and in simulations, as while as being the most superior method for simulations and real data experiments.
+Below we demonstrate that our local modification yields tests that preserve consistency regardless of the functional dependency and dimensionality, improve the testing powers under nonlinear and high-dimensional dependencies both in theory and in simulations, as while as being the most superior method for simulations and real data experiments.
 
 
 \subsection{Theoretical Consistency and Efficiency for Any Dependence Structure}
@@ -223,7 +223,7 @@ MGC empirically achieves similar or better power than the previous state of the 
 
 For the dimension $1$ scenario, MGC$\{$dcorr$\}$/$\{$mcorr$\}$/$\{$Mantel$\}$ either equals or is better than its corresponding global test. For dependencies that are close to linear (type 1-5), MGC usually yields similar testing powers as dcorr and mcorr, which are slightly better than HHG and Mantel; for the remaining nonlinear dependencies (type 6-19), HHG is the best among all global statistics, yet MGC is able to achieve similar or even better performance than HHG in almost all cases except type $15$. 
 
-Note that for all distributions other than the independent clouds, the empirical powers eventually increase to $1$ as the sample size increases, implying that all methods are consistent except the Mantel test, whose powers stay low in many nonlinear dependencies; and for the independent clouds, the empirical power of MGC is approximately at the type $1$ error level, so no false signal is detected once the MGC optimal scale is determined. 
+Note that for all distributions other than the independent clouds, the empirical powers eventually increase to $1$ as the sample size increases, implying that all methods are consistent except the Mantel test, whose powers stay low in many nonlinear dependencies; and for the independent clouds, the empirical power of MGC is approximately at the type $1$ error level, so no false signal is detected once an optimal scale is determined. 
 
 To better summarize the overall performance in the dimension $1$ simulations, we use the performance profiles \cite{DolanMore2002}, which provides an intuitive way for directly comparing a set of algorithms on a set of problems.  Briefly, each curve (profile) shows the relative performance of a given algorithm as a function of how far from the best algorithm it performed; therefore, higher curves and larger area under curve are better; a more detailed description is in appendix section~\ref{appen:profiles}. For the dimension $1$ scenario, we fix the sample size by a power threshold, and draw the corresponding performance profiles of all methods in Figure~\ref{fig:pp}(a). To compare the performance profiles of each method with respect to different threshold choices, the area under curve of the performance profiles against the power threshold is provided in Figure~\ref{fig:pp}(b).
 \begin{figure}[htbp]
@@ -286,7 +286,7 @@ For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ 
 \label{figSim6}
 \end{figure}
 
-To characterize the above behaviors, in the following theorems we prove that the testing power of MGC by the permutation test equals the testing power of the global test statistic under linear dependency, i.e., the optimal scale of MGC is at the largest. But under certain nonlinear dependency, the optimal scale is smaller such that MGC enjoys a better finite-sample testing power than the corresponding global statistic. 
+To characterize the above behaviors, in the following theorems we prove that the testing power of MGC by the permutation test equals the testing power of the global test statistic under linear dependency, i.e., the largest scale $(n,n)$ is always an optimal scale of MGC. But under certain nonlinear dependency, $(n,n)$ may no longer be an optimal scale such that MGC enjoys a better finite-sample testing power than the corresponding global statistic. 
 
 \begin{thm}
 \label{thm2}
@@ -353,8 +353,7 @@ The same robustness still holds as the dimension or sample size increases, or th
 
 \subsection{Real Data Experiment}
 \label{numer3}
-Here MGC is applied to test independence between real data sets. Among the three MGC implementations, we concentrate on MGC$\{$mcorr$\}$ as the other two implementations yield similar performance during the experiments. The optimal scale of MGC is estimated and verified by random sub-sampling of the data, as there is no known model for the given data here; then the MGC p-value is calculated by the permutation test at the estimated optimal scale. The detailed algorithm for sub-sampling is provided in appendix section~\ref{appen:tests}. 
-\cs{tba: update CORR figure and number}
+Here MGC is applied to test independence between real data sets. Among the three MGC implementations, we concentrate on MGC$\{$mcorr$\}$ as the other two implementations yield similar performance during the experiments. As there is no known model for the given data, the optimal scale of MGC is estimated and verified by random sub-sampling of the data according to the algorithms in appendix section~\ref{appen:tests}, then the MGC p-value is calculated by the permutation test at the estimated optimal scale.
 
 \subsubsection{Brain Shape vs. Disease}
 
@@ -412,7 +411,7 @@ Right Brain vs Disorder & $0.0126$ & $0.1039$ & $0.1177$  & $0.0750$ & $0.0800$\
 }
 \caption{
 (a) Local Tests P-value Curves with respect to $k$ at $l=4$ for brain vs disease. 
-(b) MGC p-value scatter plots for brain vs noise. Red cross is global mcorr, blue circle is MGC.
+(b) False positive rates for brain vs noise throughout $24$ different data sets. Red cross is global mcorr, blue circle is MGC.
 (c) Local Tests P-value Heat map with respect to $k$ and $l$ for brain Migrain vs disease. 
 (d) Local Tests P-value Heat map with respect to $k$ and $l$ for brain M2g vs disease. }
 \label{figReal}
@@ -432,7 +431,7 @@ We visualize the local p-value heat maps in Figure~\ref{figReal}(c)(d). It is cl
 \cs{yes; and under the new estimation method, those scales do not consistently produce significant p-values after sub-sampling.}
 If we test dependency between \Migraine~vs \mtg, all p-values become $0$, indicating a strong dependency. 
 
-Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly dependent with each other, \Migraine~is more related to CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our MGC statistic identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Therefore MGC can be used to find the most relevant representation / variable and provide valuable insights into the difference.
+Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly dependent with each other, \Migraine~is more related to CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our MGC statistic identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Therefore MGC can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
 
 \subsubsection{Brain Activity vs. Noise}
 
@@ -441,11 +440,12 @@ two resting state data for the same person. We used CPAC to estimate regional ti
 
 For each brain region, denote $x_{\cdot t}$ as the observation vector at timestep $t$ for all persons, then the distance matrix with respect to time is calculated by $dist(s,t)=\|x_{\cdot s}-x_{\cdot t}\|$. We generate an independent stimulus by sampling from a standard normal at each time step, whose Euclidean distance matrix can be easily calculated. Using the two distance matrices, the dependency between each brain region and the stimulus can be tested by our methods. The p-value of each method is calculated using $1000$ permutations, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
-For each data set, the above testing is carried out for each brain region with the false positive rate of MGC shown in Figure~\ref{figReal}(b) (the rates of other test statistics are included in Appendix Table~\ref{table2}). Because the stimulus is in fact independent from the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. Clearly MGC does not detect false signals from this experiment. This is in contrast to standard methods previous proposed in the literature \cite{EklundKnutsson2012}.
+For each data set, the above testing is carried out for each brain region with the false positive rate of MGC and mcorr shown in Figure~\ref{figReal}(b). Because the stimulus is in fact independent from the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. Clearly MGC is only slightly higher than mcorr, and the mean/standard deviation for MGC is $0.0583 \pm 0.0395$, and $0.0444 \pm 0.0356$ / $0.0477 \pm 0.0364$ / $0.0594 \pm 0.0559$ / $0.0552 \pm 0.0310$ for dcorr/mcorr/Mantel/HHG respectively. Therefore MGC does not inflate false signals from this experiment. This is in contrast to many other methods compared in the literature \cite{EklundKnutsson2012}.
+
 \jv{let's move the table to the appendix, and add just a jittered scatter plot of MGC false positive rate, to include in the other real data figure?}
 \cs{done; let me know if you want a better looking scatter plot}
 \jv{i do :) can you label the x-axis with the name of the dataset or something? and add a dashed line at p=0.05 for the y-axis.  and make the y scale from 0 to 1 perhaps?}
-\cs{Tried again! But if we put all 26 data names on x axis it may look too crowded...we will see}
+\cs{Tried again! I deleted the long table in appendix, for now; as the plot and the mean/std are informative enough, I think.}
 
 \section{Discussion}
 \label{conclu}
@@ -457,17 +457,16 @@ In short, we propose multiscale graph correlation to test independence between d
 
 \cs{I feel it is not necessary to include next steps in the paper. For example, although the idea to extend two-sample test by local variant is similar to MGC, we shouldn't be too optimistic in this paper before we tried them; also if it does work, probably we don't want to tell others yet :-)}
 \jv{good paper writing essentially requires next steps.  it tells people how our work changes the world, what can be achieved next, and in particular, which subset of those things we are planning on doing.}
-\cs{I have added sub-sampling stuff into intro part as well as appendix. Other than that, I cannot think of any potential stuff that is concrete enough to add; and the current applications are already wonderful enough! }
+\cs{I have added sub-sampling stuff into intro part as well as appendix, and local scale estimation and geometry implication into the next steps. I commented out other next steps in tex, that I think is not concrete enough yet; we can add back later. }
 
 \paragraph{Next Steps}
+For the optimal scales, how to better select them numerically, and what is their underlying geometric implications, are two immediate directions that worth more theoretical investigations. Beyond the testing framework, whether MGC and its optimal scale can be applicable to other closely-related areas like dimension reduction and supervised learning, are interesting subjects to follow as well.
 
+%one-sample, two-sample test by the local variants, group testing, anova, regressing out other covariates (local partial correlation), screening, metric spaces.
 
+%different test statistics: there are many possible ways to generate the null distribution, including permutation, but also t-test (as in the mcorr paper \cite{SzekelyRizzo2013a} and the asymptotic distribution derived from \cite{GrettonEtAl2012}), wilcoxon signed rank test, etc..
 
-one-sample, two-sample test by the local variants, group testing, anova, regressing out other covariates (local partial correlation), screening, metric spaces.
-
-different test statistics: there are many possible ways to generate the null distribution, including permutation, but also t-test (as in the mcorr paper \cite{SzekelyRizzo2013a} and the asymptotic distribution derived from \cite{GrettonEtAl2012}), wilcoxon signed rank test, etc..
-
-scaling up via FlashX?
+%scaling up via FlashX?
 
 \section*{Acknowledgment}
 \addcontentsline{toc}{section}{Acknowledgment}
@@ -748,7 +747,7 @@ The second algorithm computes the testing powers of all local statistics by repe
 
 The third algorithm computes the p-values of all local statistics by the random permutation test with $r$ random permutations. Once an optimal scale is estimated, the p-value at the optimal scale equals the p-value of MGC.
 
-The fourth algorithm is used to estimate the optimal scale on a given data of unknown model. Given a pair of data sets of size $n$, we randomly split it into two sub-samples of size $\frac{n}{2}$, do permutation testing for each partition separately, and check if there exists any local scale that has consistently low p-values throughout the two sub-samples. All local scales that pass through the first screen is verified again by another two random sub-samples of the given data, until the local scale no longer change or there exists too few optimal scales or a screening limit is reached (we set the limit as $s=10$ in the numerical experiments). The estimated local scale on the sub-sample is then enlarged properly to the original sample size by a factor of roughly $2$, and used as the optimal scale of MGC for the p-value calculation on the whole data; when there are only a few scales that achieve consistent low p-value, the largest scale $(n,n)$ (i.e., MGC equals the global statistic) is used instead. 
+The fourth algorithm is used to estimate the optimal scale on a given data of unknown model. Given a pair of data sets of size $n$, we randomly split it into two sub-samples of size $\frac{n}{2}$, do permutation testing for each partition separately, and check if there exists any local scale that has consistent low p-values throughout the two sub-samples. All local scales that pass through the first screen is verified again by another two random sub-samples of the given data, until the local scale stabilizes; then we extract the most consecutive scales on a row or column. The estimated local scale on the sub-sample is then enlarged properly to the original sample size by a factor of roughly $2$, and used as the optimal scales of MGC for the p-value calculation on the whole data; when there are only a few or no consecutive scales that achieve consistent low p-value, the largest scale $(n,n)$ is used instead, i.e., MGC equals the global statistic.
 
 The complexity of Algorithm~\ref{algLGC} is $O(n^2 \log n)$: the global function takes $O(n^2 \log n)$, and the following loops take $O(n^2)$. Algorithm~\ref{algPower} takes $O(rn^2 \log n)$: it takes $O(rn^2 \log n)$ to generate data and calculate the test statistics, and $O(n^2 (r+\log n))$ to estimate the power. Both Algorithm~\ref{algPerm} and Algorithm~\ref{algSplitPerm} take $O(rn^2 \log n)$ as well. 
 
@@ -854,26 +853,23 @@ Note that the first three algorithms can be used for global dcorr / mcorr / Mant
 \begin{algorithmic}
 \Function{SplitScale}{$X$,$Y$,$s$, $r$,option}
 \State $n=size(X,1)$;$n_{s}=floor(n/2)$; \Comment{$n_{s}$ is the sample size of the sub-sample}
-\State $ind=1:n_{s}^2$; \Comment{initialize all local scales as the potential optimal scale}
-\State $\epsilon=0.2$; \Comment{the threshold p-value to determine if a scale has low p-value or not}
-\For{$i=1,\ldots,s$} \Comment{estimate the optimal scale by random sub-samples}
-\State $l1=length(ind)$;
-\State $per=randperm(n)$;
-\State $p1=PermutationTest(X(per(1:n_{s}),:),Y(per(1:n_{s}),:),ceil(r/s),option)$; \Comment{we use $r/s$ random permutations instead of $r$ to speed up the screening procedure}
-\State $p2=PermutationTest(X(per(n_{s}+1:2*n_{s}),:),Y(per(n_{s}+1:2*n_{s}),:),ceil(r/s),option)$;
-\State $ind=ind(p1-min(p1)<\epsilon)$; \Comment{exclude all scales that are far away from the minimal p-values}
-\State $ind=ind(p2-min(p2)<\epsilon)$;
-\State $ind=verifyAdjancey(ind)$; \Comment{verify and exclude any isolated scales}
-\If{$l1==length(ind)$}
-\State $break$; \Comment{stop sub-sampling if the estimated optimal local scale no longer changes}
+\State $r_{s}=max(ceil(r/s),50)$; \Comment{use $r_{s}$ random permutations instead of $r$ during screening}
+\State $ind=1:n_{s}^2$; \Comment{initialize all local scales as the potential optimal scales}
+\State $\epsilon=0.5$; \Comment{the threshold p-value to determine if a scale has low p-value or not}
+\For{$i=1,\ldots,s$} \Comment{estimate the optimal scales by random sub-samples}
+\State $ll=length(ind)$;$per=randperm(n)$; 
+\State $p1=PermutationTest(X(per(1:n_{s}),:),Y(per(1:n_{s}),:),r_{s},option)$; 
+\State $p2=PermutationTest(X(per(n_{s}+1:2*n_{s}),:),Y(per(n_{s}+1:2*n_{s}),:),r_{s},option)$;
+\State $ind=ind(p1-min(p1)<\epsilon)$; $ind=ind(p2-min(p2)<\epsilon)$; \Comment{exclude all scales that have large p-values}
+\If{$length(ind)==ll$} 
+\State $ind=verifyScales(ind)$;$break$; \Comment{extract the most consecutive scales}
 \EndIf
-\If{$length(ind)<n_{s}/20$}
-\State $ind=[];$
-\State $break$; \Comment{stop sub-sampling if there are too few optimal scales}
+\If{$length(ind)<n_{s}/3$}
+\State $ind=[]$;$break$; \Comment{stop sub-sampling if there are too few optimal scales}
 \EndIf
 \EndFor
 
-\State $indN=[]$; \Comment{store the enlarged optimal scale}
+\State $indN=[]$; \Comment{store the enlarged optimal scales}
 \If{$length(ind)==0$}
 \State $indN=n^2$; \Comment{use the largest scale if no scale passes the sub-sample verification}
 \Else
@@ -887,7 +883,7 @@ Note that the first three algorithms can be used for global dcorr / mcorr / Mant
 \EndIf
 
 \State $p=PermutationTest(X,Y,r,option)$;
-\State $p=median(p(indN))$; \Comment{take the median as the estimated MGC p-value}
+\State $p=mean(p(indN))$; \Comment{take the men as the estimated MGC p-value}
 \State \Return $p$, $indN$.
 \EndFunction
 \end{algorithmic}
@@ -903,7 +899,7 @@ To evaluate MGC in simulations or real data, the optimal scale of MGC needs to b
 \end{equation}
 If there are more than one optimal neighborhood choices, we pick the scale that maximizes the mean difference of the test statistic under the null and the alternative. Then the testing power of MGC can be quickly determined by running Algorithm~\ref{algPower} again to estimate the power at the optimal scale $(k^{*},l^{*})$. 
 
-In case of given observations $(X,Y)$ of unknown distributions, we use Algorithm~\ref{algPerm}, ~\ref{algSplitPerm} to estimate the optimal scale by random sub-samples of the given data. To show that sub-sampling can yield good optimal scales, we plot the power heat maps of all local statistics at $n=25$ and $50$ for the dimension $1$ simulation in Figure~\ref{figSim2a}. It is clear that the optimal scales are always proportionate to $n$, which indicates that the estimated optimal scale by sub-sampling should be very close to the true optimal. 
+In case of given observations $(X,Y)$ of unknown distributions, we use Algorithm~\ref{algPerm}, ~\ref{algSplitPerm} to estimate the optimal scale by random sub-samples of the given data. To show that sub-sampling can yield reasonable estimation of the optimal scales, we plot the power heat maps of all local statistics at $n=25$ and $50$ for the dimension $1$ simulation in Figure~\ref{figSim2a}. It is clear that the optimal scales are always proportionate to $n$ and consecutive on at least one row or column, which indicates that the estimated scales by sub-sampling should be close to the true optimal. 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig2b}
@@ -923,13 +919,13 @@ However, if there exists another independently collected pair of data from the s
 
 The above alternative approach is not only suitable when additional data are available, but also ideal for huge amount of data sets where sub-sampling is often necessary for data analysis: we can take one sub-sample for optimal scale estimation, and another sub-sample of equal size for p-value calculation. For large amount of data, a proper sub-sampling can drastically improve the running time without affecting the testing power; but if the sample size is small due to expensive data collection process, sub-sampling may make MGC less powerful than other global methods, because only a subset of the data is used for p-value calculation. Therefore it is still necessary to find a way to reliably estimate the local scale based on the given data, and use the whole data for p-value calculation.
 
-To guarantee the estimated scale is close to the true optimal and not biased towards the given data, we make the following observation: the true optimal scale should achieve consistently high power / low p-value for all sample data independently generated by the same underlying model, is approximately proportionate to the sample size, and there usually exists multiple adjacent optimal scales due to the strong correlation between adjacency scales; while a falsely identified optimal scale cannot always produce low p-values for multiple dependent data pairs of the same distribution, and is likely isolated. Therefore, if we were able to know the model (like in Algorithm~\ref{algPower}) or have multiple independent data pairs from the same model (like the alternative approach outlined above), we can almost always correctly identify the true optimal scale and achieves the theoretical MGC power without bias.
+To guarantee the estimated scale is close to the true optimal and not biased towards the given data, we make the following observation: the true optimal scale should achieve consistently high power / low p-value for all sample data independently generated by the same underlying model, is approximately proportionate to the sample size, and there usually exists multiple adjacent optimal scales due to the strong correlation between consecutive scales; while a falsely identified optimal scale cannot always produce low p-values for multiple dependent data pairs of the same distribution, and is likely isolated. Therefore, if we were able to know the model (like in Algorithm~\ref{algPower}) or have multiple independent data pairs from the same model (like the alternative approach outlined above), we can almost always correctly identify the true optimal scale and achieves the theoretical MGC power without bias.
 
-The above paragraph motivates our Algorithm~\ref{algSplitPerm}: when the given data is randomly split into two partitions, an optimal scale at the sub-sample level should have low p-values for each half, and there should exist multiple such scales that are adjacent to each other. So scales that happen to have low p-values on the whole data can be screened out, by checking whether its p-value is sufficiently small for all random sub-samples and whether there are adjacent good scales. This splitting and screening procedure can be continued until the local scale stabilizes or a screen limit is reached, and the global statistic is used when there are too few optimal scales. Finally, the estimated optimal scale at the sub-sample level is enlarged accordingly to the full sample size and used to calculate the MGC p-values. 
+The above paragraph motivates our Algorithm~\ref{algSplitPerm}: when the given data are randomly split into two partitions, an optimal scale at the sub-sample level should have low p-values for each half, and there should exist multiple such scales that are adjacent to each other. So scales that happen to have low p-values on the whole data can be screened out, by checking whether its p-value is sufficiently small for all random sub-samples and whether there are adjacent good scales. This splitting and screening procedure can be continued until the local scale stabilizes or a screen limit is reached; and we extract the most consecutive scales on a row or column, based on the screened scales. Then the estimated optimal scale at the sub-sample level is enlarged accordingly to the full sample size and used to calculate the MGC p-values; but if there are too few scales remaining, either after screening or after searching consecutive scales, those scales may be erroneous and we use the largest scale instead. 
 
-Note that the threshold $0.2$ to screen p-values and $0.05 n_{s}$ to screen number of scales can be changed. To increase the testing powers, one may either increase the p-value threshold or decrease the scale threshold, but $s$ may need to be increased accordingly so more random sub-samples are used for verification; to make MGC more conservative, one may decrease the p-value threshold or increase the scale threshold, so only very strong signals are identified at the cost of slightly reduced MGC power. Empirically, using a p-value threshold from $0.2$ to $0.3$ and a scale threshold from $0.05n_{s}$ to $0.2n_{s}$ are usually good choices.
+For the parameters, we set $\epsilon=0.5$ for p-value screening, and $s=50$ in numerical experiments for screening limit. The threshold $0.5$ to screen p-values and $n_{s}/3$ to abandon too few scales can be changed, if necessary. To increase the testing powers, one may either increase the p-value threshold or decrease the scale threshold; to make MGC more conservative, one may decrease the p-value threshold or increase the scale threshold, so only very strong signals are identified at the cost of slightly reduced MGC power. Empirically, using a p-value threshold from $0.3$ to $0.6$ and a scale threshold from $3$ to $0.5n_{s}$ are usually fine choices. Note that $s=50$ is usually a very conservative screening limit that is rarely reached.
 
-Furthermore, the screening procedure in Algorithm~\ref{algSplitPerm} can be speed up for large amount of data and large number of random permutations, e.g., instead of setting $n_{s}=\frac{n}{2}$, it usually suffices to use $n_{s}=100$ when the sample size $n$ is too large; and we have used $\frac{r}{s}$ random permutations for each screening rather than $r$ permutations for the whole data. Therefore the screening procedure is approximately equivalent in running time to the MGC permutation test on the whole sample, and Algorithm~\ref{algSplitPerm} has twice the running time of Algorithm~\ref{algPerm} due to the extra optimal scale estimation step.
+Furthermore, the screening procedure in Algorithm~\ref{algSplitPerm} is computationally efficient for large amount of data and large number of random permutations, since we used $r_{s}$ random permutations during screening. We can also use $n_{s}=100$ rather than $n_{s}=\frac{n}{2}$ for screening, if the sample size $n$ is very large. Therefore the screening procedure can be equivalent or less in running time comparing to the MGC permutation test on the whole sample, and Algorithm~\ref{algSplitPerm} has at most twice the running time of Algorithm~\ref{algPerm}.
 
 In Figure~\ref{figSimPerm} we compare the theoretical testing power of MGC\{dcorr\} by the true optimal scale at $n=50$ under the low-dimensional simulation, to its testing power based on the sub-sampling scheme. We generate $100$ pairs of dependent data, calculate the MGC p-value by Algorithm~\ref{algSplitPerm}, and reject the independent hypothesis when the p-value is less than $0.05$. We observe that MGC by sub-sampling is slightly inferior to the true MGC power, but is still significantly better than the global method. 
 \cs{I prefer to not show the above last paragraph and Figure~\ref{figSimPerm} unless the referee asked; because it kinds of weakens our claims in the main paper. Plus we can save it for the follow-on paper on local scale estimation. But I am also ok if you think keeping it here makes algorithm 4 more convincing. Note that the sub-sampling scheme is very very good and close to true power for all types except trigonometry functions 11-17.}
@@ -939,73 +935,6 @@ In Figure~\ref{figSimPerm} we compare the theoretical testing power of MGC\{dcor
 \caption{Comparing true MGC power to MGC by sub-sampling, for the dimension $1$ simulations at $n=50$.} 
 \label{figSimPerm}
 \end{figure}
-
-\begin{table*}[!t]
-\footnotesize
-\renewcommand{\arraystretch}{0.5}
-\centering
-{\begin{tabular}{|c||c|c|c|c|c|c|c|}
-\hline
-Data Set & MGC & dcorr & mcorr & Mantel & HHG \\
-\hline
-BNU1  & $0.05$ & $0.02$ & $0.02$ & $0.04$ & $0.075$ \\
-\hline
-BNU2 & $0.09$ & $0.08$ & $0.09$  & $0.03$ & $0.035$\\
-\hline
-BNU3 & $0.02$ & $0$ & $0.005$  & $0.07$ & $0.03$\\
-\hline
-DC1 & $0.03$ & $0.035$ & $0.03$  & $0.035$ & $0.04$\\
-\hline
-HNU1 & $0.015$ & $0.01$ & $0.015$  & $0.24$ & $0.11$\\
-\hline
-IACAS & $0.04$ & $0.04$ & $0.035$  & $0.095$ & $0.055$\\
-\hline
-IBATRT & $0.06$ & $0.12$ & $0.13$  & $0.085$ & $0.04$\\
-\hline
-IPCAS1 & $0.11$ & $0.065$ & $0.065$  & $0.04$ & $0.055$\\
-\hline
-IPCAS2 & $0.045$ & $0.06$ & $0.055$  & $0.035$ & $0.045$\\
-\hline
-IPCAS5 & $0.02$ & $0.03$ & $0.025$  & $0.025$ & $0.09$\\
-\hline
-JHNU  & $0.045$ & $0.04$ & $0.04$ & $0.025$ & $0.055$ \\
-\hline
-KKI21  & $0.03$ & $0.055$ & $0.055$ & $0.035$ & $0.155$ \\
-\hline
-LMU3  & $0.035$ & $0.025$ & $0.025$ & $0.155$ & $0.06$ \\
-\hline
-MPG1  & $0.06$ & $0.06$ & $0.06$ & $0.015$ & $0.06$ \\
-\hline
-MRN  & $0.075$ & $0.09$ & $0.095$ & $0.06$ & $0.01$ \\
-\hline
-NYU1  & $0.065$ & $0.04$ & $0.04$ & $0.035$ & $0.04$ \\
-\hline
-NYU2  & $0.015$ & $0.035$ & $0.025$ & $0$ & $0.075$ \\
-\hline
-SWU3  & $0.03$ & $0.02$ & $0.02$ & $0.03$ & $0.03$ \\
-\hline
-SWU4  & $0.005$ & $0.02$ & $0.02$ & $0.155$ & $0.055$ \\
-\hline
-UM & $0.01$ & $0.005$ & $0$  & $0.005$ & $0.025$\\
-\hline
-UPSM & $0.03$ & $0.01$ & $0.005$  & $0.075$ & $0.03$\\
-\hline
-Utah1 & $0.02$ & $0.025$ & $0.02$  & $0.04$ & $0.025$\\
-\hline
-UWM & $0.155$ & $0.145$ & $0.14$  & $0.085$ & $0.065$\\
-\hline
-XHCUMS & $0.045$ & $0.035$ & $0.04$  & $0.015$ & $0.065$\\
-\hline
-\hline
-Average & $0.0458 \pm 0.0347$ & $0.0444 \pm 0.0356$ & $0.0440 \pm 0.0372$  & $0.0594 \pm 0.0559$ & $0.0552 \pm 0.0310$\\
-\hline
-\end{tabular}
-\caption{False Positive Rate of fMRI Brain Activity versus Independent Stimulus. 
-Each row displays the percentage of brain region that are tested significant for a particular data set.
-The last row shows the mean and the standard deviation. }
-\label{table2}
-}
-\end{table*}
 
 \section{Proofs}
 \label{appen:proofs}

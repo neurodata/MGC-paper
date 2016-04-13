@@ -30,7 +30,7 @@ if dim>1
     noise=0;
     dimInd=dim;
 end
-repp=50;
+repp=25;
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(6,20);
@@ -78,7 +78,7 @@ for tt=type
                 p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
             end
         end
-%         p
+        p
     end
     powerP(1,tt)=p(1);
     powerP(2,tt)=p(2);

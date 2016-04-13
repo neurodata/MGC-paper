@@ -159,7 +159,7 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         end
     case {16,17} %Sine 1/2 & 1/8
         x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
-        if type==14
+        if type==16
             theta=4;cc=1;
         else
             theta=16;cc=0.5;

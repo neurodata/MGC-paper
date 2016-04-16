@@ -1,4 +1,4 @@
-function [p1,p2,p3, p4,p5,p6,p7,p1All,p2All,p3All]=CorrPermDistTest(C,D,rep1,rep2,titlechar,option)
+function [p1,p2,p3, p4,p5,p6,p7,p1All,p2All,p3All]=CorrPermDistTest(C,D,rep,titlechar,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by dcorr/mcorr/Mantel, and global dcorr/mcorr/Mantel/HHG.
@@ -12,191 +12,157 @@ function [p1,p2,p3, p4,p5,p6,p7,p1All,p2All,p3All]=CorrPermDistTest(C,D,rep1,rep
 % option specifies whether each test statistic is calculated or not,
 % neighborhood can be specified beforehand so as to skip the optimal scale
 % estimation.
-if nargin<5
+if nargin<4
     titlechar='RealData';
 end
-if nargin<6
+if nargin<5
     option=[1,2,3,4]; % Default option. Setting any to 0 to disable the calculation of MGC by dcorr/mcorr/Mantel, global dcorr/mcorr/Mantel, HHG, in order; set the first three
 end
-n=size(C,1);
-ratio1=0.5;
-nn=floor(n*ratio1);
-rl=50;
-epsilon=0.5;
 
 % Global Correlations
-[p1All]=PermutationTest(C,D,rep2,option(1));
-[p2All]=PermutationTest(C,D,rep2,option(2));
-[p3All]=PermutationTest(C,D,rep2,option(3));
-[p7]=PermutationTest(C,D,rep2,option(4));
-p4=p1All(end);
-p5=p2All(end);
-p6=p3All(end);
-if rep1==0;
-    ind1=maxNeighbors(1-p1All);ind2=maxNeighbors(1-p2All);ind3=maxNeighbors(1-p3All);
-else
-    % % Run the permutation test to return the p-values
-    rr=ceil(rep2/rep1);
-    rr=max(rl,rr);
-    ind1=splitPermutation(C,D,nn,rep1,rr,epsilon,option(1));
-    ind2=splitPermutation(C,D,nn,rep1,rr,epsilon,option(2));
-    ind3=splitPermutation(C,D,nn,rep1,rr,epsilon,option(3));
-end
-% % p1=median(p1All(ind1));
-% % p2=median(p2All(ind2));
-% % p3=median(p3All(ind3));
-p1=mean(p1All(ind1));
-p2=mean(p2All(ind2));
-p3=mean(p3All(ind3));
-% p1=min(p1All(ind1));
-% p2=min(p2All(ind2));
-% p3=min(p3All(ind3));
+[p1All]=PermutationTest(C,D,rep,option(1));
+[p2All]=PermutationTest(C,D,rep,option(2));
+[p3All]=PermutationTest(C,D,rep,option(3));
+[p1,ind1]=verify(p1All);[p2,ind2]=verify(p2All);[p3,ind3]=verify(p3All);
+p4=p1All(end);p5=p2All(end);p6=p3All(end);
+[p7]=PermutationTest(C,D,rep,option(4));
 
-if p2<0.05 && p5>0.05
-    length(ind2)
+if p2<0.05 || p5<0.05
     p2
     p5
 end
-if p2>0.05 && p5<0.05
-    length(ind2)
-    p2
-    p5
-end
-% if min(p1,p4)<0.05
-%     length(ind1)
-%     p1
-%     p4
-% end
-% if min(p2,p5)<0.05
-%     length(ind2)
-%     p2
-%     p5
-% end
-% Save the results
 pre1='../../Data/';
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-save(filename,'titlechar','rep2','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3');
+save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3');
 
-function ind=splitPermutation(C,D,nn,rep1,rep2,epsilon,option)
-ind=[];
-if option==0;
-    ind=1;
+function [p1,ind]=verify(p1All)
+alpha=0.05;
+thres=0.80;
+if p1All==1;
+    p1=1;
+    ind=[];
     return;
 end
-n=size(C,1);
-ind=1:nn^2;
-repeatInd=0;
-% dCorA=[];
-for r=1:rep1
-    per=randperm(n);
-    l1=length(ind);
-    for rr=1:floor(n/nn)
-        pa1=per((rr-1)*nn+1:rr*nn);
-        [tmp]=PermutationTest(C(pa1,pa1),D(pa1,pa1),rep2,option);
-        eps=min(min(min(tmp))+epsilon,0.8);
-        ind=ind(tmp(ind)<eps);
-    end
-    if length(ind)==l1
-        repeatInd=repeatInd+1;
-    end
-    if length(ind)~=l1
-        repeatInd=0;
-    end
-    if repeatInd==round(rep1/5);
-        ind=verifyScales(ind,nn);
-        break;
-    end
-    if length(ind)<nn/3
-        ind=[];
-        break;
-    end
-end
+n=size(p1All,1);
+power1=(p1All<alpha);
+pCol=mean(power1(2:end,1:end),1);
+pRow=mean(power1(1:end,2:end),2);
+% figure
+% plot(1:n,pCol,'bo:',1:n,pRow,'r+:')
 
-if isempty(ind);
-    ind=n^2;
-else
-    ind=ratioScale(ind,nn,n);
-end
+if length(find(pCol>thres))+length(find(pRow>thres))<n/20 %&& length(find(pRow>thres2))<n/20
+%     figure
+%     plot(1:n,pCol,'bo:',1:n,pRow,'r+:')
 
-function ind=verifyScales(ind,nn)
-ll=length(ind);
-row=zeros(ll,1);
-col=zeros(ll,1);
-for i=1:ll
-    [k,l]=ind2sub([nn,nn],ind(i));
-    row(i)=k;
-    col(i)=l;
-end
-[km,ck]=mode(row);
-[lm,cl]=mode(col);
-tt=false;
-if ck>cl %ck>ll*0.5 && ck>cl
-    pos=(row==km);
-    ind=ind(pos);
-    pos=find(diff(ind)==nn);
-    if isempty(pos)==false
-        ind=verifyAdjacentScales(ind,pos);
-        tt=true;
-    end
-else
-    pos=(col==lm);
-    ind=ind(pos);    
-    pos=find(diff(ind)==1);
-    if isempty(pos)==false
-        ind=verifyAdjacentScales(ind,pos);
-        tt=true;
-    end
-end
-if length(ind)<nn/3 || tt==false
     ind=[];
+    p1=1;
+%     ind=n^2;
+%     p1=p1All(ind);
+    return;
 end
 
-function ind=verifyAdjacentScales(ind,pos)
-posEnd=1;
-posEndTmp=1;
+% figure
+% imagesc(pMean)
+% colorbar();
+% figure
+% plot(1:nn,pCol,'bo:',1:nn,pRow,'r+:')
+if max(pRow)>max(pCol)
+    k=find(pRow==max(pRow),1,'last');
+    l=find(p1All(k,:)==min(p1All(k,:)),1,'last');
+else
+    l=find(pCol==max(pCol),1,'last');
+    k=find(p1All(:,l)==min(p1All(:,l)),1,'last');
+end
+ind=sub2ind([n,n],k,l);
+p1=p1All(ind);
+
+function [p1,ind]=verify3(p1All,thres)
+if nargin<2
+    thres=0.05;
+end
+if p1All==1;
+    p1=1;
+    ind=[];
+    return;
+end
+p1=0;
+n=size(p1All,1);
+pCol=mean(p1All(2:end,1:end),1);
+pRow=mean(p1All(1:end,2:end),2);
+
+if min(pCol)>thres && min(pRow)>thres
+    ind=[];
+    p1=1;
+    return;
+end
+
+if min(pRow)>min(pCol)
+    p1All=p1All';
+    pCol=mean(p1All(2:end,1:end),1);
+    pRow=mean(p1All(1:end,2:end),2);
+end
+
+pos=find(pRow<thres);
+ind=find(pRow(pos)==min(pRow(pos)),1,'last');
+if isempty(ind)
+    return;
+end
+k=pos(ind);
+l=find(p1All(k,:)==min(p1All(k,:)),1,'last');
+% figure
+% plot(1:nn,pCol,'bo:',1:nn,pRow,'r+:')
+% figure
+% imagesc(pMean);
+% colorbar();
+% length(pos)
+if length(pos)<n/20;
+    ind=[];
+    p1=1;
+    return;
+else
+    ind=sub2ind([n,n],k,l);
+    p1=p1All(ind);
+end
+
+function pos=verifyAdjacentScales(pos)
+pos2=find(diff(pos)>=0);
+pos1=verifyAuxi(pos2);
+
+pos2=find(diff(pos)<=0);
+pos2=verifyAuxi(pos2);
+
+if length(pos1)>length(pos2)
+    pos2=pos1;
+end
+if isempty(pos2)
+    pos=pos(end);
+else
+    pos=pos(pos2);
+end
+
+function pos2=verifyAuxi(pos2)
+pos2=find(diff(pos2)==1);
+if isempty(pos2)
+    pos2=[];
+    return;
+end
+posStart=1;
+posStartTmp=1;
 maxT=1;
 maxTmp=1;
-for i=2:length(pos)
-    if pos(i)==pos(posEndTmp)+1
-        posEndTmp=i;
+for i=2:length(pos2)
+    if pos2(i)==pos2(i-1)+1
         maxTmp=maxTmp+1;
         if maxTmp>=maxT
             maxT=maxTmp;
-            posEnd=posEndTmp;
+            posStart=posStartTmp;
         end
     else
+        posStartTmp=i;
         maxTmp=1;
-        posEndTmp=i;
     end
 end
-pos=pos(posEnd+1-maxT):pos(posEnd)+1;
-ind=ind(pos);
-
-function [ind]=ratioScale(indn,nn,n)
-% nn=size(p1All,1);
-% indn=maxNeighbors(1-p1All,0);
-% indn=maxNeighbors(p1All,0);
-indLength=length(indn);
-ind=[];
-% ratio=(n-1)/(nn-1);
-for i=1:indLength;
-    [k,l]=ind2sub([nn,nn],indn(i));
-    k=k-1;
-    l=l-1;
-    if k==0 || l==0
-        continue;
-    end
-    kb=floor((k-1)*(n-1)/(nn-1))+2;
-    kt=floor(k*(n-1)/(nn-1))+1;
-    lb=floor((l-1)*(n-1)/(nn-1))+2;
-    lt=floor(l*(n-1)/(nn-1))+1;
-    for kk=kb:kt
-        for ll=lb:lt
-            tmp=sub2ind([n,n], kk, ll);
-            ind=[ind tmp];
-        end
-    end
-end
+pos2=pos2(posStart):pos2(posStart+maxTmp-1)+1;
 
 function  [p1]=PermutationTest(C,D,rep,option)
 % This is an auxiliary function of the main function to calculate the p-values of

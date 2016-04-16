@@ -30,7 +30,6 @@ if dim>1
     noise=0;
     dimInd=dim;
 end
-repp=25;
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(6,20);
@@ -65,7 +64,7 @@ for tt=type
         [x, y]=CorrSampleGenerator(tt,n,dim,1, noise);
         C=squareform(pdist(x));
         D=squareform(pdist(y));
-        [pp1,pp2,~,p1,p2,~,~,p1All,p2All]=CorrPermDistTest(C,D,repp,rep2,'PermInd',option);
+        [pp1,pp2,~,p1,p2,~,~,p1All,p2All]=CorrPermDistTest(C,D,rep2,'PermInd',option);
         p(1)=p(1)+(pp1<alpha)/rep1;
         p(2)=p(2)+(p1<alpha)/rep1;
         p(3)=p(3)+(pp2<alpha)/rep1;
@@ -93,19 +92,20 @@ for tt=type
         end
     end
 end
+powerP(:,type)
 filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'N',num2str(n),'Dim',num2str(dim));
 save(filename,'powerP','n','rep1','rep2','dim','noise','alpha');
 
-figure
-x=1:20;
-a=1;
-if a==1
-    ind=[1,2,5];
-else
-    ind=[3,4,6];
-end
-p1=powerP(ind,:);
-plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
-legend('Estimated MGC','Global Method', 'True MGC');
-ylim([0,1]);
-title('Testing Power Comparison for dimension 1 simulation at n=50');
+% figure
+% x=1:20;
+% a=1;
+% if a==1
+%     ind=[1,2,5];
+% else
+%     ind=[3,4,6];
+% end
+% p1=powerP(ind,:);
+% plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
+% legend('Estimated MGC','Global Method', 'True MGC');
+% ylim([0,1]);
+% title('Testing Power Comparison for dimension 1 simulation at n=50');

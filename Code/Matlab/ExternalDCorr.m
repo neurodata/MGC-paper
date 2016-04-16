@@ -120,30 +120,30 @@ CorrIndTestDim(20,n,dim,lim,rep1,rep2);
 %%%%
 clear
 load('ccidiff-Tmat-org')
-n=109; lim=1; rep1=2000; rep2=10000;
-CorrPermDistTest(C1,T1,rep2,rep2,'BrainCxT');
+n=109; rep=10000;
+CorrPermDistTest(C1,T1,rep,'BrainCxT');
 
 %%%use dcorr to find the optimal neighborhood size
 clear
 load('BrainCP')
-n=42; lim=1; rep1=50; rep2=10000;
-CorrPermDistTest(distC,distP,rep1,rep2,'BrainCxP');
+n=42; rep=10000;
+CorrPermDistTest(distC,distP,rep,'BrainCxP');
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))
 
 %%%
 clear
 load('semipar')
-n=109;rep1=50; rep2=10000;
+n=109;rep=10000;
 distCCI=squareform(pdist(cci));
-CorrPermDistTest(distMigrain(ind,ind),distCCI(ind,ind),rep1,rep2,'MigrainxCCI');
-CorrPermDistTest(distM2g(ind,ind),distCCI(ind,ind),rep1,rep2,'M2gxCCI');
-CorrPermDistTest(distM2g(ind,ind),distMigrain(ind,ind),rep1,rep2,'M2gxMigrain');
+CorrPermDistTest(distMigrain(ind,ind),distCCI(ind,ind),rep,'MigrainxCCI');
+CorrPermDistTest(distM2g(ind,ind),distCCI(ind,ind),rep,'M2gxCCI');
+CorrPermDistTest(distM2g(ind,ind),distMigrain(ind,ind),rep,'M2gxMigrain');
 
 %%%
 clear
 load('BrainHippoShape')
-n=114;rep1=50;rep2=10000;alpha=0.05;
+n=114;rep=10000;alpha=0.05;
 y=squareform(pdist(Label));
 %y=(y>0)+1;
 y=y+1;
@@ -153,9 +153,9 @@ end
 % y(y>2)=2;
 %estimate optimal scale separately
 option=[1,2,3,4];
-CorrPermDistTest(LMLS,y,rep1,rep2,'BrainLMLxY',option);
-CorrPermDistTest(LMRS,y,rep1,rep2, 'BrainLMRxY',option);
-CorrPermDistTest(LMLS,LMRS,rep1,rep2,'BrainLMLxLMR');
+CorrPermDistTest(LMLS,y,rep,'BrainLMLxY',option);
+CorrPermDistTest(LMRS,y,rep, 'BrainLMRxY',option);
+CorrPermDistTest(LMLS,LMRS,rep,'BrainLMLxLMR');
 %%%ind trial
 rep1=200;rep2=200;powerL=zeros(7,1);powerR=zeros(7,1);
 for i=1:rep2;

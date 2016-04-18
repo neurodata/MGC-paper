@@ -120,78 +120,6 @@ F.fname=strcat(pre2, figNumber);
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
-%%
-figNumber='2b';
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
-    K=n;kmin=1;thres=0.8;
-    ind=[find(max(power2,[],1)>=thres,1) lim];
-    lim=10;
-    kmin=2;
-    ph=power2All(kmin:numRange(lim),kmin:numRange(lim),lim)';
-    imagesc(ph);
-    set(gca,'YDir','normal')
-    colormap(map2)
-    if j==20
-    caxis([0 1])
-    end
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
-    title(titlechar);
-end
-xlabel('Neighborhood Choice of X','position',[-103 -10],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-265 150],'FontSize',20);
-% colorbar
-tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1 at n=50'));
-set(h,'FontSize',20,'FontWeight','normal');
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
-print_fig(gcf,F)
-
-%%
-figNumber='2c';
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
-    K=n;kmin=1;thres=0.8;
-    ind=[find(max(power2,[],1)>=thres,1) lim];
-    lim=5;
-    kmin=2;
-    ph=power2All(kmin:numRange(lim),kmin:numRange(lim),lim)';
-    imagesc(ph);
-    set(gca,'YDir','normal')
-    colormap(map2)
-    if j==20
-    caxis([0 1])
-    end
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
-    title(titlechar);
-end
-xlabel('Neighborhood Choice of X','position',[-50 -5],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-130 75],'FontSize',20);
-% colorbar
-tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1 at n=25'));
-set(h,'FontSize',20,'FontWeight','normal');
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
-print_fig(gcf,F)
-
 %% %performance profile
 figNumber='3';
 figure
@@ -419,6 +347,60 @@ ylim([0 1]);
 titleStr = strcat('Area Under Curve of Performance Profiles for Increasing Dimension');
 title(titleStr,'FontSize',12);
 %
+F.fname=strcat(pre2, figNumber);
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
+
+
+%
+map1(1,:)=dcorr;
+map1(2,:)=mcorr; 
+map1(3,:)=mante; 
+map1(4,:)=HHG; % The color for HHG
+set(groot,'defaultAxesColorOrder',map1);
+
+figNumber='9';
+filename=strcat(pre1,'CorrSimPermScale1-20N60Dim1');
+load(filename)
+figure
+x=1:20;
+a=2;
+if a==1
+    ind=[1,2,5];
+else
+    ind=[3,4,6];
+end
+p1=powerP(ind,:);
+plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
+h=legend('Global Mcorr','Estimated MGC', 'True MGC');
+set(h,'FontSize',12);
+xlabel('Function Type','FontSize',13);
+ylabel('Testing Power','FontSize',13);;
+ylim([0,1]);
+title('Testing Power Comparison for dimension 1 simulation at n=60','FontSize',12);
+F.fname=strcat(pre2, figNumber);
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
+
+figNumber='10';
+filename=strcat(pre1,'CorrSimPermScale1-20N100Dim50');
+load(filename)
+figure
+x=1:20;
+a=2;
+if a==1
+    ind=[1,2,5];
+else
+    ind=[3,4,6];
+end
+p1=powerP(ind,:);
+plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
+h=legend('Global Mcorr','Estimated MGC', 'True MGC');
+set(h,'FontSize',12);
+xlabel('Function Type','FontSize',13);
+ylabel('Testing Power','FontSize',13);
+ylim([0,1]);
+title('Testing Power Comparison for high-dimensional simulation at n=100','FontSize',12);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)

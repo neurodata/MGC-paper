@@ -37,7 +37,7 @@ save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6',
 
 function [p1,ind]=verify(p1All)
 alpha=0.05;
-thres=0.85;
+thres=0.7;
 if p1All==1;
     p1=1;
     ind=[];
@@ -51,13 +51,16 @@ k=find(pRow>thres);
 l=find(pCol>thres);
 col=false;
 
-if length(k)<length(l)
+if length(k)<length(l)%sum(pRow>thres)<sum(pCol>thres)
     p1All=p1All';
     pRow=pCol;
     k=l;
     col=true;
 end
-if length(k)<n/20;% || mean(a(indK))>length(indK)
+% [~,~,a]=unique(1-pRow);
+% k=find(a==1,1,'last');
+k=find(pRow>thres);
+if length(k)<n/10;% || mean(a(indK))>length(indK)
     ind=[];
     p1=1;
     if pRow(n)>thres || sum(pRow>pRow(n))==0
@@ -69,7 +72,7 @@ end
 % figure
 % plot(1:n,pCol,'b-',1:n,pRow,'r:')
 
-k=find(pRow==max(pRow));
+% k=find(pRow==max(pRow));
 ind=find(p1All(k,:)==min(min(p1All(k,:))),1,'last');
 [k1,l]=ind2sub([length(k),n],ind);
 k=k(k1);

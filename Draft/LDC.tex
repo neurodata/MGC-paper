@@ -368,7 +368,7 @@ its dissimilarity matrix is formed by the Euclidean distances of the vector, fol
 
 Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. Based on $r=10$,$000$ random permutations, the resulting p-values are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC / HHG / Mantel yield significant p-values with dcorr / mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, and all global tests have p-values higher than significance. 
 
-The p-value curves of the local tests are provided in figure~\ref{figReal}(a) with respect to the choice of $k$ at $l=4$. We only show the curves at $l=4$ because the p-values of local tests at a fixed $k$ are the same throughout $l \in [4,114]$ (the largest rank is $3$ for the disorder dissimilarity matrix), and the scales at $l<4$ are neither optimal nor yield significant p-values. We can clearly identify many common local scales between the two curves that yield significant p-values, which implies a local dependency structure and is the reason that MGC can successfully identify the signals. %The estimated optimal scales are $k^{*}=65$ and $k^{*}=64$ (and $l^{*}$ can be any number larger than $3$) respectively for left brain and right brain vs disease, based on $2,000$ MC replicates. As the optimal scales are very similar, it indicates the left brain and the right brain may have similar dependence structures when testing against the disease.
+The p-value curves of the local tests are provided in figure~\ref{figReal}(a) with respect to the choice of $k$ at $l=4$. We only show the curves at $l=4$ because the p-values of local tests at a fixed $k$ are the same throughout $l \in [4,114]$ (as the largest rank is $3$ for the disorder dissimilarity matrix), and the scales at $l<4$ are neither optimal nor yield significant p-values. We can clearly identify many common local scales between the two curves that yield significant p-values, which implies a local dependency structure and is the reason that MGC can successfully identify the signals. %The estimated optimal scales are $k^{*}=65$ and $k^{*}=64$ (and $l^{*}$ can be any number larger than $3$) respectively for left brain and right brain vs disease, based on $2,000$ MC replicates. As the optimal scales are very similar, it indicates the left brain and the right brain may have similar dependence structures when testing against the disease.
 
 
 \begin{table*}[!t]
@@ -379,13 +379,13 @@ The p-value curves of the local tests are provided in figure~\ref{figReal}(a) wi
 \hline
 Testing Method & MGC & dcorr & mcorr & Mantel & HHG \\
 \hline
-Left Brain vs Disorder  & $0.0282$ & $0.0758$ & $0.0847$ & $0.0405$ & $0.0410$ \\
+Left Brain vs Disorder  & $0.0173$ & $0.0806$ & $0.0820$ & $0.0399$ & $0.0368$ \\
 \hline
-Right Brain vs Disorder & $0.0126$ & $0.1039$ & $0.1177$  & $0.0750$ & $0.0800$\\
+Right Brain vs Disorder & $0.0051$ & $0.1033$ & $0.1105$  & $0.0826$ & $0.0809$\\
 \hline
-\Migraine~vs CCI & $0.0098$ & $0.0093$ & $0.0098$  & $0.0078$ & $0.0350$\\
+\Migraine~vs CCI & $0.0077$ & $0.0081$ & $0.0099$  & $0.0095$ & $0.0316$\\
 \hline
-\mtg~vs CCI & $0.0508$ & $0.0700$ & $0.0508$  & $0.3021$ & $0.6550$\\
+\mtg~vs CCI & $1$ & $0.0698$ & $0.0502$  & $0.3040$ & $0.6578$\\
 \hline
 \end{tabular}
 \caption{The Empirical P-Values in the Permutation Test}
@@ -416,8 +416,8 @@ Right Brain vs Disorder & $0.0126$ & $0.1039$ & $0.1177$  & $0.0750$ & $0.0800$\
 \caption{
 (a) Local Tests P-value Curves with respect to $k$ at $l=4$ for brain vs disease. 
 (b) False positive rates for brain vs noise throughout $24$ different data sets. Red cross is global mcorr, blue circle is MGC.
-(c) Local Tests P-value Heat map with respect to $k$ and $l$ for brain Migrain vs disease. 
-(d) Local Tests P-value Heat map with respect to $k$ and $l$ for brain M2g vs disease. }
+(c) Local Tests P-value Heat map with respect to $k$ and $l$ for brain \Migraine~vs disease. 
+(d) Local Tests P-value Heat map with respect to $k$ and $l$ for brain \mtg~vs disease. }
 \label{figReal}
 \end{figure}
 
@@ -425,9 +425,9 @@ Right Brain vs Disorder & $0.0126$ & $0.1039$ & $0.1177$  & $0.0750$ & $0.0800$\
 
 Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried both to determine which worked better for this particular task.
 
-Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI are very significant, with all methods returning significant p-values. But there is a slight loss of dependency between \mtg~and CCI, as neither the global methods nor MGC return significant p-values. 
+Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI are very significant, with all methods returning significant p-values. But there is a loss of dependency between \mtg~and CCI, as neither the global methods nor MGC return significant p-values. 
 
-We visualize the local p-value heat maps in figure~\ref{figReal}(c)(d). It is clear that there exists many local scales with significant p-values for \Migraine~vs CCI, which is no longer the case for \mtg~vs CCI. Although there exists a few scales producing p-values around $0.05$ in figure~\ref{figReal}(d), they are not strong enough to be considered optimal by our estimation algorithm.
+We visualize the local p-value heat maps in figure~\ref{figReal}(c)(d). It is clear that there exists many local scales with significant p-values for \Migraine~vs CCI, which is no longer the case for \mtg~vs CCI. Although there exists a few scales producing p-values around $0.05$ in figure~\ref{figReal}(d), the signals are not strong enough for those few scales to be considered optimal by our algorithm. 
 
 \jv{i don't understand this comment.  optimal scale is the one with the smallest p-value? or estimated higher power? what is the smaller p-value?}
 \cs{optimal scale is the one with the highest power. The optimal scale that has the highest power means it is the most reliable scale for testing: more likely to reject ind hypothesis if and only if dependent. For example, a scale that has a smaller p-value may also has a low power, which means the p-value is not so reliable.}
@@ -449,7 +449,7 @@ For each data set, the above testing is carried out for each brain region with t
 \jv{let's move the table to the appendix, and add just a jittered scatter plot of MGC false positive rate, to include in the other real data figure?}
 \cs{done; let me know if you want a better looking scatter plot}
 \jv{i do :) can you label the x-axis with the name of the dataset or something? and add a dashed line at p=0.05 for the y-axis.  and make the y scale from 0 to 1 perhaps?}
-\cs{Tried again! I deleted the long table in appendix, for now; as the plot and the mean/std are informative enough, I think.}
+\cs{Tried again! I deleted the long table in appendix, for now; as the plot and the mean/std are informative enough, I think. Also note that only mcorr and MGC are re-computed for the brain vs noise simulation; others will be updated later.}
 
 \section{Discussion}
 \label{conclu}
@@ -920,7 +920,7 @@ Instead of algorithm~\ref{algPerm2}, it is tempting to directly find the optimal
 
 To avoid the discovery of erroneous scales, we first determine one optimal index; and the thresholds $\delta$ and $\gamma$ in algorithm~\ref{algPerm2} guarantees there are multiple rows/columns where most scales are significant. Increasing either threshold makes the algorithm more conservative, which may slightly reduce the estimated MGC power; decreasing either threshold makes more scales discoverable, which boosts the estimated MGC power to be closer to the the theoretical true power, at the cost of potentially inflating the false positive rate. Empirically, choosing $\delta \in [0.75,0.95]$ and $\gamma \in [1,n/10]$ are usually good enough for the estimated MGC power to be close to the truth without inflating much the false positive rate.
 
-This problem does not exist, if we know the underlying true model, or has multiple independent pairs of data from the same model. In case of a known model, we already showed in the simulations that the theoretical MGC power can be achieved without any inflation of the false positive rate, once an optimal scale is determined. In case of multiple independent pairs of data, we can find the optimal scale by minimizing the local p-values from one or multiple pairs of data, then use the optimal scale on another pair of data. Take the brain vs disease for example, if we use left brain vs disease to estimate the optimal scale, the right brain vs disease has a MGC p-value of $0.0076$; and the left brain vs disease has a MGC p-value of $0.0169$, if we use the right brain for scale estimation. Both p-values are very close to and slightly less than the respective MGC p-values reported in the main paper using algorithm~\ref{algPerm2}. This alternative approach is not only suitable when additional data are available, but also ideal for huge amount of data sets where sub-sampling is often necessary for data analysis: we can take one or multiple sub-samples for optimal scale estimation, and another sub-sample of equal size for p-value calculation, which achieves the theoretical MGC power without bias.
+This problem does not exist, if we know the underlying true model, or has multiple independent pairs of data from the same model. In case of a known model, we already showed in the simulations that the theoretical MGC power can be achieved without any inflation of the false positive rate, once an optimal scale is determined. In case of multiple independent pairs of data, we can find the optimal scale by minimizing the local p-values from one or multiple pairs of data, then use the optimal scale on another pair of data. Take the brain vs disease for example, if we use left brain vs disease to estimate the optimal scale, the right brain vs disease has a MGC p-value of $0.0063$; and the left brain vs disease has a MGC p-value of $0.0179$, if we use the right brain for scale estimation. Both p-values are very close to the respective MGC p-values reported in the main paper using algorithm~\ref{algPerm2}. This alternative approach is not only suitable when additional data are available, but also ideal for huge amount of data sets where sub-sampling is often necessary for data analysis: we can take one or multiple sub-samples for optimal scale estimation, and another sub-sample of equal size for p-value calculation, which achieves the theoretical MGC power without bias.
 
 \section{Proofs}
 \label{appen:proofs}

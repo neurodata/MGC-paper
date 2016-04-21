@@ -1,12 +1,12 @@
 source("disToRanks.R")
 
-localGraphCorr <- function(X,Y,option, disRank){ # Calculate local graph correlation
+LocalGraphCorr <- function(X,Y,option, disRank){ # Calculate local graph correlation
   # Author: Cencheng Shen
   # Implements local graph correlation from Shen, Jovo, CEP 2016.
-  # By specifying option=1, 2, or 3, it calculates the LGC statistics
-  # by mcorr, dcorr, and Mantel
+  # By specifying option=1, 2, or 3, it calculates the local correlations
+  # of dcorr, mcorr, and Mantel
   if (missing(option)){
-    option=1; # By default use mcorr
+    option=1; # By default use dcorr
   }
   if (missing(disRank)){
     disRank=cbind(disToRanks(X), disToRanks(Y)); # Sort distances within columns, if the ranks are not provided
@@ -22,11 +22,10 @@ localGraphCorr <- function(X,Y,option, disRank){ # Calculate local graph correla
   # Depending on the choice of global test, calculate the entries of A and B accordingly for late multiplication.
   if (option!=3){
     # Double centering for mcorr/dcorr
-    H=diag(n)-(1/n)*matrix(1,n,n);
-    A=H%*%X%*%H;
-    B=H%*%Y%*%H;
+    A=doubleCentering(X);
+    B=doubleCentering(Y);
     # For mcorr, further adjust the double centered matrices to remove high-dimensional bias
-    if (option==1){
+    if (option==2){
       A=A-X/n;
       B=B-Y/n;
       # The diagonals of mcorr are set to zero, instead of the original formulation of mcorr
@@ -63,9 +62,21 @@ localGraphCorr <- function(X,Y,option, disRank){ # Calculate local graph correla
       }
       tmp1=RX[i,j]+1;
       tmp2=RY[i,j]+1;
-      corrXY[tmp1:n, tmp2:n]=corrXY[tmp1:n, tmp2:n]+a*b;
-      varX[tmp1:n]=varX[tmp1:n]+a^2;
-      varY[tmp2:n]=varY[tmp2:n]+b^2;
+      corrXY[tmp1, tmp2]=corrXY[tmp1, tmp2]+a*b;
+      varX[tmp1]=varX[tmp1]+a^2;
+      varY[tmp2]=varY[tmp2]+b^2;
+    }
+  }
+  
+  for (j in (1:(n-1))){
+    corrXY[1,j+1]=corrXY[1,j]+corrXY[1,j+1];
+    corrXY[j+1,1]=corrXY[j,1]+corrXY[j+1,1];
+    varX[j+1]=varX[j]+varX[j+1];
+    varY[j+1]=varY[j]+varY[j+1];
+  }
+  for (j in (1:(n-1))){
+    for (i in (1:(n-1))){
+      corrXY[i+1,j+1]=corrXY[i+1,j]+corrXY[i,j+1]+corrXY[i+1,j+1]-corrXY[i,j];
     }
   }
   
@@ -85,4 +96,15 @@ localGraphCorr <- function(X,Y,option, disRank){ # Calculate local graph correla
   }
   result=list(corr=corrXY,varX=varX,varY=varY);
   return(result);
+}
+
+doubleCentering<-function(X){
+  # Double centering for mcorr/dcorr
+  #H=diag(n)-(1/n)*matrix(1,n,n);
+  #A=H%*%X%*%H;
+  n=nrow(X);
+  A=colMeans(X);
+  A=t(matrix(rep(A,n), ncol = n))+matrix(rep(rowMeans(X),n), ncol = n)-matrix(mean(A),n,n);
+  A=X-A;
+  return(A);
 }

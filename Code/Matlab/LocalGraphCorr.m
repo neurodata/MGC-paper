@@ -2,7 +2,7 @@ function [corrXY,varX,varY] = LocalGraphCorr(X,Y,option,disRank) % Calculate loc
 % Author: Cencheng Shen
 % Implements local graph correlation from Shen, Jovo, CEP 2016.
 %
-% By specifying option=1, 2, or 3, it calculates all local correlations of dcorr, mcorr, and Mantel
+% By specifying option=1, 2, or 3, it calculates the local correlations of dcorr, mcorr, and Mantel
 % Specifying the rank matrix by a size n * 2n disRank can save the sorting.
 if nargin < 3
     option=1; % By default use dcorr
@@ -27,15 +27,15 @@ if option~=3
     if option==2
         A=A-X/n;
         B=B-Y/n;
-        meanX=sum(sum(X))/n^2;
-        meanY=sum(sum(Y))/n^2;
+%         meanX=sum(sum(X))/n^2;
+%         meanY=sum(sum(Y))/n^2;
         % The diagonals of mcorr are set to zero, instead of the original formulation of mcorr
         for j=1:n
-%             A(j,j)=0;
-%             B(j,j)=0;
-            % The original diagonal modification of mcorr
-            A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;
-            B(j,j)=sqrt(2/(n-2))*(mean(Y(:,j))-meanY)*1i;
+            A(j,j)=0;
+            B(j,j)=0;
+% %             The original diagonal modification of mcorr
+%             A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;
+%             B(j,j)=sqrt(2/(n-2))*(mean(Y(:,j))-meanY)*1i;
         end
     end
 else

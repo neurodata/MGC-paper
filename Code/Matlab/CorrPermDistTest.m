@@ -18,7 +18,7 @@ if nargin<5
 end
 
 % Global Correlations
-p1All=1;p2All=1;p3All=1;p1=1;p2=1;p3=1;
+p1All=1;p2All=1;p3All=1;p1=1;p2=1;p3=1;ind1=0;ind2=0;ind3=0;p7=0;
 if option(1)==1
     [p1,p1All,~,~,ind1]=MGCPermutationTest(C,D,rep,option(1));
 end

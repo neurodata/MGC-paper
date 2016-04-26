@@ -1,8 +1,8 @@
 function [powerP]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise,alpha)
 % % Author: Cencheng Shen
-% n=60;dim=1;rep1=100;rep2=500;noise=1;type=1:20;
+% n=60;dim=1;rep1=100;rep2=200;noise=1;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
-% n=100;dim=10;rep1=100;rep2=500;noise=0;type=1:20;
+% n=100;dim=10;rep1=100;rep2=200;noise=0;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
 % Used to compute the permutation test power for the 20 type of simulations
 if nargin<1
@@ -33,7 +33,7 @@ end
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,4];
+option=[0,2,0,0];
 for tt=type
     neighbor=[];
     if dim==1
@@ -67,11 +67,11 @@ for tt=type
         [pp1,pp2,~,p1,p2,~,p4,p1All,p2All]=CorrPermDistTest(C,D,rep2,'PermInd',option);
         p(1)=p(1)+(pp1<alpha)/rep1;
         p(2)=p(2)+(p1<alpha)/rep1;
-        p(3)=p(3)+(pp2<alpha)/rep1;
-        p(4)=p(4)+(p2<alpha)/rep1;
+        p(4)=p(4)+(pp2<alpha)/rep1;
+        p(5)=p(5)+(p2<alpha)/rep1;
         if isempty(neighbor)==false
             if option(1)==1
-                p(5)=p(5)+(mean(p1All(neighbor(1)))<alpha)/rep1;
+                p(3)=p(3)+(mean(p1All(neighbor(1)))<alpha)/rep1;
             end
             if option(2)==2
                 p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
@@ -80,16 +80,16 @@ for tt=type
                 p(7)=p(7)+(p4<alpha)/rep1;
             end
         end
-        p
+%         p
     end
     powerP(1,tt)=p(1);
     powerP(2,tt)=p(2);
-    powerP(3,tt)=p(3);
     powerP(4,tt)=p(4);
+    powerP(5,tt)=p(5);
     powerP(7,tt)=p(7);
     if isempty(neighbor)==false
         if option(1)==1
-            powerP(5,tt)=p(5);
+            powerP(3,tt)=p(3);
         end
         if option(2)==2
             powerP(6,tt)=p(6);
@@ -104,9 +104,9 @@ figure
 x=1:20;
 a=2;
 if a==1
-    ind=[1,2,5,7];
+    ind=[1,2,3,7];
 else
-    ind=[3,4,6,7];
+    ind=[4,5,6,7];
 end
 p1=powerP(ind,:);
 plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-',x,p1(4,:),'c.-')

@@ -15,7 +15,8 @@ RX=disRank(1:n,1:n); % The ranks for X
 RY=disRank(1:n,n+1:2*n); % The ranks for Y
 
 % The output contains the local variants of correlations and variances
-corrXY=zeros(n,n); varX=zeros(n,1); varY=zeros(n,1);
+nX=max(max(RX))+1;nY=max(max(RY))+1;
+corrXY=zeros(nX,nY); varX=zeros(nX,1); varY=zeros(nY,1);
 
 % Depending on the choice of the global test, calculate the entries of A and B
 % accordingly for late multiplication.
@@ -71,14 +72,16 @@ for j=1:n
         varY(tmp2)=varY(tmp2)+b^2;
     end
 end
-for j=1:n-1
-    corrXY(1,j+1)=corrXY(1,j)+corrXY(1,j+1);
+for j=1:nX-1
     corrXY(j+1,1)=corrXY(j,1)+corrXY(j+1,1);
     varX(j+1)=varX(j)+varX(j+1);
+end
+for j=1:nY-1
+    corrXY(1,j+1)=corrXY(1,j)+corrXY(1,j+1);
     varY(j+1)=varY(j)+varY(j+1);
 end
-for j=1:n-1
-    for i=1:n-1
+for j=1:nY-1
+    for i=1:nX-1
         corrXY(i+1,j+1)=corrXY(i+1,j)+corrXY(i,j+1)+corrXY(i+1,j+1)-corrXY(i,j);
     end
 end
@@ -87,10 +90,12 @@ end
 corrXY=corrXY./real(sqrt(varX*varY'));
 
 % Set any local correlation to 0 if any corresponding local variance is no larger than 0
-for j=1:length(varX)
+for j=1:nX
     if varX(j)<=0
         corrXY(j,:)=0;
     end
+end
+for j=1:nY
     if varY(j)<=0
         corrXY(:,j)=0;
     end

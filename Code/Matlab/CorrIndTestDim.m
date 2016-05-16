@@ -47,11 +47,17 @@ power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
     tmp=power1All(:,:,i);
-    power1(i)=tmp(neighborhoods(1,i));power4(i)=tmp(end,end);
+    power1(i)=tmp(neighborhoods(1,i));
+    tmp=tmp(tmp>0);
+    power4(i)=tmp(end);
     tmp=power2All(:,:,i);
-    power2(i)=tmp(neighborhoods(2,i));power5(i)=tmp(end,end);
+    power2(i)=tmp(neighborhoods(2,i));
+    tmp=tmp(tmp>0);
+    power5(i)=tmp(end);
     tmp=power3All(:,:,i);
-    power3(i)=tmp(neighborhoods(3,i));power6(i)=tmp(end,end);
+    power3(i)=tmp(neighborhoods(3,i));
+    tmp=tmp(tmp>0);
+    power6(i)=tmp(end);
 end
 
 % Save the results
@@ -100,13 +106,16 @@ for i=1:lim
         D=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1N(:,:,r)=LocalGraphCorr(C,D,1,disRank);
+            tmp=LocalCorr(C,D,1,disRank);
+            dCor1N(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            dCor2N(:,:,r)=LocalGraphCorr(C,D,2,disRank);
+            tmp=LocalCorr(C,D,2,disRank);
+            dCor2N(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(3)~=0
-            dCor3N(:,:,r)=LocalGraphCorr(C,D,3,disRank);
+            tmp=LocalCorr(C,D,3,disRank);
+            dCor3N(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
             dCor4N(r)=HHG(C,D);
@@ -123,13 +132,16 @@ for i=1:lim
         D=squareform(pdist(y));
         disRank=[disToRanks(C) disToRanks(D)];
         if option(1)~=0
-            dCor1A(:,:,r)=LocalGraphCorr(C,D,1,disRank);
+            tmp=LocalCorr(C,D,1,disRank);
+            dCor1A(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            dCor2A(:,:,r)=LocalGraphCorr(C,D,2,disRank);
+            tmp=LocalCorr(C,D,2,disRank);
+            dCor2A(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(3)~=0
-            dCor3A(:,:,r)=LocalGraphCorr(C,D,3,disRank);
+            tmp=LocalCorr(C,D,3,disRank);
+            dCor3A(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
             dCor4A(r)=HHG(C,D);

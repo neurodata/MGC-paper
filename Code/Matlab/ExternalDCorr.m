@@ -1,23 +1,25 @@
 %Locally linear dependent
 n=7;
 x=-1:2/(n-1):1;
+% x=unifrnd(-1,1,1,n);
 y=x.^2;
-x=unifrnd(1,2,1,n);
-x=[-x,x];
-y=abs(x);
+% x=unifrnd(1,2,1,n);
+% x=[-x,x];
+% y=abs(x);
 %x=unifrnd(-1,1,1,n);
 %y=x;
-optionModi=1;
+optionModi=2;
 C=squareform(pdist(x'));
 P=squareform(pdist(y'));
 per=perms(1:n);
-t1=LocalGraphCorr(C, P, optionModi);
-pv=zeros(n,n);
+t1=LocalCorr(C, P, optionModi);
+pv=zeros(size(t1));
 for i=1:size(per,1);
-    t2=LocalGraphCorr(C, P(per(i,:),per(i,:)), optionModi);
+    t2=LocalCorr(C, P(per(i,:),per(i,:)), optionModi);
     pv=pv+(t1>t2);
 end
 pv=1-pv/size(per,1);
+rat(pv)
 %%%ind trial
 clear
 load('BrainCP')
@@ -51,7 +53,7 @@ end
 
 %%Sims
 %outlier model
-n=100; dim=1; lim=1; rep1=2000;rep2=10000;
+n=100; dim=1; lim=1; rep1=200;rep2=1000;
 noise=0.3;
 CorrIndTest(0,n,dim,lim,rep1,rep2,noise);
 noise=0.5;
@@ -59,7 +61,7 @@ CorrIndTest(0,n,dim,lim,rep1,rep2,noise);
 noise=0.7;
 CorrIndTest(0,n,dim,lim,rep1,rep2,noise);
 %Ind
-n=100; dim=1; lim=20; rep1=2000;rep2=10000;
+n=100; dim=1; lim=20; rep1=200;rep2=1000;
 CorrIndTest(1,n,dim,lim,rep1,rep2);
 CorrIndTest(2,n,dim,lim,rep1,rep2);
 CorrIndTest(3,n,dim,lim,rep1,rep2);
@@ -71,7 +73,7 @@ CorrIndTest(8,n,dim,lim,rep1,rep2);
 CorrIndTest(9,n,dim,lim,rep1,rep2);
 CorrIndTest(10,n,dim,lim,rep1,rep2);
 
-n=100; dim=1; lim=20; rep1=2000;rep2=10000;
+n=100; dim=1; lim=20; rep1=200;rep2=1000;
 CorrIndTest(11,n,dim,lim,rep1,rep2);
 CorrIndTest(12,n,dim,lim,rep1,rep2);
 CorrIndTest(13,n,dim,lim,rep1,rep2);
@@ -85,10 +87,11 @@ CorrIndTest(20,n,dim,lim,rep1,rep2);
 
 
 %IndDim
-n=100; dim=1000; lim=20; rep1=2000;rep2=10000;
+n=100; dim=1000; lim=20; rep1=200;rep2=1000;
 CorrIndTestDim(1,n,dim,lim,rep1,rep2);
 CorrIndTestDim(2,n,dim,lim,rep1,rep2);
 CorrIndTestDim(3,n,dim,lim,rep1,rep2);
+dim=20;lim=20;
 CorrIndTestDim(4,n,dim,lim,rep1,rep2);
 dim=10;lim=10;
 CorrIndTestDim(5,n,dim,lim,rep1,rep2);
@@ -101,7 +104,7 @@ CorrIndTestDim(9,n,dim,lim,rep1,rep2);
 dim=100;
 CorrIndTestDim(10,n,dim,lim,rep1,rep2);
 
-n=100; dim=20; lim=20; rep1=2000;rep2=10000;
+n=100; dim=20; lim=20; rep1=100;rep2=1000;
 CorrIndTestDim(11,n,dim,lim,rep1,rep2);
 CorrIndTestDim(12,n,dim,lim,rep1,rep2);
 CorrIndTestDim(13,n,dim,lim,rep1,rep2);
@@ -116,6 +119,12 @@ CorrIndTestDim(18,n,dim,lim,rep1,rep2);
 dim=100;
 CorrIndTestDim(19,n,dim,lim,rep1,rep2);
 CorrIndTestDim(20,n,dim,lim,rep1,rep2);
+
+%%%
+n=60;dim=1;rep1=100;rep2=200;noise=1;type=1:20;
+[p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
+n=100;dim=10;rep1=100;rep2=200;noise=0;type=1:20;
+[p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
 
 %%%%
 clear
@@ -148,9 +157,9 @@ y=squareform(pdist(Label));
 %y=(y>0)+1;
 % y=y+1;
 % for i=1:n
-%     y(i,i)=0;
+% %     y(i,i)=0;
 % end
-% y(y>2)=2;
+y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];
 CorrPermDistTest(LMLS,y,rep,'BrainLMLxY',option);

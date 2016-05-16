@@ -12,7 +12,7 @@ if nargin<2
     pre1='../../Data/'; % The folder to locate data
 end
 if nargin<3
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 
 %% Set colors
@@ -72,15 +72,15 @@ for j=1:total
         set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
     end
-    title(titlechar);
+    title(titlechar,'FontSize',13);
 end
 xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
-h=suptitle('Testing Powers of 20 Simulated Dependencies for Dimension 1 with Increasing Sample Size');
+h=suptitle('Testing Powers in 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
 h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
-set(h,'FontSize',12);
+set(h,'FontSize',13);
 %
 F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
 F.wh=[8 4]*2;
@@ -107,13 +107,13 @@ for j=1:total
     caxis([0 thres])
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
-    title(titlechar);
+    title(titlechar,'FontSize',13);
 end
-xlabel('Neighborhood Choice of X','position',[-210 -20],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-540 300],'FontSize',20);
+xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
+ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Tests',tstring, ' for Dimension 1'));
+h=suptitle(strcat('Testing Powers of All Local Correlations in 1-Dimensional Simulations'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -150,8 +150,8 @@ set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);
 ylim([0 1]);
-titleStr = strcat('Performance Profiles for Dimension 1');
-title(titleStr,'FontSize',12);
+titleStr = strcat('Performance Profiles in 1-Dimensional Settings');
+title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
@@ -192,8 +192,8 @@ set(h,'FontSize',12);
 xlabel('Threshold of Power','FontSize',16);
 ylabel('Area Under Curve','FontSize',16);
 ylim([0 1]);
-titleStr = strcat('Area Under Curve of Performance Profiles for Dimension 1');
-title(titleStr,'FontSize',12);
+titleStr = strcat('AUC of Performance Profiles in 1-Dimensional Settings');
+title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
@@ -219,15 +219,15 @@ for j=1:total
         %set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
     end
-    title(titlechar);
+    title(titlechar,'FontSize',13);
 end
 xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
-h=suptitle('Testing Powers of 20 Simulated Dependencies for Increasing Dimension with Fixed Sample Size');
+h=suptitle('Testing Powers in 20 Simulated High-Dimensional Settings with Fixed Sample Size');
 set(h,'FontSize',20,'FontWeight','normal');
 lgdPosition = [0.03, 0.87, .07, .07]; %Legend Position
 h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
-set(h,'FontSize',12);
+set(h,'FontSize',13);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[8 4]*2;
@@ -246,9 +246,6 @@ for j=1:total
     kmin=1;thres=0.5;
     ind=[find(max(power2,[],1)>=thres,1,'last'),1];
     lim=max(ind);
-    if j==11 || j==12
-        lim=lim+1;
-    end
     ph=power2All(kmin:n,kmin:n,lim)';
 %     if max(max(ph))>thres
 %         ph=ph/max(max(ph))*thres; % in cas
@@ -259,13 +256,12 @@ for j=1:total
     caxis([0 thres])
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
-    title(titlechar);
+    title(titlechar,'FontSize',13);
 end
-xlabel('Neighborhood Choice of X','position',[-210 -20],'FontSize',20);
-ylabel('Neighborhood Choice of Y','position',[-540 300],'FontSize',20);
+xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
+ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
-tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Tests',tstring,' for Increasing Dimension'));
+h=suptitle(strcat('Testing Powers of All Local Correlations in High-Dimensional Simulations'));
 set(h,'FontSize',20,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -302,8 +298,8 @@ set(h,'FontSize',12);
 xlabel('Difference with the Best Method','FontSize',16);
 ylabel('Relative Performance','FontSize',16);
 ylim([0 1]);
-titleStr = strcat('Performance Profiles for Increasing Dimension');
-title(titleStr,'FontSize',12);
+titleStr = strcat('Performance Profiles in High-Dimensional Settings');
+title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
@@ -344,8 +340,8 @@ set(h,'FontSize',12);
 xlabel('Threshold of Power','FontSize',16);
 ylabel('Area Under Curve','FontSize',16);
 ylim([0 1]);
-titleStr = strcat('Area Under Curve of Performance Profiles for Increasing Dimension');
-title(titleStr,'FontSize',12);
+titleStr = strcat('AUC of Performance Profiles in High-Dimensional Settings');
+title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
@@ -353,10 +349,9 @@ print_fig(gcf,F)
 
 
 %
-map1(1,:)=dcorr;
-map1(2,:)=mcorr; 
-map1(3,:)=mante; 
-map1(4,:)=HHG; % The color for HHG
+% map1(1,:)=mcorr;
+% map1(2,:)=mcorr; 
+% map1(3,:)=dcorr; 
 set(groot,'defaultAxesColorOrder',map1);
 
 figNumber='9';
@@ -366,18 +361,18 @@ figure
 x=1:20;
 a=2;
 if a==1
-    ind=[1,2,5];
+    ind=[1,2,3];
 else
-    ind=[3,4,6];
+    ind=[4,5,6];
 end
 p1=powerP(ind,:);
-plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
-h=legend('Global Mcorr','Estimated MGC', 'True MGC');
+plot(x,p1(1,:),'x-',x,p1(3,:),'o-',x,p1(2,:),'.:','LineWidth',2);
+h=legend('Estimated MGC', 'True MGC','Global Mcorr','Location','SouthWest');
 set(h,'FontSize',12);
-xlabel('Function Type','FontSize',13);
-ylabel('Testing Power','FontSize',13);;
+xlabel('Function Type','FontSize',15);
+ylabel('Testing Power','FontSize',15);
 ylim([0,1]);
-title('Testing Power Comparison for dimension 1 simulation at n=60','FontSize',12);
+title('1-Dimensional Simulations at n=60','FontSize',18);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
@@ -389,18 +384,41 @@ figure
 x=1:20;
 a=2;
 if a==1
-    ind=[1,2,5];
+    ind=[1,2,3];
 else
-    ind=[3,4,6];
+    ind=[4,5,6];
 end
 p1=powerP(ind,:);
-plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-')
-h=legend('Global Mcorr','Estimated MGC', 'True MGC');
-set(h,'FontSize',12);
-xlabel('Function Type','FontSize',13);
-ylabel('Testing Power','FontSize',13);
+plot(x,p1(1,:),'x-',x,p1(3,:),'o-',x,p1(2,:),'.:','LineWidth',2);
+%h=legend('Estimated MGC', 'True MGC','Global Mcorr','Location','SouthWest');
+%set(h,'FontSize',12);
+xlabel('Function Type','FontSize',15);
+ylabel('Testing Power','FontSize',15);
 ylim([0,1]);
-title('Testing Power Comparison for high-dimensional simulation at n=100','FontSize',12);
+title('High-Dimensional Simulations at n=100','FontSize',18);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
+
+%%% Outlier Model
+seq=[0.3,0.5,0.7];
+for i=1:length(seq)
+    figNumber=strcat('Out',num2str(i));
+    filename=strcat(pre1,'CorrIndTestType0N100Dim1P',num2str(seq(i)),'.mat');
+    load(filename)
+    figure
+    imagesc(power2All(2:end,2:end));
+    set(gca,'YDir','normal')
+    colormap(map2)
+    caxis([0.5 1])
+    if i==2;
+        colorbar();
+    else
+        set(gca,'XTick',[]); % Remove x axis ticks
+        set(gca,'YTick',[]); % Remove y axis ticks
+    end
+    title(strcat('Local mcorr Testing Power of the Outlier Model with p=',num2str(seq(i))),'FontSize',13);
+    F.fname=strcat(pre2, figNumber);
+    F.wh=[3 2.5]*2;
+    print_fig(gcf,F)
+end

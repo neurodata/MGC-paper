@@ -20,7 +20,7 @@ if nargin<5
     pre1='../../Data/'; % The folder to locate data
 end
 if nargin<6
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 
 % Generate data
@@ -31,7 +31,7 @@ figure
 plot(x,y,'b.',x1,y1,'r.');
 xlabel('X','FontSize',16)
 ylabel('Y','FontSize',16);
-title('Scatter Plot of (X,Y)','FontSize',16)
+title('Scatter Plot of (X,Y)','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
         
@@ -44,8 +44,8 @@ dC=disToRanks(C);
 dD=disToRanks(D);
 map2 = brewermap(128,'GnBu'); % brewmap
 H=eye(n)-(1/n)*ones(n,n);
-A=H*C*H;
-B=H*D*H;
+A=H*C;
+B=D*H;
 % % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
 % A=A-C/n;
 % B=B-D/n;
@@ -65,7 +65,7 @@ figure
 imagesc(C');
 colormap(map2)
 caxis([0,maxC]);
-title('Distance Heatmap of X','FontSize',16)
+title('Heat maps of C and D','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 %subplot(s,t,6)
@@ -73,10 +73,12 @@ figure
 imagesc(D');
 set(gca,'FontSize',16)
 colormap(map2)
-h=colorbar;
-set(h,'FontSize',16);
+% h=colorbar;
+% set(h,'FontSize',16);
 caxis([0,maxC]);
-title('Distance Heatmap of Y','FontSize',16)
+% title('Distance Heatmap of Y','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
 
 % A3: heatmaps of the doubly centered distance matrices
 minC=min(min([A,B]));maxC=max(max([A,B]));
@@ -87,17 +89,19 @@ figure
 imagesc(C');
 colormap(map2)
 caxis([minC,maxC]);
-title('Doubly-Centered Distance Heatmap of X','FontSize',16)
+title('Heat maps of A and B','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 figure
 imagesc(D');
 set(gca,'FontSize',16)
 colormap(map2)
-h=colorbar;
-set(h,'FontSize',16);
+% h=colorbar;
+% set(h,'FontSize',16);
 caxis([minD,maxD]);
-title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
+%title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
 
 % Local distance matrices
 if n~=100 || noise~=1
@@ -108,20 +112,20 @@ load(filename,'neighborhoods');
 neighbor=neighborhoods(1,end);
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
-dC=(dC<k);
-dD=(dD<l);
-ind=(dC.*dD==0);
-A(ind)=0;
-B(ind)=0;
+dC=(dC>k);
+dD=(dD>l);
+% ind=(dC.*dD==0);
+A(dC)=0;
+B(dD)=0;
 
 % A4: heatmaps of the local doubly centered distance matrices
-C(ind)=minC;
-D(ind)=minD;
+C(dC)=minC;
+D(dD)=minD;
 figure
 imagesc(C');
 colormap(map2)
 caxis([minC,maxC]);
-title('Local Doubly-Centered Distance Heatmap of X','FontSize',16)
+title('Heat maps of Local A and B','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 figure
@@ -129,15 +133,21 @@ imagesc(D');
 set(gca,'FontSize',16)
 colormap(map2)
 caxis([minD,maxD]);
-title('Local Doubly-Centered Distance Heatmap of Y','FontSize',16)
+%title('Local Doubly-Centered Distance Heatmap of Y','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
 
 % A4: heatmaps of the distance covariance entries
 figure
-mcorrH(ind)=0;
+mcorrH(dC)=0;
+mcorrH(dD)=0;
 imagesc(mcorrH');
 set(gca,'FontSize',16)
 colormap(map2)
-h=colorbar;
-set(h,'FontSize',16);
+%h=colorbar;
+%set(h,'FontSize',16);
 caxis([0,1]);
-title('Local Distance Covariance of (X, Y)','FontSize',16)
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
+title('Heat map of Local A.*B','FontSize',30)
+%title('Local Distance Covariance of (X, Y)','FontSize',16)

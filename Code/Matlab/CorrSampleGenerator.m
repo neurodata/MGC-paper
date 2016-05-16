@@ -15,11 +15,12 @@ if nargin<5
     noise=0; % default noise level
 end
 
-if noise~=0
-    eps=mvnrnd(0,1,n); % Gaussian noise added to Y
-else
-    eps=zeros(n,1);
-end
+eps=mvnrnd(0,1,n); % Gaussian noise added to Y
+% if noise~=0
+%     eps=mvnrnd(0,1,n); % Gaussian noise added to Y
+% else
+%     eps=zeros(n,1);
+% end
 
 % High-dimensional decay
 A=ones(dim,1);
@@ -47,24 +48,28 @@ u=mix;
 
 switch type % In total 20 types of dependency + the type 0 outlier model
     case 0 %Test Outlier Model
+        x=mvnrnd(zeros(n,d),eye(d));
         y=repmat((u>0),1,d).*(x) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
         x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         if dependent==0
-            x=unifrnd(-1,1,n,d);
+            x=mvnrnd(zeros(n,d),eye(d));
             x=repmat((u>0),1,d).*(x)+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         end
     case 1 %Linear
         y=xA+1*noise*eps;
     case 2 %Cubic
         y=128*(xA-1/3).^3+48*(xA-1/3).^2-12*(xA-1/3)+80*noise*eps;
-    case 3 %Step Function
-        y=(xA>mean(xA))+1*noise*eps;
-    case 4 %Exponential
+    case 3 %Exponential
         x=unifrnd(0,3,n,d);
         y=exp(x*A)+10*noise*eps;
         if dependent==0
             x=unifrnd(0,3,n,d);
         end
+    case 4 %Step Function
+        if dim>1
+            noise=1;
+        end
+        y=(xA>0)+1*noise*eps;
     case 5 %Joint Normal; note that dim should be no more than 10 as the covariance matrix for dim>10 is no longer positive semi-definite
         rho=1/(d*2);
         cov1=[eye(d) rho*ones(d)];
@@ -143,8 +148,8 @@ switch type % In total 20 types of dependency + the type 0 outlier model
             end
         end
     case {14,15} %Square & Diamond
-        u=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
-        v=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
         if type==14
             theta=-pi/8;
         else
@@ -153,8 +158,8 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         x=u*cos(theta)+v*sin(theta);
         y=-u*sin(theta)+v*cos(theta);
         if dependent==0
-            u=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
-            v=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
             x=u*cos(theta)+v*sin(theta);
         end
     case {16,17} %Sine 1/2 & 1/8
@@ -178,6 +183,9 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 19 %Uncorrelated Binomial
         x=binornd(1,0.5,n,d);
         y=(binornd(1,0.5,n,1)*2-1);
+        if dim>1
+            noise=1;
+        end
         y=x*A.*y+0.6*noise*eps;
         if dependent==0
             x=binornd(1,0.5,n,d);

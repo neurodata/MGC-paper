@@ -1,18 +1,10 @@
-function []=CORRData(aList,rep,pre1,alpha)
+function []=CORRData(part,rep,pre1,alpha)
 
-% aList = {'BNU1','BNU2','BNU3'};
-% aList =  {'DC1','HNU1','IACAS'};
-% aList= {'IBATRT','IPCAS1','IPCAS2'};
-% aList= {'IPCAS5','JHNU','KKI21'};
-% aList= {'LMU3','MPG1','MRN'};
-% aList= {'NYU1','NYU2','SWU3','SWU1'};
-% aList=  {'SWU4','UM','UPSM1','SWU2'};
-% aList= {'Utah1','UWM','XHCUMS'};
-% CORRData(aList)
+% CORRData(1)
 
-if nargin<1
-    aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
-end
+% if nargin<1
+%     aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
+% end
 if nargin<2
     rep=200;
 end
@@ -22,6 +14,25 @@ end
 if nargin<4
     alpha=0.05;
 end
+switch part
+    case 1
+        aList = {'BNU1','BNU2','BNU3'};
+    case 2
+        aList =  {'DC1','HNU1','IACAS'};
+    case 3
+        aList= {'IBATRT','IPCAS1','IPCAS2'};
+    case 4
+        aList= {'IPCAS5','JHNU','KKI21'};
+    case 5
+        aList= {'LMU3','MPG1','MRN'};
+    case 6
+        aList= {'NYU1','NYU2','SWU3','SWU1'};
+    case 7
+        aList=  {'SWU4','UM','UPSM1','SWU2'};
+    case 8
+        aList= {'Utah1','UWM','XHCUMS'};
+end
+
 option=[0,2,0,0];
 for l=1:length(aList);
     str1=aList(l);str1=str1{1,1};

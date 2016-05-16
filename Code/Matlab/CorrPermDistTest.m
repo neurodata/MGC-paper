@@ -18,15 +18,15 @@ if nargin<5
 end
 
 % Global Correlations
-p1All=1;p2All=1;p3All=1;p1=1;p2=1;p3=1;ind1=0;ind2=0;ind3=0;p7=0;
+p1All=1;p2All=1;p3All=1;p1=1;p2=1;p3=1;ind1=0;ind2=0;ind3=0;p7=0;t1All=0;t2All=0;t3All=0;
 if option(1)==1
-    [p1,p1All,~,~,ind1]=MGCPermutationTest(C,D,rep,option(1));
+    [p1,p1All,~,t1All,ind1]=MGCPermutationTest(C,D,rep,option(1));
 end
 if option(2)==2
-    [p2,p2All,~,~,ind2]=MGCPermutationTest(C,D,rep,option(2));
+    [p2,p2All,~,t2All,ind2]=MGCPermutationTest(C,D,rep,option(2));
 end
 if option(3)==3
-    [p3,p3All,~,~,ind3]=MGCPermutationTest(C,D,rep,option(3));
+    [p3,p3All,~,t3All,ind3]=MGCPermutationTest(C,D,rep,option(3));
 end
 if option(4)==4
     [p7]=HHGPermutationTest(C,D,rep);
@@ -39,7 +39,7 @@ p4=p1All(end);p5=p2All(end);p6=p3All(end);
 % end
 pre1='../../Data/';
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3');
+save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3','t1All','t2All','t3All');
 
 function  [p, test]=HHGPermutationTest(C,D,rep)
 % Author: Cencheng Shen

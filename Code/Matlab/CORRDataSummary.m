@@ -2,7 +2,7 @@ function [p,pmean,pstd]=CORRDataSummary()
 
 fileDir='../../../../Data/CORR/';
 pre1='../../Data/'; % The folder to locate data
-pre2='../../Figures/FigReal'; % The folder to save figures
+pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 
 allFiles = dir( fileDir );
 allNames = { allFiles.name };
@@ -25,21 +25,31 @@ end
 pmean=mean(p);
 pstd=std(p);
 
+%%%sort
+[~,ind]=sort(p(:,2),'ascend');
+
+
+cmap=zeros(3,3);
+ma = [1,0,1];
+cmap(1,:) = ma;
+cmap(2,:) = ma;
+map1=cmap;
+set(groot,'defaultAxesColorOrder',map1);
+
 x=1:n;
-plot(x,p(:,2),'ob--',x,p(:,5),'xr--'); %Jittered data
+% hold on
+%semilogy(x,p(ind,2),'ob:',x,p(ind,5),'xr:',x,ones(n,1)*pmean(2),'b-',x,ones(n,1)*pmean(5),'r-'); %Jittered data
+semilogy(x,p(ind,2),'o:',x,ones(n,1)*pmean(2),'-',x,ones(n,1)*0.05,'b-','LineWidth',2); %Jittered data
 xlim([1,n]);
 ax=gca;
-h=legend('MGC\{mcorr\}','mcorr','Location','NorthEast');
-set(h,'FontSize',13);
-% strNames=['J';'F';'M';'A';'M'];
-set(gca,'XTickLabel',strNames,'XTick',1:numel(strNames),'FontSize',12);
+h=legend('MGC\{mcorr\}','Location','NorthEast');
+set(h,'FontSize',14);
+
+set(gca,'XTickLabel',strNames(ind),'XTick',1:numel(strNames),'FontSize',12);
 ax.XTickLabelRotation=45;
-%xlim([0.8,2.2])
 ylim([0,1]);
-%xlabel('Data Name','FontSize',13);
-ylabel('False Positive Rate','FontSize',13);
-% set(gca,'XTick',[]); % Remove x axis ticks
-title('MGC False Positive Rate Scatter Plot for Brain vs Noise','FontSize',13);
+ylabel('False Positive Rate','FontSize',16);
+title('FDR Plot for Brain vs Noise','FontSize',20);
 
 F.fname=strcat(pre2, num2str(2));
 F.wh=[3 2.5]*2;

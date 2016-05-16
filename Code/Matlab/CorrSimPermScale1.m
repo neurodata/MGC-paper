@@ -1,5 +1,5 @@
 function [powerP]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise,alpha)
-% % Author: Cencheng Shen
+% Author: Cencheng Shen
 % n=60;dim=1;rep1=100;rep2=200;noise=1;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
 % n=100;dim=10;rep1=100;rep2=200;noise=0;type=1:20;
@@ -71,10 +71,14 @@ for tt=type
         p(5)=p(5)+(p2<alpha)/rep1;
         if isempty(neighbor)==false
             if option(1)==1
-                p(3)=p(3)+(mean(p1All(neighbor(1)))<alpha)/rep1;
+                [k,l]=ind2sub(size(power1All),neighbor(1));
+                k=min(k,size(p1All,1));l=min(l,size(p1All,2));
+                p(3)=p(3)+(p1All(k,l)<alpha)/rep1;
             end
             if option(2)==2
-                p(6)=p(6)+(mean(p2All(neighbor(2)))<alpha)/rep1;
+                [k,l]=ind2sub(size(power2All),neighbor(2));
+                k=min(k,size(p2All,1));l=min(l,size(p2All,2));
+                p(6)=p(6)+(p2All(k,l)<alpha)/rep1;
             end
             if option(4)==4
                 p(7)=p(7)+(p4<alpha)/rep1;

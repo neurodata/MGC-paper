@@ -6,9 +6,9 @@ switch type
     case 2
         titlechar=' 2.Cubic';
     case 3
-        titlechar=' 3.Step Function';
+        titlechar=' 3.Exponential';
     case 4
-        titlechar=' 4.Exponential';
+        titlechar=' 4.Step Function';
     case 5
         titlechar=' 5.Joint Normal';
     case 6

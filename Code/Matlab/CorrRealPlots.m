@@ -6,15 +6,15 @@ if nargin<1
     pre1='../../Data/'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../Figures/FigReal'; % The folder to save figures
+    pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 end
 cmap=zeros(3,3);
-gr = [0,1,0];
+% gr = [0,1,0];
 ma = [1,0,1];
-cy = [0,1,1];
-cmap(1,:) = gr;
+% cy = [0,1,1];
+cmap(1,:) = ma;
 cmap(2,:) = ma;
-cmap(3,:) = cy;
+% cmap(3,:) = cy;
 map1=cmap;
 map2 = brewermap(128,'GnBu'); % brewmap
 
@@ -27,20 +27,20 @@ load(filename);
 n=size(p1All,1);
 kmin=2;
 xa=kmin:n;
-pp1=p1All(xa,4);
+pp1=p1All(xa,end);
 [filename, titleStr]=CorrRealDataName(2);
 filename=strcat(pre1,filename);
 load(filename);
 n=size(p1All,1);
-pp2=p1All(xa,4);
+pp2=p1All(xa,end);
 figure
-plot(xa,pp1,'.-',xa,pp2,'.-','LineWidth',2)
-xlabel('Neighborhood Choice of X','FontSize',16);
+plot(xa,pp1,'.-',xa,pp2,'.:','LineWidth',2)
+xlabel('Number of Neighbors for X','FontSize',16);
 xlim([1 n]);
 ylim([0 0.2]);
 ylabel('P-Value','FontSize',16);
 
-title('Local Tests P-value for Brain Shape vs Disorder','FontSize',13);
+title('Local Tests P-value for Brain Shape vs Disorder','FontSize',17);
 h=legend('Left Brain Shape vs Disorder','Right Brain Shape vs Disorder');
 set(h,'FontSize',13);
 
@@ -52,20 +52,19 @@ for i=3:total
     [filename, titleStr]=CorrRealDataName(i);
     filename=strcat(pre1,filename);
     load(filename);
-    n=size(p1All,1);
     figure
     kmin=2;
-    imagesc(p1All(kmin:n,kmin:n)');
+    imagesc(p1All(kmin:end,kmin:end)');
     set(gca,'YDir','normal')
     colormap(flipud(map2))
     caxis([0.01 0.1])
     colorbar
-    xlabel('Neighborhood Choice of X','FontSize',16);
-    ylabel('Neighborhood Choice of Y','FontSize',16);
+    xlabel('Number of Neighbors for X','FontSize',16);
+    ylabel('Number of Neighbors for Y','FontSize',16);
     
     % Figure title/labels
     titleStr = strcat('Local Tests P-value for ', titleStr);
-    title(titleStr,'FontSize',13);
+    title(titleStr,'FontSize',17);
     
     F.fname=strcat(pre2, num2str(i));
     F.wh=[3 2.5]*2;

@@ -13,7 +13,7 @@ if nargin<3
     noise=1;
 end
 if nargin<4
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 
 total=20;
@@ -43,9 +43,9 @@ for type=1:total
         case 2
             a=[-1,1];b=[-250,250];
         case 3
-            a=[-1,1];b=[-2.5,2.5];
-        case 4
             a=[0,3];b=[-20,40];
+        case 4
+            a=[-1,1];b=[-2.5,2.5];
         case 5
             a=[-3,3];b=[-3,3];
         case 6
@@ -91,4 +91,14 @@ set(h,'FontSize',20,'FontWeight','normal');
 
 F.fname=[strcat(pre2, '0')];
 F.wh=[8 4]*2;
+print_fig(gcf,F)
+
+figure
+[x, y]=CorrSampleGenerator(0,n,dim,1,0.5);
+plot(x(:,1),y(:,1),'b.');
+% set(gca,'XTick',[]); % Remove x axis ticks
+% set(gca,'YTick',[]); % Remove y axis ticks
+title('Linear Dependency + Outliers with Probability 0.5','FontSize',13);
+F.fname=strcat(pre2, 'Out0');
+F.wh=[3 2.5]*2;
 print_fig(gcf,F)

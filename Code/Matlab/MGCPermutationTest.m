@@ -20,14 +20,14 @@ n=size(C,1);
 % pAll=zeros(n,n);
 
 % Calculate the observed test statistics for the given data sets
-testAll=LocalGraphCorr(C,D,option);
+testAll=LocalCorr(C,D,option);
 
 % Now Permute the second dataset for rep times, and calculate the p-values
 for r=1:rep
     % Use random permutations;
     per=randperm(n);
     DN=D(per,per);
-    tmp=LocalGraphCorr(C,DN,option);
+    tmp=LocalCorr(C,DN,option);
     if r==1
         pAll=(tmp<testAll)/rep;
     else

@@ -16,18 +16,6 @@
 \usepackage{color} %used to highlight changes
 \usepackage{paralist}
 
-%\pdfminorversion=4
-% NOTE: To produce blinded version, replace "0" with "1" below.
-\newcommand{\blind}{0}
-\newcommand{\T}{^{\ensuremath{\mathsf{T}}}}           % transpose
-
-% % DON'T change margins - should be 1 inch all around.
-% \addtolength{\oddsidemargin}{-.5in}%
-% \addtolength{\evensidemargin}{-.5in}%
-% \addtolength{\textwidth}{1in}%
-% \addtolength{\textheight}{-.3in}%
-% \addtolength{\topmargin}{-.8in}%
-
 \pagestyle{fancy}
 % \oddsidemargin=-0.5in 
 % \evensidemargin=-0.5in
@@ -42,6 +30,14 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.5em}
 
+% % DON'T change margins - should be 1 inch all around.
+% \addtolength{\oddsidemargin}{-.5in}%
+% \addtolength{\evensidemargin}{-.5in}%
+% \addtolength{\textwidth}{1in}%
+% \addtolength{\textheight}{-.3in}%
+% \addtolength{\topmargin}{-.8in}%
+
+
 \providecommand{\sct}[1]{{\sc \texttt{#1}}}
 \providecommand{\mt}[1]{\widetilde{#1}}
 \providecommand{\mb}[1]{\boldsymbol{#1}}
@@ -50,10 +46,16 @@
 \newcommand{\G}{\mathcal{G}}
 \newcommand{\Migraine}{\sct{Migraine}}
 \newcommand{\mtg}{\sct{m2g}}
-
-% color comments
-\newcommand{\jv}[1]{{\color{red}{#1}}}
-\newcommand{\cs}[1]{{\color{blue}{#1}}}
+\newcommand{\T}{^{\ensuremath{\mathsf{T}}}}           % transpose
+\newcommand{\Linefor}[2]{%
+    \State \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} \algorithmicend\ \algorithmicfor%
+}
+\newcommand{\subfigimg}[3][,]{%
+  \setbox1=\hbox{\includegraphics[#1]{#3}}% Store image in box
+  \leavevmode\rlap{\usebox1}% Print image
+  \rlap{\hspace*{12pt}\raisebox{\dimexpr\ht1-0\baselineskip}{#2}}% Print label
+  \phantom{\usebox1}% Insert appropriate spcing
+}
 
 %environment
 \newtheorem{thm}{Theorem}
@@ -164,14 +166,14 @@ and $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
 \caption{
-Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic relationship with white noise. Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the Euclidean distance matrices of $X$ and $Y$. Column 3: The heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the properly centered distance matrices of $\tilde{A}$ and $\tilde{B}$. Column 4: The heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})$ is the optimal scale. Column 5: The heat map of the entry-wise product of local $A$ and $B$, i.e., $\{(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})\}$ for $i,j=1,\ldots,n$. The un-normalized MGC statistic $\G^{*}$ equals the matrix sum $\sum_{i,j}(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})$. }
+Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic relationship with white noise. Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the Euclidean distance matrices of $X$ and $Y$. Column 3: The heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the normalized (i.e. doubly centered) distance matrices of $\tilde{A}$ and $\tilde{B}$. Column 4: The heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})$ is the optimal scale. Column 5: The heat map of the entry-wise product of local $A$ and $B$, i.e., $\{(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})\}$ for $i,j=1,\ldots,n$. The matrix sum $\sum_{i,j}(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})$ equals the optimal local covariance, i.e., the un-normalized MGC statistic $\G^{*}$. }
 \label{fig:A}
 \end{figure}
 
 In the family of local statistics $\{\G_{kl}\}$, the optimal local correlation coefficient (optimal with respect to the independence testing power) is dubbed the multiscale graph correlation, and denoted as $\G^{*}$. Clearly the optimal scale exists, is distribution dependent, and may not be unique. But different from a manifold learning task, once the rank information is given, all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, which allows our definition of local correlations to be an efficient and general tool in data analysis.
 
 %tbao:ose
-Under the dependence testing framework, the optimal scale for MGC can be easily determined: if the underlying joint distribution is known, or there exists multiple pairs of data with similar dependency structure, the true optimal scale can be directly derived by maximizing the testing powers among all local correlations; if there is only one pair of observations with unknown underlying model, the optimal scale can be approximated based on p-values of all local correlations from the permutation test. When testing on a pair of given data, if the MGC p-value (i.e., the p-value of the optimal local correlation) from the permutation test is sufficiently low, say less than $0.05$, then we declare significant dependency. A flowchart on how to calculate the MGC statistic is provided in figure~\ref{fig:A}, and more details on optimal scale estimation and MGC evaluation are provided in appendix section~\ref{appen:tests}.
+Under the dependence testing framework, the optimal scale for MGC can be easily determined: if the underlying joint distribution is known, or there exists multiple pairs of data with similar dependency structure, the true optimal scale can be directly derived by maximizing the testing powers among all local correlations; if there is only one pair of observations with unknown underlying model, the optimal scale can be reasonably approximated based on p-values of all local correlations from the permutation test. When testing on a pair of given data, if the MGC p-value (i.e., the p-value of the optimal local correlation) from the permutation test is sufficiently low, say less than $0.05$, then we declare significant dependency. A flowchart on how to calculate the MGC statistic is provided in figure~\ref{fig:A}, and more details on optimal scale estimation and MGC evaluation are provided in appendix section~\ref{appen:tests}.
 
 By the optimal scale estimation, the MGC statistic $\G^{*}$ is theoretically no worse than the global counterpart $\G$, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies. Different MGC implementations may vary slightly in performance, and some may do particularly well under certain dependency, depending on the properties of the respective global statistic. For example, since mcorr performs the best under high-dimensional dependencies, MGC implemented by mcorr also empirically performs better than other implementations of MGC under high-dimensional dependencies. 
 
@@ -222,39 +224,31 @@ For the $1$-dimensional simulations, MGC$\{$dcorr$\}$/$\{$mcorr$\}$/$\{$Mantel$\
 
 Note that for all distributions other than the independent clouds, the empirical powers eventually increase to $1$ as the sample size increases, implying that all methods are consistent except the Mantel test, whose powers stay low in many nonlinear dependencies; and for the independent clouds, the empirical power of MGC is approximately at the type $1$ error level, so no false signal is detected once the optimal scale is determined. 
 
-To better summarize the overall performance in the low-dimensional simulations, we use the performance profiles \cite{DolanMore2002}, which provides an intuitive way for directly comparing a set of algorithms on a set of problems.  Briefly, each curve (profile) shows the relative performance of a given algorithm as a function of how far from the best algorithm it performed; therefore, higher curves and larger area under curve are better; a more detailed description is in appendix section~\ref{appen:profiles}. For each $1$-dimensional simulation, we fix the sample size by a power threshold, and draw the corresponding performance profiles of all methods in figure~\ref{fig:pp}(a). To compare the performance profiles of each method with respect to different threshold choices, the area under curve of the performance profiles against the power threshold is provided in figure~\ref{fig:pp}(b).
-\begin{figure}[htbp]
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/Fig3}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/Fig4}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/Fig7}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/Fig8}
-}
-\caption{Quantitative comparisons of the power of the various tests across all simulations into a single number.  
-(a) Performance profile plots comparing different methods on all 1-dimensional simulations at the first sample size $n$ of any testing power to exceed the power threshold 0.8. The legend provides the Area-Under-the-Curve (AUC) for each method; larger is better.
-(b) AUC for each method sweeping over all different power thresholds, the higher the better.
-(c) Same as (a) but for the high-dimensional simulations, at the largest dimension of any testing power that is above the power threshold $0.5$.
-(d) Same as (b) but for the high-dimensional simulations.
+To better summarize the overall performance in the low-dimensional simulations, we use the performance profiles \cite{DolanMore2002}, which provides an intuitive way for directly comparing a set of algorithms on a set of problems.  Briefly, each curve (profile) shows the relative performance of a given algorithm as a function of how far from the best algorithm it performed; therefore, higher curves and larger area under curve are better; a more detailed description is in appendix section~\ref{appen:profiles}. For each $1$-dimensional simulation, we fix the sample size by a power threshold, and draw the corresponding performance profiles of all methods in figure~\ref{fig:pp}(A). To compare the performance profiles of each method with respect to different threshold choices, the area under curve of the performance profiles against the power threshold is provided in figure~\ref{fig:pp}(B).
+\begin{figure}
+  \centering
+  \begin{tabular}{@{}p{0.5\linewidth}@{\quad}p{0.5\linewidth}@{}}
+    \subfigimg[width=\linewidth]{A}{Figures/Fig3} &
+    \subfigimg[width=\linewidth]{B}{Figures/Fig4} \\
+    \subfigimg[width=\linewidth]{C}{Figures/Fig7} &
+    \subfigimg[width=\linewidth]{D}{Figures/Fig8}
+  \end{tabular}
+  \caption{Quantitative comparisons of the power of the various tests across all simulations into a single number.  
+(A) Performance profile plots comparing different methods on all 1-dimensional simulations at the first sample size $n$ of any testing power to exceed the power threshold 0.8. The legend provides the Area-Under-the-Curve (AUC) for each method; larger is better.
+(B) AUC for each method sweeping over all different power thresholds, the higher the better.
+(C) Same as (A) but for the high-dimensional simulations, at the largest dimension of any testing power that is above the power threshold $0.5$.
+(D) Same as (B) but for the high-dimensional simulations.
 It is clear that MGC outperforms the previous state of the art approaches regardless of the underlying model, sample size, and dimensionality.}
 \label{fig:pp}
 \end{figure}
 
-From figure~\ref{fig:pp}(a)(b), MGC is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. HHG is slightly better than dcorr / mcorr in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and HHG has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global Mantel test has the lowest performance profile, but utilizing local correlations makes MGC$\{$Mantel$\}$ perform similarly as the other two MGC implementations.
+From figure~\ref{fig:pp}(A)(B), MGC is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. HHG is slightly better than dcorr / mcorr in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and HHG has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global Mantel test has the lowest performance profile, but utilizing local correlations makes MGC$\{$Mantel$\}$ perform similarly as the other two MGC implementations.
 
 \subsection{High-Dimensional Simulation Experiments}
 \label{numer2}
 In this section we consider the same $20$ distributions and the same testing procedures as in section~\ref{numer1}, but with increasing dimensions at a fixed sample size. For each dependency type, the testing powers are calculated against increasing $d_{x}$, with $d_{y}$ equals $d_{x}$ or $1$ depending on the particular distribution and the sample size fixed at $n=100$.
 
-The empirical testing powers are again based on $r=10$,$000$ Monte-Carlo replicates at $\alpha=0.05$, and the optimal scale for MGC is estimated by $2$,$000$ additional MC replicates. The powers are shown in figure~\ref{fig:nD} against $d_{x}$, and the performance profiles are provided in figure~\ref{fig:pp}(c)(d): figure~\ref{fig:pp}(c) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and figure~\ref{fig:pp}(d) plots the area under curve of the performance profiles against the power threshold.
+The empirical testing powers are again based on $r=10$,$000$ Monte-Carlo replicates at $\alpha=0.05$, and the optimal scale for MGC is estimated by $2$,$000$ additional MC replicates. The powers are shown in figure~\ref{fig:nD} against $d_{x}$, and the performance profiles are provided in figure~\ref{fig:pp}(C)(D): figure~\ref{fig:pp}(C) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and figure~\ref{fig:pp}(D) plots the area under curve of the performance profiles against the power threshold.
 
 Like the $1$-dimensional scenario, the MGC power either equals the power of the corresponding global correlation (for type 1-5), or is significantly better (type 6-19) due to its capability to better handle nonlinearity and high-dimensionality at the same time. In particular, MGC$\{$mcorr$\}$ enjoys a significant advantage over all benchmarks, since mcorr is more suitable for high-dimensional testing; and the performance profiles of MGC clearly reflect its overall superiority. 
 
@@ -271,17 +265,15 @@ Again, our method empirically achieves as high or higher power than the previous
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}
 
-Figure~\ref{figSim6} illustrates how the powers of local correlations $\{\G_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the high-dimensional simulations (the $1$-dimensional case is included in appendix). They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures in figure~\ref{fig:pp}(a)(c). 
+Figure~\ref{figSim6} illustrates how the powers of local correlations $\{\G_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the high-dimensional simulations (the $1$-dimensional case is included in appendix). They are plotted at a fixed sample size and a fixed dimension by the same thresholds as the performance profiles figures in figure~\ref{fig:pp}(A)(C). 
 
 %tbao: ose
-The powers of local correlations can be equally significant for a large number of local correlations with adjacent scales, since the local statistics are strongly correlated with each other. In fact, there almost always exists an optimal scale $(k^{*},l^{*})$ such that most local correlations with either the same row or column index are simultaneously significant. For example, for type 11 circle, $(k^{*},l^{*})=(n, n/2)$ is one such optimal scale such that $(k,l^{*})$ are equally significant for most of $k=2,\ldots,n$; for type 16 sine period, $(k^{*},l^{*})=(n/20, n)$ is an optimal scale such that $(k^{*},l)$ are equally significant for most of $l=2,\ldots,n$, etc. This is a key observation that we use to approximate the MGC optimal scale for one pair of data with unknown model, and the details are in appendix section~\ref{appen:tests}.
-
-The testing powers of all local correlations also shed light into the intrinsic dependency structure: For dependencies that are close to linear (type 1-5), the best neighborhood choice is clearly the largest scale, i.e., $k=l=n$. But for all other nonlinear dependencies (type 6-19), MGC almost always chooses a smaller scale, which is distribution dependent; and similar nonlinear dependencies yield similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, and the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share very similar optimal scale structure; so are circle and eclipse, and square and diamond, etc.
+The testing powers of all local correlations also shed light into the intrinsic dependency structure: For dependencies that are close to linear (type 1-5), the best neighborhood choice is clearly the largest scale, i.e., $k=l=n$. But for all other nonlinear dependencies (type 6-19), MGC almost always chooses a smaller scale, which is distribution dependent; and similar nonlinear dependencies yield similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, and the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share very similar optimal scale structure; so are circle and eclipse, and square and diamond, etc. Note that for almost all problems other than the sine period functions, there exist a large number of adjacent local correlations that are equally significant, which is a key observation that we use to approximate the MGC optimal scale for one pair of data with unknown model in appendix section~\ref{appen:tests}.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig6}
 \caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in high-dimensional simulations.
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the power threshold as in figure~\ref{fig:pp}(c). Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the power threshold as in figure~\ref{fig:pp}(C). Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
 \label{figSim6}
 \end{figure}
 
@@ -334,34 +326,25 @@ Let us consider a simple mixture model: suppose the joint distribution satisfies
 %
 % ^.
 
-For sample data generated under the mixture model, there are $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ is plotted in figure~\ref{figSim3}(a), and the testing powers of all local correlations of mcorr are shown in figure~\ref{figSim3}(b)(c)(d) for $p=0.3$,$0.5$,$0.7$ respectively, using the same evaluation procedure as the simulations in section~\ref{numer1}.
+For sample data generated under the mixture model, there are $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent from the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ is plotted in figure~\ref{figSim3}(A), and the testing powers of all local correlations of mcorr are shown in figure~\ref{figSim3}(B)(C)(D) for $p=0.3$,$0.5$,$0.7$ respectively, using the same evaluation procedure as the simulations in section~\ref{numer1}.
 
 The optimal local mcorr is clearly much better than global mcorr. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $p$, where $k^{*}=l^{*}=\min(pn,(1-p)n)-1$ is always optimal. Heuristically, the optimal local correlation is robust against outliers as MGC automatically excludes the independent outliers from the dependent observations in testing.
 
 The same robustness still holds as the dimension or sample size varies, or the underlying dependency changes from linear to nonlinear. Such robustness makes MGC more advantageous in practice against noise and outliers. 
 
-\begin{figure}[htbp]
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/FigOut0}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/FigOut1}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/FigOut2}
-}
-\hfil
-\subfloat[]{
-\includegraphics[width=0.5\textwidth]{Figures/FigOut3}
-}
-\caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in the outlier model.
-(a) Scatter plot of sample $(X,Y)$ under the outlier model with probability $p=0.5$
-(b) Testing power of all local correlation under the outlier model with probability $p=0.3$.
-(c) Same as (b) with $p=0.5$.
-(d) Same as (b) with $p=0.7$.
-}
+\begin{figure}
+  \centering
+  \begin{tabular}{@{}p{0.5\linewidth}@{\quad}p{0.5\linewidth}@{}}
+    \subfigimg[width=\linewidth]{A}{Figures/FigOut0} &
+    \subfigimg[width=\linewidth]{B}{Figures/FigOut1} \\
+    \subfigimg[width=\linewidth]{C}{Figures/FigOut2} &
+    \subfigimg[width=\linewidth]{D}{Figures/FigOut3}
+  \end{tabular}
+  \caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in the mixture model.
+(A) Scatter plot of sample $(X,Y)$ under the mixture model with probability $p=0.5$
+(B) Testing power of all local correlation under the mixture model with probability $p=0.3$.
+(C) Same as (B) with $p=0.5$.
+(D) Same as (B) with $p=0.7$.}
 \label{figSim3}
 \end{figure}
 
@@ -370,18 +353,18 @@ The same robustness still holds as the dimension or sample size varies, or the u
 \label{numer3}
 %tbao: ose
 Here we apply local correlations and MGC to visualize the relationship and test independence between real data sets. Since there is no known model for the given data, the optimal scale for MGC is approximated based on the p-values of all local correlations from the permutation test (see appendix section~\ref{appen:tests} for details and further discussions). 
-%tba:numerical updates
 
 \subsubsection{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
 
 The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the raw data. 
 
 To start with, the respective data sets need to be transformed into distance matrices. For the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing). For the disorder information vector,
-we form a binary dissimilarity matrix that is $0$ for data of the same label and $1$ for data of different labels.
+we form the Euclidean distance matrix from the categorical vector, then add $1$ to every non-diagonal entry so only the diagonals are of distance $0$.
 
+%tba:numerical updates
 Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. Based on $r=10$,$000$ random permutations, the resulting p-values are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, MGC / HHG / Mantel yield significant p-values with dcorr / mcorr being slightly higher than significance; for testing between the right brain and the disorder, only MGC yields significant p-value, and all benchmarks have p-values higher than significance. 
 
-The p-value curves of the local correlations are provided in figure~\ref{figReal}(a) for $k=2,\ldots,n$ at $l=2$, since the largest rank is $2$ for the categorical vector, and local correlations at $l=1$ always produce larger p-values than at $l=2$. We can clearly identify many common local scales between the two curves that yield significant p-values, which implies a local dependency structure and is the reason that MGC can successfully identify the signals. %The estimated optimal scales are $k^{*}=65$ and $k^{*}=64$ (and $l^{*}$ can be any number larger than $3$) respectively for left brain and right brain vs disease, based on $2,000$ MC replicates. As the optimal scales are very similar, it indicates the left brain and the right brain may have similar dependence structures when testing against the disease.
+The p-value curves of the local correlations are provided in figure~\ref{figReal}(A) for $k=2,\ldots,n$ at $l=4$, since the largest rank is $4$ for the categorical vector. We can clearly identify many common local scales between the two curves that yield significant p-values, which implies a local dependency structure and is the reason that MGC can successfully identify the signals. %The estimated optimal scales are $k^{*}=65$ and $k^{*}=64$ (and $l^{*}$ can be any number larger than $3$) respectively for left brain and right brain vs disease, based on $2,000$ MC replicates. As the optimal scales are very similar, it indicates the left brain and the right brain may have similar dependence structures when testing against the disease.
 
 \begin{table*}[!t]
 \Large
@@ -391,13 +374,13 @@ The p-value curves of the local correlations are provided in figure~\ref{figReal
 \hline
 Testing Method & MGC & dcorr & mcorr & Mantel & HHG \\
 \hline
-Left Brain vs Disorder  & $\textbf{0.0070}$ & $0.1450$ & $0.0600$ & $0.0070$ & $0.0240$ \\
+Left Brain vs Disorder  & $\textbf{0.0081}$ & $0.0736$ & $0.0840$ & $0.0398$ & $0.0371$ \\
 \hline
-Right Brain vs Disorder & $\textbf{0.0051}$ & $0.1330$ & $0.0860$  & $0.0370$ & $0.0670$\\
+Right Brain vs Disorder & $\textbf{0.0176}$ & $0.1085$ & $0.1141$  & $0.0803$ & $0.0833$\\
 \hline
-\Migraine~vs CCI & $\textbf{0.0077}$ & $0.0081$ & $0.0099$  & $0.0095$ & $0.0316$\\
+\Migraine~vs CCI & $\textbf{0.0097}$ & $0.0098$ & $\textbf{0.0097}$  & $0.0100$ & $0.0311$\\
 \hline
-\mtg~vs CCI & $\textbf{0.0610}$ & $0.0690$ & $0.0610$  & $0.3070$ & $0.6540$\\
+\mtg~vs CCI & $\textbf{0.0661}$ & $0.0707$ & $\textbf{0.0661}$  & $0.3361$ & $0.6536$\\
 \hline
 \end{tabular}
 \caption{The p-values of test statistics in the permutation test, for testing dependence on $4$ different pairs of real data. MGC is able to consistently identify significant relationship for the first three rows, while does not inflate the p-value in the last row.}
@@ -405,31 +388,19 @@ Right Brain vs Disorder & $\textbf{0.0051}$ & $0.1330$ & $0.0860$  & $0.0370$ & 
 }
 \end{table*}
 
-\begin{figure}[htbp]
-\centering
-\subfloat[]{
-\includegraphics[width=0.48\textwidth]{Figures/FigReal1}
-}
-\hfil
-\centering
-\subfloat[]{
-\includegraphics[width=0.48\textwidth]{Figures/FigReal2}
-}
-\hfil
-\centering
-\subfloat[]{
-\includegraphics[width=0.48\textwidth]{Figures/FigReal3}
-}
-\hfil
-\centering
-\subfloat[]{
-\includegraphics[width=0.48\textwidth]{Figures/FigReal4}
-}
+\begin{figure}
+  \centering
+  \begin{tabular}{@{}p{0.5\linewidth}@{\quad}p{0.5\linewidth}@{}}
+    \subfigimg[width=\linewidth]{A}{Figures/FigReal1} &
+    \subfigimg[width=\linewidth]{B}{Figures/FigReal2} \\
+    \subfigimg[width=\linewidth]{C}{Figures/FigReal3} &
+    \subfigimg[width=\linewidth]{D}{Figures/FigReal4}
+  \end{tabular}
 \caption{
-(a) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=2$ for brain vs disease. 
-(b) False positive rates for brain vs noise throughout $24$ different data sets. Red cross is global mcorr, blue circle is MGC.
-(c) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI.
-(d) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \mtg~vs CCI. }
+(A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. 
+(B) False positive rates for brain vs noise throughout $26$ different data sets. Red cross is global mcorr, blue circle is MGC.
+(C) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI.
+(D) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \mtg~vs CCI. }
 \label{figReal}
 \end{figure}
 
@@ -439,9 +410,9 @@ Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we es
 
 Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI are very significant, with all methods returning significant p-values. But there is a loss of dependency between \mtg~and CCI, as neither the global methods nor MGC return significant p-values. 
 
-From the local correlation p-value heat maps in figure~\ref{figReal}(c)(d), it is clear that there exists many local scales with significant p-values for \Migraine~vs CCI, which is no longer the case for \mtg~vs CCI. If we test dependency between \Migraine~vs \mtg, the p-values of all tests are $0$, indicating a strong dependency. 
+From the local correlation p-value heat maps in figure~\ref{figReal}(C)(D), it is clear that there exists many local scales with significant p-values for \Migraine~vs CCI, which is no longer the case for \mtg~vs CCI. If we test dependency between \Migraine~vs \mtg, the p-values of all tests are $0$, indicating a strong dependency. 
 
-Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly dependent with each other, \Migraine~is more related to CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our MGC statistic identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Therefore MGC can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
+Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly dependent with each other, \Migraine~is more related to CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our method identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Therefore MGC can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
 
 \subsubsection{MGC Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 
@@ -449,7 +420,8 @@ In the last experiment, MGC is applied to test independence between brain voxel 
 
 For each brain region, denote $x_{\cdot t}$ as the observation vector at timestep $t$ for all persons, then the distance matrix with respect to time is calculated by $dist(s,t)=\|x_{\cdot s}-x_{\cdot t}\|$. We generate an independent stimulus by sampling from a standard normal at each time step, whose Euclidean distance matrix can be easily calculated. Using the two distance matrices, the dependency between each brain region and the time-varying stimulus can be tested by our methods. The p-value of each method is calculated using $1000$ permutations, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
-For each data set, the above testing is carried out for each brain region with the false positive rate (FDR) of MGC shown in figure~\ref{figReal}(b). The y-axis stands for FDR, while x-axis shows the name of the data set arranged by increasing FDR of MGC; and the mean of FDR is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. As the stimulus is in fact independent from the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set, which is indeed the case for MGC. The actual mean/standard deviation of MGC is $0.062 \pm 0.049$, and $0.060 \pm 0.052$ for global mcorr, and similarly for other benchmarks. This is in contrast to many other methods that may significantly increase FDR as reported in \cite{EklundKnutsson2012}.
+%tba:numerical updates
+For each data set, the above testing is carried out for each brain region with the false positive rate (FDR) of MGC shown in figure~\ref{figReal}(B). The y-axis stands for FDR, while x-axis shows the name of the data set arranged by increasing FDR of MGC; and the mean of FDR is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. As the stimulus is in fact independent from the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set, which is indeed the case for MGC. The actual mean/standard deviation of MGC is $0.062 \pm 0.049$, and $0.060 \pm 0.052$ for global mcorr, and similarly for other benchmarks. This is in contrast to many other methods that may significantly increase FDR as reported in \cite{EklundKnutsson2012}.
 % * <joshuav@gmail.com> 2016-05-01T18:37:13.045Z:
 %
 % the sample size is not large enough for there to be meaning to 4 significant digits, 2 or 3 at best.  also, i'm not sure we need to report the false positive rate explicitly for the other methods, we can just say that the global methods performed similarly.
@@ -473,11 +445,11 @@ For each data set, the above testing is carried out for each brain region with t
 %
 % ^ <cshen6@jhu.edu> 2016-05-03T11:07:19.114Z:
 %
-% I used dark blue solid and dotted now, similar to (c)/(d)
+% I used dark blue solid and dotted now, similar to (C)/(D)
 %
 % ^ <cshen6@jhu.edu> 2016-05-03T11:42:24.754Z:
 %
-% for 7(b), changed to log scale, sorted data name by increasing FDR of MGC, and added a line of mean.
+% for 7(B), changed to log scale, sorted data name by increasing FDR of MGC, and added a line of mean.
 %
 % ^ <joshuav@gmail.com> 2016-05-04T17:09:37.628Z:
 %
@@ -527,7 +499,7 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 
 Here the distributions of the $20$ dependencies used in the simulation sections are listed, which are based on a combination of the numerical simulations in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} with some adjustments (such as the inclusion of additional noise and an extra weight vector) to better compare all methods in our low- and high-dimensional simulations.
 
-For the purpose of the high-dimensional simulations, we denote $x^{d}$ as the $d$th dimension of $x$ for $d=1,\ldots,d_{x}$, and denote $w$ as a size $d_{x} \times 1$ vector with $w^{d}=\frac{1}{d}$. So $w\T x$ is $1$-dimensional and a decaying weighted summation of $x=[x^{1};\ldots;x^{d_{x}}]$, which equals $x$ when $d_{x}=1$. In the following, $u, v$ are realizations from some auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise.
+For the purpose of the high-dimensional simulations, we denote $x^{d}$ as the $d$th dimension of $x$ for $d=1,\ldots,d_{x}$, and denote $w$ as a size $d_{x} \times 1$ vector with $w^{d}=\frac{1}{d}$. So $w\T x$ is $1$-dimensional and a decaying weighted summation of $x=[x^{1};\ldots;x^{d_{x}}]$, which equals $x$ when $d_{x}=1$. In the following, $u, v$ are realizations from some auxiliary random variables, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $c$ is a scalar constant to control the noise level, and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise. For all of the below equations, $(x,y) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(x,y)$, and define each of the above distributions, and any additional auxiliary distributions.
 
 % Then each column pair $(x_{i},y_{i})$ of the whole sample pair $(X,Y)$ is independently identically distributed as $(\mb{x},\mb{y})$ for $i=1,\ldots,n$.
 
@@ -551,12 +523,14 @@ For the purpose of the high-dimensional simulations, we denote $x^{d}$ as the $d
 
 \setcounter{equation}{0}
 \begin{compactenum}
-\item Linear $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$, 
+\item Linear $(x,y) \in \Real^{d_{x}} \times \Real$,  
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\
 y &=w\T x+c\epsilon.
 \end{align*}
-\item Cubic $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$, 
+\item Cubic $(x,y) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}}, \\ 
 y &=128(w\T x-\tfrac{1}{3})^3+48(w\T x-\tfrac{1}{3})^2-12(w\T x-\tfrac{1}{3})+80c\epsilon.
 \end{align*}
 % * <joshuav@gmail.com> 2016-05-01T18:59:40.462Z:
@@ -604,34 +578,45 @@ y &=128(w\T x-\tfrac{1}{3})^3+48(w\T x-\tfrac{1}{3})^2-12(w\T x-\tfrac{1}{3})+80
 % all done
 %
 % ^.
-\item Exponential $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(0,3)^{d_{x}}$, 
+\item Exponential $(x,y) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
+x &\sim \mc{U}(0,3)^{d_{x}}, \\
 y &=exp(w\T x)+10c\epsilon.
 \end{align*}
-\item Step Function $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$, 
+\item Step Function $(x,y) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\ 
 y &=\mb{I}(w\T x>0)+\epsilon,
 \end{align*}
 where $\mb{I}$ is the indicator function. 
-\item Joint normal $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(x,u) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,and $$y=u+0.5c\epsilon.$$ 
-\item Quadratic $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$,
+\item Joint normal $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ as the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ as the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(u,v) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
+x &=u,\\ 
+y &=v+0.5c\epsilon.
+\end{align*}
+\item Quadratic $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\
 y&=(w\T x)^2+0.5c\epsilon.
 \end{align*}
-\item W Shape $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$, $u \sim \mc{U}(-1,1)^{d_{x}}$,
+\item W Shape $(x,y) \in \Real^{d_{x}} \times \Real$:  $u \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\
 y&=4\left[ \left( (w\T x)^2 - \tfrac{1}{2} \right)^2 + w\T u/500 \right]+0.5c\epsilon.
 \end{align*}
-\item Two Parabolas $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$, $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
+\item Two Parabolas $(x,y) \in \Real^{d_{x}} \times \Real$: $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\
 y&=\left( (w\T x)^2  + 2c\epsilon\right) \cdot (u-\tfrac{1}{2}).
 \end{align*}
-\item Fourth Root $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{U}(-1,1)^{d_{x}}$,
+\item Fourth Root $(x,y) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
+x &\sim \mc{U}(-1,1)^{d_{x}},\\
 y&=|w\T x|^\frac{1}{4}+\frac{c}{4}\epsilon.
 \end{align*}
-\item Logarithmic $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $x \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$
+\item Logarithmic $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $\epsilon \sim \mc{N}(0, I_{d_{x}})$
 \begin{align*}
+x &\sim \mc{N}(0, I_{d_{x}}),\\
 y^{d}&=2log(x^{d})+3c\epsilon^{d},
 \end{align*}
 for $d=1,\ldots,d_{x}$.
@@ -663,13 +648,15 @@ x^{d}&=u+0.02 d_{x} v^{d} \mbox{ for $d=1,\ldots,d_{x}$}, \\
 y&=\sin ( \theta x )+c\epsilon.
 \end{align*}
 \item Sine Period 1/8 $(x,y) \in \Real^{d_{x}} \times \Real$: Same as above except $\theta=16\pi$ and the noise is changed to $0.5c\epsilon$.
-\item Multiplicative Noise $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $x \sim \mc{N}(0, I_{d_{x}})$, $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
+\item Multiplicative Noise $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
+x &\sim \mc{N}(0, I_{d_{x}}),\\
 y^{d}&=u^{d}x^{d}+0.5c\epsilon^{d},
 \end{align*}
 for $d=1,\ldots,d_{x}$.
-\item Uncorrelated Binomial $(x,y) \in \Real^{d_{x}} \times \Real$: $x \sim \mc{B}(0.5)^{d_{x}}$, $u \sim \mc{B}(0.5)$,
+\item Uncorrelated Binomial $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{B}(0.5)$,
 \begin{align*}
+x &\sim \mc{B}(0.5)^{d_{x}},\\ 
 y&=(2u-1)w\T x+0.6\epsilon.
 \end{align*}
 \item Independent Clouds $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $u \sim \mc{N}(0,I_{d_{x}})$, $v \sim \mc{N}(0,I_{d_{x}})$, $u' \sim \mc{B}(0.5)^{d_{x}}$, $v' \sim \mc{B}(0.5)^{d_{x}}$. Then
@@ -705,7 +692,7 @@ The high-dimensional simulation is based on $c=0$ and increasing $d_{x}$, with $
 The testing power heat map of local correlations for the $1$-dimensional simulations is provided in figure~\ref{figSim2}.
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig2}
-\caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in $1$-dimensional simulations. For each simulation, the dimension is $1$, and the sample size is determined by the power threshold as in figure~\ref{fig:pp}(a).
+\caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in $1$-dimensional simulations. For each simulation, the dimension is $1$, and the sample size is determined by the power threshold as in figure~\ref{fig:pp}(A).
 }
 \label{figSim2}
 \end{figure}
@@ -837,7 +824,7 @@ Algorithm~\ref{alg3} computes the testing powers of all local statistics by repe
 
 Algorithm~\ref{alg4} computes the p-values of all local statistics by the random permutation test with $r$ random permutations. Once an optimal scale is estimated, the p-value at the optimal local correlation equals the p-value of MGC. Both algorithm~\ref{alg3} and ~\ref{alg4} takes $O(rn^2 \log n)$, and can be directly used to compute the power or p-value of global correlations by excluding the respective local indexing.
 
-Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlation, and outputs the estimated MGC p-value. This is necessary for testing on one pair of data with unknown model, since algorithm~\ref{alg3} may no longer be used. Among all local correlations, we determine the optimal row index and the optimal column index separately (i.e., the neighborhood choice wrt $X$ and $Y$) as follows: for each $k$, we first locate $k_{1}$ and $k_{2}$ such that any $k \in [k_{1},\ldots, k_{2}]$ satisfies $\frac{\sum_{l=2}^{n} \mb{I}(p_{kl}<\alpha)}{n-1}>\delta$, at the type $1$ error $\alpha=0.05$ and a threshold parameter $\delta=0.8$, i.e., we find consecutive row index such that most local correlations on the same row have significant p-values. Similarly we determine $l_{1}$ and $l_{2}$, then find the optimal index $(k^{*},l^{*})$ by minimizing the p-values within $k \in [k_{1},\ldots, k_{2}]$ and $l \in [l_{1},\ldots, l_{2}]$. If $\frac{k_{2}-k_{1}}{\max(rank(a_{ij}))} < \gamma$ for $\gamma=0.1$, then there are not enough consecutive significant row indices, so we set $k_{1}=k_{2}=\max(rank(a_{ij}))$; similarly for $l_{1}$ and $l_{2}$. Namely the global correlation is used for MGC, when there are not sufficiently many significant local correlation on both row and column. This algorithm takes $O(n^2)$.
+Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlation, and outputs the estimated MGC p-value. This is necessary for testing on one pair of data with unknown model, since algorithm~\ref{alg3} may no longer be used. Conceptually, we search for a set of ``valid'' rows $\hat{k}$ first by utilizing a procedure similar to Bonferroni correction, i.e., the median p-value within all rows in $\hat{k}$ should be no more than $\alpha /n * |\hat{k}|$ ($|\hat{k}|$ is the number of rows in $\hat{k}$), otherwise $\hat{k}=n$; similarly we locate a set of columns $\hat{l}$. Once $\hat{k}$ and $\hat{l}$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within the valid range. Clearly if the majority p-values are less than $\alpha$, then $\hat{k}=\hat{l}=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-value among all local correlations; and if there is no such row and column, then the largest scale is used, and MGC equals the global correlation. Note that the actual algorithm is a simpler version of the above description: we use an additional parameter $\delta$ to limit the possibilities of $|\hat{k}|$ and $|\hat{l}|$ to consider, and it suffices to search among top indices that are sorted by the median p-values on row / column.
 %tba: ose
 
 %Note that the first three algorithms can be used for global dcorr / mcorr / Mantel , by excluding the respective local parts, i.e., in algorithm~\ref{algLGC}, the loops after the global function are not needed for global correlation; in algorithm~\ref{algPower} and algorithm~\ref{algPerm}, the powers and p-values only need to be estimated for one global correlation rather than $n^2$ local statistics. Therefore, for HHG or any correlation involving sorting, the complexity of each algorithm is the same as before but slightly less in actual running time; and for global dcorr / mcorr / Mantel, the complexity of each algorithm becomes $O(n^2), O(rn^2), O(rn^2)$ since sorting is no longer needed.
@@ -858,57 +845,59 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \begin{algorithm}
 \caption{Local Correlation Computation for One Scale}
 \label{alg1}
-\begin{algorithmic}
-\Function{LGC}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
-\State Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, and the given local scale $(k,l)$.
-\State Output: The local correlation coefficient $\G_{kl}$ at given $(k,l)$.
-\State $R^{Z}=sort(\tilde{Z})$ for $Z=\{A,B\}$ \Comment{assuming column-wise sorting and no ties exists}
-\State $Z=center(\tilde{Z})$ for $Z=\{A,B\}$ \Comment{proper centering of the distance matrices}
-
+\begin{algorithmic}[1]
+\Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, and the given local scale $(k,l) \in \Real \times \Real$.
+\Statex Output: The local correlation coefficient $\G_{kl} \in [-1,1]$ at the given $(k,l)$.
+\Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
+\State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ as $0$.
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{assuming column-wise sorting and no ties exists}
+\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$} \Comment{proper centering of the distance matrices}
 \For{$i,j=1,\ldots,n$}
 \State $\G_{kl}=\G_{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance covariance}
-\State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store local distance variance for the first data}
-\State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance variance for the second data}
+\State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store local distance variance for $X$}
+\State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance variance for $Y$}
 \State $E^{A}_{k}=E^{A}_{k}+A_{ij}\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store the sample means}
 \State $E^{B}_{l}=E^{B}_{l}+B_{ij}\mb{I}(R^{B}_{ij} \leq l)$
 \EndFor
 
-\State $\G_{k,l}=\left(\G_{k,l}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{normalize the local covariances yields the local correlations.}
+\State $\G_{kl}=\left(\G_{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{normalize the local covariances}
 
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Local Correlation Computation for All Scales}
+\caption{$O(n^2 \log n)$ Algorithm for Computing All Local Correlations}
 \label{alg2}
-\begin{algorithmic}
-\Function{LGC}{$\tilde{A}$,$\tilde{B}$}
-\State Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.
-\State Output: All local correlation coefficients $\G_{kl}$ for $k,l=1,\ldots,n$.
-\State $R^{Z}=sort(\tilde{Z})$ for $Z=\{A,B\}$ 
-\State $Z=center(\tilde{Z})$ for $Z=\{A,B\}$ 
+\begin{algorithmic}[1]
+\Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.
+\Statex Output: All local correlation coefficients $\G_{kl} \in [-1,1]^{n \times n}$ for $k,l=1,\ldots,n$.
+\Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$}
+\State initialize $\G$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} 
+\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$} 
 \For{$i,j=1,\ldots,n$}
-\State $k=R^{A}_{ij}$; $l=R^{B}_{ij}$
+\State $k=R^{A}_{ij}$
+\State $l=R^{B}_{ij}$
 \State $\G_{kl}=\G_{kl}+A_{ij}B_{ij}$
 \State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2$
 \State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2$
 \State $E^{A}_{k}=E^{A}_{k}+A_{ij}$ 
 \State $E^{B}_{l}=E^{B}_{l}+B_{ij}$
 \EndFor
-
+\Statex \Comment{the next two for loops wrt the scales guarantee the computation of all local covariance / variance in $O(n^2)$}
 \For{$k=1,\ldots,n-1$}
 \State $\G_{1, k+1}=\G_{1, k}+\G_{1, k+1}$
 \State $\G_{k+1,1}=\G_{k+1,1}+\G_{k+1,1}$
-\State $V^{Z}_{k+1}=V^{Z}_{k}+V^{Z}_{k+1}$ for $Z=\{A,B\}$ 
-\State $E^{Z}_{k+1}=E^{Z}_{k}+E^{Z}_{k+1}$ for $Z=\{A,B\}$ 
+\Linefor{$Z:=A,B$}{$V^{Z}_{k+1}=V^{Z}_{k}+V^{Z}_{k+1}$} 
+\Linefor{$Z:=A,B$}{$E^{Z}_{k+1}=E^{Z}_{k}+E^{Z}_{k+1}$} 
 \EndFor
 
 \For{$k,l=1,\ldots,n-1$}
 \State $\G_{k+1,l+1}=\G_{k+1,l}+\G_{k,l+1}+\G_{k+1,l+1}-\G_{k,l}$
 \EndFor
 
-\For{$k,l=1,\ldots,n$}
+\For{$k,l=1,\ldots,n$} \Comment{normalize all local covariances}
 \State $\G_{kl}=\left(\G_{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
 \EndFor
 \EndFunction
@@ -918,22 +907,22 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \begin{algorithm}
 \caption{Testing Powers Computation for All Local Correlations}
 \label{alg3}
-\begin{algorithmic}
+\begin{algorithmic}[1]
+\Statex Input: A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
+\Statex Output: The power matrix $\beta_{\alpha} \in [0,1]^{n \times n}$ for all local correlations, and the MGC optimal scale $(k^{*},l^{*}) \in R \times R$.
 \Function{TestingPowers}{$f_{xy}$,$n$, $r$,$\alpha$} 
-\State Input: A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
-\State Output: The power matrix $\beta_{\alpha}$ for all local correlations, and the MGC optimal scale $(k^{*},l^{*})$.
 \For{$j=1,\ldots,r$} 
-\State $(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}, i \in [n]$ \Comment{generate dependent samples}
-\State $X^{0}_{i} \stackrel{iid}{\sim} f_{x}$ for $i \in [n]$ \Comment{generate independent samples}
-\State $Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$ for $i \in [n]$
-\State $\tilde{Z}^{1}=dist(Z^{1})$ for $Z=\{A,B\}$ \Comment{the distance matrices under the alternative}
-\State $\tilde{Z}^{0}=dist(Z^{0})$ for $Z=\{A,B\}$ \Comment{the distance matrices under the null}
-\State $\G_{kl}^{1}[j]=LGC(\tilde{A}^{1},\tilde{B}^{1})$ \Comment{calculate all local correlations under the alternative} 
-\State $\G_{kl}^{0}[j]=LGC(\tilde{A}^{0},\tilde{B}^{0})$ \Comment{calculate all local correlations under the null} 
+\Linefor{$i:=[n]$}{$(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$} \Comment{generate dependent samples}
+\Linefor{$i:=[n]$}{$X^{0}_{i} \stackrel{iid}{\sim} f_{x}$} \Comment{generate independent samples}
+\Linefor{$i:=[n]$}{$Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$} 
+\Linefor{$Z:=A,B$}{$\tilde{Z}^{1}=\textsc{Dist}(Z^{1})$} \Comment{the distance matrices under the alternative}
+\Linefor{$Z:=A,B$}{$\tilde{Z}^{0}=\textsc{Dist}(Z^{0})$} \Comment{the distance matrices under the null}
+\State $\G_{kl}^{1}[j]=\textsc{LocalCorr}(\tilde{A}^{1},\tilde{B}^{1})$ \Comment{calculate all local correlations under the alternative} 
+\State $\G_{kl}^{0}[j]=\textsc{LocalCorr}(\tilde{A}^{0},\tilde{B}^{0})$ \Comment{calculate all local correlations under the null} 
 \EndFor
 
 \For{$k,l=1,\ldots,n$}
-\State $c_{\alpha}=CDF_{1-\alpha}(\G^{0}_{kl}[j],j \in [r])$ \Comment{get the critical value by the empirical cumulative distribution under the null at each scale}
+\State $c_{\alpha}=\textsc{Cdf}_{1-\alpha}(\G^{0}_{kl}[j],j \in [r])$ \Comment{get the critical value by the empirical cumulative distribution under the null at each scale}
 \State $\beta_{\alpha}^{kl}=\sum_{j=1}^{r}(\G^{1}_{kl}[j]>c_{\alpha}) / r$ \Comment{estimate the power}
 \EndFor
 \State $(k^{*},l^{*})=\arg\max(\beta_{\alpha}^{kl})$ \Comment{find the optimal local scale}
@@ -944,20 +933,18 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \begin{algorithm}
 \caption{P-value Computation for All Local Correlations}
 \label{alg4}
-\begin{algorithmic}
+\begin{algorithmic}[1]
+\Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.
+\Statex Output: The p-value matrix $P \in [0,1]^{n \times n}$ for all local distance correlations.
 \Function{PermutationTest}{$\tilde{A}$,$\tilde{B}$,$r$}
-\State Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.
-\State Output: The p-value matrix $p$ for all local distance correlations.
-\State $\tilde{A}=dist(X)$
-\State $\tilde{B}=dist(Y)$
-\State $\G_{kl}=LGC(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
+\State $\G_{kl}=\textsc{LocalCorr}(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
 \For{$j=1,\ldots,r$}
-\State $\pi=randperm(n)$ \Comment{generate a random permutation of size $n$}
-\State $\G_{kl}^{0}[j]=LGC(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
+\State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$}
+\State $\G_{kl}^{0}[j]=\textsc{LocalCorr}(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
 \EndFor
 
 \For{$k,l=1,\ldots,n$}
-\State $p_{kl}=\sum_{j=1}^{r}(\G_{kl}<\G^{1}{k,l}[j])/r$ \Comment{get the p-value at each local scale}
+\State $P_{kl}=\sum_{j=1}^{r}(\G_{kl}<\G^{0}_{kl}[j])/r$ \Comment{get the p-value at each local scale}
 \EndFor
 \EndFunction
 \end{algorithmic}
@@ -966,33 +953,36 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \begin{algorithm}
 \caption{Optimal Local Scale Approximation by P-values}
 \label{alg5}
-\begin{algorithmic}
-\Function{MGCScaleVerify}{$P$}
-\State Input: The p-value matrix $P$ of all local distance correlations. 
-\State Output: The approximated MGC optimal scale $(k^{*},l^{*})$, and the approximated MGC p-value.
-\State $\alpha=0.05$ \Comment{the type $1$ error level}
-\State $\delta=0.8$ \Comment{the threshold to determine whether a row/column is sufficiently powerful}
-\State $\gamma=0.1$ \Comment{the threshold to determine whether there are consecutive rows/columns that are powerful}
-\State $pRow[k]=\sum_{l=2,\ldots,n}\mb{I}(p_{kl}<\alpha)/(n-1)$ 
-\State $[k_{1},k_{2}]=\arg_{k_{1},k_{2}}\max_{pRow[k]>\delta, \forall k \in [k_{1},\ldots,k_{2}]}(k_{2}-k_{1})$
-\If{$\frac{k_{2}-k_{1}}{n-1}<\gamma$} 
-\State $[k_{1},k_{2}]=n$
-\EndIf
+\begin{algorithmic}[1]
+\Statex Input: The p-value matrix $P \in \Real^{n \times n}$ of all local distance correlations, the type $1$ error level $\alpha$, and a threshold $\delta$.
+\Statex Output: The approximated MGC optimal scale $(k^{*},l^{*})$, and the approximated MGC p-value $p$.
+\Function{MGCScaleVerify}{$P$, $\alpha$, $\delta$}
+%\State $P=\textsc{Round}(100*P) / 100$ \Comment{round the p-values}
+%\State $\delta=5$;
+\State $\hat{k}=\textsc{VerifyRow}(P,\alpha,\delta)$ \Comment{search for a set of valid row indices}
+\State $\hat{l}=\textsc{VerifyRow}(P\T,\alpha,\delta)$ \Comment{search for a set of valid column indices}
+\State $[k^{*},l^{*}]=\arg\min_{\left\{k \in \hat{k}, l \in \hat{l}\right\}} P_{kl}$ \Comment{find the optimal scale within the valid range}
+\State $p=P_{k^{*}l^{*}}$
+\EndFunction
+\end{algorithmic}
 
-\State $pCol[l]=\sum_{l=2,\ldots,n}\mb{I}(p_{kl}<\alpha)/(n-1)$ 
-\State $[l_{1},l_{2}]=\arg_{l_{1},l_{2}}\max_{pCol[l]>\delta, \forall l \in [l_{1},\ldots,l_{2}]}(l_{2}-l_{1})$
-\If{$\frac{l_{2}-l_{1}}{n-1}<\gamma$} 
-\State $[l_{1},l_{2}]=n$
+\begin{algorithmic}[1]
+\Statex
+\Statex Input: Same as \textsc{MGCScaleVerify}.
+\Statex Output: The indices of valid rows.
+\Function{VerifyRow}{$P$, $\alpha$, $\delta$}
+\Linefor{$i:=[n]$}{$p[i]= \textsc{Median}(P[i,:])$} \Comment{calculate the median p-value for each row}
+\State $[p,q]=\textsc{Sort}(p)$ \Comment{$p$ is sorted by ascending order with $q$ being the index}
+\State $\hat{k}=n$ \Comment{by default the row scale is set to the maximum}
+\For{$i=1,\ldots,\delta$} 
+\If{$\textsc{Median}(p[1:\textsc{ceil}(n/\delta*i)])<\alpha/\delta * i$} 
+\State $\hat{k}=q[1:\textsc{ceil}(n/\delta*i)]$
+\State break \Comment{stop searching once the valid range is located}
 \EndIf
-
-\State $[k^{*},l^{*}]=\arg\min_{\left\{k \in [k_{1},\ldots,k_{2}], l \in [l_{1},\ldots,l_{2}]\right\}} p_{kl}$ 
-\State $p=p[k^{*},l^{*}]$
+\EndFor
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
-
-\subsection{Evaluation of MGC}
-\label{appen:eval}
 
 \subsection{Discussions of Optimal Scale Estimation}
 \label{appen:diss}

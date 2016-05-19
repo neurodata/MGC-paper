@@ -154,12 +154,12 @@ clear
 load('BrainHippoShape')
 n=114;rep=10000;alpha=0.05;
 y=squareform(pdist(Label));
-%y=(y>0)+1;
-% y=y+1;
-% for i=1:n
-% %     y(i,i)=0;
-% end
-y(y>0)=1;
+% y=(y>0)+1;
+y=y+1;
+for i=1:n
+    y(i,i)=0;
+end
+% y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];
 CorrPermDistTest(LMLS,y,rep,'BrainLMLxY',option);

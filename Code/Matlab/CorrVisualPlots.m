@@ -84,10 +84,10 @@ for type=1:total
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     hold off
-    title(titlechar);
+    title(titlechar,'FontSize',14);
 end
 h=suptitle('Visualization for 20 Simulated Dependencies');
-set(h,'FontSize',20,'FontWeight','normal');
+set(h,'FontSize',24,'FontWeight','normal');
 
 F.fname=[strcat(pre2, '0')];
 F.wh=[8 4]*2;
@@ -98,7 +98,8 @@ figure
 plot(x(:,1),y(:,1),'b.');
 % set(gca,'XTick',[]); % Remove x axis ticks
 % set(gca,'YTick',[]); % Remove y axis ticks
-title('Linear Dependency + Outliers with Probability 0.5','FontSize',13);
+set(gca,'FontSize',14);
+title('Mixture Model with p=0.5','FontSize',15);
 F.fname=strcat(pre2, 'Out0');
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)

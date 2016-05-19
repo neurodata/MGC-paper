@@ -29,8 +29,8 @@ end
 % A1: scatter plot
 figure
 plot(x,y,'b.',x1,y1,'r.');
-xlabel('X','FontSize',16)
-ylabel('Y','FontSize',16);
+xlabel('X','FontSize',25)
+ylabel('Y','FontSize',25,'Rotation',0,'position',[-1.1,0.25]);
 title('Scatter Plot of (X,Y)','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
@@ -65,9 +65,10 @@ figure
 imagesc(C');
 colormap(map2)
 caxis([0,maxC]);
-title('Heat maps of C and D','FontSize',30)
+title('Pairwise Distances','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
+ylabel('X','FontSize',25,'Rotation',0,'position',[-5,50]);
 %subplot(s,t,6)
 figure
 imagesc(D');
@@ -79,6 +80,7 @@ caxis([0,maxC]);
 % title('Distance Heatmap of Y','FontSize',16)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
+ylabel('Y','FontSize',25,'Rotation',0,'position',[-5,50]);
 
 % A3: heatmaps of the doubly centered distance matrices
 minC=min(min([A,B]));maxC=max(max([A,B]));
@@ -89,9 +91,10 @@ figure
 imagesc(C');
 colormap(map2)
 caxis([minC,maxC]);
-title('Heat maps of A and B','FontSize',30)
+title('Normalized Distances','FontSize',30)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
+ylabel('X','FontSize',25,'Rotation',0,'position',[-5,50]);
 figure
 imagesc(D');
 set(gca,'FontSize',16)
@@ -102,6 +105,7 @@ caxis([minD,maxD]);
 %title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
+ylabel('Y','FontSize',25,'Rotation',0,'position',[-5,50]);
 
 % Local distance matrices
 if n~=100 || noise~=1
@@ -125,7 +129,8 @@ figure
 imagesc(C');
 colormap(map2)
 caxis([minC,maxC]);
-title('Heat maps of Local A and B','FontSize',30)
+title('Local Normalized Distances','FontSize',30)
+ylabel('X','FontSize',25,'Rotation',0,'position',[-5,50]);
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 figure
@@ -134,6 +139,7 @@ set(gca,'FontSize',16)
 colormap(map2)
 caxis([minD,maxD]);
 %title('Local Doubly-Centered Distance Heatmap of Y','FontSize',16)
+ylabel('Y','FontSize',25,'Rotation',0,'position',[-5,50]);
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 
@@ -149,5 +155,5 @@ colormap(map2)
 caxis([0,1]);
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
-title('Heat map of Local A.*B','FontSize',30)
+title('Element-wise Product of','FontSize',30)
 %title('Local Distance Covariance of (X, Y)','FontSize',16)

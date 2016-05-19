@@ -28,7 +28,6 @@ pstd=std(p);
 %%%sort
 [~,ind]=sort(p(:,2),'ascend');
 
-
 cmap=zeros(3,3);
 ma = [1,0,1];
 cmap(1,:) = ma;
@@ -39,17 +38,18 @@ set(groot,'defaultAxesColorOrder',map1);
 x=1:n;
 % hold on
 %semilogy(x,p(ind,2),'ob:',x,p(ind,5),'xr:',x,ones(n,1)*pmean(2),'b-',x,ones(n,1)*pmean(5),'r-'); %Jittered data
-semilogy(x,p(ind,2),'o:',x,ones(n,1)*pmean(2),'-',x,ones(n,1)*0.05,'b-','LineWidth',2); %Jittered data
+semilogy(x,p(ind,2),'.-',x,ones(n,1)*pmean(2),'.:',x,ones(n,1)*0.05,'k.:','LineWidth',2); %Jittered data
 xlim([1,n]);
+set(gca,'FontSize',14);
 ax=gca;
-h=legend('MGC\{mcorr\}','Location','NorthEast');
-set(h,'FontSize',14);
+h=legend('MGC','Mean FDR of MGC', 'FDR=0.05', 'Location','NorthEast');
+set(h,'FontSize',16);
 
-set(gca,'XTickLabel',strNames(ind),'XTick',1:numel(strNames),'FontSize',12);
+set(gca,'XTickLabel',strNames(ind),'XTick',1:numel(strNames),'FontSize',14);
 ax.XTickLabelRotation=45;
 ylim([0,1]);
 ylabel('False Positive Rate','FontSize',16);
-title('FDR Plot for Brain vs Noise','FontSize',20);
+title('FDR Plot for Brain vs Noise','FontSize',17);
 
 F.fname=strcat(pre2, num2str(2));
 F.wh=[3 2.5]*2;

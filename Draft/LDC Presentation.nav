@@ -61,10 +61,13 @@
 \headcommand {\beamer@framepages {62}{64}}
 \headcommand {\slideentry {3}{0}{11}{65/68}{}{0}}
 \headcommand {\beamer@framepages {65}{68}}
-\headcommand {\slideentry {3}{0}{12}{69/69}{}{0}}
+\headcommand {\sectionentry {4}{\translate {References}}{69}{\translate {References}}{0}}
+\headcommand {\beamer@sectionpages {54}{68}}
+\headcommand {\beamer@subsectionpages {54}{68}}
+\headcommand {\slideentry {4}{0}{12}{69/69}{}{0}}
 \headcommand {\beamer@framepages {69}{69}}
-\headcommand {\beamer@partpages {1}{69}}
-\headcommand {\beamer@subsectionpages {54}{69}}
-\headcommand {\beamer@sectionpages {54}{69}}
-\headcommand {\beamer@documentpages {69}}
+\headcommand {\beamer@partpages {1}{70}}
+\headcommand {\beamer@subsectionpages {54}{70}}
+\headcommand {\beamer@sectionpages {54}{70}}
+\headcommand {\beamer@documentpages {70}}
 \headcommand {\def \inserttotalframenumber {25}}

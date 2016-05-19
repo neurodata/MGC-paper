@@ -9,11 +9,11 @@ if nargin<2
     pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 end
 cmap=zeros(3,3);
-% gr = [0,1,0];
+gr = [0.5,0.5,0.5];
 ma = [1,0,1];
 % cy = [0,1,1];
-cmap(1,:) = ma;
-cmap(2,:) = ma;
+cmap(1,:) = gr;
+cmap(2,:) = gr;
 % cmap(3,:) = cy;
 map1=cmap;
 map2 = brewermap(128,'GnBu'); % brewmap
@@ -34,15 +34,16 @@ load(filename);
 n=size(p1All,1);
 pp2=p1All(xa,end);
 figure
-plot(xa,pp1,'.-',xa,pp2,'.:','LineWidth',2)
+plot(xa,pp1,'k.-',xa,pp2,'.-','LineWidth',2)
+set(gca,'FontSize',14);
 xlabel('Number of Neighbors for X','FontSize',16);
 xlim([1 n]);
 ylim([0 0.2]);
 ylabel('P-Value','FontSize',16);
 
 title('Local Tests P-value for Brain Shape vs Disorder','FontSize',17);
-h=legend('Left Brain Shape vs Disorder','Right Brain Shape vs Disorder');
-set(h,'FontSize',13);
+legend('Left Brain','Right Brain','Location','North');
+legend boxoff
 
 F.fname=strcat(pre2, num2str(1));
 F.wh=[3 2.5]*2;
@@ -58,9 +59,15 @@ for i=3:total
     set(gca,'YDir','normal')
     colormap(flipud(map2))
     caxis([0.01 0.1])
-    colorbar
-    xlabel('Number of Neighbors for X','FontSize',16);
-    ylabel('Number of Neighbors for Y','FontSize',16);
+    set(gca,'FontSize',14);
+%     if i==3
+        xlabel('Number of Neighbors for X','FontSize',16);
+        ylabel('Number of Neighbors for Y','FontSize',16);
+        colorbar
+%     else
+%         set(gca,'XTick',[]); % Remove x axis ticks
+%         set(gca,'YTick',[]); % Remove y axis ticks
+%     end
     
     % Figure title/labels
     titleStr = strcat('Local Tests P-value for ', titleStr);
@@ -74,9 +81,9 @@ end
 function [str, title]=CorrRealDataName(i)
 str='CorrPermDistTestType';
 switch i
-%     case 1
-%         str=strcat(str,'BrainCxP.mat');
-%         title=' Connectome vs Personality';
+    %     case 1
+    %         str=strcat(str,'BrainCxP.mat');
+    %         title=' Connectome vs Personality';
     case 1
         str=strcat(str,'BrainLMLxY.mat');
         title=' Left Brain Shape vs Disorder';

@@ -25,8 +25,9 @@
 %\usepackage{etoolbox}
 %\patchcmd{\blx@mkbibfootnote}{\unspace}{}{}
 %\makeatother
-
-%\setbeamertemplate{bibliography item}{}
+\usepackage{bbm}
+\usepackage{natbib} 
+\setbeamertemplate{bibliography item}{}
 \setbeamertemplate{theorems}[numbered]
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}[thm]{Lemma}
@@ -51,7 +52,7 @@
 \AtBeginSection{\frame{\sectionpage}}
 
 \begin{document}
-
+\bibliographystyle{plainnat}
 \begin{frame}
 \titlepage % Print the title page as the first slide
 \end{frame}
@@ -81,7 +82,7 @@
 \item 3) provides insight into the dependency structure
 \item 4) does not inflate the false positive rate in the absence of dependency.
 \item 5) easy to use and scalable on big data
-\item To that end, we propose multiscale graph correlation \cite{ShenEtAl2016} for testing independence, which combines distance correlation and nearest-neighbor into the same testing framework.
+\item To that end, we propose multiscale graph correlation in \cite{ShenEtAl2016} for testing independence, which combines distance correlation and nearest-neighbor into the same testing framework.
 \end{itemize}
 \end{frame}
 
@@ -289,9 +290,9 @@ We use a quadratic relationship and finite $n$ to prove theorem~\ref{thm3}.
 %\end{frame}
 \begin{frame}[allowframebreaks]
 
-\frametitle{References}
+%\frametitle{References}
 \tiny
-\bibliographystyle{ieeetr}
+%\bibliographystyle{ieeetr}
 \bibliography{references}
 
 \end{frame}

@@ -15,10 +15,10 @@ if nargin<3
     type=1:20;
 end
 if nargin<4
-    rep1=100;
+    rep1=100; %1000
 end
 if nargin<5
-    rep2=300;
+    rep2=300; %1000
 end
 if nargin<6
     noise=1;
@@ -33,7 +33,7 @@ end
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,0];
+option=[0,2,0,4];
 for tt=type
     neighbor=[];
     if dim==1

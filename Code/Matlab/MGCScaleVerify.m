@@ -9,41 +9,42 @@ ind=find(V==min(min(V(k,l))),1,'last');
 function k=Verify(VN)
 thres=0.05;
 [m,~]=size(VN);
-lim=2;
 
 k=m;
-if median(VN)<thres
-    k=1:m;
+
+rowTmp=median(VN,2)';
+indK=find(rowTmp==min(rowTmp),1,'last');
+if rowTmp(indK)<=thres
+    rowTmp=min(VN,[],2)';
+    tmp=indK;
+    for i=indK-1:-1:1
+        if rowTmp(i)<=thres
+            tmp=[i tmp];
+        else
+            break;
+        end
+    end
+    for i=indK+1:m
+        if rowTmp(i)<=thres
+            tmp=[tmp i];
+        else
+            break;
+        end
+    end
+    VN=VN(tmp,:);
+    VN=VN(VN>-2);
+    if median(VN)<=thres/m*length(tmp)
+        k=tmp;
+    end
 end
-% 
-% rowTmp=median(VN,2)';
+
+
 % [~,indK]=sort(rowTmp,'ascend');
-% 
-% 
 % for l=1:lim
-%     switch l
-%         case 1
-%             tmpThres=thres;
-% %         case 2
-% %             tmpThres=thres/2;
-%         case 2 
-%             tmpThres=thres/5;
-%     end
-% %     tmpThres=thres/lim*(lim-l+1);
-%     
-%     cE=find(rowTmp>tmpThres);
-%     cS=[0 cE];
-%     cE=[cE m+1];
-%     c=max(cE-cS)-1;
-%     if c>=m*tmpThres/thres/2
-%         tt=find((cE-cS)==max(cE-cS),1,'last');
-%         k=cS(tt)+1:cE(tt)-1;
+%     tmpThres=thres/lim*(lim-l+1);
+%     len=indK(1:round(m*tmpThres/thres));
+%     if median(rowTmp(len))<=tmpThres
+%         k=1:m;
 %         break;
 %     end
-%     
-% %     len=indK(1:ceil(m*tmpThres/thres));
-% %     if median(rowTmp(len))<=tmpThres
-% %         k=len;
-% %         break;
-% %     end
 % end

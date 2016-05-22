@@ -148,19 +148,21 @@ switch type % In total 20 types of dependency + the type 0 outlier model
             end
         end
     case {14,15} %Square & Diamond
-        u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
-        v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        u=repmat(unifrnd(-1,1,n,1),1,d);
+        v=repmat(unifrnd(-1,1,n,1),1,d);
         if type==14
             theta=-pi/8;
         else
             theta=-pi/4;
         end
-        x=u*cos(theta)+v*sin(theta);
+        eps=0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        x=u*cos(theta)+v*sin(theta)+eps;
         y=-u*sin(theta)+v*cos(theta);
         if dependent==0
-            u=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
-            v=repmat(unifrnd(-1,1,n,1),1,d)+0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
-            x=u*cos(theta)+v*sin(theta);
+            u=repmat(unifrnd(-1,1,n,1),1,d);
+            v=repmat(unifrnd(-1,1,n,1),1,d);
+            eps=0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            x=u*cos(theta)+v*sin(theta)+eps;
         end
     case {16,17} %Sine 1/2 & 1/8
         x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);

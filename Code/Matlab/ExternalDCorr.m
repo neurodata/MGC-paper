@@ -108,6 +108,7 @@ n=100; dim=20; lim=20; rep1=100;rep2=1000;
 CorrIndTestDim(11,n,dim,lim,rep1,rep2);
 CorrIndTestDim(12,n,dim,lim,rep1,rep2);
 CorrIndTestDim(13,n,dim,lim,rep1,rep2);
+dim=40; lim=20;
 CorrIndTestDim(14,n,dim,lim,rep1,rep2);
 CorrIndTestDim(15,n,dim,lim,rep1,rep2);
 dim=10;lim=10;
@@ -121,10 +122,14 @@ CorrIndTestDim(19,n,dim,lim,rep1,rep2);
 CorrIndTestDim(20,n,dim,lim,rep1,rep2);
 
 %%%
-n=60;dim=1;rep1=100;rep2=200;noise=1;type=1:20;
-[p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
-n=100;dim=10;rep1=100;rep2=200;noise=0;type=1:20;
-[p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
+thres=0.8;dim=1;rep1=100;rep2=200;noise=1;type=1:10;
+[p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
+thres=0.8;dim=1;rep1=100;rep2=200;noise=1;type=11:20;
+[p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
+thres=0.5;dim=2;rep1=100;rep2=200;noise=0;type=1:10;
+[p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
+thres=0.5;dim=2;rep1=100;rep2=200;noise=0;type=11:20;
+[p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
 
 %%%%
 clear

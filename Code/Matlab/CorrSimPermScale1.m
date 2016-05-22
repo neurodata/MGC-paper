@@ -1,4 +1,4 @@
-function [powerP]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise,alpha)
+function [powerP]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise,alpha)
 % Author: Cencheng Shen
 % n=60;dim=1;rep1=100;rep2=200;noise=1;type=1:20;
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
@@ -6,19 +6,19 @@ function [powerP]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise,alpha)
 % [p1]=CorrSimPermScale1(n,dim,type,rep1,rep2,noise);
 % Used to compute the permutation test power for the 20 type of simulations
 if nargin<1
-    n=50;
+    type=1:20;
 end
 if nargin<2
     dim=1;
 end
 if nargin<3
-    type=1:20;
+    thres=0.8;
 end
 if nargin<4
-    rep1=100; %1000
+    rep1=1000; %1000
 end
 if nargin<5
-    rep2=300; %1000
+    rep2=1000; %1000
 end
 if nargin<6
     noise=1;
@@ -28,7 +28,7 @@ if nargin<7
 end
 if dim>1
     noise=0;
-    dimInd=dim;
+    n=100;
 end
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
@@ -38,24 +38,24 @@ for tt=type
     neighbor=[];
     if dim==1
         filename=strcat(pre1,'CorrIndTestType',num2str(tt),'N',num2str(100),'Dim',num2str(dim));
-        load(filename,'neighborhoods','numRange','power1All','power2All','power3All','power4','power5','power6','power7');
-        ind=find(numRange==n);
+        load(filename,'neighborhoods','numRange','power1All','power2All','power3All','power1','power2','power3','power7');
+        ind=[find(max(power2,[],1)>=thres,1) length(numRange)];
+        ind=min(ind);
+        n=numRange(ind);
         neighbor=neighborhoods(:,ind);
         power1All=power1All(1:numRange(ind),1:numRange(ind),ind);
         power2All=power2All(1:numRange(ind),1:numRange(ind),ind);
         power3All=power3All(1:numRange(ind),1:numRange(ind),ind);
     else
         filename=strcat(pre1,'CorrIndTestDimType',num2str(tt),'N',num2str(100),'Dim');
-        load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power4','power5','power6','power7');
-        if dimInd>length(dimRange)
-            dimInd=length(dimRange);
-        end
-        neighbor=neighborhoods(:,dimInd);
-        dim=dimRange(dimInd);
-        power1All=power1All(:,:,dimInd);
-        power2All=power2All(:,:,dimInd);
-        power3All=power3All(:,:,dimInd);
-        ind=dimInd;
+        load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power1','power2','power3','power7');
+        ind=[find(power2>=thres,1,'last') 1];
+        ind=max(ind);
+        dim=dimRange(ind);
+        neighbor=neighborhoods(:,ind);
+        power1All=power1All(:,:,ind);
+        power2All=power2All(:,:,ind);
+        power3All=power3All(:,:,ind);
     end
     p=zeros(7,1);
     tt

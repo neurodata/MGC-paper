@@ -382,25 +382,26 @@ print_fig(gcf,F)
 
 
 %
-% map1(1,:)=mcorr;
-% map1(2,:)=mcorr; 
-% map1(3,:)=dcorr; 
+map1(1,:)=dcorr;
+map1(2,:)=mcorr; 
+map1(3,:)=mcorr; 
+map1(4,:)=HHG; 
 set(groot,'defaultAxesColorOrder',map1);
 
 figNumber='9';
-filename=strcat(pre1,'CorrSimPermScale1-20N60Dim1');
+filename=strcat(pre1,'CorrSimPermScale1-20Dim1');
 load(filename)
 figure
 x=1:20;
 a=2;
 if a==1
-    ind=[1,2,3];
+    ind=[1,2,3,7];
 else
-    ind=[4,5,6];
+    ind=[4,5,6,7];
 end
 p1=powerP(ind,:);
-plot(x,p1(1,:),'x-',x,p1(3,:),'o-',x,p1(2,:),'.:','LineWidth',2);
-legend('Estimated MGC', 'True MGC','Global mcorr','Location','SouthWest');
+plot(x,p1(1,:),'.-',x,p1(3,:),'.-',x,p1(2,:),'.:',x,p1(4,:),'.--','LineWidth',2);
+legend('Estimated MGC', 'True MGC','Global mcorr','HHG','Location','SouthWest');
 set(gca,'FontSize',14);
 legend boxoff
 xlabel('Function Type','FontSize',15);
@@ -412,18 +413,18 @@ F.wh=[3 2.5]*2;
 print_fig(gcf,F)
 
 figNumber='10';
-filename=strcat(pre1,'CorrSimPermScale1-20N100Dim50');
+filename=strcat(pre1,'CorrSimPermScale1-20Dim2');
 load(filename)
 figure
 x=1:20;
 a=2;
 if a==1
-    ind=[1,2,3];
+    ind=[1,2,3,7];
 else
-    ind=[4,5,6];
+    ind=[4,5,6,7];
 end
 p1=powerP(ind,:);
-plot(x,p1(1,:),'x-',x,p1(3,:),'o-',x,p1(2,:),'.:','LineWidth',2);
+plot(x,p1(1,:),'.-',x,p1(3,:),'.-',x,p1(2,:),'.:',x,p1(4,:),'.--','LineWidth',2);
 %h=legend('Estimated MGC', 'True MGC','Global Mcorr','Location','SouthWest');
 %set(h,'FontSize',12);
 set(gca,'FontSize',14);

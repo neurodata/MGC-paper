@@ -44,6 +44,8 @@
 \providecommand{\mc}[1]{\mathcal{#1}}
 \newcommand{\Real}{\mathbb{R}}
 \newcommand{\G}{\mathcal{G}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\LL}{\mathcal{L}}
 \newcommand{\Migraine}{\sct{Migraine}}
 \newcommand{\mtg}{\sct{m2g}}
 \newcommand{\T}{^{\ensuremath{\mathsf{T}}}}           % transpose
@@ -258,8 +260,7 @@ Again, our method empirically achieves as high or higher power than the previous
 
 Figure~\ref{figSim6} illustrates how the powers of local correlations $\{\G_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the high-dimensional simulations (the $1$-dimensional case is included in appendix). They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in figure~\ref{fig:pp}(A)(C). 
 
-%tbao: ose
-The testing powers of all local correlations also shed light into the intrinsic dependency structure: for dependencies that are close to linear (type 1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$; but for all other nonlinear dependencies (type 6-19), MGC almost always chooses a smaller scale, which is distribution dependent. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, so the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share a narrow range of significant local correlations; so are circle and eclipse, square and diamond, etc. Note that for almost all problems other than the sine period functions, there exist a large number of adjacent local correlations that are equally significant, which is a key observation that we use to approximate the MGC optimal scale for one pair of data with unknown model in appendix section~\ref{appen:tests}.
+The testing powers of all local correlations also shed light into the intrinsic dependency structure: for dependencies that are close to linear (type 1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$; but for all other nonlinear dependencies (type 6-19), MGC almost always chooses a smaller scale, which is distribution dependent. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, so the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share a narrow range of significant local correlations; so are circle and eclipse, square and diamond, etc. Note that for almost all simulations, there exist a large portion of adjacent local correlations that are equally significant, which is an important observation that we use to approximate the MGC optimal scale for one pair of data with unknown model in appendix section~\ref{appen:tests}.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig6}
@@ -297,23 +298,6 @@ The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local co
 \subsection{Robustness against Outliers}
 \label{main4}
 To show that MGC is robust against ourliers, let us consider a simple mixture model: suppose the joint distribution satisfies $f_{xy}=p f_{1}+(1-p) f_{2}$, where $f_{1} \sim \mc{N}(\mu_{1},\Sigma_{1})$ and $f_{2} \sim \mc{N}(\mu_{2},\Sigma_{2})$. We set $\mu_{1}=(0,0)$, $\mu_{2}=(5,-5)$, $\Sigma_{1} = \begin{bmatrix} 1&1\\ 1&1 \end{bmatrix}$, and $\Sigma_{2} = \begin{bmatrix} 1&0\\ 0&1 \end{bmatrix}$. Namely $x=y$ with probability $p$, otherwise independently normally distributed. Given $p$, the simulating sample pairs $(X,Y)$ at $n=100$ can be repeatedly generated to estimate the testing powers at $\alpha=0.05$. 
-% * <joshuav@gmail.com> 2016-05-01T18:31:05.795Z:
-%
-% i didn't realize our model had a point mass, it is a bit contrived.  i expected the mixture of two normals, with very different means and covariances.  of course, the point mass is just a special case of that with sigma_{1.2} goign to zero.  but let's write it as a mixture of two different gaussians, and then write out the means and covariance matrices explicitly?
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:02:35.793Z:
-%
-% there is no point mass in the model, I think. I will explain wednesday.
-%
-% ^ <joshuav@gmail.com> 2016-05-04T17:07:15.423Z:
-%
-% write it by two normals of 2 dimensions
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:39:22.004Z:
-%
-% done
-%
-% ^.
 
 For sample data generated from the mixture model, there are around $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent of the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ and $n=100$ is plotted in figure~\ref{figSim3}(A), and the testing powers of all local mcorr correlations are shown in figure~\ref{figSim3}(B)(C)(D) for $p=0.3$,$0.5$,$0.7$ respectively, using the same procedure as in section~\ref{numer1}.
 
@@ -359,13 +343,13 @@ The p-value curves of the local correlations are provided in figure~\ref{figReal
 \hline
 Testing Method & MGC & dcorr & mcorr & Mantel & HHG \\
 \hline
-Left Brain vs Disorder  & $\textbf{0.0081}$ & $0.0736$ & $0.0840$ & $0.0398$ & $0.0371$ \\
+Left Brain vs Disorder  & $\textbf{0.0046}$ & $0.0745$ & $0.0783$ & $0.0382$ & $0.0375$ \\
 \hline
-Right Brain vs Disorder & $\textbf{0.0176}$ & $0.1085$ & $0.1141$  & $0.0803$ & $0.0833$\\
+Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & $0.0809$\\
 \hline
-\Migraine~vs CCI & $\textbf{0.0097}$ & $0.0098$ & $\textbf{0.0097}$  & $0.0100$ & $0.0311$\\
+\Migraine~vs CCI & $0.0111$ & $\textbf{0.0088}$ & $0.0111$  & $0.0093$ & $0.0341$\\
 \hline
-\mtg~vs CCI & $\textbf{0.0661}$ & $0.0707$ & $\textbf{0.0661}$  & $0.3361$ & $0.6536$\\
+\mtg~vs CCI & $0.0712$ & $\textbf{0.0682}$ & $0.0712$  & $0.3314$ & $0.6553$\\
 \hline
 \end{tabular}
 \caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. MGC is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.}
@@ -407,44 +391,6 @@ For each brain region, the distance matrix with respect to time is calculated by
 
 %tba:numerical updates
 For each data set, the above testing is carried out for each brain region, and the false positive rate (FDR) of MGC is shown in figure~\ref{figReal}(B). The y-axis stands for FDR by log scale, and the x-axis shows the name of the data set arranged by increasing FDR; the mean FDR of MGC is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. As the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set, which is indeed the case. The actual mean/standard deviation of MGC is $0.062 \pm 0.049$, and $0.060 \pm 0.052$ for global mcorr, and similarly for other benchmarks. This is in contrast to many other methods that may significantly increase FDR as reported in \cite{EklundKnutsson2012} for the same data source.
-% * <joshuav@gmail.com> 2016-05-01T18:37:13.045Z:
-%
-% the sample size is not large enough for there to be meaning to 4 significant digits, 2 or 3 at best.  also, i'm not sure we need to report the false positive rate explicitly for the other methods, we can just say that the global methods performed similarly.
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:05:37.091Z:
-%
-% get it! and changed accordingly
-%
-% ^.
-% * <joshuav@gmail.com> 2016-05-01T18:33:20.950Z:
-%
-% can you make the y-axis on 7b on a log scale, and add a dotted line for the mean?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T18:36:06.292Z:
-%
-% also, order should be meaningful.  you seed to order things alphabetically, but is the alpabet something we wnt to teach our readers? if not, let's order it in a way that makes sense for the inference? eg, largest to smallest false positive rate? also, the dashed lines are misleading, these are categories, not a sequence.  also, can you make the dot size proportional to the number of scans? also, can you use the same line color/style as in the pervious figs?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T18:36:57.290Z:
-%
-% also, fig 7a, those line colors are already reserved in this paper.  can you use different ones? maybe just black and gray would work? 
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:07:19.114Z:
-%
-% I used dark blue solid and dotted now, similar to (C)/(D)
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:42:24.754Z:
-%
-% for 7(B), changed to log scale, sorted data name by increasing FDR of MGC, and added a line of mean.
-%
-% ^ <joshuav@gmail.com> 2016-05-04T17:09:37.628Z:
-%
-% delete mcorr in figure.  add line for 0.05.
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:41:19.630Z:
-%
-% done
-%
-% ^.
 
 \section{Discussion}
 \label{conclu}
@@ -484,26 +430,6 @@ For each sample $x \in \Real^{d_{x}}$, we denote $x^{d}, d=1,\ldots,d_{x}$ as th
 
 For all of the below equations, $(x,y) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(x,y)$, and define each of the above distributions, and any additional auxiliary distributions.
 
-% Then each column pair $(x_{i},y_{i})$ of the whole sample pair $(X,Y)$ is independently identically distributed as $(\mb{x},\mb{y})$ for $i=1,\ldots,n$.
-
-% * <joshuav@gmail.com> 2016-05-01T18:53:25.181Z:
-%
-% our convension is that bold is random variable, not-bold is sample, caps is? vector? i'm confused why bold lower case r.v.'s generate caps non-bold letters.
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:47:36.766Z:
-%
-% yes it could be a bit confusing here. Bold lower case rv generate each column of X and Y, which are the whole data matrix.
-%
-% ^ <joshuav@gmail.com> 2016-05-04T17:11:36.406Z:
-%
-% clarify the space of our math objects
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:41:33.901Z:
-%
-% done
-%
-% ^.
-
 \setcounter{equation}{0}
 \begin{compactenum}
 \item Linear $(x,y) \in \Real^{d_{x}} \times \Real$,  
@@ -516,51 +442,6 @@ y &=w\T x+c\epsilon.
 x &\sim \mc{U}(-1,1)^{d_{x}}, \\ 
 y &=128(w\T x-\tfrac{1}{3})^3+48(w\T x-\tfrac{1}{3})^2-12(w\T x-\tfrac{1}{3})+80c\epsilon.
 \end{align*}
-% * <joshuav@gmail.com> 2016-05-01T18:59:40.462Z:
-%
-% 1) use \left( or \big( when cascading parentheses to make it easier to see.
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:02:23.654Z:
-%
-% 2) i think it would be good for each equation to make *explicit* the dimensionality of y.  maybe start with something like "Linear, (x,y) \in Real^d  \times \Real"
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:03:10.455Z:
-%
-% 3) step uses sample mean in definition of distribution? this doesn't seem kosher, meaning, (x,y) are no longer iid. 
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:03:32.036Z:
-%
-% 4) i don't think we anywhere say that (x,y) are iid for each setting, which i think we are assuming?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:04:31.870Z:
-%
-% 5) use \tfrac when fractions are within parentheses.
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:06:08.060Z:
-%
-% 6) in log, do you mean element-wise squaring and logging? that should be explicit in notation, perhaps using ".^2" like in matlab? or just writing it out for each dimension?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:06:33.311Z:
-%
-% 7) when there is a product inside paren, make them bigger.
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:07:24.985Z:
-%
-% 8) in 11, y is a deterministic function of u? and x is not? why is that?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:08:45.376Z:
-%
-% 9) use /frac when fraction is not within paren, eg, when defining theta for square.
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T12:22:52.590Z:
-%
-% address half of them; will talk on Wednesday to resolve all
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:41:42.492Z:
-%
-% all done
-%
-% ^.
 \item Exponential $(x,y) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
 x &\sim \mc{U}(0,3)^{d_{x}}, \\
@@ -650,16 +531,6 @@ y&=v/3+2v'-1.
 \end{compactenum}
 
 For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except type 20; for some types (type 11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are "directly" dependent. Then we can independently generate $(x_{i},y_{i})$ from $(\mb{x},\mb{y})$ for $i=1,\ldots,n$, set $X=[x_{1},\cdots, x_{n}] \in \Real^{d_{x} \times n}$ and $Y=[y_{1},\cdots, y_{n}] \in \Real^{d_{y} \times n}$, and calculate local / global correlations for the sample data.
-
-% * <joshuav@gmail.com> 2016-05-01T19:10:01.958Z:
-%
-% well, actually, for some of the distriubtions, y is *directly* dependent on x, and for others, y is conditionally independent of x.  not a bad thing, but a thing worth clarifying perhaps?
-%
-% ^ <cshen6@jhu.edu> 2016-05-03T11:55:12.750Z:
-%
-% thx for the good point here! I said it now; and maybe this is why HHG did better than MGC/dcorr for some of 11-15...
-%
-% ^.
 
 The low-dimensional simulations always set $d_{x}=d_{y}=1$ and $c=1$, with their visualizations shown in figure~\ref{fig0}. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, e.g., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. 
 
@@ -798,23 +669,7 @@ Algorithm~\ref{alg3} computes the testing powers of all local correlations by re
 
 Algorithm~\ref{alg4} computes the p-values of all local correlation by the permutation test with $r$ random permutations. Both algorithm~\ref{alg3} and ~\ref{alg4} takes $O(rn^2 \log n)$, and can be used to compute the power / p-value of MGC once the optimal scale is determined, or the power / p-value of any global correlation by excluding the respective local indexing.
 
-Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs the approximated MGC p-value. This is necessary for testing on one pair of data with unknown model, since algorithm~\ref{alg3} may no longer be used. Conceptually, we search for a set of ``valid'' rows $\hat{k}$ first by utilizing a procedure similar to Bonferroni correction, i.e., the median p-value within all rows in $\hat{k}$ should be no more than $\alpha /n * |\hat{k}|$ ($|\hat{k}|$ is the number of rows in $\hat{k}$), otherwise $\hat{k}=n$; similarly we locate a set of columns $\hat{l}$. Once $\hat{k}$ and $\hat{l}$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within the valid range. Clearly if the majority p-values are less than $\alpha$, then $\hat{k}=\hat{l}=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-value among all local correlations; and if there is no valid rows and columns, then the largest scale is used, and MGC equals the global correlation. Note that the actual algorithm is a simpler version of the above description: we use an additional parameter $\delta$ to limit the possibilities of $|\hat{k}|$ and $|\hat{l}|$ to consider; and it suffices to search among top indices that are sorted by the median p-values on each row / column.
-%tba: ose
-
-%Note that the first three algorithms can be used for global dcorr / mcorr / Mantel , by excluding the respective local parts, i.e., in algorithm~\ref{algLGC}, the loops after the global function are not needed for global correlation; in algorithm~\ref{algPower} and algorithm~\ref{algPerm}, the powers and p-values only need to be estimated for one global correlation rather than $n^2$ local statistics. Therefore, for HHG or any correlation involving sorting, the complexity of each algorithm is the same as before but slightly less in actual running time; and for global dcorr / mcorr / Mantel, the complexity of each algorithm becomes $O(n^2), O(rn^2), O(rn^2)$ since sorting is no longer needed.
-% * <joshuav@gmail.com> 2016-05-01T19:20:21.315Z:
-%
-% i removed HHG here because it did not seem correct to include it, in the sense that we don't have a local HHG, right?
-%
-% ^ <joshuav@gmail.com> 2016-05-01T19:21:56.688Z:
-%
-% 2) let's go through the pseudocode together in person.
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:42:22.558Z:
-%
-% all code re-written
-%
-% ^.
+Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs the approximated MGC p-value. This is necessary for testing on one pair of data with unknown model, since algorithm~\ref{alg3} may no longer be used. Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows $\K=\{k_{1},k_{1}+1,\ldots,k_{2}-1,k_{2}\}$ such that the median p-value of $\{p_{kl},k \in \K, l=2,\ldots,n\}$ is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$. Clearly if the majority p-values of all local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations; if there is no valid rows and columns, then MGC takes the largest scale and equals the global correlation. Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns.
 
 \begin{algorithm}
 \caption{Local Correlation Computation for One Scale}
@@ -928,14 +783,12 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \caption{Optimal Local Scale Approximation by P-values}
 \label{alg5}
 \begin{algorithmic}[1]
-\Statex Input: The p-value matrix $P \in \Real^{n \times n}$ of all local distance correlations, the type $1$ error level $\alpha$, and a threshold $\delta$.
+\Statex Input: The p-value matrix $P \in \Real^{n \times n}$ of all local distance correlations, the type $1$ error level $\alpha$.
 \Statex Output: The approximated MGC optimal scale $(k^{*},l^{*})$, and the approximated MGC p-value $p$.
-\Function{MGCScaleVerify}{$P$, $\alpha$, $\delta$}
-%\State $P=\textsc{Round}(100*P) / 100$ \Comment{round the p-values}
-%\State $\delta=5$;
-\State $\hat{k}=\textsc{VerifyRow}(P,\alpha,\delta)$ \Comment{search for a set of valid row indices}
-\State $\hat{l}=\textsc{VerifyRow}(P\T,\alpha,\delta)$ \Comment{search for a set of valid column indices}
-\State $[k^{*},l^{*}]=\arg\min_{\left\{k \in \hat{k}, l \in \hat{l}\right\}} P_{kl}$ \Comment{find the optimal scale within the valid range}
+\Function{MGCScaleVerify}{$P$, $\alpha$}
+\State $\K=\textsc{VerifyRow}(P,\alpha)$ \Comment{search for a set of valid row indices}
+\State $\LL=\textsc{VerifyRow}(P\T,\alpha)$ \Comment{search for a set of valid column indices}
+\State $[k^{*},l^{*}]=\arg\min_{\left\{k \in \K, l \in \LL\right\}} P_{kl}$ \Comment{find the optimal scale within the valid range}
 \State $p=P_{k^{*}l^{*}}$
 \EndFunction
 \end{algorithmic}
@@ -944,48 +797,47 @@ Algorithm~\ref{alg5} approximates the optimal scale $(k^{*},l^{*})$ from the p-v
 \Statex
 \Statex Input: Same as \textsc{MGCScaleVerify}.
 \Statex Output: The indices of valid rows.
-\Function{VerifyRow}{$P$, $\alpha$, $\delta$}
-\Linefor{$i:=[n]$}{$p[i]= \textsc{Median}(P[i,:])$} \Comment{calculate the median p-value for each row}
-\State $[p,q]=\textsc{Sort}(p)$ \Comment{$p$ is sorted by ascending order with $q$ being the index}
-\State $\hat{k}=n$ \Comment{by default the row scale is set to the maximum}
-\For{$i=1,\ldots,\delta$} 
-\If{$\textsc{Median}(p[1:\textsc{ceil}(n/\delta*i)])<\alpha/\delta * i$} 
-\State $\hat{k}=q[1:\textsc{ceil}(n/\delta*i)]$
-\State break \Comment{stop searching once the valid range is located}
+\Function{VerifyRow}{$P$, $\alpha$}
+\State initialize $\K$ as an empty set
+\State $[k^{*},l^{*}]=\arg\min_{k, l} \{P_{kl},k,l=2,\ldots,n\}$
+\For{$k=k^{*},\ldots,2$} \Comment{check all row scales no larger than $k^{*}$}
+\If{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}
+\State break
 \EndIf
+\State $\K=[k,\K]$
 \EndFor
+\For{$k=k^{*}+1,\ldots,m$} \Comment{check all row scales larger than $k^{*}$}
+\If{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}
+\State break
+\EndIf
+\State $\K=\{\K,k\}$
+\EndFor
+\If{$\textsc{Median}(P_{kl},k \in \K, l=2,\ldots,n) > \alpha * \frac{|\K|}{n-1}$}
+\State $\K=\{n\}$ \Comment{take the largest scale if the median p-value is not sufficiently small}
+\EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 \subsection{Discussions of Optimal Scale Estimation}
 \label{appen:diss}
-To evaluate MGC in simulations or real data, the optimal scale for MGC always needs to be estimated first. Algorithm~\ref{alg3} computes the testing powers of all local correlations for known model, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (If there are more than one optimal scales, one may pick the scale that maximizes the mean difference of the test statistic under the null and the alternative, or the scale that has the largest mean under the alternative). Once the optimal scale is determined, the testing power of MGC under this type of joint distribution can be determined by algorithm~\ref{alg3}, and its p-value for testing on a particular pair of data can be determined by algorithm~\ref{alg4}.
+To evaluate MGC in simulations or real data, the optimal scale for MGC always needs to be estimated first. Algorithm~\ref{alg3} computes the testing powers of all local correlations for known model, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (if there are more than one optimal scales, one may pick the scale that maximizes the mean difference of the test statistic under the null and the alternative). Once the optimal scale is determined, the testing power of MGC under the given model can be quickly determined by algorithm~\ref{alg3}, and its p-value for testing on a particular pair of data can be determined by algorithm~\ref{alg4}.
 
-If there is only one pair of data $(X,Y)$ with unknown distributions, we have to approximate the optimal scale by algorithm~\ref{alg5}. It makes use of Bonferroni correction to separately identify valid rows and columns, which guarantees that the false positive rate is not significantly higher than $\alpha$; otherwise the scale is set to the largest, which guarantees the approximated MGC is at least as powerful as the global correlation. Still, algorithm~\ref{alg5} is a heuristic approach to approximate the optimal local scale, which does not guarantee the optimal local correlation to be always correctly identified.
+If there is only one pair of data $(X,Y)$ with unknown distributions, we have to approximate the optimal scale by algorithm~\ref{alg5}. It makes use of Bonferroni correction to separately verify the set of rows and columns, which guarantees the false positive rate to be no higher than $\alpha$; otherwise the scale is set to the largest, which guarantees the approximated MGC is at least as powerful as the global correlation. Still, algorithm~\ref{alg5} is a heuristic approach to approximate the optimal local scale, which does not guarantee the optimal local correlation to be always correctly identified.
 
 %As an additional note, for any test statistic, the power of the permutation-based test (algorithm~\ref{algPerm}) is equivalent to the simulated testing power from algorithm~\ref{algPower}, because the permuted sample pairs in algorithm~\ref{algPerm} are independent from each other and follow the same marginal distributions as the independent sample pairs in algorithm~\ref{algPower}. Furthermore, choosing a fair alternative is an important issue for evaluating the testing power, as discussed in \cite{RamdasEtAl2015}.
 
-To validate, we compare the true testing power of MGC\{mcorr\} using algorithm~\ref{alg3}, to its estimated power based on algorithm~\ref{alg5}. For each type of dependency in the simulation section, we generate $1$,$000$ pairs of dependent data by the same settings as in figure~\ref{fig:pp}(A)(C); and for each pair of data, all local p-values are calculated by $1$,$000$ random permutations. By using the true optimal scale (from the simulation section) consistently for each data pair, the true MGC p-value can be computed; and by using algorithm~\ref{alg5} to approximate the optimal scale for each pair of data separately, the estimated MGC p-value can be computed. The null is rejected when the p-value is less than $0.05$, and the power equals the percentage of correct rejection. Based on the powers of true MGC / estimated MGC / mcorr / HHG shown in figure~\ref{figSimPerm}, we observe that the estimated MGC power by algorithm~\ref{alg5} is almost always better than the powers of the respective global correlation and HHG, and is close to the true MGC power for most dependency types. 
+To better justify algorithm~\ref{alg5}, we compare the estimated MGC power by algorithm~\ref{alg5} to the true MGC power by algorithm~\ref{alg3}, with the global mcorr and HHG as benchmarks. For each type of dependency in the simulation section, we generate $1$,$000$ pairs of dependent data by the same low- and high-dimensional settings as in figure~\ref{fig:pp}(A)(C); and for each pair of data, all local p-values are calculated by $1$,$000$ random permutations. By using the true optimal scale (from the simulation section) consistently for each data pair, the true MGC p-value can be computed; by using algorithm~\ref{alg5} to approximate the optimal scale for each pair of data separately, the estimated MGC p-value can be computed; and the p-values of global mcorr and HHG can also be derived. The null is rejected when the p-value is less than $0.05$, and the power equals the percentage of correct rejection. Based on the powers of true MGC / estimated MGC / mcorr / HHG shown in figure~\ref{figSimPerm}, we observe that although the estimated MGC power by algorithm~\ref{alg5} can be lower than the true MGC power, it is almost always better than global mcorr and HHG, and combines the better performance of the two benchmarks. 
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.45\textwidth]{Figures/Fig9}
 \includegraphics[width=0.45\textwidth]{Figures/Fig10}
-\caption{Comparing estimated MGC power to true MGC power, for the $1$-dimensional and high-dimensional simulations. For the $1$-dimensional simulations, $d_{x}=1$ and the sample size is chosen by the power threshold $0.8$ as in figure~\ref{fig:pp}(A); for the high-dimensional simulations, $n=100$ and the dimension is chosen by the power threshold $0.5$ as in figure~\ref{fig:pp}(C). The estimated MGC power by the approximated optimal scale is almost always higher than the powers of mcorr / HHG, is quite close to the true MGC power, and does not inflate false signals.} 
+\caption{Comparing estimated MGC power to true MGC power, for the $1$-dimensional and high-dimensional simulations. For the $1$-dimensional simulations, $d_{x}=1$ and the sample size is chosen by the power threshold $0.8$ as in figure~\ref{fig:pp}(A); for the high-dimensional simulations, $n=100$ and the dimension is chosen by the power threshold $0.5$ as in figure~\ref{fig:pp}(C). The estimated MGC power by the approximated optimal scale is almost always better than global mcorr and HHG, combines the better performance of the two benchmarks, is quite close to the true MGC power, and does not inflate false signals.} 
 \label{figSimPerm}
 \end{figure}
-% * <joshuav@gmail.com> 2016-05-01T19:26:45.219Z:
-%
-% use the same color/line styles for this fig as the other ones.  
-%
-% ^ <cshen6@jhu.edu> 2016-05-06T02:42:35.429Z:
-%
-% done
-%
-% ^.
 
-Note that it is tempting to directly search the optimal scale that minimizes all local p-values without the validation by algorithm~\ref{alg5}, or generate random samples based on the given data pair and use algorithm~\ref{alg3}. However, both approaches are biased such that the false positive rate will be higher than the type $1$ error in the absence of dependency. This is because for a given pair of data, a non-optimal scale can happen to have a significant p-value, which may be falsely identified as optimal if we directly minimize all local p-values; and erroneous scales often still exist after a straightforward re-sampling, so random samples have the same problem. 
+Note that it is tempting to directly use the optimal scale that minimizes all local p-values without the validation by algorithm~\ref{alg5}, or generate random samples based on the given data pair and use algorithm~\ref{alg3} by bootstrap. However, both approaches are biased such that the false positive rate will be higher than the type $1$ error in the absence of dependency. This is because for a given pair of data, a non-optimal scale can happen to have a significant p-value, which may be falsely identified as optimal if we directly minimize all local p-values. Those erroneous scales often still exist after a straightforward re-sampling, so random samples have the same problem. More investigations into the bias and better methods for searching the optimal scale are two worthwhile directions for future works.
 
 %This problem does not exist, if we know the underlying true model, or has multiple pairs of training data from the same model that are independent of the testing pair. In case of a known model, we already showed in the simulations that the theoretical MGC power can be achieved without any inflation of the false positive rate, once an optimal scale is determined. Alternatively, if additional data are available, or the full data set is too large such that sub-sampling is necessary for data analysis, we can use / sub-sample multiple training data for optimal scale estimation based on maximizing the sum of p-values of all local correlations, then use the optimal scale on the testing data for p-value calculation; the alternative approach also achieve the theoretical MGC power without bias.
 

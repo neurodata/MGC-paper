@@ -33,7 +33,7 @@ end
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,0];
+option=[0,2,0,4];
 for tt=type
     neighbor=[];
     if dim==1
@@ -101,8 +101,8 @@ for tt=type
     end
 end
 powerP(:,type)
-filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'N',num2str(n),'Dim',num2str(dim));
-save(filename,'powerP','n','rep1','rep2','dim','noise','alpha');
+filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'Dim',num2str(dim));
+save(filename,'powerP','rep1','rep2','dim','noise','alpha','thres');
 
 figure
 x=1:20;

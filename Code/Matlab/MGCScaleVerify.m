@@ -16,16 +16,17 @@ rowTmp=median(VN,2)';
 indK=find(rowTmp==min(rowTmp),1,'last');
 if rowTmp(indK)<=thres
     rowTmp=min(VN,[],2)';
+    rowTmp=(rowTmp<thres);
     tmp=indK;
     for i=indK-1:-1:1
-        if rowTmp(i)<=thres
+        if rowTmp(i)==1
             tmp=[i tmp];
         else
             break;
         end
     end
     for i=indK+1:m
-        if rowTmp(i)<=thres
+        if rowTmp(i)==1
             tmp=[tmp i];
         else
             break;
@@ -37,14 +38,3 @@ if rowTmp(indK)<=thres
         k=tmp;
     end
 end
-
-
-% [~,indK]=sort(rowTmp,'ascend');
-% for l=1:lim
-%     tmpThres=thres/lim*(lim-l+1);
-%     len=indK(1:round(m*tmpThres/thres));
-%     if median(rowTmp(len))<=tmpThres
-%         k=1:m;
-%         break;
-%     end
-% end

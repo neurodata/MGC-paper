@@ -121,7 +121,7 @@ dim=100;
 CorrIndTestDim(19,n,dim,lim,rep1,rep2);
 CorrIndTestDim(20,n,dim,lim,rep1,rep2);
 
-%%%
+%%
 thres=0.8;dim=1;rep1=100;rep2=200;noise=1;type=1:10;
 [p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
 thres=0.8;dim=1;rep1=100;rep2=200;noise=1;type=11:20;
@@ -130,12 +130,6 @@ thres=0.5;dim=2;rep1=100;rep2=200;noise=0;type=1:10;
 [p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
 thres=0.5;dim=2;rep1=100;rep2=200;noise=0;type=11:20;
 [p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
-
-%%%%
-clear
-load('ccidiff-Tmat-org')
-n=109; rep=10000;
-CorrPermDistTest(C1,T1,rep,'BrainCxT');
 
 %%%use dcorr to find the optimal neighborhood size
 clear

@@ -1,5 +1,5 @@
 function [disRank]=disToRanks(dis)
-% Transform from distance to ranking within each column, order from 1,...,n.
+% An auxiliary function of LocalCorr that calculates ranking within each column for a distance matrix, order from 1,...,n.
 % For ties, the minimum ranking is used.
 
 [n,m]=size(dis);

@@ -1,6 +1,5 @@
 function [ind]=MGCScaleVerify(V)
 % An auxiliary function to verify and estimate the MGC optimal scale
-
 VN=V(2:end,2:end);
 k=Verify(VN)+1;
 l=Verify(VN')+1;

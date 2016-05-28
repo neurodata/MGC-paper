@@ -1,14 +1,22 @@
 # source("disToRanks.R")
 
 disToRanks <- function(dis) {
-  # Transform from distance to ranking, order from 0,...,n-1.
+  # An auxiliary function of LocalCorr that calculates ranking within each column for a distance matrix, order from 1,...,n.
   # For ties, the minimum ranking is used.
   n=nrow(dis);
   disRank=matrix(0,n,n);
   for (i in (1:n)){
     v=dis[,i];
-    disRank[,i]=rank(v,ties.method="min")-1;
-    #disRank[i,i]=0;
+    tmp=rank(v,ties.method="min");
+    tu=unique(tmp);
+    if (length(tu)!=max(tmp)){
+      tu=sort(tu);
+      for (j in (1:length(tu))){
+        kk=which(tmp==tu[j]);
+        tmp[kk]=j;
+      }
+    }
+    disRank[,i]=tmp;
   }
   return(disRank);
 }

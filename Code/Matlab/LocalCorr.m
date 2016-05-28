@@ -1,30 +1,32 @@
-function [corrXY,varX,varY] = LocalCorr(X,Y,option,disRank) % Calculate local variants of mcorr/dcorr/Mantel
+function [corrXY,varX,varY] = LocalCorr(X,Y,option,disRank)
 % Author: Cencheng Shen
-% Implements local graph correlation from Shen, Jovo, CEP 2016.
+% Implement the local correlation coefficients from Shen, Jovo, CEP 2016.
 %
 % By specifying option=1, 2, or 3, it calculates the local correlations of dcorr, mcorr, and Mantel
-% Specifying the rank matrix by a size n * 2n disRank can save the sorting.
+% Pre-specify a size n * 2n rank matrix can save the sorting for X and Y
 if nargin < 3
     option=1; % By default use dcorr
 end
 if nargin < 4
-    disRank=[disToRanks(X) disToRanks(Y)]; % Sort distances within columns, if the ranks are not provided
+    disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns, if the ranks are not provided
 end
 n=size(X,1);
 
-% Depending on the choice of the global test, calculate the entries of A and B
+% depending on the choice of the global test, calculate the entries of A and B
 % accordingly for late multiplication.
 A=Centering(X,option);
 B=Centering(Y,option);
 
 %   [corrXY,varX,varY]=GlobalComputation(A',B);
-RX=disRank(1:n,1:n); % The ranks for X
-RY=disRank(1:n,n+1:2*n); % The ranks for Y
+RX=disRank(1:n,1:n); % the ranks for X
+RY=disRank(1:n,n+1:2*n); % the ranks for Y
 [corrXY,varX,varY]=LocalComputation(A',B,RX,RY);
 
 function [A]=Centering(X,option)
+% An auxiliary function that centers the distance matrix X, for dcorr / mcorr / Mantel
 n=size(X,1);
 if option==3
+    % centering for Mantel
     EX=sum(sum(X))/n/(n-1);
     A=X-EX;
     % Mantel does not use diagonal entries, which is equivalent to set them zero
@@ -32,14 +34,14 @@ if option==3
         A(j,j)=0;
     end
 else
-    % Double centering for dcorr/mcorr
-    %A=X-repmat(mean(X,1),n,1)-repmat(mean(X,2),1,n)+mean(mean(A));
+    % centering for dcorr/mcorr
+    % A=X-repmat(mean(X,1),n,1)-repmat(mean(X,2),1,n)+mean(mean(A));
     A=X-repmat(mean(X,1),n,1);
-    % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
+    % for mcorr, further adjust the centered matrices to remove high-dimensional bias
     if option==2
         A=A-X/n;
         %         meanX=sum(sum(X))/n^2;
-        % The diagonals of mcorr are set to zero, instead of the original formulation of mcorr
+        % the diagonals of mcorr are set to zero, instead of the original formulation of mcorr
         for j=1:n
             A(j,j)=0;
             % %             The original diagonal modification of mcorr
@@ -49,14 +51,14 @@ else
 end
 
 function [corrXY,varX,varY]=LocalComputation(A,B,RX,RY)
-% The output contains the local variants of correlations and variances
+% An auxiliary function that computes all local correlations simultaneously
 n=size(A,1);
 nX=max(max(RX));nY=max(max(RY));
 corrXY=zeros(nX,nY); varX=zeros(nX,1); varY=zeros(nY,1);
 EX=zeros(nX,1);
 EY=zeros(nY,1);
 
-% Summing up the entrywise product of A and B based on the ranks, which
+% summing up the entrywise product of A and B based on the ranks, which
 % yields the local family of covariance and variances
 for j=1:n
     for i=1:n
@@ -83,13 +85,13 @@ for l=1:nY-1
         corrXY(k+1,l+1)=corrXY(k+1,l)+corrXY(k,l+1)+corrXY(k+1,l+1)-corrXY(k,l);
     end
 end
-% Normalizing the covariance by the variances yields the local correlation.
+% normalize the covariance by the variances yields the local correlation.
 corrXY=(corrXY-EX*EY'/n^2);%;
 varX=varX-EX.*EX/n^2;
 varY=varY-EY.*EY/n^2;
 corrXY=(corrXY)./real(sqrt(varX*varY'));
 
-% Set any local correlation to 0 if any corresponding local variance is no larger than 0
+% set any local correlation to 0 if any corresponding local variance is no larger than 0
 for k=1:nX
     if varX(k)<=0
         corrXY(k,:)=0;

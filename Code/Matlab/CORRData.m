@@ -31,6 +31,8 @@ switch part
         aList=  {'SWU4','UM','UPSM1','SWU2'};
     case 8
         aList= {'Utah1','UWM','XHCUMS'};
+    case 9
+        aList= {'IPCAS2','UM','BNU2','HNU1'};
 end
 
 option=[0,2,0,0];

@@ -33,7 +33,7 @@ end
 pre1='../../Data/';
 %pre2='../../Figures/Fig'; % The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,4];
+option=[0,2,0,0];
 for tt=type
     neighbor=[];
     if dim==1

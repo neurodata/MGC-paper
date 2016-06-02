@@ -207,7 +207,7 @@ We first experiment on a $1$-dimensional scenario at $d_{x}=d_{y}=1$. To observe
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig1}
 \caption{
-Powers of different methods in $20$ different $1$-dimensional simulations, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates.
+Powers of different methods for $20$ different $1$-dimensional simulations, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates.
 Each panel shows empirical testing power on the absicca, and sample size on the ordinate.
 MGC empirically achieves similar or better power than the previous state of the art approaches for nearly all sample sizes on all problems.}
 \label{fig:1D}
@@ -249,7 +249,7 @@ In the following sections, unless mentioned otherwise, we concentrate on MGC$\{$
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig5}
-\caption{Power of different methods on 20 different high-dimensional simulations, for dimensionality ranging from $1$ to $1$,$000$.  Details as in figure~\ref{fig:1D}.
+\caption{Power of different methods on 20 different high-dimensional simulations, for dimensionality ranging from $1$ to $1$,$000$ at a fixed sample size $n=100$.  Details as in figure~\ref{fig:1D}.
 Again, our method empirically achieves as high or higher power than the previous state of the art methods for nearly all problems and all dimensions.
 }
 \label{fig:nD}
@@ -264,7 +264,7 @@ The testing powers of all local correlations also shed light into the intrinsic 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig6}
-\caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in high-dimensional simulations.
+\caption{Testing power heat map of local mcorr correlations with respect to number of neighbors for high-dimensional simulations.
 For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the power threshold as in figure~\ref{fig:pp}(C). Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
 \label{figSim6}
 \end{figure}
@@ -311,11 +311,12 @@ The optimal local mcorr is clearly much better than global mcorr. Furthermore, t
     \subfigimg[width=\linewidth]{C}{Figures/FigOut2} &
     \subfigimg[width=\linewidth]{D}{Figures/FigOut3}
   \end{tabular}
-  \caption{Testing power heat map of local mcorr correlations with respect to number of neighbors in the mixture model.
+  \caption{Testing power heat map of local mcorr correlations with respect to number of neighbors for the mixture model.
 (A) Scatter plot of sample $(X,Y)$ under the mixture model with probability $p=0.5$
 (B) Testing power of all local correlation under the mixture model with probability $p=0.3$.
 (C) Same as (B) with $p=0.5$.
-(D) Same as (B) with $p=0.7$.}
+(D) Same as (B) with $p=0.7$.
+MGC is always better than global mcorr, and the local powers imply the existence of outliers.}
 \label{figSim3}
 \end{figure}
 

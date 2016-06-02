@@ -35,12 +35,13 @@ end
 pAll=1-pAll;
 pAll(1,:)=1;pAll(:,1)=1;
 
-trial=0;
+trial=1;
 if trial==1
-    [ind]=MGCScaleVerify2(testAll);
+    [ind,pAll2]=MGCScaleVerify2(testAll);
+    p=pAll2(ind);
 else
     % verify and estimate the MGC optimal scale
     ind=MGCScaleVerify(pAll);
+    p=pAll(ind);
 end
-p=pAll(ind);
 test=testAll(ind);

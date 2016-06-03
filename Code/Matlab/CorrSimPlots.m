@@ -77,7 +77,7 @@ for j=1:total
 end
 xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
-h=suptitle('Testing Powers in 20 Simulated 1-Dimensional Settings');
+h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.05, 0.87, .05, .05]; %Legend Position
 h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
@@ -123,7 +123,7 @@ xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
 ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Correlations in 1-Dimensional Simulations'));
+h=suptitle(strcat('Testing Powers of All Local Correlations for 1-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -163,7 +163,7 @@ legend boxoff
 xlabel('Difference with the Best Method','FontSize',15);
 ylabel('Relative Performance','FontSize',15);
 ylim([0 1]);
-titleStr = strcat('Performance Profiles in 1-Dimensional Settings');
+titleStr = strcat('Performance Profiles for 1-Dimensional Settings');
 title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
@@ -209,8 +209,8 @@ xlabel('Threshold of Power','FontSize',15);
 ylabel('Area Under Curve','FontSize',15);
 xlim([1/limN 1]);
 ylim([0 1]);
-titleStr = strcat('AUC of Performance Profiles in 1-Dimensional Settings');
-title(titleStr,'FontSize',15);
+titleStr = strcat('AUC of Performance Profiles for 1-Dimensional Settings');
+title(titleStr,'FontSize',14);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
@@ -241,7 +241,7 @@ for j=1:total
 end
 xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
-h=suptitle('Testing Powers in 20 Simulated High-Dimensional Settings');
+h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.05, 0.87, .05, .05]; %Legend Position
 h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','dcorr','mcorr','Mantel','HHG','Location',lgdPosition);
@@ -291,7 +291,7 @@ end
 xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
 ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
-h=suptitle(strcat('Testing Powers of All Local Correlations in High-Dimensional Simulations'));
+h=suptitle(strcat('Testing Powers of All Local Correlations for High-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -329,7 +329,7 @@ legend boxoff
 xlabel('Difference with the Best Method','FontSize',15);
 ylabel('Relative Performance','FontSize',15);
 ylim([0 1]);
-titleStr = strcat('Performance Profiles in High-Dimensional Settings');
+titleStr = strcat('Performance Profiles for High-Dimensional Settings');
 title(titleStr,'FontSize',15);
 %
 F.fname=strcat(pre2, figNumber);
@@ -373,8 +373,8 @@ xlabel('Threshold of Power','FontSize',15);
 ylabel('Area Under Curve','FontSize',15);
 xlim([1/limN 1]);
 ylim([0 1]);
-titleStr = strcat('AUC of Performance Profiles in High-Dimensional Settings');
-title(titleStr,'FontSize',15);
+titleStr = strcat('AUC of Performance Profiles for High-Dimensional Settings');
+title(titleStr,'FontSize',14);
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;

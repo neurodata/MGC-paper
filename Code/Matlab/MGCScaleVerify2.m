@@ -1,4 +1,4 @@
-function [ind]=MGCScaleVerify2(V)
+function [ind,pAll]=MGCScaleVerify2(V)
 % An auxiliary function to verify and estimate the MGC optimal scale
 VN=V(2:end,2:end);
 stdN=(VN<=0);
@@ -9,22 +9,24 @@ else
     stdN=0.00001;
 end
 
-tmp=sum(VN>2*stdN);
-
-if tmp>1/min(size(VN,1),size(VN,2));
+tmp=(VN>6*stdN);
+% figure
+% imagesc(tmp)
+% mean(mean(tmp))
+if mean(mean(tmp))>0.1%max(sum(tmp,1))> size(VN,1)/2 || max(sum(tmp,2))>size(VN,2)/2
     ind=find(V==max(max(VN)),1,'last');
 else
     ind=size(V,1)*size(V,2);
 end
-% pAll=ones(size(V));
-% 
-% [~,tmp]=sort(VN(VN<2),'descend');
-% ll=length(tmp);
-% ll2=size(VN);
-% for i=1:ll
-%     [k,l]=ind2sub(ll2,tmp(i));
-%     pAll(k+1,l+1)=(i-1)/(ll-1);
-% end
+pAll=ones(size(V));
+
+[~,tmp]=sort(VN(VN<2),'descend');
+ll=length(tmp);
+ll2=size(VN);
+for i=1:ll
+    [k,l]=ind2sub(ll2,tmp(i));
+    pAll(k+1,l+1)=(i-1)/(ll-1);
+end
 
 
 function k=Verify(VN)

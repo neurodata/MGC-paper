@@ -45,7 +45,7 @@ ax=gca;
 h=legend('MGC','Mean FDR of MGC', 'FDR=0.05', 'Location','NorthEast');
 set(h,'FontSize',16);
 
-set(gca,'XTickLabel',strNames(ind),'XTick',1:numel(strNames),'FontSize',14);
+set(gca,'XTickLabel',strNames(ind),'XTick',1:numel(strNames),'FontSize',11);
 ax.XTickLabelRotation=45;
 ylim([0,1]);
 ylabel('False Positive Rate','FontSize',16);

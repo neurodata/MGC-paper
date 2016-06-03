@@ -515,7 +515,7 @@ y&=\sin ( \theta x )+c\epsilon.
 \item Multiplicative Noise $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
 x &\sim \mc{N}(0, I_{d_{x}}),\\
-y^{d}&=u^{d}x^{d}+0.5c\epsilon^{d},
+y^{d}&=u^{d}x^{d}+0.5\epsilon^{d},
 \end{align*}
 for $d=1,\ldots,d_{x}$.
 \item Uncorrelated Binomial $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{B}(0.5)$,
@@ -534,7 +534,7 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except type 2
 
 The low-dimensional simulations always set $d_{x}=d_{y}=1$ and $c=1$, with their visualizations shown in figure~\ref{fig0}. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, e.g., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. 
 
-The high-dimensional simulations always set $c=0$ and $n=100$, with $d_{y}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $1$ otherwise. The decaying vector $w$ is utilized in most high-dimensional simulations, which treats higher dimensions as small perturbations and thus creates meaningful settings for testing power comparison. %but for some complex dependencies like square / diamond / sine period, the testing is already very difficult at $d_{x}>1$ and $w$ is not used.
+The high-dimensional simulations always set $c=0$ and $n=100$, with $d_{x}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. The decaying vector $w$ is utilized in most high-dimensional simulations, which treats higher dimensions as small perturbations and thus creates meaningful settings for testing power comparison. %but for some complex dependencies like square / diamond / sine period, the testing is already very difficult at $d_{x}>1$ and $w$ is not used.
 
 \begin{figure}[htbp]
 \includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{Figures/Fig0}

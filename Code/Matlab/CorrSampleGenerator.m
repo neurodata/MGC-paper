@@ -178,6 +178,9 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, d),eye(d));
+        if dim>1
+            noise=1;
+        end
         y=x.*y+0.5*noise*repmat(eps,1,d);
         if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));

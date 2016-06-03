@@ -35,7 +35,7 @@ end
 pAll=1-pAll;
 pAll(1,:)=1;pAll(:,1)=1;
 
-trial=1;
+trial=0;
 if trial==1
     [ind,pAll2]=MGCScaleVerify2(testAll);
     p=pAll2(ind);

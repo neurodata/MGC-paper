@@ -15,6 +15,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{color} %used to highlight changes
 \usepackage{paralist}
+\usepackage{lineno}
 
 \pagestyle{fancy}
 % \oddsidemargin=-0.5in 
@@ -61,6 +62,7 @@
 \newcommand{\Mgc}{\sct{Mgc}}
 \newcommand{\website}{\url{https://github.com/jovo/RankdCorr/}}
    
+\linenumbers
 
 
 
@@ -97,10 +99,12 @@ An ideal test for dependence would have the following properties:
 (1) Theoretical consistency such that the testing power converges to $1$ under any dependency structure and dimensionality. 
 (2) Strong empirical performance on a wide variety of low- and high-dimensional simulations. 
 (3) Provides insight into the nature of the dependence, rather than merely a valid p-value. 
-(4) Is robust to outliers (that is, the presence of many independence samples mixed among a few dependent samples).
-(4) On real data, detects dependence when it exists, and does not detect dependence when it does not exist. 
+(4) Is robust to outliers (that is, the presence of many independent samples mixed among a few dependent samples).
+(5) On real data, detects dependence when it exists, and does not detect dependence when it does not exist. 
 No existing test satisfies all of these properties. 
-In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc, pronounced ``magic''), by combining the ideas of distance correlation with nearest-neighbor testing.  We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and creativity, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well as better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of novel applications.  Both MATLAB and R code are provided here: \website. 
+In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.  
+More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
+We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and creativity, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of novel applications.  Both MATLAB and R code are provided here: \website. 
 \end{abstract}
 
 \noindent%
@@ -139,52 +143,47 @@ In this paper we propose a novel dependence test statistic called ``Multiscale G
 % mgc matlab \& R code available
 
 
+\section{Introduction}
 
 Detecting dependency among multiple data sets is one of the most important and fundamental tasks in computational statistics and data science. 
-Indeed, prior to embarking on a predictive machine learning style investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be fleeting.  
-The founders of statistics first highlighted the importance of this task, starting with Pearson, who developed Pearson's Product-Moment Correlation statistic (which we will revisit later) \cite{Pearson1895}.  Since then, every few years researchers develop new and improved methods (see \cite{Reimherr2013} for a recent review and discussion).  
+Indeed, prior to embarking on a predictive machine learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.  
+The founders of statistics first highlighted the importance of this task, starting with Pearson, who developed Pearson's Product-Moment Correlation statistic  \cite{Pearson1895} (which we will revisit later).  Since then, every few years researchers develop new and improved methods (see \cite{Reimherr2013} for a recent review and discussion).  
 
 In the era of big data, several challenges emerge as particularly prevalent and therefore, problematic. 
 % 
-First, the dependencies between different modalities of data can be highly non-linear.  While this has always been the case, the relative abundance of data has led to an increased demand in checking for dependence in many previously uninvestigated settings.
+First, the dependencies between different modalities of data can be highly \textbf{non-linear}.  While this has always been the case, the relative abundance of data has led to an increased demand in checking for dependence in many previously uninvestigated settings.
 % 
-Second, the dimensionality of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or billions of dimensions per data point. At the same time, the sample sizes are not increasing proportionally, meaning that we often have datasets with very high-dimensions and relatively low sample size.
+Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or billions of dimensions per data point. At the same time, the \textbf{sample sizes} are not increasing proportionally, meaning that we often have datasets with very high-dimensions and relatively low sample size.
 % 
-Third, the data are often complex: networks, shapes, questionnaires, semi-structured text are all typical examples. For example, we may desire to understand whether brain shape and  disease status are related, so that we can develop prognostic biomarkers to combat the deleterious efforts of degenerative neurological disorders \cite{??}. 
+Third, the data are often \textbf{complicated}: networks, shapes, questionnaires, semi-structured text are all typical examples. 
+% this could improve.  possibly elaborating upon what we mean, eg, non-euclidean.
+For example, we may desire to understand whether brain shape and  disease status are related, so that we can develop prognostic biomarkers to combat the deleterious efforts of degenerative neurological disorders \cite{??}. 
 % 
-Fourth, as alluded to above, checking for dependence is rarely the final step in the analysis.  Frequently, investigators and analysts desire more than a simple p-value, rather, they desire some insight into the nature of the dependence structure, which can then inform them in terms of how to proceed.
+Fourth, because the acquisition of data has became so easy, and quality control still typically requires human supervision, the  modern datasets often exhibit a large number of \textbf{outliers}, that is, samples with egregious errors.
 % 
-Fifth, because the acquisition of data has became so easy, and quality control still typically requires human supervision, the  modern datasets often exhibit a large number of outliers, that is, samples with egregious errors.
+Fifth, because we will often have lots data, and lots of different measurements, it is important to be able to compute the results reasonably \textbf{quickly}.
 % 
-Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, providing insight in addition to p-values, even in the presence of many outliers, are highly desirable. 
+Sixth, when working with big data, statistical procedures often have hyper-parameters that require tuning.  Many such procedures lack any guidance in choosing the value of those hyper-parameters, thereby requiring users of the procedures to concoct their own heuristics. It is desirable that a procedure is \textbf{adaptive}, in that it can automatically set its hyper-parameters in a valid way.
+% 
+Finally, as alluded to above, checking for dependence is rarely the final step in the analysis.  Frequently, investigators and analysts desire more than a simple p-value, rather, they desire some insight into the nature of the \textbf{dependence structure}, which can then inform them in terms of how to proceed.
+% 
+Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, we desire tests for which we can prove they have all these properties, and we can also demonstrate them both in extensive simulations and real data.
 
 
-The challenge in developing a new method
-
-To assess whether a method will actually satisfy the above design criteria
+Two related but distinct approaches stand out for their abilities in dealing with the above challenges. The first, called ``distance correlation'', is a natural generalization of Pearson's product-moment correlation statistic \cite{RizzoSzekely2016}.  This collection of results works well in high dimensions and low sample sizes \cite{??}, including in complicated domains \cite{Lyons2013}, and is reasonably computationally efficient, but, struggles in various non-linear settings, does not deal with outliers particularly well, does not automatically adapt (it does not have any explicity hyper-parameters to adapt), and does not provide much insight into the nature of the dependence, other than a p-value.  Another approach, called HHG \cite{HellerGorfine2013}, performs very well on non-linear relationships, and high-dimensional problems with low sample-sizes, may or may not work in complicated domains, is more time consuming to compute (except in one-dimensional problems \cite{??}), and does not adapt (again, does not have any explicit hyper-parameters), and does not provide insight into the nature of the dependence structure.  Although these two approaches are currently considered the best tests for dependence, it is hopefully clear that a gap exists in the literature for an approach that satisfies all of the above desiderata. 
 
 
-Two related but distinct approaches stand out for their abilities in dealing with the above challenges. The first, called energy statistics, is a natural generalization of Pearson's product-moment correlation statistic \cite{RizzoSzekely2016}.   
+% The Pearson's correlation coefficient \cite{Pearson1895}, Spearman's and Kendall's rank correlation coefficient \cite{KendallBook}, RV coefficient \cite{RobertEscoufier1976}, Procrustes coefficient \cite{GowerProcrustesBook}, information theoretic measures \cite{Renyi1959}, and the Mantel test \cite{Mantel1967} have been the traditional tools for this task, but each has its limitations when dealing with the increasingly complex modern data sets, e.g., the Pearson's correlation coefficient and RV coefficient are mostly useful for finding linear relationship and may be zero for nonlinear dependent data sets, while mutual information performs poorly for high-dimensional data. 
 
+% Many recent methods have been proposed to identify the existence of potential relationships between data sets, including \cite{Baringhaus2004,TaskinenOjaRandles2005, GrettonEtAl2005, SzekelyRizzoBakirov2007, GrettonGyorfi2010,Reshef2011, HellerGorfine2013, Reimherr2013, SzekelyRizzo2013a, SzekelyRizzo2013b, RizzoSzekely2016,HHG2016}, etc. In particular, the distance correlation method from \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2009, SzekelyRizzo2013a, SzekelyRizzo2014} has gained much popularity in the statistical community, due to its theoretical soundness and good numerical performance in testing independence. A similar method from the machine learning community is the kernel-based independence test, which is developed in \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012} and closely related to the distance-based method \cite{SejdinovicEtAl2013, RamdasEtAl2015}.
 
+% Despite current progress in the area, it remains a difficult problem to test dependency in practice; and even the best method in theory may suffer from one or more challenges underlying the modern data, such as small or huge sample size, high dimensionality, nonlinearity, noise, etc. For example, although distance correlation is consistent against all dependent alternatives when testing on Euclidean data, the sample distance correlation (dcorr) under-performs in many nonlinear or high-dimensional dependencies during finite-sample testing. The modified distance correlation (mcorr) from \cite{SzekelyRizzo2013a} adjusts the high-dimensional bias, but is still sub-optimal for many common nonlinear dependencies. In comparison, the HHG statistic developed in \cite{HellerGorfine2013} performs much better on nonlinear data of small sample size, but loses some testing power under certain noisy or high-dimensional dependencies. 
 
+A deep insight that neither of the above approaches have capitalized on, although has reaped benefits in myriad data science problems, is that of locality.  Locality has been utilized for classification and regression (k nearest-neighbors \cite{Stone1977}), data compression (wavelets \cite{Daubeches}), and recommender systems \cite{Sarwar2000}, to name a few. Moreover, it has become an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others; and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2016}.
 
+Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs \cite{David1966,Friedman1983,Schilling1986}.  These approaches have the advantage of naturally operating on complicated data, including categorical and structured data, as well as strong theoretical guarantees. However, these approaches focus on two-sample testing, rather than dependence testing. Moreover, these tests all fail to provide  a convenient or automatic way to choose the appropriate neighborhood size.  This omission burdens the user of the test to come up with a heuristic, thereby greatly impairs their practical usages and finite sample performances. In fact, adaptively choosing the scale to regularize the data is a pernicious problem in essentially all existing local procedures. A primary contribution of our work is a mechanism both for looking across scales, and for choosing the optimal scale.  
 
-
-% The Pearson's correlation coefficient \cite{Pearson1895}, Spearman's and Kendall's rank correlation coefficient \cite{KendallBook}, RV coefficient \cite{RobertEscoufier1976}, Procrustes coefficient \cite{GowerProcrustesBook}, information theoretic measures \cite{Renyi1959}, and the Mantel test \cite{Mantel1967} have been the traditional tools for this task, 
-but each has its limitations when dealing with the increasingly complex modern data sets, e.g., the Pearson's correlation coefficient and RV coefficient are mostly useful for finding linear relationship and may be zero for nonlinear dependent data sets, while mutual information performs poorly for high-dimensional data. 
-
-Many recent methods have been proposed to identify the existence of potential relationships between data sets, including \cite{Baringhaus2004,TaskinenOjaRandles2005, GrettonEtAl2005, SzekelyRizzoBakirov2007, GrettonGyorfi2010,Reshef2011, HellerGorfine2013, Reimherr2013, SzekelyRizzo2013a, SzekelyRizzo2013b, RizzoSzekely2016,HHG2016}, etc. In particular, the distance correlation method from \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2009, SzekelyRizzo2013a, SzekelyRizzo2014} has gained much popularity in the statistical community, due to its theoretical soundness and good numerical performance in testing independence. A similar method from the machine learning community is the kernel-based independence test, which is developed in \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012} and closely related to the distance-based method \cite{SejdinovicEtAl2013, RamdasEtAl2015}.
-
-Despite current progress in the area, it remains a difficult problem to test dependency in practice; and even the best method in theory may suffer from one or more challenges underlying the modern data, such as small or huge sample size, high dimensionality, nonlinearity, noise, etc. For example, although distance correlation is consistent against all dependent alternatives when testing on Euclidean data, the sample distance correlation (dcorr) under-performs in many nonlinear or high-dimensional dependencies during finite-sample testing. The modified distance correlation (mcorr) from \cite{SzekelyRizzo2013a} adjusts the high-dimensional bias, but is still sub-optimal for many common nonlinear dependencies. In comparison, the HHG statistic developed in \cite{HellerGorfine2013} performs much better on nonlinear data of small sample size, but loses some testing power under certain noisy or high-dimensional dependencies. 
-
-In a complementary literature, nearest-neighbor graphs have been used as a key computational primitive in many statistical tasks, ranging from classification and regression \cite{Stone1977} to data compression to recommender systems \cite{Sarwar2000}. Moreover, it has become an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others; and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2016}.
-
-Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs \cite{David1966,Friedman1983,Schilling1986,Dumcke2014}.  These approaches have the advantage of naturally operating on any kind of data, including categorical and structured data, as well as strong theoretical guarantees.  Perhaps more importantly, they focus only on local distances, rather than global distances, enabling them to be perform well  in nonlinear and high-dimensional dependence structures.  However, these existing graph based tests do not provide a convenient or automatic way to choose the appropriate neighborhood size, therefore leaving a crucial tuning parameter unspecified, and greatly impairs their practical usages and finite sample performances. 
-
-In this paper, we propose Multiscale Graph Correlation (\Mgc) to better address those challenges from modern data analysis. By marrying ideas from the distance correlation literature to those from the nearest neighbor literature, and adding some of our own special sauce, we obtain a test better than those in either camp.  More specifically,  the multiscale test is able to efficiently compute all local correlation coefficients to locate the optimal local scale, naturally inherits the advantages of the respective global correlation such as the consistency of dcorr, enjoys the properties of graph dependence structures such as better testing powers under nonlinear and high-dimensional dependencies, and is a scalable method on big data. 
-
-These advantages make our new test statistic a great method for dependency discovery on complex simulated dependencies and real data. Indeed, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality, noise, and small sample size, comparing to existing popular methods like dcorr / mcorr / Mantel / HHG; and in the real data experiment, we show that \Mgc~is able to uncover the underlying dependency when testing between related data sets,  and does not inflate the false positive rate when the dependencies are not there in a set of brain imaging experiments. Thus, we expect \Mgc~and the notion of local correlation coefficients to find values in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of \Mgc at \website.
+More specifically,  we propose Multiscale Graph Correlation (\Mgc), which can be thought of as the love child of distance correlations with graph-based tests, by considering all scales and choosing the best one.  \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes. \Mgc~performs as well or better than the existing literature on each of the seven above mentioned design goals. More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality, noise, and small sample size, compared to existing popular methods. Moreover,  in real data experiments, we show that \Mgc~is able to uncover the underlying dependency when testing between related data sets,  and does not inflate the false positive rate when the dependencies are not there. Thus, we expect \Mgc to find values in a wide range of applications.  To facilitate this, we provide open source MATLAB and R implementations of \Mgc~at \website.
 
 \section{Results}
 \label{main}
@@ -386,7 +385,7 @@ MGC is always better than global mcorr, and the local powers imply the existence
 \label{numer3}
 Here we apply local correlations and \Mgc~to visualize the relationship and test independence between real data sets. Since there is no known model for the given data, the optimal scale for \Mgc~is approximated based on the p-values of all local correlations from the permutation test (see appendix section~\ref{appen:tests} for details and further discussions). 
 
-\subsubsection{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
+\subsubsection[Brain Shape and Depression]{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
 
 The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the raw data. 
 
@@ -435,7 +434,7 @@ Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & 
 \label{figReal}
 \end{figure}
 
-\subsubsection{\Mgc~can Select Amongst Disparate Representations for Optimal Dependence: Brain Structural Network vs. Creativity}
+\subsubsection[Optimal Representations]{\Mgc~can Select Amongst Disparate Representations for Optimal Dependence: Brain Structural Network vs. Creativity}
 
 Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried both to determine which worked better for this particular task.
 
@@ -445,7 +444,7 @@ From the local correlation p-value heat maps in figure~\ref{figReal}(C)(D), we o
 
 Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly related with each other, \Migraine~is more dependent with CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our method identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Thus \Mgc~can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
 
-\subsubsection{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
+\subsubsection[Correct False Positive Rate]{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 
 In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the Neuroimaging Informatics Tools and Resources Clearinghouse (NITRC) 1000 functional connectomes project \url{http://fcon_1000.projects.nitrc.org/}. Take one data set BNU1 for example: the resting state data contains $200$ regions of interest for $200$ timestep for $50$ persons; and there are two resting state data for the same person. We used CPAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (unpublished).
 
@@ -458,6 +457,13 @@ For each data set, the above testing is carried out for each brain region, and t
 
 \paragraph{Summary}
 In short, we propose multiscale graph correlation to test independence between data sets, which has been shown to be perform well for testing independence on data of small sample size, low- or high-dimensionality, linearity or nonlinearity, etc. It not only enjoys theoretical guarantee such as being consistent in testing independence, but also exhibits superior numerical performances in a comprehensive simulation setting and real data experiments, comparing to existing popular methods. Therefore, the concept of local correlation coefficient and \Mgc~shall find many good applications in various domains that involve discovering relationship among multiple data. 
+
+
+\paragraph{Related Work}
+
+A method closely related to the energy based tests described above arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we expect to be able to glean further insights by working with those tests.  Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support. 
+Finally, Reshef et al \cite{Reshef2011} is another competing methodology, but does not perform as well as energy based tests in various benchmarks, and their actual test is an approximation with unknown error bound relative to their theoretical claims.  
+
 
 \paragraph{Next Steps}
 Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved by tailoring a different centering or ranking scheme for a given global correlation, which is a worthwhile direction for future works. Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Beyond the testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects like dimension reduction and supervised learning. 

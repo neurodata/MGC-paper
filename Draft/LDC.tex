@@ -46,7 +46,7 @@
 \providecommand{\mb}[1]{\boldsymbol{#1}}
 \providecommand{\mc}[1]{\mathcal{#1}}
 \newcommand{\Real}{\mathbb{R}}
-\newcommand{\G}{\mathcal{G}}
+\newcommand{\G}{\mathbb{C}}
 \newcommand{\K}{\mathcal{K}}
 \newcommand{\LL}{\mathcal{L}}
 \newcommand{\Migraine}{\sct{Migraine}}
@@ -64,8 +64,8 @@
 
 \newcommand{\Mgc}{\sct{Mgc}}
 \newcommand{\Hhg}{\sct{Hhg}}
-\newcommand{\Dcor}{\sct{Dcorr}}
-\newcommand{\Mcor}{\sct{Mcorr}}
+\newcommand{\Dcorr}{\sct{Dcorr}}
+\newcommand{\Mcorr}{\sct{Mcorr}}
 \newcommand{\Mantel}{\sct{Mantel}}
 
 \newcommand{\website}{\url{https://github.com/jovo/RankdCorr/}}
@@ -205,38 +205,52 @@ In this age of data, procedures that merely provide valid inferences are no long
 \label{main1}
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces.  Combining these two ideas yields local correlation coefficient. Our procedure, Multiscale Graph Correlation (\Mgc) searches across all local scales and provides the optimal one.   
 
-Perhaps the first realization that pairwise properties can characterize a joint distribution comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895} by letting $a_{ij}=x_i$ and $b_{ij}=y_i$ in the following general form:
+Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}. Given pairs of observations $(x_i,y_i)$, Pearson's computes the sample covariance and normalized by the product of the sample standard deviations. Kendall  \cite{KendallBook} pointed out that this is a special case of something called a  ``generalized correlation coefficient'', whose general form is:
 \begin{equation}
 \label{generalCoef}
 \G=\frac{\sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}-\bar{a})^{2} \sum_{i,j=1}^n (b_{ij}-\bar{b})^{2}}}, 
 \end{equation}
 
-where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$. Equation~\ref{generalCoef} represents a generalized correlation coefficient, which characterizes most correlation coefficients since then.  For example, Spearman and Kendall's rank correlations set $a_{ij}$ to be $rank(x_i)-rank(x_j)$ and $sign(x_i-x_j)$ respectively \cite{KendallBook}; the Mantel coefficient \cite{Mantel1967} considers distance matrices and takes $a_{ij}=|x_i-x_j|_{2}$, which has been a popular method in biology and ecology. More recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} proved that by doubly centering the distance matrices and using the resulting centered distance entries as $a_{ij}$, the ``distance correlation'' statistic is a consistent test for independence --- a test whose power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments. By further adjusting the properly centered distance entries, the modified distance correlation is consistent as the dimensionality of $x_{i}$ and $y_{i}$ approach infinity \cite{SzekelyRizzo2013a} faster than the sample size. This is in contrast to all previously proposed  correlation coefficients. 
+where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$
+% Equation~\ref{generalCoef} represents a generalized correlation coefficient, which characterizes most correlation coefficients since then.  
+% For example, 
+(Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
+ % set $a_{ij}$ to be $R(x_i)-R(x_j)$ and $sign(x_i-x_j)$ respectively \cite{KendallBook}; 
+Three special cases of the above are particularly popular for independence testing.  First, the Mantel coefficient \cite{Mantel1967}, a very popular method in biology and ecology, 
+let's $a_{ij}=||x_i-x_j||_{2}$. Second, Szekely et al. \cite{SzekelyRizzoBakirov2007} define a new method, whereby they let $a_{ij}$ be the ``doubly centered'' distances, that is, they subtract the mean from each row and each column.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments. Third, Szekely et al. \cite{SzekelyRizzo2013a} noted that \Dcorr~could be generalized to achieve consistency even as the dimensions increase to infinity by simply modifying \Dcorr, essentially by dividing by powers of $n$, the sample size. 
+% By further adjusting the properly centered distance entries, the modified distance correlation is consistent as the dimensionality of $x_{i}$ and $y_{i}$ approach infinity \cite{SzekelyRizzo2013a} faster than the sample size. 
+\Mcorr, the modified \Dcorr, was the first dependence test proven to work in high-dimensions.
+ % This is in contrast to all previously proposed  correlation coefficients. 
 % However, as all sample data are required to compute those correlations, the resulting coefficients may suffer from non-linearity / noise / outliers in the inference task.
 
-In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a theoretically justified method for choosing the neighborhood. From a statistical point of view, the multiscale graph structure is useful for testing purposes \cite{David1966,Friedman1983,Schilling1986,Dumcke2014,HHG2016}, where choosing the appropriate local scale is also a difficult and time-consuming task. \jovo{i don't understand this sentence.}
+In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a theoretically justified method for choosing the neighborhood. From a statistical point of view, the multiscale graph structure is useful for testing purposes \cite{David1966,Friedman1983,Schilling1986,Dumcke2014,HHG2016}, where choosing the appropriate local scale is also a difficult and time-consuming task. \jovo{i don't understand this sentence, ie, why it is here and what it means.}
 
-Our Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with multiscale graph distances, in an effort to efficiently uncover local relationships and optimize the independence test.  Specifically, let $rank(a_{ij})$  be the ``rank'' of $x_i$ relative to $x_j$, that is, $rank(a_{ij})=k$ if $x_i$ is the $k^{th}$ closest point (or ``neighbor'') to $x_j$; and the ranks start from $k=1$ onwards (i.e., $rank(a_{jj})=1$), and the minimal rank is used for ties.  Then for any general correlation coefficient $\G$ in the form of Equation~\ref{generalCoef}, we define its \emph{local} variant by
-\begin{equation}
-\label{localCoef}
-\G_{kl}=\frac{\sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}^{k}-\bar{a}^{k})^2 \sum_{i,j=1}^n (b_{ij}^{l}-\bar{b}^{l})^2}},
-\end{equation}
-for $k=1,\ldots,\max(rank(a_{ij}))$, $l=1,\ldots,\max(rank(b_{ij}))$, where
+Our Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with  graph distances, in an effort to efficiently uncover local relationships and optimize the independence test.  Specifically, let $R(a_{ij})$  be the ``rank'' of $x_i$ relative to $x_j$, that is, $R(a_{ij})=k$ if $x_i$ is the $k^{th}$ closest point (or ``neighbor'') to $x_j$, starting from $1$, and the minimal rank is used for ties.  Defining $R(b_{ij})$ equivalently for the $y$'s, for any neighborhood size $k$ around each $x$ and any neighborhood size $l$ around each $y$, 
+we define the rank-truncated distances:
 \begin{equation}
 \label{localCoef2}
     a_{ij}^k=
     \begin{cases}
-      a_{ij}, & \text{if } rank(a_{ij}) \leq k, \\
+      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\
       0, & \text{otherwise};
     \end{cases} \qquad \qquad
     b_{ij}^l=
     \begin{cases}
-      b_{ij}, & \text{if } rank(b_{ij}) \leq l, \\
+      b_{ij}, & \text{if } R(b_{ij}) \leq l, \\
       0, & \text{otherwise};
     \end{cases}
 \end{equation}
-and $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_{ij}^{l}$, respectively. For example, $\G_{kl}$ can be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. We have a total of $n^2$ local correlations for all possible combinations of $k$ and $l$.
-\jovo{i took this out, it is a technical detail ``$\max(rank(a_{ij})) \times \max(rank(a_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating point in the data.''}
+which we can then use to define  a \emph{local} variant of any global generalized correlation coefficient:
+% Then for any general correlation coefficient $\G$ in the form of Equation~\ref{generalCoef}, we define its \emph{local} variants by
+\begin{equation}
+\label{localCoef}
+\G_{kl}=\frac{\sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}^{k}-\bar{a}^{k})^2 \sum_{i,j=1}^n (b_{ij}^{l}-\bar{b}^{l})^2}},
+\end{equation}
+% for $k=1,\ldots,n$, %$\max(R(a_{ij}))$, 
+% $l=1,\ldots,n$, %$\max(R(b_{ij}))$
+%  where
+where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_{ij}^{l}$, respectively. For example, $\G_{kl}$ can be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. We have a total of $n^2$ local correlations for all possible combinations of $k$ and $l$.
+\jovo{i took this out, it is a technical detail ``$\max(R(a_{ij})) \times \max(R(a_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating point in the data.''}
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
@@ -245,7 +259,7 @@ Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic 
 \label{fig:A}
 \end{figure}
 
-\Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$, providing all local p-values and selecting the optimal neighborhood size,  denoted  $\G^{*}$. Clearly the optimal scale exists, is distribution dependent, and may not be unique. But different from a manifold learning task, once the rank information is given, all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, which allows our definition of local correlations to be an efficient and general tool in data analysis.
+\Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$, providing all local p-values and selecting the optimal neighborhood size,  denoted  $(k^{*},l^*)$. Clearly the optimal scale exists, is distribution dependent, and may not be unique. But different from a manifold learning task, once the rank information is given, all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, which allows our definition of local correlations to be an efficient and general tool in data analysis.
 
 If the distribution of the data is already known (of course, this is only for simulations), the optimal scale for \Mgc~can be easily determined via simulation.  When the distribution of data is unknown, we have a procedure for estimating the optimal scale by finding a region of neighborhood sizes for which p-values are consistently low (guarding against noisy scales that appear optimal, and combatting bias added by looking at many different scales). 
 \jovo{this stuff was confusing for me: if the underlying joint distribution is known, or multiple dependent data are already given, the true optimal scale can be derived by maximizing the testing powers among all local correlations; if there is only one pair of observations with unknown underlying model, the optimal scale can be reasonably approximated based on p-values of all local correlations from the permutation test. }
@@ -276,7 +290,7 @@ In addition to theoretical consistency, \Mgc~also is computationally efficient. 
 
 \subsection{Low-Dimensional Simulation Experiments}
 \label{numer1}
-In this section and the next, we demonstrate the numerical advantage of multiscale graph correlation via  empirical power for independence testing. We compare with several state-of-the-art methods for low-dimensional settings: dcorr, Mantel, and \Hhg.  Specifically, we compare those global methods with \Mgc$\{$\Dcor$\}$ and \Mgc$\{$\Mantel$\}$, two novel methods. 
+In this section and the next, we demonstrate the numerical advantage of multiscale graph correlation via  empirical power for independence testing. We compare with several state-of-the-art methods for low-dimensional settings: dcorr, Mantel, and \Hhg.  Specifically, we compare those global methods with \Mgc$\{$\Dcorr$\}$ and \Mgc$\{$\Mantel$\}$, two novel methods. 
  % To better illustrate the properties of local correlations, two different \Mgc~statistics are used in the simulations: Mantel and dcorr  as the respective global correlation; and the benchmarks are dcorr, \Mcorr\, Mantel, and \Hhg.  
  Detailed algorithm and evaluation procedure are provided in Appendix \ref{appen:tests}.
 
@@ -663,6 +677,8 @@ where $x \in [0,1]$, $\mb{I}$ is the indicator function, and $\beta_{\alpha}^{t}
 \section{Dependence Measures}
 \label{appen:methods}
 
+\cs{if we define the generalized correlation coefficient above, then in this section, we should define each measure in terms of what $a_{ij}$ is explicitly. like, each subsection should have an explicit statement/remark: ``Letting X $\leftarrow a_{ij}$, this method is a special case of the generalized correlation coefficient.'' }
+
 In this section, we review distance correlation, modified distance correlation, the Mantel test, and the \Hhg\ statistic in order. Note that for dcorr / mcorr, we implement them in a slightly different but equivalent way from the original definition.
 
 \subsection{(Global) Distance Correlation}
@@ -762,7 +778,7 @@ All algorithms are implemented in Matlab and R with the pseudo-code shown below.
 
 Algorithm~\ref{alg1} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using algorithm~\ref{alg1} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient. 
 
-To facilitate the optimal scale estimation, algorithm~\ref{alg2} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G_{kl}$ if and only if $(k,l)$ satisfies $k\leq rank(a_{ij})$ and $l\leq rank(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G_{kl}$ whose scales are no more than $(rank(a_{ij}),rank(b_{ij}))$. However, accessing and adding multiple $\G_{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G_{kl}$ at $(k,l)=(rank(a_{ij}),rank(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G_{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
+To facilitate the optimal scale estimation, algorithm~\ref{alg2} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G_{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G_{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G_{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G_{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G_{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
 
 Algorithm~\ref{alg3} computes the testing powers of all local correlations by repeated simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and algorithm~\ref{alg2} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by maximizing the powers. This algorithm is also applicable if there exists multiple pairs of data with unknown model but similar dependency structure, then the alternative statistic can be computed from each data pair while the null statistic can be computed from each data pair under permutation.
 

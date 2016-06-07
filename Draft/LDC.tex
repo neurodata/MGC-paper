@@ -304,9 +304,8 @@ In this section we consider the same $20$ distributions and the same testing pro
 
 Figure~\ref{fig:nD} shows power versus dimensionality of $x$ for a significance value of $\alpha=0.05$ (see Methods for details).  
 % The performance profiles are provided in Figure~\ref{fig:pp}(C)(D): Figure~\ref{fig:pp}(C) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and Figure~\ref{fig:pp}(D) plots the area under curve of the performance profiles against the power threshold.
-Like the $1$-dimensional scenario, \Mgc~either equals the corresponding global correlation (for type 1-5), or is significantly better (type 6-19) in testing powers due to its capability to better handle nonlinearity and high-dimensionality at the same time. In particular, \Mgc$\{$mcorr$\}$ enjoys a significant advantage over all benchmarks, since mcorr is more suitable for high-dimensional testing; and the performance profiles of \Mgc~clearly reflect its overall superiority. 
+Like the $1$-dimensional scenario, \Mgc~either equals the corresponding global correlation (for type 1-5), or is significantly better (type 6-19) in testing powers due to its capability to better handle nonlinearity and high-dimensionality at the same time. In particular, \Mgc$\{$mcorr$\}$ enjoys a significant advantage over all global benchmarks, since mcorr is more suitable for high-dimensional testing; and the performance profiles of \Mgc~clearly reflect its overall superiority. 
 
-In the following sections, unless mentioned otherwise, we concentrate on \Mgc$\{$mcorr$\}$, because the three different \Mgc~implementations often yield similar numerical results with \Mgc$\{$mcorr$\}$ being more advantageous based on the high-dimensional simulations.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig5}
@@ -339,13 +338,14 @@ It is clear that \Mgc~outperforms the previous state of the art approaches regar
 
 From Figure~\ref{fig:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg\ is slightly better than dcorr / mcorr in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg\ has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global Mantel test has the lowest performance profile, but utilizing local correlations makes \Mgc$\{$Mantel$\}$ perform similarly as the other two \Mgc~implementations.
 
+In the following sections, unless mentioned otherwise, we concentrate on \Mgc$\{$mcorr$\}$, because the three different \Mgc~implementations often yield similar numerical results with \Mgc$\{$mcorr$\}$ being more advantageous based on the high-dimensional simulations.
 
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}
 
-Figure~\ref{figSim6} illustrates how the powers of local correlations $\{\G_{kl}\}$ change with respect to increasing neighborhood $k$ and $l$, for the high-dimensional simulations (the $1$-dimensional case is included in appendix). They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}(A)(C). 
+Figure~\ref{figSim6} illustrates how the powers of local correlations $\{\G_{kl}\}$ change with respect to increasing neighborhood sizes, for the high-dimensional simulations (the $1$-dimensional case is included in appendix)\cs{is this still true?}. They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}(A) and (C). 
 
-The testing powers of all local correlations also shed light into the intrinsic dependency structure: for dependencies that are close to linear (type 1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$; but for all other nonlinear dependencies (type 6-19), \Mgc~almost always chooses a smaller scale, which is distribution dependent. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, so the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share a narrow range of significant local correlations; so are circle and eclipse, square and diamond, etc. Note that for almost all simulations, there exist a large portion of adjacent local correlations that are equally significant, which is an important observation that we use to approximate the \Mgc~optimal scale for one pair of data with unknown model in Appendix \ref{appen:tests}.
+The testing powers of all local correlations also shed light into the intrinsic dependency structure: for dependencies that are close to linear (type 1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$; but for all other nonlinear dependencies (type 6-19), \Mgc~almost always chooses a smaller scale, which is distribution dependent. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, type 6 and type 7 are both polynomials of degree 2 with different coefficients, so the optimal scales are quite similar to each other; type 16 and 17 are the same trigonometry function with different periods, and they share a narrow range of significant local correlations; so are circle and eclipse, square and diamond, etc. Note that for almost all simulations, there exist a large portion of adjacent local correlations that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scale for real data.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig6}
@@ -354,11 +354,11 @@ For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ 
 \label{figSim6}
 \end{figure}
 
-To characterize the above behaviors, in the following theorems we prove that: for the testing power of the permutation test, \Mgc~indeed equals the global correlation under linear dependency, i.e., the largest scale $(n,n)$ is an optimal scale for \Mgc; but under certain nonlinear dependency, \Mgc~may enjoy a better finite-sample testing power than the corresponding global correlation. 
+To characterize the above behaviors, in the following theorems we prove that: for testing power, under linear dependency, the optimal \Mgc~scale is the global correlation; but under certain nonlinear dependency, \Mgc~can acheive a better finite-sample testing power than the corresponding global correlation. 
 
 \begin{thm}
 \label{thm2}
-Suppose $\mb{x}$ is linearly dependent of $\mb{y}$. Then for any $n$ and $\alpha$ it always holds that
+Suppose $\mb{x}$ is linearly dependent on $\mb{y}$. Then for any $n$ and $\alpha$ it always holds that
 \begin{equation}
 \beta_{\alpha}(\G^{*}) = \beta_{\alpha}(\G).
 \end{equation}
@@ -382,11 +382,15 @@ The proof of Theorem~\ref{thm3} is a constructive one, as it shows that local co
 
 \subsection{Robustness against Outliers}
 \label{main4}
-To show that \Mgc~is robust against ourliers, let us consider a simple mixture model: suppose the joint distribution satisfies $f_{xy}=p f_{1}+(1-p) f_{2}$, where $f_{1} \sim \mc{N}(\mu_{1},\Sigma_{1})$ and $f_{2} \sim \mc{N}(\mu_{2},\Sigma_{2})$. We set $\mu_{1}=(0,0)$, $\mu_{2}=(5,-5)$, $\Sigma_{1} = \begin{bmatrix} 1&1\\ 1&1 \end{bmatrix}$, and $\Sigma_{2} = \begin{bmatrix} 1&0\\ 0&1 \end{bmatrix}$. Namely $x=y$ with probability $p$, otherwise independently normally distributed. Given $p$, the simulating sample pairs $(X,Y)$ at $n=100$ can be repeatedly generated to estimate the testing powers at $\alpha=0.05$. 
+To show that \Mgc~is robust against ourliers, let us consider a simple mixture model: suppose the joint distribution satisfies $f_{xy}=w f_{1}+(1-w) f_{2}$, where $f_{1} \sim \mc{N}(\mu_{1},\Sigma_{1})$ and $f_{2} \sim \mc{N}(\mu_{2},\Sigma_{2})$. We set $\mu_{1}=(0,0)$, $\mu_{2}=(5,-5)$, $\Sigma_{1}$ is a matrix of all ones, 
+% $ = \mb{1}\T\mb{1}$, $\begin{bmatrix} 1&1\\ 1&1 \end{bmatrix}$,
+ and $\Sigma_{2}$ is the identity matrix (ones on the diagonal and zero everywhere else). 
+ % $ = \begin{bmatrix} 1&0\\ 0&1 \end{bmatrix}$. 
+ The above mixture implies that with probably $w$,  $x=y$, and with probability $(1-w)$ $x$ and $y$ are independent. Given $w$, the simulating sample pairs $(X,Y)$ at $n=100$ can be repeatedly generated to estimate the testing powers at $\alpha=0.05$. 
 
-For sample data generated from the mixture model, there are around $pn$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent of the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ and $n=100$ is plotted in Figure~\ref{figSim3}(A), and the testing powers of all local mcorr correlations are shown in Figure~\ref{figSim3}(B)(C)(D) for $p=0.3$,$0.5$,$0.7$ respectively, using the same procedure as in section~\ref{numer1}.
+For sample data generated from the mixture model, there are around $w \times n$ observations in $X$ that are exactly the same as the corresponding observations in $Y$; and the remaining observations in $X$ are outliers, which are independent of the corresponding observations in $Y$. One such sample pair $(X,Y)$ at $p=0.5$ and $n=100$ is plotted in Figure~\ref{figSim3}(A), and the testing powers of all local mcorr correlations are shown in Figure~\ref{figSim3}(B)(C)(D) for $p=0.3$,$0.5$,$0.7$ respectively, using the same procedure as in section~\ref{numer1}. \cs{fix after fixing figure}
 
-The optimal local mcorr is clearly much better than global mcorr. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $p$, where $k^{*}=l^{*}=\min(pn,(1-p)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers as the optimal local correlation automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency change, which makes \Mgc~more advantageous in practice against noise and outliers. 
+The optimal local mcorr is clearly much better than global mcorr. Furthermore, the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $w$, where $k^{*}=l^{*}=\min(wn,(1-w)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers as the optimal local correlation automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency change, which makes \Mgc~more advantageous in practice against noise and outliers. \cs{explicilty mention that we discover the fraction of outliers.  and the other don't}
 
 \begin{figure}
   \centering
@@ -408,18 +412,18 @@ The optimal local mcorr is clearly much better than global mcorr. Furthermore, t
 \subsection{Real Data Experiments}
 
 \label{numer3}
-Here we apply local correlations and \Mgc~to visualize the relationship and test independence between real data sets. Since there is no known model for the given data, the optimal scale for \Mgc~is approximated based on the p-values of all local correlations from the permutation test (see Appendix \ref{appen:tests} for details and further discussions). 
+Here we apply  \Mgc~to visualize the relationship and test independence between real data sets. Since there is no known model for the given data, the optimal scale for \Mgc~is approximated (see Appendix \ref{appen:tests} for details and further discussions). 
 
 \subsubsection[Brain Shape and Depression]{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
 
-The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, and we would like to test the significance of such relationship in the raw data. 
+The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, though previous test were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level for both hemispheres. 
 
 To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing); for the disorder information vector,
 we form the pairwise Euclidean distance matrix from the categorical vector, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$).
 
 Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg\ / Mantel yield significant p-values with dcorr / mcorr being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
 
-The p-value curves of the local correlations are provided in Figure~\ref{figReal}(A) for $k=2,\ldots,n$ at $l=4$, since the largest rank is $4$ for the categorical vector. We can clearly identify many common local scales between the two curves that yield significant p-values, which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
+The p-value curves of the local correlations are provided in Figure~\ref{figReal}(A) for $k=2,\ldots,n$ at $l=4$; we only show $l=4$ because the other curves look similar. We can clearly identify many common local scales between the two curves that yield significant p-values, which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
 
 \begin{table*}[!t]
 \Large
@@ -442,6 +446,7 @@ Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & 
 \label{table1}
 }
 \end{table*}
+\cs{maybe bold everything in table that is significant?}
 
 \begin{figure}
   \centering
@@ -455,15 +460,15 @@ Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & 
 (A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. 
 (B) False positive rates for brain vs noise throughout $26$ different data sets. 
 (C) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI.
-(D) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \mtg~vs CCI. }
+(D) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \mtg~vs CCI.  }
 \label{figReal}
 \end{figure}
 
 \subsubsection[Optimal Representations]{\Mgc~can Select Amongst Disparate Representations for Optimal Dependence: Brain Structural Network vs. Creativity}
 
-Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried both to determine which worked better for this particular task.
+Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
 
-Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI is strong enough for all methods to return significant p-values. But there appears to be a loss of dependency between \mtg~and CCI, as neither the global methods nor \Mgc~return significant p-values. 
+Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI is strong enough for all dependence tests to return significant p-values. But there appears to be a loss of dependency between \mtg~and CCI, as neither the global methods nor \Mgc~return significant p-values. 
 
 From the local correlation p-value heat maps in Figure~\ref{figReal}(C)(D), we observe that there exists many local scales with significant p-values for \Migraine~vs CCI, which is no longer the case for \mtg~vs CCI. In comparison, global methods do not exhibit the local structure; and Mantel and \Hhg\ are less informative due to the large change of p-values when moving from \Migraine~to \mtg. Note that if we test independence between \Migraine~vs \mtg, the p-values of all tests are $0$, indicating a strong dependency. 
 
@@ -471,27 +476,29 @@ Therefore in this exploration task, \Migraine~is a better brain graph estimator 
 
 \subsubsection[Correct False Positive Rate]{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 
-In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the Neuroimaging Informatics Tools and Resources Clearinghouse (NITRC) 1000 functional connectomes project \url{http://fcon_1000.projects.nitrc.org/}. Take one data set BNU1 for example: the resting state data contains $200$ regions of interest for $200$ timestep for $50$ persons; and there are two resting state data for the same person. We used CPAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (unpublished).
+In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project \url{http://fcon_1000.projects.nitrc.org/}. Take one data set BNU1 for example: the resting state data contains $200$ regions of interest for $200$ timestep for $50$ persons. We used CPAC\cs{cite CPAC} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (unpublished).
 
-For each brain region, the distance matrix with respect to time is calculated by $dist(s,t)=\|x_{\cdot s}-x_{\cdot t}\|$, where $x_{\cdot t}$ denote the observation vector at timestep $t$ for all persons. Then an independent stimulus is generated by sampling from a standard normal at each time step, whose pairwise distance can be directly computed. From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc. The p-value based on $1000$ random permutations is computed, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
+For each brain region, the distance matrix with respect to time is calculated by $dist(s,t)=\|x_{\cdot s}-x_{\cdot t}\|$, where $x_{\cdot t}$ denotes the observation vector at timestep $t$ for all persons. Then an independent stimulus is generated by sampling from a standard normal at each time step, whose pairwise distance can be directly computed. From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc. The p-value based on $1000$ random permutations is computed, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
-For each data set, the above testing is carried out for each brain region, and the false positive rate (FDR) of \Mgc~is shown in Figure~\ref{figReal}(B). The y-axis stands for FDR by log scale, and the x-axis shows the name of the data set arranged by increasing FDR; the mean FDR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. As the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgc, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase FDR as reported in \cite{EklundKnutsson2012} for the same data source.
+For each data set, the above test is carried out for each brain region, and the false positive rate (FDR) of \Mgc~is shown in Figure~\ref{figReal}(B). The y-axis stands for FDR by log scale, and the x-axis shows the name of the data set arranged by increasing FDR; the mean FDR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. \cs{fix after fixing fig} Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgc, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FDR as reported in \cite{EklundKnutsson2012} for the same data source.
 
 \section{Discussion}
 \label{conclu}
 
-\paragraph{Summary}
-In short, we propose multiscale graph correlation to test independence between data sets, which has been shown to be perform well for testing independence on data of small sample size, low- or high-dimensionality, linearity or nonlinearity, etc. It not only enjoys theoretical guarantee such as being consistent in testing independence, but also exhibits superior numerical performances in a comprehensive simulation setting and real data experiments, comparing to existing popular methods. Therefore, the concept of local correlation coefficient and \Mgc~shall find many good applications in various domains that involve discovering relationship among multiple data. 
+% \paragraph{Summary}
+In short, we propose multiscale graph correlation to test independence between data sets. 
+We demonstrate via simulations that \Mgc~empirically performs well in non-linear, high-dimensional and low-sample size, and outlier settings.  Moreover, it efficiently adapts to the data, to provide not just a valid p-value, but also a picture of which scales contain the dependence structure. We then prove that it achieves optimal power asymptotically no matter what the depedence structure is, even in complicated settings.  In real data experiments it revealed dependence where global methods failed, revealed the locality of dependence where global methods succeeded, and did not falsely detect signals when there were none.
 
 
-\paragraph{Related Work}
 
-A method closely related to the energy based tests described above arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we expect to be able to glean further insights by working with those tests.  Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support. 
+% \paragraph{Related Work}
+
+A method closely related to distance correlation tests arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we expect to be able to glean further insights by casting \Mgc~within the kernel framework.  Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support. 
 Finally, Reshef et al \cite{Reshef2011} is another competing methodology, but does not perform as well as energy based tests in various benchmarks, and their actual test is an approximation with unknown error bound relative to their theoretical claims.  
 
 
-\paragraph{Next Steps}
-Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved by tailoring a different centering or ranking scheme for a given global correlation, which is a worthwhile direction for future works. Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Beyond the testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects like dimension reduction and supervised learning. 
+% \paragraph{Next Steps}
+Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved by tailoring a different centering or ranking scheme for a given global correlation, which is a worthwhile direction for future works. Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Beyond the testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects like dimension reduction and supervised learning. \cs{choosing the metric, using the concept for other testing and prediction domains, eg, using the scales for guidance in constructing prediction engines.}
 
 %scaling up via FlashX?
 

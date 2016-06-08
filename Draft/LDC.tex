@@ -122,7 +122,7 @@ An ideal test for dependence would have the following properties:
 No existing test satisfies all of these properties. 
 In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.  
 More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
-We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and creativity, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of novel applications.  Both MATLAB and R code are provided here: \website. 
+We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and creativity, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website. 
 \end{abstract}
 
 \noindent%
@@ -131,7 +131,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 
 \clearpage
 \tableofcontents
-\listofchanges[style=list]
+% \listofchanges[style=list]
 
 % science report: 2500 words
 % science article: 4500 words
@@ -299,7 +299,7 @@ Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic 
 Having defined how to compute \Mgc~for all neighborhood sizes, we face three challenges to make the method practical. First, in addition to the test statistic, we need to compute the null distribution, so that we may find the critical values and p-values.
 Second, na\"ively, computing all local $\G_{kl}$ statistics would therefore require $\mc{O}(n^4)$, because it requires $\mc{O}(n^2)$ time to compute each local statistic.  That computational burden would be so high as to make doing so impractical.  Third, having computed all local statistics, we require a method for choosing the optimal neighborhood size, in such a way that the test is still consistent, and not biased (meaning that the resultant p-value is valid).   
 
-Computing the p-values from the test statistic is actually straightforward, thanks to the advent of permutation testing \cite{??}.  Specifically, we can permute the labels of either the $x_i$'s or the $y_i$'s, and then compute the \Mgc~statistics on the permuted data.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so $r$ times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important (see Pseudocode \ref{alg2} in Appendix \ref{appen:algorithms} for details on our permutation test).
+Computing the p-values from the test statistic is actually straightforward, thanks to the advent of permutation testing \cite{Good2005}.  Specifically, we can permute the labels of either the $x_i$'s or the $y_i$'s, and then compute the \Mgc~statistics on the permuted data.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so $r$ times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important (see Pseudocode \ref{alg2} in Appendix \ref{appen:algorithms} for details on our permutation test).
 
 
 Nearly all algorithms that employ \emph{some} kind of regularization face a similar dilemma: how to efficiently choose the hyper-parameters. 

@@ -17,6 +17,7 @@
 \usepackage{paralist}
 \usepackage{lineno}
 \usepackage{todonotes}
+% \usepackage{xfrac}
 
 
 \pagestyle{fancy}
@@ -46,7 +47,7 @@
 \providecommand{\mb}[1]{\boldsymbol{#1}}
 \providecommand{\mc}[1]{\mathcal{#1}}
 \newcommand{\Real}{\mathbb{R}}
-\newcommand{\G}{\mathbb{C}}
+\newcommand{\G}{\mathsf{C}}
 \newcommand{\K}{\mathcal{K}}
 \newcommand{\LL}{\mathcal{L}}
 \newcommand{\Migraine}{\sct{Migraine}}
@@ -205,19 +206,30 @@ In this age of data, procedures that merely provide valid inferences are no long
 \label{main1}
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces.  Combining these two ideas yields local correlation coefficient. Our procedure, Multiscale Graph Correlation (\Mgc) searches across all local scales and provides the optimal one.   
 
-Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}. Given pairs of observations $(x_i,y_i)$, Pearson's computes the sample covariance and normalized by the product of the sample standard deviations. Kendall  \cite{KendallBook} pointed out that this is a special case of something called a  ``generalized correlation coefficient'', whose general form is:
+Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}. Given  observations $(x_i,y_i)$, Pearson's computes the sample covariance and normalized by the product of the sample standard deviations. 
+Kendall  \cite{KendallBook} pointed out that this is a special case of something called a  ``generalized correlation coefficient''.
+Specifically, we can define $a_{ij}$ to be \emph{some} function of $x_i$ and $x_j$  (for example, their squared distance), and we can define $b_{ij}$ similarly for pairs $y_i$ and $y_j$.  The generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
-\G=\frac{\sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}-\bar{a})^{2} \sum_{i,j=1}^n (b_{ij}-\bar{b})^{2}}}, 
+\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij} }
+ % /{\sigma_{a}^2 \sigma_b^2} 
+% \frac{\sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b})}
+% {\sqrt{\sum_{i,j=1}^n  (a_{ij}-\bar{a})^{2} \sum_{i,j=1}^n (b_{ij}-\bar{b})^{2}}}
+, 
 \end{equation}
-
-where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$
+where $z$ is the product of variances, that is $z=var(a) var(b)$.
+% where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$
 % Equation~\ref{generalCoef} represents a generalized correlation coefficient, which characterizes most correlation coefficients since then.  
 % For example, 
-(Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
+In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the invidual data samples.    
+$\G$ has many well known special cases, including Pearson, Spearman, and Kendall's (see Kendall 1970 for more details). 
+% (Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
  % set $a_{ij}$ to be $R(x_i)-R(x_j)$ and $sign(x_i-x_j)$ respectively \cite{KendallBook}; 
 Three special cases of the above are particularly popular for independence testing.  First, the Mantel coefficient \cite{Mantel1967}, a very popular method in biology and ecology, 
-let's $a_{ij}=||x_i-x_j||_{2}$. Second, Szekely et al. \cite{SzekelyRizzoBakirov2007} define a new method, whereby they let $a_{ij}$ be the ``doubly centered'' distances, that is, they subtract the mean from each row and each column.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments. Third, Szekely et al. \cite{SzekelyRizzo2013a} noted that \Dcorr~could be generalized to achieve consistency even as the dimensions increase to infinity by simply modifying \Dcorr, essentially by dividing by powers of $n$, the sample size. 
+defines $a_{ij}=||x_i-x_j||_{2} - \bar{a}$, where $\bar{a}$ is the mean of all $\{a_{ij}\}$'s. 
+Mantel, however, does not have any theoretical support for being a consistent test, in general. 
+Szekely et al. \cite{SzekelyRizzoBakirov2007} extended Mantel's approach, rather than merely subtracting the overall mean, they also subtract the row means and column means.  The result are ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments. 
+However, \Dcorr~breaks down as the dimensionality of the data increases.  Therefore, Szekely et al. \cite{SzekelyRizzo2013a} further extended \Dcorr, essentially by normalizing by sample size,  $n$. 
 % By further adjusting the properly centered distance entries, the modified distance correlation is consistent as the dimensionality of $x_{i}$ and $y_{i}$ approach infinity \cite{SzekelyRizzo2013a} faster than the sample size. 
 \Mcorr, the modified \Dcorr, was the first dependence test proven to work in high-dimensions.
  % This is in contrast to all previously proposed  correlation coefficients. 

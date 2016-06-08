@@ -30,7 +30,7 @@ if dim>1
     noise=0;
     n=100;
 end
-pre1='../../../Data/Results/';
+pre1='../../Data/Results/';
 powerP=zeros(7,20);
 option=[0,2,0,4];
 for tt=type

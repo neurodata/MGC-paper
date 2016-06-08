@@ -1,4 +1,6 @@
 Draft/LDC.pdf
+*.loc
+*.soc
 *.brf
 *.out
 *.aux

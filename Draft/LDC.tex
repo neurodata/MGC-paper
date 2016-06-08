@@ -16,8 +16,11 @@
 \usepackage{color} %used to highlight changes
 \usepackage{paralist}
 \usepackage{lineno}
-\usepackage{todonotes}
-% \usepackage{xfrac}
+% \usepackage{todonotes}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[draft,authormarkup=none]{changes}
+\newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+
 
 
 \pagestyle{fancy}
@@ -71,8 +74,9 @@
 
 \newcommand{\website}{\url{https://github.com/jovo/RankdCorr/}}
    
-\newcommand{\jovo}[1]{{\todo{#1}}}
-\newcommand{\cs}[1]{{\todo{#1}}}
+\newcommand{\jv}[1]{{\note{jv: #1}}}
+\newcommand{\jovo}[1]{{\note{jv: #1}}}
+\newcommand{\cs}[1]{{\note{cs: #1}}}
 
 
 
@@ -127,6 +131,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 
 \clearpage
 \tableofcontents
+\listofchanges[style=list]
 
 % science report: 2500 words
 % science article: 4500 words
@@ -182,7 +187,7 @@ Sixth, when working with big data, statistical procedures often have hyper-param
 Finally, as alluded to above, checking for dependence is rarely the final step in the analysis.  Frequently, investigators and analysts desire more than a simple p-value, rather, they desire some insight into the nature of the \textbf{dependence structure}, which can then inform them in terms of how to proceed.
 
 
-Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, we desire tests for which we can prove they have all these properties. More specifically, we desire asymptotically consistent tests, meaning, we want a test whose power converges to one whenever the two disparate views of the data are indeed dependent, and does not converge when they are not dependent. And we desire asymptotically consistent tests for as large a class of dependence structures as possible, much larger than merely linear and low-dimensionality dependence, and including all sorts of objects, including shapes and graphs and vectors.  In addition to asymptotic guarantees of the above, we desire superior finite sample performance, which we can assess in extensive simulations.  Finally, we desire that these tests provide guidance into our data scientific inquiries, both in terms of discovering novel dependencies, and providing insight into the nature of those dependencies. 
+Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, we desire tests for which we can prove they have all these properties. More specifically, we desire a consistent test, meaning, we want a test whose power converges to one as sample size increases to infinity whenever the two disparate views of the data are indeed dependent, and does not converge when they are not dependent. And we desire asymptotically consistent tests for as large a class of dependence structures as possible, much larger than merely linear and low-dimensionality dependence, and including all sorts of objects, including shapes and graphs and vectors.  In addition to asymptotic guarantees of the above, we desire superior finite sample performance, which we can assess in extensive simulations.  Finally, we desire that these tests provide guidance into our data scientific inquiries, both in terms of discovering novel dependencies, and providing insight into the nature of those dependencies. 
 
 
 % and we can also demonstrate them both in extensive simulations and real data.
@@ -206,11 +211,15 @@ In this age of data, procedures that merely provide valid inferences are no long
 
 \section{Results}
 \label{main}
-\subsection{Description of Multiscale Graph Correlation}
+
+All dependence tests start from the same setting: we observe $n$ pairs of observations $(x_i,y_i)$, and we desire to know whether the $x$'s and $y$'s are independent of one another, and if so, what is the nature of that dependence structure (Figure \ref{fig:A}A provides an example where $x$ and $y$ are nonlinearly dependent). 
+
+\subsection{Multiscale Graph Correlation}
 \label{main1}
 There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons  suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces.  Combining these two ideas yields local correlation coefficient. Our procedure, Multiscale Graph Correlation (\Mgc) searches across all local scales and provides the optimal one.   
 
-Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}. Given  observations $(x_i,y_i)$, Pearson's computes the sample covariance and normalized by the product of the sample standard deviations. 
+Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}.  
+% Pearson's computes the sample covariance and normalized by the product of the sample standard deviations. 
 Kendall  \cite{KendallBook} pointed out that this is a special case of something called a  ``generalized correlation coefficient''.
 Specifically, we can define $a_{ij}$ to be \emph{some} function of $x_i$ and $x_j$  (for example, their squared distance), and we can define $b_{ij}$ similarly for pairs $y_i$ and $y_j$.  The generalized correlation coefficient can then be written:
 \begin{equation}
@@ -225,21 +234,23 @@ where $z$ is the product of variances, that is $z=var(a) var(b)$.
 % where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$
 % Equation~\ref{generalCoef} represents a generalized correlation coefficient, which characterizes most correlation coefficients since then.  
 % For example, 
-In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the invidual data samples.    
+In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  That is, if we define $A$ and $B$ as the interpoint comparison matrices for $x$ and $y$ respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.    
 $\G$ has many well known special cases, including Pearson, Spearman, and Kendall's (see Kendall 1970 for more details). 
 % (Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
  % set $a_{ij}$ to be $R(x_i)-R(x_j)$ and $sign(x_i-x_j)$ respectively \cite{KendallBook}; 
 Three special cases of $\G$ are particularly popular for independence testing.  First, the Mantel coefficient \cite{Mantel1967}, a very popular method in biology and ecology, 
-defines $a_{ij}=||x_i-x_j||_{2} - \bar{a}$, where $\bar{a}$ is the mean of all $\{a_{ij}\}$'s, and similarly for $b_{ij}$. 
+defines $a_{ij}=||x_i-x_j||_{2} - \bar{a}$, where $\bar{a}$ is the mean of all $\{a_{ij}\}$'s, and similarly for $b_{ij}$ 
+(Figure \ref{fig:A}B). 
 Mantel, however, does not have any theoretical support for being a generally consistent test. 
-Szekely et al. \cite{SzekelyRizzoBakirov2007} extended Mantel's approach, rather than merely subtracting the overall mean, they also subtract the row means and column means.  The result are ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments. 
-However, \Dcorr~breaks down as the dimensionality of the data increases.  Therefore, Szekely et al. \cite{SzekelyRizzo2013a} further extended \Dcorr, essentially by normalizing by sample size,  $n$. 
+Szekely et al. \cite{SzekelyRizzoBakirov2007} extended Mantel's approach, rather than merely subtracting the overall mean, they also subtract the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments
+(Figure \ref{fig:A}C). 
+\Dcorr, however, breaks down as the dimensionality of the data increases.  Therefore, Szekely et al. \cite{SzekelyRizzo2013a} further extended \Dcorr, essentially by normalizing by sample size,  $n$. 
 % By further adjusting the properly centered distance entries, the modified distance correlation is consistent as the dimensionality of $x_{i}$ and $y_{i}$ approach infinity \cite{SzekelyRizzo2013a} faster than the sample size. 
 \Mcorr, the modified \Dcorr, was the first dependence test proven to work in high-dimensions.
  % This is in contrast to all previously proposed  correlation coefficients. 
 % However, as all sample data are required to compute those correlations, the resulting coefficients may suffer from non-linearity / noise / outliers in the inference task.
 
-In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a theoretically justified method for choosing the neighborhood. From a statistical point of view, the multiscale graph structure is useful for testing purposes \cite{David1966,Friedman1983,Schilling1986,Dumcke2014,HHG2016}, where choosing the appropriate local scale is also a difficult and time-consuming task. \jovo{i don't understand this sentence, ie, why it is here and what it means.}
+In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a principally justified method for choosing the neighborhood. From a statistical point of view, the multiscale graph structure is useful for testing purposes \cite{David1966,Friedman1983,Schilling1986,Dumcke2014,HHG2016}, where choosing the appropriate local scale is also a difficult and time-consuming task. \jovo{i don't understand this sentence, ie, why it is here and what it means.}
 
 Our Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with  graph distances, in an effort to efficiently uncover local relationships and optimize the independence test.  Specifically, let $R(a_{ij})$  be the ``rank'' of $x_i$ relative to $x_j$, that is, $R(a_{ij})=k$ if $x_i$ is the $k^{th}$ closest point (or ``neighbor'') to $x_j$, starting from $1$, and the minimal rank is used for ties.  Defining $R(b_{ij})$ equivalently for the $y$'s, for any neighborhood size $k$ around each $x$ and any neighborhood size $l$ around each $y$, 
 we define the rank-truncated distances:
@@ -260,13 +271,17 @@ which we can then use to define  a \emph{local} variant of any global generalize
 % Then for any general correlation coefficient $\G$ in the form of Equation~\ref{generalCoef}, we define its \emph{local} variants by
 \begin{equation}
 \label{localCoef}
-\G_{kl}=\frac{\sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}^{k}-\bar{a}^{k})^2 \sum_{i,j=1}^n (b_{ij}^{l}-\bar{b}^{l})^2}},
+\G_{kl}=\dfrac{1}{z_{kl}} \textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^k,
+% \G_{kl}=\frac{\sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}^{k}-\bar{a}^{k})^2 \sum_{i,j=1}^n (b_{ij}^{l}-\bar{b}^{l})^2}},
 \end{equation}
 % for $k=1,\ldots,n$, %$\max(R(a_{ij}))$, 
 % $l=1,\ldots,n$, %$\max(R(b_{ij}))$
 %  where
-where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_{ij}^{l}$, respectively. For example, $\G_{kl}$ can be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. We have a total of $n^2$ local correlations for all possible combinations of $k$ and $l$.
-\jovo{i took this out, it is a technical detail ``$\max(R(a_{ij})) \times \max(R(a_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating point in the data.''}
+where $z_{kl}$ is simply the product of the truncated variances, $z_{kl}=var(a^k) var(b^l)$. There are a maximum of  $n^2$ different local correlations, one for each possible combinations of $k$ and $l$.
+% where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_{ij}^{l}$, respectively. 
+As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. 
+\cs{i took this out, it is a technical detail ``$\max(R(a_{ij})) \times \max(R(a_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating point in the data.''}
+\Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$ (see Pseudocode \ref{alg1} in Appendix \ref{appen:algorithms} for details on how to compute \Mgc~for a given neighborhood size).
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
@@ -275,13 +290,39 @@ Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic 
 \label{fig:A}
 \end{figure}
 
-\Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$, providing all local p-values and selecting the optimal neighborhood size,  denoted  $(k^{*},l^*)$. Clearly the optimal scale exists, is distribution dependent, and may not be unique. But different from a manifold learning task, once the rank information is given, all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, which allows our definition of local correlations to be an efficient and general tool in data analysis.
 
-If the distribution of the data is already known (of course, this is only for simulations), the optimal scale for \Mgc~can be easily determined via simulation.  When the distribution of data is unknown, we have a procedure for estimating the optimal scale by finding a region of neighborhood sizes for which p-values are consistently low (guarding against noisy scales that appear optimal, and combatting bias added by looking at many different scales). 
-\jovo{this stuff was confusing for me: if the underlying joint distribution is known, or multiple dependent data are already given, the true optimal scale can be derived by maximizing the testing powers among all local correlations; if there is only one pair of observations with unknown underlying model, the optimal scale can be reasonably approximated based on p-values of all local correlations from the permutation test. }
-Once the optimal scale is determined, we may use the permutation test to calculate the \Mgc~p-value (i.e., the p-value of the optimal local correlation), and declare significant dependency when the p-value is less than $\alpha$, often $0.05$. A schematic illustrating  how to calculate the \Mgc~statistic is provided in Figure~\ref{fig:A}, with more details provided in Appendix \ref{appen:tests}.
+\cs{providing all local p-values and selecting the optimal neighborhood size.}
+% ,  denoted  $(k^{*},l^*)$. 
+\cs{this seems to be a technical detail.  maybe we can put it back in the appendix where we define things more rigorously? ``''Clearly the optimal scale exists, is distribution dependent, and may not be unique. ''}
+% 
 
-By the optimal scale estimation, the \Mgc~statistic $\G^{*}$ is theoretically no worse than the global counterpart $\G$, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies; moreover, different \Mgc~implementations may vary slightly in performance depending on the properties of the respective global statistic. In the following sections, we demonstrate that our \Mgc~statistic yields tests that preserve consistency regardless of the functional dependency and dimensionality, improves the testing powers of the respective global correlation under nonlinear and high-dimensional dependencies both in theory and in simulations, as while as being the most superior test in simulations and real data experiments.
+Having defined how to compute \Mgc~for all neighborhood sizes, we face three challenges to make the method practical. First, in addition to the test statistic, we need to compute the null distribution, so that we may find the critical values and p-values.
+Second, na\"ively, computing all local $\G_{kl}$ statistics would therefore require $\mc{O}(n^4)$, because it requires $\mc{O}(n^2)$ time to compute each local statistic.  That computational burden would be so high as to make doing so impractical.  Third, having computed all local statistics, we require a method for choosing the optimal neighborhood size, in such a way that the test is still consistent, and not biased (meaning that the resultant p-value is valid).   
+
+Computing the p-values from the test statistic is actually straightforward, thanks to the advent of permutation testing \cite{??}.  Specifically, we can permute the labels of either the $x_i$'s or the $y_i$'s, and then compute the \Mgc~statistics on the permuted data.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so $r$ times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important (see Pseudocode \ref{alg2} in Appendix \ref{appen:algorithms} for details on our permutation test).
+
+
+Nearly all algorithms that employ \emph{some} kind of regularization face a similar dilemma: how to efficiently choose the hyper-parameters. 
+% requires running the entire algorithm again from scratch.
+% Unlike many manifold learning methods, 
+% once the rank information is given, 
+Most  manifold learning algorithms require that the user essentially runs the entire algorithm again from scratch for each different hyper-parameter setting, a pursuit that can be exponentially taxing as the number of hyper-parameters increases.
+We have devised an algorithm for exactly computing \emph{all} local correlations in $\mc{O}(n^2 \log n)$, essentially the same running time complexity as the global correlation coefficient (the additional log factor is for sorting to find the neighbors, see Appendix \ref{appen:algorithms} for details).  
+We do so by noting that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, so we can simply keep track of them as we iteratively increase neighborhood size. Doing so yields the p-values for each neighborhood size, but it does not tell us which neighborhood sizes are optimal (see Pseudocode \ref{alg3} in Appendix \ref{appen:algorithms} for details).
+% all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, 
+\cs{seemed redundant: which allows our definition of local correlations to be an efficient and general tool in data analysis.}
+
+% Next, we must find an optimal scale.  
+\cs{If the distribution of the data is already known (of course, this is only for simulations), the optimal scale for \Mgc~can be easily determined via simulation.  When the distribution of data is unknown,} 
+Our procedure for estimating the optimal scale searches for regions of neighborhood sizes for which p-values are consistently low, guarding against noisy scales that appear optimal, and combating bias added by looking at many different scales.   
+\jv{this stuff was confusing for me: if the underlying joint distribution is known, or multiple dependent data are already given, the true optimal scale can be derived by maximizing the testing powers among all local correlations; if there is only one pair of observations with unknown underlying model, the optimal scale can be reasonably approximated based on p-values of all local correlations from the permutation test. }
+% 
+We assert that the optimal scale is the largest neighborhood size in that region.
+\cs{deleted: we may use the permutation test to calculate the \Mgc~p-value (i.e., the p-value of the optimal local correlation),} 
+We define the p-value of \Mgc~to be the p-value from the optimal scale, and declare significant dependency when the p-value is less than $\alpha$, often $0.05$ (see Pseudocode \ref{alg5} in Appendix \ref{appen:algorithms} for details). 
+\cs{deleted: A schematic illustrating  how to calculate the \Mgc~statistic is provided in Figure~\ref{fig:A}, with more details provided in Appendix \ref{appen:tests}.}
+
+\cs{deleted because in Science, there is no room for a summary of the coming results (and in fact, in general, i believe it is bad practice): By the optimal scale estimation, the \Mgc~statistic $\G^{*}$ is theoretically no worse than the global counterpart $\G$, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies; moreover, different \Mgc~implementations may vary slightly in performance depending on the properties of the respective global statistic. In the following sections, we demonstrate that our \Mgc~statistic yields tests that preserve consistency regardless of the functional dependency and dimensionality, improves the testing powers of the respective global correlation under nonlinear and high-dimensional dependencies both in theory and in simulations, as while as being the most superior test in simulations and real data experiments.}
 
 \subsection{Theoretical Consistency and Computational Efficiency of \Mgc}
 \label{main2}

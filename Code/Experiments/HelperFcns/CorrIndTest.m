@@ -62,8 +62,11 @@ for i=1:lim
 end
 
 % Save the results
-pre1='../../../Data/Results/';
+pre1='../../Data/Results/';
 filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
+if type==0;
+    filename=strcat(filename,'W',num2str(noise),'.mat');
+end
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','power1All','power2All','power3All');
 
 function [power1, power2, power3, power4,neighbor]=IndependenceTest(type,n,dim,lim,rep, noise,alpha,option)

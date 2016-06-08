@@ -1,4 +1,4 @@
-function []=CorrRealPlots(pre1,pre2)
+function []=plot_realData(pre1,pre2)
 % Used to plot the heatmap of real data used in tex. Run like
 % CorrRealPlots()
 
@@ -6,7 +6,7 @@ if nargin<1
     pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../../../Draft/Figures/FigReal'; % The folder to save figures
+    pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 end
 cmap=zeros(3,3);
 gr = [0.5,0.5,0.5];
@@ -34,17 +34,22 @@ load(filename);
 n=size(p1All,1);
 pp2=p1All(xa,end);
 figure
+
+y=0.05;
+H=area(xa,y*ones(n-kmin+1,1),'LineStyle',':','FaceColor', [.9 .9 .9]);
+hold on
 plot(xa,pp1,'k.-',xa,pp2,'.--','LineWidth',2)
 set(gca,'FontSize',14);
 xlabel('Number of Neighbors for X','FontSize',16);
-xlim([1 n]);
+xlim([2 n]);
 ylim([0 0.2]);
 ylabel('P-Value','FontSize',16);
 
 title('Local Tests P-value for Brain Shape vs Disorder','FontSize',17);
-legend('Left Brain','Right Brain','Location','North');
+legend('Significant P-value Area','P-value for Testing Left Brain','P-value for Testing Right Brain','Location','North');
 legend boxoff
 
+hold off
 F.fname=strcat(pre2, num2str(1));
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)

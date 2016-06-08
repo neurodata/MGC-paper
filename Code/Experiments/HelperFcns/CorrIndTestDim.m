@@ -61,7 +61,7 @@ for i=1:lim
 end
 
 % Save the results
-pre1='../../../Data/Results/';
+pre1='../../Data/Results/';
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
 

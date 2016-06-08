@@ -1,4 +1,4 @@
-function []=CorrVisualPlots(n,dim,noise,pre2)
+function []=plot_simulation_visual(n,dim,noise,pre2)
 % Author: Cencheng Shen
 % CorrVisualPlots()
 % CorrVisualPlots(100,2)
@@ -13,7 +13,7 @@ if nargin<3
     noise=1;
 end
 if nargin<4
-    pre2='../../../../Draft/Figures/FigReal'; % The folder to save figures
+    pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 
 total=20;
@@ -26,24 +26,20 @@ end
 
 cmap=zeros(3,3);
 gr = [0.5,0.5,0.5];
-ma = [1,0,1];
-% cy = [0,1,1];
 cmap(1,:) = gr;
-cmap(2,:) = gr;
-% cmap(3,:) = cy;
 map1=cmap;
-map2 = brewermap(128,'GnBu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
-sz=20;
+
+sz=12;
 for type=1:total
     subplot(s,t,type);
     titlechar=CorrSimuTitle(type);
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
     if type==19
-        sz2=10; % Enlarge the point size for discrete distribution, i.e., uncorrelation binomial
+        sz2=24; % Enlarge the point size for discrete distribution, i.e., uncorrelation binomial
     else
-        sz2=10;
+        sz2=8;
     end
     hold on
     plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);
@@ -101,17 +97,6 @@ end
 h=suptitle('Visualization for 20 Simulated Dependencies');
 set(h,'FontSize',24,'FontWeight','normal');
 
-F.fname=[strcat(pre2, '0')];
+F.fname=[strcat(pre2, 'SimVisual')];
 F.wh=[8 4]*2;
-print_fig(gcf,F)
-
-figure
-[x, y]=CorrSampleGenerator(0,n,dim,1,0.5);
-plot(x(:,1),y(:,1),'b.');
-% set(gca,'XTick',[]); % Remove x axis ticks
-% set(gca,'YTick',[]); % Remove y axis ticks
-set(gca,'FontSize',14);
-title('Mixture Model with p=0.5','FontSize',15);
-F.fname=strcat(pre2, 'Out0');
-F.wh=[3 2.5]*2;
 print_fig(gcf,F)

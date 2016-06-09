@@ -18,9 +18,9 @@
 \usepackage{lineno}
 % \usepackage{todonotes}
 \usepackage[font=small,labelfont=bf]{caption}
-\usepackage[draft,authormarkup=none]{changes}
+\usepackage[final,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\usepackage{flushend}
+% \usepackage{flushend}
 
 %better toc
 % \usepackage{tocloft}
@@ -110,9 +110,9 @@
 {#1}\small\normalsize} \spacingset{1}
 
 \title{\bf Dependence Discovery from Multimodal Data via  Multiscale Graph Correlation}
-\author[1]{Cencheng Shen\thanks{cshen@temple.edu}}
-\author[2]{Carey E. Priebe\thanks{cep@jhu.edu}}
-\author[3]{Mauro Maggioni\thanks{mauro.maggioni@duke.edu}}
+\author[1]{Cencheng Shen} %\thanks{cshen@temple.edu}}
+\author[2]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
+\author[3]{Mauro Maggioni}%\thanks{mauro.maggioni@duke.edu}}
 \author[4]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
 \affil[1]{Department of Statistics, Temple University}
 \affil[2]{Department of Applied Mathematics and Statistics, Johns Hopkins University}
@@ -121,7 +121,7 @@
 \maketitle
 \pagestyle{empty}
 
-\bigskip
+% \bigskip
 \begin{abstract}
 Understanding and discovering dependence between multiple properties or measurements is a fundamental task not just in science, but also policy, commerce, and other domains. 
 An ideal test for dependence would have the following properties:
@@ -148,6 +148,10 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 
 % science report: 2500 words
 % science article: 4500 words
+
+% intro
+% results
+% discussion: 
 
 \newpage
 \spacingset{1.45}
@@ -201,7 +205,11 @@ Finally, as alluded to above, checking for dependence is rarely the final step i
 
 
 % XXX this paragraph is a bit redundant with previous one.  it should simply express *when* we want the above properties, ie, in theory, simulation, and real data. reduce by 4x
-Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, we desire tests for which we can prove they have all these properties. More specifically, we desire a consistent test, meaning, we want a test whose power converges to one as sample size increases to infinity whenever the two disparate views of the data are indeed dependent, and does not converge when they are not dependent. And we desire asymptotically consistent tests for as large a class of dependence structures as possible, much larger than merely linear and low-dimensionality dependence, and including all sorts of objects, including shapes and graphs and vectors.  In addition to asymptotic guarantees of the above, we desire superior finite sample performance, which we can assess in extensive simulations.  Finally, we desire that these tests provide guidance into our data scientific inquiries, both in terms of discovering novel dependencies, and providing insight into the nature of those dependencies.  
+% Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, w
+We desire tests for which we can prove they have all these properties. More specifically, we desire a consistent test for as large a class of problems as possible, meaning, we want a test whose power converges to one as sample size increases to infinity whenever the two disparate views of the data are indeed dependent, and does not converge when they are not dependent. 
+% And we desire  consistent tests for as large a class of dependence structures as possible, much larger than merely linear and low-dimensionality dependence, and including all sorts of objects, including shapes and graphs and vectors.  
+In addition to asymptotic guarantees of the above, we desire superior finite sample performance, which we can assess in extensive simulations.  Finally, we desire that these tests provide guidance into our real data data scientific inquiries.
+% , both in terms of discovering novel dependencies, and providing insight into the nature of those dependencies.  
 
 
 % and we can also demonstrate them both in extensive simulations and real data.
@@ -217,8 +225,15 @@ Most relevant to our work, a number of approaches to two-sample and dependence t
 
 
 % XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
-More specifically,  we propose Multiscale Graph Correlation (\Mgc), which can be thought of as the love child of distance correlations with graph-based tests, by considering all scales and choosing the best one.  \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes. \Mgc~performs as well or better than the existing literature on each of the seven above mentioned design goals. More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.  In real data experiments, we show that \Mgc~is able to uncover the underlying dependency when testing between related data sets,  and does not inflate the false positive rate when the dependencies are not there. 
-In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledg, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasinagly desirable as data becomes even more prevalent. We therefore expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
+More specifically,  we propose Multiscale Graph Correlation (\Mgc), 
+which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
+% which can be thought of as the love child of distance correlations with graph-based tests, by considering all scales and choosing the best one.  
+% \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes. 
+\Mgc~performs as well or better than the existing literature on each of the seven above mentioned design goals, in theory, and extensive simulations. 
+% More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.  
+In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and creativity, and did not inflate the false positive rate when the dependencies are not there, unlike many previously proposed approaches.  
+% In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent. 
+We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
 
 \section{Results}
 \label{s:results}
@@ -706,7 +721,7 @@ Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT
 % 
 Defense Advanced Research Projects Agency's (DARPA) SIMPLEX program through SPAWAR contract N66001-15-C-4041, 
 % 
-and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) administered through Air Force Research Laboratory contract FA8750-12-2-0303.
+and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) administered through Air Force Research Laboratory contract FA8750-12-2-0303. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere.
 
 
 

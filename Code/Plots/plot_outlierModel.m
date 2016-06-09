@@ -39,7 +39,7 @@ for i=1:length(seq)
         ylabel('Example Data','FontSize',24)%,'position',[-200 -0.2],'FontSize',20);
     end
     set(gca,'FontSize',16);
-    title(strcat('w=', num2str(w*100),'%'),'FontSize',30);
+    title(strcat(num2str(w*100),'% outliers'),'FontSize',30);
     s1Pos=get(gca,'position');
     F.fname=strcat(pre2, 'OutlierVisual',num2str(i));
     F.wh=[3 2.5]*2;

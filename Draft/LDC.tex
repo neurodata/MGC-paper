@@ -20,7 +20,13 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[draft,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+\usepackage{flushend}
 
+%better toc
+% \usepackage{tocloft}
+% \setlength\cftparskip{-1pt}
+% \setlength\cftbeforesecskip{2pt}
+% \setlength\cftaftertoctitleskip{4pt}
 
 
 \pagestyle{fancy}
@@ -132,10 +138,12 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 
 \noindent%
 {\it Keywords: testing independence, distance correlation, k-nearest-neighbor, local correlation coefficient, permutation test}
-\vfill
+% \vfill
 
 % \clearpage
-\tableofcontents
+\setcounter{tocdepth}{2}% paragraphs and above
+{\small\tableofcontents}
+% \addtocontents{toc}{\vspace{-3\baselineskip}}
 % \listofchanges[style=list]
 
 % science report: 2500 words
@@ -600,7 +608,7 @@ Furthermore, \Mgcd~provides useful information regarding the fraction of outlier
 Here we apply  \Mgc~to visualize the relationship and test independence between real data sets. 
 \cs{deleted: Since there is no known model for the given data, the optimal scale for \Mgc~is approximated (see Appendix \ref{appen:tests} for details and further discussions). }
 
-\subsubsection[Brain Shape and Depression]{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
+\subsubsection[Brain Shape vs. Depression]{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
 
 The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, though previous test were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level for both hemispheres. 
 
@@ -609,10 +617,10 @@ we form the pairwise Euclidean distance matrix from the categorical vector, then
 
 Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
 
-The p-value curves of the local correlations are provided in Figure~\ref{f:real}(A) for $k=2,\ldots,n$ at $l=4$; we only show $l=4$ because the other curves look similar. We can clearly identify many common local scales between the two curves that yield significant p-values, which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
+The p-value curves of the local correlations are provided in Figure~\ref{f:real}A for $k=2,\ldots,n$ at $l=4$; we only show $l=4$ because the other curves look similar. We can clearly identify many common local scales between the two curves that yield significant p-values, which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
 
 \begin{table*}[!t]
-\caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. Significant p-values are highlighted. \Mgc~is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.\cs{table captions go above tables.} \cs{maybe add a row to table showing the average FDR  in the fake dependency case? i'm not sure if this is a good idea.}}
+\caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. Significant p-values are highlighted. \Mgc~is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.\cs{table captions go above tables.} \cs{maybe add a row to table showing the average FDR  in the fake dependency case? i'm not sure if this is a good idea.} \cs{actually, i'm not even sure that having the table at all is useful anymore, given that the real data figure basically says everything we want.  i kinda think take it out.  waht do you think?}}
 % \Large
 \renewcommand{\arraystretch}{0.5}
 \centering
@@ -650,7 +658,7 @@ Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & 
 \label{f:real}
 \end{figure}
 
-\subsubsection[Optimal Representations]{\Mgc~can Select Amongst Disparate Representations for Optimal Dependence: Brain Structural Network vs. Creativity}
+\subsubsection[Brain Graph vs. Creativity]{\Mgc~can provide insight into the nature of the dependence structure: Brain Structural Network vs. Creativity}
 
 Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
 
@@ -662,12 +670,12 @@ Therefore in this exploration task, \Migraine~is a better brain graph estimator 
 
 \subsubsection[Correct False Positive Rate]{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 
-In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project \url{http://fcon_1000.projects.nitrc.org/}. Take one data set BNU1 for example: the resting state data contains $200$ regions of interest for $200$ timestep for $50$ persons. We used CPAC\cs{cite CPAC} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (unpublished).
+In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}). We used CPAC\cs{cite CPAC} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (unpublished).  The output for each dataset is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps. 
 
 For each brain region, the distance matrix with respect to time is calculated by $dist(s,t)=\|\mbx_{\cdot s}-\mbx_{\cdot t}\|$, where $\mbx_{\cdot t}$ denotes the observation vector at timestep $t$ for all persons. Then an independent stimulus is generated by sampling from a standard normal at each time step, whose pairwise distance can be directly computed. From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc. The p-value based on $1000$ random permutations is computed, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
-For each data set, the above test is carried out for each brain region, and the false positive rate (FPR) of \Mgc~is shown in Figure~\ref{f:real}(C) by a jittered scatter plot. %The y-axis stands for FPR by log scale, and the x-axis shows the name of the data set arranged by increasing FPR; the mean FPR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. 
-\jovo{fix after fixing fig}\cs{fixed} Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgc, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FPR as reported in \cite{EklundKnutsson2012} for the same data source.
+For each data set, the above test is carried out for each brain region, and the false positive rates of \Mgc~for each dataset are shown in Figure~\ref{f:real}C. %The y-axis stands for FPR by log scale, and the x-axis shows the name of the data set arranged by increasing FPR; the mean FPR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. 
+Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgcm, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FPR as reported in \cite{EklundKnutsson2012} for the same fMRI datasets.
 
 \section{Discussion}
 \label{conclu}

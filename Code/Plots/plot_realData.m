@@ -62,11 +62,11 @@ ind2=ind2(i)+1:ind2(i+1)-2;
 ind2S=2:ind2(1);
 ind2E=ind2(end):n;
 
-plot(ind1S,pp1(ind1S),'.-',ind2S,pp2(ind2S),'.--',ind1E,pp1(ind1E),'.-',ind2E,pp2(ind2E),'.--','LineWidth',2);
+plot(ind1S,pp1(ind1S),'-',ind2S,pp2(ind2S),'--',ind1E,pp1(ind1E),'-',ind2E,pp2(ind2E),'--','LineWidth',2);
 h=legend('Left Brain','Right Brain','Location','North');
 set(h,'FontSize',20);
 legend boxoff
-plot(ind1,pp1(ind1),'k.-',ind2,pp2(ind2),'k.--','LineWidth',2)
+plot(ind1,pp1(ind1),'k-',ind2,pp2(ind2),'k--','LineWidth',4)
 set(gca,'FontSize',16);
 xlabel('Number of Neighbors for X','FontSize',20);
 xlim([2 n]);

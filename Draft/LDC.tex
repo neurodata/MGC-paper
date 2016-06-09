@@ -133,7 +133,7 @@ An ideal test for dependence would have the following properties:
 No existing test satisfies all of these properties. 
 In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.  
 More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
-We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and creativity, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website. 
+We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and personality, and (iii) failing to detect a dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website. 
 \end{abstract}
 
 \noindent%
@@ -149,9 +149,29 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 % science report: 2500 words
 % science article: 4500 words
 
-% intro
-% results
-% discussion: 
+% assuming 20/60/20 for intro/results/discussion, this means
+
+% intro: 900
+% results: 2700
+% disc: 900
+
+% assuming we can submit, say 20% over the limit, then we get
+
+% intro: 1080
+% results: 3240
+% disc: 900
+
+% i have line numbers, and a width that uses about 15 words per line.
+
+% this means i get: 360 lines total
+
+% intro: 72 lines
+% results: 216 lines
+% disc: 72 lines
+
+
+% total: 411, need to remove 50 lines, almost entirely from results.
+
 
 \newpage
 \spacingset{1.45}
@@ -179,6 +199,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 % mgc matlab \& R code available
 
 
+% 77 lines
 \section{Introduction}
 
 Detecting dependency among multiple data sets is one of the most important and fundamental tasks in computational statistics and data science. 
@@ -231,10 +252,11 @@ which combines distance correlations with graph based tests, considers all local
 % \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes. 
 \Mgc~performs as well or better than the existing literature on each of the seven above mentioned design goals, in theory, and extensive simulations. 
 % More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.  
-In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and creativity, and did not inflate the false positive rate when the dependencies are not there, unlike many previously proposed approaches.  
+In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and personality, and did not inflate the false positive rate when the dependencies are not there, unlike many previously proposed approaches.  
 % In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent. 
 We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
 
+% 307 lines; target = 216
 \section{Results}
 \label{s:results}
 
@@ -312,8 +334,8 @@ As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in t
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
-\includegraphics[width=1.0\textwidth]{Figures/FigB}
-\includegraphics[width=1.0\textwidth]{Figures/FigC}
+% \includegraphics[width=1.0\textwidth]{Figures/FigB}
+% \includegraphics[width=1.0\textwidth]{Figures/FigC}
 \caption{
 Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic relationship with white noise. Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the pairwise Euclidean distance matrices of $X$ and $Y$. Column 3: The heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the normalized (i.e. doubly centered) distance matrices of $\tilde{A}$ and $\tilde{B}$. Column 4: The heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})$ is the optimal scale for the quadratic relationship. Column 5: The heat map of the entry-wise product of local $A$ and $B$, i.e., $\{(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})\}$ for $i,j=1,\ldots,n$. The matrix sum $\sum_{i,j}(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})$ equals the optimal local covariance, i.e., the un-normalized \Mgc~statistic $\G^{*}$. }
 \label{f:schematic}
@@ -500,25 +522,26 @@ In the following sections, unless mentioned otherwise, we concentrate on \Mgc\{\
 \label{fig:pp2}
 \end{figure}
 
-\begin{figure}
-  \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
-    \subfigimg[width=\linewidth]{A}{Figures/Fig1DDcorr} &
-    \subfigimg[width=\linewidth]{B}{Figures/Fig1DMcorr} &
-    \subfigimg[width=\linewidth]{C}{Figures/Fig1DMantel} \\
-    \subfigimg[width=\linewidth]{D}{Figures/FigHDDcorr} &
-    \subfigimg[width=\linewidth]{E}{Figures/FigHDMcorr} &
-    \subfigimg[width=\linewidth]{F}{Figures/FigHDMantel} 
-  \end{tabular}
-  \caption{This is a trial figure.
-	(A) Dcorr-HHG in 1D
-	(B) Mcorr-HHG in 1D
-	(C) Mantel-HHG in 1D
-	(D) Dcorr-HHG in HD
-	(E) Mcorr-HHG in HD
-	(F) Mantel-HHG in HD}
-\label{figPP33}
-\end{figure}
+% \begin{figure}
+%   \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
+%     \subfigimg[width=\linewidth]{A}{Figures/Fig1DDcorr} &
+%     \subfigimg[width=\linewidth]{B}{Figures/Fig1DMcorr} &
+%     \subfigimg[width=\linewidth]{C}{Figures/Fig1DMantel} \\
+%     \subfigimg[width=\linewidth]{D}{Figures/FigHDDcorr} &
+%     \subfigimg[width=\linewidth]{E}{Figures/FigHDMcorr} &
+%     \subfigimg[width=\linewidth]{F}{Figures/FigHDMantel} 
+%   \end{tabular}
+%   \caption{This is a trial figure.
+% 	(A) Dcorr-HHG in 1D
+% 	(B) Mcorr-HHG in 1D
+% 	(C) Mantel-HHG in 1D
+% 	(D) Dcorr-HHG in HD
+% 	(E) Mcorr-HHG in HD
+% 	(F) Mantel-HHG in HD}
+% \label{figPP33}
+% \end{figure}
 
+% 27 lines; target = 72
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}
 
@@ -546,10 +569,10 @@ The above described qualitative descriptions led us to belief the following two 
 \label{t:linear}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
 \begin{equation}
-\beta(\G_{nn}) = \beta(\G^{*}).
+\beta(\G^{nn}) = \beta(\G^{*}) = \beta(\G).
 \end{equation}
 
-Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
+Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{thm}
 
 \begin{thm}
@@ -619,43 +642,49 @@ Furthermore, \Mgcm~provides useful information regarding the fraction of outlier
 \subsection{Real Data Experiments}
 \label{numer3}
 
-Here we apply  \Mgc~to visualize the relationship and test independence between real data sets. 
-\cs{deleted: Since there is no known model for the given data, the optimal scale for \Mgc~is approximated (see Appendix \ref{appen:tests} for details and further discussions). }
+\cs{deleted: Here we apply  \Mgc~to visualize the relationship and test independence between real data sets. 
+Since there is no known model for the given data, the optimal scale for \Mgc~is approximated (see Appendix \ref{appen:tests} for details and further discussions). }
 
-\subsubsection[Brain Shape vs. Depression]{Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
+\subsubsection[Brain Shape vs. Depression]{Only Local Scales can Detect Dependence Between Hippocampus Shape and Depression}
 
-The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. There are $n=114$ subjects, and the brain images of each person are obtained by high resolution MRI scans on the hippocampus for both the left brain and the right brain. A categorical vector containing the disorder information is also available, including clinically depressed subject, high-risk subject, and non-affected subject. There has been evidences that relate major depressive disorder to the hippocampus shape in \cite{ParkEtAl2011} and \cite{PosenerEtAl2003}, though previous test were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level for both hemispheres. 
+Our first real data experiment investigates whether brain shape and disease status are indeed dependent on one another.  Previous investigations have linked major depressive disorder to the hippocampus shape \cite{ParkEtAl2011,PosenerEtAl2003}, though global tests were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level.
 
-To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark matching (see \cite{ParkEtAl2011} for more details on data processing); for the disorder information vector,
-we form the pairwise Euclidean distance matrix from the categorical vector, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$).
+ % for both hemispheres. 
+% The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. 
 
-Two hypothesis tests are considered: testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
+This brain shape versus disease dataset consists of $n=114$ subjects, for each we have an MRI scans on the hippocampus for both the left brain and the right brain ad well as a categorical variable indicating whether the subject is clinically depressed, high-risk, or non-affected.   For the brain shape ``view'' of the data, we compute the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2011,LLDMM}.
+% To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark 
+% matching (see \cite{ParkEtAl2011} for more details on data processing); 
+For the categorical disorder variable,
+we use squared distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$).
 
-The p-value curves of the local correlations are provided in Figure~\ref{f:real}A for $k=2,\ldots,n$ at $l=4$; we only show $l=4$ because the other curves look similar. We can clearly identify many common local scales between the two curves that yield significant p-values, which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
+We consider two dependence tests, one for each hemisphere: hippomcapus shape independent of depressive state.  
+% testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. 
+% The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
+Figure \ref{f:real}A provides the p-value curves for \Mgcd~for $k=2,\ldots,n$ at $l=4$  (we only show $l=4$ because the other curves look similar). Many local scales yield significant p-values for both hemispheres, whereas the global scale does not detect a significant dependence in either hemisphere. 
+% , which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
 
-\begin{table*}[!t]
-\caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. Significant p-values are highlighted. \Mgc~is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.\cs{table captions go above tables.} \cs{maybe add a row to table showing the average FDR  in the fake dependency case? i'm not sure if this is a good idea.} \cs{actually, i'm not even sure that having the table at all is useful anymore, given that the real data figure basically says everything we want.  i kinda think take it out.  waht do you think?}}
-% \Large
-\renewcommand{\arraystretch}{0.5}
-\centering
-{\begin{tabular}{|c||c|c|c|c|c|c|c|}
-\hline
-Testing Method & \Mgc~& \Dcorr~& \Mcorr~& \Mantel~& \Hhg~\\
-\hline
-Left Brain vs Disorder  & $\textbf{0.0046}$ & $0.0745$ & $0.0783$ & $\textbf{0.0382}$ & $\textbf{0.0375}$ \\
-\hline
-Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & $0.0809$\\
-\hline
-\Migraine~vs CCI & $\textbf{0.0111}$ & $\textbf{0.0088}$ & $\textbf{0.0111}$  & $\textbf{0.0093}$ & $\textbf{0.0341}$\\
-\hline
-% \mtg~vs CCI & $0.0712$ & $0.0682$ & $0.0712$  & $0.3314$ & $0.6553$\\
+% \begin{table*}[!t]
+% \caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. Significant p-values are highlighted. \Mgc~is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.\cs{table captions go above tables.} \cs{maybe add a row to table showing the average FDR  in the fake dependency case? i'm not sure if this is a good idea.} \cs{actually, i'm not even sure that having the table at all is useful anymore, given that the real data figure basically says everything we want.  i kinda think take it out.  waht do you think?}}
+% % \Large
+% \renewcommand{\arraystretch}{0.5}
+% \centering
+% {\begin{tabular}{|c||c|c|c|c|c|c|c|}
 % \hline
-\end{tabular}
-\label{table1}
-}
-\end{table*}
-\jovo{maybe bold everything in table that is significant?}
-\cs{done}
+% Testing Method & \Mgc~& \Dcorr~& \Mcorr~& \Mantel~& \Hhg~\\
+% \hline
+% Left Brain vs Disorder  & $\textbf{0.0046}$ & $0.0745$ & $0.0783$ & $\textbf{0.0382}$ & $\textbf{0.0375}$ \\
+% \hline
+% Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & $0.0809$\\
+% \hline
+% \Migraine~vs CCI & $\textbf{0.0111}$ & $\textbf{0.0088}$ & $\textbf{0.0111}$  & $\textbf{0.0093}$ & $\textbf{0.0341}$\\
+% \hline
+% % \mtg~vs CCI & $0.0712$ & $0.0682$ & $0.0712$  & $0.3314$ & $0.6553$\\
+% % \hline
+% \end{tabular}
+% \label{table1}
+% }
+% \end{table*}
 
 \begin{figure}
   \centering
@@ -672,15 +701,19 @@ Right Brain vs Disorder & $\textbf{0.0133}$ & $0.1046$ & $0.1104$  & $0.0848$ & 
 \label{f:real}
 \end{figure}
 
-\subsubsection[Brain Graph vs. Creativity]{\Mgc~can provide insight into the nature of the dependence structure: Brain Structural Network vs. Creativity}
+\subsubsection[Brain Graph vs. Personality]{\Mgc~can provide insight into the nature of the dependence structure: Brain Structural Network vs. Personality}
 
-Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of creativity.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
+The next real data experiment investigates whether brain graph and personality are independent of one another. Previous work \cite{AdelsteinEtAl2011} investigated whether individual voxels were related to specific dimensions of personality, but were unable to compare entire brain networks to a higher-dimensional characterization of personality.
 
-Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI is strong enough for all dependence tests to return significant p-values; in particular, we observe that there exists many local scales with significant p-values for \Migraine~vs CCI from the p-value heat map in Figure~\ref{f:real}(B). But there appears to be a loss of dependency between \mtg~and CCI, as most significant scales for \Migraine are no longer significant when testing on \mtg. (The p-value heat map for \mtg vs CCI is not shown, as it has no significant scale.)
 
-All the benchmarks also suggest the disappearance of significant dependency, but they do not exhibit the local structure difference. And \Mantel~and \Hhg~are less informative due to the large change of p-values when moving from \Migraine~to \mtg. Note that if we test independence between \Migraine~vs \mtg, the p-values of all tests are $0$, indicating a strong dependency. 
 
-Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly related with each other, \Migraine~is more dependent with CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our method identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Thus \Mgc~can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
+% Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of personality.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
+
+% Using the same testing procedure as the previous experiment, the resulting p-values for \Migraine~vs CCI and \mtg~vs CCI are reported in the last two rows of Table~\ref{table1}. The dependency between \Migraine~and CCI is strong enough for all dependence tests to return significant p-values; in particular, we observe that there exists many local scales with significant p-values for \Migraine~vs CCI from the p-value heat map in Figure~\ref{f:real}(B). But there appears to be a loss of dependency between \mtg~and CCI, as most significant scales for \Migraine are no longer significant when testing on \mtg. (The p-value heat map for \mtg vs CCI is not shown, as it has no significant scale.)
+
+% All the benchmarks also suggest the disappearance of significant dependency, but they do not exhibit the local structure difference. And \Mantel~and \Hhg~are less informative due to the large change of p-values when moving from \Migraine~to \mtg. Note that if we test independence between \Migraine~vs \mtg, the p-values of all tests are $0$, indicating a strong dependency. 
+
+% Therefore in this exploration task, \Migraine~is a better brain graph estimator than \mtg: although they are strongly related with each other, \Migraine~is more dependent with CCI than \mtg, because \mtg~is a transformation of \Migraine~without consideration of CCI. Our method identifies the better representation of the two, reveals the local dependency loss from the p-value heat maps, and does not identify false signals. Thus \Mgc~can be used to find the most relevant representation / variable and provide valuable insights into the structural difference.
 
 \subsubsection[Correct False Positive Rate]{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 

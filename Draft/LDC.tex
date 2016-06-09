@@ -417,7 +417,7 @@ For the independent clouds,  the empirical power of all the tests, including all
 \includegraphics[width=1.0\textwidth]{Figures/Fig1DPower}
 \caption{
 Powers of different methods for $20$ different $1$-d dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates.
-Each panel shows empirical testing power on the absicca, and sample size on the ordinate.
+Each panel shows empirical testing power on the absicca at a significant level $\alpha=0.05$, and sample size on the ordinate.
 \Mgc~empirically achieves similar or better power than the previous state of the art approaches for nearly all sample sizes on all problems.}
 \label{f:1D}
 \end{figure}
@@ -429,8 +429,7 @@ Each panel shows empirical testing power on the absicca, and sample size on the 
 In this section we consider the same $20$ functions as in Section~\ref{numer1}, but increase the dimensionality while keeping sample sizes fixed  at $n=100$. 
 Note that for all dependencies, the dimensionality of \mbx~is increasing, but the dimensionality of \mby~increases in only a subset of the settings (see Appendix \ref{appen:function} for details).
 
-Figure~\ref{fig:nD} shows power versus dimensionality of \mbx~
-\cs{put in appendix and caption: for a significance value of $\alpha=0.05$} 
+Figure~\ref{f:nD} shows power versus dimensionality of \mbx~
 (see Methods for details).  
 % The performance profiles are provided in Figure~\ref{fig:pp}(C)(D): Figure~\ref{fig:pp}(C) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and Figure~\ref{fig:pp}(D) plots the area under curve of the performance profiles against the power threshold.
 For these high dimensional settings, we already know that \Mcorr~will outperform \Dcorr; and since \Mantel~is also unnormalized for high-dimensions, we also expect \Mcorr~will outperform it.  Therefore, we only show \Mgcm, \Mcorr, and \Hhg~(though see Figure \ref{??} in Appendix \ref{appen:function} to see all algorithm performance).
@@ -444,7 +443,7 @@ In the high-dimensional settings, the advantage of \Mgc~over its global counterp
 \caption{Power of different methods for 20 different high-dimensional dependence structures, for dimensionality ranging from $1$ to $1$,$000$ at a fixed sample size $n=100$.  Details as in Figure~\ref{f:1D}.
 Again, our method empirically achieves as high or higher power than the previous state of the art methods for nearly all problems and all dimensions.
 }
-\label{fig:nD}
+\label{f:nD}
 \end{figure}
 
 
@@ -521,7 +520,7 @@ Note that for almost all simulations, there exist a large portion of adjacent lo
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDHeat}
-\caption{Influence of neighborhood size on testing power of local correlations.
+\caption{Influence of neighborhood size on testing power of local correlations at $\alpha=0.05$.
 For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the power threshold as in Figure~\ref{fig:pp}(C). Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
 \label{f:powermaps}
 \end{figure}
@@ -575,8 +574,8 @@ Setting $n=100$ and $d_{x}=d_{y}=1$, in }
 The top row of Figure~\ref{f:outliers} shows exemplar datasets with 30\%, 50\%, and 70\% outliers; the bottom row shows the multiscale power maps for each.
 % at each $w$ by the same procedure as in section~\ref{numer1}. 
 
-A few points are evident from the figure.  First, \Mgcd~achieves a much higher power than its global counterpart  \Dcorr~(evidenced by considering the power of \Mgcd$^{n,n}$ in the plots, and noticing that they have much lower power than the maximum of the maps), regardless of the fraction of outliers.\cs{i don't know what we did here.  mgcd vs dcorr, or mgcm vs. mcorr.  please correct.}  Though we do not show it, \Mgcd~is also better than \Hhg: the power of \Hhg~is $1, 0.75,0$ at $w=0.7,0.5,0.3$ respectively, which drastically decreases as $w$ decreases, while \Mgc~always maintains power $1$. 
-Furthermore, \Mgcd~provides useful information regarding the fraction of outliers: the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $w$, specifically $k^{*}=l^{*}=\min(wn,(1-w)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers because the optimal local scale automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency change (not shown).\jv{cs: is this true? do we have an appendix figure showing it? or have you at least run the simulation?}
+A few points are evident from the figure.  First, \Mgcm~achieves a much higher power than its global counterpart  \Mcorr~(evidenced by considering the power of \Mgcm$^{n,n}$ in the plots, and noticing that they have much lower power than the maximum of the maps), regardless of the fraction of outliers.\cs{i don't know what we did here.  mgcd vs dcorr, or mgcm vs. mcorr.  please correct. it is mcorr here and next section}  Though we do not show it, \Mgcm~is also better than \Hhg: the power of \Hhg~is $1, 0.75,0$ at $w=0.7,0.5,0.3$ respectively, which drastically decreases as $w$ decreases, while \Mgc~always maintains power $1$. 
+Furthermore, \Mgcm~provides useful information regarding the fraction of outliers: the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $w$, specifically $k^{*}=l^{*}=\min(wn,(1-w)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers because the optimal local scale automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency change (not shown).\jv{cs: is this true? do we have an appendix figure showing it? or have you at least run the simulation?}
 \cs{deleted:, which makes \Mgc~more advantageous in practice against noise and outliers. }
 
 
@@ -590,7 +589,7 @@ Furthermore, \Mgcd~provides useful information regarding the fraction of outlier
     \subfigimg[width=\linewidth]{F}{Figures/FigOutlierPower3} 
   \end{tabular}
   \caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 30\%, 50\%, and 70\%  outliers (depicted across the three columns).
-  Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps.  It is evident that 
+  Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps at critical level $\alpha=0.05$.  It is evident that 
  %  samples under the outlier model in the main text, with different fractions of outliers in the three columns.  The bottom row shows the 
 	% (A) Scatter plot of samples $(X,Y)$ under the outlier model with probability $w=0.3$. Black points are dependent data, while the gray points are independent outliers.
 	% (B) Same as $A$ with $w=0.5$.
@@ -837,6 +836,21 @@ The high-dimensional simulations always set $c=0$ and $n=100$, with $d_{x}$ incr
 \label{f:dependencies}
 \end{figure}
 
+The powers of all three \Mgc implementations for the 1-dimensional and high-dimensional simulations are provided in Figure~\ref{f:1DAll} and~\ref{f:nDAll}.
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{Figures/Fig1DPowerAll}
+\caption{
+Same as Figure~\ref{f:1D} but includes all of \Mgc\{\Dcorr\}, \Mgc\{\Mcorr\} and \Mgc\{\Mantel\}.}
+\label{f:1DAll}
+\end{figure}
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{Figures/FigHDPowerAll}
+\caption{
+Same as Figure~\ref{f:nD} but includes all of \Mgc\{\Dcorr\}, \Mgc\{\Mcorr\} and \Mgc\{\Mantel\}.}
+\label{f:nDAll}
+\end{figure}
+
 The testing power heat map of local correlations for the $1$-dimensional simulations is provided in Figure~\ref{f:powermaps1}.
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig1DHeat}
@@ -924,7 +938,7 @@ Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, the \Mantel~c
 \end{equation}
 where $A=\tilde{A}$, $B=\tilde{B}$, $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$. Intuitively, the \Mantel~coefficient treats the two distance matrices (excluding the diagonals) as two observation vectors, and calculates the Pearson's correlation between them; then the \Mantel~test is carried out by the permutation test.
 
-Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{fig:nD} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgc~by \Mantel~achieves comparable performances as other variants of \Mgc, which implies that \Mgc\{\Mantel\} may be consistent against most, if not all dependent alternatives.
+Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{f:nD} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgc~by \Mantel~achieves comparable performances as other variants of \Mgc, which implies that \Mgc\{\Mantel\} may be consistent against most, if not all dependent alternatives.
 
 \subsection{Heller, Heller \& Gorfine (\Hhg)}
 \label{appen:hhg}

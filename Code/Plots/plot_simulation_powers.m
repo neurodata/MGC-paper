@@ -1,4 +1,4 @@
-function []=plot_simulation_powers(pre1,pre2)
+function []=plot_simulation_powers(pre1,pre2,select)
 % Used to plot figure 1-8 used in tex. Run like
 
 % total is usually 20.
@@ -10,6 +10,9 @@ if nargin<1
 end
 if nargin<2
     pre2='../../Draft/Figures/Fig'; % The folder to save figures
+end
+if nargin<3
+    select=0;
 end
 total=20;
 %% Set colors
@@ -29,7 +32,6 @@ map1(1,:)=dcorr; map1(5,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
 map1(2,:)=mcorr; map1(6,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
 map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
-select=1;
 if select==1
     map1(1,:)=dcorr; map1(4,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
     map1(2,:)=HHG; map1(5,:)=mante; % The color for MGC{Mantel} and global Mantel.
@@ -41,6 +43,9 @@ set(groot,'defaultAxesColorOrder',map1);
 
 %figure1-4
 figNumber='1DPower';
+if select~=1
+    figNumber='1DPowerAll';
+end
 figure('units','normalized','position',[0 0 1 1])
 set(groot,'defaultAxesColorOrder',map1);
 s=4;
@@ -89,6 +94,9 @@ map1(2,:)=HHG; % The color for HHG
 end
 
 figNumber='HDPower';
+if select~=1
+    figNumber='HDPowerAll';
+end
 figure('units','normalized','position',[0 0 1 1])
 set(groot,'defaultAxesColorOrder',map1)
 s=4;

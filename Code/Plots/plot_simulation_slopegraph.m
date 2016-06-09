@@ -32,8 +32,51 @@ map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
 set(groot,'defaultAxesColorOrder',map1);
 strL=['Global';'Local '];
+average=0;
+
+
+AUC=zeros(8,20);
+%load data
+for j=1:total
+    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
+    load(filename)
+    if length(dimRange)<20
+        continue;
+    end
+    AUC(1,j)=mean(power4);
+    AUC(2,j)=mean(power1);
+    AUC(3,j)=mean(power5);
+    AUC(4,j)=mean(power2);
+    AUC(5,j)=mean(power6);
+    AUC(6,j)=mean(power3);
+    AUC(7,j)=mean(power7);
+    AUC(8,j)=mean(power7);
+end
+
+x=1:2;
+str=['Dcorr ';'Mcorr ';'Mantel'];
+for j=1:3
+    figure
+    hold on
+    for i=1:20
+        plot(x,AUC(2*j-1:2*j,i)-AUC(7:8,i),'.:','LineWidth',2,'Color',map1(j,:));
+        %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
+    end
+    hold off
+    ylim([-1,1]);
+    if j==1
+        ylabel('1-Dimensional');
+    end
+    %yTickN=[floor(sumP(1,1)*100)/100,1];
+    set(gca,'XTickLabel',strL,'XTick',1:2,'FontSize',16);
+    %yTickN=[floor(sumP(1,2)*100)/100,1];
+    axes('xlim', [1 2],'ylim', [-1 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',16);
+    title(str(j,:));
+end
+
 
 %% %performance profile
+if average~=0
 figNumber='1DSlope';
 figure
 set(groot,'defaultAxesColorOrder',map1)
@@ -118,3 +161,4 @@ title('Mean Powers for High-Dimensional Simulations');
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
+end

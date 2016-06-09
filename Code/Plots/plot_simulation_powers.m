@@ -12,7 +12,7 @@ if nargin<2
     pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 if nargin<3
-    select=0;
+    select=1;
 end
 total=20;
 %% Set colors

@@ -61,10 +61,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC1(j,:),'.:','LineWidth',1,'Color',dcorr/2);
+    plot(x,AUC1(j,:),'.-','LineWidth',3,'Color',dcorr/2);
 end
 for j=21:40
-    plot(x,AUC1(j,:),'.-','LineWidth',1,'Color',dcorr);
+    plot(x,AUC1(j,:),'.:','LineWidth',3,'Color',dcorr);
 end
 hold off
 figNumber='1DDcorr';
@@ -76,10 +76,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC2(j,:),'.:','LineWidth',1,'Color',mcorr/2);
+    plot(x,AUC2(j,:),'.-','LineWidth',3,'Color',mcorr/2);
 end
 for j=21:40
-    plot(x,AUC2(j,:),'.-','LineWidth',1,'Color',mcorr);
+    plot(x,AUC2(j,:),'.:','LineWidth',3,'Color',mcorr);
 end
 hold off
 figNumber='1DMcorr';
@@ -91,10 +91,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC3(j,:),'.:','LineWidth',1,'Color',mante/2);
+    plot(x,AUC3(j,:),'.-','LineWidth',3,'Color',mante/2);
 end
 for j=21:40
-    plot(x,AUC3(j,:),'.-','LineWidth',1,'Color',mante);
+    plot(x,AUC3(j,:),'.:','LineWidth',3,'Color',mante);
 end
 hold off
 figNumber='1DMantel';
@@ -127,10 +127,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC1(j,:),'.:','LineWidth',1,'Color',dcorr/2);
+    plot(x,AUC1(j,:),'.-','LineWidth',3,'Color',dcorr/2);
 end
 for j=21:40
-    plot(x,AUC1(j,:),'.-','LineWidth',1,'Color',dcorr);
+    plot(x,AUC1(j,:),'.:','LineWidth',3,'Color',dcorr);
 end
 hold off
 figNumber='HDDcorr';
@@ -142,10 +142,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC2(j,:),'.:','LineWidth',1,'Color',mcorr/2);
+    plot(x,AUC2(j,:),'.-','LineWidth',3,'Color',mcorr/2);
 end
 for j=21:40
-    plot(x,AUC2(j,:),'.-','LineWidth',1,'Color',mcorr);
+    plot(x,AUC2(j,:),'.:','LineWidth',3,'Color',mcorr);
 end
 hold off
 figNumber='HDMcorr';
@@ -157,10 +157,10 @@ figure
 hold on
 x=1:lim;
 for j=1:20
-    plot(x,AUC3(j,:),'.:','LineWidth',1,'Color',mante/2);
+    plot(x,AUC3(j,:),'.-','LineWidth',3,'Color',mante/2);
 end
 for j=21:40
-    plot(x,AUC3(j,:),'.-','LineWidth',1,'Color',mante);
+    plot(x,AUC3(j,:),'.:','LineWidth',3,'Color',mante);
 end
 hold off
 figNumber='HDMantel';

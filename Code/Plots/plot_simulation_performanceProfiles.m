@@ -25,7 +25,7 @@ cmap(7,:) = [0 0 0];
 dcorr = cmap(1,:);
 mcorr = cmap(2,:);
 mante = cmap(3,:);
-HHG   = [0,0,0];
+HHG   = [0.5,0.5,0.5];
 map1(1,:)=dcorr; map1(5,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
 map1(2,:)=mcorr; map1(6,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
 map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.

@@ -291,6 +291,8 @@ As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in t
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
+\includegraphics[width=1.0\textwidth]{Figures/FigB}
+\includegraphics[width=1.0\textwidth]{Figures/FigC}
 \caption{
 Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic relationship with white noise. Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the pairwise Euclidean distance matrices of $X$ and $Y$. Column 3: The heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the normalized (i.e. doubly centered) distance matrices of $\tilde{A}$ and $\tilde{B}$. Column 4: The heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})$ is the optimal scale for the quadratic relationship. Column 5: The heat map of the entry-wise product of local $A$ and $B$, i.e., $\{(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})\}$ for $i,j=1,\ldots,n$. The matrix sum $\sum_{i,j}(a_{ij}^{k^{*}}-\bar{a}^{k^{*}}) (b_{ij}^{l^{*}}-\bar{b}^{l^{*}})$ equals the optimal local covariance, i.e., the un-normalized \Mgc~statistic $\G^{*}$. }
 \label{fig:A}
@@ -463,6 +465,38 @@ It is clear that \Mgc~outperforms the previous state of the art approaches regar
 From Figure~\ref{fig:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr / \Mcorr in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgc\{\Mantel\} perform similarly as the other two \Mgc~implementations.
 
 In the following sections, unless mentioned otherwise, we concentrate on \Mgc\{\Mcorr\}, because the three different \Mgc~implementations often yield similar numerical results with \Mgc\{\Mcorr\} being more advantageous based on the high-dimensional simulations.
+
+\begin{figure}
+  \centering
+  \begin{tabular}{@{}p{0.5\linewidth}@{\quad}p{0.5\linewidth}@{}}
+    \subfigimg[width=\linewidth]{A}{Figures/Fig1DSlope} &
+    \subfigimg[width=\linewidth]{B}{Figures/FigHDSlope} \\
+  \end{tabular}
+  \caption{This is a trial figure.
+	(A): Slope graph for the mean power in 1D simulations.
+	(B): Slope graph for the mean power in HD simulations.
+	}
+\label{fig:pp2}
+\end{figure}
+
+\begin{figure}
+  \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
+    \subfigimg[width=\linewidth]{A}{Figures/Fig1DDcorr} &
+    \subfigimg[width=\linewidth]{B}{Figures/Fig1DMcorr} &
+    \subfigimg[width=\linewidth]{C}{Figures/Fig1DMantel} \\
+    \subfigimg[width=\linewidth]{D}{Figures/FigHDDcorr} &
+    \subfigimg[width=\linewidth]{E}{Figures/FigHDMcorr} &
+    \subfigimg[width=\linewidth]{F}{Figures/FigHDMantel} 
+  \end{tabular}
+  \caption{This is a trial figure.
+	(A) Dcorr-HHG in 1D
+	(B) Mcorr-HHG in 1D
+	(C) Mantel-HHG in 1D
+	(D) Dcorr-HHG in HD
+	(E) Mcorr-HHG in HD
+	(F) Mantel-HHG in HD}
+\label{figPP33}
+\end{figure}
 
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}

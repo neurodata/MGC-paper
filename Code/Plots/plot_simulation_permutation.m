@@ -19,7 +19,7 @@ cmap(7,:) = [0 0 0];
 dcorr = cmap(1,:);
 mcorr = cmap(2,:);
 mante = cmap(3,:);
-HHG   = [0,0,0];
+HHG   = [0.5,0.5,0.5];
 
 %
 map1(1,:)=dcorr;

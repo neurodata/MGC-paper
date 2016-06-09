@@ -83,6 +83,29 @@ for i=3:total
     print_fig(gcf,F)
 end
 
+load(strcat(pre1,'CorrBrainNoiseSummary.mat'));
+cmap=zeros(3,3);
+ma = [1,0,1];
+cmap(1,:) = ma;
+cmap(2,:) = ma;
+map1=cmap;
+set(groot,'defaultAxesColorOrder',map1);
+
+x=ones(size(p,1),1);
+scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
+ylim([0,0.15]);
+set(gca,'FontSize',16);
+ax=gca;
+
+set(gca,'XTick',[]); % Remove x axis ticks
+ylabel('False Positive Rate','FontSize',16);
+title('False Positive Rates for Brain vs Noise','FontSize',17);
+
+F.fname=strcat(pre2, 'CORR');
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
+
+
 function [str, title]=CorrRealDataName(i)
 str='CorrPermDistTestType';
 switch i

@@ -67,8 +67,8 @@ for i=1:length(seq)
         ylabel('Multiscale Power Map','FontSize',24)
     end
     s2Pos = get(gca,'position');
-        s2Pos(3:4) = [s1Pos(3:4)];
-        set(gca,'position',s2Pos);
+    s2Pos(3:4) = [s1Pos(3:4)];
+    set(gca,'position',s2Pos);
     %title(strcat('Local Testing Powers at w=',num2str(w)),'FontSize',15);
     F.fname=strcat(pre2, figNumber);
     F.wh=[3 2.5]*2;

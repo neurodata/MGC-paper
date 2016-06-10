@@ -1,4 +1,4 @@
-function []=plot_outlierModel(pre1,pre2)
+function []=plot_simulation_outliers(pre1,pre2)
 % Author: Cencheng Shen
 % CorrVisualPlots()
 % CorrVisualPlots(100,2)
@@ -29,7 +29,7 @@ for i=1:length(seq)
     [x, y]=CorrSampleGenerator(0,n,dim,1,w);
     dep=1:ceil(n*w);
     ind=ceil(n*w)+1:n;
-    plot(x(dep,1),y(dep,1),'k.',x(ind,1),y(ind,1),'.','MarkerSize',24);
+    plot(x(dep,1),y(dep,1),'k.',x(ind,1),y(ind,1),'.','MarkerSize',12);
     xlim([-5,10]);
     ylim([-10,5]);
     if i~=1
@@ -39,7 +39,7 @@ for i=1:length(seq)
         ylabel('Example Data','FontSize',24)%,'position',[-200 -0.2],'FontSize',20);
     end
     set(gca,'FontSize',16);
-    title(strcat(num2str(w*100),'% outliers'),'FontSize',30);
+    title(strcat(num2str(100-w*100),'% outliers'),'FontSize',30);
     s1Pos=get(gca,'position');
     F.fname=strcat(pre2, 'OutlierVisual',num2str(i));
     F.wh=[3 2.5]*2;

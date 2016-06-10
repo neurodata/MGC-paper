@@ -56,13 +56,13 @@ for j=1:3
     figure
     hold on
     for i=6:19
-        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',1.5,'Color',map1(j,:));
+        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
-    plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',4,'Color',map1(j,:));
+    plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
-        plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
+        %plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
         ylabel('High-Dimensional','FontSize',24);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
@@ -71,6 +71,7 @@ for j=1:3
     hold off
     %yTickN=[floor(sumP(1,2)*100)/100,1];
     %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
+    set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
     title(str(j,:),'FontSize',24);
     if j==1
     F.fname=strcat(pre2,'1DDcorr');
@@ -106,13 +107,13 @@ for j=1:3
     figure
     hold on
     for i=6:19
-        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',1.5,'Color',map1(j,:));
+        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
-    plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',4,'Color',map1(j,:));
+    plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
-        plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
+        %plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
         ylabel('High-Dimensional','FontSize',24);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
@@ -120,7 +121,7 @@ for j=1:3
     end
     hold off
     %yTickN=[floor(sumP(1,1)*100)/100,1];
-    set(gca,'XTickLabel',strL,'XTick',1:2,'FontSize',18);
+    set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
     %yTickN=[floor(sumP(1,2)*100)/100,1];
     %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
      if j==1

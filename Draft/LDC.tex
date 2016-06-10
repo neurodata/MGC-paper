@@ -20,7 +20,9 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[final,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+\usepackage[nottoc,numbib]{tocbibind}
 % \usepackage{flushend}
+
 
 %better toc
 % \usepackage{tocloft}
@@ -146,8 +148,10 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 % \addtocontents{toc}{\vspace{-3\baselineskip}}
 % \listofchanges[style=list]
 
-% science report: 2500 words
-% science article: 4500 words
+% science lengths:
+% report: 2500 words including captions & refs, 4 figs, 30 refs
+% article: 4500 words including caps & refs, 6 figs, 40 refs
+% http://www.sciencemag.org/authors/science-information-authors
 
 % assuming 20/60/20 for intro/results/discussion, this means
 
@@ -170,7 +174,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 % disc: 72 lines
 
 
-% total: 411, need to remove 50 lines, almost entirely from results.
+% total: 455, need to remove ~100 lines, almost entirely from results.
 
 
 \newpage
@@ -749,6 +753,10 @@ Although our definition of local correlation coefficient is fast to implement, g
 
 %scaling up via FlashX?
 
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+
 \section*{Acknowledgment}
 % \addcontentsline{toc}{section}{Acknowledgment}
 This work was partially supported by 
@@ -1279,7 +1287,5 @@ Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power
 Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with more significant p-values; but the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for \Mgc~based on \Dcorr~or \Mantel~using the same example.
 \end{proof}
 
-\bibliographystyle{alpha}
-\bibliography{references}
 
 \end{document}

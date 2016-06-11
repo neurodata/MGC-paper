@@ -8,7 +8,7 @@ if nargin < 2
 end
 
 %Ind
-n=100;lim=20;
+n=100;lim=20;dim=1;
 for i=1:20
     CorrIndTest(i,n,dim,lim,rep1,rep2); % the output are saved to ../../data/results
 end

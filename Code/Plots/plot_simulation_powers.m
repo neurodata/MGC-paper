@@ -1,4 +1,4 @@
-function []=plot_simulation_powers(pre1,pre2,select)
+function []=plot_simulation_powers(select,pre1,pre2)
 % Used to plot figure 1-8 used in tex. Run like
 
 % total is usually 20.
@@ -6,13 +6,13 @@ function []=plot_simulation_powers(pre1,pre2,select)
 % pre2 specifies the location to save pictures.
 
 if nargin<1
-    pre1='../../Data/Results/'; % The folder to locate data
+    select=1;
 end
 if nargin<2
-    pre2='../../Draft/Figures/Fig'; % The folder to save figures
+    pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<3
-    select=1;
+    pre2='../../Draft/Figures/Fig'; % The folder to save figures
 end
 total=20;
 %% Set colors
@@ -74,11 +74,11 @@ xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.05, 0.87, .05, .05]; %Legend Position
+lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC\{dcorr\}','HHG','dcorr','Location',lgdPosition);
+    h=legend('MGC_{D}','HHG','Dcorr','Location',lgdPosition);
 else
-    h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','HHG','dcorr','mcorr','Mantel','Location',lgdPosition);
+    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -125,11 +125,11 @@ xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.05, 0.87, .05, .05]; %Legend Position
+lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC\{mcorr\}','HHG','mcorr','Location',lgdPosition);
+    h=legend('MGC_{M}','HHG','Mcorr','Location',lgdPosition);
 else
-    h=legend('MGC\{dcorr\}','MGC\{mcorr\}','MGC\{Mantel\}','HHG','dcorr','mcorr','Mantel','Location',lgdPosition);
+    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

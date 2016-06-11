@@ -77,7 +77,7 @@ for j=1:3
         plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
         plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
         xlim([1,2.2]);
-        set(gca,'XTickLabel',['Global';'Local ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
+        set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
     end
     hold off
     if j==1
@@ -142,7 +142,7 @@ for j=1:3
         plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
         plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
         xlim([1,2.2]);
-        set(gca,'XTickLabel',['Global';'Local ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
+        set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
     end
     hold off
     %yTickN=[floor(sumP(1,2)*100)/100,1];
@@ -186,7 +186,7 @@ x=1:2;
 
 sumP=zeros(4,2); sumP(1,1)=AUC(4);sumP(1,2)=AUC(1);sumP(2,1)=AUC(5);sumP(2,2)=AUC(2);sumP(3,1)=AUC(6);sumP(3,2)=AUC(3);sumP(4,1)=AUC(4);sumP(4,2)=AUC(4);
 plot(x,sumP(1,:),'.-',x,sumP(2,:),'.-',x,sumP(3,:),'.--',x,sumP(4,:),'.--','LineWidth',3);
-legend('dcorr','mcorr','Mantel','HHG','Location','NorthWest');
+legend('Dcorr','Mcorr','Mantel','HHG','Location','NorthWest');
 legend boxoff
 % ln = findobj('type','line');
 % set(ln,'marker','.','markers',14,'markerfa','w')

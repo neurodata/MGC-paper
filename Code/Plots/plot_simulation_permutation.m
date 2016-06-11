@@ -41,7 +41,7 @@ else
 end
 p1=powerP(ind,:);
 plot(x,p1(1,:),'.-',x,p1(3,:),'.-',x,p1(2,:),'.:',x,p1(4,:),'.--','LineWidth',2);
-legend('Estimated MGC', 'True MGC','Global mcorr','HHG','Location','SouthWest');
+legend('Estimated MGC', 'True MGC','Mcorr','HHG','Location','SouthWest');
 set(gca,'FontSize',14);
 legend boxoff
 xlabel('Function Type','FontSize',15);

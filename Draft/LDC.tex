@@ -276,28 +276,15 @@ Kendall  \cite{KendallBook} pointed out that this is a special case of something
 Specifically, we can define $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their squared distance), and we can define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. The generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
-\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }
- % /{\sigma_{a}^2 \sigma_b^2} 
-% \frac{\sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b})}
-% {\sqrt{\sum_{i,j=1}^n  (a_{ij}-\bar{a})^{2} \sum_{i,j=1}^n (b_{ij}-\bar{b})^{2}}}
-, 
-\end{equation}
-where $z$ is the product of standard deviations, that is $z=std(a) std(b)$, and $\bar{a}$ and $\bar{b}$ denote the sample means.
-For $a_{ij}, b_{ij}$ that are not of zero-mean, the generalized correlation coefficient is of the form
-\begin{equation}
-\label{generalCoef}
 \G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }, 
 \end{equation}
-where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$, and $z=std(a)std(b)$.
-% where $\bar{a}$ and $\bar{b}$ denote the sample means of $a_{ij}$ and $b_{ij}$
-% Equation~\ref{generalCoef} represents a generalized correlation coefficient, which characterizes most correlation coefficients since then.  
-% For example, 
+where $z$ is the product of standard deviations, that is $z=\sigma(a) \sigma(b)$, and $\bar{a}$ and $\bar{b}$ denote the sample means of all $\{a_{ij}\}$ and $\{b_{ij}\}$
 In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.    
 $\G$ has many well known special cases, including Pearson, Spearman, and Kendall's (see Kendall 1970 for more details). 
 % (Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
  % set $a_{ij}$ to be $R(\mbx_i)-R(\mbx_j)$ and $sign(\mbx_i-\mbx_j)$ respectively \cite{KendallBook}; 
-Three special cases of $\G$ are particularly popular for independence testing.  First, the Mantel coefficient \cite{Mantel1967}, a very popular method in biology and ecology, 
-defines $a_{ij}=||\mbx_i-\mbx_j||_{2} - \bar{a}$, where $\bar{a}$ is the mean of all $\{a_{ij}\}$'s, and similarly for $b_{ij}$ 
+Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel coefficient \cite{Mantel1967}, a very popular method in biology and ecology, 
+defines $a_{ij}=||\mbx_i-\mbx_j||_{2}$ 
 (Figure \ref{f:schematic}B). 
 \Mantel, however, does not have any theoretical support for being a generally consistent test. 
 Szekely et al. \cite{SzekelyRizzoBakirov2007} extended Mantel's approach, rather than merely subtracting the overall mean, they also subtract the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments
@@ -327,17 +314,11 @@ we define the rank-truncated distances:
     \end{cases}
 \end{equation}
 which we can then use to define  a \emph{local} variant of any global generalized correlation coefficient:
-% Then for any general correlation coefficient $\G$ in the form of Equation~\ref{generalCoef}, we define its \emph{local} variants by
 \begin{equation}
 \label{localCoef}
 \G_{kl}=\dfrac{1}{z_{kl}} \textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l}),
-% \G_{kl}=\frac{\sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})}{\sqrt{\sum_{i,j=1}^n  (a_{ij}^{k}-\bar{a}^{k})^2 \sum_{i,j=1}^n (b_{ij}^{l}-\bar{b}^{l})^2}},
 \end{equation}
-% for $k=1,\ldots,n$, %$\max(R(a_{ij}))$, 
-% $l=1,\ldots,n$, %$\max(R(b_{ij}))$
-%  where
-where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the truncated means, and $z_{kl}$ is the product of the truncated standard deviations. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$.
-% where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the sample means of $a_{ij}^{k}$ and $b_{ij}^{l}$, respectively. 
+where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the truncated means, and $z_{kl}$ is the product of the truncated standard deviations $\sigma(a)^{k}\sigma(b)^{l}$. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more details for \Mgc are in Appendix \ref{appen:mgc}).
 As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. 
 \Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$ (see Pseudocode \ref{alg1} in Appendix \ref{appen:algorithms} for details on how to compute \Mgc~for a given neighborhood size).
 
@@ -388,7 +369,7 @@ The formal testing scenario is as follows: we observe $n$ pairs of observations,
 % where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y})$. 
 
 The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false.  As defined above, a test is consistent if its power converges to $1$ as sample size increases.  
-Let $\G_t$ denote a global generalized correlation coefficient based test, that is, $t$ might indicate Pearson, Mantel, \Dcorr, or \Mcorr), and let $\beta(\G_t^*)$ denote the power of the corresponding multiscale version.  
+Let $\G_t$ denote a global generalized correlation coefficient based test, that is, $t$ might indicate Pearson, \Mantel, \Dcorr, or \Mcorr), and let $\beta(\G_t^*)$ denote the power of the corresponding multiscale version.  
 Recalling from the work Szekeley et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
  % in different scenarios, leads us to our first theorem.
 % \cs{replaced with the above: A consistent test statistic has power $1$ asymptotically, i.e., the test statistic under the alternative is asymptotically larger than the statistic under the null. Denote the type 1 error level as $\alpha$, the testing power of \Mgc~as $\beta_{\alpha}(\G^{*})$, and the power of the respective global test as $\beta_{\alpha}(\G)$. Assuming the optimal scale is estimated by the testing power, we have the following theorem regarding the consistency of \Mgc, whose proof is provided in Appendix \ref{appen:proofs}:}
@@ -901,7 +882,17 @@ The testing power heat map of local correlations for the $1$-dimensional simulat
 \section{Dependence Measures}
 \label{appen:methods}
 
-In this section, we review distance correlation, modified distance correlation, the \Mantel~test, and the \Hhg~statistic in order. Note that for \Dcorr~/ \Mcorr, we implement them in a slightly different but equivalent way from the original definition.
+In this section, we review the \Mantel~test, distance correlation, modified distance correlation, the \Mgc~statistic, and the \Hhg~statistic in order. Note that for \Dcorr~/ \Mcorr, we implement them in a slightly different but equivalent way from the original definition.
+
+\subsection{(Global) \Mantel~Test}
+\label{appen:mantel}
+Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, the \Mantel~coefficient \cite{Mantel1967} is defined as 
+\begin{equation}
+\Mantel(X,Y)=\frac{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})(b_{ij}-\bar{b})}{\sqrt{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})^2 \sum_{i \neq j}^{n}(b_{ij}-\bar{b})^2}},
+\end{equation}
+where $A=\tilde{A}$, $B=\tilde{B}$, $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$. Then the \Mantel~test is carried out by the permutation test.
+
+Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{f:nD} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgc~by \Mantel~achieves comparable performances as other variants of \Mgc, which implies that \Mgc\{\Mantel\} may be consistent against most, if not all dependent alternatives.
 
 \subsection{(Global) Distance Correlation}
 \label{appen:dcorr}
@@ -920,7 +911,6 @@ and the sample distance correlation equals
 \label{dcorrEqu}
 \Dcorr(X,Y)=\frac{dcov(X)}{\sqrt{dvar(X) \cdot dvar(Y)}}.
 \end{equation}
-To express \Dcorr by the general correlation coefficient in Equation~\ref{generalCoef}, $a_{ij}$ and $b_{ij}$ are the respective matrix entry of $A$ and $B$, and the sample means $\bar{a}, \bar{b}$ are automatically $0$. The local version of \Dcorr follows by Equation~\ref{localCoef}.
 
 It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\Dcorr(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variable $\mb{x}$ and $\mb{y}$. The population distance correlation is defined by the characteristic functions, which is $0$ if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is a consistent statistic for testing independence, i.e., the testing power $\beta_{\alpha}(\Dcorr(X,Y))$ converges to $1$ as $n$ increases, at any type $1$ error level $\alpha$. Note that all of $dcov, dvar, \Dcorr$ are always non-negative; and the consistency result assumes finite second moments of $\mb{x}$ and $\mb{y}$, which holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. Also note that the \Dcorr~above is actually the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
@@ -957,19 +947,49 @@ It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estima
 
 Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr, which does not alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for the testing purpose. 
 
-In accordance with Equation~\ref{generalCoef}, our version of global \Mcorr sets $a_{ij}=b_{ij}=0$ when $i=j$; otherwise $a_{ij}$ equals the respective matrix entry of $H\tilde{A}-\tilde{A}/n$, and $b_{ij}$ equals the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr follows by Equation~\ref{localCoef}. This is the local correlation we use for \Mgc throughout the main paper.
-
 %Also note that when there exists repeating points, it is necessary to set $a_{ij}=a_{jj}$ for repeating points during global/local mcorr computation, or exclude repeating observation before-hand, otherwise the diagonal adjustment of mcorr may lose its effect for adjusting high-dimensional bias.
 
-\subsection{(Global) \Mantel~Test}
-\label{appen:mantel}
-Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, the \Mantel~coefficient \cite{Mantel1967} is defined as 
+\subsection{Multiscale Graph Correlations (\Mgc)}
+\label{appen:mgc}
+The generalized correlation coefficient can then be written:
 \begin{equation}
-\Mantel(X,Y)=\frac{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})(b_{ij}-\bar{b})}{\sqrt{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})^2 \sum_{i \neq j}^{n}(b_{ij}-\bar{b})^2}},
+\label{generalCoef}
+\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }, 
 \end{equation}
-where $A=\tilde{A}$, $B=\tilde{B}$, $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$. In terms of Equation~\ref{generalCoef}, \Mantel lets $a_{ij}$ and $b_{ij}$ be the entries of $\tilde{A}$ and $\tilde{B}$ directly, and excludes $a_{ii}$ and $b_{ii}$ in the sample means because they are always $0$. Then the \Mantel~test is carried out by the permutation test.
+where $z$ is the product of standard deviations, that is $z=\sigma(a) \sigma(b)$, and $\bar{a}$ and $\bar{b}$ denote the sample means.
 
-Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{f:nD} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgc~by \Mantel~achieves comparable performances as other variants of \Mgc, which implies that \Mgc\{\Mantel\} may be consistent against most, if not all dependent alternatives.
+Our Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with  graph distances, in an effort to efficiently uncover local relationships and optimize the independence test.  Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$, and the minimal rank is used for ties.  Defining $R(b_{ij})$ equivalently for the \mby's, for any neighborhood size $k$ around each \mbx~and any neighborhood size $l$ around each \mby, 
+we define the rank-truncated distances:
+\begin{equation}
+\label{localCoef2}
+    a_{ij}^k=
+    \begin{cases}
+      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\
+      0, & \text{otherwise};
+    \end{cases} \qquad \qquad
+    b_{ij}^l=
+    \begin{cases}
+      b_{ij}, & \text{if } R(b_{ij}) \leq l, \\
+      0, & \text{otherwise};
+    \end{cases}
+\end{equation}
+which we can then use to define  a \emph{local} variant of any global generalized correlation coefficient:
+\begin{equation}
+\label{localCoef}
+\G_{kl}=\dfrac{1}{z_{kl}} \textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l}),
+\end{equation}
+where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the truncated means, and $z_{kl}$ is the product of the truncated standard deviations $\sigma(a)^{k}\sigma(b)^{l}$. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$.
+tba: a maximum of ... local correlation rather than $n^2$
+tba: re-define mean and std properly and unbiased.
+tba: origianl dcorr/mcorr centering and our version centering
+
+For \Mantel, it sets $a_{ij}$ and $b_{ij}$ be the entries of $\tilde{A}$ and $\tilde{B}$ directly, and excludes $a_{ii}$ and $b_{ii}$ in the sample means because they are always $0$.
+
+For \Dcorr, $a_{ij}$ and $b_{ij}$ are the respective matrix entry of $A$ and $B$, and the sample means $\bar{a}, \bar{b}$ are automatically $0$. 
+
+In accordance with Equation~\ref{generalCoef}, our version of global \Mcorr sets $a_{ij}=b_{ij}=0$ when $i=j$; otherwise $a_{ij}$ equals the respective matrix entry of $H\tilde{A}-\tilde{A}/n$, and $b_{ij}$ equals the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr follows by Equation~\ref{localCoef}. This is the local correlation we use for \Mgc throughout the main paper.
+
+The optimal scale exists, may not be unique, and is distribution dependent.
 
 \subsection{Heller, Heller \& Gorfine (\Hhg)}
 \label{appen:hhg}

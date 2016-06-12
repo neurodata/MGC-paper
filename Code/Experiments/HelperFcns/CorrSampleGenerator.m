@@ -48,24 +48,24 @@ u=mix;
 
 switch type % In total 20 types of dependency + the type 0 outlier model
     case 0 %Test Outlier Model
-%         sigma=eye(2);
-%         sigma(1,2)=0.9;sigma(2,1)=0.9;
-%         x=mvnrnd(zeros(n,2),sigma);
-%         y=repmat((u>0),1,d).*(x(:,1)) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-%         x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         if dependent==0
-%             x=mvnrnd(zeros(n,2),sigma);
-%             x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         end
         sigma=eye(2);
         sigma(1,2)=0.9;sigma(2,1)=0.9;
         x=mvnrnd(zeros(n,2),sigma);
-        y=repmat((u>0),1,d).*(x(:,1).^2) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-        x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+        y=repmat((u>0),1,d).*(x(:,1)) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
+        x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         if dependent==0
             x=mvnrnd(zeros(n,2),sigma);
-            x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+            x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
         end
+%         sigma=eye(2);
+%         sigma(1,2)=0.9;sigma(2,1)=0.9;
+%         x=mvnrnd(zeros(n,2),sigma);
+%         y=repmat((u>0),1,d).*(x(:,1).^2) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
+%         x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+%         if dependent==0
+%             x=mvnrnd(zeros(n,2),sigma);
+%             x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+%         end
     case 1 %Linear
         y=xA+1*noise*eps;
     case 2 %Cubic

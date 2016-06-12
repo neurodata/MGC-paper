@@ -11,7 +11,7 @@ end
 %     pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 % end
 option=1;
-type=6;
+type=8;
 n=100;
 dim=1;
 noise=1;
@@ -71,7 +71,7 @@ set(gca,'YTick',[]); % Remove y axis ticks
 ylabel('$$\tilde{B}$$','FontSize',25,'Rotation',0,'position',[-5,50],'interpreter','latex');
 
 % A3: heatmaps of the doubly centered distance matrices
-for option=1:3
+for option=1:1
     RC=disToRanks(C);
     RD=disToRanks(D);
     if option==3;

@@ -31,7 +31,7 @@ map1(2,:)=mcorr; map1(6,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
 map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
 set(groot,'defaultAxesColorOrder',map1);
-strL={'Global';'Local'};
+strL=['Global';'Local '];
 average=0;
 
 
@@ -51,7 +51,7 @@ for j=1:total
 end
 
 x=1:2;
-str={'Dcorr';'Mcorr';'Mantel'};
+str=['Dcorr ';'Mcorr ';'Mantel'];
 for j=1:3
     figure
     hold on

@@ -73,12 +73,12 @@ for j=1:3
     set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
     title(str(j,:),'FontSize',24);
     
-    if j==3
-        plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
-        plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
-        xlim([1,2.2]);
-        set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
-    end
+%     if j==3
+%         plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
+%         plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
+%         xlim([1,2.2]);
+%         set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
+%     end
     hold off
     if j==1
     F.fname=strcat(pre2,'1DDcorr');
@@ -93,15 +93,18 @@ for j=1:3
     print_fig(gcf,F)
 end
 
-% figure
-% hold on
-% plot(1.2*oness(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
-% plot(0,mean(AUC(7,1:19)),'*','LineWidth',5,'Color',map1(4,:));
-% ylim([0 1])
-% hold off
-% set(gca,'XTickLabel',['HHG'],'XTick',0,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
-% set(gca,'YTick',[]); % Remove y axis ticks
-% set(gca,'ycolor',[1 1 1])
+figure
+hold on
+plot(x,AUC(7,6:19),'.:','LineWidth',2,'Color',map1(4,:));
+plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',10,'Color',map1(4,:));
+ylim([0 1])
+hold off
+set(gca,'XTickLabel',['HHG'],'XTick',0,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
+set(gca,'YTick',[]); % Remove y axis ticks
+set(gca,'ycolor',[1 1 1])
+F.fname=strcat(pre2,'1DAll');
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
 
 
 AUC=zeros(8,20);
@@ -138,12 +141,12 @@ for j=1:3
     end
     %yTickN=[floor(sumP(1,1)*100)/100,1];
     set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
-    if j==3
-        plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
-        plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
-        xlim([1,2.2]);
-        set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
-    end
+%     if j==3
+%         plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
+%         plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
+%         xlim([1,2.2]);
+%         set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
+%     end
     hold off
     %yTickN=[floor(sumP(1,2)*100)/100,1];
     %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
@@ -158,93 +161,4 @@ for j=1:3
     end
     F.wh=[3 2.5]*2;
     print_fig(gcf,F)
-end
-
-
-%% %performance profile
-if average~=0
-figNumber='1DSlope';
-figure
-set(groot,'defaultAxesColorOrder',map1)
-a=0;b=1;
-AUC=zeros(7,1);
-%load data
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-    load(filename)
-    mm=1;%max([mean(power1), mean(power2),mean(power3),mean(power4),mean(power5),mean(power6),mean(power7)]);
-    AUC(1)=AUC(1)+mean(power1)/mm;
-    AUC(2)=AUC(2)+mean(power2)/mm;
-    AUC(3)=AUC(3)+mean(power3)/mm;
-    AUC(4)=AUC(4)+mean(power4)/mm;
-    AUC(5)=AUC(5)+mean(power5)/mm;
-    AUC(6)=AUC(6)+mean(power6)/mm;
-    AUC(7)=AUC(7)+mean(power7)/mm;
-end
-AUC=AUC./total;
-x=1:2;
-
-sumP=zeros(4,2); sumP(1,1)=AUC(4);sumP(1,2)=AUC(1);sumP(2,1)=AUC(5);sumP(2,2)=AUC(2);sumP(3,1)=AUC(6);sumP(3,2)=AUC(3);sumP(4,1)=AUC(4);sumP(4,2)=AUC(4);
-plot(x,sumP(1,:),'.-',x,sumP(2,:),'.-',x,sumP(3,:),'.--',x,sumP(4,:),'.--','LineWidth',3);
-legend('Dcorr','Mcorr','Mantel','HHG','Location','NorthWest');
-legend boxoff
-% ln = findobj('type','line');
-% set(ln,'marker','.','markers',14,'markerfa','w')
-% text(x(:,1),x(:,2),'1')
-%ylabel('power');
-ylim([0,1]);
-yTickN=[floor(sumP(1,1)*100)/100,1];
-set(gca,'XTickLabel',strL,'XTick',1:2,'FontSize',16,'YTick',yTickN);
-yTickN=[floor(sumP(1,2)*100)/100,1];
-axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',16);
-set(gca,'YTick',yTickN);
-%axes( 'YTick',yTickN,'YAxisLocation', 'right')
-title('Mean Powers for 1-Dimensional Simulations');
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
-
-%%%performance profile AUC for n
-figNumber='HDSlope';
-figure
-set(groot,'defaultAxesColorOrder',map1)
-a=0;b=1;
-AUC=zeros(7,1);
-%load data
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
-    load(filename)
-    mm=1;%max([mean(power1), mean(power2),mean(power3),mean(power4),mean(power5),mean(power6),mean(power7)]);
-    AUC(1)=AUC(1)+mean(power1)/mm;
-    AUC(2)=AUC(2)+mean(power2)/mm;
-    AUC(3)=AUC(3)+mean(power3)/mm;
-    AUC(4)=AUC(4)+mean(power4)/mm;
-    AUC(5)=AUC(5)+mean(power5)/mm;
-    AUC(6)=AUC(6)+mean(power6)/mm;
-    AUC(7)=AUC(7)+mean(power7)/mm;
-end
-AUC=AUC./total;
-x=1:2;
-
-sumP=zeros(4,2); sumP(1,1)=AUC(4);sumP(1,2)=AUC(1);sumP(2,1)=AUC(5);sumP(2,2)=AUC(2);sumP(3,1)=AUC(6);sumP(3,2)=AUC(3);sumP(4,1)=AUC(4);sumP(4,2)=AUC(4);
-plot(x,sumP(1,:),'.-',x,sumP(2,:),'.-',x,sumP(3,:),'.--',x,sumP(4,:),'.--','LineWidth',3);
-legend('dcorr','mcorr','Mantel','HHG','Location','NorthWest');
-legend boxoff
-% ln = findobj('type','line');
-% set(ln,'marker','.','markers',14,'markerfa','w')
-% text(x(:,1),x(:,2),'1')
-%ylabel('power');
-ylim([0,1]);
-yTickN=[floor(sumP(3,1)*100)/100,floor(sumP(2,1)*100)/100,1];
-set(gca,'XTickLabel',strL,'XTick',1:2,'FontSize',16,'YTick',yTickN);
-yTickN=[floor(sumP(3,2)*100)/100,floor(sumP(2,2)*100)/100,1];
-axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',16);
-set(gca,'YTick',yTickN);
-%axes( 'YTick',yTickN,'YAxisLocation', 'right')
-title('Mean Powers for High-Dimensional Simulations');
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
 end

@@ -316,9 +316,9 @@ which we can then use to define a \emph{local} variant of any global generalized
 \label{localCoef}
 \G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})},
 \end{equation}
-where $z_{kl}=n^2 \sigma(a^{k})\sigma(b^{l})$, and $\bar{a}^{k} / \sigma(a^{k}) / \bar{b}^{l} / \sigma(b^{l})$ are the means and standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
+where $z_{kl}=n^2 \sigma(a^{k})\sigma(b^{l})$, and $\bar{a}^{k}, \sigma(a^{k}), \bar{b}^{l}, \sigma(b^{l})$ are the means and standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
 As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. 
-\Mgc~computes all $n^2$ local statistics, $\{\G_{kl}\}$ (see Pseudocode \ref{alg1} in Appendix \ref{appen:algorithms} for details on how to compute \Mgc~for a given neighborhood size).
+\Mgc~requires the computation of all $n^2$ local statistics, $\{\G_{kl}\}$, among which the best local statistic is used for testing (see Pseudocode \ref{alg1} in Appendix \ref{appen:algorithms} for details on how to compute \Mgc~for a given neighborhood size).
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigA}
@@ -390,7 +390,8 @@ The results of this section therefore demonstrate that \Mgc~is a consistent test
 
 \subsection{Finite Sample Simulation Experiments}
 
-\jv{we haven't defined \mgcd, \mgcm, \mgcp up to this point. I have changed figure legend to this though.}
+From this section onwards, we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
+\jv{we should defined \Mgcd, \Mgcm, \Mgcp at this point, which I added above; and changed figure legend for this.}
 
 Based on the previous section, we understand \Mgcd~and \Mgcm~are consistent tests in a wide variety of settings (all finite dimensional joint distributions with bounded variance, and those whose dimension increases, respectively).  But, our theoretical results do not shed light on the finite sample performance of our tests.
 % 
@@ -404,7 +405,7 @@ to previously proposed global tests.
  % To better illustrate the properties of local correlations, two different \Mgc~statistics are used in the simulations: Mantel and dcorr  as the respective global correlation; and the benchmarks are dcorr, \Mcorr\, Mantel, and \Hhg.  
  % Detailed algorithm and evaluation procedure are provided in Appendix \ref{appen:tests}.
 
-To do so, we consider  $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several addition settings.  They include: 
+To do so, we consider $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several addition settings.  They include: 
 linear and nearly linear  (type 1-5), 
 polynomial   (type 6-12), 
 trigonometric (type 13-17), 
@@ -450,7 +451,7 @@ Note that for all dependencies, the dimensionality of \mbx~is increasing, but th
 Figure~\ref{f:nD} shows power versus dimensionality of \mbx~
 (see Methods for details).  
 % The performance profiles are provided in Figure~\ref{fig:pp}(C)(D): Figure~\ref{fig:pp}(C) draws the performance profiles of all methods at a fixed dimension determined by a power threshold; and Figure~\ref{fig:pp}(D) plots the area under curve of the performance profiles against the power threshold.
-For these high dimensional settings, we already know that \Mcorr~will outperform \Dcorr; and since \Mantel~is also unnormalized for high-dimensions, we also expect \Mcorr~will outperform it.  Therefore, we only show \Mgcm, \Mcorr, and \Hhg~(though see Figure \ref{??} in Appendix \ref{appen:function} to see all algorithm performance).
+For these high dimensional settings, we already know that \Mcorr~will outperform \Dcorr; and since \Mantel~is also unnormalized for high-dimensions, we also expect \Mcorr~will outperform it.  Therefore, we only show \Mgcm, \Mcorr, and \Hhg~(though see Figure \ref{f:nDAll} in Appendix \ref{appen:function} for all algorithm performance).
 In the high-dimensional settings, the advantage of \Mgc~over its global counterparts is even more stark. For all $20$ settings, for essentially all sample sizes, \Mgc~significantly outperforms both \Hhg~and \Mcorr.
 
 % Like the $1$-dimensional scenario, \Mgc~either equals the corresponding global correlation (for type 1-5), or is significantly better (type 6-19) in testing powers due to its capability to better handle nonlinearity and high-dimensionality at the same time. In particular, \Mgc\{\Mcorr\} enjoys a significant advantage over all global benchmarks, since \Mcorr~is more suitable for high-dimensional testing; and the performance profiles of \Mgc~clearly reflect its overall superiority. 
@@ -567,7 +568,7 @@ Furthermore, \Mgcm~provides useful information regarding the fraction of outlier
     \subfigimg[width=\linewidth]{}{Figures/FigOutlierPower2} &
     \subfigimg[width=\linewidth]{}{Figures/FigOutlierPower3} 
   \end{tabular}
-  \caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 30\%, 50\%, and 70\%  outliers (depicted across the three columns).
+  \caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 70\%, 50\%, and 30\%  outliers (depicted across the three columns).
   Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps at critical level $\alpha=0.05$.  It is evident that 
  %  samples under the outlier model in the main text, with different fractions of outliers in the three columns.  The bottom row shows the 
 	% (A) Scatter plot of samples $(X,Y)$ under the outlier model with probability $w=0.3$. Black points are dependent data, while the gray points are independent outliers.
@@ -950,27 +951,27 @@ Similar to the alternative implementation of \Dcorr, we can also use singly cent
 
 \subsection{Multiscale Graph Correlations (\Mgc)}
 \label{appen:mgc}
-Let us first repeat the generalized correlation coefficient:
+Let us first recap the definition of generalized correlation coefficient:
 \begin{equation}
 \label{generalCoef}
 \G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }, 
 \end{equation}
 where $z=n^2 \sigma(a) \sigma(b)$.
 
-For any general correlation coefficient, after sorting the distance matrices column-wise as in Equation~\ref{localCoef2}, the local correlations can be directly implemented by plugging in the respective $a_{ij}$ and $b_{ij}$:
+After sorting the distance matrices column-wise as in Equation~\ref{localCoef2}, the local correlations can be directly implemented by plugging in the respective $a_{ij}$ and $b_{ij}$ from a generalized correlation coefficient:
 \begin{equation}
 \label{localCoef}
 \G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})},
 \end{equation}
-where $z_{kl}=n^2\sigma(a)^{k}\sigma(b)^{l}$. Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating data. Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique.
+where $z_{kl}=n^2\sigma(a^{k})\sigma(b^{l})$. Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating data. Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique.
 
-\Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~merely modifies the matrix entries of $A$ and $B$ accordingly. Then their local correlations follows by Equation~\ref{localCoef}.
+\Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. For all three global correlations, the local correlations follows by Equation~\ref{localCoef}.
 
-As discussed already, our version of \Mgcm~is based on single centering throughout: we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr~follows by Equation~\ref{localCoef}, which is used for our \Mgc~in the main paper.
+As discussed already, our version of \Mgcm~is based on single centering throughout: we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr~follows by Equation~\ref{localCoef}.
 
 Note that among all local correlations, it suffices to exclude $\G_{1l}$ and $\G_{k1}$ for testing: since $\G_{1l}=\G_{k1}=\G_{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose. Also note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average / max ranks.
 
-Another technical detail worth mentioning: in our definition of $\bar{a}^{k} \ \sigma(a)^{k} \ \bar{b}^{l} \ \sigma(b)^{l}$, they are computed from all entries of $a_{ij}^k$ and $b_{ij}^l$, e.g., $\bar{a}^{k}$ equals $\dfrac{1}{n^2} \sum_{i,j=1}^{n} a_{ij}^k$. Alternatively, one may exclude the zero entries in computing the means and standard deviations of the truncated comparisons, then properly adjust the scalar factor in $z_{kl}$, i.e., $\bar{a}^{k}=\dfrac{1}{nk} \sum_{i,j=1}^{n} a_{ij}^k$ for \Dcorr, and the scalar factor in $z_{kl}$ should equal the number of non-zeros entries in the numerator rather than $n^2$, etc. This will yield an unbiased local correlation due to the exclusion of known zero entries, but is not used in the main paper for the ease of presentation; and the empirical testing performance are not affected by changing the simple centering.
+Another technical detail worth mentioning: in our definition of $\bar{a}^{k}, \sigma(a)^{k}, \bar{b}^{l}, \sigma(b)^{l}$, they are computed from all entries of $a_{ij}^k$ and $b_{ij}^l$, e.g., $\bar{a}^{k}$ equals $\dfrac{1}{n^2} \sum_{i,j=1}^{n} a_{ij}^k$. Alternatively, one may exclude the zero entries in computing the means and standard deviations of the truncated comparisons, i.e., $\bar{a}^{k}=\dfrac{1}{nk} \sum_{i,j=1}^{n} a_{ij}^k$ for \Dcorr, etc., then properly adjust the scalar factor $n^2$ in $z_{kl}$. But for ease of presentation, we presented the more intuitive definition in the main paper, which is empirically equivalent to the alternative definition for the testing purpose.
 
 \subsection{Heller, Heller \& Gorfine (\Hhg)}
 \label{appen:hhg}

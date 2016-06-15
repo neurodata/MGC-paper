@@ -273,12 +273,12 @@ There are two key insights from the literature that we combine to develop our me
 Interpoint pairwise comparison matrices \cite{Maa83}, have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895}.  
 % Pearson's computes the sample covariance and normalized by the product of the sample standard deviations.
 Kendall  \cite{KendallBook} pointed out that this is a special case of something called a  ``generalized correlation coefficient''.
-Specifically, we can define $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and we can define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. The generalized correlation coefficient can then be written:
+Specifically, we can define $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and we can define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. Without loss of generality, assuming $a_{ij}$ and $b_{ij}$ are of zero mean, the generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
-\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }, 
+\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}}, 
 \end{equation}
-where $z$ is the product of standard deviations multiplied by the number of entries, that is $z=n^2\sigma(a) \sigma(b)$, and $\bar{a}$ and $\bar{b}$ denote the sample means of all $\{a_{ij}\}$ and $\{b_{ij}\}$.
+where $z$ is the product of standard deviations multiplied by the number of entries, that is $z=n^2\sigma(a) \sigma(b)$. %denote the sample means of all $\{a_{ij}\}$ and $\{b_{ij}\}$.
 In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.    
 $\G$ has many well known special cases, including Pearson, Spearman, and Kendall's (see Kendall 1970 for more details). 
 % (Spearman and Kendall's rank correlations are also special cases of the generalized correlation matrix).
@@ -302,21 +302,21 @@ we define the rank-truncated pairwise comparisons:
 \label{localCoef2}
     a_{ij}^k=
     \begin{cases}
-      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\
-      0, & \text{otherwise};
+      a_{ij}-\bar{a}^{k}, & \text{if } R(a_{ij}) \leq k, \\
+      -\bar{a}^{k}, & \text{otherwise};
     \end{cases} \qquad \qquad
     b_{ij}^l=
     \begin{cases}
-      b_{ij}, & \text{if } R(b_{ij}) \leq l, \\
-      0, & \text{otherwise};
+      b_{ij}-\bar{b}^{l}, & \text{if } R(b_{ij}) \leq l, \\
+      -\bar{b}^{l}, & \text{otherwise};
     \end{cases}
 \end{equation}
-which we can then use to define a \emph{local} variant of any global generalized correlation coefficient:
+where $\bar{a}^{k}$ and $\bar{b}^{l}$ are two mean-adjusting scalars such that $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$. Then we can define a \emph{local} variant of any global generalized correlation coefficient:
 \begin{equation}
 \label{localCoef}
-\G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})},
+\G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
 \end{equation}
-where $z_{kl}=n^2 \sigma(a^{k})\sigma(b^{l})$, and $\bar{a}^{k}, \sigma(a^{k}), \bar{b}^{l}, \sigma(b^{l})$ are the means and standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
+where $z_{kl}=n^2 \sigma(a^{k})\sigma(b^{l})$ with $\sigma(a^{k}), \sigma(b^{l})$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
 As an example, $\G_{kl}$ could be a local Pearson's correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the corresponding global correlation coefficient $\G$. 
 \Mgc~requires the computation of all $n^2$ local statistics, $\{\G_{kl}\}$, among which the best local statistic is used for testing (see Pseudocode \ref{alg1} in Appendix \ref{appen:algorithms} for details on how to compute \Mgc~for a given neighborhood size).
 
@@ -475,13 +475,13 @@ In the following sections, unless mentioned otherwise, we concentrate on \Mgcm, 
 \begin{figure}
   \centering
   \begin{tabular}{@{}p{0.2\linewidth}@{\quad}p{0.2\linewidth}@{\quad}p{0.2\linewidth}@{\quad}p{0.2\linewidth}@{}}
+    \subfigimg[width=\linewidth]{}{Figures/Fig1DMantel} &
     \subfigimg[width=\linewidth]{}{Figures/Fig1DDcorr} &
-    \subfigimg[width=\linewidth]{}{Figures/Fig1DMcorr} &
-		\subfigimg[width=\linewidth]{}{Figures/Fig1DMantel} &
+		\subfigimg[width=\linewidth]{}{Figures/Fig1DMcorr} &
 		\subfigimg[width=\linewidth]{}{Figures/Fig1DAll} \\
+		\subfigimg[width=\linewidth]{}{Figures/FigHDMantel} &
 		\subfigimg[width=\linewidth]{}{Figures/FigHDDcorr} &
 		\subfigimg[width=\linewidth]{}{Figures/FigHDMcorr} &
-		\subfigimg[width=\linewidth]{}{Figures/FigHDMantel} &
 		\subfigimg[width=\linewidth]{}{Figures/FigHDAll} \\
   \end{tabular}
   \caption{This is a trial figure.
@@ -953,31 +953,19 @@ Similar to the alternative implementation of \Dcorr, we can also use singly cent
 
 \subsection{Multiscale Graph Correlations (\Mgc)}
 \label{appen:mgc}
-Let us first recap the definition of generalized correlation coefficient:
-\begin{equation}
-\label{generalCoef}
-\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n (a_{ij}-\bar{a}) (b_{ij}-\bar{b}) }, 
-\end{equation}
-where $z=n^2 \sigma(a) \sigma(b)$.
+For any generalized correlation coefficient, its local correlations can be directly implemented as in Equation~\ref{localCoef}, by plugging in the respective $a_{ij}$ and $b_{ij}$ from Equation~\ref{generalCoef} and sorting the distance matrices column-wise as in Equation~\ref{localCoef2}. 
 
-After sorting the distance matrices column-wise as in Equation~\ref{localCoef2}, the local correlations can be directly implemented by plugging in the respective $a_{ij}$ and $b_{ij}$ from a generalized correlation coefficient:
-\begin{equation}
-\label{localCoef}
-\G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n (a_{ij}^k-\bar{a}^{k}) (b_{ij}^l-\bar{b}^{l})},
-\end{equation}
-where $z_{kl}=n^2\sigma(a^{k})\sigma(b^{l})$. Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating data. Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique.
+In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. As discussed already, our version of \Mgcm~is based on single centering throughout: we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr~follows by Equation~\ref{localCoef}.
 
-\Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. For all three global correlations, the local correlations follows by Equation~\ref{localCoef}.
+Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating data. Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique.
 
-As discussed already, our version of \Mgcm~is based on single centering throughout: we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Then the local version of \Mcorr~follows by Equation~\ref{localCoef}.
+Note that among all local correlations, it suffices to exclude $\G_{1l}$ and $\G_{k1}$ for testing and optimal scale estimation: since $\G_{1l}=\G_{k1}=\G_{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose. Also note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average / max ranks.
 
-Note that among all local correlations, it suffices to exclude $\G_{1l}$ and $\G_{k1}$ for testing: since $\G_{1l}=\G_{k1}=\G_{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose. Also note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average / max ranks.
-
-Another technical detail worth mentioning: in our definition of $\bar{a}^{k}, \sigma(a)^{k}, \bar{b}^{l}, \sigma(b)^{l}$, they are computed from all entries of $a_{ij}^k$ and $b_{ij}^l$, e.g., $\bar{a}^{k}$ equals $\dfrac{1}{n^2} \sum_{i,j=1}^{n} a_{ij}^k$. Alternatively, one may exclude the zero entries in computing the means and standard deviations of the truncated comparisons, i.e., $\bar{a}^{k}=\dfrac{1}{nk} \sum_{i,j=1}^{n} a_{ij}^k$ for \Dcorr, etc., then properly adjust the scalar factor $n^2$ in $z_{kl}$. But for ease of presentation, we presented the more intuitive definition in the main paper, which is empirically equivalent to the alternative definition for the testing purpose.
+%Another technical detail worth mentioning: in our definition of $\bar{a}^{k}, \sigma(a)^{k}, \bar{b}^{l}, \sigma(b)^{l}$, they are computed from all entries of $a_{ij}^k$ and $b_{ij}^l$, e.g., $\bar{a}^{k}$ equals $\dfrac{1}{n^2} \sum_{i,j=1}^{n} a_{ij}^k$. Alternatively, one may exclude the zero entries in computing the means and standard deviations of the truncated comparisons, i.e., $\bar{a}^{k}=\dfrac{1}{nk} \sum_{i,j=1}^{n} a_{ij}^k$ for \Dcorr, etc., then properly adjust the scalar factor $n^2$ in $z_{kl}$. But for ease of presentation, we presented the more intuitive definition in the main paper, which is empirically equivalent to the alternative definition for the testing purpose.
 
 \subsection{Heller, Heller \& Gorfine (\Hhg)}
 \label{appen:hhg}
-The \Hhg~statistic applies Pearson's chi-square test to ranks of distances within each column, and is shown to be better than many global tests including \Dcorr~under common nonlinear dependencies in \cite{GorfineHellerHeller2012, HellerGorfine2013}. Like \Dcorr~and \Mcorr, \Hhg~is distance-based and consistent, but not in the form of the general correlation coefficient; and like our \Mgc, it makes use of the rank information, but in a distinct manner.
+The \Hhg~statistic applies Pearson's chi-square test to ranks of distances within each column, and is shown to be better than many global tests including \Dcorr~under common nonlinear dependencies in \cite{GorfineHellerHeller2012, HellerGorfine2013}. Like \Dcorr~and \Mcorr, \Hhg~is distance-based and consistent, but not in the form of the generalized correlation coefficient; and like our \Mgc, it makes use of the rank information, but in a distinct manner.
 
 Given the Euclidean distance matrices $\tilde{A}=[\tilde{a}_{ij}]$ and $\tilde{B}=[\tilde{b}_{ij}]$, we denote
 \begin{align*}
@@ -1193,57 +1181,54 @@ Note that it is tempting to directly use the optimal scale that minimizes all lo
 \section{Proofs}
 \label{appen:proofs}
 \begin{appThm}
-Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
-
-Therefore, multiscale graph correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
+$\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
+% whenever $\beta(\G)$ does.
+% Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 \end{appThm}
 \begin{proof}
-The power of multiscale graph correlation satisfies
+For any $f_{xy}$, the power of multiscale graph correlation satisfies
 \begin{equation}
-\beta_{\alpha}(\G^{*})=\max\mbx_{k,l}\{\beta_{\alpha}(\G_{kl})\} \geq \beta_{\alpha}(\G).
+\beta(\G^{*})=\max\mbx_{k,l}\{\beta(\G_{kl})\} \geq \beta(\G),
 \end{equation}
-So if $\beta_{\alpha}(\G) \rightarrow 1$, it is immediate that $\beta_{\alpha}(\G^{*}) \rightarrow 1$.
+at any type $1$ error level $\alpha$. So $\beta(\G^{*}) \rightarrow 1$ if $\beta(\G) \rightarrow 1$.
 
-Since \Dcorr~and \Mcorr~are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}, their multiscale graph correlations are also consistent.
+Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent against all alternative of finite second moments, because \Dcorr~and \Mcorr~are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}.
 \end{proof}
 
 \begin{appThm}
-Suppose $\mb{x}$ is linearly dependent of $\mb{y}$. Then for any $n$ and $\alpha$ it always holds that
+\label{t:linear}
+If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
 \begin{equation}
-\beta_{\alpha}(\G^{*}) = \beta_{\alpha}(\G).
+\beta(\G^{nn}) = \beta(\G^{*}) = \beta(\G).
 \end{equation}
 
-Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
+Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
+
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G_{kl}$ is always no less than the p-value of $\G$ for all $k,l$.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G_{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence.
 
 Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
 \begin{equation}
 1=\G(X, Y) \geq \G(X, YQ)
 \end{equation}
-for any permutation matrix $Q$, where the equality holds if and only if $X$ is a scalar multiple of $YQ$. It follows that the p-value of $\G$ is $\frac{|\Omega|}{n!}$, where $|\Omega|$ is the cardinality of 
-\begin{align*}
-\Omega &=\{Q, X \mbox{ is a scalar multiple of }YQ\} \\
-&\subset \{\mbox{all possible permutation matrices }Q\}. 
-\end{align*}
-Since the identity matrix is an element of $\Omega$, the p-value is at least $\frac{1}{n!}$.
+for any permutation matrix $Q$, where the equality holds if and only if $X$ is a scalar multiple of $YQ$. It follows that the p-value of $\G$ is $0$, which is at the minimal. 
 
-Clearly the p-value of $\G$ equals $\frac{|\Omega|}{n!}$, while the p-value of $\G_{kl}$ is at least $\frac{|\Omega|}{n!}$ for any $k,l$, because there may exist other permutation matrices $Q \notin \Omega$ such that $\G_{kl}(X,Y) \leq \G_{kl}(X,YQ)$. Thus the p-value of $\G_{kl}$ is always bounded below by the p-value of $\G$.
-
-Therefore the global correlation is the optimal choice for \Mgc~under linear dependency. Note that this theorem holds for \Mgc~based on any of \Dcorr~/ \Mcorr~/ \Mantel.
+Therefore the p-value of $\G_{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency.
 \end{proof}
 
+
 \begin{appThm}
-There exists $f_{xy}$, $n$ and $\alpha$ such that 
+There exists $f_{xy}$ and $n$ such that 
 \begin{equation}
-\beta_{\alpha}(\G^{*}) > \beta_{\alpha}(\G).
+\beta(\G^{*}) > \beta(\G).
 \end{equation}
 
-Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
+Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
 \end{appThm}
+
 \begin{proof}
-We give a simple discrete example of $f_{xy}$ at $n=7$, such that the p-value of a local correlation is strictly lower than the p-value of the global correlation. %This is equivalent to say the permutation test power of \Mgc~is higher than the power of the global correlation at an appropriate type $1$ error level $\alpha$.
+We give a simple discrete example of $f_{xy}$ at $n=7$, such that the p-value of \Mgcm~is strictly lower than the p-value of \Mcorr. 
 
 Suppose under the alternative, each pair of observation $(x,y)$ is sampled as follows:
 \begin{align*} 
@@ -1252,12 +1237,36 @@ y &= \mb{x}^2,
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-At $n=7$, we can directly calculate $\G_{kl}(X, Y)$ and $\{\G_{kl}(X, YQ)\}$ for all permutation matrices $Q$. Take \Mcorr~as an example, the p-value of global \Mcorr~is $\frac{151}{210}$, while $\G_{kl}(X, Y)=\frac{17}{70}$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. 
+At $n=7$, we can directly calculate $\G_{kl}(X, Y)$ and $\{\G_{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210}$, while $\G_{kl}(X, Y)=\frac{17}{70}$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. 
 
-Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails. 
+Then by choosing $\alpha=0.25$, \Mgcm~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgcm~successfully identifies the dependency in this example while global \Mcorr~fails. 
 
-Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with more significant p-values; but the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for \Mgc~based on \Dcorr~or \Mantel~using the same example.
+Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with more significant p-values; but the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for \Mgcd~and \Mgcp~using the same example.
 \end{proof}
+
+%\begin{appThm}
+%Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
+
+%Therefore, multiscale graph correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
+%\end{appThm}
+
+%\begin{appThm}
+%Suppose $\mb{x}$ is linearly dependent of $\mb{y}$. Then for any $n$ and $\alpha$ it always holds that
+%\begin{equation}
+%\beta_{\alpha}(\G^{*}) = \beta_{\alpha}(\G).
+%\end{equation}
+
+%Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
+%\end{appThm}
+
+%\begin{appThm}
+%There exists $f_{xy}$, $n$ and $\alpha$ such that 
+%\begin{equation}
+%\beta_{\alpha}(\G^{*}) > \beta_{\alpha}(\G).
+%\end{equation}
+
+%Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
+%\end{appThm}
 
 
 \end{document}

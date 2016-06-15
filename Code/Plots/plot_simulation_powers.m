@@ -33,7 +33,7 @@ map1(2,:)=mcorr; map1(6,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
 map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
 if select==1
-    map1(1,:)=dcorr; map1(4,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
+    map1(1,:)=mcorr; map1(4,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
     map1(2,:)=HHG; map1(5,:)=mante; % The color for MGC{Mantel} and global Mantel.
     map1(3,:)=dcorr; % The color for HHG
 end
@@ -57,7 +57,7 @@ for j=1:total
     titlechar=CorrSimuTitle(j);
     %
     if select==1
-        plot(numRange,power1,'.-',numRange,power7,'.--',numRange,power4,'.:','LineWidth',3);
+        plot(numRange,power2,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
     else
         plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
     end
@@ -76,7 +76,7 @@ h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC_{D}','HHG','Dcorr','Location',lgdPosition);
+    h=legend('MGC_{M}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 else
     h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 end
@@ -88,10 +88,10 @@ F.wh=[8 4]*2;
 print_fig(gcf,F)
 
 %Plot 5-8
-if select==1;
-map1(1,:)=mcorr; map1(3,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
-map1(2,:)=HHG; % The color for HHG
-end
+% if select==1;
+% map1(1,:)=mcorr; map1(3,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
+% map1(2,:)=HHG; % The color for HHG
+% end
 
 figNumber='HDPower';
 if select~=1
@@ -108,7 +108,7 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     if select==1;
-        plot(numRange,power2,'.-',numRange,power7,'.--',numRange,power5,'.:','LineWidth',3);
+        plot(numRange,power2,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
     else
         plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
     end
@@ -127,7 +127,7 @@ h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC_{M}','HHG','Mcorr','Location',lgdPosition);
+    h=legend('MGC_{M}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 else
     h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
 end

@@ -40,18 +40,18 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
-    AUC(1,j)=mean(power4);
-    AUC(2,j)=mean(power1);
-    AUC(3,j)=mean(power5);
-    AUC(4,j)=mean(power2);
-    AUC(5,j)=mean(power6);
-    AUC(6,j)=mean(power3);
+    AUC(1,j)=mean(power6);
+    AUC(2,j)=mean(power3);
+    AUC(3,j)=mean(power4);
+    AUC(4,j)=mean(power1);
+    AUC(5,j)=mean(power5);
+    AUC(6,j)=mean(power2);
     AUC(7,j)=mean(power7);
     AUC(8,j)=mean(power7);
 end
 
 x=1:2;
-str={'Dcorr';'Mcorr';'Mantel'};
+str={'Mantel';'Dcorr';'Mcorr'};
 for j=1:3
     figure
     hold on
@@ -59,7 +59,7 @@ for j=1:3
         plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
-    plot(x,[mean(AUC(2*j-1,1:19)) mean(AUC(2*j,1:19))],'.-','LineWidth',10,'Color',map1(j,:));
+    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
         %plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
@@ -81,13 +81,13 @@ for j=1:3
 %     end
     hold off
     if j==1
-    F.fname=strcat(pre2,'1DDcorr');
+    F.fname=strcat(pre2,'1DMantel');
     end
     if j==2
-    F.fname=strcat(pre2,'1DMcorr');
+    F.fname=strcat(pre2,'1DDcorr');
     end
     if j==3
-    F.fname=strcat(pre2,'1DMantel');
+    F.fname=strcat(pre2,'1DMcorr');
     end
     F.wh=[3 2.5]*2;
     print_fig(gcf,F)
@@ -116,18 +116,18 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
-    AUC(1,j)=mean(power4);
-    AUC(2,j)=mean(power1);
-    AUC(3,j)=mean(power5);
-    AUC(4,j)=mean(power2);
-    AUC(5,j)=mean(power6);
-    AUC(6,j)=mean(power3);
+    AUC(1,j)=mean(power6);
+    AUC(2,j)=mean(power3);
+    AUC(3,j)=mean(power4);
+    AUC(4,j)=mean(power1);
+    AUC(5,j)=mean(power5);
+    AUC(6,j)=mean(power2);
     AUC(7,j)=mean(power7);
     AUC(8,j)=mean(power7);
 end
 
 x=1:2;
-str=['Dcorr ';'Mcorr ';'Mantel'];
+str={'Mantel';'Dcorr';'Mcorr'};
 for j=1:3
     figure
     hold on
@@ -154,14 +154,14 @@ for j=1:3
     hold off
     %yTickN=[floor(sumP(1,2)*100)/100,1];
     %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
-     if j==1
-    F.fname=strcat(pre2,'HDDcorr');
+    if j==1
+    F.fname=strcat(pre2,'HDMantel');
     end
     if j==2
-    F.fname=strcat(pre2,'HDMcorr');
+    F.fname=strcat(pre2,'HDDcorr');
     end
     if j==3
-    F.fname=strcat(pre2,'HDMantel');
+    F.fname=strcat(pre2,'HDMcorr');
     end
     F.wh=[3 2.5]*2;
     print_fig(gcf,F)

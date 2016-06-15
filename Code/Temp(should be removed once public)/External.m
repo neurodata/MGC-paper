@@ -2,12 +2,12 @@
 n=7;
 x=-1:2/(n-1):1;
 % x=unifrnd(-1,1,1,n);
-y=x.^2;
+% y=x.^2;
 % x=unifrnd(1,2,1,n);
 % x=[-x,x];
 % y=abs(x);
 %x=unifrnd(-1,1,1,n);
-%y=x;
+y=x;
 optionModi=2;
 C=squareform(pdist(x'));
 P=squareform(pdist(y'));

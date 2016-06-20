@@ -47,6 +47,13 @@ set(gca,'YTick',[]); % Remove y axis ticks
 y=y(ind);
 C=squareform(pdist(x));
 D=squareform(pdist(y));
+tA=localCorr(C,D,2);
+rep=1000;
+tN=zeros(n,n,rep);
+for r=1:rep;
+    per=randperm(n);
+    tN(:,:,r)=localCorr(C,D(per,per),2);
+end
 
 % A2: heatmaps of the distance matrices
 maxC=ceil(max(max([C,D]))*10)/10;

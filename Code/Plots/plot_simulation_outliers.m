@@ -20,7 +20,7 @@ map1=cmap;
 set(groot,'defaultAxesColorOrder',map1)
 map2 = brewermap(128,'GnBu'); % brewmap
 %%% Outlier Model
-seq=[0.3,0.5,0.7];
+seq=[0.7,0.5,0.3];
 n=100;dim=1;
 
 for i=1:length(seq)

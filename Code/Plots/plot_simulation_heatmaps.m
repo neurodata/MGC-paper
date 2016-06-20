@@ -49,7 +49,7 @@ xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
 ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
-h=suptitle(strcat('Testing Powers of All Local Correlations'));% for 1-Dimensional Simulations'));
+h=suptitle(strcat('Multiscale Power Maps'));% for 1-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -94,7 +94,7 @@ end
 xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
 ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
 colorbar
-h=suptitle(strcat('Testing Powers of All Local Correlations'));% for High-Dimensional Simulations'));
+h=suptitle(strcat('Multiscale Power Maps'));% for High-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);

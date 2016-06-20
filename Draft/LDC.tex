@@ -508,8 +508,8 @@ and we set $\mu_{1}=(0,0)$, $\mu_{2}=(5,-5)$, $\Sigma_{1}$ is a matrix with ones
 The top row of Figure~\ref{f:outliers} shows exemplar datasets with 30\%, 50\%, and 70\% outliers; the bottom row shows the multiscale power maps for each.
 % at each $w$ by the same procedure as in section~\ref{numer1}. 
 
-A few points are evident from the figure.  First, \Mgc~achieves a much higher power than its global counterpart  \Mcorr~(evidenced by considering the power of \Mgc$^{n,n}$ in the plots, and noticing that they have much lower power than the maximum of the maps), regardless of the fraction of outliers. Though we do not show it, \Mgc~is also better than \Hhg: the power of \Hhg~is $1, 0.75,0$ at $w=0.7,0.5,0.3$ respectively, which drastically decreases as $w$ decreases, while \Mgc~always maintains power $1$. 
-Furthermore, \Mgc~provides useful information regarding the fraction of outliers: the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $w$, specifically $k^{*}=l^{*}=\min(wn,(1-w)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers because the optimal local scale automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency change (not shown).
+A few points are evident from the figure.  First, \Mgc~achieves a much higher power than its global counterpart  \Mcorr~(evidenced by considering the power of \Mgc$^{n,n}$ in each panel, and noticing that it has much lower power than the maximum of each power map), regardless of the fraction of outliers. \Mgc~is also better than \Hhg: the power of \Hhg~is $1, 0.75,0$ at $w=0.7,0.5,0.3$ respectively, which drastically decreases as $w$ decreases, while \Mgc~always maintains power $1$. 
+Furthermore, \Mgc~provides useful information regarding the fraction of outliers: the optimal scale $(k^{*},l^{*})$ is directly related to the mixture probability $w$, specifically $k^{*}=l^{*}=\min(wn,(1-w)n)-1$ is always optimal. Intuitively, \Mgc~is robust against outliers because the optimal local scale automatically excludes the independent outliers from the dependent observations in testing. The robustness still holds as the dimension, sample size, or the underlying dependency changes (not shown).
 
 \begin{figure}
   \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
@@ -520,7 +520,7 @@ Furthermore, \Mgc~provides useful information regarding the fraction of outliers
     \subfigimg[width=\linewidth]{}{Figures/FigOutlierPower2} &
     \subfigimg[width=\linewidth]{}{Figures/FigOutlierPower3} 
   \end{tabular}
-  \caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 70\%, 50\%, and 30\%  outliers (depicted across the three columns).
+  \caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 30\%, 50\%, and 70\%  outliers (depicted across the three columns).
   Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps at critical level $\alpha=0.05$.  It is evident that 
  %  samples under the outlier model in the main text, with different fractions of outliers in the three columns.  The bottom row shows the 
 	% (A) Scatter plot of samples $(X,Y)$ under the outlier model with probability $w=0.3$. Black points are dependent data, while the gray points are independent outliers.
@@ -543,7 +543,7 @@ Our first real data experiment investigates whether brain shape and disease stat
  % for both hemispheres. 
 % The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder. 
 
-This brain shape versus disease dataset consists of $n=114$ subjects, for each we have an MRI scans on the hippocampus for both the left brain and the right brain ad well as a categorical variable indicating whether the subject is clinically depressed, high-risk, or non-affected.   For the brain shape ``view'' of the data, we compute the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}.
+This brain shape versus disease dataset consists of $n=114$ subjects, for each we have an MRI scans on the hippocampus for both the left brain and the right brain as well as a categorical variable indicating whether the subject is clinically depressed, high-risk, or non-affected.   For the brain shape ``view'' of the data, we compute the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}.
 % To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark 
 % matching (see \cite{ParkEtAl2011} for more details on data processing); 
 For the categorical disorder variable,
@@ -554,6 +554,8 @@ We consider two dependence tests, one for each hemisphere: hippomcapus shape ind
 % The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
 Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at $l=4$  (we only show $l=4$ because the other curves look similar). Many local scales yield significant p-values for both hemispheres, whereas the global scale does not detect a significant dependence in either hemisphere. 
 % , which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
+\jv{we didn't mentioned HHG here?}
+
 
 % \begin{table*}[!t]
 % \caption{The p-values by the permutation test, for testing dependence on $4$ different pairs of real data. Significant p-values are highlighted. \Mgc~is able to consistently identify significant relationship for the first three rows, and does not inflate the p-value in the last row.
@@ -586,9 +588,9 @@ Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at 
     \subfigimg[width=\linewidth]{C}{Figures/FigRealCORR}
   \end{tabular}
 \caption{
-(A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. 
+(A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. Dark lines correspond to the largest region of significant scales.
 (B) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI.
-(C) Jittered scatter plot for the false positive rates of brain vs noise experimented. }
+(C) Density estimate for the false positive rates of \Mgc~on the brain vs noise experiments, with the actual rate of each data shown as dots above the x-axis.}
 \label{f:real}
 \end{figure}
 
@@ -614,6 +616,7 @@ For each brain region, the distance matrix with respect to time is calculated by
 
 For each data set, the above test is carried out for each brain region, and the false positive rates of \Mgc~for each dataset are shown in Figure~\ref{f:real}C. %The y-axis stands for FPR by log scale, and the x-axis shows the name of the data set arranged by increasing FPR; the mean FPR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. 
 Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgc, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FPR as reported in \cite{EklundKnutsson2012} for the same fMRI datasets.
+\jv{we may want to point out what are those methods here and in intro, as those methods are not HHG/dcorr.}
 
 \section{Discussion}
 \label{conclu}
@@ -625,7 +628,7 @@ We demonstrate via simulations that \Mgc~empirically performs well in linear and
 
 
 % \paragraph{Related Work}
-\jv{the paragraph below seems more appropriate at intro than conclusion?}
+\jv{the paragraph below seems more appropriate at intro than conclusion? and we should change the above paragraph when main paper setlles}
 A method closely related to distance correlation tests arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we expect to be able to glean further insights by casting \Mgc~within the kernel framework.  Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support. 
 Finally, Reshef et al \cite{Reshef2011} is another competing methodology, but does not perform as well as energy based tests in various benchmarks, and their actual test is an approximation with unknown error bound relative to their theoretical claims.  
 

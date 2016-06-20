@@ -213,6 +213,12 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
         y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
+    case 21 %A more extreme Exponential for plot_auxiliary
+        x=unifrnd(-1,30,n,d);
+        y=exp(x*A)+10*noise*eps;
+        if dependent==0
+            x=unifrnd(-1,30,n,d);
+        end
 end
 
 %affine invariant

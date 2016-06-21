@@ -157,30 +157,8 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 \newpage
 \spacingset{1.45}
 
-% \section{Introduction}
-% \label{sec:intro}
 
-% \paragraph{Opportunity} 
-% non-linear dependencies
-% large dimensionality + small sample size, 
-% non-euclidean data,  
-% many outliers.  
-
-% \paragraph{challenge}
-% 1. theory proving the thing works in the above settings
-% 2. extensive \& illustrative simulations
-% 3. real data examples
-% 4. for both 2 \& 3, both positive and negative examples
-
-% \paragraph{action}
-% mgc: combine energy \& knn
-
-% \paragraph{results}
-% summary of conclusions: mgc is always better
-% mgc matlab \& R code available
-
-
-% 77 lines
+% 64 lines
 \section{Introduction}
 
 Detecting dependency among multiple data sets is one of the most important and fundamental tasks in computational statistics and data science. 
@@ -216,6 +194,7 @@ In addition to asymptotic guarantees of the above, we desire superior finite sam
 % and we can also demonstrate them both in extensive simulations and real data.
 
 \jv{I made some changes in the paragraph below for better accuracy.}
+\cs{why did you remove ``doesn't adapt to data?'', and complicated domains?  }
 Two related and very recent approaches stand out for their abilities in dealing with the above challenges. The first, called ``distance correlation'' (\Dcorr), is a distance-based generalization of Pearson's product-moment correlation statistic \cite{RizzoSzekely2016}.  \Dcorr~and its generalizations work well in high dimensions and low sample sizes \cite{SzekelyRizzoBakirov2007,SzekelyRizzo2013a}, including in complicated domains \cite{Lyons2013}, and is reasonably computationally efficient, but, struggles in various non-linear settings, does not deal with outliers well, 
 %does not automatically adapt (it does not have any explicity hyper-parameters to adapt), 
 and does not provide much insight into the nature of the dependence, other than a p-value.  Another approach, called \Hhg~\cite{HellerGorfine2013}, performs very well on non-linear relationships, but falls short on some high-dimensional problems, %may or may not work in complicated domains, 
@@ -223,16 +202,15 @@ is more time consuming to compute, %and does not adapt (again, does not have any
 does not deal with outliers particularly well, 
 and also does not provide insight into the nature of the dependence structure.  Although these two approaches are currently considered the best tests for dependence, it is hopefully clear that a gap exists in the literature for an approach that satisfies all of the above desiderata. 
 
-\jv{the next two paragraphs are great!!!}
 A deep insight that neither of the above approaches have capitalized on, although has reaped benefits in myriad data science problems, is that of locality.  Locality has been utilized for classification and regression (k-nearest neighbors \cite{Stone1977}), data compression (wavelets \cite{DaubechiesWaveletBook}), and recommender systems \cite{Sarwar2000}, to name a few. Moreover, it has become an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, including Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others; and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2016}.
 
 Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs \cite{David1966,Friedman1983,Schilling1986}.  These approaches have the advantage of naturally operating on complicated data, including categorical and structured data, as well as strong theoretical guarantees. However, these approaches focus on two-sample testing, rather than dependence testing. Moreover, these tests all fail to provide  a convenient or automatic way to choose the appropriate neighborhood size.  This omission burdens the user of the test to come up with a heuristic, thereby greatly impairs their practical usages and finite sample performances. In fact, adaptively choosing the scale to regularize the data is a pernicious problem in essentially all existing local procedures. A primary contribution of our work is an efficient mechanism both for looking across scales, and for choosing the optimal scale.  
 
-\jv{there are a few details in next paragraph we should discuss for better accuracy}
+\jv{there are a few details in next paragraph we should discuss for better accuracy} 
+cs{ok}
 % XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
 More specifically,  we propose Multiscale Graph Correlation (\Mgc), 
 which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
-% which can be thought of as the love child of distance correlations with graph-based tests, by considering all scales and choosing the best one.  
 % \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes. 
 \Mgc~performs as well or better than the existing literature on each mentioned design goal, in theory, and extensive simulations. 
 % More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.  
@@ -240,7 +218,7 @@ In real data experiments, we show that \Mgc~is able to uncover the underlying de
 % In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent. 
 We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
 
-% 307 lines; target = 216
+% 250 lines; target = 192
 \section{Results}
 \label{s:results}
 
@@ -307,7 +285,9 @@ Flowchart for local correlation computation: Column 1: $(X,Y)$ have a quadratic 
 % 
 
 Having defined how to compute \Mgc, we face three challenges to make the method practical. First, in addition to the test statistic, we need to compute the null distribution, so that we may find the critical values and p-values.
-Second, na\"ively, computing all local $\G_{kl}$ statistics would require $\mc{O}(n^4)$, because it requires $\mc{O}(n^2)$ time to compute each local statistic (Pseudocode \ref{alg:1scale} in Appendix \ref{appen:algorithms}).  That computational burden would be so high as to make doing so impractical.  Third, having computed all local statistics, we require a method for choosing the optimal neighborhood size, in such a way that the test is still consistent, and not biased (meaning that the resultant p-value is valid).   
+Second, na\"ively, computing all local $\G_{kl}$ statistics would require an unacceptably large computational budget.
+% require $\mc{O}(n^4)$, because it requires $\mc{O}(n^2)$ time to compute each local statistic (Pseudocode \ref{alg:1scale} in Appendix \ref{appen:algorithms}).  That computational burden would be so high as to make doing so impractical.  
+Third, having computed all local statistics, we require a method for choosing the optimal neighborhood size, in such a way that the test is still consistent, and not biased (meaning that the resultant p-value is valid).   
 
 Computing the p-values from the test statistic is actually straightforward, thanks to the advent of permutation testing \cite{GoodPermutationBook}.  Specifically, we can permute the labels of either the $\mbx_i$'s or the $\mby_i$'s, and then compute the \Mgc~statistics on the permuted data.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so many times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important.
 
@@ -322,6 +302,10 @@ Most  manifold learning algorithms require that the user essentially runs the en
 We have devised an algorithm for exactly computing \emph{all} local correlations in $\mc{O}(n^2 \log n)$, essentially the same running time complexity as the global correlation coefficient (the additional log factor is for sorting to find the neighbors, see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details).  
 We do so by noting that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, so we can simply keep track of them as we iteratively increase neighborhood size. Doing so yields the p-values for each neighborhood size, but it does not tell us which neighborhood sizes are optimal (see Pseudocode \ref{alg:pval} in Appendix \ref{appen:algorithms} for details).
 % all local correlation coefficients can be simultaneously computed in the same running time complexity as the global correlation coefficient, 
+
+In addition to theoretical consistency, \Mgc~also is computationally efficient. Once the rank information is provided, each distance-based local correlation takes $O(n^2)$ to compute, which means a straightforward algorithm to compute all local correlations would take $O(n^4)$. However, we have devised an efficient  algorithm that builds up the sufficient statistics by iteratively increasing the neighborhood size and storing all required statistics (see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details).  The end result is \Mgc~can be computed in $\mathcal{O}(n^2 \log n)$ time (the additional $\log n$ over \Dcorr~is due to finding the neighbors). Other rank-based methods, such as \Hhg, also require  $\mathcal{O}(n^2\log(n))$. So, \Mgc~requires comparable time as the other leading dependence tests. 
+
+
 
 % Next, we must find an optimal scale.  
 \jv{The next paragraph will need us to discuss and polish again}
@@ -357,8 +341,8 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. However, asymptotic consistency does not convey to us how quickly \Mgc~achieves optimal power in various settings, and whether it exhibits significant advantage over its global counterpart and other popular methods.  For that, we turn to numerical simulations. 
 
 
-\jv{I think next paragraph is now repetitive, as we already discussed computational efficiency of MGC in last section}
-%In addition to theoretical consistency, \Mgc~also is computationally efficient. Once the rank information is provided, each distance-based local correlation takes $O(n^2)$ to compute, which means a straightforward algorithm to compute all local correlations would take $O(n^4)$. However, we have devised an efficient  algorithm that builds up the sufficient statistics by iteratively increasing the neighborhood size and storing all required statistics (see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details).  The end result is \Mgc~can be computed in $\mathcal{O}(n^2 \log n)$ time (the additional $\log n$ over \Dcorr~is due to finding the neighbors). Other rank-based methods, such as \Hhg, also require  $\mathcal{O}(n^2\log(n))$. So, \Mgc~requires comparable time as the other leading dependence tests. 
+\jv{I think next paragraph is now repetitive, as we already discussed computational efficiency of MGC in last section} \cs{agreed, i don't think it belongs here, this paragraph belongs up there, so i moved it.  we should combine into a single paragraph.}
+% In addition to theoretical consistency, \Mgc~also is computationally efficient. Once the rank information is provided, each distance-based local correlation takes $O(n^2)$ to compute, which means a straightforward algorithm to compute all local correlations would take $O(n^4)$. However, we have devised an efficient  algorithm that builds up the sufficient statistics by iteratively increasing the neighborhood size and storing all required statistics (see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details).  The end result is \Mgc~can be computed in $\mathcal{O}(n^2 \log n)$ time (the additional $\log n$ over \Dcorr~is due to finding the neighbors). Other rank-based methods, such as \Hhg, also require  $\mathcal{O}(n^2\log(n))$. So, \Mgc~requires comparable time as the other leading dependence tests. 
 
 %The results of this section therefore demonstrate that \Mgc~is a consistent test in a wide variety of settings.  However, these results are asymptotic, which means that they do not convey to us how quickly \Mgc~achieves optimal power in various settings.  For that, we turn to numerical simulations. 
 
@@ -425,6 +409,7 @@ Each panel shows empirical testing power on the absicca at a significant level $
 %\subsubsection{\Mgc~improves finite sample performance of all global generalized correlation coefficient based tests}
 
 \jv{the figure caption next needs polish...not sure how to better describe a slopegraph here}
+\cs{made some changes, i think we should use solid lines throughout, it is difficult to see that they are dotted.  also, i think we should show the average of 6-19, ignore the 5 linear ones.}
 \begin{figure}
   \centering
   \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
@@ -432,8 +417,9 @@ Each panel shows empirical testing power on the absicca at a significant level $
 		\subfigimg[width=\linewidth]{}{Figures/FigHDDcorr} &
 		\subfigimg[width=\linewidth]{}{Figures/FigHDMantel} 
   \end{tabular}
-  \caption{Average powers comparison between each global correlation and \Mgc. For each global correlation, each dot on the left side corresponds to the mean power of each simulation in Figure~\ref{f:nD}, while the corresponding dot on the right side corresponds to the respective \Mgc~mean power. The dotted line are shown for type 6-19, because \Mgc~equals the global correlation for type 1-5 and type 20. Then the thick solid line summarizes how the overall mean power (including type 1-19) changes from global to \Mgc.
-It is clear that \Mgc always has a large advantage margin regardless of the actual global correlation to use.}
+  \caption{
+Average powers slopegraphs comparing global and \Mgc~tests. For each global test,  the left side corresponds to the mean power of each simulation in Figure~\ref{f:nD}, the right side corresponds to the respective \Mgc~mean power. The dotted line are shown for type 6-19, because \Mgc~equals the global correlation for type 1-5 and type 20. Then the thick solid line summarizes how the overall mean power (including type 1-19) changes from global to \Mgc.
+It is clear that \Mgc always significantly improves over its global counterpart.}
 \label{f:pp}
 \end{figure}
 
@@ -441,7 +427,7 @@ Note that in Appendix \ref{appen:function}, we further include the actual powers
 
 %From Figure~\ref{f:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr~/ \Mcorr~in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgcp~perform similarly as the other two \Mgc~implementations.
 
-% 27 lines; target = 72
+% 31 lines; target = 64
 \subsection{Discovery of Dependency Across Scales}
 \label{main3}
 
@@ -549,12 +535,14 @@ This brain shape versus disease dataset consists of $n=114$ subjects, for each w
 For the categorical disorder variable,
 we use squared distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$).
 
-We consider two dependence tests, one for each hemisphere: hippomcapus shape independent of depressive state.  
+We consider two dependence tests, one for each hemisphere: is hippomcapus shape independent of depressive state.  
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder. 
 % The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance. 
 Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at $l=4$  (we only show $l=4$ because the other curves look similar). Many local scales yield significant p-values for both hemispheres, whereas the global scale does not detect a significant dependence in either hemisphere. 
 % , which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure. 
 \jv{we didn't mentioned HHG here?}
+\Hhg~only detects dependence for the left hemisphere, but does not for the right hemisphere (not shown).
+\cs{if done to your satisfaction, delete our comments?}
 
 
 % \begin{table*}[!t]
@@ -596,7 +584,7 @@ Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at 
 
 \subsubsection[Brain Graph vs. Personality]{\Mgc~can provide insight into the nature of the dependence structure: Brain Structural Network vs. Personality}
 
-The next real data experiment investigates whether brain graph and personality are independent of one another. Previous work \cite{AdelsteinEtAl2011} investigated whether individual voxels were related to specific dimensions of personality, but were unable to compare entire brain networks to a higher-dimensional characterization of personality.
+The next real data experiment investigates whether brain graph and personality are independent of one another. Previous work \cite{AdelsteinEtAl2011} investigated whether individual voxels were related to specific dimensions of personality, but were unable to compare entire brain networks to a higher-dimensional characterization of personality.  Figure \ref{f:real}B shows that  global dependence tests can ascertain whether the whole brain-network is independent of the five-factor personality traits quantified by the NEO Personality Inventory-Revised \cite{Costa1992}.  However, the global test is quite fragile, even ignoring a single subject from the global test can render the test non-significant.  On the other hand, \Mgc~is more robust, there is a whole region of neighborhood sizes such that the test is quite significant.  Moreover, that the local tests performs optimally with approximately 30 neighbors suggests that these data have multiple cohorts, for which the dependence structure likely differs.  This result therefore suggests precisely the next investigatory steps to take to further understand the nature of the dependence structure between brain networks and personality.
 
 
 
@@ -610,40 +598,52 @@ The next real data experiment investigates whether brain graph and personality a
 
 \subsubsection[Correct False Positive Rate]{\Mgc~Does Not Inflate False Positive Rates: Brain Activity vs. Noise}
 
-In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}). We used CPAC \cite{CPAC2015} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability (\jv{unpublished}).  The output for each dataset is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps. 
+In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to \cite{EklundKnutsson2012}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}). We used CPAC \cite{CPAC2015} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each dataset is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps.   
+We then also generate  an independent stimulus  by sampling from a standard normal at each time step.  Of course, the brain activity data and the stimuli are, in fact, independent, by construction.
+For each brain region, we test: activity of that brain region independent of the time-varying stimuli. We pool brain activity over all of the samples from the population to improve sample size.  
+Any regions that are detected significant are, by definition, false positives.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the critical level, which we set at $0.05$ for this experiment. 
 
-For each brain region, the distance matrix with respect to time is calculated by $dist(s,t)=\|\mbx_{\cdot s}-\mbx_{\cdot t}\|$, where $\mbx_{\cdot t}$ denotes the observation vector at timestep $t$ for all persons. Then an independent stimulus is generated by sampling from a standard normal at each time step, whose pairwise distance can be directly computed. From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc. The p-value based on $1000$ random permutations is computed, and each brain region is declared significant when the p-value is less than $\alpha=0.05$. Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
+
+To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mbx_{\cdot i}-\mbx_{\cdot j}\|$, for all $(i,j)$ pairs,  where $\mbx_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$. 
+For the stimulus, we similarly compute the Euclidean distance between activity at all pairs of time-steps: $b_{ij}= \|y_i - y_j \|$.
+Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
+% From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc. 
+The p-values are based on $1000$ random permutations. 
 
 For each data set, the above test is carried out for each brain region, and the false positive rates of \Mgc~for each dataset are shown in Figure~\ref{f:real}C. %The y-axis stands for FPR by log scale, and the x-axis shows the name of the data set arranged by increasing FPR; the mean FPR of \Mgc~is shown as the purple-red straight line, with the type $1$ error level $0.05$ drawn as the blue straight line. 
-Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. This is indeed the case for \Mgc, and the actual mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FPR as reported in \cite{EklundKnutsson2012} for the same fMRI datasets.
+% Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set. 
+\Mgc~false positive rate is centered around the critical level $0.05$, as it should be; the mean/standard deviation is $0.060 \pm 0.025$. This is in contrast to many other methods that may significantly increase or FPR as reported in \cite{EklundKnutsson2012} for the same fMRI datasets.
 \jv{we may want to point out what are those methods here and in intro, as those methods are not HHG/dcorr.}
+\cs{good point, want to try?}
 
 \section{Discussion}
 \label{conclu}
 
 % \paragraph{Summary}
-In short, we propose multiscale graph correlation to test independence between data sets. 
+% In short, 
+We propose multiscale graph correlation to test independence between data sets. 
 We demonstrate via simulations that \Mgc~empirically performs well in linear and non-linear settings, regardless of the dimension, sample size, noise, and outliers.  Moreover, it efficiently adapts to the data, to provide not just a valid p-value, but also a picture of which scales contain the dependence structure. We then prove that it achieves optimal power asymptotically no matter what the depedence structure is, even in complicated settings.  In real data experiments it revealed dependence where global methods failed, revealed the locality of dependence where global methods succeeded, and did not falsely detect signals when there were none.
 
 
 
 % \paragraph{Related Work}
 \jv{the paragraph below seems more appropriate at intro than conclusion? and we should change the above paragraph when main paper setlles}
+\cs{i think it is discussion. let's ask others.  i think: the intro only sets up what we are going to do.  this is not necessary for that.}
 A method closely related to distance correlation tests arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we expect to be able to glean further insights by casting \Mgc~within the kernel framework.  Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support. 
 Finally, Reshef et al \cite{Reshef2011} is another competing methodology, but does not perform as well as energy based tests in various benchmarks, and their actual test is an approximation with unknown error bound relative to their theoretical claims.  
 
-
+\cs{maybe we should mention some sparsity something, since we are sparsifying?}
 % \paragraph{Next Steps}
 Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved by tailoring a different centering or ranking scheme for a given global correlation, which is a worthwhile direction for future works. 
 
-Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Another direction is to choose a proper metric for given data, which may improve both the optimal scale estimation and the resulting power. 
+Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for other inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Another direction we are investigating is how to choose the optimal metric for given data. 
 
 Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction and supervised learning. The concept of local scales may be applicable to other testing and prediction domains as well.
 
 %scaling up via FlashX?
 
 \bibliographystyle{abbrv}
-\bibliography{references}
+\bibliography{LDCbib}
 
 
 \section*{Acknowledgment}

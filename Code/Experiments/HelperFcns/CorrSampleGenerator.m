@@ -47,16 +47,16 @@ mix(1:ceil(n*pp))=1;
 u=mix;
 
 switch type % In total 20 types of dependency + the type 0 outlier model
-    case 0 %Test Outlier Model
-        sigma=eye(2);
-        sigma(1,2)=0.9;sigma(2,1)=0.9;
-        x=mvnrnd(zeros(n,2),sigma);
-        y=repmat((u>0),1,d).*(x(:,1)) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-        x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-        if dependent==0
-            x=mvnrnd(zeros(n,2),sigma);
-            x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-        end
+%     case 0 %Test Outlier Model
+%         sigma=eye(2);
+%         sigma(1,2)=0.9;sigma(2,1)=0.9;
+%         x=mvnrnd(zeros(n,2),sigma);
+%         y=repmat((u>0),1,d).*(x(:,1)) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
+%         x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+%         if dependent==0
+%             x=mvnrnd(zeros(n,2),sigma);
+%             x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
+%         end
 %         sigma=eye(2);
 %         sigma(1,2)=0.9;sigma(2,1)=0.9;
 %         x=mvnrnd(zeros(n,2),sigma);
@@ -213,12 +213,12 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
         y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
-    case 21 %A more extreme Exponential for plot_auxiliary
-        x=unifrnd(-1,30,n,d);
-        y=exp(x*A)+10*noise*eps;
-        if dependent==0
-            x=unifrnd(-1,30,n,d);
-        end
+%     case 21 %A more extreme Exponential for plot_auxiliary
+%         x=unifrnd(0,30,n,d)+10*noise*eps;
+%         y=exp(x*A);
+%         if dependent==0
+%             x=unifrnd(0,30,n,d)+10*noise*eps;
+%         end
 end
 
 %affine invariant

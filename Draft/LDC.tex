@@ -634,13 +634,11 @@ Finally, Reshef et al \cite{Reshef2011} is another competing methodology, but do
 
 \cs{maybe we should mention some sparsity something, since we are sparsifying?}
 % \paragraph{Next Steps}
-Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved by tailoring a different centering or ranking scheme for a given global correlation, which is a worthwhile direction for future works. 
+Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved, by tailoring a different centering or ranking scheme for a given global correlation, or by coming up with a different rank-truncated pairwise comparison. Overall, a more thorough investigation on the finite-sample performance of \Mgc, its possible extensions, and other existing methods, are much needed in the future to enhance our understanding of dependence discovery.
 
-Furthermore, future investigations on the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for other inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Another direction we are investigating is how to choose the optimal metric for given data. 
+Furthermore, the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. Another direction we are investigating is how to choose the optimal metric for given data. Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction, classification, other testing and prediction domains, etc.
 
-Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction and supervised learning. The concept of local scales may be applicable to other testing and prediction domains as well.
-
-%scaling up via FlashX?
+\cs{scaling up via FlashX?}
 
 \bibliographystyle{abbrv}
 \bibliography{LDCbib}
@@ -667,117 +665,113 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \section{Simulation Functions}
 \label{appen:function}
 
-We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} but with some changes (such as the inclusion of additional noise and an extra weight vector) to better compare all methods in our low- and high-dimensional simulations.
+We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} but with some changes (such as the inclusion of additional noise and an extra weight vector) to better compare all methods throughout different dimensions and sample sizes.
 
-For each sample $x \in \Real^{d_{x}}$, we denote $x^{d}, d=1,\ldots,d_{x}$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{d_{x}}$ is a decaying vector with $w^{d}=1/d$ for each $d$, such that $w\T x$ is a $1$-dimensional weighted summation of all dimensions of \mbx, which equals \mbx~if $d_{x}=1$. Furthermore, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $u$ and $v$ represent realizations from some auxiliary random variables, $c$ is a scalar constant to control the noise level (which equals $1$ for 1-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise. 
+For each sample $\mbx \in \Real^{d_{x}}$, we denote $\mbx^{d}, d=1,\ldots,d_{x}$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{d_{x}}$ is a decaying vector with $w^{d}=1/d$ for each $d$, such that $w\T \mbx$ is a $1$-dimensional weighted summation of all dimensions of \mbx, which equals \mbx~if $d_{x}=1$. Furthermore, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $u$ and $v$ represent realizations from some auxiliary random variables, $c$ is a scalar constant to control the noise level (which equals $1$ for 1-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise. 
 
-For all of the below equations, $(x,y) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(x,y)$, and define each of the above distributions, and any additional auxiliary distributions.
+For all of the below equations, $(\mbx,\mby) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(\mbx,\mby)$, and define each of the above distributions, and any additional auxiliary distributions.
 
 \setcounter{equation}{0}
 \begin{compactenum}
-\item Linear $(x,y) \in \Real^{d_{x}} \times \Real$,  
+\item Linear $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$,  
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\
-y &=w\T x+c\epsilon.
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
+\mby &=w\T \mbx+c\epsilon.
 \end{align*}
-\item Cubic $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\item Cubic $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}}, \\ 
-y &=128(w\T x-\tfrac{1}{3})^3+48(w\T x-\tfrac{1}{3})^2-12(w\T x-\tfrac{1}{3})+80c\epsilon.
+\mbx &\sim \mc{U}(-1,1)^{d_{x}}, \\ 
+\mby &=128(w\T \mbx-\tfrac{1}{3})^3+48(w\T \mbx-\tfrac{1}{3})^2-12(w\T \mbx-\tfrac{1}{3})+80c\epsilon.
 \end{align*}
-\item Exponential $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\item Exponential $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
-x &\sim \mc{U}(0,3)^{d_{x}}, \\
-y &=exp(w\T x)+10c\epsilon.
+\mbx &\sim \mc{U}(0,3)^{d_{x}}, \\
+\mby &=exp(w\T \mbx)+10c\epsilon.
 \end{align*}
-\item Step Function $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\item Step Function $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\ 
-y &=\mb{I}(w\T x>0)+\epsilon,
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\ 
+\mby &=\mb{I}(w\T \mbx>0)+\epsilon,
 \end{align*}
 where $\mb{I}$ is the indicator function. 
-\item Joint normal $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ be the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ be the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(u,v) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
+\item Joint normal $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ be the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ be the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(u,v) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
-x &=u,\\ 
-y &=v+0.5c\epsilon.
+\mbx &=u,\\ 
+\mby &=v+0.5c\epsilon.
 \end{align*}
-\item Quadratic $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\item Quadratic $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\
-y&=(w\T x)^2+0.5c\epsilon.
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
+\mby&=(w\T \mbx)^2+0.5c\epsilon.
 \end{align*}
-\item W Shape $(x,y) \in \Real^{d_{x}} \times \Real$:  $u \sim \mc{U}(-1,1)^{d_{x}}$,
+\item W Shape $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$:  $u \sim \mc{U}(-1,1)^{d_{x}}$,
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\
-y&=4\left[ \left( (w\T x)^2 - \tfrac{1}{2} \right)^2 + w\T u/500 \right]+0.5c\epsilon.
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
+\mby&=4\left[ \left( (w\T \mbx)^2 - \tfrac{1}{2} \right)^2 + w\T u/500 \right]+0.5c\epsilon.
 \end{align*}
-\item Two Parabolas $(x,y) \in \Real^{d_{x}} \times \Real$: $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
+\item Two Parabolas $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\
-y&=\left( (w\T x)^2  + 2c\epsilon\right) \cdot (u-\tfrac{1}{2}).
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
+\mby&=\left( (w\T \mbx)^2  + 2c\epsilon\right) \cdot (u-\tfrac{1}{2}).
 \end{align*}
-\item Fourth Root $(x,y) \in \Real^{d_{x}} \times \Real$: 
+\item Fourth Root $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: 
 \begin{align*}
-x &\sim \mc{U}(-1,1)^{d_{x}},\\
-y&=|w\T x|^\frac{1}{4}+\frac{c}{4}\epsilon.
+\mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
+\mby&=|w\T \mbx|^\frac{1}{4}+\frac{c}{4}\epsilon.
 \end{align*}
-\item Logarithmic $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $\epsilon \sim \mc{N}(0, I_{d_{x}})$
+\item Logarithmic $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $\epsilon \sim \mc{N}(0, I_{d_{x}})$
 \begin{align*}
-x &\sim \mc{N}(0, I_{d_{x}}),\\
-y^{d}&=2log(x^{d})+3c\epsilon^{d},
+\mbx &\sim \mc{N}(0, I_{d_{x}}),\\
+\mby^{d}&=2log(\mbx^{d})+3c\epsilon^{d},
 \end{align*}
 for $d=1,\ldots,d_{x}$.
-\item Circle $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(-1,1)^{d_{x}}$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$, $r=1$,
+\item Circle $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(-1,1)^{d_{x}}$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$, $r=1$,
 \begin{align*}
-x^{d}&=r \left(\sin(\pi u^{d+1})  \prod_{j=1}^{d} \cos(\pi u^{j})+0.4 \epsilon^{d}\right) \mbox{ for $d=1,\ldots,d_{x}-1$},\\
-x^{d_{x}}&=r \left(\prod_{j=1}^{d_{x}} \cos(\pi u^{j})+0.4 \epsilon^{d_{x}}\right),\\
-y&= \sin(\pi u^{1}).
+\mbx^{d}&=r \left(\sin(\pi u^{d+1})  \prod_{j=1}^{d} \cos(\pi u^{j})+0.4 \epsilon^{d}\right) \mbox{ for $d=1,\ldots,d_{x}-1$},\\
+\mbx^{d_{x}}&=r \left(\prod_{j=1}^{d_{x}} \cos(\pi u^{j})+0.4 \epsilon^{d_{x}}\right),\\
+\mby&= \sin(\pi u^{1}).
 \end{align*}
-\item Ellipse $(x,y) \in \Real^{d_{x}} \times \Real$: Same as above except $r=5$.
+\item Ellipse $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: Same as above except $r=5$.
 
-\item Spiral $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(0,5)$, $\epsilon \sim \mc{N}(0, 1)$, 
+\item Spiral $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(0,5)$, $\epsilon \sim \mc{N}(0, 1)$, 
 \begin{align*}
-x^{d}&=u \sin(\pi u)  [\cos(\pi u)]^{d} \mbox{ for $d=1,\ldots,d_{x}-1$},\\
-x^{d_{x}}&=u [\cos(\pi u)]^{d_{x}},\\
-y&= u \sin(\pi u) +0.4 (d_{x}-1)\epsilon.
+\mbx^{d}&=u \sin(\pi u)  [\cos(\pi u)]^{d} \mbox{ for $d=1,\ldots,d_{x}-1$},\\
+\mbx^{d_{x}}&=u [\cos(\pi u)]^{d_{x}},\\
+\mby&= u \sin(\pi u) +0.4 (d_{x}-1)\epsilon.
 \end{align*}
 
-\item Square $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $u \sim \mc{U}(-1,1)$, $v \sim \mc{U}(-1,1)$, $\epsilon \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
+\item Square $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $u \sim \mc{U}(-1,1)$, $v \sim \mc{U}(-1,1)$, $\epsilon \sim \mc{N}(0,1)^{d_{x}}$, $\theta=-\frac{\pi}{8}$. Then
 \begin{align*}
-x^{d}&=u \cos\theta + v \sin\theta + 0.05 d_{x}\epsilon^{d},\\
-y^{d}&=-u \sin\theta + v \cos\theta,
+\mbx^{d}&=u \cos\theta + v \sin\theta + 0.05 d_{x}\epsilon^{d},\\
+\mby^{d}&=-u \sin\theta + v \cos\theta,
 \end{align*}
 for $d=1,\ldots,d_{x}$.
-\item Diamond $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Same as above except $\theta=-\frac{\pi}{4}$.
-\item Sine Period 1/2 $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(-1,1)$, $v \sim \mc{N}(0,1)^{d_{x}}$, $\theta=4\pi$,
+\item Diamond $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Same as above except $\theta=-\frac{\pi}{4}$.
+\item Sine Period 1/2 $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(-1,1)$, $v \sim \mc{N}(0,1)^{d_{x}}$, $\theta=4\pi$,
 \begin{align*}
-x^{d}&=u+0.02 d_{x} v^{d} \mbox{ for $d=1,\ldots,d_{x}$}, \\
-y&=\sin ( \theta x )+c\epsilon.
+\mbx^{d}&=u+0.02 d_{x} v^{d} \mbox{ for $d=1,\ldots,d_{x}$}, \\
+\mby&=\sin ( \theta x )+c\epsilon.
 \end{align*}
-\item Sine Period 1/8 $(x,y) \in \Real^{d_{x}} \times \Real$: Same as above except $\theta=16\pi$ and the noise is changed to $0.5c\epsilon$.
-\item Multiplicative Noise $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
+\item Sine Period 1/8 $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: Same as above except $\theta=16\pi$ and the noise is changed to $0.5c\epsilon$.
+\item Multiplicative Noise $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
-x &\sim \mc{N}(0, I_{d_{x}}),\\
-y^{d}&=u^{d}x^{d}+0.5\epsilon^{d},
+\mbx &\sim \mc{N}(0, I_{d_{x}}),\\
+\mby^{d}&=u^{d}\mbx^{d}+0.5\epsilon^{d},
 \end{align*}
 for $d=1,\ldots,d_{x}$.
-\item Uncorrelated Binomial $(x,y) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{B}(0.5)$,
+\item Uncorrelated Binomial $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{B}(0.5)$,
 \begin{align*}
-x &\sim \mc{B}(0.5)^{d_{x}},\\ 
-y&=(2u-1)w\T x+0.6\epsilon.
+\mbx &\sim \mc{B}(0.5)^{d_{x}},\\ 
+\mby&=(2u-1)w\T \mbx+0.6\epsilon.
 \end{align*}
-\item Independent Clouds $(x,y) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $u \sim \mc{N}(0,I_{d_{x}})$, $v \sim \mc{N}(0,I_{d_{x}})$, $u' \sim \mc{B}(0.5)^{d_{x}}$, $v' \sim \mc{B}(0.5)^{d_{x}}$. Then
+\item Independent Clouds $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $u \sim \mc{N}(0,I_{d_{x}})$, $v \sim \mc{N}(0,I_{d_{x}})$, $u' \sim \mc{B}(0.5)^{d_{x}}$, $v' \sim \mc{B}(0.5)^{d_{x}}$. Then
 \begin{align*}
-x&=u/3+2u'-1,\\
-y&=v/3+2v'-1.
+\mbx&=u/3+2u'-1,\\
+\mby&=v/3+2v'-1.
 \end{align*}
 \end{compactenum}
 
-For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except type 20; for some types (type 11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are "directly" dependent. Then we can independently generate $(\mbx_{i},\mby_{i})$ from $(\mb{x},\mb{y})$ for $i=1,\ldots,n$, set $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$, and calculate local / global correlations for the sample data.
-
-The low-dimensional simulations always set $d_{x}=d_{y}=1$ and $c=1$, with their visualizations shown in Figure~\ref{f:dependencies}. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, e.g., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. 
-
-The high-dimensional simulations always set $c=0$ and $n=100$, with $d_{x}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. The decaying vector $w$ is utilized in most high-dimensional simulations, which treats higher dimensions as small perturbations and thus creates meaningful settings for testing power comparison. %but for some complex dependencies like square / diamond / sine period, the testing is already very difficult at $d_{x}>1$ and $w$ is not used.
+For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except type 20; for some types (type 11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are "directly" dependent. Then we can independently generate $(\mbx_{i},\mby_{i})$ from $(\mb{x},\mb{y})$ for $i=1,\ldots,n$, set $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$, and calculate local / global correlations for the sample data. A visualization of each dependency is shown in Figure~\ref{f:dependencies}. 
 
 \begin{figure}[htbp]
 \includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{Figures/FigSimVisual}
@@ -786,7 +780,19 @@ The high-dimensional simulations always set $c=0$ and $n=100$, with $d_{x}$ incr
 \label{f:dependencies}
 \end{figure}
 
-The powers of all three \Mgc~implementations for the 1-dimensional and high-dimensional simulations are provided in Figure~\ref{f:1DAll} and~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
+For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $d_{x}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. The decaying vector $w$ is utilized for $d_{x}>1$ to treat higher dimensions as small perturbations, which creates a meaningful setting for testing power comparison. The powers of all three \Mgc~implementations in this setting are provided in Figure~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
+
+Here we also present an additional setting, which sets $d_{x}=d_{y}=1$ and $c=1$ with the sample size $n$ increasing from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}. 
+
+Clearly \Mgc~always improves over its global counterpart, and always has a large advantage regardless of the underlying dependency structure, the dimensionality, the sample size, or noise. 
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{Figures/FigHDPowerAll}
+\caption{
+Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.}
+\label{f:nDAll}
+\end{figure}
+
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig1DPowerAll}
 \caption{
@@ -796,14 +802,6 @@ Each panel shows empirical testing power on the absicca at a significant level $
 \label{f:1DAll}
 \end{figure}
 
-\begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/FigHDPowerAll}
-\caption{
-Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.}
-\label{f:nDAll}
-\end{figure}
-
-The testing power heat map of local correlations for the $1$-dimensional simulations is provided in Figure~\ref{f:powermaps1}.
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/Fig1DHeat}
 \caption{Influence of neighborhood size on testing power of local correlations. For each simulation, the dimension is $1$, and the sample size is determined by the first sample size $n$ for \Mgc~to have powers exceeding the threshold $0.8$.
@@ -853,7 +851,7 @@ Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, the \Mantel~c
 \end{equation}
 where $A=\tilde{A}$, $B=\tilde{B}$, $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$. Then the \Mantel~test is carried out by the permutation test.
 
-Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{f:nD} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgcp~achieves comparable performances as other variants of \Mgc, which implies that \Mgcp~may be consistent against most, if not all dependent alternatives.
+Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology due to its simplicity. It is clear from Figure~\ref{f:nDAll} and ~\ref{f:1DAll} that global \Mantel~is sub-optimal and appears to be not consistent for many dependencies, yet \Mgcp~achieves comparable performances as other variants of \Mgc, which implies that \Mgcp~may be consistent against most, if not all dependent alternatives.
 
 \subsection{(Global) Distance Correlation}
 \label{appen:dcorr}
@@ -1189,10 +1187,10 @@ Thus multiscale graph correlation can be better than its global correlation coef
 \begin{proof}
 We give a simple discrete example of $f_{xy}$ at $n=7$, such that the p-value of \Mgcm~is strictly lower than the p-value of \Mcorr. 
 
-Suppose under the alternative, each pair of observation $(x,y)$ is sampled as follows:
+Suppose under the alternative, each pair of observation $(\mbx,\mby)$ is sampled as follows:
 \begin{align*} 
-x &\in \{-1,-\frac{2}{3},-\frac{1}{3},0,\frac{1}{3},\frac{2}{3},1\} \mbox{ without replacement}, \\
-y &= \mb{x}^2,
+\mbx &\in \{-1,-\frac{2}{3},-\frac{1}{3},0,\frac{1}{3},\frac{2}{3},1\} \mbox{ without replacement}, \\
+\mby &= \mbx^2,
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 

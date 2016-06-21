@@ -64,6 +64,8 @@ D=squareform(pdist(y));
 % optimal scale
 tA=zeros(n,n,rep);
 tN=zeros(n,n,rep);
+pa=zeros(n,n);
+for rr=1:10
 for r=1:rep;
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     CA=squareform(pdist(x));
@@ -74,6 +76,7 @@ for r=1:rep;
     DA=squareform(pdist(y));
     tN(:,:,r)=LocalCorr(CA,DA,2);
 end
+
 power1=zeros(n,n);
 alpha=0.05;
 for i=1:n;
@@ -83,6 +86,9 @@ for i=1:n;
         power1(i,j)=mean(tA(i,j,:)>cut1);
     end
 end
+pa=pa+power1/10;
+end
+power1=pa;
 % figure
 % ksdensity(reshape(tA(n,n,:),1,rep));
 % figure

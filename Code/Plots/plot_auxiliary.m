@@ -19,8 +19,9 @@ dim=1;
 noise=0;
 cc=1;
 samebar=1;
-colorb=1;
+colorb=0;
 rep=1000;
+repp=1;
 
 cmap=zeros(3,3);
 gr = [0.5,0.5,0.5];
@@ -37,14 +38,14 @@ set(groot,'defaultAxesColorOrder',map1);
 % Generate data
 [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
 if noise~=0
-[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
+    [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
 end
 % A1: scatter plot
 figure
 if noise==0
-plot(x,y,'.','MarkerSize',30);
+    plot(x,y,'.','MarkerSize',30);
 else
-plot(x,y,'.',x1,y1,'k.','MarkerSize',30);
+    plot(x,y,'.',x1,y1,'k.','MarkerSize',30);
 end
 xlabel('X','FontSize',25)
 ylabel('Y','FontSize',25,'Rotation',0,'position',[-1.3,-0.1]);
@@ -65,28 +66,28 @@ D=squareform(pdist(y));
 tA=zeros(n,n,rep);
 tN=zeros(n,n,rep);
 pa=zeros(n,n);
-for rr=1:10
-for r=1:rep;
-    [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-    CA=squareform(pdist(x));
-    DA=squareform(pdist(y));
-    tA(:,:,r)=LocalCorr(CA,DA,2);
-    [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
-    CA=squareform(pdist(x));
-    DA=squareform(pdist(y));
-    tN(:,:,r)=LocalCorr(CA,DA,2);
-end
-
-power1=zeros(n,n);
-alpha=0.05;
-for i=1:n;
-    for j=1:n;
-        dCorT=sort(tN(i,j,:),'descend');
-        cut1=dCorT(ceil(rep*alpha));
-        power1(i,j)=mean(tA(i,j,:)>cut1);
+for rr=1:repp
+    for r=1:rep;
+        [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
+        CA=squareform(pdist(x));
+        DA=squareform(pdist(y));
+        tA(:,:,r)=LocalCorr(CA,DA,2);
+        [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
+        CA=squareform(pdist(x));
+        DA=squareform(pdist(y));
+        tN(:,:,r)=LocalCorr(CA,DA,2);
     end
-end
-pa=pa+power1/10;
+    
+    power1=zeros(n,n);
+    alpha=0.05;
+    for i=1:n;
+        for j=1:n;
+            dCorT=sort(tN(i,j,:),'descend');
+            cut1=dCorT(ceil(rep*alpha));
+            power1(i,j)=mean(tA(i,j,:)>cut1);
+        end
+    end
+    pa=pa+power1/repp;
 end
 power1=pa;
 % figure
@@ -131,7 +132,7 @@ plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',2);
 set(gca,'FontSize',24);
 h=legend('Mcorr','MGC','Location','NorthEast');
 set(h,'FontSize',30);
-plot(tA(end),0.01,'.',tA(k,l),0.01,'k.','MarkerSize',30);
+plot(tA(end),0.01,'.',tA(k,l),0.01,'k.','MarkerSize',80);
 xlim([minp,maxp]);
 ylabel('Density Function','FontSize',24);
 %ylim([-1 15]);
@@ -173,11 +174,11 @@ if colorb~=0
     h=colorbar('Ticks',[-1000,0,maxC]);
     set(h,'FontSize',16);
 end
-title('Pairwise Distances','FontSize',30)
+%xlabel('$$\tilde{A}_{ij}=|x_{i}-x_{j}|_{2}$$','FontSize',30,'interpreter','latex','position',[0,-1])
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
-%xlabel('\tilde{A}_{ij}=\|x_{i}-x_{j}\|_{2}','FontSize',25);
-ylabel('$$\tilde{A}$$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+xlabel('$\|x_{i}-x_{j}\|_{2}$','FontSize',30,'interpreter','latex')
+title('$\tilde{A}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
 
 %subplot(s,t,6)
 figure
@@ -196,7 +197,8 @@ caxis([0,maxC]);
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 %xlabel('\tilde{B}_{ij}=\|y_{i}-y_{j}\|_{2}','FontSize',25);
-ylabel('$$\tilde{B}$$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+xlabel('$\|y_{i}-y_{j}\|_{2}$','FontSize',30,'interpreter','latex')
+title('$\tilde{B}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
 
 % A3: heatmaps of the doubly centered distance matrices
 for option=1:1
@@ -237,6 +239,7 @@ for option=1:1
     else
         minC=floor(min(min([A]))*10)/10;maxC=ceil(max(max([A]))*10)/10;
     end
+    minC=min(minC,-maxC);maxC=max(maxC,-minC);
     figure
     imagesc(A');
     colormap(map2)
@@ -249,7 +252,7 @@ for option=1:1
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     %xlabel('A=H\tilde{A}H','FontSize',25);
-    ylabel('$$A$$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+    title('$$A$$','FontSize',30,'interpreter','latex');
     
     figure
     if samebar==1
@@ -257,6 +260,7 @@ for option=1:1
     else
         minD=floor(min(min([B]))*10)/10;maxD=ceil(max(max([B]))*10)/10;
     end
+    minD=min(minD,-maxD);maxD=max(maxD,-minD);
     imagesc(B');
     set(gca,'FontSize',16)
     colormap(map2)
@@ -265,11 +269,13 @@ for option=1:1
         h=colorbar('Ticks',[-1000,minD,maxD]);
         set(h,'FontSize',16);
     end
+    h=colorbar('Ticks',[0],'location','southoutside');
+    set(h,'FontSize',30);
     %title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     %xlabel('B=H\tilde{B}H','FontSize',25);
-    ylabel('$$B$$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+    title('$$B$$','FontSize',30,'interpreter','latex');
     
     % Local distance matrices
     %if n~=100 || noise~=1
@@ -319,15 +325,16 @@ for option=1:1
     % A4: heatmaps of the distance covariance entries
     figure
     MH=ceil(max(max(mcorrH(2:end,2:end)))*10)/10;
-    mMH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
+    mH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
+    mH=min(mH,-MH);MH=max(MH,-mH);
     imagesc(mcorrH');
     set(gca,'FontSize',16)
     colormap(map2)
     if colorb~=0
-        h=colorbar('Ticks',[-1000,mMH,MH]);
+        h=colorbar('Ticks',[-1000,mH,MH]);
         set(h,'FontSize',16);
     end
-    caxis([mMH,MH]);
+    caxis([mH,MH]);
     %ylabel('$$A^{k^{*}}.*B^{l^{*}}$$','FontSize',25,'Rotation',0,'position',[-5,50],'interpreter','latex');
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
@@ -347,12 +354,12 @@ for option=1:1
     set(gca,'FontSize',16)
     colormap(map2)
     if colorb~=0
-        h=colorbar('Ticks',[-1000,mMH,MH]);
+        h=colorbar('Ticks',[-1000,mH,MH]);
         set(h,'FontSize',16);
     end
-    caxis([mMH,MH]);
-     if colorb~=0
-        h=colorbar('Ticks',[-1000,mMH,MH]);
+    caxis([mH,MH]);
+    if colorb~=0
+        h=colorbar('Ticks',[-1000,mH,MH]);
         set(h,'FontSize',16);
     end
     %ylabel('$$A^{k^{*}}.*B^{l^{*}}$$','FontSize',25,'Rotation',0,'position',[-5,50],'interpreter','latex');
@@ -385,8 +392,8 @@ for option=1:1
     ylabel('l','FontSize',25)%,'Rotation',0,'position',[-5,50]);
     xlim([1 n-1]);
     ylim([1 n-1]);
-    h=colorbar('Ticks',[-1000,0.5,0.98]);
-    set(h,'FontSize',16);
+    h=colorbar('Ticks',[-1000,0.5,1]);
+    set(h,'FontSize',30);
     
     imagesc(k,l,1);
     

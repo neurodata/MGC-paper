@@ -367,43 +367,21 @@ We assert that the optimal scale is the largest neighborhood size in that region
 We define the p-value of \Mgc~to be the p-value from the optimal scale, and declare significant dependency when the p-value is less than $\alpha$, often $0.05$ (see Pseudocode \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for details).
 % By the optimal scale estimation, the \Mgc~statistic $\G^{*}$ is theoretically no worse than the global counterpart $\G$, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies; moreover, different \Mgc~implementations may vary slightly in performance depending on the properties of the respective global statistic. In the following sections, we demonstrate that our \Mgc~statistic yields tests that preserve consistency regardless of the functional dependency and dimensionality, improves the testing powers of the respective global correlation under nonlinear and high-dimensional dependencies both in theory and in simulations, as while as being the most superior test in simulations and real data experiments.}
 
-\subsection*{Theoretical Consistency of \Mgc}
-\label{s:theory}
 
-The formal testing scenario is as follows: we observe $n$ pairs of observations, $(\mbx_i,\mby_i)$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
-% suppose two data sets $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$ are given, where $n$ is the sample size, $d_{x}$ and $d_{y}$ are the dimensions of each data set. Under the classical hypothesis testing framework, $\mbx_{i}, i=1,\ldots,n$ are assumed identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of the random variable $\mb{x}$; similarly $\mby_{i}$ are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
-\begin{align*}
-& H_{0}: f_{xy}=f_{x}f_{y},\\
-& H_{A}: f_{xy} \neq f_{x}f_{y}.
-\end{align*}
-% where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y})$.
-
-The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false.  As defined above, a test is consistent if its power converges to $1$ as sample size increases.
-Let $\G_t$ denote a global generalized correlation coefficient based test, that is, $t$ might indicate Pearson, \Mantel, \Dcorr, or \Mcorr, and let $\beta(\G_t^*)$ denote the power of the corresponding multiscale version.
-Recalling from the work Szekeley et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
- % in different scenarios, leads us to our first theorem.
-% A consistent test statistic has power $1$ asymptotically, i.e., the test statistic under the alternative is asymptotically larger than the statistic under the null. Denote the type 1 error level as $\alpha$, the testing power of \Mgc~as $\beta_{\alpha}(\G^{*})$, and the power of the respective global test as $\beta_{\alpha}(\G)$. Assuming the optimal scale is estimated by the testing power, we have the following theorem regarding the consistency of \Mgc, whose proof is provided in Appendix \ref{appen:proofs}:
-\begin{thm}
-\label{thm1}
-$\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
-% whenever $\beta(\G)$ does.
-% Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
-\end{thm}
-
-Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. However, asymptotic consistency does not convey to us how quickly \Mgc~achieves optimal power in various settings, and whether it exhibits significant advantage over its global counterpart and other popular methods.  For that, we turn to numerical simulations.
 
 \subsection*{Finite Sample Simulation Experiments}
 
-From this section onwards, unless mentioned otherwise, our \Mgc~is always implemented for \Mcorr, due to its theoretical consistency and numerical advantages throughout.
+% From this section onwards, unless mentioned otherwise, our \Mgc~is always implemented for \Mcorr, due to its theoretical consistency and numerical advantages throughout.
 
-Based on the previous section, we understand \Mgc~can be a consistent tests in a wide variety of settings (all finite dimensional joint distributions with bounded variance)
-%, and those whose dimension increases, respectively).
-But, our theoretical results do not shed light on the finite sample performance of \Mgc.
-%We are interested, therefore, in understand which of these tests performs well in various simulated settings.
-Specifically, we are interested in comparing our newly proposed local tests in a comprehensive set of simulations, to previous tests like \Hhg, \Mcorr, \Dcorr, and \Mantel, each of which performs well in a fraction but not all of the simulations.
+% Based on the previous section, we understand \Mgc~can be a consistent tests in a wide variety of settings (all finite dimensional joint distributions with bounded variance)
+% %, and those whose dimension increases, respectively).
+% But, our theoretical results do not shed light on the finite sample performance of \Mgc.
+% %We are interested, therefore, in understand which of these tests performs well in various simulated settings.
+% Specifically, 
+We are interested in assessing the performance of our newly proposed multiscale tests in a comprehensive set of simulations, to better understand which the tests, and gain insight into which to use in different settings.  
+% to previous tests like \Hhg, \Mcorr, \Dcorr, and \Mantel, each of which performs well in a fraction but not all of the simulations.
 %\Mcorr~is a generalization of \Dcorr~that achieves better performance in high-dimensional settings, and nearly identical performance in low-dimensional settings, for brevity here. And \Dcorr~is a generalization of \Mantel~that has stronger theoretical support.  Therefore, in this section, we only consider \Mcorr~and \Hhg~as the global benchmarks, and compare them with \Mgcm~(though see Figure \ref{f:nDAll} in Appendix \ref{appen:function} for all algorithm performance).
-
-To do so, we consider $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several additional settings.  They include:
+We therefore consider $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several additional settings.  They include:
 linear and nearly linear  (1-5),
 polynomial   (6-12),
 trigonometric (13-17),
@@ -448,11 +426,8 @@ Each panel shows empirical testing power on the absicca at a significant level $
 %In this section we consider the same $20$ functions as in Section~\ref{numer1}, but increase the dimensionality while keeping sample sizes fixed  at $n=100$.
 %Note that for all dependencies, the dimensionality of \mbx~is increasing, but the dimensionality of \mby~increases in only a subset of the settings (see Appendix \ref{appen:function} for details).
 
-Figure~\ref{f:nD} shows the testing powers of \Mgc, \Mcorr, and \Hhg~versus the dimensionality of \mbx~(see Methods for details), with the sample sizes fixed at $n=100$ for each simulation. Note that
-% for all dependencies, the dimensionality of \mbx~is increasing, but
-the dimensionality of \mby~increases in only a subset of the settings.
- % (see Appendix \ref{appen:function} for details).
-
+Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each simulation.  We compare  our novel test, \Mgc, with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios, are qualitatively similar, and are therefore relegated to Appendix \ref{appen:figs}, in which we also compare to \Mantel~and \Dcorr, as well as our novel local variants of both \Mantel~and \Dcorr.  
+% 
 The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~as the dimension increases.  For the remaining nonlinear dependencies, \Mgc~ achieves superior power than \Hhg~and \Mcorr~for \emph{all} functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected according to the theory.
 
 \subsection*{\Mgc~dominates Global Counterparts}
@@ -476,6 +451,33 @@ It is clear that \Mgc always significantly improves over its global counterpart.
 \end{figure}
 
 %From Figure~\ref{f:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr~/ \Mcorr~in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgcp~perform similarly as the other two \Mgc~implementations.
+
+
+\subsection*{Theoretical Consistency of \Mgc}
+\label{s:theory}
+
+The formal testing scenario is as follows: we observe $n$ pairs of observations, $(\mbx_i,\mby_i)$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
+% suppose two data sets $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$ are given, where $n$ is the sample size, $d_{x}$ and $d_{y}$ are the dimensions of each data set. Under the classical hypothesis testing framework, $\mbx_{i}, i=1,\ldots,n$ are assumed identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of the random variable $\mb{x}$; similarly $\mby_{i}$ are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
+\begin{align*}
+& H_{0}: f_{xy}=f_{x}f_{y},\\
+& H_{A}: f_{xy} \neq f_{x}f_{y}.
+\end{align*}
+% where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y})$.
+
+The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false.  As defined above, a test is consistent if its power converges to $1$ as sample size increases.
+Let $\G_t$ denote a global generalized correlation coefficient based test, that is, $t$ might indicate \Mantel, \Dcorr, or \Mcorr, and let $\beta(\G_t^*)$ denote the power of the corresponding multiscale version.
+Recall from the work Szekeley et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
+ % in different scenarios, leads us to our first theorem.
+% A consistent test statistic has power $1$ asymptotically, i.e., the test statistic under the alternative is asymptotically larger than the statistic under the null. Denote the type 1 error level as $\alpha$, the testing power of \Mgc~as $\beta_{\alpha}(\G^{*})$, and the power of the respective global test as $\beta_{\alpha}(\G)$. Assuming the optimal scale is estimated by the testing power, we have the following theorem regarding the consistency of \Mgc, whose proof is provided in Appendix \ref{appen:proofs}:
+\begin{thm}
+\label{thm1}
+$\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
+% whenever $\beta(\G)$ does.
+% Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
+\end{thm}
+
+Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. 
+Asymptotic consistency, however, does not convey to us how quickly \Mgc~achieves optimal power in various settings, and whether it exhibits significant advantage over its global counterpart and other popular methods.  For that, we turn to numerical simulations.
 
 % 31 lines; target = 64
 \subsection*{Discovery of Dependency Across Scales}
@@ -819,6 +821,13 @@ for $d=1,\ldots,d_{x}$.
 
 For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except  (20); for some settings (11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are "directly" dependent. Then we can independently generate $(\mbx_{i},\mby_{i})$ from $(\mb{x},\mb{y})$ for $i=1,\ldots,n$, set $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$, and calculate local / global correlations for the sample data. A visualization of each dependency is shown in Figure~\ref{f:dependencies}.
 
+
+For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $d_{x}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. The decaying vector $w$ is utilized for $d_{x}>1$ to treat higher dimensions as small perturbations, which creates a meaningful setting for testing power comparison. The powers of all three \Mgc~implementations in this setting are provided in Figure~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
+
+\section{Supplementary Figures}
+\label{appen:figs}
+
+
 \begin{figure}[htbp]
 \includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{../Figures/FigSimVisual}
 \caption{Visualization of the $20$ dependencies for $1$-dimensional simulations. The blue points are generated with noise (c=1) at $n=100$ to show the actual sample data in testing, and the red points are generated without noise at $n=1000$ to highlight each underlying dependency.
@@ -826,7 +835,6 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except  (20);
 \label{f:dependencies}
 \end{figure}
 
-For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $d_{x}$ increasing while $d_{y}=d_{x}$ for type $5,10,14,15,18,20$ and $d_{y}=1$ otherwise. The decaying vector $w$ is utilized for $d_{x}>1$ to treat higher dimensions as small perturbations, which creates a meaningful setting for testing power comparison. The powers of all three \Mgc~implementations in this setting are provided in Figure~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
 
 Here we also present an additional setting, which sets $d_{x}=d_{y}=1$ and $c=1$ with the sample size $n$ increasing from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
 

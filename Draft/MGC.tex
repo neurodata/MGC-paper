@@ -106,6 +106,10 @@
 \newtheorem*{defi*}{Properties}
 \newtheorem{asn}{Assumption}
 \newcommand*\mean[1]{\bar{#1}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
 \begin{document}
 
 \def\spacingset#1{\renewcommand{\baselinestretch}%
@@ -160,7 +164,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 \spacingset{1.45}
 
 
-% 64 lines
+% 73 lines; target = 64
 % \section{Introduction}
 
 Detecting dependency among multiple data sets is one of the most important and fundamental tasks in computational statistics and data science.
@@ -196,7 +200,7 @@ We desire tests that satisfy the above desiderata, both in theory as well as in 
 
 % and we can also demonstrate them both in extensive simulations and real data.
 
-There are two key insights from the literature that we combine to develop our methodology.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces.  Our approach, Multiscale Graph Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
+There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces.  Our approach, Multiscale Graph Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
 
 
 
@@ -209,22 +213,26 @@ For data adaptation, I removed it for now, because I actually think having an ad
 
 
 Interpoint pairwise comparison matrices have been used for over 100 years for various statistical purposes. Perhaps one of the earliest examples  comes from  Karl Pearson, who created Pearson's Product-Moment Correlation \cite{Pearson1895},   a special case of something subsequently named  ``generalized correlation coefficients'' \cite{KendallBook}.
-Specifically, we can define $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and we can define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. Without loss of generality, assuming $a_{ij}$ and $b_{ij}$ are of zero mean, the generalized correlation coefficient can then be written:
+Specifically, let $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the interpoint comparison matrices for $\mbx$ and $\mby$, respectively.  
+Without loss of generality, assuming $A$ and $B$ have zero mean, the generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
 \G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}},
 \end{equation}
-where $z$ is the product of standard deviations multiplied by the number of entries, that is $z=n^2\sigma_a \sigma_b$.
-In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.
-$\G$ has many well known special cases, including Pearson, Spearman, and Kendall's (see Kendall 1970 for more details).
-Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel~coefficient \cite{Mantel1967}, a widely-used method in biology and ecology, defines $a_{ij}=||\mbx_i-\mbx_j||_{2}$.
-\Mantel, however, does not have any theoretical support for being a generally consistent test.
-Szekely et al. \cite{SzekelyRizzoBakirov2007} extended the distance-based approach, rather than merely subtracting the overall mean, they subtract the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the distance correlation test's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments.
-\Dcorr, however, breaks down as the dimensionality of the data increases.  By adjusting the high-dimensional bias of \Dcorr, Szekely et al. \cite{SzekelyRizzo2013a} further proposed \Mcorr, which is proven to work better in high-dimensions.
+where $z$ is proportional to standard deviations of $A$ and $B$, that is $z=n^2\sigma_a \sigma_b$.
+In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  
+% That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.
+$\G$ has many well known special cases, including Pearson \cite{Pearson1895}, Spearman \cite{Spearman1904}, Kendall \cite{KendallBook}, and Mantel \cite{Mantel1967}, which is widely used in biology and ecology.
+% Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel~coefficient \cite{Mantel1967}, a widely-used method in biology and ecology, defines $a_{ij}=||\mbx_i-\mbx_j||_{2}$.
+% \Mantel, however, does not have any theoretical support for being a generally consistent test.
+Recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} extended these approaches, rather than merely subtracting the overall mean, they subtract the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the \Dcorr's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments.
+% \Dcorr, however, breaks down as the dimensionality of the data increases.  
+By adjusting the high-dimensional bias of \Dcorr, Szekely et al. \cite{SzekelyRizzo2013a} further proposed \Mcorr, which is proven to be consistent as dimensions increase to infinity as well.
+% work better in high-dimensions.
 % The first, called ``distance correlation'' (\Dcorr), is a distance-based generalization of Pearson's product-moment correlation statistic \cite{RizzoSzekely2016}.
 % \Dcorr~and its generalizations
 Existing generalized correlation coefficient based tests therefore
-work well in high dimensions and low sample sizes \cite{SzekelyRizzoBakirov2007,SzekelyRizzo2013a}, including in complicated domains \cite{Lyons2013}, and are reasonably computationally efficient, but, struggles in various non-linear settings,
+work well in high dimensions and low sample sizes \cite{SzekelyRizzoBakirov2007,SzekelyRizzo2013a}, including in complicated domains \cite{Lyons2013}, and are reasonably computationally efficient. But, they struggle in various non-linear settings,
 do not automatically adapt to the data,
 and do not provide much insight into the nature of the dependence, other than a p-value.
 
@@ -233,7 +241,7 @@ and do not provide much insight into the nature of the dependence, other than a 
 
 
 
-A deep insight that neither of the above approaches have capitalized on, although has reaped benefits in myriad data science problems, is that of locality.  Locality has been utilized for classification and regression (k-nearest neighbors \cite{Stone1977}), data compression (wavelets \cite{DaubechiesWaveletBook}), and recommender systems \cite{Sarwar2000}, to name a few.
+A deep insight that the generalized correlation coefficient tests  have failed to capitalized on, although it has reaped benefits in myriad data science problems, is that of locality.  Locality has been utilized for classification and regression  \cite{Stone1977}, data compression \cite{DaubechiesWaveletBook}, and recommender systems \cite{Sarwar2000}, to name a few.
 Moreover, it has become an invaluable tool in unfolding nonlinear geometry in many recent development of nonlinear embedding algorithms, dating back to the 1950s \cite{TorgersonBook}, and more recently making a resurgence with the advent of  Isomap \cite{TenenbaumSilvaLangford2000, SilvaTenenbaum2003}, Local Linear Embedding \cite{SaulRoweis2000, RoweisSaul2003}, and Laplacien eigenmaps \cite{BelkinNiyogi2003}, among many others. The concept of locality, while popular within certain fields has only entered into  testing very infrequently
 % Most relevant to our work, a number of approaches to two-sample and dependence testing have utilized nearest-neighbor graphs
 \cite{David1966,Friedman1983,Schilling1986}.  These approaches have the advantage of naturally operating on complicated data, including categorical and structured data, as well as strong theoretical guarantees. However, these approaches focus on two-sample testing, rather than dependence testing. Moreover, these tests all fail to provide  a convenient or automatic way to choose the appropriate neighborhood size.  This omission burdens the user of the test to come up with a heuristic, thereby greatly impairs their practical usages and finite sample performances. In fact, adaptively choosing the scale to regularize the data is a pernicious problem in essentially all existing local procedures,
@@ -247,19 +255,19 @@ and a good choice of joint neighborhood can better unfold the nonlinearity and m
 
 
 
-\jv{there are a few details in next paragraph we should discuss for better accuracy}
-\cs{ok}
-% XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
-More specifically,  we propose Multiscale Graph Correlation (\Mgc),
-which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
-% \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes.
-\Mgc~performs as well or better than the existing literature on each mentioned design goal, in theory, and extensive simulations.
-% More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.
-In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and personality, and did not inflate the false positive rate when the dependencies are not there, unlike some other methods for fMRI analysis in \cite{EklundKnutsson2012}.
-% In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent.
-We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
+% \jv{there are a few details in next paragraph we should discuss for better accuracy}
+% \cs{ok}
+% % XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
+% More specifically,  we propose Multiscale Graph Correlation (\Mgc),
+% which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
+% % \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes.
+% \Mgc~performs as well or better than the existing literature on each mentioned design goal, in theory, and extensive simulations.
+% % More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.
+% In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and personality, and did not inflate the false positive rate when the dependencies are not there, unlike some other methods for fMRI analysis in \cite{EklundKnutsson2012}.
+% % In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent.
+% We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
 
-% 250 lines; target = 192
+% 193 lines; target = 192
 % \section{Results}
 % \label{s:results}
 
@@ -276,22 +284,24 @@ Our \Mgc~combines generalized correlation coefficients with  graph distances, in
     a_{ij}^k=
     \begin{cases}
       a_{ij}-\bar{a}^{k}, & \text{if } R(a_{ij}) \leq k, \\
-      -\bar{a}^{k}, & \text{otherwise};
+      % -\bar{a}^{k}, & \text{otherwise};      
+      0, & \text{otherwise};
     \end{cases} \qquad \qquad
     b_{ij}^l=
     \begin{cases}
       b_{ij}-\bar{b}^{l}, & \text{if } R(b_{ij}) \leq l, \\
-      -\bar{b}^{l}, & \text{otherwise};
+      % -\bar{b}^{l}, & \text{otherwise};
+      0, & \text{otherwise};
     \end{cases}
 \end{equation}
-where $\bar{a}^{k}$ and $\bar{b}^{l}$ are two mean-adjusting scalars such that $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$. Then we can define a \emph{local} variant of any global generalized correlation coefficient, which essentially excludes large distances up-to the centering scalars:
+where $\bar{a}^{k}$ and $\bar{b}^{l}$ are two mean-adjusting scalars such that $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$. Then we can define a \emph{local} variant of any global generalized correlation coefficient, by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
 \label{localCoef}
-\G_{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
+\G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
 \end{equation}
 where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combinations of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
-As an example, $\G_{kl}$ could be a local distance correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the global distance correlation coefficient $\G$.
-Among all $n^2$ local statistics, $\{\G_{kl}\}$, \Mgc~selects the best local statistic for testing. %(see Appendix \ref{appen:algorithms} for details on how to compute local correlations and estimate \Mgc).
+% As an example, $\G^{kl}$ could be a local distance correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the global distance correlation coefficient $\G$.
+Among all $n^2$ local statistics, $\{\G^{kl}\}$, \Mgc~selects the best local statistic for testing. %(see Appendix \ref{appen:algorithms} for details on how to compute local correlations and estimate \Mgc).
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigA}
@@ -309,7 +319,7 @@ Column 5: The top panel is the testing powers of all local correlations, where t
 %
 
 Having defined how to compute \Mgc, we face three challenges to make the method practical. First, in addition to the test statistic, we need to compute the null distribution, so that we may find the critical values and p-values.
-Second, na\"ively, computing all local $\G_{kl}$ statistics would require an unacceptably large computational budget.
+Second, na\"ively, computing all local $\G^{kl}$ statistics would require an unacceptably large computational budget.
 % require $\mc{O}(n^4)$, because it requires $\mc{O}(n^2)$ time to compute each local statistic (Pseudocode \ref{alg:1scale} in Appendix \ref{appen:algorithms}).  That computational burden would be so high as to make doing so impractical.
 Third, having computed all local statistics, we require a method for choosing the optimal neighborhood size, in such a way that the test is still consistent, and not biased (meaning that the resultant p-value is valid).
 
@@ -934,7 +944,7 @@ In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\t
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating data. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average / max ranks.
 
-Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique. Among all local correlations, it suffices to exclude $\G_{1l}$ and $\G_{k1}$ for testing and optimal scale estimation: since $\G_{1l}=\G_{k1}=\G_{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
+Among all possible local correlations, MGC picks the optimal local correlation that yields the best testing power. The optimal scale clearly exists, but is distribution dependent and is almost always non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
 
 %Another technical detail worth mentioning: in our definition of $\bar{a}^{k}, \sigma_a^{k}, \bar{b}^{l}, \sigma_b^{l}$, they are computed from all entries of $a_{ij}^k$ and $b_{ij}^l$, e.g., $\bar{a}^{k}$ equals $\dfrac{1}{n^2} \sum_{i,j=1}^{n} a_{ij}^k$. Alternatively, one may exclude the zero entries in computing the means and standard deviations of the truncated comparisons, i.e., $\bar{a}^{k}=\dfrac{1}{nk} \sum_{i,j=1}^{n} a_{ij}^k$ for \Dcorr, etc., then properly adjust the scalar factor $n^2$ in $z_{kl}$. But for ease of presentation, we presented the more intuitive definition in the main paper, which is empirically equivalent to the alternative definition for the testing purpose.
 
@@ -969,8 +979,8 @@ All algorithms are implemented in Matlab and R with the pseudo-code shown below.
 
 Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient.
 
-To facilitate the optimal scale estimation, algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G_{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G_{kl}$
-whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G_{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G_{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G_{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.
+To facilitate the optimal scale estimation, algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
+whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.
 
 Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$.
 
@@ -984,20 +994,20 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \label{alg:1scale}
 \begin{algorithmic}[1]
 \Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, and the given local scale $(k,l) \in \Real \times \Real$.
-\Statex Output: The local correlation coefficient $\G_{kl} \in [-1,1]$ at the given $(k,l)$.
+\Statex Output: The local correlation coefficient $\G^{kl} \in [-1,1]$ at the given $(k,l)$.
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
 \State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ as $0$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{column-wise sorting and assume no ties}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$} \Comment{proper centering of the distance matrices}
 \For{$i,j=1,\ldots,n$}
-\State $\G_{kl}=\G_{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance covariance}
+\State $\G^{kl}=\G^{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance covariance}
 \State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store local distance variance for $X$}
 \State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance variance for $Y$}
 \State $E^{A}_{k}=E^{A}_{k}+A_{ij}\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store the sample means}
 \State $E^{B}_{l}=E^{B}_{l}+B_{ij}\mb{I}(R^{B}_{ij} \leq l)$
 \EndFor
 
-\State $\G_{kl}=\left(\G_{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{normalize the local covariances}
+\State $\G^{kl}=\left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{normalize the local covariances}
 
 \EndFunction
 \end{algorithmic}
@@ -1008,7 +1018,7 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \label{alg:all_scales}
 \begin{algorithmic}[1]
 \Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.
-\Statex Output: All local correlation coefficients $\G_{kl} \in [-1,1]^{n \times n}$ for $k,l=1,\ldots,n$.
+\Statex Output: All local correlation coefficients $\G^{kl} \in [-1,1]^{n \times n}$ for $k,l=1,\ldots,n$.
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$}
 \State initialize $\G$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$}
@@ -1016,7 +1026,7 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \For{$i,j=1,\ldots,n$}
 \State $k=R^{A}_{ij}$
 \State $l=R^{B}_{ij}$
-\State $\G_{kl}=\G_{kl}+A_{ij}B_{ij}$
+\State $\G^{kl}=\G^{kl}+A_{ij}B_{ij}$
 \State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2$
 \State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2$
 \State $E^{A}_{k}=E^{A}_{k}+A_{ij}$
@@ -1024,18 +1034,18 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \EndFor
 \Statex \Comment{the next two for loops with respect to the scales guarantee the computation of all local covariance / variance in $O(n^2)$}
 \For{$k=1,\ldots,n-1$}
-\State $\G_{1, k+1}=\G_{1, k}+\G_{1, k+1}$
-\State $\G_{k+1,1}=\G_{k+1,1}+\G_{k+1,1}$
+\State $\G^{1, k+1}=\G^{1, k}+\G^{1, k+1}$
+\State $\G^{k+1,1}=\G^{k+1,1}+\G^{k+1,1}$
 \Linefor{$Z:=A,B$}{$V^{Z}_{k+1}=V^{Z}_{k}+V^{Z}_{k+1}$}
 \Linefor{$Z:=A,B$}{$E^{Z}_{k+1}=E^{Z}_{k}+E^{Z}_{k+1}$}
 \EndFor
 
 \For{$k,l=1,\ldots,n-1$}
-\State $\G_{k+1,l+1}=\G_{k+1,l}+\G_{k,l+1}+\G_{k+1,l+1}-\G_{k,l}$
+\State $\G^{k+1,l+1}=\G^{k+1,l}+\G^{k,l+1}+\G^{k+1,l+1}-\G^{k,l}$
 \EndFor
 
 \For{$k,l=1,\ldots,n$} \Comment{normalize all local covariances}
-\State $\G_{kl}=\left(\G_{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
+\State $\G^{kl}=\left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
 \EndFor
 \EndFunction
 \end{algorithmic}
@@ -1048,14 +1058,14 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \Statex Input: A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.
 \Statex Output: The p-value matrix $P \in [0,1]^{n \times n}$ for all local distance correlations.
 \Function{PermutationTest}{$\tilde{A}$,$\tilde{B}$,$r$}
-\State $\G_{kl}=\textsc{LocalCorr}(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
+\State $\G^{kl}=\textsc{LocalCorr}(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
 \For{$j=1,\ldots,r$}
 \State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$}
-\State $\G_{kl}^{0}[j]=\textsc{LocalCorr}(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
+\State $\G^{kl}_{0}[j]=\textsc{LocalCorr}(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
 \EndFor
 
 \For{$k,l=1,\ldots,n$}
-\State $P_{kl}=\sum_{j=1}^{r}(\G_{kl}<\G^{0}_{kl}[j])/r$ \Comment{get the p-value at each local scale}
+\State $P_{kl}=\sum_{j=1}^{r}(\G^{kl}<\G^{kl}_{0}[j])/r$ \Comment{get the p-value at each local scale}
 \EndFor
 \EndFunction
 \end{algorithmic}
@@ -1105,17 +1115,17 @@ Algorithm~\ref{alg:power} computes the testing powers of all local correlations 
 \caption{Testing Powers Computation for All Local Correlations}
 \label{alg:power}
 \begin{algorithmic}[1]
-\Statex Input: A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
-\Statex Output: The power matrix $\beta_{\alpha} \in [0,1]^{n \times n}$ for all local correlations, and the \Mgc~optimal scale $(k^{*},l^{*}) \in \Real \times \Real$.
+\Require A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
+\Ensure The power matrix $\beta_{\alpha} \in [0,1]^{n \times n}$ for all local correlations, and the \Mgc~optimal scale $(k^{*},l^{*}) \in \Real \times \Real$.
 \Function{TestingPowers}{$f_{xy}$,$n$, $r$,$\alpha$}
 \For{$j=1,\ldots,r$}
 \Linefor{$i:=[n]$}{$(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$} \Comment{generate dependent samples}
 \Linefor{$i:=[n]$}{$X^{0}_{i} \stackrel{iid}{\sim} f_{x}$} \Comment{generate independent samples}
 \Linefor{$i:=[n]$}{$Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$}
-\Linefor{$Z:=A,B$}{$\tilde{Z}^{1}=\textsc{Dist}(Z^{1})$} \Comment{the distance matrices under the alternative}
-\Linefor{$Z:=A,B$}{$\tilde{Z}^{0}=\textsc{Dist}(Z^{0})$} \Comment{the distance matrices under the null}
-\State $\G_{kl}^{1}[j]=\textsc{LocalCorr}(\tilde{A}^{1},\tilde{B}^{1})$ \Comment{calculate all local correlations under the alternative}
-\State $\G_{kl}^{0}[j]=\textsc{LocalCorr}(\tilde{A}^{0},\tilde{B}^{0})$ \Comment{calculate all local correlations under the null}
+\Linefor{$Z:=A,B$}{$\tilde{Z}_{1}=\textsc{Dist}(Z_{1})$} \Comment{the distance matrices under the alternative}
+\Linefor{$Z:=A,B$}{$\tilde{Z}_{0}=\textsc{Dist}(Z_{0})$} \Comment{the distance matrices under the null}
+\State $\G^{kl}_{1}[j]=\textsc{LocalCorr}(\tilde{A}_{1},\tilde{B}_{1})$ \Comment{calculate all local correlations under the alternative}
+\State $\G^{kl}_{0}[j]=\textsc{LocalCorr}(\tilde{A}_{0},\tilde{B}_{0})$ \Comment{calculate all local correlations under the null}
 \EndFor
 
 \For{$k,l=1,\ldots,n$}
@@ -1165,7 +1175,7 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 \begin{proof}
 For any $f_{xy}$, the power of multiscale graph correlation satisfies
 \begin{equation}
-\beta(\G^{*})=\max\mbx_{k,l}\{\beta(\G_{kl})\} \geq \beta(\G),
+\beta(\G^{*})=\max\mbx_{k,l}\{\beta(\G^{kl})\} \geq \beta(\G),
 \end{equation}
 at any type $1$ error level $\alpha$. So $\beta(\G^{*}) \rightarrow 1$ if $\beta(\G) \rightarrow 1$.
 
@@ -1183,7 +1193,7 @@ Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G_{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence.
 
 Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
 \begin{equation}
@@ -1191,7 +1201,7 @@ Under linear dependency, for any global correlation coefficient satisfying Equat
 \end{equation}
 for any permutation matrix $Q$, where the equality holds if and only if $X$ is a scalar multiple of $YQ$. It follows that the p-value of $\G$ is $0$, which is at the minimal.
 
-Therefore the p-value of $\G_{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency.
+Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency.
 \end{proof}
 
 
@@ -1214,7 +1224,7 @@ Suppose under the alternative, each pair of observation $(\mbx,\mby)$ is sampled
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-At $n=7$, we can directly calculate $\G_{kl}(X, Y)$ and $\{\G_{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210}$, while $\G_{kl}(X, Y)=\frac{17}{70}$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$.
+At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210}$, while $\G^{kl}(X, Y)=\frac{17}{70}$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$.
 
 Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
 

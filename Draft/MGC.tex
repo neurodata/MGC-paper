@@ -381,7 +381,7 @@ We define the p-value of \Mgc~to be the p-value from the optimal scale, and decl
 We are interested in assessing the performance of our newly proposed multiscale tests in a comprehensive set of simulations, to better understand which the tests, and gain insight into which to use in different settings.  
 % to previous tests like \Hhg, \Mcorr, \Dcorr, and \Mantel, each of which performs well in a fraction but not all of the simulations.
 %\Mcorr~is a generalization of \Dcorr~that achieves better performance in high-dimensional settings, and nearly identical performance in low-dimensional settings, for brevity here. And \Dcorr~is a generalization of \Mantel~that has stronger theoretical support.  Therefore, in this section, we only consider \Mcorr~and \Hhg~as the global benchmarks, and compare them with \Mgcm~(though see Figure \ref{f:nDAll} in Appendix \ref{appen:function} for all algorithm performance).
-We therefore consider $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several additional settings.  They include:
+We therefore consider $20$ different joint distributions $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}, and we have added several additional settings.  They include
 linear and nearly linear  (1-5),
 polynomial   (6-12),
 trigonometric (13-17),
@@ -426,11 +426,14 @@ Each panel shows empirical testing power on the absicca at a significant level $
 %In this section we consider the same $20$ functions as in Section~\ref{numer1}, but increase the dimensionality while keeping sample sizes fixed  at $n=100$.
 %Note that for all dependencies, the dimensionality of \mbx~is increasing, but the dimensionality of \mby~increases in only a subset of the settings (see Appendix \ref{appen:function} for details).
 
-Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each simulation.  We compare  our novel test, \Mgc, with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios, are qualitatively similar, and are therefore relegated to Appendix \ref{appen:figs}, in which we also compare to \Mantel~and \Dcorr, as well as our novel local variants of both \Mantel~and \Dcorr.  
+Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each simulation.  We compare  our novel test, \Mgc, with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios,
+in which we also compare to \Mantel~and \Dcorr, 
+as well as our novel multiscale variants of both \Mantel~and \Dcorr, 
+ are qualitatively similar, and are therefore relegated to Appendix \ref{appen:figs}, 
 % 
-The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~as the dimension increases.  For the remaining nonlinear dependencies, \Mgc~ achieves superior power than \Hhg~and \Mcorr~for \emph{all} functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected according to the theory.
+The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~as the dimension increases.  For the remaining nonlinear dependencies, \Mgc~achieves superior power than \Hhg~and \Mcorr~for \emph{all} functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected according to the theory.
 
-\subsection*{\Mgc~dominates Global Counterparts}
+\subsection*{\Mgc~Emperically Dominates Global Counterparts}
 
 
 To better summarize the advantages of global versus local, Figure~\ref{f:pp} shows how the powers change from each global correlation to its \Mgc~implementation, for each dependency in Figure~\ref{f:nD}. Indeed, \Mgc~always improves over its global correlation, regardless of the global correlation that is being used. Note that the actual powers for \Dcorr, \Mantel~, and their \Mgc~variants are included in Appendix \ref{appen:function}, where the same conclusion for \Mgc~superiority still hold. We also present in Appendix \ref{appen:function} an additional simulation setting with increasing sample size and fixed dimensionality to observe that the powers of \Mgc~converge to $1$ faster than all the benchmarks for nearly all dependencies.
@@ -453,7 +456,32 @@ It is clear that \Mgc always significantly improves over its global counterpart.
 %From Figure~\ref{f:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr~/ \Mcorr~in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgcp~perform similarly as the other two \Mgc~implementations.
 
 
-\subsection*{Theoretical Consistency of \Mgc}
+
+
+% 31 lines; target = 64
+\subsection*{Discovery of Dependency Across Scales}
+\label{main3}
+
+A multiscale power map is a heatmap of powers for all neighborhood sizes, for a given joint distribution and sample size.
+Figure~\ref{f:powermaps} provides the multiscale power maps for all 20 different scenarios for a specified dimensionality (see caption for details), illustrating how the powers of local correlations change with respect to increasing neighborhood sizes.
+% , for the high-dimensional simulations
+%(the $1$-dimensional case is provided in Figure \ref{f:powermaps1} in Appendix \ref{appen:methods}).
+% They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}A and C.
+
+The multiscale power map sheds light into the intrinsic dependency structure.
+For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), \Mgc~almost always chooses a smaller scale in a distribution dependent fashion. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6) and W (7) are both polynomials of degree 2 with different coefficients, and their power maps are quite similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
+Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
+Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scale for real data.
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
+\caption{Influence of neighborhood size on testing power of local correlations at $\alpha=0.05$.
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the largest dimension for \Mgc~to have powers exceeding the threshold $0.5$. Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
+\label{f:powermaps}
+\end{figure}
+
+
+\subsection*{\Mgc~Theoretically Dominates its Global Counterparts}
 \label{s:theory}
 
 The formal testing scenario is as follows: we observe $n$ pairs of observations, $(\mbx_i,\mby_i)$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
@@ -479,27 +507,6 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. 
 Asymptotic consistency, however, does not convey to us how quickly \Mgc~achieves optimal power in various settings, and whether it exhibits significant advantage over its global counterpart and other popular methods.  For that, we turn to numerical simulations.
 
-% 31 lines; target = 64
-\subsection*{Discovery of Dependency Across Scales}
-\label{main3}
-
-A multiscale power map is a heatmap of powers for all neighborhood sizes, for a given joint distribution and sample size.
-Figure~\ref{f:powermaps} provides the multiscale power maps for all 20 different scenarios for a specified dimensionality (see caption for details), illustrating how the powers of local correlations change with respect to increasing neighborhood sizes.
-% , for the high-dimensional simulations
-%(the $1$-dimensional case is provided in Figure \ref{f:powermaps1} in Appendix \ref{appen:methods}).
-% They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}A and C.
-
-The multiscale power map sheds light into the intrinsic dependency structure.
-For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), \Mgc~almost always chooses a smaller scale in a distribution dependent fashion. Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6) and W (7) are both polynomials of degree 2 with different coefficients, and their power maps are quite similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
-Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
-Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scale for real data.
-
-\begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
-\caption{Influence of neighborhood size on testing power of local correlations at $\alpha=0.05$.
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the largest dimension for \Mgc~to have powers exceeding the threshold $0.5$. Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
-\label{f:powermaps}
-\end{figure}
 
 The above described qualitative descriptions led us to believe the following two conjectures.  First, for linear dependencies,  the optimal \Mgc~scale is the global one. Second, under certain nonlinear dependencies, \Mgc~can achieve a better finite-sample testing power than its corresponding global correlation. Indeed, we were able to prove both of these claims:
 

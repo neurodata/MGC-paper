@@ -128,11 +128,11 @@ p=tN(:,n,n);
 [f,xi]=ksdensity(p,'support',[-1,1]);
 hold on
 %plot(xi,f,'.-','LineWidth',2);
-plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',2);
+plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',5);
 set(gca,'FontSize',24);
 h=legend('Mcorr','MGC','Location','NorthEast');
 set(h,'FontSize',30);
-plot(tA(end),0.01,'.',tA(k,l),0.01,'k.','MarkerSize',80);
+plot(tA(end),0.01,'.',tA(k,l),0.01,'k*','MarkerSize',50);
 xlim([minp,maxp]);
 ylabel('Density Function','FontSize',24);
 %ylim([-1 15]);
@@ -177,7 +177,7 @@ end
 %xlabel('$$\tilde{A}_{ij}=|x_{i}-x_{j}|_{2}$$','FontSize',30,'interpreter','latex','position',[0,-1])
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
-xlabel('$\|x_{i}-x_{j}\|_{2}$','FontSize',30,'interpreter','latex')
+xlabel('$\|x_{i}-x_{j}\|$','FontSize',30,'interpreter','latex')
 title('$\tilde{A}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
 
 %subplot(s,t,6)
@@ -197,7 +197,7 @@ caxis([0,maxC]);
 set(gca,'XTick',[]); % Remove x axis ticks
 set(gca,'YTick',[]); % Remove y axis ticks
 %xlabel('\tilde{B}_{ij}=\|y_{i}-y_{j}\|_{2}','FontSize',25);
-xlabel('$\|y_{i}-y_{j}\|_{2}$','FontSize',30,'interpreter','latex')
+xlabel('$\|y_{i}-y_{j}\|$','FontSize',30,'interpreter','latex')
 title('$\tilde{B}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
 
 % A3: heatmaps of the doubly centered distance matrices
@@ -401,5 +401,5 @@ for option=1:1
     %     %set(h,'FontSize',16,'location','southoutside');
     %set(gca,'XTick',[]); % Remove x axis ticks
     %set(gca,'YTick',[]); % Remove y axis ticks
-    title('Testing Powers','FontSize',30);
+    title('Multiscale Power Map','FontSize',30);
 end

@@ -1,15 +1,15 @@
 LATEX = pdflatex
 SPELL = aspell
-TEX = LDC 
+TEX = MGC
 BIBTEX = bibtex
 
 
-default: $(TEX).tex 
+default: $(TEX).tex
 	$(LATEX) $(TEX); $(BIBTEX) $(TEX); $(LATEX) $(TEX); $(LATEX) $(TEX);
-	$(RM) -f  *.blg *.dvi *.log *.toc *.lof *.lot *.cb *.bbl *.brf *.out $(TEX).ps 
+	$(RM) -f  *.blg *.dvi *.log *.toc *.lof *.lot *.cb *.bbl *.brf *.out *.aux *.fls *.fdb_latexmk *.soc $(TEX).ps
 	open $(TEX).pdf &
 
-view: $(TEX).tex 
+view: $(TEX).tex
 	$(LATEX) $(TEX); $(BIBTEX) $(TEX); $(LATEX) $(TEX); $(LATEX) $(TEX)
 	open $(TEX).pdf &
 

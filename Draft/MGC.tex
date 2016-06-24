@@ -209,12 +209,6 @@ There are two key insights from the literature that we combine to develop our me
 
 
 
-\jv{I made some changes in the paragraph below for better accuracy.}
-\cs{why did you remove ``doesn't adapt to data?'', and complicated domains?  }
-\jv{complicated domain is still there for dcorr.
-For data adaptation, I removed it for now, because I actually think having an additional hyperparameter is not necessarily an advantage, i.e., performance surely improves with more parameters, but it will require good estimation. So data adaptation is the property of our method and not theirs, but I don't think it is a disadvantage for them. What do you think?}
-\cs{definitely a disadvantage.}
-% Two related and very recent approaches stand out for their abilities in dealing with the above challenges.
 
 
 Interpoint pairwise comparison matrices have been used for over 100 years for various statistical purposes \cite{Maa1996}. Perhaps one of the earliest examples of using them for dependence testing comes from  Karl Pearson \cite{Pearson1895}, who created  a special case of something subsequently called a ``generalized correlation coefficient'' \cite{KendallBook}.
@@ -236,14 +230,10 @@ Recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} extended these approache
 % \Dcorr, however, breaks down as the dimensionality of the data increases.  
 % By adjusting the high-dimensional bias of \Dcorr, 
 Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $x$ and $y$ increase to infinity as well.
-Moreover, because these distance based tests merely require a comparison function for both $x$ and $y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties \cite{Lyons2013}.
-\jv{that was not true above: lyons proves a general metric space for dcorr to be consistent, but didn't come up with any example of it, not to mention metric space for network/shape. Also the first sentence of the next paragraph is a bit misleading, I think, so I tried to rephrase; feel free to change again.}
+Moreover, because these distance based tests merely require a comparison function for both $x$ and $y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties, including certain networks, shapes, and other complicated spaces  \cite{Lyons2013}.
 
-Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given. However, 
-empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
-%
-%Thus, existing generalized correlation coefficient based tests therefore
-%work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
+% Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given.  However, empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
+Thus, existing generalized correlation coefficient based tests therefore work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
 
 
 % In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a principally justified method for choosing the neighborhood.
@@ -263,30 +253,6 @@ The challenge associated with all of methods that employ locality is in choosing
 Thus, a gap remains in the literature: a dependence test that has all of the desirable properties of the distance based tests, but also performs well in nonlinear settings via adapting scale appropriately, thereby providing insight into the most informative neighborhood sizes for both understanding and subsequent inference purposes.  
 
 
-
-% Moreover, these tests all fail to provide a convenient or automatic way to choose the appropriate neighborhood size.  This omission burdens the user of the test to come up with a heuristic, thereby greatly impairs their practical usages and finite sample performances. In fact, adaptively choosing the scale to regularize the data is a pernicious problem in essentially all existing local procedures,
-% and a good choice of joint neighborhood can better unfold the nonlinearity and match data sets of multiple modality \cite{ShenVogelsteinPriebe2016}. A primary contribution of our work is an efficient mechanism both for looking across scales, and for choosing the optimal scale.
-
-
-% In a separate academic linear, another dependence test named \Hhg~\cite{HellerGorfine2013} after its authors, performs very well on non-linear relationships, but falls short on some high-dimensional problems, may or may not work in complicated domains,
-% is more time consuming to compute, and does not adapt
-% % (again, does not have any explicit hyper-parameters),
-% and also does not provide insight into the nature of the dependence structure.  Although these two approaches are currently considered the best tests for dependence, it is hopefully clear that a gap exists in the literature for an approach that satisfies all of the above desiderata.
-
-
-
-% \jv{there are a few details in next paragraph we should discuss for better accuracy}
-% \cs{ok}
-% % XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
-% More specifically,  we propose Multiscale Generalized Correlation (\Mgc),
-% which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
-% % \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes.
-% \Mgc~performs as well or better than the existing literature on each mentioned design goal, in theory, and extensive simulations.
-% % More specifically, in a comprehensive simulation setting, \Mgc~is able to achieve superior finite-sample testing powers for data sets of nonlinearity, high-dimensionality with and small sample size, including outliers, quickly and adaptively.
-% In real data experiments, we show that \Mgc~is able to uncover the underlying dependency between brain shape and disease that global tests were unable to detect, revealed the structure of dependence between brain networks and personality, and did not inflate the false positive rate when the dependencies are not there, unlike some other methods for fMRI analysis in \cite{EklundKnutsson2012}.
-% % In this age of data, procedures that merely provide valid inferences are no longer sufficient; rather, the goal of running an analysis ought be provide additional insight to guide the practitioner to the next experiment or decision.  Crucially, \Mgc~does not merely provide valid p-values in myriad settings, rather, it also provides some insight into the nature of the dependence structure. To our knowledge, \Mgc~is the only dependence test that incorporates this important property, which we expect to be increasingly desirable as data becomes even more prevalent.
-% We  expect \Mgc~to find values in a wide range of applications; to facilitate this, we provide open source MATLAB and R implementations of \Mgc~at~\website.
-
 % 193 lines; target = 192
 % \section{Results}
 % \label{s:results}
@@ -301,7 +267,6 @@ All dependence tests start from the same setting: we observe $n$ pairs of observ
 Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
 Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each \mbx~and any neighborhood size $l$ around each \mby, we define the rank-truncated pairwise comparisons:
-\jv{alas, I tried only setting large distances to 0 below; but it would be too cumbersome algorithmically. So, either we do not center them at all (excluding mean), or keep the mean subtracted always. I am ok either way, and the simulation results won't change. }
 \begin{equation}
 \label{localCoef2}
     \mt{a}_{ij}^k=
@@ -317,8 +282,11 @@ Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$,
       0, & \text{otherwise};
     \end{cases}
 \end{equation}
-and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$.
-where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
+and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, 
+where $\bar{a}^k$ is the local mean;
+and define $b^k_{ij}$ similarly.
+% where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  
+We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
 \label{localCoef}
 \G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
@@ -345,7 +313,7 @@ the un-normalized \Mcorr~statistic, which is significant only when that sum is p
 Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=4$ (which happens to be optimal in this simulation). Note that their element-wise product is only positive numbers, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be significant.
 % The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
 Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic. The global correlation has a p-value of $0.24$ while \Mgc~has a p-value $<0.001$.
-Top shows a multiscale power map denoting the power for all possible scales in this simulation, demonstrating that the global scale (equivalent to ), achieves significantly lower power than \Mgc, which achieves essentially perfect power in this highly nonlinear dependence setting, as well as reveals which local scales have high power, a novel property for dependence tests.
+Top shows a multiscale power map denoting the power for all possible scales in this simulation, demonstrating that the global scale (equivalent to \Mcorr), achieves significantly lower power than \Mgc, which achieves essentially perfect power in this highly nonlinear dependence setting, as well as reveals which local scales have high power, a novel property for dependence tests.
 % \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
 % Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.
 }
@@ -371,15 +339,16 @@ Nearly all algorithms that employ regularization (for example, sparse methods, f
 % Unlike many manifold learning methods,
 % once the rank information is given,
 % 
-\jv{Need to discuss the last two paragraphs in this section; and I have combined two running time paragraph into one.}
 Most manifold learning algorithms require that the user essentially runs the entire algorithm again from scratch for each different hyper-parameter setting, a pursuit that can be exponentially taxing as the number of hyper-parameters increases.
 In our case, once the rank information is provided, each distance-based local correlation takes $O(n^2)$ time to compute (Pseudocode \ref{alg:1scale} in Appendix \ref{appen:algorithms}), which means a straightforward algorithm to compute all local correlations would take $O(n^4)$ time.
 % 
-However, we have devised an algorithm for exactly computing \emph{all} local correlations in $\mc{O}(n^2 \log n)$, essentially the same running time complexity as  global correlation coefficients (the additional $\log$ factor is for sorting to find the neighbors, see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details). We do so by noting that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, so we can simply keep track of them as we iteratively increase neighborhood size. The end result is \Mgc~can be computed in  time comparable to the other leading dependence tests (see Pseudocode \ref{alg:pval} in Appendix \ref{appen:algorithms} for details on computing all $n^2$ p-values efficiently).
+We noted that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, so we can simply keep track of them as we iteratively increase neighborhood size. 
+This insight yields an algorithm for exactly computing \emph{all} local correlations in $\mc{O}(n^2 \log n)$, essentially the same running time complexity as  global correlation coefficients (the additional $\log$ factor is for sorting to find the neighbors, see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details). The end result is \Mgc~can be computed in  time comparable to the current state-of-the-art dependence tests (see Pseudocode \ref{alg:pval} in Appendix \ref{appen:algorithms} for details on computing all $n^2$ p-values efficiently).
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Pseudocode \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
 Finally, we must find an optimal scale.
+\cs{clarify different between sims and real data}
 Our procedure for estimating the optimal scale searches for regions of neighborhood sizes for which p-values are consistently low, guarding against noisy scales that appear optimal, and combating bias added by looking at many different scales.
 %
 The optimal scale is the largest neighborhood size in that region.
@@ -476,7 +445,9 @@ Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc. 
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
 Average powers slopegraphs comparing global and \Mgc~tests. For each global test,  the left side corresponds to the average power of each panel in Figure~\ref{f:nD}, the right side corresponds to the respective \Mgc~mean power. The thin solid line are shown for  6-19, because \Mgc~equals the global correlation for  1-5 and  20. Then the thick solid line summarizes how the overall mean power (including  6-19) changes from global to \Mgc.
-It is clear that \Mgc~dominates its global counterpart. }
+It is clear that \Mgc~dominates its global counterpart. 
+\cs{this caption is not right}
+}
 \label{f:pp}
 \end{figure}
 
@@ -628,11 +599,11 @@ Our first real data experiment investigates whether brain shape and disease stat
  % for both hemispheres.
 % The first experiment is to test dependency between the brain hippocampus shape and major depressive disorder.
 
-This brain shape versus disease dataset consists of $n=114$ subjects, for each we have an MRI scan as well as a categorical variable indicating whether the subject is clinically depressed, high-risk, or non-affected.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape ``view'' of the data, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}.
+This brain shape versus disease dataset consists of $n=114$ subjects, for each we have an MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape ``view'' of the data, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}.
 % To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark
 % matching (see \cite{ParkEtAl2011} for more details on data processing);
-For the categorical disorder variable,
-we use squared Euclidean distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$). \cs{make sure the above is correct.}
+For the discrete disorder variable,
+we use squared Euclidean distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$). 
 
 We consider two dependence tests, one for each hemisphere: is hippomcapus shape independent of depressive state.
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
@@ -672,7 +643,8 @@ Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at 
     \subfigimg[width=\linewidth]{C}{../Figures/FigRealCORR}
   \end{tabular}
 \caption{
-(A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. Dark lines correspond to the largest region of significant scales.
+(A) Local correlation p-value curves with respect to $k=2,\ldots,114$ at $l=4$ for brain vs disease. 
+Thick solid black lines correspond to the largest region of p-values $<0.05$.
 (B) Local correlation p-value heat map with respect to $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI.
 (C) Density estimate for the false positive rates of \Mgc~on the brain vs noise experiments, with the actual rate of each data shown as dots above the x-axis.}
 \label{f:real}
@@ -728,16 +700,13 @@ We demonstrate via simulations that \Mgc~empirically performs well in linear and
 In real data experiments \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeeded, and did not falsely detect signals when there were none.
 
 
-
+\jv{add sparsity/regularization}
 A method closely related to distance correlation tests arises from the machine learning community: kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we may be able to glean further insights by casting \Mgc~within the kernel framework. Specifically, more efficient tests using asymptotic null distribution approximations for our multiscale tests are possibly available.
 
 Two other tests merit particular mention at this point.  First, Dumcke et al \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support.
 Finally, Reshef et al \cite{Reshef2011} is another dependence testing methodology, but does not perform as well as energy based tests in various benchmarks \cite{SimonTibshirani2012}, and is designed specifically for low-dimensional settings.
 % their actual test is an approximation with unknown error bound relative to their theoretical claims.
 
-\cs{maybe we should mention some sparsity something, since we are sparsifying?}
-\jv{not sure what you mean above, let us talk}
-\cs{i don't know where you are going with the below paragraph, so i removed}
 % Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved, by tailoring a different centering or ranking scheme for a given global correlation, or by coming up with a different rank-truncated pairwise comparison. Overall, a more thorough investigation on the finite-sample performance of \Mgc, its possible extensions, and other existing methods, are much needed in the future to enhance our understanding of dependence discovery.
 
 There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scale. 

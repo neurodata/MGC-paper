@@ -412,9 +412,11 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDPower}
-\caption{Powers of different methods for $20$ different dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
-Each panel shows empirical testing power on the absicca at a significant level $\alpha=0.05$, and the dimensionality on the ordinate.
-\Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on all problems.
+\caption{Powers of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Pseudocode \ref{alg:indep} in Appendix \ref{appen:algorithms} for details).  We used $10$,$000$ Monte-Carlo replicates to estimate the null power, and an additional $2$,$000$  replicates to estimate the optimal scale.
+Each panel shows empirical testing power at a significant level $\alpha=0.05$
+versus the dimensionality of $x$, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
+Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for all settings and all dimensions, 
+% the previous state of the art approaches for all sample sizes on all problems.
 }
 \label{f:nD}
 \end{figure}

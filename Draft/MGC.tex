@@ -879,19 +879,6 @@ For the increasing dimension simulation in the main paper, we always set $c=0$ a
 \end{figure}
 
 
-\begin{figure}
-  \centering
-  \begin{tabular}{@{}p{0.4\linewidth}@{\quad}p{0.4\linewidth}@{}}
-	  \centering
-    \subfigimg[width=\linewidth]{A}{../Figures/Fig1DPerm} &
-    \subfigimg[width=\linewidth]{B}{../Figures/FigHDPerm}
-  \end{tabular}
-\caption{Comparing estimated \Mgc~power to true \Mgc~power, for the $1$-dimensional and high-dimensional simulations.
-(A) $1$-dimensional simulations, where $d_{x}=1$ and the sample size is chosen by the power threshold $0.8$ as in Figure~\ref{f:powermaps1}.
-(B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
-The estimated \Mgc~power by the approximated optimal scale is almost always better than global \Mcorr~and \Hhg, combines the better performance of the two benchmarks, is quite close to the true \Mgc~power, and does not inflate false signals.}
-\label{f:simPerm}
-\end{figure}
 
 
 Here we also present an additional setting, which sets $d_{x}=d_{y}=1$ and $c=1$ with the sample size $n$ increasing from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
@@ -920,6 +907,21 @@ Each panel shows empirical testing power on the absicca at a significant level $
 }
 \label{f:powermaps1}
 \end{figure}
+
+\begin{figure}
+  \centering
+  \begin{tabular}{@{}p{0.4\linewidth}@{\quad}p{0.4\linewidth}@{}}
+	  \centering
+    \subfigimg[width=\linewidth]{A}{../Figures/Fig1DPerm} &
+    \subfigimg[width=\linewidth]{B}{../Figures/FigHDPerm}
+  \end{tabular}
+\caption{Comparing estimated \Mgc~power to true \Mgc~power, for the $1$-dimensional and high-dimensional simulations.
+(A) $1$-dimensional simulations, where $d_{x}=1$ and the sample size is chosen by the power threshold $0.8$ as in Figure~\ref{f:powermaps1}.
+(B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
+The estimated \Mgc~power by the approximated optimal scale is almost always better than global \Mcorr~and \Hhg, combines the better performance of the two benchmarks, is quite close to the true \Mgc~power, and does not inflate false signals.}
+\label{f:simPerm}
+\end{figure}
+
 
 %\section{Performance Profiles}
 %\label{appen:profiles}

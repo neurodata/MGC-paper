@@ -115,7 +115,7 @@
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
 
-\title{\bf Dependence Discovery from Multimodal Data via  Multiscale Graph Correlation}
+\title{\bf Dependence Discovery from Multimodal Data via  Multiscale Generalized Correlation}
 \author[1]{Cencheng Shen} %\thanks{cshen@temple.edu}}
 \author[2]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
 \author[3]{Mauro Maggioni}%\thanks{mauro.maggioni@duke.edu}}
@@ -137,7 +137,7 @@ An ideal test for dependence would have the following properties:
 (4) Provides insight into the nature of the dependence, rather than merely a valid p-value.
 %(4) Is robust to outliers (that is, the presence of many independent samples mixed among a few dependent samples).
 No existing test satisfies all of these properties.
-In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.
+In this paper we propose a novel dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.
 More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
 We demonstrate that \Mgc~has all of the above properties.
  % via a series of theoretical proofs, numerical simulations, and real data experiments.  
@@ -205,7 +205,7 @@ We desire tests that satisfy the above desiderata, both in theory as well as in 
 
 % and we can also demonstrate them both in extensive simulations and real data.
 
-There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces \cite{Allard2012}.  Our approach, Multiscale Graph Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
+There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces \cite{Allard2012}.  Our approach, Multiscale Generalized Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
 
 
 
@@ -278,7 +278,7 @@ Thus, a gap remains in the literature: a dependence test that has all of the des
 % \jv{there are a few details in next paragraph we should discuss for better accuracy}
 % \cs{ok}
 % % XXX be super succint. this is like the first paragraph of the discussion. reduce by 2.5x or 3x
-% More specifically,  we propose Multiscale Graph Correlation (\Mgc),
+% More specifically,  we propose Multiscale Generalized Correlation (\Mgc),
 % which combines distance correlations with graph based tests, considers all locality scales, and chooses the best one.
 % % \Mgc~therefore  naturally inherits the advantages of the global distance correlation tests---such as the consistency---while also enjoying the properties of graph-based tests to exclude non-local comparisons, efficiently for all definitions of local, and choosing the optimal neighborhood sizes.
 % \Mgc~performs as well or better than the existing literature on each mentioned design goal, in theory, and extensive simulations.
@@ -292,13 +292,13 @@ Thus, a gap remains in the literature: a dependence test that has all of the des
 % \label{s:results}
 
 
-\subsection*{Multiscale Graph Correlation}
+\subsection*{Multiscale Generalized Correlation}
 \label{s:mgc}
 
 All dependence tests start from the same setting: we observe $n$ pairs of observations $(\mbx_i,\mby_i)$, and we first desire to know whether the \mbx's and \mby's are independent of one another, and if so, we then desire to understand the nature of that dependence structure.
 
 
-Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with localilty.
+Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
 Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each \mbx~and any neighborhood size $l$ around each \mby, we define the rank-truncated pairwise comparisons:
 \jv{alas, I tried only setting large distances to 0 below; but it would be too cumbersome algorithmically. So, either we do not center them at all (excluding mean), or keep the mean subtracted always. I am ok either way, and the simulation results won't change. }
@@ -333,8 +333,7 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 % \includegraphics[width=1.0\textwidth]{../Figures/FigB}
 % \includegraphics[width=1.0\textwidth]{../Figures/FigC}
 \caption{
-<<<<<<< HEAD
-Flowchart schematizing Multiscale Graph Correlation (\Mgc).
+Flowchart schematizing Multiscale Generalized Correlation (\Mgc).
 Column 1: $(X,Y)$ are nonlinearly dependent on one another, they have a circle relationship.
 Column 2: By choosing appropriate distances for $x$ and $y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of $x$, and bottom row will be functions of $y$).  
 Heatmaps  are arbitrarily chosen to be sorted by $x$. 
@@ -344,19 +343,12 @@ the un-normalized \Mcorr~statistic, which is significant only when that sum is p
 % As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
 Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=4$ (which happens to be optimal in this simulation). Note that their element-wise product is only positive numbers, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be significant.
 % The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
-Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic.  Clearly, \Mgc yields a very small p-value in this setting.
+Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic. The global correlation has a p-value of $0.24$ while \Mgc~has a p-value $<0.001$.
 Top shows a multiscale power map denoting the power for all possible scales in this simulation, demonstrating that the global scale (equivalent to ), achieves significantly lower power than \Mgc, which achieves essentially perfect power in this highly nonlinear dependence setting, as well as reveals which local scales have high power, a novel property for dependence tests.
 % \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
 % Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.
 }
-=======
-Flowchart for \Mgc~computation:
-Column 1: $(X,Y)$ have a circle relationship.
-Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the pairwise Euclidean distance matrices of $X$ and $Y$. All distance entries are non-negative.
-Column 3: The top and bottom panels are the heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the properly centered distance matrices of $\tilde{A}$ and $\tilde{B}$. The center panel is the heatmap of the entry-wise products of $A$ and $B$, summing over which yields the un-normalized \Mcorr~statistic. As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
-Column 4: The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
-Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is $(k^{*},l^{*})=(4,4)$ with many adjacent scales being very close to optimal. The global correlation has a power of $0.1$ while \Mgc~has power $1$. The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as density of the respective permuted test statistics. The global correlation has a p-value of $0.24$ while \Mgc~has a p-value $0$.}
->>>>>>> 5ea7a2bc5ffd2e1e83026ba30e4ddfa54eb572bc
+% Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is $(k^{*},l^{*})=(4,4)$ with many adjacent scales being very close to optimal. The global correlation has a power of $0.1$ while \Mgc~has power $1$. The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as density of the respective permuted test statistics. }
 \label{f:schematic}
 \end{figure}
 %
@@ -1055,7 +1047,7 @@ Similar to the alternative implementation of \Dcorr, we can also use singly cent
 
 %Also note that when there exists repeating points, it is necessary to set $a_{ij}=a_{jj}$ for repeating points during global/local mcorr computation, or exclude repeating observation before-hand, otherwise the diagonal adjustment of mcorr may lose its effect for adjusting high-dimensional bias.
 
-\subsection{Multiscale Graph Correlations (\Mgc)}
+\subsection{Multiscale Generalized Correlation (\Mgc)}
 \label{appen:mgc}
 For any generalized correlation coefficient, its local correlations can be directly implemented as in Equation~\ref{localCoef}, by plugging in the respective $a_{ij}$ and $b_{ij}$ from Equation~\ref{generalCoef} and sorting the distance matrices column-wise as in Equation~\ref{localCoef2}.
 

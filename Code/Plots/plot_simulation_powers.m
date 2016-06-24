@@ -7,7 +7,7 @@ function []=plot_simulation_powers(select,pre1,pre2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

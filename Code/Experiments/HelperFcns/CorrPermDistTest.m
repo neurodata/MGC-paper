@@ -50,7 +50,7 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-pre1='..\..\Data\Results\';
+pre1='../../Data/Results/'; % The folder to locate data
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
 save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3','t1All','t2All','t3All');
 

@@ -75,7 +75,7 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-pre1='..\..\Data\Results\';
+pre1='../../Data/Results/'; % The folder to locate data
 filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
 if type==0;
     filename=strcat(filename,'W',num2str(noise),'.mat');

@@ -20,8 +20,8 @@ addpath(p);
 if nargin<1
     type=11;
 end
-pre1='..\..\Data\Results\'; % The folder to locate data
-pre2='..\..\Figures\Fig'; % The folder to save figures
+pre1='../../Data/Results/'; % The folder to locate data
+pre2='../../Figures/Fig'; % The folder to save figures
 option=2;
 n=50;
 dim=1;
@@ -30,7 +30,7 @@ cc=1;
 rep=1000;
 repp=1;
 fontSize=20;
-mkSize=30;
+mkSize=25;
 
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];
@@ -121,7 +121,7 @@ p=tN(:,n,n);
 ax=subplot(s,t,1);
 set(groot,'defaultAxesColorOrder',map0);
 if noise==0
-    plot(x,y,'.','MarkerSize',mkSize);
+    plot(x,y,'.','MarkerSize',15);
 else
     plot(x,y,'.',x1,y1,'k.','MarkerSize',mkSize);
 end
@@ -306,8 +306,8 @@ caxis([floor(min(min(ph))*10)/10 1])
 h=colorbar('Ticks',[0.1,1]);
 set(h,'FontSize',fontSize);
 set(gca,'XTick',[10,20,30,40],'YTick',[10,20,30,40]);
-xlabel('Number Of Neighbors for X','FontSize',16)
-ylabel('Number Of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
+xlabel('# of Neighbors for X','FontSize',16)
+ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
 ylim([1 n-1]);
 
@@ -337,7 +337,7 @@ set(gca,'XTick',[0,tA(k,l)],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
 ind=find(xi>x1,1,'first');
-y1 = f(ind)+8;
+y1 = f(ind)+15;
 x2 = tA(k,l);
 y2 = 2;
 txt1 = strcat('Mcorr p = ',num2str(1-pAll(end)));

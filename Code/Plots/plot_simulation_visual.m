@@ -27,7 +27,7 @@ if nargin<3
     noise=1;
 end
 if nargin<4
-    pre2='..\..\Figures\Fig'; % The folder to save figures
+    pre2='../../Figures/Fig'; % The folder to save figures
 end
 
 total=20;

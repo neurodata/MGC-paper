@@ -43,7 +43,7 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-pre1='..\..\Data\Results\';
+pre1='../../Data/Results/'; % The folder to locate data
 powerP=zeros(7,20);
 option=[0,2,0,4];
 for tt=type

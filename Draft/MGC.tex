@@ -83,7 +83,7 @@
 \newcommand{\Mcorr}{\sct{Mcorr}}
 \newcommand{\Mantel}{\sct{Mantel}}
 
-\newcommand{\website}{\url{https://github.com/jovo/RankdCorr/}}
+\newcommand{\website}{\url{https://github.com/jovo/MGC/}}
 
 \newcommand{\jv}[1]{{\note{jv: #1}}}
 \newcommand{\jovo}[1]{{\note{jv: #1}}}
@@ -93,7 +93,7 @@
 \newcommand{\mby}{\ensuremath{\mb{y}}}
 
 
-\linenumbers
+% \linenumbers
 
 
 
@@ -129,28 +129,33 @@
 
 % \bigskip
 \begin{abstract}
-Understanding and discovering dependence between multiple properties or measurements is a fundamental task not just in science, but also policy, commerce, and other domains.
+Understanding and discovering dependence between multiple  measurements is a fundamental task not just in science, but also policy, commerce, and other domains.
 An ideal test for dependence would have the following properties:
 (1) Theoretical consistency such that the testing power converges to $1$ under any dependency structure and dimensionality.
-(2) Strong empirical performance on a wide variety of low- and high-dimensional simulations.
-(3) Provides insight into the nature of the dependence, rather than merely a valid p-value.
+(2) Strong empirical performance on a wide variety of low- and high-dimensional simulations, including both linear and nonlinear dependencies.
+(3) On real data, detects dependence when it exists, and does not detect dependence when it does not exist.
+(4) Provides insight into the nature of the dependence, rather than merely a valid p-value.
 %(4) Is robust to outliers (that is, the presence of many independent samples mixed among a few dependent samples).
-(4) On real data, detects dependence when it exists, and does not detect dependence when it does not exist.
 No existing test satisfies all of these properties.
 In this paper we propose a novel dependence test statistic called ``Multiscale Graph Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.
 More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
-We demonstrate that \Mgc~has all of the above properties via a series of theoretical proofs, numerical simulations, and real data experiments.  Specifically, we applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine whether either of two pipelines can detect dependence between brain activity and personality, and (iii) do not inflate non-existent dependence between resting activity and a spurious stimulation.  \Mgc~performs as well or better than previously proposed methods in essentially all theory, low-dimensional and high-dimensional simulations, and real data experiments.  \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website.
+We demonstrate that \Mgc~has all of the above properties.
+ % via a series of theoretical proofs, numerical simulations, and real data experiments.  
+\Mgc~performs as well or better than previously proposed methods in essentially all simulations settings. 
+Based on this empirical discovery, we then proved that \Mgc~indeed theoretically dominates global generalized correlation coefficients, improving upon them in finite sample nonlinear settings, which is the setting of all real data experiments. 
+We then applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine the scale of dependency between personality and brain connectivity, and (iii) do not inflate non-existent dependence between brain activity and spurious stimulation.  
+%  
+\Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website.
 \end{abstract}
-\jv{in above abstract application (iii), you write "`failing to detect"', I reworded it, as "`failing"' sounds as a negative word to me. delete this comment if you are ok with it}
 
 
 \noindent%
-{\it Keywords: testing independence, distance correlation, k-nearest-neighbor, local correlation coefficient, permutation test}
+{\it Keywords: testing independence, distance correlation, k-nearest-neighbor, kernel test, permutation test}
 % \vfill
 
 % \clearpage
 \setcounter{tocdepth}{2}% paragraphs and above
-{\small\tableofcontents}
+% {\small\tableofcontents}
 % \addtocontents{toc}{\vspace{-3\baselineskip}}
 % \listofchanges[style=list]
 
@@ -160,7 +165,7 @@ We demonstrate that \Mgc~has all of the above properties via a series of theoret
 % total: 455, need to remove >100 lines, almost entirely from results.
 
 
-\newpage
+% \newpage
 \spacingset{1.45}
 
 
@@ -325,12 +330,21 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 % \includegraphics[width=1.0\textwidth]{../Figures/FigB}
 % \includegraphics[width=1.0\textwidth]{../Figures/FigC}
 \caption{
-Flowchart for \Mgc~computation:
-Column 1: $(X,Y)$ have a circle relationship.
-Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the pairwise Euclidean distance matrices of $X$ and $Y$. All distance entries are non-negative.
-Column 3: The top and bottom panels are the heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the properly centered distance matrices of $\tilde{A}$ and $\tilde{B}$. The center panel is the heatmap of the entry-wise products of $A$ and $B$, summing over which yields the un-normalized \Mcorr~statistic. As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
-Column 4: The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
-Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.}
+Flowchart schematizing Multiscale Graph Correlation (\Mgc).
+Column 1: $(X,Y)$ are nonlinearly dependent on one another, they have a circle relationship.
+Column 2: By choosing appropriate distances for $x$ and $y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of $x$, and bottom row will be functions of $y$).  
+Heatmaps  are arbitrarily chosen to be sorted by $x$. 
+Note that all distances are non-negative.
+Column 3: Double centering yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product (center).  Summing over this yields 
+the un-normalized \Mcorr~statistic, which is significant only when that sum is positive. 
+% As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
+Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=4$ (which happens to be optimal in this simulation). Note that their element-wise product is only positive numbers, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be significant.
+% The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
+Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic.  Clearly, \Mgc yields a very small p-value in this setting.
+Top shows a multiscale power map denoting the power for all possible scales in this simulation, demonstrating that the global scale (equivalent to ), achieves significantly lower power than \Mgc, which achieves essentially perfect power in this highly nonlinear dependence setting, as well as reveals which local scales have high power, a novel property for dependence tests.
+% \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
+% Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.
+}
 \label{f:schematic}
 \end{figure}
 %
@@ -725,7 +739,7 @@ Finally, Reshef et al \cite{Reshef2011} is another dependence testing methodolog
 
 There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scale. 
 While in this work we proved that there exist scales that improve upon the global scale, and that many local scales outperform the global scale.
-Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hgg~and \Mcorr.  
+Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hhg~and \Mcorr.  
 
 
 % Furthermore, the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. 
@@ -735,8 +749,8 @@ Second, as highlighted above, \Mgc~requires a pair of metrics, one for each data
 
 Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work has demonstrated efficient algorithms that are linear in sample size \cite{Hou2016} for one-dimensional data.  Although it is not clear how to extend this approach to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even upon subsampling the data points significantly (not shown), suggesting that subsampling data or comparisons  could yield a linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using hard disk space in a streaming fashion to both speed up computations for big data, and enable storing matrices larger than fit in RAM.
 
-Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014}, and two-sample tests \cite{Szekely2004}.   
-Testing independence between graphs and node attributes \cite{Fosdick16} is another immediate potential application of this year.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions.
+Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},  two-sample tests \cite{Szekely2004}, and feature selection \cite{LiZhongZhu2012,Zhong2015}.   
+Testing independence between graphs and node attributes \cite{Fosdick16} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the locality of dependence.
 
 
 % Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction, classification, other testing and prediction domains, etc.

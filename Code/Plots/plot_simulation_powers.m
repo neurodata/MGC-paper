@@ -55,8 +55,15 @@ end
 
 set(groot,'defaultAxesColorOrder',map1);
 
+ls{1}='-';
+ls{2}='--';
+ls{3}='.-';
+ls{4}='.:';
+ls{5}='.--';
 
-%figure1-4
+
+
+%% figure1-4
 figNumber='1DPower';
 if select~=1
     figNumber='1DPowerAll';
@@ -72,9 +79,9 @@ for j=1:total
     titlechar=CorrSimuTitle(j);
     %
     if select==1
-        plot(numRange,power2,'.-',numRange,power5,'.:',numRange,power7,'.--','LineWidth',3);
+        plot(numRange,power2,ls{3},numRange,power5,ls{4},numRange,power7,ls{5},'LineWidth',3);
     else
-        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
+        plot(numRange,power1,ls{3},numRange,power2,ls{3},numRange,power3,ls{3},numRange,power4,ls{4},numRange,power5,ls{4},numRange,power6,ls{4},numRange,power7,ls{5},'LineWidth',3);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
@@ -102,7 +109,7 @@ F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
 F.wh=[8 4]*2;
 print_fig(gcf,F)
 
-%Plot 5-8
+%% Plot 5-8
 % if select==1;
 % map1(1,:)=mcorr; map1(3,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
 % map1(2,:)=HHG; % The color for HHG
@@ -123,9 +130,9 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     if select==1
-        plot(numRange,power2,'.-',numRange,power5,'.:',numRange,power7,'.--','LineWidth',3);
+        plot(numRange,power2,ls{3},numRange,power5,ls{4},numRange,power7,ls{5},'LineWidth',3);
     else
-        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
+        plot(numRange,power1,ls{3},numRange,power2,ls{3},numRange,power3,ls{3},numRange,power4,ls{4},numRange,power5,ls{4},numRange,power6,ls{4},numRange,power7,ls{5},'LineWidth',3);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);

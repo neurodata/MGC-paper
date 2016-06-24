@@ -304,19 +304,20 @@ Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$,
 \jv{alas, I tried only setting large distances to 0 below; but it would be too cumbersome algorithmically. So, either we do not center them at all (excluding mean), or keep the mean subtracted always. I am ok either way, and the simulation results won't change. }
 \begin{equation}
 \label{localCoef2}
-    a_{ij}^k=
+    \mt{a}_{ij}^k=
     \begin{cases}
-      a_{ij}-\bar{a}^{k}, & \text{if } R(a_{ij}) \leq k, \\
-       -\bar{a}^{k}, & \text{otherwise};      
-      %0, & \text{otherwise};
+      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\
+       % -\bar{a}^{k}, & \text{otherwise};      
+      0, & \text{otherwise};
     \end{cases} \qquad \qquad
-    b_{ij}^l=
+    \mt{b}_{ij}^l=
     \begin{cases}
-      b_{ij}-\bar{b}^{l}, & \text{if } R(b_{ij}) \leq l, \\
-       -\bar{b}^{l}, & \text{otherwise};
-      %0, & \text{otherwise};
+      b_{ij}, & \text{if } R(b_{ij}) \leq l, \\
+       % -\bar{b}^{l}, & \text{otherwise};
+      0, & \text{otherwise};
     \end{cases}
 \end{equation}
+and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$.
 where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
 \label{localCoef}

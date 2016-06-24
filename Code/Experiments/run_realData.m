@@ -9,10 +9,10 @@ load('../../Data/Preprocessed/BrainHippoShape')
 n=114;
 y=squareform(pdist(Label));
 % y=(y>0)+1;
-y=y+1;
-for i=1:n
-    y(i,i)=0;
-end
+% y=y+1;
+% for i=1:n
+%     y(i,i)=0;
+% end
 % y(y>0)=1;
 CorrPermDistTest(LMLS,y,rep,'BrainLMLxY');
 CorrPermDistTest(LMRS,y,rep, 'BrainLMRxY');

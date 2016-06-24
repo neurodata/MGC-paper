@@ -1,4 +1,4 @@
-function []=plot_auxiliary(type,pre1)%,pre2)
+function []=plot_auxiliary(type)%,pre2)
 
 % type=6;n=100;dim=1;noise=1;pre1='../../Data/';
 % CorrSimPlotsA(type,n,dim,noise,pre1);
@@ -7,9 +7,8 @@ function []=plot_auxiliary(type,pre1)%,pre2)
 if nargin<1
     type=11;
 end
-if nargin<2
-    pre1='../../Data/Results/'; % The folder to locate data
-end
+pre1='../../Data/Results/'; % The folder to locate data
+pre2='../../Figures/Fig'; % The folder to save figures
 % if nargin<2
 %     pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 % end
@@ -22,7 +21,8 @@ samebar=1;
 colorb=0;
 rep=1000;
 repp=1;
-
+fontSize=20;
+mkSize=20;
 cmap=zeros(3,3);
 gr = [0.5,0.5,0.5];
 ma = [1,0,1];
@@ -33,29 +33,31 @@ cmap(2,:) = gr;
 map1=cmap;
 map2 = brewermap(128,'PRGn'); % brewmap
 map3 = brewermap(128,'Greens'); % brewmap
+map4 = brewermap(128,'GnBu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
+s=3;t=4;
 
+figure('units','normalized','position',[0 0 1 1])
+subplot(s,t,1);
 % Generate data
 [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
 if noise~=0
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
 end
 % A1: scatter plot
-figure
 if noise==0
-    plot(x,y,'.','MarkerSize',30);
+    plot(x,y,'.','MarkerSize',mkSize);
 else
-    plot(x,y,'.',x1,y1,'k.','MarkerSize',30);
+    plot(x,y,'.',x1,y1,'k.','MarkerSize',mkSize);
 end
-xlabel('X','FontSize',25)
-ylabel('Y','FontSize',25,'Rotation',0,'position',[-1.3,-0.1]);
+xlabel('X');
+ylabel('Y','Rotation',0,'position',[-1.4,-0.1]);
 if samebar==1
     xlim([-1.2,1.2]);
     ylim([-1.2,1.2]);
 end
-title('Scatter Plot of (X,Y)','FontSize',30)
-set(gca,'XTick',[]); % Remove x axis ticks
-set(gca,'YTick',[]); % Remove y axis ticks
+title('Scatter Plot of (X,Y)')
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis ticks
 % Get distance matrix
 [x,ind]=sort(x,'ascend');
 y=y(ind);
@@ -100,6 +102,7 @@ neighbor=maxNeighbors(power1,0,tN,tA);
 % [~,pAll]=MGCPermutationTest(C,D,rep,2);
 
 % Permutation p-value
+subplot(s,t,5)
 tA=LocalCorr(C,D,2);
 tN=zeros(rep,n,n);
 pAll=zeros(n,n);
@@ -116,7 +119,6 @@ end
 
 l=ceil(neighbor/n)
 k=neighbor-n*(l-1)
-figure
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
 maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -128,13 +130,25 @@ p=tN(:,n,n);
 [f,xi]=ksdensity(p,'support',[-1,1]);
 hold on
 %plot(xi,f,'.-','LineWidth',2);
-plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',5);
-set(gca,'FontSize',24);
+plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',3);
+set(gca,'FontSize',fontSize);
 h=legend('Mcorr','MGC','Location','NorthEast');
-set(h,'FontSize',30);
-plot(tA(end),0.01,'.',tA(k,l),0.01,'k*','MarkerSize',50);
+set(h,'FontSize',fontSize);
+plot(tA(end),0.1,'.',tA(k,l),0.1,'k.','MarkerSize',2*mkSize);
+
+% x1 = tA(end);
+% y1 = 0.01;
+% x2 = tA(k,l);
+% y2 = 0.01;
+% txt1 = strcat('Mcorr P-value = ',num2str(1-pAll(end)));
+% txt2 = strcat('MGC P-value = ',num2str(1-pAll(k,l)));
+% text(x1,y1,txt1)
+% text(x2,y2,txt2)
+
+
 xlim([minp,maxp]);
-ylabel('Density Function','FontSize',24);
+%ylabel('Density Function','FontSize',fontSize);
+title('Density Plot','FontSize',fontSize);
 %ylim([-1 15]);
 %set(gca,'YTick',[]); % Remove y axis ticks
 hold off
@@ -157,48 +171,45 @@ hold off
 %title('Brain Activity vs. Fake Movie','FontSize',24);
 1-pAll(end)
 1-pAll(k,l)
-% 1-pAll2(end)
-% 1-pAll2(k,l)
+power1(end)
+power1(k,l)
 
 % A2: heatmaps of the distance matrices
+ax=subplot(s,t,2);
 if samebar==1
     maxC=ceil(max(max([C,D]))*10)/10;
 else
     maxC=ceil(max(max([C]))*10)/10;
 end
-figure
 imagesc(C');
-colormap(map3)
+colormap(ax,map3);
 caxis([0,maxC]);
 if colorb~=0
     h=colorbar('Ticks',[-1000,0,maxC]);
-    set(h,'FontSize',16);
 end
 %xlabel('$$\tilde{A}_{ij}=|x_{i}-x_{j}|_{2}$$','FontSize',30,'interpreter','latex','position',[0,-1])
-set(gca,'XTick',[]); % Remove x axis ticks
-set(gca,'YTick',[]); % Remove y axis ticks
-xlabel('$\|x_{i}-x_{j}\|$','FontSize',30,'interpreter','latex')
-title('$\tilde{A}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
+xlabel('$\|x_{i}-x_{j}\|$','interpreter','latex')
+title('$\tilde{A}$','interpreter','latex');
+pos = get(ax,'position');
 
 %subplot(s,t,6)
-figure
+ax=subplot(s,t,3);
 if samebar~=1
     maxC=ceil(max(max([D]))*10)/10;
 end
 imagesc(D');
 set(gca,'FontSize',16)
-colormap(map3)
+colormap(ax,map3);
 if colorb~=0
     h=colorbar('Ticks',[-1000,0,maxC]);
-    set(h,'FontSize',16);
 end
 caxis([0,maxC]);
 % title('Distance Heatmap of Y','FontSize',16)
-set(gca,'XTick',[]); % Remove x axis ticks
-set(gca,'YTick',[]); % Remove y axis ticks
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 %xlabel('\tilde{B}_{ij}=\|y_{i}-y_{j}\|_{2}','FontSize',25);
-xlabel('$\|y_{i}-y_{j}\|$','FontSize',30,'interpreter','latex')
-title('$\tilde{B}$','FontSize',30,'Rotation',0,'position',[-5,50],'interpreter','latex');
+xlabel('$\|y_{i}-y_{j}\|$','interpreter','latex')
+title('$\tilde{B}$','interpreter','latex');
 
 % A3: heatmaps of the doubly centered distance matrices
 for option=1:1
@@ -234,27 +245,25 @@ for option=1:1
     mcorrH=A.*B;
     %
     
+    ax=subplot(s,t,6);
     if samebar==1
         minC=floor(min(min([A,B]))*10)/10;maxC=ceil(max(max([A,B]))*10)/10;
     else
         minC=floor(min(min([A]))*10)/10;maxC=ceil(max(max([A]))*10)/10;
     end
     minC=min(minC,-maxC);maxC=max(maxC,-minC);
-    figure
     imagesc(A');
-    colormap(map2)
+    colormap(ax,map2)
     caxis([minC,maxC]);
     if colorb~=0
         h=colorbar('Ticks',[-1000,minC,maxC]);
-        set(h,'FontSize',16);
     end
     %title('Normalized Distances','FontSize',30)
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
     %xlabel('A=H\tilde{A}H','FontSize',25);
-    title('$$A$$','FontSize',30,'interpreter','latex');
+    title('$$A$$','FontSize',fontSize,'interpreter','latex');
     
-    figure
+    ax=subplot(s,t,7);
     if samebar==1
         minD=floor(min(min([A,B]))*10)/10;maxD=ceil(max(max([A,B]))*10)/10;
     else
@@ -262,20 +271,16 @@ for option=1:1
     end
     minD=min(minD,-maxD);maxD=max(maxD,-minD);
     imagesc(B');
-    set(gca,'FontSize',16)
-    colormap(map2)
+    set(gca,'FontSize',fontSize)
+    colormap(ax,map2)
     caxis([minD,maxD]);
     if colorb~=0
         h=colorbar('Ticks',[-1000,minD,maxD]);
-        set(h,'FontSize',16);
     end
-    h=colorbar('Ticks',[0],'location','southoutside');
-    set(h,'FontSize',30);
     %title('Doubly-Centered Distance Heatmap of Y','FontSize',16)
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
     %xlabel('B=H\tilde{B}H','FontSize',25);
-    title('$$B$$','FontSize',30,'interpreter','latex');
+    title('$$B$$','interpreter','latex');
     
     % Local distance matrices
     %if n~=100 || noise~=1
@@ -294,56 +299,52 @@ for option=1:1
     end
     
     % A4: heatmaps of the local doubly centered distance matrices
-    figure
+    ax=subplot(s,t,9);
     imagesc(A');
-    colormap(map2)
+    colormap(ax,map2)
     caxis([minC,maxC]);
     if colorb~=0
         h=colorbar('Ticks',[-1000,minC,maxC]);
-        set(h,'FontSize',16);
     end
     %title('Local Normalized Distances','FontSize',30)
     %xlabel(strcat('k^{*}}=',num2str(k),'interpreter','latex'),'FontSize',25);
-    title('$$A^{k^{*}}$$','FontSize',30,'interpreter','latex');
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+    title('$$A^{k^{*}}$$','interpreter','latex');
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
     
-    figure
+    ax=subplot(s,t,10);
     imagesc(B');
-    set(gca,'FontSize',16)
-    colormap(map2)
+    set(gca,'FontSize',fontSize)
+    colormap(ax,map2)
     caxis([minD,maxD]);
     if colorb~=0
         h=colorbar('Ticks',[-1000,minD,maxD]);
-        set(h,'FontSize',16);
     end
     %title('Local Doubly-Centered Distance Heatmap of Y','FontSize',16)
-    title('$$B^{l^{*}}$$','FontSize',30,'interpreter','latex');
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+    title('$$B^{l^{*}}$$','interpreter','latex');
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
     
     % A4: heatmaps of the distance covariance entries
-    figure
+    ax=subplot(s,t,4);
     MH=ceil(max(max(mcorrH(2:end,2:end)))*10)/10;
     mH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
     mH=min(mH,-MH);MH=max(MH,-mH);
     imagesc(mcorrH');
-    set(gca,'FontSize',16)
-    colormap(map2)
-    if colorb~=0
-        h=colorbar('Ticks',[-1000,mH,MH]);
-        set(h,'FontSize',16);
-    end
+    colormap(ax,map2)
+%     if colorb~=0
+        h=colorbar('Ticks',[mH,0,MH]);
+%     end
     caxis([mH,MH]);
     %ylabel('$$A^{k^{*}}.*B^{l^{*}}$$','FontSize',25,'Rotation',0,'position',[-5,50],'interpreter','latex');
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
     %title('Element-wise Product of','FontSize',30)
-    title('$$A.*B$$','FontSize',30,'interpreter','latex');
+    title('$$A.*B$$','FontSize',fontSize,'interpreter','latex');
+    pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
     %title('Local Distance Covariance of (X, Y)','FontSize',16)
     
     % A4: heatmaps of the distance covariance entries
-    figure
+    ax=subplot(s,t,8);
     mcorrH=A.*B;
     %     mcorrH(RC)=0;
     %     mcorrH(RD)=0;
@@ -351,55 +352,57 @@ for option=1:1
     %     MH=ceil(max(max(mcorrH(2:end,2:end)))*10)/10;
     %     mMH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
     imagesc(mcorrH');
-    set(gca,'FontSize',16)
-    colormap(map2)
+    colormap(ax,map2)
     if colorb~=0
         h=colorbar('Ticks',[-1000,mH,MH]);
-        set(h,'FontSize',16);
     end
     caxis([mH,MH]);
-    if colorb~=0
-        h=colorbar('Ticks',[-1000,mH,MH]);
-        set(h,'FontSize',16);
-    end
     %ylabel('$$A^{k^{*}}.*B^{l^{*}}$$','FontSize',25,'Rotation',0,'position',[-5,50],'interpreter','latex');
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
-    title('$$A^{k^{*}}.*B^{l^{*}}$$','FontSize',30,'interpreter','latex');
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
+    title('$$A^{k^{*}}.*B^{l^{*}}$$','interpreter','latex');
     %title('Element-wise Product of','FontSize',30)
     %title('Local Distance Covariance of (X, Y)','FontSize',16)
     
-    figure
+    ax=subplot(s,t,12);
     %filename=strcat(pre1,'CorrIndTestType',num2str(type),'N100Dim1.mat');
     %load(filename)
     kmin=2;
     hold on
     ph=power1(kmin:n,kmin:n)';
-    ph(ph>0.98)=0.98;
+%     ph(ph>0.98)=0.98;
     %     nei=find(ph>0.99);
     %     [k,l]=ind2sub(size(ph),nei);
     imagesc(ph);
-    set(gca,'FontSize',16)
+    set(gca,'FontSize',15)
     set(gca,'YDir','normal')
-    map2 = brewermap(128,'GnBu'); % brewmap
-    cmap=zeros(50,3);
-    cmap(1:48,:)=map2(1:48,:);
-    cmap(49,:)=map2(80,:);
-    cmap(50,:)=map2(128,:);
-    colormap(cmap)
-    caxis([0.5 1])
-    xlabel('k','FontSize',25)
-    ylabel('l','FontSize',25)%,'Rotation',0,'position',[-5,50]);
+    cmap=map4;
+%     cmap=zeros(50,3);
+%     cmap(1:45,:)=map4(1:45,:);
+%     cmap(46:49,:)=map4(80:83,:);
+%     cmap(50,:)=map4(128,:);
+    colormap(ax,cmap)
+    caxis([0 1])
+    xlabel('k','FontSize',fontSize)
+    ylabel('l','FontSize',fontSize,'Rotation',0,'position',[-7,20]);
     xlim([1 n-1]);
     ylim([1 n-1]);
-    h=colorbar('Ticks',[-1000,0.5,1]);
-    set(h,'FontSize',30);
+    h=colorbar('Ticks',[0,0.5,1]);
+    set(h,'FontSize',fontSize);
+        pos2 = get(ax,'position');
+        pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
     
-    imagesc(k,l,1);
+%     imagesc(k,l,1);
     
     hold off
     %     %set(h,'FontSize',16,'location','southoutside');
     %set(gca,'XTick',[]); % Remove x axis ticks
     %set(gca,'YTick',[]); % Remove y axis ticks
-    title('Multiscale Power Map','FontSize',30);
+    title('Multiscale Power Map','FontSize',fontSize);
+    colorbar
 end
+
+%
+F.fname=strcat(pre2, 'A2');
+F.wh=[8 4]*2;
+print_fig(gcf,F)

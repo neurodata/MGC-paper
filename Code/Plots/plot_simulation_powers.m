@@ -7,7 +7,7 @@ function []=plot_simulation_powers(select,pre1,pre2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
+findex=strfind(fpath,'\');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
@@ -24,10 +24,10 @@ if nargin<1
     select=1;
 end
 if nargin<2
-    pre1='../../Data/Results/'; % The folder to locate data
+    pre1='..\..\Data\Results\'; % The folder to locate data
 end
 if nargin<3
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='..\..\Figures\Fig'; % The folder to save figures
 end
 total=20;
 
@@ -68,52 +68,50 @@ ls{5}='.--';
 close all
 
 %% figure1-4
-% if lowd==1;
-%     figNumber='1DPower';
-%     if select~=1
-%         figNumber='1DPowerAll';
-%     end
-%     figure('units','normalized','position',[0 0 1 1])
-%     set(groot,'defaultAxesColorOrder',map1);
-%     s=4;
-%     t=5;
-%     for j=1:total
-%         filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-%         load(filename)
-%         subplot(s,t,j)
-%         titlechar=CorrSimuTitle(j);
-%         %
-%         if select==1
-%             plot(numRange,power2,ls{3},numRange,power5,ls{4},numRange,power7,ls{5},'LineWidth',3);
-%         else
-%             plot(numRange,power1,ls{3},numRange,power2,ls{3},numRange,power3,ls{3},numRange,power4,ls{4},numRange,power5,ls{4},numRange,power6,ls{4},numRange,power7,ls{5},'LineWidth',3);
-%         end
-%         xlim([numRange(1) numRange(end)]);
-%         ylim([0 1]);
-%         if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
-%             set(gca,'YTick',[]); % Remove y axis ticks
-%         end
-%         set(gca,'XTick',[]); % Remove x axis ticks
-%         set(gca,'FontSize',14);
-%         title(titlechar,'FontSize',14);
-%     end
-%     xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
-%     ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
-%     h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
-%     set(h,'FontSize',24,'FontWeight','normal');
-%     lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
-%     if select==1;
-%         h=legend('MGC','Mcorr','HHG','Location',lgdPosition);
-%     else
-%         h=legend('MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
-%     end
-%     legend boxoff
-%     set(h,'FontSize',14);
-%     %
-%     F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
-%     F.wh=[8 4]*2;
-%     print_fig(gcf,F)
-% end
+    figNumber='1DPower';
+    if select~=1
+        figNumber='1DPowerAll';
+    end
+    figure('units','normalized','position',[0 0 1 1])
+    set(groot,'defaultAxesColorOrder',map1);
+    s=4;
+    t=5;
+    for j=1:total
+        filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+        load(filename)
+        subplot(s,t,j)
+        titlechar=CorrSimuTitle(j);
+        %
+        if select==1
+            plot(numRange,power2,ls{3},numRange,power5,ls{4},numRange,power7,ls{5},'LineWidth',3);
+        else
+            plot(numRange,power1,ls{3},numRange,power2,ls{3},numRange,power3,ls{3},numRange,power4,ls{4},numRange,power5,ls{4},numRange,power6,ls{4},numRange,power7,ls{5},'LineWidth',3);
+        end
+        xlim([numRange(1) numRange(end)]);
+        ylim([0 1]);
+        if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
+            set(gca,'YTick',[]); % Remove y axis ticks
+        end
+        set(gca,'XTick',[]); % Remove x axis ticks
+        set(gca,'FontSize',12);
+        title(titlechar,'FontSize',14);
+    end
+    xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
+    ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
+    h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
+    set(h,'FontSize',24,'FontWeight','normal');
+    lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
+    if select==1;
+        h=legend('MGC','Mcorr','HHG','Location',lgdPosition);
+    else
+        h=legend('MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
+    end
+    legend boxoff
+    set(h,'FontSize',14);
+    %
+    F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
+    F.wh=[8 4]*2;
+    print_fig(gcf,F)
 
 %% Plot 5-8
 % if select==1;

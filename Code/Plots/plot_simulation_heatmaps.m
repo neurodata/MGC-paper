@@ -7,7 +7,7 @@ function []=plot_simulation_heatmaps(pre1,pre2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
+findex=strfind(fpath,'\');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
@@ -19,10 +19,10 @@ end
 addpath(p);
 
 if nargin<1
-    pre1='../../Data/Results/'; % The folder to locate data
+    pre1='..\..\Data\Results\'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='..\..\Figures\Fig'; % The folder to save figures
 end
 total=20;
 map2 = brewermap(128,'GnBu'); % brewmap
@@ -101,7 +101,7 @@ for j=1:total
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     end
-    set(gca,'FontSize',14);
+    set(gca,'FontSize',12);
     title(titlechar,'FontSize',14);
 end
 xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);

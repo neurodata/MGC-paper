@@ -3,7 +3,7 @@ function run_1d_sims(rep1,rep2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
+findex=strfind(fpath,'\');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

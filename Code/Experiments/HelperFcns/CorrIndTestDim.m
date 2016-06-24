@@ -63,8 +63,8 @@ end
 % Save the results
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
-rootDir=fpath(1:findex(end-2));
+findex=strfind(fpath,'\');
+rootDir=fpath(1:findex(end-3));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
 colons=strfind(p,':');
@@ -74,7 +74,7 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-pre1='../../../Data/Results/';
+pre1='..\..\Data\Results\';
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
 

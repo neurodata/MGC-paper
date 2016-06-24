@@ -4,7 +4,7 @@ function []=plot_realData(pre1,pre2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
+findex=strfind(fpath,'\');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
@@ -16,10 +16,10 @@ end
 addpath(p);
 
 if nargin<1
-    pre1='../../Data/Results/'; % The folder to locate data
+    pre1='..\..\Data\Results\'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../Figures/FigReal'; % The folder to save figures
+    pre2='..\..\Figures\Fig'; % The folder to save figures
 end
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];

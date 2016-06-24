@@ -32,8 +32,8 @@ if dim>1
 end
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
-rootDir=fpath(1:findex(end-2));
+findex=strfind(fpath,'\');
+rootDir=fpath(1:findex(end-3));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
 colons=strfind(p,':');
@@ -43,7 +43,7 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-pre1='../../../Data/Results/';
+pre1='..\..\Data\Results\';
 powerP=zeros(7,20);
 option=[0,2,0,4];
 for tt=type

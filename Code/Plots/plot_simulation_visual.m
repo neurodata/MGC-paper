@@ -6,7 +6,7 @@ function []=plot_simulation_visual(n,dim,noise,pre2)
 
 %%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'/');
+findex=strfind(fpath,'\');
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
@@ -27,7 +27,7 @@ if nargin<3
     noise=1;
 end
 if nargin<4
-    pre2='../../Figures/Fig'; % The folder to save figures
+    pre2='..\..\Figures\Fig'; % The folder to save figures
 end
 
 total=20;

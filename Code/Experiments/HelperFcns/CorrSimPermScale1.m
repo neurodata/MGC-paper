@@ -30,7 +30,20 @@ if dim>1
     noise=0;
     n=100;
 end
-pre1='../../Data/Results/';
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
+pre1='../../../Data/Results/';
 powerP=zeros(7,20);
 option=[0,2,0,4];
 for tt=type
@@ -100,6 +113,7 @@ for tt=type
     end
 end
 powerP(:,type)
+
 filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'Dim',num2str(dim));
 save(filename,'powerP','rep1','rep2','dim','noise','alpha','thres');
 

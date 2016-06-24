@@ -62,7 +62,20 @@ for i=1:lim
 end
 
 % Save the results
-pre1='../../Data/Results/';
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
+pre1='../../../Data/Results/';
 filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2str(dim));
 if type==0;
     filename=strcat(filename,'W',num2str(noise),'.mat');

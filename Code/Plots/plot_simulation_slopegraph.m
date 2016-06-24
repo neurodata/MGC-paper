@@ -5,6 +5,19 @@ function []=plot_simulation_slopegraph(pre1,pre2)
 % pre1 specifies the location to load data.
 % pre2 specifies the location to save pictures.
 
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
 if nargin<1
     pre1='../../Data/Results/'; % The folder to locate data
 end

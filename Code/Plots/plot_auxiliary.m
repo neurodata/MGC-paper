@@ -4,6 +4,19 @@ function []=plot_auxiliary(type)%,pre2)
 % CorrSimPlotsA(type,n,dim,noise,pre1);
 % Used to generate figure A in the files
 
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
 if nargin<1
     type=11;
 end
@@ -22,7 +35,7 @@ colorb=0;
 rep=1000;
 repp=1;
 fontSize=20;
-mkSize=20;
+mkSize=30;
 cmap=zeros(3,3);
 gr = [0.5,0.5,0.5];
 ma = [1,0,1];
@@ -134,23 +147,26 @@ plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',3);
 set(gca,'FontSize',fontSize);
 h=legend('Mcorr','MGC','Location','NorthEast');
 set(h,'FontSize',fontSize);
-plot(tA(end),0.1,'.',tA(k,l),0.1,'kx','MarkerSize',mkSize);
+plot(tA(end),0.1,'.','MarkerSize',mkSize);
+plot(tA(k,l),0.1,'k*','MarkerSize',10);
 
 x1 = tA(end);
 y1 = 0.01;
 x2 = tA(k,l);
 y2 = 0.01;
-txt1 = strcat('Mcorr p = ',num2str((floor(1-pAll(end))*100)/100));
-txt2 = strcat('MGC p < 1/',num2str(repp));
-text(x1,y1,txt1)
-text(x2,y2,txt2)
+txt1 = strcat('Mcorr p = ',num2str(1-pAll(end)));
+txt2 = strcat('MGC p < 0.01');
+a=text(x1,y1,txt1,'VerticalAlignment','top','HorizontalAlignment','center');
+b=text(x2,y2,txt2,'VerticalAlignment','top','HorizontalAlignment','center');
+set(a,'FontSize',16);
+set(b,'FontSize',16);
 
 
 xlim([minp,maxp]);
 %ylabel('Density Function','FontSize',fontSize);
 title('Density Plot','FontSize',fontSize);
 %ylim([-1 15]);
-%set(gca,'YTick',[]); % Remove y axis ticks
+set(gca,'XTick',[]); % Remove y axis ticks
 hold off
 
 % figure

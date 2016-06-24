@@ -37,7 +37,20 @@ p4=p1All(end);p5=p2All(end);p6=p3All(end);
 %     p2
 %     p5
 % end
-pre1='../../Data/Results/';
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
+pre1='../../../Data/Results/';
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
 save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3','t1All','t2All','t3All');
 

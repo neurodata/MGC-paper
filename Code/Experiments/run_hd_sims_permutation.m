@@ -1,5 +1,19 @@
 function p1=run_hd_sims_permutation(rep1,rep2)
 % run high-dimensional simulations based on MGC approximate scale for permutation test
+
+%%
+fpath = mfilename('fullpath');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+p = genpath(rootDir);
+gits=strfind(p,'.git');
+colons=strfind(p,':');
+for i=0:length(gits)-1
+    endGit=find(colons>gits(end-i),1);
+    p(colons(endGit-1):colons(endGit)-1)=[];
+end
+addpath(p);
+
 if nargin < 1
     rep1=1000; % number of MC replicates for power computation
 end

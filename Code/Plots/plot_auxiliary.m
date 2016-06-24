@@ -134,16 +134,16 @@ plot(xi,f,'.:',xi1,f1,'k.-','LineWidth',3);
 set(gca,'FontSize',fontSize);
 h=legend('Mcorr','MGC','Location','NorthEast');
 set(h,'FontSize',fontSize);
-plot(tA(end),0.1,'.',tA(k,l),0.1,'k.','MarkerSize',2*mkSize);
+plot(tA(end),0.1,'.',tA(k,l),0.1,'kx','MarkerSize',mkSize);
 
-% x1 = tA(end);
-% y1 = 0.01;
-% x2 = tA(k,l);
-% y2 = 0.01;
-% txt1 = strcat('Mcorr P-value = ',num2str(1-pAll(end)));
-% txt2 = strcat('MGC P-value = ',num2str(1-pAll(k,l)));
-% text(x1,y1,txt1)
-% text(x2,y2,txt2)
+x1 = tA(end);
+y1 = 0.01;
+x2 = tA(k,l);
+y2 = 0.01;
+txt1 = strcat('Mcorr p = ',num2str((floor(1-pAll(end))*100)/100));
+txt2 = strcat('MGC p < 1/',num2str(repp));
+text(x1,y1,txt1)
+text(x2,y2,txt2)
 
 
 xlim([minp,maxp]);

@@ -28,14 +28,14 @@ dcorr = cmap(1,:);
 mcorr = cmap(2,:);
 mante = cmap(3,:);
 HHG   = [0.5,0.5,0.5];
-map1(1,:)=dcorr; map1(5,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
-map1(2,:)=mcorr; map1(6,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
-map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
-map1(4,:)=HHG; % The color for HHG
+map1(1,:)=dcorr; map1(4,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
+map1(2,:)=mcorr; map1(5,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
+map1(3,:)=mante; map1(6,:)=mante; % The color for MGC{Mantel} and global Mantel.
+map1(7,:)=HHG; % The color for HHG
 if select==1
     map1(1,:)=mcorr; map1(4,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
-    map1(2,:)=HHG; map1(5,:)=mante; % The color for MGC{Mantel} and global Mantel.
-    map1(3,:)=mcorr; % The color for HHG
+    map1(2,:)=mcorr; map1(5,:)=mante; % The color for MGC{Mantel} and global Mantel.
+    map1(3,:)=HHG; % The color for HHG
 end
 
 set(groot,'defaultAxesColorOrder',map1);
@@ -57,13 +57,13 @@ for j=1:total
     titlechar=CorrSimuTitle(j);
     %
     if select==1
-        plot(numRange,power2,'.-',numRange,power7,'.--',numRange,power5,'.:','LineWidth',3);
+        plot(numRange,power2,'.-',numRange,power5,'.:',numRange,power7,'.--','LineWidth',3);
     else
-        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
+        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
-    if j~=16 % Remove x&y axis ticks except type 16, which is at the left bottom
+    if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
         set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
     end
@@ -74,11 +74,11 @@ xlabel('Sample Size','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
+lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC','HHG','Mcorr','Location',lgdPosition);
+    h=legend('MGC','Mcorr','HHG','Location',lgdPosition);
 else
-    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
+    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -107,14 +107,14 @@ for j=1:total
     numRange=dimRange;
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
-    if select==1;
-        plot(numRange,power2,'.-',numRange,power7,'.--',numRange,power5,'.:','LineWidth',3);
+    if select==1
+        plot(numRange,power2,'.-',numRange,power5,'.:',numRange,power7,'.--','LineWidth',3);
     else
-        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power7,'.--',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:','LineWidth',3);
+        plot(numRange,power1,'.-',numRange,power2,'.-',numRange,power3,'.-',numRange,power4,'.:',numRange,power5,'.:',numRange,power6,'.:',numRange,power7,'.--','LineWidth',3);
     end
     xlim([numRange(1) numRange(end)]);
     ylim([0 1]);
-    if j~=16 % Remove x&y axis ticks except type 16, which is at the left bottom
+    if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
         %set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
     end
@@ -125,11 +125,11 @@ xlabel('Dimension','position',[-200 -0.2],'FontSize',20);
 ylabel('Empirical Testing Power','position',[-515 3],'FontSize',20);
 h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.05, 0.85, .05, .05]; %Legend Position
+lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend('MGC','HHG','Mcorr','Location',lgdPosition);
+    h=legend('MGC','Mcorr','HHG','Location',lgdPosition);
 else
-    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','HHG','Dcorr','Mcorr','Mantel','Location',lgdPosition);
+    h=legend('MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

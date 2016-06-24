@@ -26,9 +26,9 @@ dcorr = cmap(1,:);
 mcorr = cmap(2,:);
 mante = cmap(3,:);
 HHG   = [0.5,0.5,0.5];
-map1(1,:)=mcorr; map1(5,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
+map1(1,:)=mante; map1(5,:)=mante; % The color for MGC{dcorr} and global dcorr.
 map1(2,:)=dcorr; map1(6,:)=dcorr; % The color for MGC{mcorr} and global mcorr.
-map1(3,:)=mante; map1(7,:)=mante; % The color for MGC{Mantel} and global Mantel.
+map1(3,:)=mcorr; map1(7,:)=mcorr; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
 set(groot,'defaultAxesColorOrder',map1);
 strL={'Global';'MGC'};
@@ -43,23 +43,23 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
-    AUC(1,j)=mean(power5);
-    AUC(2,j)=mean(power2);
+    AUC(1,j)=mean(power6);
+    AUC(2,j)=mean(power3);
     AUC(3,j)=mean(power4);
     AUC(4,j)=mean(power1);
-    AUC(5,j)=mean(power6);
-    AUC(6,j)=mean(power3);
+    AUC(5,j)=mean(power5);
+    AUC(6,j)=mean(power2);
     AUC(7,j)=mean(power7);
     AUC(8,j)=mean(power7);
 end
 
 x=1:2;
-str={'Mcorr';'Dcorr';'Mantel'};
+str={'Mantel';'Dcorr';'Mcorr'};
 for j=1:3
     subplot(s,t,j);
     hold on
     for i=6:19
-        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
+        plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
@@ -82,12 +82,12 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
-    AUC(1,j)=mean(power5);
-    AUC(2,j)=mean(power2);
+    AUC(1,j)=mean(power6);
+    AUC(2,j)=mean(power3);
     AUC(3,j)=mean(power4);
     AUC(4,j)=mean(power1);
-    AUC(5,j)=mean(power6);
-    AUC(6,j)=mean(power3);
+    AUC(5,j)=mean(power5);
+    AUC(6,j)=mean(power2);
     AUC(7,j)=mean(power7);
     AUC(8,j)=mean(power7);
 end

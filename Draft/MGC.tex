@@ -231,12 +231,14 @@ Recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} extended these approache
 % \Dcorr, however, breaks down as the dimensionality of the data increases.  
 % By adjusting the high-dimensional bias of \Dcorr, 
 Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $x$ and $y$ increase to infinity as well.
-Moreover, because these distance based tests merely require a comparison function for both $x$ and $y$, Lyons was able to prove that they are consistent even in other metric spaces, including certain networks, shapes, and other complicated spaces \cite{Lyons2013}.
-% work better in high-dimensions.
-% The first, called ``distance correlation'' (\Dcorr), is a distance-based generalization of Pearson's product-moment correlation statistic \cite{RizzoSzekely2016}.
-% \Dcorr~and its generalizations
-Thus, existing generalized correlation coefficient based tests therefore
-work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
+Moreover, because these distance based tests merely require a comparison function for both $x$ and $y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties \cite{Lyons2013}.
+\jv{that was not true above: lyons proves a general metric space for dcorr to be consistent, but didn't come up with any example of it, not to mention metric space for network/shape. Also the first sentence of the next paragraph is a bit misleading, I think, so I tried to rephrase; feel free to change again.}
+
+Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given. However, 
+empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
+%
+%Thus, existing generalized correlation coefficient based tests therefore
+%work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
 
 
 % In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a principally justified method for choosing the neighborhood.
@@ -253,7 +255,7 @@ Moreover, it has become an invaluable tool in unfolding nonlinear geometry in ma
 However, these local testing approaches focus on two-sample testing, rather than dependence testing. 
 
 The challenge associated with all of methods that employ locality is in choosing the appropriate scale (or neighborhood size) \cite{ShenVogelsteinPriebe2016}.  Even those approaches that do provide a mechanism for optimizing  neighborhood size often do so without any theoretical guarantees, and choose based on some surrogate function, rather than the exploitation task at hand. In either case, changing the neighborhood size for many of these algorithms typically requires running the entire algorithm again, rendering it computationally intractable. 
-Thus, a gap remains in the literature: a dependence test that has all of the desirable properties of the distance based tests, but also performs well in highly nonlinear settings via adapting scale appropriately, thereby providing insight into the most informative neighborhood sizes for both understanding and subsequent inference purposes.  
+Thus, a gap remains in the literature: a dependence test that has all of the desirable properties of the distance based tests, but also performs well in nonlinear settings via adapting scale appropriately, thereby providing insight into the most informative neighborhood sizes for both understanding and subsequent inference purposes.  
 
 
 
@@ -294,19 +296,20 @@ All dependence tests start from the same setting: we observe $n$ pairs of observ
 Multiscale Graph Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
 Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each \mbx~and any neighborhood size $l$ around each \mby, we define the rank-truncated pairwise comparisons:
+\jv{alas, I tried only setting large distances to 0 below; but it would be too cumbersome algorithmically. So, either we do not center them at all (excluding mean), or keep the mean subtracted always. I am ok either way, and the simulation results won't change. }
 \begin{equation}
 \label{localCoef2}
     a_{ij}^k=
     \begin{cases}
       a_{ij}-\bar{a}^{k}, & \text{if } R(a_{ij}) \leq k, \\
-      % -\bar{a}^{k}, & \text{otherwise};      
-      0, & \text{otherwise};
+       -\bar{a}^{k}, & \text{otherwise};      
+      %0, & \text{otherwise};
     \end{cases} \qquad \qquad
     b_{ij}^l=
     \begin{cases}
       b_{ij}-\bar{b}^{l}, & \text{if } R(b_{ij}) \leq l, \\
-      % -\bar{b}^{l}, & \text{otherwise};
-      0, & \text{otherwise};
+       -\bar{b}^{l}, & \text{otherwise};
+      %0, & \text{otherwise};
     \end{cases}
 \end{equation}
 where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
@@ -330,7 +333,7 @@ Column 1: $(X,Y)$ have a circle relationship.
 Column 2: The heat maps of $\tilde{A}$ and $\tilde{B}$, which are the pairwise Euclidean distance matrices of $X$ and $Y$. All distance entries are non-negative.
 Column 3: The top and bottom panels are the heat maps of $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which are the properly centered distance matrices of $\tilde{A}$ and $\tilde{B}$. The center panel is the heatmap of the entry-wise products of $A$ and $B$, summing over which yields the un-normalized \Mcorr~statistic. As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
 Column 4: The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
-Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.}
+Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is $(k^{*},l^{*})=(4,4)$ with many adjacent scales being very close to optimal. The global correlation has a power of $0.1$ while \Mgc~has power $1$. The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as density of the respective permuted test statistics. The global correlation has a p-value of $0.24$ while \Mgc~has a p-value $0$.}
 \label{f:schematic}
 \end{figure}
 %
@@ -434,15 +437,15 @@ The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For
 More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios,
 in which we also compare to \Mantel~and \Dcorr, 
 as well as our novel multiscale variants of both \Mantel~and \Dcorr, 
- are qualitatively similar, and are therefore relegated to Appendix \ref{appen:figs}. 
+ are qualitatively similar, and are therefore relegated to Figure~\ref{f:1DAll} and~\ref{f:nDAll} in Appendix \ref{appen:figs}. 
 
 
 
 \subsection*{\Mgc~Emperically Dominates Global Counterparts}
 
-The above results demonstrate that converting \Mcorr, a global generalized correlation coefficient based test, to \Mgc, its multiscale variant, improves (or does not diminish) testing power for all considered settings, regardless of dimensionality.  We wondered, therefore, whether the multiscale variant of other generalized correlation coefficients would be behave similarly.  Specifically we consider the \Mantel~and \Dcorr~tests, in addition to \Mcorr, and for each, develop a multiscale variant (see Appendix \ref{appen:methods} for details). 
+The above results demonstrate that converting \Mcorr, a global generalized correlation coefficient, to \Mgc, its multiscale variant, always improves (or does not diminish) the testing power for all considered settings, regardless of the dimensionality.  We wondered, therefore, whether the multiscale variant of other generalized correlation coefficients would behave similarly.  Specifically we consider the \Mantel~and \Dcorr~tests, in addition to \Mcorr, and for each, develop a multiscale variant (see Appendix \ref{appen:methods} for details). 
 % 
-Figure \ref{f:pp} show slopegraphs comparing global and multiscale generalized correlation coefficients.  The top row shows for each of the $20$ settings, with both $x$ and $y$ in 1-dimension, the average power as sample size increases.  The bottom row shows the same, but keeping sample size fixed at $n=100$ and increasing dimensionality of $x$.  In all $40$ settings, both low and increasing dimensions, and both fixed and increasing sample sizes, multiscale methods always improve on or stay the same, and never decrease power.  
+Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc.  The top row shows for each of the $20$ settings, with both $x$ and $y$ in 1-dimension with some noise, the average power for different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but the average power is for different dimensionality of $x$ while the sample size is fixed at $n=100$ as in Figure~\ref{f:nDAll}.  In all $40$ settings, both low and increasing dimensions, and both fixed and increasing sample sizes, multiscale methods always improve on or stay the same, and never decrease power. 
 
 
  % 
@@ -452,14 +455,10 @@ Figure \ref{f:pp} show slopegraphs comparing global and multiscale generalized c
 %\subsubsection{\Mgc~improves finite sample performance of all global generalized correlation coefficient based tests}
 \begin{figure}
   \centering
-  \begin{tabular}{@{}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{\quad}p{0.3\linewidth}@{}}
-		\subfigimg[width=\linewidth]{}{../Figures/FigHDMcorr} &
-		\subfigimg[width=\linewidth]{}{../Figures/FigHDDcorr} &
-		\subfigimg[width=\linewidth]{}{../Figures/FigHDMantel}
-  \end{tabular}
+  \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing global and \Mgc~tests. For each global test,  the left side corresponds to the mean power of each simulation in Figure~\ref{f:nD}, the right side corresponds to the respective \Mgc~mean power. The thin solid line are shown for  6-19, because \Mgc~equals the global correlation for  1-5 and  20. Then the thick solid line summarizes how the overall mean power (including  6-19) changes from global to \Mgc.
-It is clear that \Mgc always significantly improves over its global counterpart.}
+Average powers slopegraphs comparing global and \Mgc~tests. For each global test,  the left side corresponds to the average power of each panel in Figure~\ref{f:nD}, the right side corresponds to the respective \Mgc~mean power. The thin solid line are shown for  6-19, because \Mgc~equals the global correlation for  1-5 and  20. Then the thick solid line summarizes how the overall mean power (including  6-19) changes from global to \Mgc.
+It is clear that \Mgc~dominates its global counterpart. }
 \label{f:pp}
 \end{figure}
 
@@ -725,7 +724,7 @@ Finally, Reshef et al \cite{Reshef2011} is another dependence testing methodolog
 
 There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scale. 
 While in this work we proved that there exist scales that improve upon the global scale, and that many local scales outperform the global scale.
-Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hgg~and \Mcorr.  
+Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hhg~and \Mcorr.  
 
 
 % Furthermore, the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. 
@@ -891,10 +890,7 @@ For the increasing dimension simulation in the main paper, we always set $c=0$ a
 \label{f:dependencies}
 \end{figure}
 
-
-
-
-Here we also present an additional setting, which sets $d_{x}=d_{y}=1$ and $c=1$ with the sample size $n$ increasing from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
+Here we also present an additional 1-dimensional setting, to observe that the powers of \Mgc~converge to $1$ faster than all the benchmarks for nearly all dependencies. We fix $d_{x}=d_{y}=1$ and $c=1$, and let the sample size $n$ increase from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
 
 Clearly \Mgc~always improves over its global counterpart, and always has a large advantage regardless of the underlying dependency structure, the dimensionality, the sample size, or noise.
 

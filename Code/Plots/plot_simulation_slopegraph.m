@@ -9,10 +9,10 @@ if nargin<1
     pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../Draft/Figures/Fig'; % The folder to save figures
+    pre2='../../Figures/Fig'; % The folder to save figures
 end
 total=20;
-
+fontSize=20;
 %% Set colors
 map1=zeros(7,3);
 gr = [0,1,0];
@@ -34,6 +34,9 @@ set(groot,'defaultAxesColorOrder',map1);
 strL={'Global';'MGC'};
 average=0;
 
+figure('units','normalized','position',[0 0 1 1])
+s=2;t=3;
+
 
 AUC=zeros(8,20);
 %load data
@@ -50,58 +53,28 @@ for j=1:total
     AUC(8,j)=mean(power7);
 end
 
-% x=1:2;
-% str={'Dcorr';'Mcorr';'Mantel'};
-% for j=1:3
-%     figure
-%     hold on
-%     for i=6:19
-%         plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
-%         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
-%     end
-%     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
-%     ylim([0,1]);
-%     if j==1
-%         %plot(x,[mean(AUC(7,1:19)) mean(AUC(7,1:19))],'.-','LineWidth',4,'Color',map1(4,:));
-%         ylabel('1-Dimensional','FontSize',32);
-%     else
-%         set(gca,'YTick',[]); % Remove y axis ticks
-%         set(gca,'ycolor',[1 1 1])
-%     end
-%     %yTickN=[floor(sumP(1,2)*100)/100,1];
-%     %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
-%     set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',30);
-%     title(str(j,:),'FontSize',32);
-%     hold off
-%     if j==1
-%     F.fname=strcat(pre2,'HDDcorr');
-%     end
-%     if j==2
-%     F.fname=strcat(pre2,'HDMcorr');
-%     end
-%     if j==3
-%     F.fname=strcat(pre2,'HDMantel');
-%     end
-%     F.wh=[3 2.5]*2;
-%     print_fig(gcf,F)
-% end
-
-% figure
-% hold on
-% for i=6:19
-%         plot(x,[max(AUC([1,3,5,7],i)), max(AUC([2,4,6],i))],'.:','LineWidth',2,'Color',map1(4,:));
-%         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
-% end
-% plot(x,[mean(max(AUC([1,3,5,7],1:19),[],1)) mean(max(AUC([2,4,6],1:19),[],1))],'.-','LineWidth',10,'Color',map1(4,:));
-% ylim([0 1])
-% hold off
-% set(gca,'YTick',[]); % Remove y axis ticks
-% set(gca,'ycolor',[1 1 1])
-% set(gca,'XTickLabel',{'Best Global';'Best MGC'},'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',30);
-% title('Summary','FontSize',32);
-% F.fname=strcat(pre2,'1DAll');
-% F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+x=1:2;
+str={'Mcorr';'Dcorr';'Mantel'};
+for j=1:3
+    subplot(s,t,j);
+    hold on
+    for i=6:19
+        plot(x,AUC(2*j-1:2*j,i),'.:','LineWidth',2,'Color',map1(j,:));
+        %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
+    end
+    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
+    ylim([0,1]);
+    if j==1
+        ylabel('1-Dimensional','FontSize',fontSize);
+    else
+        set(gca,'YTick',[]); % Remove y axis ticks
+        set(gca,'ycolor',[1 1 1])
+    end
+    set(gca,'XTick',[]); % Remove y axis ticks
+    set(gca,'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize);
+    title(str(j,:),'FontSize',fontSize);
+    hold off
+end
 
 
 AUC=zeros(8,20);
@@ -119,10 +92,8 @@ for j=1:total
     AUC(8,j)=mean(power7);
 end
 
-x=1:2;
-str={'Mcorr';'Dcorr';'Mantel'};
 for j=1:3
-    figure
+    subplot(s,t,3+j);
     hold on
     for i=6:19
         plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
@@ -131,36 +102,18 @@ for j=1:3
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
-        ylabel('Mean Power','FontSize',32);
+        ylabel('High-Dimensional','FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
         set(gca,'ycolor',[1 1 1])
     end
-    %yTickN=[floor(sumP(1,1)*100)/100,1];
-    set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',30);
-%     if j==3
-%         plot(2.2*ones(14,1),AUC(7,6:19),'.','LineWidth',2,'Color',map1(4,:));
-%         plot(2.2,mean(AUC(7,1:19)),'o','LineWidth',5,'Color',map1(4,:));
-%         xlim([1,2.2]);
-%         set(gca,'XTickLabel',['Global';'  MGC ';'  HHG '],'XTick',[1;2;2.2],'YTickLabel',[0,1],'YTick',0:1,'FontSize',18);
-%     end
-title(str(j,:),'FontSize',32);
+    set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize);
+%     title(str(j,:),'FontSize',32);
     hold off
-    %yTickN=[floor(sumP(1,2)*100)/100,1];
-    %axes('xlim', [1 2],'ylim', [0 1], 'color', 'none', 'YAxisLocation', 'right','XTick',[],'FontSize',18);
-    if j==1
-    F.fname=strcat(pre2,'HDMcorr');
-    end
-    if j==2
-    F.fname=strcat(pre2,'HDDcorr');
-    end
-    if j==3
-    F.fname=strcat(pre2,'HDMantel');
-    end
-    F.wh=[3 2.5]*2;
-    print_fig(gcf,F)
 end
-
+F.fname=strcat(pre2,'Slope');
+    F.wh=[6 3]*2;
+    print_fig(gcf,F)
 % figure
 % hold on
 % for i=6:19

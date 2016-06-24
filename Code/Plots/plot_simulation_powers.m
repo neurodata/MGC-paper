@@ -12,7 +12,7 @@ if nargin<2
     pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<3
-    pre2='../../Draft/Figures/Fig'; % The folder to save figures
+    pre2='../../Figures/Fig'; % The folder to save figures
 end
 total=20;
 %% Set colors

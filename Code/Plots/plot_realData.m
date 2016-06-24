@@ -6,7 +6,7 @@ if nargin<1
     pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<2
-    pre2='../../Draft/Figures/FigReal'; % The folder to save figures
+    pre2='../../Figures/FigReal'; % The folder to save figures
 end
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];

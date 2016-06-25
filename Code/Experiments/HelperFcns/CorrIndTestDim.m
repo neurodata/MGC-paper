@@ -35,6 +35,10 @@ if lim==0
 else
     dimRange=ceil(dim/lim):ceil(dim/lim):dim; % Test using dimension choices at the interval of ceil(dim/lim).
 end
+if ceil(dim/lim)~=1
+    dimRange=[1 dimRange];
+    lim=lim+1;
+end
 power1=zeros(1,lim);power2=zeros(1,lim);power3=zeros(1,lim);% Powers for MGC{dcorr/mcorr/Mantel}
 power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
 
@@ -61,10 +65,13 @@ for i=1:lim
 end
 
 % Save the results
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
-rootDir=fpath(1:findex(end-3));
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
+rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
 colons=strfind(p,':');
@@ -94,6 +101,10 @@ if lim==0
     lim=1;
 else
     dimRange=ceil(dim/lim):ceil(dim/lim):dim; % Test using dimension choices at the interval of ceil(dim/lim).
+end
+if ceil(dim/lim)~=1
+    dimRange=[1 dimRange];
+    lim=lim+1;
 end
 
 % Store the test statistics under the null and the alternative

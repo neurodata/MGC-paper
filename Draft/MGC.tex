@@ -1072,6 +1072,7 @@ is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and simi
 
 Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeated simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by maximizing the powers. This algorithm is also applicable if there exists multiple pairs of data with unknown model but similar dependency structure, then the alternative statistic can be computed from each data pair while the null statistic can be computed from each data pair under permutation. The running time is $O(rn^2 \log n)$.
 
+
 \begin{algorithm}
 \caption{Local Correlation Computation for One Scale}
 \label{alg:1scale}
@@ -1243,7 +1244,7 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 % Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 \end{appThm}
 \begin{proof}
-Define $\beta(\G^{*})=\max\{\beta(\G^{kl})\}$. Therefore, for any $f_{xy}$, the power of multiscale graph correlation satisfies
+Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any $f_{xy}$, the power of multiscale graph correlation satisfies
 \begin{equation}
 \beta(\G^*) \geq \beta(\G),
 \end{equation}

@@ -1,19 +1,12 @@
 function run_fig1Data
 % generate data for figure 1
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
 rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
 
 type=11;
 option=2;
@@ -77,5 +70,4 @@ end
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 
-
-save('../../Data/Results/CorrFigure1.mat','tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');
+save(strcat(rootDir,'Data/Results/CorrFigure1.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');

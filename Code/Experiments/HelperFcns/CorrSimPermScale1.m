@@ -30,23 +30,15 @@ if dim>1
     noise=0;
     n=100;
 end
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
-rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+rootDir=fpath(1:findex(end-3));
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
 
-pre1='../../Data/Results/'; % The folder to locate data
+pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 powerP=zeros(7,20);
 option=[0,2,0,4];
 for tt=type

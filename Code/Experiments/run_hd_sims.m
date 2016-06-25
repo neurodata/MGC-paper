@@ -2,21 +2,13 @@ function run_hd_sims(rep1,rep2)
 % run high-dimensional simulations
 % the output are saved to ../../data/results
 
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
 rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
 
 if nargin < 1
     rep1=2000; % number of MC replicates for MGC scale estimation

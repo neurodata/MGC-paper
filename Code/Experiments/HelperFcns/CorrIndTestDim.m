@@ -65,23 +65,15 @@ for i=1:lim
 end
 
 % Save the results
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
-rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+rootDir=fpath(1:findex(end-3));
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
 
-pre1='../../Data/Results/'; % The folder to locate data
+pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
 save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
 

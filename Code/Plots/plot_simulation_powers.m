@@ -1,36 +1,23 @@
-function []=plot_simulation_powers(select,pre1,pre2)
+function []=plot_simulation_powers(select)
 % Used to plot figure 1-8 used in tex. Run like
 
 % total is usually 20.
 % pre1 specifies the location to load data.
 % pre2 specifies the location to save pictures.
 
-%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
 rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
-
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
+pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
+pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 %%
 if nargin<1
     select=1;
-end
-if nargin<2
-    pre1='../../Data/Results/'; % The folder to locate data
-end
-if nargin<3
-    pre2='../../Figures/Fig'; % The folder to save figures
 end
 total=20;
 

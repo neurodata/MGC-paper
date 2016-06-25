@@ -1,29 +1,17 @@
-function []=plot_realData(pre1,pre2)
+function []=plot_realData
 % Used to plot the heatmap of real data used in tex. Run like
 % CorrRealPlots()
 
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
 rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
+pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
+pre2=strcat(rootDir,'Figures/FigReal');% The folder to save figures
 
-if nargin<1
-    pre1='../../Data/Results/'; % The folder to locate data
-end
-if nargin<2
-    pre2='../../Figures/Fig'; % The folder to save figures
-end
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];
 ma = [1,0,1];
@@ -131,10 +119,19 @@ set(groot,'defaultAxesColorOrder',map1);
 
 figure
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
- [f,xi]=ksdensity(p(:,2),'support',[0,1]); 
+pv=p(:,2);
+ [f,xi]=ksdensity(pv,'support',[0,1]); 
  hold on
  plot(xi,f,'.-','LineWidth',2);
- plot(p(:,2),0.01*ones(size(p,1),1),'k.','MarkerSize',20);
+ addJitter=1:length(pv);
+ pv=sort(pv,'ascend');
+ ord=0.01*ones(length(pv),1);
+ for i=2:length(pv);
+     if pv(i)-pv(i-1)<0.001
+         ord(i)=ord(i-1)+0.4;
+     end
+ end
+ plot(pv,ord,'k.','MarkerSize',20);
 xlim([0,0.15]);
 ylim([-1 15]);
 set(gca,'FontSize',16);

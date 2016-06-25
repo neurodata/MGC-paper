@@ -1,24 +1,17 @@
-function []=plot_simulation_visual(n,dim,noise,pre2)
+function []=plot_simulation_visual(n,dim,noise)
 % Author: Cencheng Shen
 % CorrVisualPlots()
 % CorrVisualPlots(100,2)
 % Used to plot figure 0 in the files
 
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
 rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
+pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 if nargin<1
     n=100;
@@ -28,9 +21,6 @@ if nargin<2
 end
 if nargin<3
     noise=1;
-end
-if nargin<4
-    pre2='../../Figures/Fig'; % The folder to save figures
 end
 
 total=20;
@@ -68,9 +58,9 @@ for type=1:total
         case 2
             a=[-1,1];b=[-250,250];
         case 3
-            a=[-1,1];b=[-2.5,2.5];
-        case 4
             a=[0,3];b=[-20,40];
+        case 4
+            a=[-1,1];b=[-2.5,2.5];
         case 5
             a=[-3,3];b=[-3,3];
         case 6

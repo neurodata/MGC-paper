@@ -37,23 +37,15 @@ p4=p1All(end);p5=p2All(end);p6=p3All(end);
 %     p2
 %     p5
 % end
-%%%
+%%% File path searching
 fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
-if isempty(findex)
-    findex=strfind(fpath,'\');
-end
-rootDir=fpath(1:findex(end-2));
-p = genpath(rootDir);
-gits=strfind(p,'.git');
-colons=strfind(p,':');
-for i=0:length(gits)-1
-    endGit=find(colons>gits(end-i),1);
-    p(colons(endGit-1):colons(endGit)-1)=[];
-end
-addpath(p);
+rootDir=fpath(1:findex(end-3));
+strcat(rootDir,'Code/');
+addpath(genpath(strcat(rootDir,'Code/')));
 
-pre1='../../Data/Results/'; % The folder to locate data
+pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
 save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3','t1All','t2All','t3All');
 

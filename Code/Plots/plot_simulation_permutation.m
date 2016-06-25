@@ -1,8 +1,11 @@
 function []=plot_simulation_permutation(pre1,pre2)
 
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

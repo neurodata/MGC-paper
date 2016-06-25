@@ -4,9 +4,12 @@ if nargin<1
     rep=10000;
 end
 
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

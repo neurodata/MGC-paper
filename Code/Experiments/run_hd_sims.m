@@ -2,9 +2,12 @@ function run_hd_sims(rep1,rep2)
 % run high-dimensional simulations
 % the output are saved to ../../data/results
 
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

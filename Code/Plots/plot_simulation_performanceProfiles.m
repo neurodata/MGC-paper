@@ -5,9 +5,12 @@ function []=plot_simulation_powers(pre1,pre2)
 % pre1 specifies the location to load data.
 % pre2 specifies the location to save pictures.
 
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

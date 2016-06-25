@@ -62,10 +62,13 @@ for i=1:lim
 end
 
 % Save the results
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
-rootDir=fpath(1:findex(end-3));
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
+rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
 colons=strfind(p,':');

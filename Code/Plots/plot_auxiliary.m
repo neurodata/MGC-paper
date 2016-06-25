@@ -1,4 +1,4 @@
-function []=plot_auxiliary(type)
+function []=plot_auxiliary
 
 % type=6;n=100;dim=1;noise=1;
 % CorrSimPlotsA(type,n,dim,noise,pre1);
@@ -6,7 +6,10 @@ function []=plot_auxiliary(type)
 
 %%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');
@@ -17,20 +20,12 @@ for i=0:length(gits)-1
 end
 addpath(p);
 
-if nargin<1
-    type=11;
-end
-pre1='../../Data/Results/'; % The folder to locate data
+load('../../Data/Results/CorrFigure1.mat')
 pre2='../../Figures/Fig'; % The folder to save figures
-option=2;
-n=50;
-dim=1;
-noise=0;
+
 cc=1;
-rep=1000;
-repp=1;
 fontSize=20;
-mkSize=25;
+mkSize=20;
 
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];
@@ -49,85 +44,11 @@ map4 = brewermap(128,'GnBu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
 s=3;t=4;
 
-% optimal scale
-tA=zeros(n,n,rep);
-tN=zeros(n,n,rep);
-pa=zeros(n,n);
-for rr=1:repp
-    for r=1:rep;
-        [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-        CA=squareform(pdist(x));
-        DA=squareform(pdist(y));
-        tA(:,:,r)=LocalCorr(CA,DA,2);
-        [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
-        CA=squareform(pdist(x));
-        DA=squareform(pdist(y));
-        tN(:,:,r)=LocalCorr(CA,DA,2);
-    end
-    power1=zeros(n,n);
-    alpha=0.05;
-    for i=1:n;
-        for j=1:n;
-            dCorT=sort(tN(i,j,:),'descend');
-            cut1=dCorT(ceil(rep*alpha));
-            power1(i,j)=mean(tA(i,j,:)>cut1);
-        end
-    end
-    pa=pa+power1/repp;
-end
-power1=pa;
-power1(1,:)=0;power1(:,1)=0; % Set the powers of all local tests at rank 0 to 0
-neighbor=maxNeighbors(power1,0,tN,tA);
-
 figure('units','normalized','position',[0 0 1 1])
 %%% Col 1
-% Generate data
-[x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-if noise~=0
-    [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-end
-% Get distance matrix
-[x,ind]=sort(x,'ascend');
-y=y(ind);
-C=squareform(pdist(x));
-D=squareform(pdist(y));
-
-% Permutation p-value
-tA=LocalCorr(C,D,2);
-tN=zeros(rep,n,n);
-pAll=zeros(n,n);
-for r=1:rep;
-    per=randperm(n);
-    tmp=LocalCorr(C,D(per,per),2);
-    tN(r,:,:)=tmp;
-    if r==1
-        pAll=(tmp<tA)/rep;
-    else
-        pAll=pAll+(tmp<tA)/rep;
-    end
-end
-
-l=ceil(neighbor/n)
-k=neighbor-n*(l-1)
-minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
-minp=floor(minp*10)/10;
-maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
-maxp=ceil(maxp*10)/10;
-p=tN(:,k,l);
-[f1,xi1]=ksdensity(p,'support',[-1,1]);
-p=tN(:,n,n);
-[f,xi]=ksdensity(p,'support',[-1,1]);
-
 ax=subplot(s,t,1);
 set(groot,'defaultAxesColorOrder',map0);
-if noise==0
-    plot(x,y,'.','MarkerSize',15);
-else
-    plot(x,y,'.',x1,y1,'k.','MarkerSize',mkSize);
-end
-%xlabel('X');
-%ylabel('Y','Rotation',0,'position',[-1.4,-0.1]);
-
+    plot(x,y,'.','MarkerSize',mkSize);
 xlim([-1.2,1.2]);
 ylim([-1.2,1.2]);
 
@@ -137,7 +58,6 @@ pos = get(ax,'position');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-
 
 %%% Col 2
 ax=subplot(s,t,2);
@@ -298,14 +218,14 @@ kmin=2;
 hold on
 ph=power1(kmin:n,kmin:n)';
 imagesc(ph);
-set(gca,'FontSize',13)
+set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(ax,cmap)
-caxis([floor(min(min(ph))*10)/10 1])
-h=colorbar('Ticks',[0.1,1]);
+caxis([0 1])
+h=colorbar('Ticks',[0,0.5,1]);
 set(h,'FontSize',fontSize);
-set(gca,'XTick',[10,20,30,40],'YTick',[10,20,30,40]);
+set(gca,'XTick',[10,20,30,40],'YTick',[10,20,30,40],'FontSize',16);
 xlabel('# of Neighbors for X','FontSize',16)
 ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
@@ -328,24 +248,33 @@ colorbar
 
 % Col 5 p-value
 subplot(s,t,5)
+minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
+minp=floor(minp*10)/10;
+maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
+maxp=ceil(maxp*10)/10;
+p=tN(:,k,l);
+[f1,xi1]=ksdensity(p,'support',[-1,1]);
+p=tN(:,n,n);
+[f,xi]=ksdensity(p,'support',[-1,1]);
+
 hold on
 plot(xi,f,'.:',xi1,f1,'.-','LineWidth',2);
 set(gca,'FontSize',15);
 plot(tA(end),0.1,'.','MarkerSize',mkSize);
 plot(tA(k,l),0.1,'*','MarkerSize',10);
-set(gca,'XTick',[0,tA(k,l)],'YTick',[]); % Remove x axis ticks
+set(gca,'XTick',[0,round(tA(k,l)*100)/100],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
 ind=find(xi>x1,1,'first');
 y1 = f(ind)+15;
 x2 = tA(k,l);
 y2 = 2;
-txt1 = strcat('Mcorr p = ',num2str(1-pAll(end)));
-txt2 = strcat('MGC p < 0.001');
+txt1 = {'Mcorr';['p = ' num2str(1-pAll(end))]};
+txt2 = {'MGC';'p < 0.001'};
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','center');
-set(a,'FontSize',18);
-set(b,'FontSize',18);
+set(a,'FontSize',17);
+set(b,'FontSize',17);
 xlim([minp,maxp]);
 ylabel('Density','FontSize',fontSize);
 title('Test Statistics Distributions','FontSize',16);

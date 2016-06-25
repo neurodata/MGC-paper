@@ -4,9 +4,12 @@ function []=plot_simulation_visual(n,dim,noise,pre2)
 % CorrVisualPlots(100,2)
 % Used to plot figure 0 in the files
 
-%%
+%%%
 fpath = mfilename('fullpath');
-findex=strfind(fpath,'\');
+findex=strfind(fpath,'/');
+if isempty(findex)
+    findex=strfind(fpath,'\');
+end
 rootDir=fpath(1:findex(end-2));
 p = genpath(rootDir);
 gits=strfind(p,'.git');

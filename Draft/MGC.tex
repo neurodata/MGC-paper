@@ -377,7 +377,7 @@ polynomial   (6-12),
 trigonometric (13-17),
 uncorrelated but nonlinearly dependent  (18-19),
 and an independent relationship (20).
-Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$  as Euclidean distance,  $\delta(x_i,x_j) = \sum_{d=1}^{d_x} (x_i(d) - x_j(d))^2$, and the same for $\delta_y$.
+Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$ and $\delta_y$ both as the Euclidean distance, that is, $\delta_x(x_i,x_j) = \sum_{d=1}^{D} (x_i[d] - x_j[d])^2$, and the same for $\delta_y$.
 
 
 \begin{figure}[htbp]
@@ -726,7 +726,7 @@ Second, as highlighted above, \Mgc~requires a pair of metrics, one for each data
 Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work has demonstrated efficient algorithms that are linear in sample size \cite{Hou2016} for one-dimensional data.  Although it is not clear how to extend this approach to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even upon subsampling the data points significantly (not shown), suggesting that subsampling data or comparisons  could yield a linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using hard disk space in a streaming fashion to both speed up computations for big data, and enable storing matrices larger than fit in RAM.
 
 Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},  two-sample tests \cite{Szekely2004}, and feature selection \cite{LiZhongZhu2012,Zhong2015}.   
-Testing independence between graphs and node attributes \cite{Fosdick16} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the locality of dependence.
+Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the locality of dependence.
 
 
 % Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction, classification, other testing and prediction domains, etc.
@@ -758,10 +758,15 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \section{Simulation Functions}
 \label{appen:function}
 
-We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012} but with some changes (such as the inclusion of additional noise and an extra weight vector) to better compare all methods throughout different dimensions and sample sizes.
+We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add noise, thereby making them more difficult, or adding a weight vector for higher dimensions, %but with some changes (such as the inclusion of additional noise and an extra weight vector)
+\cs{is the above true? you had "some changes", which felt vague and suggested we changed things for our favor.} 
+to better compare all methods throughout different dimensions and sample sizes.
 
-For each sample $\mbx \in \Real^{d_{x}}$, we denote $\mbx^{d}, d=1,\ldots,d_{x}$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{d_{x}}$ is a decaying vector with $w^{d}=1/d$ for each $d$, such that $w\T \mbx$ is a $1$-dimensional weighted summation of all dimensions of \mbx, which equals \mbx~if $d_{x}=1$.
-Furthermore, $\mc{U}$ denotes the uniform distribution, $\mc{B}$ denotes the Bernoulli distribution, $\mc{N}$ denotes the normal distribution, $u$ and $v$ represent realizations from some auxiliary random variables, $c$ is a scalar constant to control the noise level (which equals $1$ for 1-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise.
+For each sample $\mbx \in \Real^{d_{x}}$, we denote $\mbx^{d}, d=1,\ldots,d_{x}$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{d_{x}}$ is a decaying vector with $w^{d}=1/d$ for each $d$, such that $w\T \mbx$ is a 
+% $1$-dimensional 
+weighted summation of all dimensions of \mbx. %, which equals \mbx~if $d_{x}=1$.
+Furthermore, $\mc{U}(a,b)$ denotes the uniform distribution on the interval $(a,b)$, $\mc{B}(p)$ denotes the Bernoulli distribution with probability $p$, $\mc{N}(\mu,{\Sigma})$ denotes the normal distribution with mean ${\mu}$ and covariance ${\Sigma}$, 
+$u$ and $v$ represent realizations from some auxiliary random variables, $c$ is a scalar constant to control the noise level (which equals $1$ for 1-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise.
 
 For all of the below equations, $(\mbx,\mby) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(\mbx,\mby)$, and define each of the above distributions, and any additional auxiliary distributions.
 
@@ -785,12 +790,12 @@ For all of the below equations, $(\mbx,\mby) \overset{iid}{\sim} f_{xy} = f_{y|x
 \item Step Function $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$:
 \begin{align*}
 \mbx &\sim \mc{U}(-1,1)^{d_{x}},\\
-\mby &=\mb{I}(w\T \mbx>0)+\epsilon,
+\mby &={I}(w\T \mbx>0)+\epsilon,
 \end{align*}
-where $\mb{I}$ is the indicator function.
-\item Joint normal $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ be the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ be the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $(u,v) \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
+where ${I}$ is the indicator function.
+\item Joint normal $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: Let $\rho=1/2d_{x}$, $I_{d_{x}}$ be the identity matrix of size $d_{x} \times d_{x}$, $J_{d_{x}}$ be the matrix of ones of size $d_{x} \times d_{x}$, and $\Sigma = \begin{bmatrix} I_{d_{x}}&\rho J_{d_{x}}\\ \rho J_{d_{x}}&I_{d_{x}} \end{bmatrix}$. Then let $v \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
-\mbx &=u,\\
+\mbx &\sim \mc{N}(0, \Sigma),\\
 \mby &=v+0.5c\epsilon.
 \end{align*}
 \item Quadratic $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$:
@@ -846,7 +851,7 @@ for $d=1,\ldots,d_{x}$.
 \mbx^{d}&=u+0.02 d_{x} v^{d} \mbox{ for $d=1,\ldots,d_{x}$}, \\
 \mby&=\sin ( \theta x )+c\epsilon.
 \end{align*}
-\item Sine Period 1/8 $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: Same as above except $\theta=16\pi$ and the noise is changed to $0.5c\epsilon$.
+\item Sine Period 1/8 $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: Same as above except $\theta=16\pi$ and the noise on $\mby$ is changed to $0.5c\epsilon$.
 \item Multiplicative Noise $(\mbx,\mby) \in \Real^{d_{x}} \times \Real^{d_{x}}$: $u \sim \mc{N}(0, I_{d_{x}})$, $\epsilon \sim \mc{N}(0, I_{d_{x}})$,
 \begin{align*}
 \mbx &\sim \mc{N}(0, I_{d_{x}}),\\

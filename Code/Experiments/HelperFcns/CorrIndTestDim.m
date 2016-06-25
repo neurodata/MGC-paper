@@ -37,7 +37,7 @@ else
 end
 if ceil(dim/lim)~=1
     dimRange=[1 dimRange];
-    lim=lim+1;
+    lim=length(dimRange);
 end
 power1=zeros(1,lim);power2=zeros(1,lim);power3=zeros(1,lim);% Powers for MGC{dcorr/mcorr/Mantel}
 power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
@@ -104,7 +104,7 @@ else
 end
 if ceil(dim/lim)~=1
     dimRange=[1 dimRange];
-    lim=lim+1;
+    lim=length(dimRange);
 end
 
 % Store the test statistics under the null and the alternative

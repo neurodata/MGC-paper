@@ -262,7 +262,10 @@ plot(xi,f,'.:',xi1,f1,'.-','LineWidth',2);
 set(gca,'FontSize',15);
 plot(tA(end),0.1,'.','MarkerSize',mkSize);
 plot(tA(k,l),0.1,'*','MarkerSize',10);
-set(gca,'XTick',[0,round(tA(k,l)*100)/100],'YTick',[]); % Remove x axis ticks
+zeroLine=0:max(f)/100:max(f);
+plot(zeros(length(zeroLine),1),zeroLine,':','LineWidth',2,'Color',gr);
+set(gca,'XTick',[round(tA(end)*100)/100,round(tA(k,l)*100)/100]);
+set(gca,'XTickLabel',['      0.03'; '      0.31'],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
 ind=find(xi>x1,1,'first');
@@ -272,7 +275,7 @@ y2 = 2;
 txt1 = {'Mcorr';['p = ' num2str(1-pAll(end))]};
 txt2 = {'MGC';'p < 0.001'};
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left');
-b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','center');
+b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left');
 set(a,'FontSize',17);
 set(b,'FontSize',17);
 xlim([minp,maxp]);

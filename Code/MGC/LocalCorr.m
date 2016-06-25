@@ -56,7 +56,6 @@ function [corrXY,varX,varY]=LocalComputation(A,B,RX,RY)
 n=size(A,1);nX=max(max(RX));nY=max(max(RY));
 corrXY=zeros(nX,nY); varX=zeros(1,nX); varY=zeros(1,nY);
 EX=zeros(1,nX);EY=zeros(1,nY);
-%nK=zeros(1,nX); nL=zeros(1,nY); 
 
 % summing up the entrywise product of A and B based on the ranks, which
 % yields the local family of covariance and variances
@@ -68,25 +67,17 @@ for j=1:n
         varY(l)=varY(l)+b^2;
         EX(k)=EX(k)+a;
         EY(l)=EY(l)+b;
-%         if a~=0
-%         nK(k)=nK(k)+1;
-%         end
-%         if b~=0
-%         nL(l)=nL(l)+1;
-%         end
     end
 end
 for k=1:nX-1
     corrXY(k+1,1)=corrXY(k,1)+corrXY(k+1,1);
     varX(k+1)=varX(k)+varX(k+1);
     EX(k+1)=EX(k)+EX(k+1);
-%     nK(k+1)=nK(k)+nK(k+1);
 end
 for l=1:nY-1
     corrXY(1,l+1)=corrXY(1,l)+corrXY(1,l+1);
     varY(l+1)=varY(l)+varY(l+1);
     EY(l+1)=EY(l)+EY(l+1);
-%     nL(l+1)=nL(l)+nL(l+1);
 end
 for l=1:nY-1
     for k=1:nX-1
@@ -95,12 +86,6 @@ for l=1:nY-1
 end
 
 % normalize the covariance by the variances yields the local correlation
-% EX=EX./nK/n;EY=EY./nL/n;
-% corrXY=(corrXY./(nK'*nL)-EX'*EY);
-% varX=varX/nK/n-EX.^2;
-% varY=varY/nL/n-EY.^2;
-% corrXY=(corrXY)./real(sqrt(varX'*varY));
-
 corrXY=(corrXY-EX'*EY/n^2);
 varX=varX-EX.^2/n^2;
 varY=varY-EY.^2/n^2;

@@ -18,7 +18,7 @@ end
 addpath(p);
 
 %%%
-load('..\..\Data\Preprocessed\BrainHippoShape')
+load('../../Data/Preprocessed/BrainHippoShape')
 n=114;
 y=squareform(pdist(Label));
 % y=(y>0)+1;
@@ -33,7 +33,7 @@ CorrPermDistTest(LMLS,LMRS,rep,'BrainLMLxLMR');
 
 
 %
-load('..\..\Data\Preprocessed\semipar')
+load('../../Data/Preprocessed/semipar')
 n=109;
 distCCI=squareform(pdist(cci));
 CorrPermDistTest(distMigrain(ind,ind),distCCI(ind,ind),rep,'MigrainxCCI');

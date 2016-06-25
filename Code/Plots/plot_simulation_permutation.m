@@ -14,10 +14,10 @@ end
 addpath(p);
 
 if nargin<1
-    pre1='..\..\Data\Results\'; % The folder to locate data
+    pre1='../../Data/Results/'; % The folder to locate data
 end
 if nargin<2
-    pre2='..\..\Figures\Fig'; % The folder to save figures
+    pre2='../../Figures/Fig'; % The folder to save figures
 end
 
 %% Set colors

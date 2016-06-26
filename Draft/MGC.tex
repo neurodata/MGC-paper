@@ -891,13 +891,6 @@ Here we also present an additional 1-dimensional setting, to observe that the po
 Clearly \Mgc~always improves over its global counterpart, and always has a large advantage regardless of the underlying dependency structure, the dimensionality, the sample size, or noise.
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/FigHDPowerAll}
-\caption{
-Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.}
-\label{f:nDAll}
-\end{figure}
-
-\begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DPowerAll}
 \caption{
 Powers of different methods for $20$ different $1$-dimensional dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
@@ -905,6 +898,14 @@ Each panel shows empirical testing power on the abscissa at a significant level 
 \Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on nearly all problems.}
 \label{f:1DAll}
 \end{figure}
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth]{../Figures/FigHDPowerAll}
+\caption{
+Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.}
+\label{f:nDAll}
+\end{figure}
+
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}

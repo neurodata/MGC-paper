@@ -1,6 +1,9 @@
-function run_fig1Data
+function run_fig1Data(type,n,noise)
 % generate data for figure 1
 %%% File path searching
+if nargin<1
+    type=11;
+end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -8,11 +11,11 @@ rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
-type=11;
+%type=11;
 option=2;
-n=50;
+%n=50;
 dim=1;
-noise=0;
+%noise=0;
 rep=1000;
 
 % optimal scale
@@ -70,4 +73,4 @@ end
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 
-save(strcat(rootDir,'Data/Results/CorrFigure1.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');

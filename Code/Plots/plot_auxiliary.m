@@ -1,22 +1,39 @@
-function []=plot_auxiliary
+function []=plot_auxiliary(newSim,type,n,noise)
 
 % type=6;n=100;dim=1;noise=1;
 % CorrSimPlotsA(type,n,dim,noise,pre1);
 % Used to generate figure A in the files
 
 %%% File path searching
+if nargin<1
+    newSim=0;
+end
+if nargin<2
+    type=11;
+end
+if nargin<3
+    n=50;
+end
+if nargin<4
+    noise=0;
+end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
-load(strcat(rootDir,'Data/Results/CorrFigure1.mat')); % The folder to locate data
+
+if newSim==1
+    run_fig1Data(type,n,noise);
+end
+load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'.mat')); % The folder to locate data
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 cc=1;
 fontSize=20;
 mkSize=20;
+sameBar=0;
 
 cmap=zeros(4,3);
 gr = [0.5,0.5,0.5];
@@ -52,7 +69,11 @@ set(ax,'position',pos2);
 
 %%% Col 2
 ax=subplot(s,t,2);
+if sameBar==1
     maxC=ceil(max(max([C,D]))*10)/10;
+else
+    maxC=ceil(max(max(C))*10)/10;
+end
 imagesc(C');
 colormap(ax,map3);
 caxis([0,maxC]);
@@ -66,6 +87,9 @@ pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
 ax=subplot(s,t,3);
+if sameBar~=1
+    maxC=ceil(max(max(D))*10)/10;
+end
 imagesc(D');
 set(gca,'FontSize',16)
 colormap(ax,map3);
@@ -115,7 +139,11 @@ mcorrH=A.*B;
 
 %%% Col 3
 ax=subplot(s,t,6);
-minC=floor(min(min([A,B]))*10)/10;maxC=ceil(max(max([A,B]))*10)/10;
+if sameBar==1
+    minC=floor(min(min([A,B]))*10)/10;maxC=ceil(max(max([A,B]))*10)/10;
+else
+    minC=floor(min(min([A]))*10)/10;maxC=ceil(max(max([A]))*10)/10;
+end
 minC=min(minC,-maxC);maxC=max(maxC,-minC);
 imagesc(A');
 set(gca,'YDir','normal')
@@ -128,7 +156,11 @@ pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
 ax=subplot(s,t,7);
-minD=floor(min(min([A,B]))*10)/10;maxD=ceil(max(max([A,B]))*10)/10;
+if sameBar==1
+    minD=floor(min(min([A,B]))*10)/10;maxD=ceil(max(max([A,B]))*10)/10;
+else
+    minD=floor(min(min([B]))*10)/10;maxD=ceil(max(max([B]))*10)/10;
+end
 minD=min(minD,-maxD);maxD=max(maxD,-minD);
 imagesc(B');
 set(gca,'YDir','normal')
@@ -251,10 +283,12 @@ p=tN(:,n,n);
 hold on
 plot(xi,f,'.:',xi1,f1,'.-','LineWidth',4);
 set(gca,'FontSize',15);
-plot(tA(end),0.1,'.','MarkerSize',mkSize);
-plot(tA(k,l),0.1,'*','MarkerSize',10);
-set(gca,'XTick',[round(tA(end)*100)/100,round(tA(k,l)*100)/100]);
-set(gca,'XTickLabel',['      0.03'; '      0.31'],'YTick',[]); % Remove x axis ticks
+x1=round(tA(end)*100)/100;
+x2=round(tA(k,l)*100)/100;
+plot(x1,0.1,'.','MarkerSize',mkSize);
+plot(x2,0.1,'*','MarkerSize',10);
+set(gca,'XTick',[x1+0.04,x2+0.04],'TickLength',[0 0]);
+set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
 ind=find(xi>x1,1,'first');

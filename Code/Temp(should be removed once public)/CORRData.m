@@ -36,6 +36,7 @@ switch part
 end
 
 option=[0,2,0,0];
+total=0;
 for l=1:length(aList);
     str1=aList(l);str1=str1{1,1};
     fileDir=strcat(pre1,str1,'/');
@@ -55,6 +56,7 @@ for l=1:length(aList);
     distP=squareform(pdist(Y));
     power=zeros(7,1);
     p1=zeros(7,1);
+    total=total+n;
     
     for j=1:n
         fileName=allNames(j);
@@ -77,3 +79,4 @@ for l=1:length(aList);
     fileS=strcat(pre1,str1,'FalseDetection.mat');
     save(fileS,'power','alpha','n','timestep','region','str1');
 end
+total

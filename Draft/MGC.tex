@@ -53,7 +53,8 @@
 % \addtolength{\topmargin}{-.8in}%
 
 
-\providecommand{\sct}[1]{{\sc \texttt{#1}}}
+%\providecommand{\sct}[1]{{\sc \texttt{#1}}}
+\providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
 \providecommand{\mt}[1]{\widetilde{#1}}
 \providecommand{\mb}[1]{\boldsymbol{#1}}
 \providecommand{\mc}[1]{\mathcal{#1}}
@@ -347,15 +348,14 @@ This insight yields an algorithm for exactly computing \emph{all} local correlat
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Pseudocode \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find an optimal scale.
+Finally, we must find an optimal scale. If the underlying joint distribution is known, or can be reasonably estimated, or there exists training data of similar dependency structure, then the optimal scale can be directly estimated by maximizing the testing powers of all local correlations, which is the procedure used for the simulations. Alternatively, if only one pair of data is given, and the underlying model is unknown and hard to estimate, the optimal scale is searched over regions of neighborhood sizes for which p-values are consistently low, guarding against noisy scales that appear optimal, and combating bias added by looking at many different scales. If no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation); otherwise we take the scale with the smallest p-value in the region as optimal. This is the procedure used for real data experiments, which is less ideal than estimating by testing powers but still maintains a very good performance over existing methods (see Pseudocode \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 \cs{clarify different between sims and real data}
-Our procedure for estimating the optimal scale searches for regions of neighborhood sizes for which p-values are consistently low, guarding against noisy scales that appear optimal, and combating bias added by looking at many different scales.
+\jv{tried clarification in the paragraph above}
+%Our procedure for estimating the optimal scale searches for regions of neighborhood sizes for which p-values are consistently low, guarding against noisy scales that appear optimal, and combating bias added by looking at many different scales.
 %
-The optimal scale is the largest neighborhood size in that region.
-The p-value of \Mgc~is therefore the p-value of the optimal scale 
-% , and declare significant dependency when the p-value is less than $\alpha$, often $0.05$ 
-(see Pseudocode \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for details).
-% By the optimal scale estimation, the \Mgc~statistic $\G^{*}$ is theoretically no worse than the global counterpart $\G$, and usually enjoys better testing powers under high-dimensional and/or nonlinear dependencies; moreover, different \Mgc~implementations may vary slightly in performance depending on the properties of the respective global statistic. In the following sections, we demonstrate that our \Mgc~statistic yields tests that preserve consistency regardless of the functional dependency and dimensionality, improves the testing powers of the respective global correlation under nonlinear and high-dimensional dependencies both in theory and in simulations, as while as being the most superior test in simulations and real data experiments.}
+%The optimal scale is the largest neighborhood size in that region.
+%The p-value of \Mgc~is therefore the p-value of the optimal scale 
+%(see Pseudocode \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for details).
 
 
 
@@ -444,9 +444,9 @@ Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc. 
   \centering
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing global and \Mgc~tests. For each global test,  the left side corresponds to the average power of each panel in Figure~\ref{f:nD}, the right side corresponds to the respective \Mgc~mean power. The thin solid line are shown for  6-19, because \Mgc~equals the global correlation for  1-5 and  20. Then the thick solid line summarizes how the overall mean power (including  6-19) changes from global to \Mgc.
-It is clear that \Mgc~dominates its global counterpart. 
+Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure\~ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. For each global correlation,  the left side corresponds to the average power of each simulation, and the right side corresponds to the average power of its \Mgc~variant. The thin solid line are for the powers of simulation 6-19, because \Mgc~equals the global correlation for 1-5 and  20. Then the thick solid line summarizes how the overall mean power (including 6-19) changes from global to \Mgc.It is clear that \Mgc~dominates its global counterpart. 
 \cs{this caption is not right}
+\jv{fixed?}
 }
 \label{f:pp}
 \end{figure}
@@ -536,8 +536,9 @@ Thus multiscale graph correlation can be better than its global correlation coef
 \end{thm}
 Note that Theorem~\ref{t:linear} and Theorem~\ref{t:non} hold for any of \Mgc~varieties, including  \Dcorr, \Mcorr, and \Mantel.
 %
-The proofs of Theorem~\ref{t:linear} and \ref{t:non} are both in Appendix \ref{appen:proofs}.  The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\ref{t:non} is a constructive one. More specifically, we constructed quadratic function and sampled data a finite number of times and exactly compute the power for both \Mgc~and \Dcorr, proving that \Mgc~has higher power in this setting. This shows that \Mgc~can outperform its global counterpart even for the most modest nonlinear functions.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. To our knowledge, Theorems \ref{t:linear} and \ref{t:non} are the first finite sample theorems for dependence testing.
+The proofs of Theorem~\ref{t:linear} and \ref{t:non} are both in Appendix \ref{appen:proofs}.  The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\ref{t:non} is a constructive one. More specifically, we constructed quadratic function and sampled data a finite number of times and exactly compute the power for both \Mgc~and \Dcorr, proving that \Mgc~has higher power in this setting. This shows that \Mgc~can outperform its global counterpart even for the most modest nonlinear functions.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. %To our knowledge, Theorems \ref{t:linear} and \ref{t:non} are the first finite sample theorems for dependence testing.
 \cs{is that true?}
+\jv{no, that is too general a claim to be true, so I commented out. For example, dcorr=1 under any linear dependency, is also a finite sample theorem and easy to prove.}
 
 The three above theorems taken together lead to the main theoretical result of this manuscript:
 \begin{thm}
@@ -654,10 +655,12 @@ Thick solid black lines correspond to the largest region of p-values $<0.05$.
 % : Brain Structural Network vs. Personality}
 
 The next real data experiment investigates whether brain networks and personalities are independent of one another. Previous work \cite{AdelsteinEtAl2011} investigated whether individual voxels were related to specific dimensions of personality, but were unable to compare entire brain networks to a higher-dimensional characterization of personality. 
-In this dataset, we have $n=XXX$ \cs{please fix} subjects, for each we obtained a resting-state functional MRI scan as well as her five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. \cs{how many subjects? which atlas did we use? how did we represent the data? what metric did we use for each view? etc.}  
+In this dataset, we have $n=109$ subjects, for each we obtained a resting-state functional MRI scan as well as her five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. \cs{how many subjects? which atlas did we use? how did we represent the data? what metric did we use for each view? etc.}  
+\jv{this section is for \Migrain~vs CCI, which is not the five factor model? or it is?
+in total 109 subjects, the \Migrain data is already a distance matrices, the CCI data is a numeric vector with values ranging from 75 to 115 followed by Euclidean distance. For other information, I don't know & we have to ask Youngser (who passed me the data)?
+}
 
  Figure \ref{f:real}B shows that  global dependence tests can ascertain whether the whole brain-network is independent of the subject's personality.  However, the global test is quite fragile, even ignoring a single subject from the global test can render the test non-significant.  On the other hand, \Mgc~is more robust, there is a whole region of neighborhood sizes such that the test is quite significant.  Moreover, that the local tests performs optimally with approximately 30 neighbors suggests that these data have multiple cohorts, for which the dependence structure likely differs.  This result therefore suggests  the next investigatory steps to take to further understand the nature of the dependence structure between brain networks and personality.
-
 
 
 % Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of personality.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
@@ -670,17 +673,16 @@ In this dataset, we have $n=XXX$ \cs{please fix} subjects, for each we obtained 
 
 \subsubsection*{\Mgc~Does Not Inflate False Positive Rates} %: Brain Activity vs. Noise}
 
-In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to a pair of studies led by Eklund et al. \cite{EklundKnutsson2012,Eklund2015}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of XXX subjects.
-\cs{please fix} 
+In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to a pair of studies led by Eklund et al. \cite{EklundKnutsson2012,Eklund2015}, by using $26$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of $1604$ subjects.
 We used CPAC \cite{CPAC2015} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps.
 We then also generate an independent stimulus  by sampling from a standard normal at each time step.  Of course, the brain activity data and the stimuli are independent by construction.
 For each brain region, we test: is activity of that  brain region independent of the time-varying stimuli. We pool brain activity over all of the samples from the population.
 Any regions that are detected significant are false positives by definition.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the critical level, which we set at $0.05$ for this experiment.
 
-
-To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mbx_{\cdot i}-\mbx_{\cdot j}\|_2^2$, for all $(i,j)$ pairs,  where $\mbx_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$.
-For the stimulus, we similarly compute the Euclidean distance between activity at all pairs of time-steps: $b_{ij}= (y_i - y_j)^2$.
+To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mbx_{\cdot i}-\mbx_{\cdot j}\|_2$, for all $(i,j)$ pairs,  where $\mbx_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$.
+For the stimulus, we similarly compute the Euclidean distance between activity at all pairs of time-steps: $b_{ij}= \|y_i - y_j\|_2$.
 \cs{am i right?}
+\jv{yes almost. But we don't need the square (otherwise it is distance squared) for a_{ij}, neither for b_{ij}.}
 Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 % From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc.
 % The p-values are based on $1000$ random permutations.
@@ -723,7 +725,7 @@ Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm 
 Second, as highlighted above, \Mgc~requires a pair of metrics, one for each data type. In this work we selected such metrics using domain knowledge, and mitigated the potential inopportune choice of metric via locality tuning.  If we were able to choose the optimal metric for a given dataset, this would possibly obviate the need for locality, and further improve power.  Perhaps more likely, we can combine a search over metrics and scales to obtain even better performing results.  
 % Another direction we are investigating is how to choose the optimal metric for given data. 
 
-Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work has demonstrated efficient algorithms that are linear in sample size \cite{Hou2016} for one-dimensional data.  Although it is not clear how to extend this approach to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even upon subsampling the data points significantly (not shown), suggesting that subsampling data or comparisons  could yield a linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using hard disk space in a streaming fashion to both speed up computations for big data, and enable storing matrices larger than fit in RAM.
+Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work has demonstrated efficient algorithms that are linear in sample size \cite{Huo2016} for one-dimensional data.  Although it is not clear how to extend this approach to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even upon subsampling the data points significantly (not shown), suggesting that subsampling data or comparisons  could yield a linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using hard disk space in a streaming fashion to both speed up computations for big data, and enable storing matrices larger than fit in RAM.
 
 Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},  two-sample tests \cite{Szekely2004}, and feature selection \cite{LiZhongZhu2012,Zhong2015}.   
 Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the locality of dependence.
@@ -758,9 +760,9 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \section{Simulation Functions}
 \label{appen:function}
 
-We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add noise, thereby making them more difficult, or adding a weight vector for higher dimensions, %but with some changes (such as the inclusion of additional noise and an extra weight vector)
+We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add noise, and adding a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes.
 \cs{is the above true? you had "some changes", which felt vague and suggested we changed things for our favor.} 
-to better compare all methods throughout different dimensions and sample sizes.
+\jv{yes it is true. We do not alter anything to make MGC better, because it is always better! Those additions may make MGC advantages more distinguish-able in 1d and hd.}
 
 For each sample $\mbx \in \Real^{d_{x}}$, we denote $\mbx^{d}, d=1,\ldots,d_{x}$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{d_{x}}$ is a decaying vector with $w^{d}=1/d$ for each $d$, such that $w\T \mbx$ is a 
 % $1$-dimensional 

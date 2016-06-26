@@ -70,8 +70,14 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     kmin=2;thres=0.5;
-    ind=[find(max(power2,[],1)>=thres,1,'last'),1];
-    lim=max(ind);
+    ind=find(max(power2,[],1)>=thres,1,'last');
+    if isempty(ind)
+        ind=1;
+    end
+    if lim==21 && ind>1
+        ind=ind-1;
+    end
+    lim=ind;
     ph=power2All(kmin:n,kmin:n,lim)';
  tt=find(sum(ph,2)==0,1,'first');
     if isempty(tt)==false && tt~=1;

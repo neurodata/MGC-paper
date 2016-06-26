@@ -91,8 +91,8 @@ for j=1:total
     ylim([0 1]);
     if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
         set(gca,'YTick',[]); % Remove y axis ticks
+        set(gca,'XTick',[]); % Remove x axis ticks
     end
-    set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'FontSize',12);
     title(titlechar,'FontSize',14);
 end

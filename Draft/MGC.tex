@@ -123,7 +123,7 @@
 \author[4]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
 \affil[1]{Department of Statistics, Temple University}
 \affil[2]{Department of Applied Mathematics and Statistics, Johns Hopkins University}
-\affil[2]{Department of Mathematics, Duke University}
+\affil[3]{Department of Mathematics, Duke University}
 \affil[4]{Department of Biomedical Engineering and Institute for Computational Medicine, Johns Hopkins University}
 \maketitle
 \pagestyle{empty}
@@ -213,16 +213,16 @@ There are two key insights from the literature that we combine to develop our me
 
 
 Interpoint pairwise comparison matrices have been used for over 100 years for various statistical purposes \cite{Maa1996}. Perhaps one of the earliest examples of using them for dependence testing comes from  Karl Pearson \cite{Pearson1895}, who created  a special case of something subsequently called a ``generalized correlation coefficient'' \cite{KendallBook}.
-Generalized correlation coefficients start with $n$ pairs of observations $(x_i,y_i)$, where $x$'s and $y$'s both might vectors, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(x_i,x_j)$, and let $b_{ij}=\delta_y(y_i,y_j)$.  
+Generalized correlation coefficients start with $n$ pairs of observations $\{(\mbx_i,\mby_i),i=1,\ldots,n\}$, where $\mbx$'s and $\mby$'s both might be vectors, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mbx_i,\mbx_j)$, and let $b_{ij}=\delta_y(\mby_i,\mby_j)$.  
 % Specifically, let $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. 
-Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $\mbx$ and $\mby$, respectively.  
+Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $X=\{\mbx_{i}\}$ and $Y=\{\mby_{i}\}$, respectively.  
 Without loss of generality, assuming $A$ and $B$ have zero mean, a generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
-\G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}},
+\G(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}},
 \end{equation}
 where $z$ is proportional to standard deviations of $A$ and $B$, that is $z=n^2\sigma_a \sigma_b$.
-In words, $\G$ is the correlation across \emph{pairwise comparisons}, rather than the individual data samples.  
+In words, $\G$ is the correlation across \emph{pairwise comparisons} between $X$ and $Y$, rather than the individual data samples.  
 % That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.
 $\G$ has many well known special cases historically, including Pearson's  \cite{Pearson1895}, Spearman's \cite{Spearman1904},  Kendall's \cite{KendallBook}, and Mantel's correlation \cite{Mantel1967}. % which is widely used in biology and ecology.
 % Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel~coefficient \cite{Mantel1967}, a widely-used method in biology and ecology, defines $a_{ij}=||\mbx_i-\mbx_j||_{2}$.
@@ -230,8 +230,8 @@ $\G$ has many well known special cases historically, including Pearson's  \cite{
 Recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} extended these approaches, letting $\delta_x$ and $\delta_y$ to be the Euclidean distance, followed by subtracting the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the \Dcorr's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments.
 % \Dcorr, however, breaks down as the dimensionality of the data increases.  
 % By adjusting the high-dimensional bias of \Dcorr, 
-Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $x$ and $y$ increase to infinity as well.
-Moreover, because these distance based tests merely require a comparison function for both $x$ and $y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties, including certain networks, shapes, and other complicated spaces  \cite{Lyons2013}.
+Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $\mbx_i$ and $\mby_i$ increase to infinity as well.
+Moreover, because these distance based tests merely require a comparison function for both $X$ and $Y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties, including certain networks, shapes, and other complicated spaces  \cite{Lyons2013}.
 
 % Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given.  However, empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
 Thus, existing generalized correlation coefficient based tests therefore work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
@@ -262,12 +262,12 @@ Thus, a gap remains in the literature: a dependence test that has all of the des
 \subsection*{Multiscale Generalized Correlation}
 \label{s:mgc}
 
-All dependence tests start from the same setting: we observe $n$ pairs of observations $(\mbx_i,\mby_i)$, and we first desire to know whether the \mbx's and \mby's are independent of one another, and if so, we then desire to understand the nature of that dependence structure.
+All dependence tests start from the same setting: we observe $n$ pairs of observations $\{(\mbx_i,\mby_i)\}$, and we first desire to know whether the \mbx's and \mby's are independent of one another, and if so, we then desire to understand the nature of that dependence structure.
 
 
 Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
-Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each \mbx~and any neighborhood size $l$ around each \mby, we define the rank-truncated pairwise comparisons:
+Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mbx_i$~and any neighborhood size $l$ around each $\mby_i$, we define the rank-truncated pairwise comparisons:
 \begin{equation}
 \label{localCoef2}
     \mt{a}_{ij}^k=
@@ -290,7 +290,7 @@ and define $b^k_{ij}$ similarly.
 We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
 \label{localCoef}
-\G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
+\G^{kl}(X,Y)=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
 \end{equation}
 where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combination of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
 % As an example, $\G^{kl}$ could be a local distance correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the global distance correlation coefficient $\G$.
@@ -304,14 +304,14 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 % \includegraphics[width=1.0\textwidth]{../Figures/FigC}
 \caption{
 Flowchart schematizing Multiscale Generalized Correlation (\Mgc).
-Column 1: $(X,Y)$ are nonlinearly dependent on one another, they have a circle relationship.
-Column 2: By choosing appropriate distances for $x$ and $y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of $x$, and bottom row will be functions of $y$).  
-Heatmaps  are arbitrarily chosen to be sorted by $x$. 
+Column 1: $(X,Y)$ are nonlinearly dependent on one another, with each pair $(\mbx_i,\mby_i)$ having a circle relationship.
+Column 2: By choosing appropriate distances for $X$ and $Y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of \mbx's, and bottom row will be functions of \mby's).  
+Heatmaps  are arbitrarily chosen to be sorted by $X$. 
 Note that all distances are non-negative.
 Column 3: Double centering yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product (center).  Summing over this yields 
 the un-normalized \Mcorr~statistic, which is significant only when that sum is positive. 
 % As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
-Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=4$ (which happens to be optimal in this simulation). Note that their element-wise products are mostly positive numbers, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be more significant than \Mcorr.
+Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly positive numbers, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be more significant than \Mcorr.
 % The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
 Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic. The global correlation has a p-value of $0.159$ while \Mgc~has a p-value $<0.001$.
 Bottom shows a multiscale power map denoting the power for all possible scales in this simulation, demonstrating that the global scale (equivalent to \Mcorr), achieves significantly lower power than \Mgc, which achieves essentially perfect power in this highly nonlinear dependence setting, as well as reveals which local scales have high power, a novel property for dependence tests.
@@ -377,14 +377,14 @@ polynomial   (6-12),
 trigonometric (13-17),
 uncorrelated but nonlinearly dependent  (18-19),
 and an independent relationship (20).
-Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$ and $\delta_y$ both as the Euclidean distance, that is, $\delta_x(x_i,x_j) = \sum_{d=1}^{D} (x_i[d] - x_j[d])^2$, and the same for $\delta_y$.
+Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$ and $\delta_y$ both as the Euclidean distance, that is, $\delta_x(\mbx_i,\mbx_j) = \|\mbx_i - \mbx_j\|_{2}$, and the same for $\delta_y$.
 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDPower}
 \caption{Powers of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Pseudocode \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  We used $10$,$000$ Monte-Carlo replicates to estimate the null power, and an additional $2$,$000$  replicates to estimate the optimal scale.
 Each panel shows empirical testing power at a significant level $\alpha=0.05$
-versus the dimensionality of $x$, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
+versus the dimensionality of $\mbx$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
 Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for all settings and all dimensions, 
 % the previous state of the art approaches for all sample sizes on all problems.
 }
@@ -432,7 +432,7 @@ as well as our novel multiscale variants of both \Mantel~and \Dcorr,
 
 The above results demonstrate that converting \Mcorr, a global generalized correlation coefficient, to \Mgc, its multiscale variant, always improves (or does not diminish) the testing power for all considered settings, regardless of the dimensionality.  We wondered, therefore, whether the multiscale variant of other generalized correlation coefficients would behave similarly.  Specifically we consider the \Mantel~and \Dcorr~tests, in addition to \Mcorr, and for each, develop a multiscale variant (see Appendix \ref{appen:methods} for details). 
 % 
-Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc.  The top row shows for each of the $20$ settings, with both $x$ and $y$ in 1-dimension with some noise, the average power for different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but the average power is for different dimensionality of $x$ while the sample size is fixed at $n=100$ as in Figure~\ref{f:nDAll}.  In all $40$ settings, both low and increasing dimensions, and both fixed and increasing sample sizes, multiscale methods always improve on or stay the same, and never decrease power. 
+Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc.  The top row shows for each of the $20$ settings, with both \mbx's and \mby's in 1-dimension with some noise, the average power for different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but the average power is for different dimensionality of \mbx's while the sample size is fixed at $n=100$ as in Figure~\ref{f:nDAll}.  In all $40$ settings, both low and increasing dimensions, and both fixed and increasing sample sizes, multiscale methods always improve on or stay the same, and never decrease power. 
 
 
  % 
@@ -444,7 +444,7 @@ Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc. 
   \centering
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure\~ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. For each global correlation,  the left side corresponds to the average power of each simulation, and the right side corresponds to the average power of its \Mgc~variant. The thin solid line are for the powers of simulation 6-19, because \Mgc~equals the global correlation for 1-5 and  20. Then the thick solid line summarizes how the overall mean power (including 6-19) changes from global to \Mgc.It is clear that \Mgc~dominates its global counterpart. 
+Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure~\ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. For each global correlation,  the left side corresponds to the average power of each simulation, and the right side corresponds to the average power of its \Mgc~variant. The thin solid line are for the powers of simulation 6-19, because \Mgc~equals the global correlation for 1-5 and  20. Then the thick solid line summarizes how the overall mean power (including 6-19) changes from global to \Mgc.It is clear that \Mgc~dominates its global counterpart. 
 \cs{this caption is not right}
 \jv{fixed?}
 }
@@ -468,7 +468,7 @@ The dimension was chosen as the largest one for which $\Mgc$'s power exceeded 0.
 % They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}A and C.
 
 The multiscale power map sheds light into the intrinsic dependency structure.
-For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), \Mgc~almost always chooses a smaller scale for $x$ or $y$.
+For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), \Mgc~almost always chooses a smaller scale for $X$ or $Y$.
  % in a distribution dependent fashion. 
  Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6) and W (7) are both polynomials of degree 2 with different coefficients, and their power maps are quite similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
 Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
@@ -485,7 +485,7 @@ For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ 
 \subsection*{\Mgc~Theoretically Dominates its Global Counterparts}
 \label{s:theory}
 
-The formal testing scenario is as follows: we observe $n$ pairs of observations, $(\mbx_i,\mby_i)$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
+The formal testing scenario is as follows: we observe $n$ pairs of observations, $\{(\mbx_i,\mby_i)\}$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
 % suppose two data sets $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{d_{x} \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{d_{y} \times n}$ are given, where $n$ is the sample size, $d_{x}$ and $d_{y}$ are the dimensions of each data set. Under the classical hypothesis testing framework, $\mbx_{i}, i=1,\ldots,n$ are assumed identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of the random variable $\mb{x}$; similarly $\mby_{i}$ are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
 \begin{align*}
 & H_{0}: f_{xy}=f_{x}f_{y},\\
@@ -532,7 +532,7 @@ There exists $f_{xy}$ and $n$ such that
 \beta(\G^{*}) > \beta(\G).
 \end{equation}
 
-Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
+Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
 \end{thm}
 Note that Theorem~\ref{t:linear} and Theorem~\ref{t:non} hold for any of \Mgc~varieties, including  \Dcorr, \Mcorr, and \Mantel.
 %
@@ -691,12 +691,13 @@ For each data set, the above test is carried out for each brain region, and the 
 % Because the stimulus is in fact independent of the brain activities, the false positive rate should be close to $\alpha=0.05$ for each data set.
 \Mgc~false positive rate is centered around the critical level $0.05$, as it should be.
 % ; the mean/standard deviation is $0.060 \pm 0.025$.
-In contrast,  standard methods for fMRI analysis, such as generalized linear models, significantly increase  or decrease the false discovery rates, depending on the data \cite{EklundKnutsson2012,Eklund2015}.
+In contrast,  standard methods for fMRI analysis, such as generalized linear models, significantly increase the false discovery rates, depending on the data \cite{EklundKnutsson2012,Eklund2015}.
+\jv{you wrote "`significantly increase or decrease"', I delete the decrease part, because decreasing the FDR is actually a good thing, and in their paper they solely concentrate on FDR increase?!}
 
 \subsection*{Discussion}
 \label{conclu}
 
-We propose multiscale graph correlation to test independence between multiple measurement types.
+We propose multiscale generalized correlation to test independence between multiple measurement types.
 We demonstrate via simulations that \Mgc~empirically performs well in linear and non-linear settings, regardless of the dimension, sample size, and noise statistics.  Moreover, it efficiently adapts to the data, to provide not just a valid p-value, but also a picture of which scales contain the dependence structure. We then prove that it dominates global generalized correlation coefficients in finite samples, the first finite sample theorems for dependence testing that we are aware of.  
  % achieves optimal power asymptotically no matter what the dependence structure is.  
 In real data experiments \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeeded, and did not falsely detect signals when there were none.
@@ -836,8 +837,8 @@ for $d=1,\ldots,d_{x}$.
 
 \item Spiral $(\mbx,\mby) \in \Real^{d_{x}} \times \Real$: $u \sim \mc{U}(0,5)$, $\epsilon \sim \mc{N}(0, 1)$,
 \begin{align*}
-\mbx^{d}&=u \sin(\pi u)  [\cos(\pi u)]^{d} \mbox{ for $d=1,\ldots,d_{x}-1$},\\
-\mbx^{d_{x}}&=u [\cos(\pi u)]^{d_{x}},\\
+\mbx^{d}&=u \sin(\pi u)  \{\cos(\pi u)\}^{d} \mbox{ for $d=1,\ldots,d_{x}-1$},\\
+\mbx^{d_{x}}&=u \{\cos(\pi u)\}^{d_{x}},\\
 \mby&= u \sin(\pi u) +0.4 (d_{x}-1)\epsilon.
 \end{align*}
 
@@ -1256,7 +1257,7 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 % Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 \end{appThm}
 \begin{proof}
-Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any $f_{xy}$, the power of multiscale graph correlation satisfies
+Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any $f_{xy}$, the power of multiscale generalized correlation satisfies
 \begin{equation}
 \beta(\G^*) \geq \beta(\G),
 \end{equation}
@@ -1294,7 +1295,7 @@ There exists $f_{xy}$ and $n$ such that
 \beta(\G^{*}) > \beta(\G).
 \end{equation}
 
-Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
+Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
 \end{appThm}
 
 \begin{proof}
@@ -1317,7 +1318,7 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 %\begin{appThm}
 %Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 
-%Therefore, multiscale graph correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
+%Therefore, multiscale generalized correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
 %\end{appThm}
 
 %\begin{appThm}
@@ -1326,7 +1327,7 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 %\beta_{\alpha}(\G^{*}) = \beta_{\alpha}(\G).
 %\end{equation}
 
-%Thus multiscale graph correlation is equivalent to the global correlation coefficient under linear dependency.
+%Thus multiscale generalized correlation is equivalent to the global correlation coefficient under linear dependency.
 %\end{appThm}
 
 %\begin{appThm}
@@ -1335,7 +1336,7 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 %\beta_{\alpha}(\G^{*}) > \beta_{\alpha}(\G).
 %\end{equation}
 
-%Thus multiscale graph correlation can be better than its global correlation coefficient under certain nonlinear dependency.
+%Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency.
 %\end{appThm}
 
 

@@ -249,7 +249,7 @@ p=tN(:,n,n);
 [f,xi]=ksdensity(p,'support',[-1,1]);
 
 hold on
-plot(xi,f,'.:',xi1,f1,'.-','LineWidth',2);
+plot(xi,f,'.:',xi1,f1,'.-','LineWidth',4);
 set(gca,'FontSize',15);
 plot(tA(end),0.1,'.','MarkerSize',mkSize);
 plot(tA(k,l),0.1,'*','MarkerSize',10);

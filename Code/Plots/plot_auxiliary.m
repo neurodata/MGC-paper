@@ -35,27 +35,27 @@ fontSize=20;
 mkSize=20;
 sameBar=0;
 
-cmap=zeros(4,3);
-gr = [0.5,0.5,0.5];
-ma = [1,0,1];
-% cy = [0,1,1];
-cmap(1,:) = ma;
-cmap(2,:) = ma;
-cmap(3,:) = ma;
-cmap(4,:) = ma;
+cmap=zeros(2,3);
+% gr = [0.5,0.5,0.5];
+% ma = [1,0,1];
+% % cy = [0,1,1];
+% cmap(1,:) = ma;
+% cmap(2,:) = ma;
+% cmap(3,:) = ma;
+% cmap(4,:) = ma;
 % cmap(3,:) = cy;
-map0=gr;
-map1=cmap;
+% map0=gr;
+% map1=cmap;
 map2 = brewermap(128,'PRGn'); % brewmap
 map3 = brewermap(128,'Greens'); % brewmap
 map4 = brewermap(128,'GnBu'); % brewmap
-set(groot,'defaultAxesColorOrder',map1);
 s=3;t=4;
 gr=map2(110,:);
 pu=map2(18,:);
 cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
+set(groot,'defaultAxesColorOrder',map1);
 
 figure('units','normalized','position',[0 0 1 1])
 %%% Col 1

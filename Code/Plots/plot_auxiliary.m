@@ -27,8 +27,13 @@ addpath(genpath(strcat(rootDir,'Code/')));
 if newSim==1
     run_fig1Data(type,n,noise);
 end
-load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'.mat')); % The folder to locate data
-pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
+try
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'.mat')); % The folder to locate data
+catch
+    display('no file exist, running instead')
+    run_fig1Data(type,n,noise);
+end
+pre2=strcat(rootDir,'Figures/Aux/Fig');% The folder to save figures
 
 cc=1;
 fontSize=20;
@@ -57,13 +62,15 @@ cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
 
-figure('units','normalized','position',[0 0 1 1])
+figure(1), clf
+set(gcf,'units','normalized','position',[0 0 1 1])
 %%% Col 1
 ax=subplot(s,t,1);
 set(groot,'defaultAxesColorOrder',map0);
-    plot(x,y,'.','MarkerSize',mkSize);
-xlim([-1.2,1.2]);
-ylim([-1.2,1.2]);
+plot(x,y,'.','MarkerSize',mkSize);
+% xlim([-1.2,1.2]);
+% ylim([-1.2,1.2]);
+axis('tight')
 
 title('Scatter Plot of (X,Y)')
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
@@ -72,7 +79,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%%% Col 2
+%% Col 2
 ax=subplot(s,t,2);
 if sameBar==1
     maxC=ceil(max(max([C,D]))*10)/10;
@@ -86,7 +93,8 @@ set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 xlabel('i','FontSize',fontSize,'position',[-5,0]);
 ylabel('j','Rotation',0,'position',[-7,25],'FontSize',fontSize);
-title('Mantel $\tilde{A}=\delta_{x}(x_{i},x_{j})$','interpreter','latex','FontSize',fontSize);
+% title('Mantel $\tilde{A}=\delta_{x}(x_{i},x_{j})$','interpreter','latex','FontSize',fontSize);
+title('Mantel','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
@@ -155,7 +163,8 @@ set(gca,'YDir','normal')
 colormap(ax,map2)
 caxis([minC,maxC]);
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize);
-title('Mcorr $$A$$','FontSize',fontSize,'interpreter','latex');
+% title('Mcorr $$A$$','FontSize',fontSize,'interpreter','latex');
+title('Mcorr','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
@@ -187,13 +196,14 @@ if cc==1
     A=A-mean(mean(A));B=B-mean(mean(B));
 end
 
-%%% Col 4
+%% Col 4
 ax=subplot(s,t,5);
 imagesc(A');
 colormap(ax,map2)
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-title('MGC $$A^{k^{*}}$$','interpreter','latex');
+% title('MGC $$A^{k^{*}}$$','interpreter','latex');
+title('MGC');
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
@@ -211,7 +221,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%Col3 Center
+%% Col3 Center
 ax=subplot(s,t,4);
 MH=ceil(max(max(mcorrH(2:end,2:end)))*10)/10;
 mH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
@@ -227,7 +237,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%Col4 Center
+%% %Col4 Center
 ax=subplot(s,t,11);
 mcorrH=A.*B;
 imagesc(mcorrH');
@@ -239,7 +249,8 @@ title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-% Col5
+
+%% Col5 MPM
 set(groot,'defaultAxesColorOrder',map1);
 ax=subplot(s,t,12);
 kmin=2;
@@ -273,19 +284,20 @@ set(ax,'position',pos2);
 %set(gca,'YTick',[]); % Remove y axis ticks
 title('Multiscale Power Map','FontSize',16);
 
-% Col5 p-value 
+%% Col5 p-value
 set(groot,'defaultAxesColorOrder',map1);
 ax=subplot(s,t,8);
 kmin=2;
 hold on
 ph=pAll';
-imagesc(ph);
+ph(ph<eps)=eps;
+imagesc(ph); %log(ph)-min(log(ph(:))));
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(ax,flipud(cmap));
 caxis([0 ceil(max(max(ph(2:end,2:end)))*10)/10]);
-h=colorbar('Ticks',[0,0.05,0.2]);%,'location','westoutside');
+h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
 set(gca,'XTick',[24,49],'YTick',[24,49],'XTickLabel',[25,50],'YTickLabel',[25,50],'FontSize',16);
 %xlabel('# of Neighbors for X','FontSize',16)
@@ -308,7 +320,7 @@ set(ax,'position',pos2);
 title('Multiscale P-Value Map','FontSize',16);
 %colorbar('location','westoutside');
 
-% Col 5 p-value
+%% Col 5 p-value
 subplot(s,t,9)
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
@@ -320,7 +332,7 @@ p=tN(:,n,n);
 [f,xi]=ksdensity(p,'support',[-1,1]);
 
 hold on
-plot(xi,f,'.:',xi1,f1,'.-','LineWidth',4);
+plot(xi,f,'.-',xi1,f1,'.-','LineWidth',4);
 set(gca,'FontSize',15);
 x1=round(tA(end)*100)/100;
 x2=round(tA(k,l)*100)/100;
@@ -342,7 +354,7 @@ else
 end
 a=text(x1,y1,txt1,'VerticalAlignment','middle','HorizontalAlignment','left','Color',pu);
 b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',gr);
-ylim([0 35]);
+ylim([0 y1+10]);
 set(a,'FontSize',17);
 set(b,'FontSize',17);
 xlim([minp,maxp]);
@@ -353,12 +365,13 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 hold off
+% axis([0, y2, 0, y2])
 % 1-pAll(end)
 % 1-pAll(k,l)
 % power1(end)
 % power1(k,l)
 
-%
-F.fname=strcat(pre2, 'A2');
+%%
+F.fname=strcat(pre2, 'A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

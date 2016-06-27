@@ -164,8 +164,8 @@ for j=1:total
     %set(gca,'XTickLabel','FontSize',16);
     axis('square');
 end
-xlabel('Dimension','position',[-270 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-690 3],'FontSize',24);
+xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
+ylabel('Empirical Testing Power','position',[-720 3],'FontSize',24);
 h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position

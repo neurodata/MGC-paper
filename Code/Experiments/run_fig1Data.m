@@ -74,4 +74,4 @@ l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 pAll=1-pAll;
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y');

@@ -100,10 +100,11 @@ for type=1:total
     set(gca,'YTick',[]); % Remove y axis ticks
     hold off
     title(titlechar,'FontSize',14);
+    axis('square');
 end
 h=suptitle('Visualization for 20 Simulated Dependencies');
 set(h,'FontSize',24,'FontWeight','normal');
 
 F.fname=[strcat(pre2, 'SimVisual')];
-F.wh=[8 4]*2;
+F.wh=[8 5]*2;
 print_fig(gcf,F)

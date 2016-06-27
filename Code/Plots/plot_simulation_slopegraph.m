@@ -19,12 +19,13 @@ total=20;
 fontSize=20;
 %% Set colors
 map1=zeros(7,3);
-gr = [0,1,0];
-ma = [1,0,1];
-cy = [0,1,1];
+gr = [0.5,0.5,0.5];
+% gr = [0,1,0];
+% ma = [1,0,1];
+% cy = [0,1,1];
 cmap(1,:) = gr;
-cmap(2,:) = ma;
-cmap(3,:) = cy;
+cmap(2,:) = gr;
+cmap(3,:) = gr;
 cmap(7,:) = [0 0 0];
 dcorr = cmap(1,:);
 mcorr = cmap(2,:);
@@ -40,7 +41,11 @@ average=0;
 
 figure('units','normalized','position',[0 0 1 1])
 s=2;t=3;
-
+ls{3}='-';
+ls{2}='--';
+ls{1}='-.';
+%ls{4}='.:';
+ls{4}='--';
 
 AUC=zeros(8,20);
 %load data
@@ -66,7 +71,7 @@ for j=1:3
         plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
-    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
+    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
         ylabel('1-Dimensional','FontSize',fontSize);
@@ -103,7 +108,7 @@ for j=1:3
         plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
-    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],'.-','LineWidth',10,'Color',map1(j,:));
+    plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==1
         ylabel('High-Dimensional','FontSize',fontSize);

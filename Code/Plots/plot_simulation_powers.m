@@ -26,8 +26,8 @@ highd=1;
 
 %% Set colors
 map2 = brewermap(128,'PRGn'); % brewmap
-loca=map2(110,:);
-glob=map2(18,:);
+loca=map2(100,:);
+glob=map2(28,:);
 
 % gr = [0,1,0];
 % ma = [1,0,1];
@@ -96,12 +96,13 @@ for j=1:total
         set(gca,'YTick',[]); % Remove y axis ticks
         set(gca,'XTick',[]); % Remove x axis ticks
     end
-    set(gca,'FontSize',12);
+    set(gca,'FontSize',14);
 %    set(gca,'XTickLabel','FontSize',16);
     title(titlechar,'FontSize',14);
+    axis('square');
 end
-xlabel('Sample Size','position',[-200 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-515 3],'FontSize',24);
+xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
+ylabel('Empirical Testing Power','position',[-690 3],'FontSize',24);
 h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
@@ -158,12 +159,13 @@ for j=1:total
         set(gca,'YTick',[]); % Remove y axis ticks
     end
     set(gca,'XTick',[numRange(1),numRange(end)]); % Remove x axis ticks
-    set(gca,'FontSize',12);
+    set(gca,'FontSize',14);
     title(titlechar,'FontSize',14);
     %set(gca,'XTickLabel','FontSize',16);
+    axis('square');
 end
-xlabel('Dimension','position',[-210 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-540 3],'FontSize',24);
+xlabel('Dimension','position',[-270 -0.2],'FontSize',24);
+ylabel('Empirical Testing Power','position',[-690 3],'FontSize',24);
 h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position

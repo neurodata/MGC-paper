@@ -55,8 +55,8 @@ map2 = brewermap(128,'PRGn'); % brewmap
 map3 = brewermap(128,'Greens'); % brewmap
 map4 = brewermap(128,'GnBu'); % brewmap
 s=3;t=4;
-gr=map2(110,:);
-pu=map2(18,:);
+gr=map2(100,:);
+pu=map2(28,:);
 cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
@@ -297,15 +297,15 @@ set(groot,'defaultAxesColorOrder',map1);
 ax=subplot(s,t,8);
 kmin=2;
 hold on
-ph=pAll';
-ph(ph<eps)=eps;
+ph=pAll(2:end,2:end)';
+%ph(ph<eps)=eps;
 imagesc(ph); %log(ph)-min(log(ph(:))));
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(ax,flipud(cmap));
-caxis([0 ceil(max(max(ph(2:end,2:end)))*10)/10]);
-h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
+caxis([0 ceil(max(max(ph))*10)/10]);
+h=colorbar('Ticks',[0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
 set(gca,'XTick',[24,49],'YTick',[24,49],'XTickLabel',[25,50],'YTickLabel',[25,50],'FontSize',16);
 %xlabel('# of Neighbors for X','FontSize',16)

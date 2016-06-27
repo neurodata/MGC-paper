@@ -48,10 +48,14 @@ for j=1:total
 %     set(gca,'XTick',[]); % Remove x axis ticks
 %     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar,'FontSize',14);
+    if j~=1
+    set(gca,'XTick',[]); % Remove x axis ticks
+    set(gca,'YTick',[]); % Remove y axis ticks
+    end
 axis('square')
 end
-xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',20);
-ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',20);
+xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',24);
+ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',24);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Multiscale Power Maps'));% for 1-Dimensional Simulations'));
@@ -95,17 +99,20 @@ for j=1:total
     set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
-    if j~=16
+    set(gca,'XTick',[49,99],'XTickLabel',[50,100]); % Remove x axis ticks
+    set(gca,'YTick',[49,99],'YTickLabel',[50,100]); % Remove x axis ticks
+    if j~=1
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     end
-    set(gca,'FontSize',12);
+    set(gca,'FontSize',14);
     title(titlechar,'FontSize',14);
     axis('square');
 end
-xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',20);
-ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',20);
-colorbar
+xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',24);
+ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',24);
+h=colorbar('Ticks',[thres/2,thres]);%,'location','westoutside');
+set(h,'FontSize',14);
 h=suptitle(strcat('Multiscale Power Maps'));% for High-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %

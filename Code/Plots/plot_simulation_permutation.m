@@ -11,11 +11,11 @@ pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 %% Set colors
-map2 = brewermap(128,'PRGn'); % brewmap
-loca=map2(100,:);
-glob=map2(28,:);
+%map2 = brewermap(128,'PRGn'); % brewmap
+loca=[0,1,0];
+glob= [1,0,1];
 HHG   = [0.5,0.5,0.5];
-
+mk=30;
 % map1=zeros(7,3);
 % gr = [0,1,0];
 % ma = [1,0,1];
@@ -31,9 +31,12 @@ HHG   = [0.5,0.5,0.5];
 
 ls{1}='-';
 ls{2}='--';
-ls{3}='-.';
-%ls{4}='.:';
+ls{3}=':';
 ls{4}='--';
+ls{1}='.';
+ls{2}='.';
+ls{3}='.';
+ls{4}='.';
 
 %
 % map1(1,:)=dcorr;
@@ -56,17 +59,20 @@ end
 p1=powerP(ind,:);
 p1=p1-repmat(p1(1,:),4,1);
 hold on
-plot(x,p1(3,:),ls{1},'Color',loca,'LineWidth',2);
-plot(x,p1(2,:),ls{1},'Color',glob,'LineWidth',2);
-plot(x,p1(4,:),ls{4},'Color',HHG,'LineWidth',2);
+plot(x,p1(3,:),ls{1},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(2,:),ls{1},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(4,:),ls{4},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
 hold off
 legend('True MGC','Mcorr','HHG','Location','NorthWest');
-set(gca,'FontSize',16);
+set(gca,'FontSize',24);
 legend boxoff
-xlabel('Function Type','FontSize',16);
-ylabel('Testing Power Difference','FontSize',16);
-ylim([-1,1]);
-title('1-Dimensional Simulations at n=60','FontSize',18);
+xlabel('Function Type','FontSize',24);
+ylabel('Power Difference','FontSize',24);
+xlim([1,20]);
+ylim([-0.6,1]);
+set(gca,'XTick',[1,10,20]); % Remove x axis ticks
+    set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
+title('1-Dimensional Simulations','FontSize',24);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
@@ -85,16 +91,19 @@ end
 p1=powerP(ind,:);
 p1=p1-repmat(p1(1,:),4,1);
 hold on
-plot(x,p1(3,:),ls{1},'Color',loca,'LineWidth',2);
-plot(x,p1(2,:),ls{1},'Color',glob,'LineWidth',2);
-plot(x,p1(4,:),ls{4},'Color',HHG,'LineWidth',2);
+plot(x,p1(3,:),ls{1},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(2,:),ls{1},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(4,:),ls{4},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
 hold off
-legend('True MGC','Mcorr','HHG','Location','NorthWest');
-set(gca,'FontSize',16);
-xlabel('Function Type','FontSize',16);
-ylabel('Testing Power Difference','FontSize',16);
-ylim([-1,1]);
-title('High-Dimensional Simulations at n=100','FontSize',18);
+%legend('True MGC','Mcorr','HHG','Location','NorthWest');
+set(gca,'FontSize',24);
+xlabel('Function Type','FontSize',24);
+%ylabel('Power Difference','FontSize',24);
+xlim([1,20]);
+ylim([-0.6,1]);
+set(gca,'XTick',[1,10,20]); % Remove x axis ticks
+set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
+title('High-Dimensional Simulations','FontSize',24);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)

@@ -23,6 +23,7 @@ figNumber='1DHeat';
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
+nn=60;
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
@@ -31,7 +32,7 @@ for j=1:total
         K=n;kmin=2;thres=0.8;
     %     ind=[find(max(power2,[],1)>=thres,1) lim];
     %     lim=min(ind);
-    ind=find(numRange==50);
+    ind=find(numRange==nn);
     if isempty(ind)
         ind=1;
     end
@@ -52,8 +53,8 @@ for j=1:total
     colormap(map2)
     caxis([0 thres])
     set(gca,'FontSize',14);
-    set(gca,'XTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n]); % Remove x axis ticks
-    set(gca,'YTick',[1,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
+    set(gca,'XTick',[round(nn/2)-1,nn-1],'XTickLabel',[round(nn/2),nn]); % Remove x axis ticks
+    set(gca,'YTick',[round(nn/2)-1,nn-1],'YTickLabel',[round(nn/2),nn]); % Remove x axis ticks
 %     set(gca,'XTick',[]); % Remove x axis ticks
 %     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar,'FontSize',14);
@@ -63,8 +64,8 @@ for j=1:total
     end
 axis('square')
 end
-xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',24);
-ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',24);
+xlabel('# of Neighbors for X','position',[-172 -12],'FontSize',24);
+ylabel('# of Neighbors for Y','position',[-430 156],'FontSize',24);
 colorbar
 h=colorbar('Ticks',[thres/2,thres]);%,'location','westoutside');
 tstring=' of mcorr ';
@@ -108,8 +109,8 @@ for j=1:total
     set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
-    set(gca,'XTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n]); % Remove x axis ticks
-    set(gca,'YTick',[1,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
+    set(gca,'XTick',[round(n/2)-1,n-1],'XTickLabel',[round(n/2),n]); % Remove x axis ticks
+    set(gca,'YTick',[round(n/2)-1,n-1],'YTickLabel',[round(n/2),n]); % Remove x axis ticks
     if j~=1
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
@@ -119,7 +120,7 @@ for j=1:total
     axis('square');
 end
 xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',24);
-ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',24);
+ylabel('# of Neighbors for Y','position',[-720 260],'FontSize',24);
 h=colorbar('Ticks',[thres/2,thres]);%,'location','westoutside');
 set(h,'FontSize',14);
 h=suptitle(strcat('Multiscale Power Maps'));% for High-Dimensional Simulations'));

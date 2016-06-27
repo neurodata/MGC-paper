@@ -25,10 +25,11 @@ lowd=0;
 highd=1;
 
 %% Set colors
-map2 = brewermap(128,'PRGn'); % brewmap
-loca=map2(100,:);
-glob=map2(28,:);
-
+%map2 = brewermap(128,'PRGn'); % brewmap
+%loca=map2(110,:);
+%glob=map2(18,:);
+loca=[0,1,0];
+glob= [1,0,1];
 % gr = [0,1,0];
 % ma = [1,0,1];
 % cy = [0,1,1];
@@ -54,7 +55,7 @@ HHG   = [0.5,0.5,0.5];
 
 ls{1}='-';
 ls{2}='--';
-ls{3}='-.';
+ls{3}=':';
 %ls{4}='.:';
 ls{4}='--';
 
@@ -102,7 +103,7 @@ for j=1:total
     axis('square');
 end
 xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-690 3],'FontSize',24);
+ylabel('Empirical Testing Power','position',[-687 2.7],'FontSize',24);
 h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
@@ -165,7 +166,7 @@ for j=1:total
     axis('square');
 end
 xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-720 3],'FontSize',24);
+ylabel('Empirical Testing Power','position',[-720 2.7],'FontSize',24);
 h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position

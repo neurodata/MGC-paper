@@ -99,6 +99,7 @@ title('Mantel','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 ax=subplot(s,t,3);
 if sameBar~=1
@@ -170,6 +171,7 @@ title('Mcorr','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 ax=subplot(s,t,7);
 if sameBar==1
@@ -199,6 +201,7 @@ if cc==1
     A=A-mean(mean(A));B=B-mean(mean(B));
 end
 
+
 %% Col 4
 ax=subplot(s,t,5);
 imagesc(A');
@@ -211,6 +214,7 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 ax=subplot(s,t,10);
 imagesc(B');
@@ -292,7 +296,7 @@ title('Multiscale Power Map','FontSize',16);
 axis('square')
 
 
-%% Col5 p-value
+%% Col5 p-value map
 set(groot,'defaultAxesColorOrder',map1);
 ax=subplot(s,t,8);
 kmin=2;

@@ -24,6 +24,10 @@ cmap(4,:) = gr;
 map1=cmap;
 map2 = brewermap(128,'GnBu'); % brewmap
 
+map3 = brewermap(128,'PRGn'); % brewmap
+lgr=map3(100,:);
+dgr=map3(128,:);
+
 % Plot 1st figure
 set(groot,'defaultAxesColorOrder',map1);
 filename=strcat(pre1,'CorrPermDistTestTypeBrainLMLxY.mat');
@@ -66,13 +70,16 @@ ind2=ind2(i)+1:ind2(i+1)-2;
 ind2S=2:ind2(1);
 ind2E=ind2(end):n;
 
-plot(ind1S,pp1(ind1S),'-',ind2S,pp2(ind2S),'--',ind1E,pp1(ind1E),'-',ind2E,pp2(ind2E),'--','LineWidth',2);
+plot(ind1S,pp1(ind1S),'-',ind2S,pp2(ind2S),'--',ind1E,pp1(ind1E),'-',ind2E,pp2(ind2E),'--','LineWidth',2,'Color',lgr);
 h=legend('Left Brain','Right Brain','Location','North');
 set(h,'FontSize',20);
 legend boxoff
-plot(ind1,pp1(ind1),'k-',ind2,pp2(ind2),'k--','LineWidth',4)
+plot(ind1,pp1(ind1),'k-','Color',dgr,'LineWidth',4)
+plot(ind2,pp2(ind2),'k-','Color',dgr,'LineWidth',4)
 set(gca,'FontSize',16);
 xlabel('# of Neighbors for X','FontSize',20);
+n1=length(pp1);
+set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 xlim([2 n]);
 ylim([0 0.2]);
 ylabel('P-Value','FontSize',20);
@@ -95,8 +102,11 @@ colormap(flipud(map2))
 caxis([0.01 0.1])
 set(gca,'FontSize',16);
 %     if i==3
+[n1,n2]=size(p1All);
 xlabel('# of Neighbors for X','FontSize',20);
 ylabel('# of Neighbors for Y','FontSize',20);
+set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 colorbar
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks

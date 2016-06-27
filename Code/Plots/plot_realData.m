@@ -72,7 +72,7 @@ set(h,'FontSize',20);
 legend boxoff
 plot(ind1,pp1(ind1),'k-',ind2,pp2(ind2),'k--','LineWidth',4)
 set(gca,'FontSize',16);
-xlabel('Number of Neighbors for X','FontSize',20);
+xlabel('# of Neighbors for X','FontSize',20);
 xlim([2 n]);
 ylim([0 0.2]);
 ylabel('P-Value','FontSize',20);
@@ -95,8 +95,8 @@ colormap(flipud(map2))
 caxis([0.01 0.1])
 set(gca,'FontSize',16);
 %     if i==3
-xlabel('Number of Neighbors for X','FontSize',20);
-ylabel('Number of Neighbors for Y','FontSize',20);
+xlabel('# of Neighbors for X','FontSize',20);
+ylabel('# of Neighbors for Y','FontSize',20);
 colorbar
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks

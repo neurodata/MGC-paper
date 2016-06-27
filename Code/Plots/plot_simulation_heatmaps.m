@@ -48,16 +48,17 @@ for j=1:total
 %     set(gca,'XTick',[]); % Remove x axis ticks
 %     set(gca,'YTick',[]); % Remove y axis ticks
     title(titlechar,'FontSize',14);
+axis('square')
 end
-xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
-ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
+xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',20);
+ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',20);
 colorbar
 tstring=' of mcorr ';
 h=suptitle(strcat('Multiscale Power Maps'));% for 1-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
+F.wh=[8 5]*2;
 print_fig(gcf,F)
 
 figNumber='HDHeat';
@@ -100,13 +101,14 @@ for j=1:total
     end
     set(gca,'FontSize',12);
     title(titlechar,'FontSize',14);
+    axis('square');
 end
-xlabel('Number of Neighbors for X','position',[-210 -20],'FontSize',20);
-ylabel('Number of Neighbors for Y','position',[-540 300],'FontSize',20);
+xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',20);
+ylabel('# of Neighbors for Y','position',[-720 300],'FontSize',20);
 colorbar
 h=suptitle(strcat('Multiscale Power Maps'));% for High-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
-F.wh=[8 4]*2;
+F.wh=[8 5]*2;
 print_fig(gcf,F)

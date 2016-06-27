@@ -70,19 +70,20 @@ ind2=ind2(i)+1:ind2(i+1)-2;
 ind2S=2:ind2(1);
 ind2E=ind2(end):n;
 
-plot(ind1S,pp1(ind1S),'-',ind2S,pp2(ind2S),'--',ind1E,pp1(ind1E),'-',ind2E,pp2(ind2E),'--','LineWidth',2,'Color',lgr);
+plot(ind1S,pp1(ind1S),'-',ind2S,pp2(ind2S),':',ind1E,pp1(ind1E),'-',ind2E,pp2(ind2E),':','LineWidth',3,'Color',lgr);
 h=legend('Left Brain','Right Brain','Location','North');
-set(h,'FontSize',20);
+set(h,'FontSize',24);
 legend boxoff
-plot(ind1,pp1(ind1),'k-','Color',dgr,'LineWidth',4)
-plot(ind2,pp2(ind2),'k-','Color',dgr,'LineWidth',4)
-set(gca,'FontSize',16);
-xlabel('# of Neighbors for X','FontSize',20);
+plot(ind1,pp1(ind1),'k-','Color',dgr,'LineWidth',6)
+plot(ind2,pp2(ind2),'k:','Color',dgr,'LineWidth',6)
+set(gca,'FontSize',24);
+xlabel('# of Neighbors for X','FontSize',24);
 n1=length(pp1);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[0 0.05 0.1 0.15 0.2]); % Remove x axis ticks
 xlim([2 n]);
 ylim([0 0.2]);
-ylabel('P-Value','FontSize',20);
+ylabel('P-Value','FontSize',24);
 
 title('Brain Shape vs. Disorder','FontSize',24);
 
@@ -100,14 +101,14 @@ imagesc(p1All(kmin:end,kmin:end)');
 set(gca,'YDir','normal')
 colormap(flipud(map2))
 caxis([0.01 0.1])
-set(gca,'FontSize',16);
+set(gca,'FontSize',24);
 %     if i==3
 [n1,n2]=size(p1All);
-xlabel('# of Neighbors for X','FontSize',20);
-ylabel('# of Neighbors for Y','FontSize',20);
-set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
-colorbar
+xlabel('# of Neighbors for X','FontSize',24);
+ylabel('# of Neighbors for Y','FontSize',24);
+set(gca,'XTick',[round(n1/2)-1,n1-1],'XTickLabel',[round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[round(n2/2)-1,n2-1],'YTickLabel',[round(n2/2),n2]); % Remove x axis ticks
+h=colorbar('Ticks',[0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
@@ -132,7 +133,7 @@ figure
 pv=p(:,2);
  [f,xi]=ksdensity(pv,'support',[0,1]); 
  hold on
- plot(xi,f,'.-','LineWidth',2);
+ plot(xi,f,'.-','LineWidth',4);
  addJitter=1:length(pv);
  pv=sort(pv,'ascend');
  ord=0.01*ones(length(pv),1);
@@ -141,14 +142,14 @@ pv=p(:,2);
          ord(i)=ord(i-1)+0.4;
      end
  end
- plot(pv,ord,'k.','MarkerSize',20);
+ plot(pv,ord,'k.','MarkerSize',24);
 xlim([0,0.15]);
 ylim([-1 15]);
-set(gca,'FontSize',16);
+set(gca,'FontSize',24);
 set(gca,'YTick',[]); % Remove y axis ticks
  hold off
-xlabel('False Positive Rate','FontSize',20);
-ylabel('Density Function','FontSize',20);
+xlabel('False Positive Rate','FontSize',24);
+ylabel('Density Function','FontSize',24);
 title('Brain Activity vs. Fake Movie','FontSize',24);
 
 F.fname=strcat(pre2, 'CORR');

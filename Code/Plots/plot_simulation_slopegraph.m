@@ -43,7 +43,7 @@ figure('units','normalized','position',[0 0 1 1])
 s=2;t=3;
 ls{3}='-';
 ls{2}='--';
-ls{1}='-.';
+ls{1}=':';
 %ls{4}='.:';
 ls{4}='--';
 
@@ -68,7 +68,7 @@ for j=1:3
     subplot(s,t,j);
     hold on
     for i=6:19
-        plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
+        plot(x,AUC(2*j-1:2*j,i),ls{j},'LineWidth',1,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
@@ -105,7 +105,7 @@ for j=1:3
     subplot(s,t,3+j);
     hold on
     for i=6:19
-        plot(x,AUC(2*j-1:2*j,i),'.-','LineWidth',1,'Color',map1(j,:));
+        plot(x,AUC(2*j-1:2*j,i),ls{j},'LineWidth',1,'Color',map1(j,:));
         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));

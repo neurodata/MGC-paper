@@ -64,13 +64,14 @@ set(groot,'defaultAxesColorOrder',map1);
 
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
-%%% Col 1
+
+%%  Col 1
 ax=subplot(s,t,1);
-set(groot,'defaultAxesColorOrder',map0);
+set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize);
 % xlim([-1.2,1.2]);
 % ylim([-1.2,1.2]);
-axis('tight')
+% axis('tight')
 
 title('Scatter Plot of (X,Y)')
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
@@ -116,8 +117,9 @@ title('$\tilde{B}=\delta_{y}(y_{i},y_{j})$','interpreter','latex','FontSize',fon
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
-%Centering
+%% Centering
 RC=disToRanks(C);
 RD=disToRanks(D);
 if option==3;
@@ -150,7 +152,7 @@ end
 mcorrH=A.*B;
 %
 
-%%% Col 3
+%% Col 3
 ax=subplot(s,t,6);
 if sameBar==1
     minC=floor(min(min([A,B]))*10)/10;maxC=ceil(max(max([A,B]))*10)/10;
@@ -186,8 +188,9 @@ title('$$B$$','interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
-% Global to Local
+%% Global to Local
 RC=(RC>k);
 RD=(RD>l);
 A(RC)=0;
@@ -220,6 +223,7 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 %% Col3 Center
 ax=subplot(s,t,4);
@@ -236,6 +240,7 @@ title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 %% %Col4 Center
 ax=subplot(s,t,11);
@@ -249,6 +254,7 @@ title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+axis('square')
 
 %% Col5 MPM
 set(groot,'defaultAxesColorOrder',map1);
@@ -283,6 +289,8 @@ set(ax,'position',pos2);
 %set(gca,'XTick',[]); % Remove x axis ticks
 %set(gca,'YTick',[]); % Remove y axis ticks
 title('Multiscale Power Map','FontSize',16);
+axis('square')
+
 
 %% Col5 p-value
 set(groot,'defaultAxesColorOrder',map1);
@@ -319,6 +327,7 @@ set(ax,'position',pos2);
 %set(gca,'YTick',[]); % Remove y axis ticks
 title('Multiscale P-Value Map','FontSize',16);
 %colorbar('location','westoutside');
+axis('square')
 
 %% Col 5 p-value
 subplot(s,t,9)

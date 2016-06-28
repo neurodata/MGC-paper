@@ -439,7 +439,7 @@ Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc. 
   \centering
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure~\ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. For each global correlation,  the left side corresponds to the average power of each simulation, and the right side corresponds to the average power of its \Mgc~variant. The thin solid line are for the powers of simulation 6-19, because \Mgc~equals the global correlation for 1-5 and  20. Then the thick solid line summarizes how the overall mean power (including 6-19) changes from global to \Mgc.It is clear that \Mgc~dominates its global counterpart. 
+Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure~\ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. For each global correlation,  the left side corresponds to the average power of each simulation, and the right side corresponds to the average power of its \Mgc~variant. The thin solid line are for the powers of simulation 6-19, because \Mgc~equals the global correlation for simulation 1-5 and  20. Then the thick solid line summarizes how the overall mean power (including simulation 6-19) changes from global to \Mgc.It is clear that \Mgc~dominates its global counterpart. 
 \cs{this caption is not right}
 \jv{fixed?}
 }
@@ -472,7 +472,7 @@ Note that for almost all simulations, there exist a large portion of adjacent lo
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
 \caption{Influence of neighborhood size on testing power of local correlations at $\alpha=0.05$.
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the largest dimension for \Mgc~to have powers exceeding the threshold $0.5$. Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. }
+For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the largest dimension for \Mgc~to have powers exceeding the threshold $0.5$. Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. Note that we always exclude local correlations with $k=1$ or $l=1$ in all power / p-value heatmaps, since they should never be optimal. See Appendix~\ref{appen:mgc}.}
 \label{f:powermaps}
 \end{figure}
 
@@ -908,7 +908,7 @@ Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}
-\caption{Influence of neighborhood size on testing power of local correlations. For each simulation, the dimension is $1$, and the sample size is $60$.
+\caption{Influence of neighborhood size on testing power of local correlations, for the 1-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation, the dimension is $1$, and the sample size is $60$.
 }
 \label{f:powermaps1}
 \end{figure}
@@ -920,10 +920,10 @@ Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.
     \subfigimg[width=\linewidth]{A}{../Figures/Fig1DPerm} &
     \subfigimg[width=\linewidth]{B}{../Figures/FigHDPerm}
   \end{tabular}
-\caption{Comparing estimated \Mgc~power to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each benchmark to estimated \Mgc.
+\caption{Comparing the estimated \Mgc~powers to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each of true \Mgc, \Mcorr, and \Hhg, to the estimated \Mgc.
 (A) $1$-dimensional simulations, where $D=1$ and $n=60$.
 (B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
-The estimated \Mgc~power by the approximated optimal scale is almost always better than global \Mcorr~and \Hhg, combines the better performance of the two benchmarks, is quite close to the true \Mgc~power, and does not inflate false signals.}
+The true \Mgc~powers based on known model is better than the estimated \Mgc~powers with unknown model, which are overall still better than the powers of \Mcorr~and \Hhg.}
 \label{f:simPerm}
 \end{figure}
 
@@ -1060,7 +1060,7 @@ The permutation test using the \Hhg~statistic is consistent against all dependen
 \label{appen:tests}
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
-Five algorithms are presented in section~\ref{appen:algorithms}: given the choice of a global correlation coefficient, algorithm~\ref{alg:1scale} computes one local correlation coefficient at a given $(k,l)$; then algorithm~\ref{alg:all_scales} shows how to compute all local correlations simultaneously; algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; algorithm~\ref{alg:best_scale} approximates the optimal scale for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value of \Mgc; algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scale for \Mgc~when the underlying model is known or training data of the same size are given. More detailed discussions regarding the optimal scale approximation is offered in section~\ref{appen:diss}.
+Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, algorithm~\ref{alg:1scale} computes one local correlation coefficient at a given $(k,l)$; then algorithm~\ref{alg:all_scales} shows how to compute all local correlations simultaneously; algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; algorithm~\ref{alg:best_scale} approximates the optimal scale for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value of \Mgc; algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scale for \Mgc~when the underlying model is known or training data of the same size are given. More detailed discussions regarding the optimal scale approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -1235,8 +1235,9 @@ If the underlying model is unavailable and hard to estimate and there is no trai
 
 %As an additional note, for any test statistic, the power of the permutation-based test (algorithm~\ref{algPerm}) is equivalent to the simulated testing power from algorithm~\ref{algPower}, because the permuted sample pairs in algorithm~\ref{algPerm} are independent from each other and follow the same marginal distributions as the independent sample pairs in algorithm~\ref{algPower}. Furthermore, choosing a fair alternative is an important issue for evaluating the testing power, as discussed in \cite{RamdasEtAl2015}.
 
-To better justify algorithm~\ref{alg:best_scale}, we compare the estimated \Mgc~power by algorithm~\ref{alg:best_scale} to the true \Mgc~power by algorithm~\ref{alg:power}, with the global \Mcorr~and \Hhg~as benchmarks. For each type of dependency in the simulation section, we generate $1$,$000$ pairs of dependent data by the same low- and high-dimensional settings as in Figure~\ref{f:1DAll} and ~\ref{f:nDAll}; and for each pair of data, all local p-values are calculated by $1$,$000$ random permutations. By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using algorithm~\ref{alg:best_scale} to approximate the optimal scale for each pair of data separately, the estimated \Mgc~p-value can be computed; and the p-values of global \Mcorr~and \Hhg~can also be derived. The null is rejected when the p-value is less than $0.05$, and the power equals the percentage of correct rejection. Based on the powers of true \Mgc~/ estimated \Mgc~/ \Mcorr~/ \Hhg~shown in Figure~\ref{f:simPerm}, we observe that although the estimated \Mgc~power by algorithm~\ref{alg:best_scale} can be lower than the true \Mgc~power, it is almost always better than global \Mcorr~and \Hhg, and combines the better performance of the two benchmarks.
+To better justify algorithm~\ref{alg:best_scale}, we compare the estimated \Mgc~power by algorithm~\ref{alg:best_scale} to the true \Mgc~power by algorithm~\ref{alg:power}, with the global \Mcorr~and \Hhg~as benchmarks. For each type of dependency in the simulation section, we generate $1$,$000$ pairs of dependent data by the same low- and high-dimensional settings as in Figure~\ref{f:1DAll} and ~\ref{f:nDAll}; and for each pair of data, all local p-values are calculated by $1$,$000$ random permutations. By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using algorithm~\ref{alg:best_scale} to approximate the optimal scale for each pair of data separately, the estimated \Mgc~p-value can be computed; and the p-values of global \Mcorr~and \Hhg~can also be derived. The null is rejected when the p-value is less than $0.05$, and the power equals the percentage of correct rejection. 
 
+By plotting the power differences between each of true \Mgc, \Mcorr, and \Hhg~to the estimated \Mgc in Figure~\ref{f:simPerm}, we observe that the true \Mgc~powers based on known model are the better than the estimated \Mgc~powers with unknown model, yet the estimated \Mgc~is still better than \Mcorr~and \Hhg: the estimated \Mgc~is always better than \Mcorr as expected, and is more superior or equivalent to \Hhg most of the time.
 
 Note that it is tempting to directly use the optimal scale that minimizes all local p-values without the validation by algorithm~\ref{alg:best_scale}, or generate random samples based on the given data pair and use algorithm~\ref{alg:power} by bootstrap. However, both approaches are biased such that the false positive rate will be higher than the type $1$ error in the absence of dependency. This is because for a given pair of data, a non-optimal scale can happen to have a significant p-value, which may be falsely identified as optimal if we directly minimize all local p-values. Those erroneous scales often still exist after a straightforward re-sampling, so random samples have the same problem. More investigations into the bias and better methods for searching the optimal scale are two worthwhile directions for future works.
 

@@ -15,6 +15,10 @@ pre2=strcat(rootDir,'Figures/FigReal');% The folder to save figures
 cmap=zeros(4,3);
 gr =[0,1,0];
 ma = [1,0,1];
+map3 = brewermap(128,'PRGn'); % brewmap
+lgr=map3(100,:);
+dgr=map3(128,:);
+gr=lgr;
 % cy = [0,1,1];
 cmap(1,:) = gr;
 cmap(2,:) = gr;
@@ -24,9 +28,6 @@ cmap(4,:) = gr;
 map1=cmap;
 map2 = brewermap(128,'GnBu'); % brewmap
 
-map3 = brewermap(128,'PRGn'); % brewmap
-lgr=map3(100,:);
-dgr=map3(128,:);
 
 % Plot 1st figure
 set(groot,'defaultAxesColorOrder',map1);
@@ -79,7 +80,7 @@ plot(ind2,pp2(ind2),'k:','Color',dgr,'LineWidth',6)
 set(gca,'FontSize',24);
 xlabel('# of Neighbors for X','FontSize',24);
 n1=length(pp1);
-set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'XTick',[2,round(n1/2),n1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[0 0.05 0.1 0.15 0.2]); % Remove x axis ticks
 xlim([2 n]);
 ylim([0 0.2]);
@@ -106,8 +107,8 @@ set(gca,'FontSize',24);
 [n1,n2]=size(p1All);
 xlabel('# of Neighbors for X','FontSize',24);
 ylabel('# of Neighbors for Y','FontSize',24);
-set(gca,'XTick',[round(n1/2)-1,n1-1],'XTickLabel',[round(n1/2),n1]); % Remove x axis ticks
-set(gca,'YTick',[round(n2/2)-1,n2-1],'YTickLabel',[round(n2/2),n2]); % Remove x axis ticks
+set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks

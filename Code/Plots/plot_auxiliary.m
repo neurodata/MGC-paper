@@ -43,21 +43,15 @@ sameBar=0;
 
 cmap=zeros(2,3);
 gray = [0.5,0.5,0.5];
-% ma = [1,0,1];
-% % cy = [0,1,1];
-% cmap(1,:) = ma;
-% cmap(2,:) = ma;
-% cmap(3,:) = ma;
-% cmap(4,:) = ma;
-% cmap(3,:) = cy;
-% map0=gr;
-% map1=cmap;
-map2 = brewermap(128,'PRGn'); % brewmap
-map3 = brewermap(128,'Greens'); % brewmap
+map2 = brewermap(128,'PiYG'); % brewmap
+map3 = map2(size(map2,1)/2+1:end,:);
+% map3 = brewermap(128,'Greens'); % brewmap
 map4 = brewermap(128,'GnBu'); % brewmap
 s=3;t=4;
-gr=map2(110,:);
-pu=map2(18,:);
+gr=map2(120,:);
+pu=map2(8,:);
+loca=[0,1,0];
+glob= [1,0,1];
 cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
@@ -355,12 +349,13 @@ p=tN(:,n,n);
 [f,xi]=ksdensity(p,'support',[-1,1]);
 
 hold on
-plot(xi,f,'.-',xi1,f1,'.-','LineWidth',4);
+plot(xi,f,'.-','LineWidth',4,'Color',glob);
+plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
 set(gca,'FontSize',15);
 x1=round(tA(end)*100)/100;
 x2=round(tA(k,l)*100)/100;
-plot(x1,0.1,'.','MarkerSize',mkSize,'Color',pu);
-plot(x2,0.1,'*','MarkerSize',10,'Color',gr);
+plot(x1,0.1,'.','MarkerSize',mkSize,'Color',glob);
+plot(x2,0.1,'*','MarkerSize',10,'Color',loca);
 set(gca,'XTick',[x1+0.04,x2+0.04],'TickLength',[0 0]);
 set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
@@ -375,8 +370,8 @@ if pAll(k,l)<0.001;
 else
     txt2 = {'MGC';['p = ' num2str(pAll(k,l))]};
 end
-a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',pu);
-b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',gr);
+a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca);
+b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',glob);
 ylim([0 y1+25]);
 set(a,'FontSize',17);
 set(b,'FontSize',17);

@@ -25,31 +25,12 @@ lowd=0;
 highd=1;
 
 %% Set colors
-%map2 = brewermap(128,'PRGn'); % brewmap
+map2 = brewermap(128,'PiYG'); % brewmap
 %loca=map2(110,:);
 %glob=map2(18,:);
 loca=[0,1,0];
 glob= [1,0,1];
-% gr = [0,1,0];
-% ma = [1,0,1];
-% cy = [0,1,1];
-% cmap(1,:) = gr;
-% cmap(2,:) = ma;
-% cmap(3,:) = cy;
-% cmap(7,:) = [0 0 0];
-% dcorr = cmap(1,:);
-% mcorr = cmap(2,:);
-% mante = cmap(3,:);
 HHG   = [0.5,0.5,0.5];
-% map1(1,:)=dcorr; map1(4,:)=dcorr; % The color for MGC{dcorr} and global dcorr.
-% map1(2,:)=mcorr; map1(5,:)=mcorr; % The color for MGC{mcorr} and global mcorr.
-% map1(3,:)=mante; map1(6,:)=mante; % The color for MGC{Mantel} and global Mantel.
-% map1(7,:)=HHG; % The color for HHG
-% if select==1
-%     map1(1,:)=mcorr; map1(4,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
-%     map1(2,:)=mcorr; map1(5,:)=mante; % The color for MGC{Mantel} and global Mantel.
-%     map1(3,:)=HHG; % The color for HHG
-% end
 
 %set(groot,'defaultAxesColorOrder',map1);
 

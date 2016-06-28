@@ -56,29 +56,36 @@ else
     ind=[4,5,6,7];
 end
 p1=powerP(ind,:);
-p1=p1-repmat(p1(1,:),4,1);
-[~, so]=sort(p1(3,:),'descend');
+% p1=p1-repmat(p1(1,:),4,1);
+% [~, so]=sort(p1(3,:),'descend');
+so=x;
+
+% 1 estimated mgc
+% 2 mcorr
+% 3 true mgc
+% 4 hhg
 
 figure(1), clf
 hold on
-plot(x,p1(3,so),ls{1},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(3,so),ls{1},'Color','k','LineWidth',4,'MarkerSize',mk);
+plot(x,p1(1,so),ls{1},'Color',loca,'LineWidth',4,'MarkerSize',mk);
 plot(x,p1(2,so),ls{2},'Color',glob,'LineWidth',4,'MarkerSize',mk);
 plot(x,p1(4,so),ls{3},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
 hold off
-legend('True MGC','Mcorr','HHG','Location','NorthWest');
+legend('True MGC','Estimated MGC','Mcorr','HHG','Location','Best');
 set(gca,'FontSize',24);
 legend boxoff
 % xlabel('Function Type','FontSize',24);
-ylabel('Power Difference','FontSize',24);
+ylabel('Power','FontSize',24);
 xlim([1,20]);
-ylim([-0.6,1]);
+ylim([0,1]);
 set(gca,'XTick',[1,10,20]); % Remove x axis ticks
     set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
 title('1-Dimensional Simulations','FontSize',24);
 grid on
-F.fname=strcat(pre2, figNumber);
+F.fname=strcat(pre2, figNumber, 'B');
 F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+print_fig(gcf,F)
 
 %%
 figure(3), clf
@@ -193,7 +200,6 @@ print_fig(gcf,F)
 figNumber='HDPerm';
 filename=strcat(pre1,'CorrSimPermScale1-20Dim2');
 load(filename)
-figure(2), clf
 x=1:20;
 a=2;
 if a==1
@@ -202,27 +208,31 @@ else
     ind=[4,5,6,7];
 end
 p1=powerP(ind,:);
-p1=p1-repmat(p1(1,:),4,1);
-[~, so]=sort(p1(3,:),'descend');
+% p1=p1-repmat(p1(1,:),4,1);
+% [~, so]=sort(p1(3,:),'descend');
+so=x;
 
+figure(2), clf
 hold on
-plot(x,p1(3,so),ls{4},'Color',loca,'LineWidth',4,'MarkerSize',mk);
-plot(x,p1(2,so),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
-plot(x,p1(4,so),ls{6},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
-plot([0 20], [0 0],'color',0.5*[1 1 1])
+plot(x,p1(3,so),ls{1},'Color','k','LineWidth',4,'MarkerSize',mk);
+plot(x,p1(1,so),ls{1},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(2,so),ls{2},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(x,p1(4,so),ls{3},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
 hold off
-%legend('True MGC','Mcorr','HHG','Location','NorthWest');
+legend('True MGC','Estimated MGC','Mcorr','HHG','Location','Best');
 set(gca,'FontSize',24);
+legend boxoff
 % xlabel('Function Type','FontSize',24);
-%ylabel('Power Difference','FontSize',24);
+ylabel('Power','FontSize',24);
 xlim([1,20]);
-ylim([-0.6,1]);
+ylim([0,1]);
+
 set(gca,'XTick',[1,10,20]); % Remove x axis ticks
 set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
 title('High-Dimensional Simulations','FontSize',24);
-F.fname=strcat(pre2, figNumber);
+F.fname=strcat(pre2, figNumber, 'B');
 F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+print_fig(gcf,F)
 
 %%
 
@@ -344,3 +354,39 @@ xlim([-0.3, 3.3])
 F.fname=strcat(pre2, figNumber, 'A');
 F.wh=[3 2.5]*2;
 print_fig(gcf,F)
+
+%%
+
+% figure(7), clf
+% hold on
+% p2=powerP(ind,:);
+% p3=p2([1,2,4],:);
+% 
+% [~,rank]=sort(p3,'descend');
+% 
+% [counts,centers]=hist(rank);
+% 
+% 
+% plot(-1+ones(20,1)+randn(20,1)/10,p2(3,:),ls{5},'Color','k','LineWidth',4,'MarkerSize',mk); % true mgc
+% plot(ones(20,1)+randn(20,1)/10,p2(1,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);   % estimate mgc
+% plot(1+ones(20,1)+randn(20,1)/10,p2(2,:),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk); % mcorr
+% plot(2+ones(20,1)+randn(20,1)/10,p2(4,:),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);  % hhg
+% hold off
+% % legend('True MGC','Estimated MGC','Mcorr','HHG','Location','NorthWest');
+% set(gca,'FontSize',24);
+% legend boxoff
+% % xlabel('Function Type','FontSize',24);
+% ylabel('Power','FontSize',24);
+% % xlim([1,20]);
+% % ylim([-0.6,1]);
+% set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'True MGC'}; {'Estimated MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
+% set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
+% ax=gca;
+% ax.XTickLabelRotation=45;
+% title('High-Dimensional Simulations','FontSize',24);
+% grid on
+% xlim([-0.3, 3.3])
+% F.fname=strcat(pre2, figNumber, 'A');
+% F.wh=[3 2.5]*2;
+% print_fig(gcf,F)
+

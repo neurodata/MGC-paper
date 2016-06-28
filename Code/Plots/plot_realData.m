@@ -33,14 +33,14 @@ map2 = brewermap(128,'GnBu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
 filename=strcat(pre1,'CorrPermDistTestTypeBrainLMLxY.mat');
 load(filename);
-n=size(p1All,1);
+n=size(p2All,1);
 % kmin=2;
 % xa=kmin:n;
-pp1=p1All(:,end);
+pp1=p2All(:,end);
 filename=strcat(pre1,'CorrPermDistTestTypeBrainLMRxY.mat');
 load(filename);
-n=size(p1All,1);
-pp2=p1All(:,end);
+n=size(p2All,1);
+pp2=p2All(:,end);
 
 % figure
 % y=0.05;
@@ -98,13 +98,13 @@ filename=strcat(pre1,'CorrPermDistTestTypeMigrainxCCI.mat');
 load(filename);
 figure
 kmin=2;
-imagesc(p1All(kmin:end,kmin:end)');
+imagesc(p2All(kmin:end,kmin:end)');
 set(gca,'YDir','normal')
 colormap(flipud(map2))
 caxis([0 0.1])
 set(gca,'FontSize',24);
 %     if i==3
-[n1,n2]=size(p1All);
+[n1,n2]=size(p2All);
 xlabel('# of Neighbors for X','FontSize',24);
 ylabel('# of Neighbors for Y','FontSize',24);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks

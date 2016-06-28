@@ -32,6 +32,7 @@ try
 catch
     display('no file exist, running instead')
     run_fig1Data(type,n,noise);
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 end
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
@@ -55,8 +56,8 @@ map2 = brewermap(128,'PRGn'); % brewmap
 map3 = brewermap(128,'Greens'); % brewmap
 map4 = brewermap(128,'GnBu'); % brewmap
 s=3;t=4;
-gr=map2(100,:);
-pu=map2(28,:);
+gr=map2(110,:);
+pu=map2(18,:);
 cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
@@ -94,9 +95,9 @@ caxis([0,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 xlabel('i','FontSize',fontSize,'position',[-10,0]);
-ylabel('j','Rotation',0,'position',[-25,40],'FontSize',fontSize);
-set(gca,'XTick',[round(n/2)-1,n-1],'XTickLabel',[round(n/2),n]); % Remove x axis ticks
-set(gca,'YTick',[round(n/2)-1,n-1],'YTickLabel',[round(n/2),n]); % Remove x axis ticks
+ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
+set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
 % title('Mantel $\tilde{A}=\delta_{x}(x_{i},x_{j})$','interpreter','latex','FontSize',fontSize);
 title('Mantel','FontSize',fontSize);
 pos2 = get(ax,'position');
@@ -116,9 +117,9 @@ set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 %set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 xlabel('i','FontSize',fontSize,'position',[-10,0]);
-ylabel('j','Rotation',0,'position',[-25,40],'FontSize',fontSize);
-set(gca,'XTick',[round(n/2)-1,n-1],'XTickLabel',[round(n/2),n]); % Remove x axis ticks
-set(gca,'YTick',[round(n/2)-1,n-1],'YTickLabel',[round(n/2),n]); % Remove x axis ticks
+ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
+set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
 title('$\tilde{B}=\delta_{y}(y_{i},y_{j})$','interpreter','latex','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
@@ -236,13 +237,13 @@ axis('square')
 
 %% Col3 Center
 ax=subplot(s,t,4);
-MH=ceil(max(max(mcorrH(2:end,2:end))))
+MH=ceil(max(max(mcorrH(2:end,2:end))));
 mH=floor(min(min(mcorrH(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
 imagesc(mcorrH');
 set(gca,'YDir','normal')
 colormap(ax,map2)
-colorbar('Ticks',[mH,0,MH]);
+colorbar('Ticks',[mH,0,MH],'location','westoutside');
 caxis([mH,MH]);
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
@@ -254,9 +255,9 @@ axis('square')
 %% %Col4 Center
 ax=subplot(s,t,11);
 mcorrH=A.*B;
-MH=ceil(max(max(mcorrH(2:end,2:end)))*10)/10;
-mH=floor(min(min(mcorrH(2:end,2:end)))*10)/10;
-mH=min(mH,-MH);MH=max(MH,-mH);
+% MH=ceil(max(max(mcorrH(2:end,2:end))));
+% mH=floor(min(min(mcorrH(2:end,2:end))));
+% mH=min(mH,-MH);MH=max(MH,-mH);
 imagesc(mcorrH');
 set(gca,'YDir','normal')
 colormap(ax,map2)
@@ -376,15 +377,10 @@ else
 end
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',pu);
 b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',gr);
-xm=min([xi1,xi]);
-xM=max([xi1,xi]);
-xm=min([x1,x2,xm]);
-xM=max([x1,x2,xM]);
-xlim([xm xM]);
 ylim([0 y1+25]);
 set(a,'FontSize',17);
 set(b,'FontSize',17);
-xlim([minp,maxp]);
+xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fontSize);
 ylabel('Density','FontSize',fontSize);
 title('Test Statistics Distributions','FontSize',16);

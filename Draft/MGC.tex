@@ -300,16 +300,20 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 % \includegraphics[width=1.0\textwidth]{../Figures/FigC}
 \caption{
 Flowchart schematizing Multiscale Generalized Correlation (\Mgc).
-Column 1: $(X,Y)$ are nonlinearly dependent on one another, with each pair $(\mbx_i,\mby_i)$ having a spiral relationship.
-Column 2: By choosing appropriate distances for $X$ and $Y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of \mbx's, and bottom row will be functions of \mby's).  
+Column 1: Pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
+Column 2, \Mantel: By choosing appropriate distances for $X$ and $Y$, compute the pairwise distance matrices $\tilde{A}$ and $\tilde{B}$ (top row will continue to be functions of \mbx's, and bottom row will be functions of \mby's).  
 Heatmaps  are arbitrarily chosen to be sorted by $X$. 
-Note that all distances are non-negative.
-Column 3: Double centering yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the Hadamard product yields the un-normalized \Mcorr~statistic, which is significant only when that double sum is positive. 
+Note that all distances are non-negative. These are the matrices used by the \Mantel~test \cite{Mantel1967}.
+Column 3: Double centering yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the Hadamard product yields the un-normalized \Mcorr~statistic \cite{SzekelyRizzo2013a}, which is significant only when that double sum is positive. 
 % As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
-Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly non-negative, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be more significant than \Mcorr.
+Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly non-negative, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be highly significant.
 % The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
-Column 5: Top shows the empirical null distribution for the modified distance correlation, \Mcorr \cite{SzekelyRizzo2013a}, as well as our newly defined \Mgc, and the corresponding observed test statistic. The global correlation has a p-value of $0.188$ while \Mgc~has a p-value $<0.001$.
-Middle panel shows the multiscale p-value map, and bottom shows a multiscale power map, denoting the p-value / power for all possible scales in this simulation, demonstrating that the global scale (equivalent to \Mcorr), achieves significantly lower power / higher p-value than \Mgc, which achieves essentially perfect power and significant p-value in this highly nonlinear dependence setting, as well as reveals which local scales have high power / low p-value, a novel property for dependence tests.
+Column 5 (Top): The empirical null distribution for \Mcorr, as well as our newly defined \Mgc, and the corresponding observed test statistics for each. \Mcorr, the global test, has  p-value $0.188$ while \Mgc, our multiscale test, has  p-value $<0.001$.
+(Middle) The multiscale p-value map, used in the absense of the true distribution or training data. 
+(Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scale and understand the structure of dependence.
+Clearly, 
+Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that acheive nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
+% demonstrating that the global scale (equivalent to \Mcorr), achieves significantly lower power / higher p-value than \Mgc, which achieves essentially perfect power and significant p-value in this highly nonlinear dependence setting, as well as reveals which local scales have high power / low p-value, a novel property for dependence tests.
 % \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
 % Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.
 }

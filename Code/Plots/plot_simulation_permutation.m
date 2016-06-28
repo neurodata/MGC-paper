@@ -78,7 +78,7 @@ title('1-Dimensional Simulations','FontSize',24);
 grid on
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
-print_fig(gcf,F)
+% print_fig(gcf,F)
 
 %%
 figure(3), clf
@@ -109,7 +109,85 @@ F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
 % print_fig(gcf,F)
 
+%%
 
+% 1 estimated mgc
+% 2 mcorr
+% 3 true mgc
+% 4 hhg
+
+figure(20), clf
+hold on
+p2=powerP(ind,:);
+bw=0.3;
+jit=inf;
+sp=-0.2;
+
+% True MGC
+[foo,bar]=ksdensity(p2(3,:),'support',[0 1],'bandwidth',bw);
+h(1)=plot(bar,foo,ls{6},'Color','k','LineWidth',4,'MarkerSize',mk);
+plot(p2(3,:),4*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color','k','LineWidth',4,'MarkerSize',mk);
+
+% estimated MGC
+[foo,bar]=ksdensity(p2(1,:),'support',[0 1],'bandwidth',bw);
+h(2)=plot(bar,foo,ls{6},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(p2(1,:),3*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+
+% Mcorr
+[foo,bar]=ksdensity(p2(2,:),'support',[0 1],'bandwidth',bw);
+h(3)=plot(bar,foo,ls{6},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(p2(2,:),2*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+
+% HHG
+[foo,bar]=ksdensity(p2(4,:),'support',[0 1],'bandwidth',bw);
+h(4)=plot(bar,foo,ls{6},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+plot(p2(4,:),1*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+
+plot([0 1], [0, 0],'--k')
+hold off
+legend(h,'True MGC','Estimated MGC','Mcorr','HHG','Position',[320 300 1 0.21]);
+set(gca,'FontSize',24);
+legend boxoff
+ylabel('Probability','FontSize',24);
+xlabel('Power','FontSize',24);
+% xlim([1,20]);
+% ylim([-0.6,1]);
+set(gca,'XTick',[0,0.5,1]); % Remove x axis ticks
+set(gca,'YTick',[0]); % Remove x axis ticks
+title('1-Dimensional Simulations','FontSize',24);
+% grid on
+axis('tight')
+F.fname=strcat(pre2, figNumber);
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
+
+%%
+
+figure(60), clf
+hold on
+p2=powerP(ind,:);
+plot(-1+ones(20,1)+randn(20,1)/10,p2(3,:),ls{5},'Color','k','LineWidth',4,'MarkerSize',mk);
+plot(ones(20,1)+randn(20,1)/10,p2(1,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(1+ones(20,1)+randn(20,1)/10,p2(2,:),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(2+ones(20,1)+randn(20,1)/10,p2(4,:),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+hold off
+% legend('True MGC','Estimated MGC','Mcorr','HHG','Location','NorthWest');
+set(gca,'FontSize',24);
+legend boxoff
+% xlabel('Function Type','FontSize',24);
+ylabel('Power','FontSize',24);
+% xlim([1,20]);
+% ylim([-0.6,1]);
+set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'True MGC'}; {'Estimated MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
+set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
+title('1-Dimensional Simulations','FontSize',24);
+xlim([-0.3, 3.3])
+grid on
+ax=gca;
+ax.XTickLabelRotation=45;
+F.fname=strcat(pre2, figNumber, 'A');
+F.wh=[3 2.5]*2;
+print_fig(gcf,F)
 
 %% high dim
 figNumber='HDPerm';
@@ -144,7 +222,7 @@ set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
 title('High-Dimensional Simulations','FontSize',24);
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
-print_fig(gcf,F)
+% print_fig(gcf,F)
 
 %%
 
@@ -157,31 +235,32 @@ figure(4), clf
 hold on
 p2=powerP(ind,:);
 bw=0.3;
-jit=5;
+jit=inf;
+sp=-0.3;
 
 % True MGC
 [foo,bar]=ksdensity(p2(3,:),'support',[0 1],'bandwidth',bw);
 h(1)=plot(bar,foo,ls{6},'Color','k','LineWidth',4,'MarkerSize',mk);
-plot(p2(3,:),-0.8+zeros(20,1)+rand(20,1)/jit,ls{5},'Color','k','LineWidth',4,'MarkerSize',mk);
+plot(p2(3,:),4*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color','k','LineWidth',4,'MarkerSize',mk);
 
 % estimated MGC
 [foo,bar]=ksdensity(p2(1,:),'support',[0 1],'bandwidth',bw);
 h(2)=plot(bar,foo,ls{6},'Color',loca,'LineWidth',4,'MarkerSize',mk);
-plot(p2(1,:),-0.6+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+plot(p2(1,:),3*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
 
 % Mcorr
 [foo,bar]=ksdensity(p2(2,:),'support',[0 1],'bandwidth',bw);
 h(3)=plot(bar,foo,ls{6},'Color',glob,'LineWidth',4,'MarkerSize',mk);
-plot(p2(2,:),-0.4+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+plot(p2(2,:),2*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
 
 % HHG
 [foo,bar]=ksdensity(p2(4,:),'support',[0 1],'bandwidth',bw);
 h(4)=plot(bar,foo,ls{6},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
-plot(p2(4,:),-0.2+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+plot(p2(4,:),1*sp+zeros(20,1)+rand(20,1)/jit,ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
 
 plot([0 1], [0, 0],'--k')
 hold off
-legend(h,'True MGC','Estimated MGC','Mcorr','HHG','Location','NorthEast');
+% legend(h,'True MGC','Estimated MGC','Mcorr','HHG','Location','NorthEast');
 set(gca,'FontSize',24);
 legend boxoff
 ylabel('Probability','FontSize',24);
@@ -189,13 +268,13 @@ xlabel('Power','FontSize',24);
 % xlim([1,20]);
 % ylim([-0.6,1]);
 set(gca,'XTick',[0,0.5,1]); % Remove x axis ticks
-% set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
+set(gca,'YTick',[0]); % Remove x axis ticks
 title('High-Dimensional Simulations','FontSize',24);
 % grid on
 axis('tight')
 F.fname=strcat(pre2, figNumber);
 F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+print_fig(gcf,F)
 
 %%
 
@@ -252,14 +331,16 @@ hold off
 set(gca,'FontSize',24);
 legend boxoff
 % xlabel('Function Type','FontSize',24);
-ylabel('Power Difference','FontSize',24);
+ylabel('Power','FontSize',24);
 % xlim([1,20]);
 % ylim([-0.6,1]);
-set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'MGC'}; {'MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
-% set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
+set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'True MGC'}; {'Estimated MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
+set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
+ax=gca;
+ax.XTickLabelRotation=45;
 title('High-Dimensional Simulations','FontSize',24);
-axis('tight')
 grid on
-F.fname=strcat(pre2, figNumber);
+xlim([-0.3, 3.3])
+F.fname=strcat(pre2, figNumber, 'A');
 F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+print_fig(gcf,F)

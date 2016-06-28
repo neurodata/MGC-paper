@@ -13,7 +13,7 @@ pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 pre2=strcat(rootDir,'Figures/FigReal');% The folder to save figures
 
 cmap=zeros(4,3);
-gr = [0.5,0.5,0.5];
+gr =[0,1,0];
 ma = [1,0,1];
 % cy = [0,1,1];
 cmap(1,:) = gr;
@@ -100,7 +100,7 @@ kmin=2;
 imagesc(p1All(kmin:end,kmin:end)');
 set(gca,'YDir','normal')
 colormap(flipud(map2))
-caxis([0.01 0.1])
+caxis([0 0.1])
 set(gca,'FontSize',24);
 %     if i==3
 [n1,n2]=size(p1All);
@@ -108,7 +108,7 @@ xlabel('# of Neighbors for X','FontSize',24);
 ylabel('# of Neighbors for Y','FontSize',24);
 set(gca,'XTick',[round(n1/2)-1,n1-1],'XTickLabel',[round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[round(n2/2)-1,n2-1],'YTickLabel',[round(n2/2),n2]); % Remove x axis ticks
-h=colorbar('Ticks',[0.05,0.1]);%,'location','westoutside');
+h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
@@ -142,7 +142,7 @@ pv=p(:,2);
          ord(i)=ord(i-1)+0.4;
      end
  end
- plot(pv,ord,'k.','MarkerSize',24);
+ plot(pv,ord,'.','MarkerSize',24);
 xlim([0,0.15]);
 ylim([-1 15]);
 set(gca,'FontSize',24);

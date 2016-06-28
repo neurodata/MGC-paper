@@ -281,7 +281,7 @@ colormap(ax,cmap)
 caxis([0 1])
 h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
-set(gca,'XTick',[round(n/2)-1,n-1],'YTick',[round(n/2)-1,n-1],'XTickLabel',[round(n/2),n],'YTickLabel',[round(n/2),n],'FontSize',16);
+set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 xlabel('# of Neighbors for X','FontSize',16)
 ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
@@ -319,7 +319,7 @@ colormap(ax,flipud(cmap));
 caxis([0 0.2]);
 h=colorbar('Ticks',[0 0.05 0.2]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
-set(gca,'XTick',[round(n/2)-1,n-1],'YTick',[round(n/2)-1,n-1],'XTickLabel',[round(n/2),n],'YTickLabel',[round(n/2),n],'FontSize',16);
+set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 %xlabel('# of Neighbors for X','FontSize',16)
 %ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);

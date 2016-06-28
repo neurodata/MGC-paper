@@ -15,7 +15,7 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 loca=[0,1,0];
 glob= [1,0,1];
 HHG   = [0.5,0.5,0.5];
-mkSize=25;
+mkSize=20;
 
 ls{1}='-';
 ls{2}='-';
@@ -28,9 +28,11 @@ for i=1:2
     if i==1
         figNumber='1DPerm';
         filename=strcat(pre1,'CorrSimPermScale1-20Dim1');
+        tstr='1-Dimensional Simulations';
     else
         figNumber='HDPerm';
         filename=strcat(pre1,'CorrSimPermScale1-20Dim2');
+        tstr='High-Dimensional Simulations';
     end
     load(filename)
     
@@ -55,13 +57,38 @@ for i=1:2
     h3=plot(xi3,f3,ls{3},'Color',HHG,'LineWidth',4);
     h2=plot(xi2,f2,ls{2},'Color',glob,'LineWidth',4);
     h1=plot(xi1,f1,ls{1},'Color',loca,'LineWidth',4);
-    h=legend([h1 h2 h3],'True MGC','Mcorr','HHG','Location','NorthWest');
-    plot(pp3,-0.1*ones(size(pp3)),'.','MarkerSize',mkSize,'Color',HHG);
-    plot(pp2,-0.25*ones(size(pp2)),'.','MarkerSize',mkSize,'Color',glob);
-    plot(pp1,-0.4*ones(size(pp1)),'.','MarkerSize',mkSize,'Color',loca);
+    legend([h1 h2 h3],'True MGC','Mcorr','HHG','Location','NorthWest');
+    
+    for j=1:3
+        switch j
+            case 1
+                pv=pp3;
+                cc=HHG;
+                c=-0.1;
+            case 2
+                pv=pp2;
+                cc=glob;
+                c=-0.3;
+            case 3
+                pv=pp1;
+                cc=loca;
+                c=-0.5;
+        end
+        pv=sort(pv,'ascend');
+        ord=0*ones(size(pv));
+%         for jj=2:length(pv);
+%             if pv(jj)-pv(jj-1)<0.001
+%                 ord(jj)=ord(jj-1)+0.1;
+%                 %pv(jj)=pv(jj-1);
+%             end
+%         end
+        
+        plot(pv,c*ones(size(pv))-ord,'.','MarkerSize',mkSize,'Color',cc);
+        
+    end
     hold off
     set(gca,'FontSize',24);
-    ylim([-0.5 4]);
+    ylim([-0.6 4]);
     set(gca,'YTick',[]); % Remove y axis ticks
     
     legend boxoff
@@ -72,43 +99,9 @@ for i=1:2
     % ylim([-0.6,1]);
     % set(gca,'XTick',[1,10,20]); % Remove x axis ticks
     %     set(gca,'YTick',[-0.5,0,0.5,1]); % Remove x axis ticks
-    if i==1
-        title('1-Dimensional Simulations','FontSize',24);
-    else
-        title('High-Dimensional Simulations','FontSize',24);
-    end
+        title(tstr,'FontSize',24);
     % grid on
     F.fname=strcat(pre2, figNumber);
     F.wh=[3 2.5]*2;
     print_fig(gcf,F)
-    
-    figure
-hold on
-p2=powerP(ind,:);
-% plot(-1+ones(20,1)+randn(20,1)/10,p2(3,:),ls{5},'Color','k','LineWidth',4,'MarkerSize',mk);
-plot(ones(20,1)+randn(20,1)/10,p2(1,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
-plot(1+ones(20,1)+randn(20,1)/10,p2(2,:),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
-plot(2+ones(20,1)+randn(20,1)/10,p2(4,:),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
-hold off
-% legend('True MGC','Estimated MGC','Mcorr','HHG','Location','NorthWest');
-set(gca,'FontSize',24);
-legend boxoff
-% xlabel('Function Type','FontSize',24);
-ylabel('Power','FontSize',24);
-% xlim([1,20]);
-% ylim([-0.6,1]);
-set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'True MGC'}; {'Estimated MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
-set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
-ax=gca;
-ax.XTickLabelRotation=45;
-if i==1
-        title('1-Dimensional Simulations','FontSize',24);
-    else
-        title('High-Dimensional Simulations','FontSize',24);
-    end
-grid on
-xlim([-0.3, 3.3])
-F.fname=strcat(pre2, figNumber, 'A');
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
 end

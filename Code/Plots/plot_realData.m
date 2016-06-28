@@ -135,7 +135,6 @@ pv=p(:,2);
  [f,xi]=ksdensity(pv,'support',[0,1]); 
  hold on
  plot(xi,f,'.-','LineWidth',4);
- addJitter=1:length(pv);
  pv=sort(pv,'ascend');
  ord=0.01*ones(length(pv),1);
  for i=2:length(pv);

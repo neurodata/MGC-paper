@@ -1,4 +1,4 @@
-function []=plot_realDataTrial
+% function []=plot_realDataTrial
 
 %%% File path searching
 fpath = mfilename('fullpath');
@@ -29,12 +29,13 @@ map2 = brewermap(128,'GnBu'); % brewmap
 filename=strcat(pre1,'CorrPermDistTestTypeBrainCxP.mat');
 load(filename)
 figNumber='CxP';
-figure
+figure(1), clf
+subplot(121)
 kmin=2;
-imagesc(p2All(kmin:end,kmin:end)');
+imagesc(log(p2All(kmin:end,kmin:end)'));
 set(gca,'YDir','normal')
 colormap(flipud(map2))
-caxis([0 0.1])
+% caxis([0 0.1])
 set(gca,'FontSize',24);
 %     if i==3
 [n1,n2]=size(p2All);
@@ -42,13 +43,39 @@ xlabel('# of Neighbors for X','FontSize',24);
 ylabel('# of Neighbors for Y','FontSize',24);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
-h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
+% h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
+cticks=[0.01, 0.05, 0.1, 0.5];
+h=colorbar('Ticks',log(cticks), 'TickLabels',cticks);
+axis('square')
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
 title('Brain vs. Personality','FontSize',24);
+%%
 
+subplot(122)
+t=0.02;
+imagesc(p2All(kmin:end,kmin:end)'>t);
+set(gca,'YDir','normal')
+colormap(flipud(map2))
+% caxis([0 0.1])
+set(gca,'FontSize',24);
+%     if i==3
+[n1,n2]=size(p2All);
+set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+
+set(gca,'Xtick',[], 'YTick',[])
+% h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
+cticks=[0 1]; %0.001, 0.05:0.05:1];
+h=colorbar('Ticks',(cticks), 'TickLabels',[{['<', num2str(t)]}; {'not'}]);
+axis('square')
+title(['Significant Map'])
+
+%%
 F.fname=strcat(pre2, figNumber);
-F.wh=[3 2.5]*2;
+F.wh=[6 2.5]*2;
 print_fig(gcf,F)
+
+

@@ -116,7 +116,8 @@
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
 
-\title{\bf Dependence Discovery from Multimodal Data via  Multiscale Generalized Correlation}
+% \title{\bf Dependence Discovery from Multimodal Data via  Multiscale Generalized Correlation}
+\title{\bf Revealing the Structure of Dependency Between Multimodal Datasets via  Multiscale Generalized Correlation}
 \author[1]{Cencheng Shen} %\thanks{cshen@temple.edu}}
 \author[2]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
 \author[3]{Mauro Maggioni}%\thanks{mauro.maggioni@duke.edu}}
@@ -132,19 +133,20 @@
 \begin{abstract}
 Understanding and discovering dependence between multiple  measurements is a fundamental task not just in science, but also policy, commerce, and other domains.
 An ideal test for dependence would have the following properties:
-(1) Theoretical consistency such that the testing power converges to $1$ under any dependency structure and dimensionality.
-(2) Strong empirical performance on a wide variety of low- and high-dimensional simulations, including both linear and nonlinear dependencies.
-(3) On real data, detects dependence when it exists, and does not detect dependence when it does not exist.
-(4) Provides insight into the nature of the dependence, rather than merely a valid p-value.
+(1) High power (probability of rejecting false null hypotheses) even for low sample size, without requiring any additional assumptions (such as linear dependence, low dimensional data, or vector-valued observations).
+(2) Theoretical guarantees that power converges to $1$ under all of the above assumptions.
+% (2) Strong empirical performance on a wide variety of low- and high-dimensional simulations, including both linear and nonlinear dependencies.
+(3) Provides insight into the nature of the dependence, rather than merely a valid p-value.
+(4) On real data, detects dependence when it exists, and does not detect dependence when it does not exist, and reveals the scales of optimal dependence
 %(4) Is robust to outliers (that is, the presence of many independent samples mixed among a few dependent samples).
 No existing test satisfies all of these properties.
-In this paper we propose a novel dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of distance correlation with nearest-neighbor testing.
-More specifically, we only use the distance correlations amongst the nearest-neighbors of each data point, yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
-We demonstrate that \Mgc~has all of the above properties.
+In this paper we propose a novel dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of generalized correlation coefficient with multiscale neighborhoods.
+More specifically, we compute the correlation for all neighborhood sizes, and find the optimal one,  yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
+We demonstrate that \Mgc~has all of the above properties via simulation and theory.
  % via a series of theoretical proofs, numerical simulations, and real data experiments.  
-\Mgc~performs as well or better than previously proposed methods in essentially all simulations settings. 
-Based on this empirical discovery, we then proved that \Mgc~indeed theoretically dominates global generalized correlation coefficients, improving upon them in finite sample nonlinear settings, which is the setting of all real data experiments. 
-We then applied \Mgc~in several real applications: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine the scale of dependency between personality and brain connectivity, and (iii) do not inflate non-existent dependence between brain activity and spurious stimulation.  
+% \Mgc~performs as well or better than previously proposed methods in essentially all simulations settings. 
+% Based on this empirical discovery, we then proved that \Mgc~indeed theoretically dominates global generalized correlation coefficients, improving upon them in finite sample nonlinear settings, which is the setting of all real data experiments. 
+We then applied \Mgc~in several real applications to: (i) detect dependence between brain disorder and hippocampus shape, (ii) determine the scale of dependency between personality and brain connectivity, and (iii) not inflate non-existent dependence between brain activity and spurious stimulation.  
 %  
 \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for both measurement types.  Both MATLAB and R code are provided here: \website.
 \end{abstract}
@@ -468,8 +470,8 @@ Note that for almost all simulations, there exist a large portion of adjacent lo
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
-\caption{Influence of neighborhood size on testing power of local correlations at $\alpha=0.05$.
-For each of the 20 panels, the abscissa denotes the number of neighbors for $X$ (the scale increases from left to right), and the ordinate denotes the number of neighbors for $Y$ (the scale increases from bottom to top). For each simulation, the sample size is $n=100$, and the dimension is determined by the largest dimension for \Mgc~to have powers exceeding the threshold $0.5$. Each different simulation yields a different surface, highlighting the importance of understanding local scale in terms of understanding the data. Note that we always exclude local correlations with $k=1$ or $l=1$ in all power / p-value heatmaps, since they should never be optimal. See Appendix~\ref{appen:mgc}.}
+\caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
+For each of the 20 panels, the abscissa and orginate denote the number of neighbors for $X$ and  $Y$, respectively. For each simulation, the sample size is $n=100$,  the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$, and the significance level is $0.05$. Each simulation yields a different multiscale power map, highlighting that \Mgc~reveals, rather than the mere existence of dependency, also its  structure  (see Appendix~\ref{appen:mgc} for details).}
 \label{f:powermaps}
 \end{figure}
 
@@ -568,7 +570,7 @@ The three above theorems taken together lead to the main theoretical result of t
     %\subfigimg[width=\linewidth]{}{../Figures/FigOutlierPower3}
   %\end{tabular}
   %\caption{\Mgc~is robust against outliers. We simulated $n=100$ data points  according to  Equation \eqref{e:outlier} with 30\%, 50\%, and 70\%  outliers (depicted across the three columns).
-  %Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps at critical level $\alpha=0.05$.  It is evident that
+  %Top row shows scatter plots of an exemplary dataset, the bottom row shows multiscale power maps at significance level $\alpha=0.05$.  It is evident that
  %  samples under the outlier model in the main text, with different fractions of outliers in the three columns.  The bottom row shows the
 	% (A) Scatter plot of samples $(X,Y)$ under the outlier model with probability $w=0.3$. Black points are dependent data, while the gray points are independent outliers.
 	% (B) Same as $A$ with $w=0.5$.
@@ -667,7 +669,7 @@ In the last experiment, \Mgc~is applied to test independence between brain voxel
 We used CPAC \cite{CPAC2015} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps.
 We then also generate an independent stimulus  by sampling from a standard normal at each time step.  Of course, the brain activity data and the stimuli are independent by construction.
 For each brain region, we test: is activity of that  brain region independent of the time-varying stimuli. We pool brain activity over all of the samples from the population.
-Any regions that are detected significant are false positives by definition.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the critical level, which we set at $0.05$ for this experiment.
+Any regions that are detected significant are false positives by definition.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the significance level, which we set at $0.05$ for this experiment.
 
 To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mbx_{\cdot i}-\mbx_{\cdot j}\|_2$, for all $(i,j)$ pairs,  where $\mbx_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$.
 For the stimulus, we similarly compute the Euclidean distance between activity at all pairs of time-steps: $b_{ij}= \|y_i - y_j\|_2$.
@@ -898,7 +900,7 @@ Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}
-\caption{Influence of neighborhood size on testing power of local correlations, for the 1-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation, the dimension is $1$, and the sample size is $60$.
+\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the 1-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation, the dimension is $1$,  the sample size is $60$, and the significance level is $0.05$.
 }
 \label{f:powermaps1}
 \end{figure}
@@ -911,39 +913,13 @@ Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.
     \subfigimg[width=\linewidth]{B}{../Figures/FigHDPermA}
   \end{tabular}
 \caption{Comparing the estimated \Mgc~powers to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each of true \Mgc, \Mcorr, and \Hhg, to the estimated \Mgc.
-(A) $1$-dimensional simulations, where $D=1$ and $n=60$.
-(B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
-The true \Mgc~powers based on known model is better than the estimated \Mgc~powers with unknown model, which are overall superior to \Mcorr~and \Hhg.\jv{I like this one the best}}
+(A) $1$-dimensional simulations, where $n=60$ and $D=1$.
+(B) High-dimensional simulations, where $n=100$ and the dimension is chosen as in Figure~\ref{f:powermaps}.
+Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribution is known, dominate to \Mcorr~and almost always improve upon \Hhg's power.}
 \label{f:simPerm}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \begin{tabular}{@{}p{0.4\linewidth}@{\quad}p{0.4\linewidth}@{}}
-	  \centering
-    \subfigimg[width=\linewidth]{A}{../Figures/Fig1DPerm} &
-    \subfigimg[width=\linewidth]{B}{../Figures/FigHDPerm}
-  \end{tabular}
-\caption{Comparing estimated \Mgc~power to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each benchmark to estimated \Mgc, and the empirical density of the difference.
-(A) $1$-dimensional simulations, where $D=1$ and $n=60$.
-(B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
-The true \Mgc~powers based on known model is better than the estimated \Mgc~powers with unknown model, which are overall superior to \Mcorr~and \Hhg.}
-% \label{f:simPerm}
-\end{figure}
 
-\begin{figure}
-  \centering
-  \begin{tabular}{@{}p{0.4\linewidth}@{\quad}p{0.4\linewidth}@{}}
-	  \centering
-    \subfigimg[width=\linewidth]{A}{../Figures/Fig1DPermB} &
-    \subfigimg[width=\linewidth]{B}{../Figures/FigHDPermB}
-  \end{tabular}
-\caption{Comparing estimated \Mgc~power to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each benchmark to estimated \Mgc, for each simulation.
-(A) $1$-dimensional simulations, where $D=1$ and $n=60$.
-(B) High-dimensional simulations, where $n=100$ and the dimension is chosen by the power threshold $0.5$ as in Figure~\ref{f:powermaps}.
-The true \Mgc~powers based on known model is better than the estimated \Mgc~powers with unknown model, which are overall superior to \Mcorr~and \Hhg.}
-% \label{f:simPerm}
-\end{figure}
 
 %\section{Performance Profiles}
 %\label{appen:profiles}

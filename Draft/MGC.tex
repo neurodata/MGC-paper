@@ -200,13 +200,6 @@ Finally, as alluded to above, checking for dependence is rarely the final step i
 % Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, w
 We desire tests that satisfy the above desiderata, both in theory as well as in extensive simulations and real data problems.
 
-% We desire tests for which we can prove they have all these properties. More specifically, we desire a consistent test for as large a class of problems as possible, meaning, we want a test whose power converges to one as sample size increases to infinity whenever the two disparate views of the data are indeed dependent, and does not converge when they are not dependent.
-% And we desire  consistent tests for as large a class of dependence structures as possible, much larger than merely linear and low-dimensionality dependence, and including all sorts of objects, including shapes and graphs and vectors.
-% In addition to asymptotic guarantees of the above, we desire superior finite sample performance, which we can assess in extensive simulations.  Finally, we desire that these tests provide guidance into our real data data scientific inquiries.
-% , both in terms of discovering novel dependencies, and providing insight into the nature of those dependencies.
-
-
-% and we can also demonstrate them both in extensive simulations and real data.
 
 There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces \cite{Allard2012}.  Our approach, Multiscale Generalized Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
 
@@ -234,8 +227,6 @@ Moreover, because these distance based tests merely require a comparison functio
 % Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given.  However, empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
 Thus, existing generalized correlation coefficient based tests therefore work well in high dimensions and low sample sizes, including in complicated domains, and are reasonably computationally efficient. But, empirically, they struggle in various non-linear settings, perhaps because they do not automatically adapt to the data.  Therefore, they also do provide insight into the nature of the dependence.
 
-
-% In a separate academic lineage, manifolds have taken center stage.  A manifold is a topological space that can be approximated by a collection of local flat Euclidean spaces.  Although nonlinear manifold learning has been around since at least the 1950s \cite{TorgersonBook}, it rose to prominence in the early 2000s when Local Linear Embedding \cite{SaulRoweis2000} and Isomap \cite{TenenbaumSilvaLangford2000} popularized the notion that computing distances between neighboring points could enable ``unfolding'' the manifold to discover its structure.  Since then, a multitude of theoretical and empirical studies have devised different nonlinear dimensionality reduction techniques \cite{LeeVerleysen2007}, most of which are essentially generalized principal components analysis \cite{ScholkopfSmolaMuller1999}.  These approaches all require choosing the neighborhood size, a parameter of paramount importance for subsequent inference. Despite of many efforts to numerically determine the parameter, to our knowledge, no approach provides a principally justified method for choosing the neighborhood.
 
 
 
@@ -314,11 +305,7 @@ Column 5 (Top): The empirical null distribution for \Mcorr, as well as our newly
 (Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scale and understand the structure of dependence.
 Clearly, 
 Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that acheive nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
-% demonstrating that the global scale (equivalent to \Mcorr), achieves significantly lower power / higher p-value than \Mgc, which achieves essentially perfect power and significant p-value in this highly nonlinear dependence setting, as well as reveals which local scales have high power / low p-value, a novel property for dependence tests.
-% \Mgc~successfully identifies the optimal local structure for correlation testing, and the resulting entry-wise products are dominantly non-negative, which causes $\Mgc(X,Y)$ to be much larger than $0$ and the p-value to be significant, as shown in column 5.
-% Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is shown as a dark blue point with many adjacent scales being very close to optimal (light blue points). The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as the distribution of the permuted test statistics.
 }
-% Column 5: The top panel is the testing powers of all local correlations, where the optimal scale is $(k^{*},l^{*})=(4,4)$ with many adjacent scales being very close to optimal. The global correlation has a power of $0.1$ while \Mgc~has power $1$. The bottom panel shows $\Mgc(X,Y)$ and $\Mcorr(X,Y)$ as dark and gray dots on the x-axis, as well as density of the respective permuted test statistics. }
 \label{f:schematic}
 \end{figure}
 %
@@ -387,31 +374,6 @@ Except the independent clouds (setting 20), for which all methods yield power $0
 \end{figure}
 
 
-%\subsubsection{Low-Dimensional Simulation Experiments}
-%\label{numer1}
-
-%We first experiment on the 20 different $1$-dimensional scenarios, that is, for each scenario, both \mbx~and \mby~are 1-dimensional. To observe how fast the testing power of each method converges to $1$ under each dependency, we plot the testing power as we vary sample size from $5$ to $100$  (Figure~\ref{f:1D}).
-
-%It is immediately clear that in all 20 scenarios for all sample sizes, \Mgcm~performs as well or better than its global counterpart \Mcorr, and this is nearly true comparing \Mgcm~to \Hhg~as well. More specifically, for dependencies that are close to linear (type 1-5), \Mgcm~achieves the same power as \Mcorr~(as it should according to theory), both of which achieve a power as high or higher \Hhg, for all sample sizes.
-%For nearly all of the remaining nonlinear dependencies (type 6-19),  \Mgcm~also does as well or better than its global counterparts.  In these settings,  \Mgcm~often performs significantly better than its local counterpart, \Mcorr.
-%For the independent clouds,  the empirical power of all the tests, including all \Mgc~tests, are indeed around the type $1$ error level, meaning no false signal is detected.
-
-
-%\begin{figure}[htbp]
-%\includegraphics[width=1.0\textwidth]{../Figures/Fig1DPower}
-%\caption{
-%Powers of different methods for $20$ different $1$-d dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
-%Each panel shows empirical testing power on the absicca at a significant level $\alpha=0.05$, and sample size on the ordinate.
-%\Mgcm~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on nearly all problems.}
-%\label{f:1D}
-%\end{figure}
-
-
-%\subsubsection{High-Dimensional Simulation Experiments}
-%\label{numer2}
-
-%In this section we consider the same $20$ functions as in Section~\ref{numer1}, but increase the dimensionality while keeping sample sizes fixed  at $n=100$.
-%Note that for all dependencies, the dimensionality of \mbx~is increasing, but the dimensionality of \mby~increases in only a subset of the settings (see Appendix \ref{appen:function} for details).
 
 Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare  our novel test, \Mgc, with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
 % 
@@ -429,12 +391,6 @@ The above results demonstrate that converting \Mcorr, a global generalized corre
 % 
 Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc.  The top row shows for each of the $20$ settings, with both \mbx's and \mby's in 1-dimension with some noise, the average power for different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but the average power is for different dimensionality of \mbx's while the sample size is fixed at $n=100$ as in Figure~\ref{f:nDAll}.  In all $40$ settings, both low and increasing dimensions, and both fixed and increasing sample sizes, multiscale methods always improve on or stay the same, and never decrease power. 
 
-
- % 
-% To better summarize the advantages of global versus local, Figure~\ref{f:pp} shows how the powers change from each global correlation to its \Mgc~implementation, for each dependency in Figure~\ref{f:nD}. Indeed, \Mgc~always improves over its global correlation, regardless of the global correlation that is being used. Note that the actual powers for \Dcorr, \Mantel~, and their \Mgc~variants are included in Appendix \ref{appen:function}, where the same conclusion for \Mgc~superiority still hold. We also present in Appendix \ref{appen:function} an additional simulation setting with increasing sample size and fixed dimensionality to observe that the powers of \Mgc~converge to $1$ faster than all the benchmarks for nearly all dependencies.
-
-
-%\subsubsection{\Mgc~improves finite sample performance of all global generalized correlation coefficient based tests}
 \begin{figure}
   \centering
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
@@ -601,7 +557,6 @@ We consider two dependence tests, one for each hemisphere: is hippomcapus shape 
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
 % The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance.
 Figure \ref{f:real}A provides the p-value curves for \Mgc~for $k=2,\ldots,n$ at $l=4$  (we only show $l=4$ because the other curves look similar). Many local scales yield significant p-values (around $0.01$) for both hemispheres, whereas the global scale does not detect a significant dependence in either hemisphere. None of the previously proposed dependence tests under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) were able to detect dependence for both hemispheres (not shown).
-% , which is the reason that \Mgc~can successfully identify the signals in both tests, and implies a similar local dependency structure.
 
 
 % \begin{table*}[!t]
@@ -687,9 +642,10 @@ In contrast,  standard methods for fMRI analysis, such as generalized linear mod
 \label{conclu}
 
 We propose multiscale generalized correlation to test independence between multiple measurement types.
-We demonstrate via simulations that \Mgc~empirically performs well in linear and non-linear settings, regardless of the dimension, sample size, and noise statistics.  Moreover, it efficiently adapts to the data, to provide not just a valid p-value, but also a picture of which scales contain the dependence structure. We then prove that it dominates global generalized correlation coefficients in finite samples, the first finite sample theorems for dependence testing that we are aware of.  
+We demonstrate via simulations that \Mgc~empirically performs well in linear and non-linear settings, regardless of the dimension, sample size, and noise statistics.  Moreover, it efficiently adapts to the data, to provide not just a valid p-value, but also a map of which scales contain the dependence structure. We then prove that it dominates global generalized correlation coefficients in finite samples.
+% , the first finite sample theorems for dependence testing that we are aware of.  
  % achieves optimal power asymptotically no matter what the dependence structure is.  
-In real data experiments \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeeded, and did not falsely detect signals when there were none.
+In real data experiments \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeeded, and does not falsely detect signals when there were none.
 
 
 Several other approaches to dependence detection are worth mentioning.
@@ -701,28 +657,20 @@ Our \Mgc~can be thought of as a regularized, or sparsified variant of generalize
 
 
 
-% their actual test is an approximation with unknown error bound relative to their theoretical claims.
-
-% Although our definition of local correlation coefficient is fast to implement, generally applicable to any global correlation, and achieves good testing powers, there are multiple ways to combine neighborhood information into a particular global correlation coefficient. So it is possible that the testing performance may be further improved, by tailoring a different centering or ranking scheme for a given global correlation, or by coming up with a different rank-truncated pairwise comparison. Overall, a more thorough investigation on the finite-sample performance of \Mgc, its possible extensions, and other existing methods, are much needed in the future to enhance our understanding of dependence discovery.
-
 There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scale. 
 While in this work we proved that there exist scales that improve upon the global scale, and that many local scales outperform the global scale.
 Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hhg~and \Mcorr.  
 
 
-% Furthermore, the optimal scale for \Mgc~is also of interest, such as how to more accurately select the local scale under unknown models for a particular inference task, and the implication of the optimal scale on the geometry of underlying dependency, etc. 
-
 Second, as highlighted above, \Mgc~requires a pair of metrics, one for each data type. In this work we selected such metrics using domain knowledge, and mitigated the potential inopportune choice of metric via locality tuning.  If we were able to choose the optimal metric for a given dataset, this would possibly obviate the need for locality, and further improve power.\footnote{Skezely considered changing the exponent of the metric, say, from squared error to absolute error, in an attempt to search for the optimal metric. Alas, searching over the optimal exponent proved tedious and relatively unsatisfactory (personal communications).  }
 Perhaps more likely, we can combine a search over metrics and scales to obtain even better performing results. 
-% Another direction we are investigating is how to choose the optimal metric for given data. 
 
 Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work has demonstrated efficient algorithms that are linear in sample size \cite{Huo2016} for one-dimensional data.  Although it is not clear how to extend this approach to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even upon subsampling the data points significantly (not shown), suggesting that subsampling data or comparisons  could yield a linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using hard disk space in a streaming fashion to both speed up computations for big data, and enable storing matrices larger than fit in RAM.
 
 Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},  two-sample tests \cite{Szekely2004}, and feature selection \cite{LiZhongZhu2012,Zhong2015}.   
-Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the locality of dependence.
+Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the scales of dependence which can easily be employed in such problems.
 
 
-% Beyond the dependence testing framework, it may also be promising to pursue the applications of \Mgc~and local correlations in other closely-related subjects, such as dimension reduction, classification, other testing and prediction domains, etc.
 
 
 \bibliographystyle{Science}

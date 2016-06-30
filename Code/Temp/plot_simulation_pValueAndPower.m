@@ -59,7 +59,8 @@ for r=1:rep;
 end
 pAll=1-pAll;
 
-figure('units','normalized','position',[0 0 1 1])
+h=figure(type);
+figure(gcf,'units','normalized','position',[0 0 1 1])
 ax=subplot(1,2,1);
 ph=pAll(2:end,2:end)';
 ph(ph<=eps)=0.0005;
@@ -112,3 +113,8 @@ ylim([1 nn-1]);
 title('Multiscale Power Map')
 h=suptitle(CorrSimuTitle(type));
 set(h,'FontSize',32);% for 1-Dimensional Simulations'));
+
+%% 
+F.fname=strcat(rootDir, 'Figures/Aux/',type,'_n', n,'_d', dim);
+F.wh=[8 5]*2;
+print_fig(gcf,F)

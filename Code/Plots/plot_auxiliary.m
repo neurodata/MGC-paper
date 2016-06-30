@@ -37,7 +37,7 @@ end
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 cc=1;
-fontSize=20;
+fontSize=18;
 mkSize=20;
 sameBar=0;
 
@@ -62,6 +62,7 @@ set(gcf,'units','normalized','position',[0 0 1 1])
 
 %%  Col 1
 ax=subplot(s,t,t+1);
+% set(ax, 'Position', [0.05, 0.37, 0.92, 0.27])
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 % xlim([-1.2,1.2]);
@@ -231,7 +232,7 @@ set(ax,'position',pos2);
 axis('square')
 
 %% Col3 Center
-ax=subplot(s,t,t+3);
+ax=subplot(s,t,t+2);
 MH=ceil(max(max(mcorrH(2:end,2:end))));
 mH=floor(min(min(mcorrH(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
@@ -279,8 +280,8 @@ caxis([0 1])
 h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
 set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
-xlabel('# of Neighbors for X','FontSize',16)
-ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
+xlabel('# of Neighbors for X','FontSize',fontSize)
+ylabel('# of Neighbors for Y','FontSize',fontSize) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
 ylim([1 n-1]);
 
@@ -306,7 +307,7 @@ ax=subplot(s,t,t+t);
 kmin=2;
 hold on
 ph=pAll(2:end,2:end)';
-ph(ph<=eps)=0.0005;
+%ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
@@ -335,7 +336,7 @@ set(ax,'position',pos2);
 %     %set(h,'FontSize',16,'location','southoutside');
 %set(gca,'XTick',[]); % Remove x axis ticks
 %set(gca,'YTick',[]); % Remove y axis ticks
-title('Multiscale P-Value Map','FontSize',16);
+title('Multiscale P-Value Map','FontSize',fontSize);
 %colorbar('location','westoutside');
 axis('square')
 
@@ -375,12 +376,12 @@ end
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca);
 b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',glob);
 ylim([0 y1+25]);
-set(a,'FontSize',17);
-set(b,'FontSize',17);
+set(a,'FontSize',fontSize);
+set(b,'FontSize',fontSize);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fontSize);
 ylabel('Density','FontSize',fontSize);
-title('Test Statistics Distributions','FontSize',16);
+title('Test Statistics Distributions','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
@@ -396,5 +397,5 @@ l
 
 %%
 F.fname=strcat(pre2, 'A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
-F.wh=[8 5]*2;
+F.wh=[10 6]*2;
 print_fig(gcf,F)

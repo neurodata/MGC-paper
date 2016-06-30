@@ -60,7 +60,7 @@ end
 pAll=1-pAll;
 
 h=figure(type);
-figure(gcf,'units','normalized','position',[0 0 1 1])
+set(h,'units','normalized','position',[0 0 1 1]);
 ax=subplot(1,2,1);
 ph=pAll(2:end,2:end)';
 ph(ph<=eps)=0.0005;
@@ -115,6 +115,6 @@ h=suptitle(CorrSimuTitle(type));
 set(h,'FontSize',32);% for 1-Dimensional Simulations'));
 
 %% 
-F.fname=strcat(rootDir, 'Figures/Aux/',type,'_n', n,'_d', dim);
+F.fname=strcat(rootDir, 'Code/Temp/',num2str(type),'_n', num2str(n),'_d', num2str(dim));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

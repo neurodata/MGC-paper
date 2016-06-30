@@ -307,7 +307,7 @@ ax=subplot(s,t,t+t);
 kmin=2;
 hold on
 ph=pAll(2:end,2:end)';
-%ph(ph<=eps)=0.0005;
+ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
@@ -373,8 +373,8 @@ if pAll(k,l)<0.001;
 else
     txt2 = {'MGC';['p = ' num2str(pAll(k,l))]};
 end
-a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca);
-b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',glob);
+a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob);
+b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',loca);
 ylim([0 y1+25]);
 set(a,'FontSize',fontSize);
 set(b,'FontSize',fontSize);

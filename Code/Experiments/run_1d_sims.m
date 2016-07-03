@@ -1,4 +1,4 @@
-function run_1d_sims(rep1,rep2)
+function run_1d_sims(rep1,rep2,type)
 % run 1-dimensional simulations
 
 %%% File path searching
@@ -15,9 +15,12 @@ end
 if nargin < 2
     rep2=10000; % number of MC replicates for power computation
 end
+if nargin < 3
+    type=1:20; 
+end
 
 %Ind
 n=100;lim=20;dim=1;
-for i=1:20
+for i=type
     CorrIndTest(i,n,dim,lim,rep1,rep2); % the output are saved to ../../data/results
 end

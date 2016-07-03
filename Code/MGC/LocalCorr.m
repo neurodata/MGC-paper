@@ -13,6 +13,12 @@ end
 n=size(X,1);
 disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
 
+rk=0;
+if rk==1
+    X=disRank(1:n,1:n)-1;
+    Y=disRank(1:n,n+1:2*n)-1;
+end
+
 % depending on the choice of the global correlation, properly center the
 % distance matrices
 A=Centering(X,option);
@@ -26,29 +32,32 @@ function [A]=Centering(X,option)
 % An auxiliary function that properly centers the distance matrix X,
 % depending on the choice of global corr.
 n=size(X,1);
-if option==3
-    % centering for Mantel
-    EX=sum(sum(X))/n/(n-1);
-    A=X-EX;
+
+% centering for dcorr / mcorr / Mantel
+switch option
+    case 1
+        EX=repmat(mean(X,1),n,1);
+        %EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X)); % this is original double-centering
+    case 2
+        EX=repmat(sum(X,1)/(n-1),n,1);
+        %EX=repmat(sum(X,1)/n,n,1);
+        %EX=EX+X/n;
+    case 3
+        EX=sum(sum(X))/n/(n-1);
+end
+A=X-EX;
+
+% for mcorr or Mantel, exclude the diagonal entries
+if option==2 || option==3
+    %%%   meanX=sum(sum(X))/n^2;
     for j=1:n
         A(j,j)=0;
-    end
-else
-    % centering for dcorr / mcorr, which uses single centering rather than
-    % the original double centering
-    A=X-repmat(mean(X,1),n,1);
-    %A=X-repmat(mean(X,1),n,1)-repmat(mean(X,2),1,n)+mean(mean(X)); % this is original double-centering
-    
-    % for mcorr, further adjust the centered matrices to remove high-dimensional bias
-    if option==2
-        A=A-X/n;
-        %%%   meanX=sum(sum(X))/n^2;
-        for j=1:n
-            A(j,j)=0;
-            %%% A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;  % the original diagonal modification of mcorr
-        end
+        %%% A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;  % the original diagonal modification of mcorr
     end
 end
+
+% A(A<0)=-1;
+% A(A>0)=1;
 
 function [corrXY,varX,varY]=LocalComputation(A,B,RX,RY)
 % An auxiliary function that computes all local correlations simultaneously

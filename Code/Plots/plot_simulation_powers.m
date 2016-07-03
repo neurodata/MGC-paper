@@ -94,7 +94,7 @@ lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -159,7 +159,7 @@ lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{D}','MGC_{M}','MGC_{P}','Dcorr','Mcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

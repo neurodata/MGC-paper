@@ -1,4 +1,4 @@
-function run_hd_sims(rep1,rep2)
+function run_hd_sims(rep1,rep2,type)
 % run high-dimensional simulations
 % the output are saved to ../../data/results
 
@@ -16,38 +16,28 @@ end
 if nargin < 2
     rep2=10000; % number of MC replicates for power computation
 end
+if nargin < 3
+    type=1:20;
+end
 
-n=100; dim=1000; lim=20; 
-CorrIndTestDim(1,n,dim,lim,rep1,rep2);
-CorrIndTestDim(2,n,dim,lim,rep1,rep2);
-CorrIndTestDim(3,n,dim,lim,rep1,rep2);
-dim=20;lim=20;
-CorrIndTestDim(4,n,dim,lim,rep1,rep2);
-dim=10;lim=10;
-CorrIndTestDim(5,n,dim,lim,rep1,rep2);
-dim=40;lim=20;
-CorrIndTestDim(6,n,dim,lim,rep1,rep2);
-CorrIndTestDim(7,n,dim,lim,rep1,rep2);
-CorrIndTestDim(8,n,dim,lim,rep1,rep2);
-dim=40;lim=20;
-CorrIndTestDim(9,n,dim,lim,rep1,rep2);
-dim=100;
-CorrIndTestDim(10,n,dim,lim,rep1,rep2);
-
-
-n=100; dim=20; lim=20; 
-CorrIndTestDim(11,n,dim,lim,rep1,rep2);
-CorrIndTestDim(12,n,dim,lim,rep1,rep2);
-CorrIndTestDim(13,n,dim,lim,rep1,rep2);
-dim=40; lim=20;
-CorrIndTestDim(14,n,dim,lim,rep1,rep2);
-CorrIndTestDim(15,n,dim,lim,rep1,rep2);
-dim=10;lim=10;
-CorrIndTestDim(16,n,dim,lim,rep1,rep2);
-dim=10;lim=10;
-CorrIndTestDim(17,n,dim,lim,rep1,rep2);
-dim=1000;lim=20;
-CorrIndTestDim(18,n,dim,lim,rep1,rep2);
-dim=100;
-CorrIndTestDim(19,n,dim,lim,rep1,rep2);
-CorrIndTestDim(20,n,dim,lim,rep1,rep2);
+n=100;
+for i=type
+    switch i
+        case {1,2,3,18}
+            dim=1000;
+        case {4,11,12,13}
+            dim=20;
+        case {5,16,17}
+            dim=10;
+        case {6,7,8,9,14,15}
+            dim=40;
+        case {10,19,20}
+            dim=100;
+    end
+    if i==15 ||i==16||i==17
+        lim=10;
+    else
+        lim=20;
+    end
+    CorrIndTestDim(i,n,dim,lim,rep1,rep2);
+end

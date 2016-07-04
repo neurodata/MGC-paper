@@ -204,9 +204,8 @@ We desire tests that satisfy the above desiderata, both in theory as well as in 
 There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces \cite{Allard2012}.  Our approach, Multiscale Generalized Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
 
 Interpoint pairwise comparison matrices have been used for over 100 years for various statistical purposes \cite{Maa1996}. Perhaps one of the earliest examples of using them for dependence testing comes from  Karl Pearson \cite{Pearson1895}, who created  a special case of something subsequently called a ``generalized correlation coefficient'' \cite{KendallBook}.
-Generalized correlation coefficients start with $n$ pairs of observations $\{(\mbx_i,\mby_i),i=1,\ldots,n\}$, where $\mbx$'s and $\mby$'s both might be vectors of arbitrary dimensions, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mbx_i,\mbx_j)$, and let $b_{ij}=\delta_y(\mby_i,\mby_j)$.  
-% Specifically, let $a_{ij}$ to be \emph{some} function of $\mbx_i$ and $\mbx_j$  (for example, their Euclidean distance), and define $b_{ij}$ similarly for pairs $\mby_i$ and $\mby_j$. 
-Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $X=\{\mbx_{i}\}$ and $Y=\{\mby_{i}\}$, respectively.  
+Generalized correlation coefficients start with $n$ pairs of observations $\{(\mb{x}_i,\mb{y}_i),i=1,\ldots,n\}$, where $\mb{x}$'s and $\mb{y}$'s both might be vectors of arbitrary dimensions, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$, and let $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
+Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $X=\{\mb{x}_{i}\}$ and $Y=\{\mb{y}_{i}\}$, respectively.  
 Without loss of generality, assuming $A$ and $B$ have zero mean, a generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
@@ -214,14 +213,14 @@ Without loss of generality, assuming $A$ and $B$ have zero mean, a generalized c
 \end{equation}
 where $z$ is proportional to standard deviations of $A$ and $B$, that is $z=n^2\sigma_a \sigma_b$.
 In words, $\G$ is the sample correlation across \emph{pairwise comparisons} between the data matrices $X$ and $Y$, rather than the individual data samples.  
-% That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mbx~and \mby~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.
+% That is, if we define $A$ and $B$ as the interpoint comparison matrices for \mb{x}~and \mb{y}~respectively, then $\G$ is simply the correlation between elements of $A$ and $B$.
 $\G$ has many well known special cases historically, including Pearson's  \cite{Pearson1895}, Spearman's \cite{Spearman1904},  Kendall's \cite{KendallBook}, and Mantel's correlation \cite{Mantel1967}. % which is widely used in biology and ecology.
-% Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel~coefficient \cite{Mantel1967}, a widely-used method in biology and ecology, defines $a_{ij}=||\mbx_i-\mbx_j||_{2}$.
+% Three special cases of $\G$ are particularly popular for independence testing.  First, the \Mantel~coefficient \cite{Mantel1967}, a widely-used method in biology and ecology, defines $a_{ij}=||\mb{x}_i-\mb{x}_j||_{2}$.
 % \Mantel, however, does not have any theoretical support for being a generally consistent test.
 Recently, Szekely et al. \cite{SzekelyRizzoBakirov2007} extended these approaches, letting $\delta_x$ and $\delta_y$ to be the Euclidean distance, followed by subtracting the row means and column means, resulting in ``doubly centered'' distances.  Impressively, they proved that this ``distance correlation'' (\Dcorr) statistic is a consistent test for independence for any joint distribution (under suitable regularity conditions), that is, the \Dcorr's power approaches $1$ as sample size approaches infinity, for any joint distribution of finite dimension and finite second moments.
 % \Dcorr, however, breaks down as the dimensionality of the data increases.  
 % By adjusting the high-dimensional bias of \Dcorr, 
-Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $\mbx_i$ and $\mby_i$ increase to infinity as well.
+Szekely et al. \cite{SzekelyRizzo2013a} further proposed a modified version called \Mcorr, which they prove to be consistent even as the dimensions of $\mb{x}_i$ and $\mb{y}_i$ increase to infinity as well.
 Moreover, because these distance based tests merely require a comparison function for both $X$ and $Y$, Lyons was able to prove that they are consistent even in general metric spaces satisfying certain properties, including certain networks, shapes, and other complicated spaces  \cite{Lyons2013}.
 
 % Thus, \Dcorr and \Mcorr are guaranteed to work well for most dependencies, and even in complicated domains, as long as sufficient sample size are given.  However, empirically, existing generalized correlation coefficient based tests often struggle in various non-linear, high-dimensional, and noisy settings, which require a very large sample size to achieve good testing power. But securing sufficient observations is often costly in many domains, which also impairs the computational efficiency of global correlations. 
@@ -251,12 +250,12 @@ Thus, a gap remains in the literature: a dependence test that has all of the des
 \subsection*{Multiscale Generalized Correlation}
 \label{s:mgc}
 
-All dependence tests start from the same setting: we observe $n$ pairs of observations $\{(\mbx_i,\mby_i)\}$, and we first desire to know whether the \mbx's and \mby's are independent of one another, and if so, we then desire to understand the nature of that dependence structure.
+All dependence tests start from the same setting: we observe $n$ pairs of observations $\{(\mb{x}_i,\mb{y}_i)\}$, and we first desire to know whether the \mbx's and \mbx's are independent of one another, and if so, we then desire to understand the nature of that dependence structure.
 
 
 Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
-Specifically, let $R(a_{ij})$  be the ``rank'' of $\mbx_i$ relative to $\mbx_j$, that is, $R(a_{ij})=k$ if $\mbx_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mbx_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mbx_i$~and any neighborhood size $l$ around each $\mby_i$, we define the rank-truncated pairwise comparisons:
+Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, that is, $R(a_{ij})=k$ if $\mb{x}_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
 \begin{equation}
 \label{localCoef2}
     \mt{a}_{ij}^k=
@@ -317,7 +316,7 @@ Third, having computed all local statistics, we require a method for choosing th
 
 Computing the p-values from the test statistic is  straightforward.
 % , thanks to the advent of permutation testing \cite{GoodPermutationBook}.  
-Specifically, we can permute the labels of either the $\mbx_i$'s or the $\mby_i$'s, and then compute the \Mgc~statistics on the permuted data \cite{GoodPermutationBook}.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so many times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important.
+Specifically, we can permute the labels of either the $\mb{x}_i$'s or the $\mb{y}_i$'s, and then compute the \Mgc~statistics on the permuted data \cite{GoodPermutationBook}.  By permuting the labels, we have rendered the two different views of the data independent.  Doing so many times yields an empirical estimate of the null distribution, which we can use to compute the critical value and p-value. This procedure is somewhat time consuming, which makes computing the test statistics for all neighborhoods efficiently even more important.
 
  % (see Pseudocode \ref{alg:all_scales} in Appendix \ref{appen:algorithms} for details on our permutation test).
 
@@ -359,14 +358,14 @@ polynomial   (6-12),
 trigonometric (13-17),
 uncorrelated but nonlinearly dependent  (18-19),
 and an independent relationship (20).
-Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$ and $\delta_y$ both as the Euclidean distance, that is, $\delta_x(\mbx_i,\mbx_j) = \|\mbx_i - \mbx_j\|_{2}$, and the same for $\delta_y$.
+Details for each setting are given in Appendix \ref{appen:function}, with a visualization of each dependency shown in Supplementary Figure~\ref{f:dependencies}. For all $20$ settings, we define  $\delta_x$ and $\delta_y$ both as the Euclidean distance, that is, $\delta_x(\mb{x}_i,\mb{x}_j) = \|\mb{x}_i - \mb{x}_j\|_{2}$, and the same for $\delta_y$.
 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDPower}
 \caption{Powers of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Pseudocode \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  We used $10$,$000$ Monte-Carlo replicates to estimate the null power, and an additional $2$,$000$  replicates to estimate the optimal scale.
 Each panel shows empirical testing power at a significant level $\alpha=0.05$
-versus the dimensionality of $\mbx$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
+versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
 Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for all settings and all dimensions, 
 % the previous state of the art approaches for all sample sizes on all problems.
 }
@@ -400,7 +399,7 @@ Average powers slopegraphs comparing tests by global correlation and the respect
 \label{f:pp}
 \end{figure}
 
-%From Figure~\ref{f:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr~/ \Mcorr~in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgcp~perform similarly as the other two \Mgc~implementations.
+%From Figure~\ref{f:pp}(A)(B), \Mgc~is clearly more reliable than all benchmarks throughout the $1$-dimensional simulations regardless of the actual implementation. \Hhg~is slightly better than \Dcorr~/ \Mcorr~in the performance profiles, because there are more nonlinear simulations than linear in the $20$ dependencies, and \Hhg~has a larger advantage for nonlinear dependency than its disadvantage in linear dependency; the global \Mantel~test has the lowest performance profile, but utilizing local correlations makes \Mgcp~perform similarly as the other two \Mgc~algorithms.
 
 
 
@@ -434,8 +433,8 @@ For each of the 20 panels, the abscissa and orginate denote the number of neighb
 \subsection*{\Mgc~Theoretically Dominates its Global Counterparts}
 \label{s:theory}
 
-The formal testing scenario is as follows: we observe $n$ pairs of observations, $\{(\mbx_i,\mby_i)\}$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
-% suppose two data sets $X=[\mbx_{1},\cdots, \mbx_{n}] \in \Real^{D \times n}$ and $Y=[\mby_{1},\cdots, \mby_{n}] \in \Real^{D_{y} \times n}$ are given, where $n$ is the sample size, $D$ and $D_{y}$ are the dimensions of each data set. Under the classical hypothesis testing framework, $\mbx_{i}, i=1,\ldots,n$ are assumed identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of the random variable $\mb{x}$; similarly $\mby_{i}$ are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
+The formal testing scenario is as follows: we observe $n$ pairs of observations, $\{(\mb{x}_i,\mb{y}_i)\}$, and we desire to know whether the \mbx's are independent of the \mby's.  To cast this problem as a statistical inference query requires specifying a statistical model, that is, a collection of possible distributions from which we may assume the data arise.  To make the investigation as general as possible, we consider the largest possible set of distributions: any possible joint distribution $f_{xy}$. If \mbx~and \mby~were independent, then it would follow that $f_{xy}=f_x f_y$; in other words, for independent data, the joint distribution is equal to the product of the marginals.  Therefore, we have the following hypothesis testing scenario:
+% suppose two data sets $X=[\mb{x}_{1},\cdots, \mb{x}_{n}] \in \Real^{D \times n}$ and $Y=[\mb{y}_{1},\cdots, \mb{y}_{n}] \in \Real^{D_{y} \times n}$ are given, where $n$ is the sample size, $D$ and $D_{y}$ are the dimensions of each data set. Under the classical hypothesis testing framework, $\mb{x}_{i}, i=1,\ldots,n$ are assumed identically independently distributed (iid) as $\mb{x} \sim f_{x}$, where $f_{x}$ denotes the distribution of the random variable $\mb{x}$; similarly $\mb{y}_{i}$ are independent realizations of $\mb{y} \sim f_{y}$. Then the null and the alternative hypothesis for testing independence are
 \begin{align*}
 & H_{0}: f_{xy}=f_{x}f_{y},\\
 & H_{A}: f_{xy} \neq f_{x}f_{y}.
@@ -507,7 +506,7 @@ The three above theorems taken together lead to the main theoretical result of t
 % $ = \mb{1}\T\mb{1}$, $\begin{bmatrix} 1&1\\ 1&1 \end{bmatrix}$,
  %and $\Sigma_{2}$ is the identity matrix (ones on the diagonal and zero elsewhere).
  % $ = \begin{bmatrix} 1&0\\ 0&1 \end{bmatrix}$.
- %The above mixture implies that \mbx~and \mby~are  linearly correlated with probably $w$, and \mbx~and \mby~are independent with probability $(1-w)$.
+ %The above mixture implies that \mb{x}~and \mb{y}~are  linearly correlated with probably $w$, and \mb{x}~and \mb{y}~are independent with probability $(1-w)$.
 %The top row of Figure~\ref{f:outliers} shows exemplar datasets with 30\%, 50\%, and 70\% outliers; the bottom row shows the multiscale power maps for each.
 % at each $w$ by the same procedure as in section~\ref{numer1}.
 
@@ -624,7 +623,7 @@ We then also generate an independent stimulus  by sampling from a standard norma
 For each brain region, we test: is activity of that  brain region independent of the time-varying stimuli. We pool brain activity over all of the samples from the population.
 Any regions that are detected significant are false positives by definition.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the significance level, which we set at $0.05$ for this experiment.
 
-To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mbx_{\cdot i}-\mbx_{\cdot j}\|_2$, for all $(i,j)$ pairs,  where $\mbx_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$.
+To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region, we compute $a_{ij}=\|\mb{x}_{\cdot i}-\mb{x}_{\cdot j}\|_2$, for all $(i,j)$ pairs,  where $\mb{x}_{\cdot i}$ denotes the observation vector of all subjects at time-step $i$.
 For the stimulus, we similarly compute the Euclidean distance between activity at all pairs of time-steps: $b_{ij}= \|y_i - y_j\|_2$.
 Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 % From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc.
@@ -697,156 +696,164 @@ and the XDATA program of the Defense Advanced Research Projects Agency (DARPA) a
 \section{Simulation Functions}
 \label{appen:function}
 
-We list the distributions of the $20$ dependencies used in the simulations, which are based on a combination of the simulations used in \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add noise, and adding a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes.
+This section provides the $20$ different dependency functions used in the simulations.  We used the essentially exact same settings as previous publications to ensure as fair comparison \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add noise, and adding a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes. We also added a few additional settings.
 
-For each sample $\mbx \in \Real^{D}$, we denote $\mbx_{[d]}, d=1,\ldots,D$ as the $d$th dimension of \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{D}$ is a decaying vector with $w_{[d]}=1/d$ for each $d$, such that $w\T \mbx$ is a 
+For each sample $\mb{x} \in \Real^{D}$, we denote $\mb{x}_{[d]}, d=1,\ldots,D$ as the $d^{th}$ element of the vector  \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{D}$ is a decaying vector with $w_{[d]}=1/d$ for each $d$, such that $w\T \mb{x}$ is a 
 % $1$-dimensional 
-weighted summation of all dimensions of \mbx. %, which equals \mbx~if $D=1$.
+weighted summation of all dimensions of \mbx. %, which equals \mb{x}~if $D=1$.
 Furthermore, $\mc{U}(a,b)$ denotes the uniform distribution on the interval $(a,b)$, $\mc{B}(p)$ denotes the Bernoulli distribution with probability $p$, $\mc{N}(\mu,{\Sigma})$ denotes the normal distribution with mean ${\mu}$ and covariance ${\Sigma}$, 
 $u$ and $v$ represent realizations from some auxiliary random variables, $c$ is a scalar constant to control the noise level (which equals $1$ for 1-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise.
 
-For all of the below equations, $(\mbx,\mby) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(\mbx,\mby)$, and define each of the above distributions, and any additional auxiliary distributions.
+For all of the below equations, $(\mb{x},\mb{y}) \overset{iid}{\sim} f_{xy} = f_{y|x} f_x$. For each setting, we provide the space of $(\mb{x},\mb{y})$, and define $f_{y|x}$ and $f_x$, as well as any additional auxiliary distributions.
 
 \setcounter{equation}{0}
 \begin{compactenum}
-\item Linear $(\mbx,\mby) \in \Real^{D} \times \Real$,
+\item Linear $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$,
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby &=w\T \mbx+c\epsilon.
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y} &=w\T \mb{x}+c\epsilon.
 \end{align*}
-\item Cubic $(\mbx,\mby) \in \Real^{D} \times \Real$:
+\item Cubic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D}, \\
-\mby &=128(w\T \mbx-\tfrac{1}{3})^3+48(w\T \mbx-\tfrac{1}{3})^2-12(w\T \mbx-\tfrac{1}{3})+80c\epsilon.
+\mb{x} &\sim \mc{U}(-1,1)^{D}, \\
+\mb{y} &=128(w\T \mb{x}-\tfrac{1}{3})^3+48(w\T \mb{x}-\tfrac{1}{3})^2-12(w\T \mb{x}-\tfrac{1}{3})+80c\epsilon.
 \end{align*}
-\item Exponential $(\mbx,\mby) \in \Real^{D} \times \Real$:
+\item Exponential $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
-\mbx &\sim \mc{U}(0,3)^{D}, \\
-\mby &=exp(w\T \mbx)+10c\epsilon.
+\mb{x} &\sim \mc{U}(0,3)^{D}, \\
+\mb{y} &=exp(w\T \mb{x})+10c\epsilon.
 \end{align*}
-\item Step Function $(\mbx,\mby) \in \Real^{D} \times \Real$:
+\item Step Function $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby &=\mb{I}(w\T \mbx>0)+\epsilon,
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y} &=\mb{I}(w\T \mb{x}>0)+\epsilon,
 \end{align*}
-where $\mb{I}$ is the indicator function.
-\item Joint normal $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}&I_{D} \end{bmatrix}$. Then let $v \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{D})$,
+where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever $z$ true and zero otherwise.
+\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}&I_{D} \end{bmatrix}$. Then let $v \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
-\mbx &\sim \mc{N}(0, \Sigma),\\
-\mby &=v+0.5c\epsilon.
+\mb{x} &\sim \mc{N}(0, \Sigma),\\
+\mb{y} &=v+0.5c\epsilon.
 \end{align*}
-\item Quadratic $(\mbx,\mby) \in \Real^{D} \times \Real$:
+\item Quadratic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby&=(w\T \mbx)^2+0.5c\epsilon.
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y}&=(w\T \mb{x})^2+0.5c\epsilon.
 \end{align*}
-\item W Shape $(\mbx,\mby) \in \Real^{D} \times \Real$:  $u \sim \mc{U}(-1,1)^{D}$,
+\item W Shape $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:  $u \sim \mc{U}(-1,1)^{D}$,
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby&=4\left[ \left( (w\T \mbx)^2 - \tfrac{1}{2} \right)^2 + w\T u/500 \right]+0.5c\epsilon.
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y}&=4\left[ \left( (w\T \mb{x})^2 - \tfrac{1}{2} \right)^2 + w\T u/500 \right]+0.5c\epsilon.
 \end{align*}
-\item Two Parabolas $(\mbx,\mby) \in \Real^{D} \times \Real$: $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
+\item Two Parabolas $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $\epsilon \sim \mc{U}(0,1)$, $u \sim \mc{B}(0.5)$,
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby&=\left( (w\T \mbx)^2  + 2c\epsilon\right) \cdot (u-\tfrac{1}{2}).
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y}&=\left( (w\T \mb{x})^2  + 2c\epsilon\right) \cdot (u-\tfrac{1}{2}).
 \end{align*}
-\item Fourth Root $(\mbx,\mby) \in \Real^{D} \times \Real$:
+\item Fourth Root $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
-\mbx &\sim \mc{U}(-1,1)^{D},\\
-\mby&=|w\T \mbx|^\frac{1}{4}+\frac{c}{4}\epsilon.
+\mb{x} &\sim \mc{U}(-1,1)^{D},\\
+\mb{y}&=|w\T \mb{x}|^\frac{1}{4}+\frac{c}{4}\epsilon.
 \end{align*}
-\item Logarithmic $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: $\epsilon \sim \mc{N}(0, I_{D})$
+\item Logarithmic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $\epsilon \sim \mc{N}(0, I_{D})$
 \begin{align*}
-\mbx &\sim \mc{N}(0, I_{D}),\\
-\mby_{[d]}&=2log(\mbx_{[d]})+3c\epsilon_{[d]},
+\mb{x} &\sim \mc{N}(0, I_{D}),\\
+\mb{y}_{[d]}&=2log(\mb{x}_{[d]})+3c\epsilon_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
-\item Circle $(\mbx,\mby) \in \Real^{D} \times \Real$: $u \sim \mc{U}(-1,1)^{D}$, $\epsilon \sim \mc{N}(0, I_{D})$, $r=1$,
+\item Circle $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{U}(-1,1)^{D}$, $\epsilon \sim \mc{N}(0, I_{D})$, $r=1$,
 \begin{align*}
-\mbx_{[d]}&=r \left(\sin(\pi u_{[d+1]})  \prod_{j=1}^{d} \cos(\pi u_{[j]})+0.4 \epsilon_{[d]}\right) \mbox{ for $d=1,\ldots,D-1$},\\
-\mbx_{[D]}&=r \left(\prod_{j=1}^{D} \cos(\pi u_{[j]})+0.4 \epsilon_{[D]}\right),\\
-\mby&= \sin(\pi u_{[1]}).
+\mb{x}_{[d]}&=r \left(\sin(\pi u_{[d+1]})  \prod_{j=1}^{d} \cos(\pi u_{[j]})+0.4 \epsilon_{[d]}\right) \mbox{ for $d=1,\ldots,D-1$},\\
+\mb{x}_{[D]}&=r \left(\prod_{j=1}^{D} \cos(\pi u_{[j]})+0.4 \epsilon_{[D]}\right),\\
+\mb{y}&= \sin(\pi u_{[1]}).
 \end{align*}
-\item Ellipse $(\mbx,\mby) \in \Real^{D} \times \Real$: Same as above except $r=5$.
+\item Ellipse $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $r=5$.
 
-\item Spiral $(\mbx,\mby) \in \Real^{D} \times \Real$: $u \sim \mc{U}(0,5)$, $\epsilon \sim \mc{N}(0, 1)$,
+\item Spiral $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{U}(0,5)$, $\epsilon \sim \mc{N}(0, 1)$,
 \begin{align*}
-\mbx_{[d]}&=u \sin(\pi u)  \cos^{d}(\pi u) \mbox{ for $d=1,\ldots,D-1$},\\
-\mbx_{[D]}&=u \cos^{D}(\pi u),\\
-\mby&= u \sin(\pi u) +0.4 (D-1)\epsilon.
+\mb{x}_{[d]}&=u \sin(\pi u)  \cos^{d}(\pi u) \mbox{ for $d=1,\ldots,D-1$},\\
+\mb{x}_{[D]}&=u \cos^{D}(\pi u),\\
+\mb{y}&= u \sin(\pi u) +0.4 (D-1)\epsilon.
 \end{align*}
 
-\item Square $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{U}(-1,1)$, $v \sim \mc{U}(-1,1)$, $\epsilon \sim \mc{N}(0,1)^{D}$, $\theta=-\frac{\pi}{8}$. Then
+\item Square $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{U}(-1,1)$, $v \sim \mc{U}(-1,1)$, $\epsilon \sim \mc{N}(0,1)^{D}$, $\theta=-\frac{\pi}{8}$. Then
 \begin{align*}
-\mbx_{[d]}&=u \cos\theta + v \sin\theta + 0.05 D\epsilon_{[d]},\\
-\mby_{[d]}&=-u \sin\theta + v \cos\theta,
+\mb{x}_{[d]}&=u \cos\theta + v \sin\theta + 0.05 D\epsilon_{[d]},\\
+\mb{y}_{[d]}&=-u \sin\theta + v \cos\theta,
 \end{align*}
 for $d=1,\ldots,D$.
-\item Diamond $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: Same as above except $\theta=-\frac{\pi}{4}$.
-\item Sine Period 1/2 $(\mbx,\mby) \in \Real^{D} \times \Real$: $u \sim \mc{U}(-1,1)$, $v \sim \mc{N}(0,1)^{D}$, $\theta=4\pi$,
+\item Diamond $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Same as above except $\theta=-\frac{\pi}{4}$.
+\item Sine Period 1/2 $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{U}(-1,1)$, $v \sim \mc{N}(0,1)^{D}$, $\theta=4\pi$,
 \begin{align*}
-\mbx_{[d]}&=u+0.02 D v_{[d]} \mbox{ for $d=1,\ldots,D$}, \\
-\mby&=\sin ( \theta x )+c\epsilon.
+\mb{x}_{[d]}&=u+0.02 D v_{[d]} \mbox{ for $d=1,\ldots,D$}, \\
+\mb{y}&=\sin ( \theta x )+c\epsilon.
 \end{align*}
-\item Sine Period 1/8 $(\mbx,\mby) \in \Real^{D} \times \Real$: Same as above except $\theta=16\pi$ and the noise on $\mby$ is changed to $0.5c\epsilon$.
-\item Multiplicative Noise $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, $\epsilon \sim \mc{N}(0, I_{D})$,
+\item Sine Period 1/8 $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $\theta=16\pi$ and the noise on $\mb{y}$ is changed to $0.5c\epsilon$.
+\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, $\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
-\mbx &\sim \mc{N}(0, I_{D}),\\
-\mby_{[d]}&=u_{[d]}\mbx_{[d]}+0.5\epsilon_{[d]},
+\mb{x} &\sim \mc{N}(0, I_{D}),\\
+\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]}+0.5\epsilon_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
-\item Uncorrelated Binomial $(\mbx,\mby) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$,
+\item Uncorrelated Binomial $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$,
 \begin{align*}
-\mbx &\sim \mc{B}(0.5)^{D},\\
-\mby&=(2u-1)w\T \mbx+0.6\epsilon.
+\mb{x} &\sim \mc{B}(0.5)^{D},\\
+\mb{y}&=(2u-1)w\T \mb{x}+0.6\epsilon.
 \end{align*}
-\item Independent Clouds $(\mbx,\mby) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{N}(0,I_{D})$, $v \sim \mc{N}(0,I_{D})$, $u' \sim \mc{B}(0.5)^{D}$, $v' \sim \mc{B}(0.5)^{D}$. Then
+\item Independent Clouds $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{N}(0,I_{D})$, $v \sim \mc{N}(0,I_{D})$, $u' \sim \mc{B}(0.5)^{D}$, $v' \sim \mc{B}(0.5)^{D}$. Then
 \begin{align*}
-\mbx&=u/3+2u'-1,\\
-\mby&=v/3+2v'-1.
+\mb{x}&=u/3+2u'-1,\\
+\mb{y}&=v/3+2v'-1.
 \end{align*}
 \end{compactenum}
 
-For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except  (20); for some settings (11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are "directly" dependent. Then we can independently generate $(\mbx_{i},\mby_{i})$ from $(\mb{x},\mb{y})$ for $i=1,\ldots,n$, set $X=\{\mbx_{1},\cdots, \mbx_{n}\} \in \Real^{D \times n}$ and $Y=\{\mby_{1},\cdots, \mby_{n}\} \in \Real^{D_{y} \times n}$, and calculate local / global correlations for the sample data. A visualization of each dependency is shown in Figure~\ref{f:dependencies}.
+For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except  (20); for some settings (11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are
+ ``directly'' dependent. 
+ Given $(\mb{x}_{i},\mb{y}_{i})$ pairs for $i=1,\ldots,n$, set $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_{y} \times n}$. A visualization of each dependency is shown in Figure~\ref{f:dependencies}.
 
 
-For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing while $D_{y}=D$ for type $5,10,14,15,18,20$ and $D_{y}=1$ otherwise. The decaying vector $w$ is utilized for $D>1$ to treat higher dimensions as small perturbations, which creates a meaningful setting for testing power comparison. The powers of all three \Mgc~implementations in this setting are provided in Figure~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
+For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing while $D_{y}=D$ for type $5,10,14,15,18,20$ and $D_{y}=1$ otherwise. The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional settings more difficult (otherwise, additional dimensions add more signal than noise).
+
+% treat higher dimensions as small perturbations, which creates a meaningful setting for testing power comparison. The powers of all three \Mgc~algorithms in this setting are provided in Figure~\ref{f:nDAll}, where we denote \Mgcd~as the \Mgc~for \Dcorr, \Mgcm~as the \Mgc~for \Mcorr, \Mgcp~as the \Mgc~for \Mantel.
 
 \section{Supplementary Figures}
 \label{appen:figs}
 
 
+% Here we also present an additional 1-dimensional setting, to observe that the powers of \Mgc~converge to $1$ faster than all the benchmarks for nearly all dependencies. We fix $D=D_{y}=1$ and $c=1$, and let the sample size $n$ increase from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
+
+% Clearly \Mgc~always improves over its global counterpart, and always has a large advantage regardless of the underlying dependency structure, the dimensionality, the sample size, or noise.
+
+
+
 \begin{figure}[htbp]
 \includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{../Figures/FigSimVisual}
-\caption{Visualization of the $20$ dependencies for $1$-dimensional simulations. The blue points are generated with noise (c=1) at $n=100$ to show the actual sample data in testing, and the red points are generated without noise at $n=1000$ to highlight each underlying dependency.
+\caption{Visualization of the $20$ dependencies for $1$-dimensional simulations. For each, we sampled $n=100$ points with noise (c=1) to show the actual sample data used testing (gray dots). For comparison purposes, we also sampled $n=1000$ points without noise (c=1) to highlight each underlying dependency (black dots).
 }
 \label{f:dependencies}
 \end{figure}
 
-Here we also present an additional 1-dimensional setting, to observe that the powers of \Mgc~converge to $1$ faster than all the benchmarks for nearly all dependencies. We fix $D=D_{y}=1$ and $c=1$, and let the sample size $n$ increase from $5$ to $100$. The parameter before $c$ (e.g., there is a $80$ before $c$ in type 2) is a tuned noise parameter for some dependencies, so the testing powers can be compared meaningfully for each simulation, i.e., in the absence of noise, the testing powers may converge to $1$ at very small $n$ for some trivial dependencies like linear; and it is also more meaningful to consider noisy simulations in practice. The powers of all methods in this setting are provided in Figure~\ref{f:1DAll}, with the multiscale power maps shown in Figure~\ref{f:powermaps1}.
 
-Clearly \Mgc~always improves over its global counterpart, and always has a large advantage regardless of the underlying dependency structure, the dimensionality, the sample size, or noise.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DPowerAll}
 \caption{
 Powers of different methods for $20$ different $1$-dimensional dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
 Each panel shows empirical testing power on the abscissa at a significant level $\alpha=0.05$, and sample size on the ordinate.
-\Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on nearly all problems.}
+\Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on all problems.}
 \label{f:1DAll}
 \end{figure}
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDPowerAll}
 \caption{
-Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.}
+Same as Figure~\ref{f:nD} in main text, but includes all three different \Mgc~algorithms. Note that \Mgc~dominates the other approaches by always being as powerful or moreso, regardless of dimensionality and distribution.}
 \label{f:nDAll}
 \end{figure}
 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}
-\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the 1-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation, the dimension is $1$,  the sample size is $60$, and the significance level is $0.05$.
+\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the 1-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global setting.
 }
 \label{f:powermaps1}
 \end{figure}
@@ -861,7 +868,7 @@ Same as Figure~\ref{f:nD} but includes all three different \Mgc~implementations.
 \caption{Comparing the estimated \Mgc~powers to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each of true \Mgc, \Mcorr, and \Hhg, to the estimated \Mgc.
 (A) $1$-dimensional simulations, where $n=60$ and $D=1$.
 (B) High-dimensional simulations, where $n=100$ and the dimension is chosen as in Figure~\ref{f:powermaps}.
-Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribution is known, dominate to \Mcorr~and almost always improve upon \Hhg's power.}
+Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribution is known, dominate to \Mcorr~and almost always improve upon \Hhg's power, especially in the high-dimensionality settings.}
 \label{f:simPerm}
 \end{figure}
 
@@ -875,7 +882,7 @@ Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribu
 %\begin{align*}
 %performance_{s}(x) &= \frac{1}{T} \sum_{t=1}^{T} \mb{I}((\beta_{\alpha}^{t}(*)-\beta_{\alpha}^{t}(s)) \leq x)
 %\end{align*}
-%where $x \in [0,1]$, $\mb{I}$ is the indicator function, and $\beta_{\alpha}^{t}(*) =\max \mbx_{s} \{\beta_{\alpha}^{t}(s)\}$ denotes the best testing power in the $t$th problem. Namely \mbx~stands for the difference with respect to the best power, and the relative performance of each method equals the proportion of simulations that the method is worse than the best method by no more than \mbx. For example, at $x=0.1$, \Mgc~has a relative performance of $0.75$ if and only if there are $15$ out of $20$ simulations that \Mgc~is worse than the best method by no more than $0.1$ in testing power. Note that the performance profiles at $x=0$ stands for the proportion of simulations that the method has the best power; and the curve always increases to $1$ at $x=1$.
+%where $x \in [0,1]$, $\mb{I}$ is the indicator function, and $\beta_{\alpha}^{t}(*) =\max \mb{x}_{s} \{\beta_{\alpha}^{t}(s)\}$ denotes the best testing power in the $t$th problem. Namely \mb{x}~stands for the difference with respect to the best power, and the relative performance of each method equals the proportion of simulations that the method is worse than the best method by no more than \mbx. For example, at $x=0.1$, \Mgc~has a relative performance of $0.75$ if and only if there are $15$ out of $20$ simulations that \Mgc~is worse than the best method by no more than $0.1$ in testing power. Note that the performance profiles at $x=0$ stands for the proportion of simulations that the method has the best power; and the curve always increases to $1$ at $x=1$.
 
 %To better summarize the overall performance in the low-dimensional simulations, we use the performance profiles \cite{DolanMore2002}, which provides an intuitive way for directly comparing a set of algorithms on a set of problems.  Briefly, each curve (profile) shows the relative performance of a given algorithm as a function of how far from the best algorithm it performed. Therefore, higher curves and larger area under curve are better, and a more detailed description is in Appendix \ref{appen:profiles}. For each $1$-dimensional simulation, we fix the sample size by a power threshold, and draw the corresponding performance profiles of all tests in Figure~\ref{fig:pp}(A). To compare the performance profiles of each test with respect to different threshold choices, we further provide the area under curve of the performance profiles against the power threshold in Figure~\ref{fig:pp}(B).
 
@@ -896,6 +903,7 @@ Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribu
 % \label{fig:pp}
 % \end{figure}
 
+\clearpage
 \section{Dependence Measures}
 \label{appen:methods}
 
@@ -1234,10 +1242,10 @@ Thus multiscale generalized correlation can be better than its global correlatio
 \begin{proof}
 We give a simple discrete example of $f_{xy}$ at $n=7$, such that the p-value of \Mgcm~is strictly lower than the p-value of \Mcorr.
 
-Suppose under the alternative, each pair of observation $(\mbx,\mby)$ is sampled as follows:
+Suppose under the alternative, each pair of observation $(\mb{x},\mb{y})$ is sampled as follows:
 \begin{align*}
-\mbx &\in \left\{-1,-\frac{2}{3},-\frac{1}{3},0,\frac{1}{3},\frac{2}{3},1\right\} \mbox{ without replacement}, \\
-\mby &= \mbx^2,
+\mb{x} &\in \left\{-1,-\frac{2}{3},-\frac{1}{3},0,\frac{1}{3},\frac{2}{3},1\right\} \mbox{ without replacement}, \\
+\mb{y} &= \mb{x}^2,
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 

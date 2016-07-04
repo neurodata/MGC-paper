@@ -1241,7 +1241,7 @@ Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any
 \end{equation*}
 at any type $1$ error level $\alpha$. So $\beta(\G^{*}) \rightarrow 1$ if $\beta(\G) \rightarrow 1$.
 % 
-Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent against all alternative of finite second moments, because \Dcorr~and \Mcorr~are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}.
+Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent against all alternative of finite second moments, because \Dcorr~and \Mcorr~are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. \cs{this isn't true, \Dcorr also requires finite dimension.}
 \end{proof}
 
 \begin{appThm}
@@ -1263,7 +1263,7 @@ Under linear dependency, for any global correlation coefficient satisfying Equat
 \end{equation*}
 for any permutation matrix $Q$, where the equality holds if and only if $X$ is a scalar multiple of $YQ$. It follows that the p-value of $\G$ is $0$, which is at the minimal.
 
-Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency.
+Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency. \cs{i don't get it.}
 \end{proof}
 
 
@@ -1286,7 +1286,7 @@ Suppose under the alternative, each pair of observation $(\mb{x},\mb{y})$ is sam
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210}$, while $\G^{kl}(X, Y)=\frac{17}{70}$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$.
+At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{17}{70} \approx 0.24$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. \cs{is that (k,l) pair optimal? the p-value is 0.24.  i realize if we set alpha to 0.24 it is dependent, i just wonder whether it is optimal.}
 
 Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
 

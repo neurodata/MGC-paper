@@ -134,16 +134,18 @@
 
 % \bigskip
 \begin{abstract}
-Understanding and discovering dependence between multiple  measurements is a fundamental task not just in science, but also policy, commerce, and other domains.
+Understanding and discovering dependence between multiple  measurements is a fundamental task not just in the natural sciences, but also policy, commerce, and other domains.
 An ideal test for dependence would have the following properties:
 (1) High power (probability of rejecting false null hypotheses) even for low sample size, without requiring any additional assumptions (such as linear dependence, low dimensional data, or vector-valued observations).
 (2) Theoretical guarantees that power converges to $1$ under all of the above assumptions.
 % (2) Strong empirical performance on a wide variety of low- and high-dimensional simulations, including both linear and nonlinear dependencies.
 (3) Provides insight into the nature of the dependence, rather than merely a valid p-value.
-(4) On real data, detects dependence when it exists, and does not detect dependence when it does not exist, and reveals the scales of optimal dependence
+\jv{make "real data" dirtier, so further distinguish from (1). or, maybe 4 is about doing all of the above even on real data.}
+(4) On real data, detects dependence when it exists, and does not detect dependence when it does not exist, and reveals the scales of optimal dependence.
 %(4) Is robust to outliers (that is, the presence of many independent samples mixed among a few dependent samples).
 No existing test satisfies all of these properties.
 In this paper we propose a novel dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of generalized correlation coefficient with multiscale neighborhoods.
+\jv{too many commas below}
 More specifically, we compute the correlation for all neighborhood sizes, and find the optimal one,  yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
 We demonstrate that \Mgc~has all of the above properties via simulation and theory.
  % via a series of theoretical proofs, numerical simulations, and real data experiments.  
@@ -179,8 +181,8 @@ We then applied \Mgc~in several real applications to: (i) detect dependence betw
 % \section{Introduction}
 
 Detecting dependency among multiple data sets is one of the most important and fundamental tasks in computational statistics and data science.
-Indeed, prior to embarking on a predictive machine learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.
-The founders of statistics first highlighted the importance of this task, starting with Pearson, who developed Pearson's Product-Moment Correlation statistic  \cite{Pearson1895}.  Since then, researchers have consistently developed new and improved methods (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
+Indeed, prior to embarking on a predictive machine-learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.
+The founders of statistics first highlighted the importance of this task, starting with Pearson's Product-Moment Correlation statistic in 1895 \cite{Pearson1895}.  Since then, researchers have consistently developed new and improved methods (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
 
 In the era of big data, several challenges emerge as particularly prevalent and therefore, problematic.
 %
@@ -203,11 +205,11 @@ Finally, as alluded to above, checking for dependence is rarely the final step i
 % Thus, dependence tests that work in non-linear, high-dimensional, low sample size, complex datasets, even in the presence of many outliers, reasonably quickly, and automatically adaptive to the data, and provide insight in addition to valid p-values, are highly desirable. Moreover, w
 We desire tests that satisfy the above desiderata, both in theory as well as in extensive simulations and real data problems.
 
-
+\jv{remove this paragraph and integrate it into next paragraphs. above: here's what everyone wants.  next: here's what everyone's doing.}
 There are two key insights from the literature that we combine to develop our methodology that satisfies the above desiderata.  First, a collection of pairwise comparisons suffices to characterize a joint distribution \cite{Maa1996}.  Second, nonlinear manifolds can be approximated by local linear spaces \cite{Allard2012}.  Our approach, Multiscale Generalized Correlation (\Mgc), leverages and improves upon recent developments from both subdisciplines of data science.
 
 Interpoint pairwise comparison matrices have been used for over 100 years for various statistical purposes \cite{Maa1996}. Perhaps one of the earliest examples of using them for dependence testing comes from  Karl Pearson \cite{Pearson1895}, who created  a special case of something subsequently called a ``generalized correlation coefficient'' \cite{KendallBook}.
-Generalized correlation coefficients start with $n$ pairs of observations $\{(\mb{x}_i,\mb{y}_i),i=1,\ldots,n\}$, where $\mb{x}$'s and $\mb{y}$'s both might be vectors of arbitrary dimensions, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$, and let $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
+Generalized correlation coefficients start with $n$ pairs of observations $(\mb{x}_i,\mb{y}_i)$ for $i=1,\ldots,n$, where $\mb{x}$'s and $\mb{y}$'s both might be vectors of arbitrary dimensions, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$, and let $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
 Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $X=\{\mb{x}_{i}\}$ and $Y=\{\mb{y}_{i}\}$, respectively.  
 Without loss of generality, assuming $A$ and $B$ have zero mean, a generalized correlation coefficient can then be written:
 \begin{equation}
@@ -298,7 +300,7 @@ Flowchart schematizing Multiscale Generalized Correlation (\Mgc). Columns listed
 Column 1: Pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 Column 2: By choosing appropriate distances for $X$ and $Y$, compute the pairwise distance matrices $\tilde{A}$ (top) and $\tilde{B}$ (bottom).  
 Note that heatmaps  are arbitrarily chosen to be sorted by $X$. These are the matrices used by the \Mantel~test \cite{Mantel1967}.
-Column 3: Double centering yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the element-wise product yields the un-normalized observed \Mcorr~statistic \cite{SzekelyRizzo2013a}, which is significant only when that double sum is positive. 
+Column 3: Double centering---subtracting the row-sums and column-sums to eliminate extrema due to individual samples---yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the element-wise product yields the un-normalized observed \Mcorr~statistic \cite{SzekelyRizzo2013a}, which is significant only when that double sum is positive. 
 % As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
 Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly non-negative, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be highly significant.
 % The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 

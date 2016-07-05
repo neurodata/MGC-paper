@@ -732,10 +732,10 @@ For all of the below equations, $(\mb{x},\mb{y}) \overset{iid}{\sim} f_{xy} = f_
 \mb{y} &=\mb{I}(w\T \mb{x}>0)+\epsilon,
 \end{align*}
 where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever $z$ true and zero otherwise.
-\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}&I_{D} \end{bmatrix}$. Then let $\epsilon \sim \mc{N}(0, I_{D})$,
+\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}& (1+0.5c) I_{D} \end{bmatrix}$. Then let $\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
-(\mb{x}, \mb{y}) &\sim \mc{N}(0, \Sigma), \\
-\mb{y} &=\mb{y}+0.5c\epsilon.
+(\mb{x}, \mb{y}) &\sim \mc{N}(0, \Sigma). 
+% \\\mb{y} &=\mb{y}+0.5c\epsilon.
 \end{align*}
 \item Quadratic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
@@ -944,8 +944,11 @@ It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\
 converges to $1$ as $n$ increases, at any type $1$ error level $\alpha$. Note that all of $dcov, dvar$, \Dcorr~are always non-negative; and the consistency result assumes finite second moments of $\mb{x}$ and $\mb{y}$, which holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. Also note that the \Dcorr~above is actually the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
 Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column. Then \Dcorr~by singly centered distance matrices has the same testing power as the original \Dcorr, because distance covariance is equivalent to distance correlation in the permutation test (note that the actual \Dcorr~statistic by single centering is different from the original \Dcorr, as using single centering changes the distance variances). \cs{i don't understand this paragraph}
+\cs{state lemma about dcorr, which includes the result of dcov and dvar's.}
 
-In our implementation of  \Dcorr, we always use singly centered distance matrices rather than doubly centered distance matrices. Although they are equivalent for the testing power of global \Dcorr, our alternative implementation improves the testing power of \Mgcd. This is because the ranking information of $\tilde{A}$ and $\tilde{B}$ are better preserved in singly centered distance matrices, so that \Mgc~is more effective in excluding far-away points that exhibit insignificant dependency. This applies to \Mcorr~as well. \cs{nor this one, not at all.}
+In our implementation of  \Dcorr, we always use singly centered distance matrices rather than doubly centered distance matrices. Although they are equivalent for the testing power of global \Dcorr, our alternative implementation improves the testing power of \Mgcd. This is because the ranking information of $\tilde{A}$ and $\tilde{B}$ are better preserved in singly centered distance matrices, so that \Mgc~is more effective in excluding far-away points that exhibit insignificant dependency. This applies to \Mcorr~as well. 
+\cs{nor this one, not at all.}
+\cs{another lemma about preserving ranks}
 
 \subsection{(Global) Modified Distance Correlation}
 \label{appen:mcorr}
@@ -959,7 +962,7 @@ where $A$ modifies the entries of $\hat{A}$ by
 \[a_{ij} = \left\{
   \begin{array}{lr}
     \hat{a}_{ij}-\frac{\tilde{a}_{ij}}{n}, & \mbox{ if } i \neq j, \\
-    \frac{1}{n}\sum_{i}\tilde{a}_{ij}-\frac{1}{n^2}\sum_{ij}\tilde{a}_{ij}, &\mbox{ if } i = j,
+    \frac{1}{n}\sum_{i}\tilde{a}_{ii}-\frac{1}{n^2}\sum_{ij}\tilde{a}_{ij}, &\mbox{ if } i = j,
   \end{array}
 \right.
 \]
@@ -984,7 +987,8 @@ For any generalized correlation coefficient, its local correlations can be direc
 
 In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. As discussed already,  \Mgcd~and \Mgcm~are based on single centering throughout. For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}.
 
-Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average or max ranks.\cs{why is this "more convenient"?} 
+Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average or max ranks.
+\cs{why is this "more convenient"?} 
 
 Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exists,  is distribution dependent, and is almost always non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
 See Appendix \ref{appen:algorithms} for details of all relevant algorithms.
@@ -1003,8 +1007,6 @@ H_{12}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} \leq \tilde{a}_{ij})I(\t
 H_{21}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} > \tilde{a}_{ij})I(\tilde{b}_{iq} \leq \tilde{b}_{ij}) \\
 H_{22}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} > \tilde{a}_{ij})I(\tilde{b}_{iq} > \tilde{b}_{ij}),
 \end{align*}
-\cs{the above don't make any sense, there is no 'q' in the equations.}
-\jovo{corrected}
 and the \Hhg~statistic is defined as
 \begin{align*}
 \Hhg(X,Y) &= \sum_{i=1,j\neq i}^{n} \frac{(n-2)(H_{12}(i,j)H_{21}(i,j)-H_{11}(i,j)H_{22}(i,j))^2}{H_{1 \cdot}(i,j)H_{2 \cdot}(i,j)-H_{\cdot 1}(i,j)H_{\cdot 2}(i,j)},
@@ -1028,8 +1030,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient.
 
 To facilitate  optimal scale estimation, Algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
-whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. \cs{centering should take $O(2n)$, not $O(n^2)$, right?}
-\jovo{no, $O(n^2)$: centering needs to count all matrix entries}
+whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
 
 Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$.
 
@@ -1040,6 +1041,7 @@ is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and simi
 
 Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeatedly simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and Algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by selecting the scale that maximizes power. 
 In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. \cs{is this correct?} \jovo{yes; although in practice it doesn't matter much}
+\cs{fix ties for data and optimal scales.}
 This algorithm is also applicable if there exists training data, 
 % multiple pairs of data with unknown model but similar dependency structure,
 then the alternative statistic can be computed from the training data while the null statistic can be computed from both datasets. The running time is $O(rn^2 \log n)$.
@@ -1150,13 +1152,13 @@ then the alternative statistic can be computed from the training data while the 
 \State $[k^{*},l^{*}] \rto \arg\min_{k, l} \{P_{kl},k,l=2,\ldots,n\}$
 \For{$k:=k^{*},\ldots,2$} \Comment{check all row scales no larger than $k^{*}$}
 \Lineif{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}{break}
-\State $\K \rto [k,\K]$
+\State $\K \rto \{\K,k\}$
 \EndFor
 \For{$k:=k^{*}+1,\ldots,m$} \Comment{check all row scales larger than $k^{*}$}
 \Lineif{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}{break}
 \State $\K \rto \{\K,k\}$
 \EndFor
-\If{$\textsc{Median}(P_{kl},k \in \K, l=2,\ldots,n) > \alpha * \frac{|\K|}{n-1}$}
+\If{$\textsc{Median}(P_{kl},k \in \K, l=2,\ldots,n) > \alpha \times \frac{|\K|}{n-1}$}
 \State $\K \rto \{n\}$ \Comment{take the largest scale if the median p-value is not sufficiently small}
 \EndIf
 \EndFunction
@@ -1232,7 +1234,7 @@ Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In parti
 
 \begin{appThm}
 \label{at:linear}
-If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
+If $\mb{x}$ is linearly dependent on $\mb{y}$, so $\mb{x} \propto \mb{y}$, then for any $n$ it always holds that
 \begin{equation*}
 \beta(\G^{nn}) = \beta(\G^{*}) = \beta(\G).
 \end{equation*}
@@ -1251,7 +1253,7 @@ for any permutation $\pi$, where the equality holds if and only if $X$ is a scal
 
 The identity permutation is one such example. However, for any permutation $\pi$ such that the equality holds, it is also applicable to rank-truncated comparisons too, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$. Therefore, for any $\pi$ such that $\G(X, Y) = \G(X, Y_{\pi})$, we always have $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$ for all $k,l$; moreover, there may exist other permutations such that $\G^{kl}(X, Y)<\G^{kl}(X, Y_{\pi})$, but there is no $\pi$ such that $\G(X, Y) < \G(X, Y_{\pi})$.
 
-Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc. \cs{i don't get it.} \jovo{expanded a bit now}
+Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc. \cs{i don't get it.} \jovo{expanded a bit now} \cs{connect permutation and p-values.}
 \end{proof}
 
 

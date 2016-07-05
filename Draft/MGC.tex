@@ -305,7 +305,6 @@ Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (w
 Column 5 (Top): The empirical null distribution for \Mcorr, as well as our newly defined \Mgc, and the corresponding observed test statistics for each. \Mcorr, the global test, has  p-value $0.188$ while \Mgc, our multiscale test, has  p-value $<0.001$.
 (Middle) The multiscale p-value map, used in the absense of the true distribution or training data. 
 (Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scale and understand the structure of dependence.
-Clearly, 
 Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that acheive nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
 }
 \label{f:schematic}
@@ -397,7 +396,7 @@ Figure \ref{f:pp} show slopegraphs comparing a global correlation and its \Mgc. 
   \centering
   \includegraphics[width=1.0\textwidth]{../Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure~\ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulation 1-5 and  20. The left side of each panel shows the global correlations, and the right side shows our corresponding \Mgc's average power. The thick line shows the average within that panel. It is clear that \Mgc~dominates its global counterpart. 
+Average powers slopegraphs comparing tests by global correlation and the respective \Mgc. The first row corresponds to 1-dimensional simulation powers in Figure~\ref{f:1DAll}, and the second row corresponds to high-dimensional simulation powers in Figure~\ref{f:nDAll}. Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulation 1-5 and  20. The left side of each panel shows the global correlations, and the right side shows our corresponding \Mgc's average power. The thick line shows the average within that panel. This figure suggests that \Mgc~dominates its global counterpart. 
 }
 \label{f:pp}
 \end{figure}
@@ -731,10 +730,10 @@ For all of the below equations, $(\mb{x},\mb{y}) \overset{iid}{\sim} f_{xy} = f_
 \mb{y} &=\mb{I}(w\T \mb{x}>0)+\epsilon,
 \end{align*}
 where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever $z$ true and zero otherwise.
-\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}&I_{D} \end{bmatrix}$. Then let $v \sim \mc{N}(0, \Sigma)$, $\epsilon \sim \mc{N}(0, I_{D})$,
+\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}&I_{D} \end{bmatrix}$. Then let $\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
-\mb{x} &\sim \mc{N}(0, \Sigma),\\
-\mb{y} &=v+0.5c\epsilon.
+(\mb{x}, \mb{y}) &\sim \mc{N}(0, \Sigma), \\
+\mb{y} &=\mb{y}+0.5c\epsilon.
 \end{align*}
 \item Quadratic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
@@ -759,7 +758,7 @@ where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever 
 \item Logarithmic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $\epsilon \sim \mc{N}(0, I_{D})$
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
-\mb{y}_{[d]}&=2log(\mb{x}_{[d]})+3c\epsilon_{[d]},
+\mb{y}_{[d]}&=2\log_{2}(\mb{x}_{[d]})+3c\epsilon_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
 \item Circle $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{U}(-1,1)^{D}$, $\epsilon \sim \mc{N}(0, I_{D})$, $r=1$,
@@ -808,7 +807,7 @@ for $d=1,\ldots,D$.
 \end{align*}
 \end{compactenum}
 
-For each distribution, $\mb{x}$ and $\mb{y}$ are clearly dependent except  (20); for some settings (11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are
+For each distribution, $\mb{x}$ and $\mb{y}$ are dependent except  (20); for some settings (11-15) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are
  ``directly'' dependent. 
  Given $(\mb{x}_{i},\mb{y}_{i})$ pairs for $i=1,\ldots,n$, set $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_y \times n}$, where $D_y$ is the dimensionality of \mby. A visualization of each dependency is shown in Figure~\ref{f:dependencies}.
 
@@ -920,7 +919,7 @@ The \Mantel~coefficient \cite{Mantel1967} is defined as
 \end{equation*}
 Then the \Mantel~test is carried out by the permutation test.
 
-Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectively. It is clear from Figure~\ref{f:nDAll} and ~\ref{f:1DAll} that global \Mantel~is sub-optimal relative to much more recently proposed tests (\Mantel was proposed in 1967, \Dcorr~was not proposed until about 40 years later), and appears to be not consistent for many dependencies. Nonetheless,  \Mgcp~achieves comparable performances as other variants of \Mgc, which implies that \Mgcp~may be consistent against most, if not all dependent alternatives.
+Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectively. One can observe from Figure~\ref{f:nDAll} and ~\ref{f:1DAll} that global \Mantel~is sub-optimal relative to much more recently proposed tests (\Mantel was proposed in 1967, \Dcorr~was not proposed until about 40 years later), and appears to be not consistent for many dependencies. Nonetheless,  \Mgcp~achieves comparable performances as other variants of \Mgc, which implies that \Mgcp~may be consistent against most, if not all dependent alternatives.
 
 \subsection{(Global) Distance Correlation}
 \label{appen:dcorr}
@@ -963,6 +962,7 @@ where $A$ modifies the entries of $\hat{A}$ by
 \right.
 \]
 \cs{why sum over i in the first term and ij in the next? i would think it should be consistent}
+\jovo{that is what Gabor wrote, plus it is not necessary to make them consistent?}
 and  $B$ modifies the entires of $\hat{A}$ similarly;  $mvar(X)$ and $mvar(Y)$ are similarly defined as well.
 
 If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $0$ (negativity can only occur when $n\leq 2$, equality can only happen in some special cases); otherwise it is defined as
@@ -982,7 +982,7 @@ For any generalized correlation coefficient, its local correlations can be direc
 
 In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. As discussed already,  \Mgcd~and \Mgcm~are based on single centering throughout. For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}.
 
-Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average or max ranks.\cs{why is this "more convenient"?}
+Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average or max ranks.\cs{why is this "more convenient"?} 
 
 Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exists,  is distribution dependent, and is almost always non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
 See Appendix \ref{appen:algorithms} for details of all relevant algorithms.
@@ -996,19 +996,18 @@ The \Hhg~statistic applies Pearson's chi-square test to ranks of distances withi
 
 Given the Euclidean distance matrices $\tilde{A}=\{\tilde{a}_{ij}\}$ and $\tilde{B}=\{\tilde{b}_{ij}\}$, we denote
 \begin{align*}
-H_{11}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{ik} \leq \tilde{a}_{ij})I(\tilde{b}_{ik} \leq \tilde{b}_{ij}) \\
-H_{12}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{ik} \leq \tilde{a}_{ij})I(\tilde{b}_{ik} > \tilde{b}_{ij}) \\
-H_{21}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{ik} > \tilde{a}_{ij})I(\tilde{b}_{ik} \leq \tilde{b}_{ij}) \\
-H_{22}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{ik} > \tilde{a}_{ij})I(\tilde{b}_{ik} > \tilde{b}_{ij}),
+H_{11}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} \leq \tilde{a}_{ij})I(\tilde{b}_{iq} \leq \tilde{b}_{ij}) \\
+H_{12}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} \leq \tilde{a}_{ij})I(\tilde{b}_{iq} > \tilde{b}_{ij}) \\
+H_{21}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} > \tilde{a}_{ij})I(\tilde{b}_{iq} \leq \tilde{b}_{ij}) \\
+H_{22}(i,j) &= \sum_{q=1,q\neq i,j}^{n}I(\tilde{a}_{iq} > \tilde{a}_{ij})I(\tilde{b}_{iq} > \tilde{b}_{ij}),
 \end{align*}
 \cs{the above don't make any sense, there is no 'q' in the equations.}
+\jovo{corrected}
 and the \Hhg~statistic is defined as
 \begin{align*}
 \Hhg(X,Y) &= \sum_{i=1,j\neq i}^{n} \frac{(n-2)(H_{12}(i,j)H_{21}(i,j)-H_{11}(i,j)H_{22}(i,j))^2}{H_{1 \cdot}(i,j)H_{2 \cdot}(i,j)-H_{\cdot 1}(i,j)H_{\cdot 2}(i,j)},
 \end{align*}
-where $H_{1 \cdot}=H_{11}+H_{12}$, $H_{2 \cdot}=H_{21}+H_{22}$, $H_{\cdot 1}=H_{11}+H_{21}$, and $H_{\cdot 2}=H_{12}+H_{22}$. It is clear that \Hhg~is structurally different from \Dcorr~/ \Mcorr~/ \Mantel, and therefore cannot be conveniently expressed by Equation~\ref{generalCoef}.
-% , and there is no direct extension of local correlation to \Hhg.
-\cs{i disagree. there is a direct extension, we just don't feel like describing/implementing it.}
+where $H_{1 \cdot}=H_{11}+H_{12}$, $H_{2 \cdot}=H_{21}+H_{22}$, $H_{\cdot 1}=H_{11}+H_{21}$, and $H_{\cdot 2}=H_{12}+H_{22}$. Thus \Hhg~is structurally different from all previous distance-based correlations, and cannot be conveniently expressed by Equation~\ref{generalCoef}.
 
 The permutation test using the \Hhg~statistic is consistent against all dependent alternatives. In our numerical simulations, \Hhg~falls a bit short when testing against high-dimensional and noisy linear dependencies, but is often more advantageous than global correlations under nonlinear dependencies, which makes it a strong competitor in general.
 
@@ -1028,6 +1027,7 @@ Algorithm~\ref{alg:1scale} shows a straightforward computation of one local corr
 
 To facilitate  optimal scale estimation, Algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
 whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. \cs{centering should take $O(2n)$, not $O(n^2)$, right?}
+\jovo{no, $O(n^2)$: centering needs to count all matrix entries}
 
 Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$.
 
@@ -1037,11 +1037,12 @@ Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows 
 is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$.  If the majority p-values of  local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations. If there are no valid rows or columns, then \Mgc~takes the largest scale (that is, it is equivalent to  the global correlation). Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns. \cs{i don't understand this last sentence, and i maintain that this approach has no practical or conceptual advantage over the one i proposed.}
 
 Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeatedly simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and Algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by selecting the scale that maximizes power. 
-In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. \cs{is this correct?}
+In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. \cs{is this correct?} \jovo{yes; although in practice it doesn't matter much}
 This algorithm is also applicable if there exists training data, 
 % multiple pairs of data with unknown model but similar dependency structure,
 then the alternative statistic can be computed from the training data while the null statistic can be computed from both datasets. The running time is $O(rn^2 \log n)$.
 \cs{is this correct?}
+\jovo{correct}
 
 \begin{algorithm}
 \caption{Local Correlation Computation for One Scale}
@@ -1052,23 +1053,15 @@ then the alternative statistic can be computed from the training data while the 
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
 \State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ at $0$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{column-wise sorting  assuming no ties}
-\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$} \Comment{proper centering of the distance matrices}
+\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}  \Comment{proper centering of the distance matrices}
+
 \For{$i,j:=1,\ldots,n$}
-\State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance covariance}
-
-\Linefor{$Z:=A,B$}
-% \State 
-{$V^{Z}_{k} \rto V^{Z}_{k}+Z_{ij}^2\mb{I}(R^{Z}_{ij} \leq k)$} \Comment{store local distance variance}
+\State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store un-centered local distance covariance}
+\Linefor{$Z:=A,B$}{$V^{Z}_{k} \rto V^{Z}_{k}+Z_{ij}^2\mb{I}(R^{Z}_{ij} \leq k)$} \Comment{store local distance variance}
 \Linefor{$Z:=A,B$}{$E^{Z}_{k} \rto E^{Z}_{k}+Z_{ij}\mb{I}(R^{Z}_{ij} \leq k)$} \Comment{store the sample means}
-% \EndFor
-
-% \State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store local distance variance for $X$}
-% \State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store local distance variance for $Y$}
-% \State $E^{A}_{k}=E^{A}_{k}+A_{ij}\mb{I}(R^{A}_{ij} \leq k)$ \Comment{store the sample means}
-% \State $E^{B}_{l}=E^{B}_{l}+B_{ij}\mb{I}(R^{B}_{ij} \leq l)$
 \EndFor
 
-\State $\G^{kl} \rto \left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{normalize} 
+\State $\G^{kl} \rto \left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{center and normalize} 
 % the local covariances}
 
 \EndFunction
@@ -1085,29 +1078,30 @@ then the alternative statistic can be computed from the training data while the 
 \State initialize $C$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
-\For{$i,j=1,\ldots,n$}
-\State $k=R^{A}_{ij}$
-\State $l=R^{B}_{ij}$
-\State $\G^{kl}=\G^{kl}+A_{ij}B_{ij}$
-\State $V^{A}_{k}=V^{A}_{k}+A_{ij}^2$
-\State $V^{B}_{l}=V^{B}_{l}+B_{ij}^2$
-\State $E^{A}_{k}=E^{A}_{k}+A_{ij}$
-\State $E^{B}_{l}=E^{B}_{l}+B_{ij}$
+
+\For{$i,j:=1,\ldots,n$}
+\State $k \rto R^{A}_{ij}$
+\State $l \rto R^{B}_{ij}$
+\State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}$
+\State $V^{A}_{k} \rto V^{A}_{k}+A_{ij}^2$
+\State $V^{B}_{l} \rto V^{B}_{l}+B_{ij}^2$
+\State $E^{A}_{k} \rto E^{A}_{k}+A_{ij}$
+\State $E^{B}_{l} \rto E^{B}_{l}+B_{ij}$
 \EndFor
-\Statex \Comment{the next two for loops with respect to the scales guarantee the computation of all local covariance / variance in $O(n^2)$} \cs{i don't know what this comment means.}
-\For{$k=1,\ldots,n-1$}
-\State $\G^{1, k+1}=\G^{1, k}+\G^{1, k+1}$
-\State $\G^{k+1,1}=\G^{k+1,1}+\G^{k+1,1}$
-\Linefor{$Z:=A,B$}{$V^{Z}_{k+1}=V^{Z}_{k}+V^{Z}_{k+1}$}
-\Linefor{$Z:=A,B$}{$E^{Z}_{k+1}=E^{Z}_{k}+E^{Z}_{k+1}$}
+%\Statex \Comment{the next two for loops with respect to the scales guarantee the computation of all local covariances and variances in $O(n^2)$} \cs{i don't know what this comment means.}
+\For{$k:=1,\ldots,n-1$}
+\State $\G^{1, k+1} \rto \G^{1, k}+\G^{1, k+1}$
+\State $\G^{k+1,1} \rto \G^{k+1,1}+\G^{k+1,1}$
+\Linefor{$Z:=A,B$}{$V^{Z}_{k+1} \rto V^{Z}_{k}+V^{Z}_{k+1}$}
+\Linefor{$Z:=A,B$}{$E^{Z}_{k+1} \rto E^{Z}_{k}+E^{Z}_{k+1}$}
 \EndFor
 
-\For{$k,l=1,\ldots,n-1$}
-\State $\G^{k+1,l+1}=\G^{k+1,l}+\G^{k,l+1}+\G^{k+1,l+1}-\G^{k,l}$
+\For{$k,l:=1,\ldots,n-1$}
+\State $\G^{k+1,l+1} \rto \G^{k+1,l}+\G^{k,l+1}+\G^{k+1,l+1}-\G^{k,l}$
 \EndFor
 
-\For{$k,l=1,\ldots,n$} \Comment{normalize all local covariances}
-\State $\G^{kl}=\left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
+\For{$k,l:=1,\ldots,n$} \Comment{center and normalize all local covariances}
+\State $\G^{kl} \rto \left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
 \EndFor
 \EndFunction
 \end{algorithmic}
@@ -1121,14 +1115,12 @@ then the alternative statistic can be computed from the training data while the 
 \Ensure The p-value matrix $P \in [0,1]^{n \times n}$ for all local distance correlations.
 \Function{PermutationTest}{$\tilde{A}$,$\tilde{B}$,$r$}
 \State $\G^{kl}=\textsc{LocalCorr}(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
-\For{$j=1,\ldots,r$}
+\For{$j:=1,\ldots,r$}
 \State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$} \cs{i think we need to define random permutation and the notatio n $B(\pi,\pi)$ for this audience, not sure where that should go, probably in caption.}
 \State $\G^{kl}_{0}[j]=\textsc{LocalCorr}(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
 \EndFor
 
-\For{$k,l=1,\ldots,n$}
-\State $P_{kl}=\sum_{j=1}^{r}(\G^{kl}<\G^{kl}_{0}[j])/r$ \Comment{get the p-value at each local scale} \cs{i think should this just go on 1 line?}
-\EndFor
+\Linefor{$k,l:=1,\ldots,n$}{$P_{kl} \rto \sum_{j=1}^{r}(\G^{kl}<\G^{kl}_{0}[j])/r$}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -1142,8 +1134,8 @@ then the alternative statistic can be computed from the training data while the 
 \Function{MGCScaleVerify}{$P$, $\alpha$}
 \State $\K=\textsc{VerifyRow}(P,\alpha)$ \Comment{search for a set of valid row indices}
 \State $\LL=\textsc{VerifyRow}(P\T,\alpha)$ \Comment{search for a set of valid column indices}
-\State $[k^{*},l^{*}]=\arg\min_{\left\{k \in \K, l \in \LL\right\}} P_{kl}$ \Comment{find the optimal scale within the valid range}
-\State $p=P_{k^{*}l^{*}}$
+\State $[k^{*},l^{*}] \rto \arg\min_{\left\{k \in \K, l \in \LL\right\}} P_{kl}$ \Comment{find the optimal scale within the valid range}
+\State $p \rto P_{k^{*}l^{*}}$
 \EndFunction
 \end{algorithmic}
 
@@ -1153,22 +1145,17 @@ then the alternative statistic can be computed from the training data while the 
 \Ensure The indices of valid rows.
 \Function{VerifyRow}{$P$, $\alpha$}
 \State initialize $\K$ as an empty set
-\State $[k^{*},l^{*}]=\arg\min_{k, l} \{P_{kl},k,l=2,\ldots,n\}$
-\For{$k=k^{*},\ldots,2$} \Comment{check all row scales no larger than $k^{*}$}
-\Lineif{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}
-% \State
-{break}
-% \EndIf
-\State $\K=[k,\K]$
+\State $[k^{*},l^{*}] \rto \arg\min_{k, l} \{P_{kl},k,l=2,\ldots,n\}$
+\For{$k:=k^{*},\ldots,2$} \Comment{check all row scales no larger than $k^{*}$}
+\Lineif{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}{break}
+\State $\K \rto [k,\K]$
 \EndFor
-\For{$k=k^{*}+1,\ldots,m$} \Comment{check all row scales larger than $k^{*}$}
-\If{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}
-\State break
-\EndIf
-\State $\K=\{\K,k\}$
+\For{$k:=k^{*}+1,\ldots,m$} \Comment{check all row scales larger than $k^{*}$}
+\Lineif{$\min\{P_{kl},l=2,\ldots,n\}>\alpha$}{break}
+\State $\K \rto \{\K,k\}$
 \EndFor
 \If{$\textsc{Median}(P_{kl},k \in \K, l=2,\ldots,n) > \alpha * \frac{|\K|}{n-1}$}
-\State $\K=\{n\}$ \Comment{take the largest scale if the median p-value is not sufficiently small}
+\State $\K \rto \{n\}$ \Comment{take the largest scale if the median p-value is not sufficiently small}
 \EndIf
 \EndFunction
 \end{algorithmic}
@@ -1181,21 +1168,18 @@ then the alternative statistic can be computed from the training data while the 
 \Require A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
 \Ensure The power matrix $\beta_{\alpha} \in [0,1]^{n \times n}$ for all local correlations, and the \Mgc~optimal scale $(k^{*},l^{*}) \in \Real \times \Real$.
 \Function{TestingPowers}{$f_{xy}$,$n$, $r$,$\alpha$}
-\For{$j=1,\ldots,r$}
-\Linefor{$i:=[n]$}{$(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$} \Comment{generate dependent samples}
-\Linefor{$i:=[n]$}{$X^{0}_{i} \stackrel{iid}{\sim} f_{x}$} \Comment{generate independent samples}
-\Linefor{$i:=[n]$}{$Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$}
-\Linefor{$Z:=A,B$}{$\tilde{Z}_{1}=\textsc{Dist}(Z_{1})$} \Comment{the distance matrices under the alternative}
-\Linefor{$Z:=A,B$}{$\tilde{Z}_{0}=\textsc{Dist}(Z_{0})$} \Comment{the distance matrices under the null}
+\For{$j:=1,\ldots,r$}
+\Linefor{$i:=[n]$}{$(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$, $X^{0}_{i} \stackrel{iid}{\sim} f_{x}$, $Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$} 
+\Linefor{$Z:=A,B$}{$\tilde{Z}_{1}=\textsc{Dist}(Z_{1})$, $\tilde{Z}_{0}=\textsc{Dist}(Z_{0})$} 
 \State $\G^{kl}_{1}[j]=\textsc{LocalCorr}(\tilde{A}_{1},\tilde{B}_{1})$ \Comment{calculate all local correlations under the alternative}
 \State $\G^{kl}_{0}[j]=\textsc{LocalCorr}(\tilde{A}_{0},\tilde{B}_{0})$ \Comment{calculate all local correlations under the null}
 \EndFor
 
-\For{$k,l=1,\ldots,n$}
-\State $c_{\alpha}=\textsc{Cdf}_{1-\alpha}(\G^{0}_{kl}[j],j \in [r])$ \Comment{get the critical value by the empirical cumulative distribution under the null at each scale}
-\State $\beta_{\alpha}^{kl}=\sum_{j=1}^{r}(\G^{1}_{kl}[j]>c_{\alpha}) / r$ \Comment{estimate the power}
+\For{$k,l:=1,\ldots,n$}
+\State $c_{\alpha} \rto \textsc{Cdf}_{1-\alpha}(\G^{0}_{kl}[j],j \in [r])$ \Comment{get the critical value by the empirical distributions}
+\State $\beta_{\alpha}^{kl} \rto \sum_{j=1}^{r}(\G^{1}_{kl}[j]>c_{\alpha}) / r$ \Comment{estimate the power}
 \EndFor
-\State $(k^{*},l^{*})=\arg\max(\beta_{\alpha}^{kl})$ \Comment{find the optimal local scale}
+\State $(k^{*},l^{*}) \rto \arg\max(\beta_{\alpha}^{kl})$ \Comment{find the optimal local scale}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -1203,7 +1187,7 @@ then the alternative statistic can be computed from the training data while the 
 \clearpage
 \subsection{Discussions of Optimal Scale Estimation}
 \label{appen:diss}
-Evaluating \Mgc requires estimating the optimal scale. Algorithm~\ref{alg:power} computes the testing powers of all local correlations for known or estimated distribution, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (if there are more than one optimal scales, one may pick the scale that maximizes the mean difference of the test statistic under the null and the alternative)\cs{one may? what do we actually do?}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
+Evaluating \Mgc requires estimating the optimal scale. Algorithm~\ref{alg:power} computes the testing powers of all local correlations for known or estimated distribution, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (if there are more than one optimal scales, we pick the scale that maximizes the mean difference of the test statistic under the null and the alternative). Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
 If the underlying distribution is unavailable or there is no training data given, we have to approximate the optimal scale by Algorithm~\ref{alg:best_scale}. It makes use of Bonferroni correction to separately verify the set of rows and columns, which guarantees the false positive rate to be no higher than $\alpha$; otherwise the scale is set to the largest option, which guarantees our estimated \Mgc~is at least as powerful as the global correlation. Still, Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, which does not guarantee the optimal local correlation to be always correctly identified.
 
@@ -1241,7 +1225,7 @@ Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any
 \end{equation*}
 at any type $1$ error level $\alpha$. So $\beta(\G^{*}) \rightarrow 1$ if $\beta(\G) \rightarrow 1$.
 % 
-Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent against all alternative of finite second moments, because \Dcorr~and \Mcorr~are consistent against all alternatives of finite second moments by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. \cs{this isn't true, \Dcorr also requires finite dimension.}
+Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent against all alternatives satisfying certain regularity conditions, because \Dcorr~and \Mcorr~are consistent by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. 
 \end{proof}
 
 \begin{appThm}
@@ -1255,15 +1239,17 @@ Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
 
 Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
 \begin{equation*}
-1=\G(X, Y) \geq \G(X, YQ)
+1=\G(X, Y) \geq \G(X, Y_{\pi})
 \end{equation*}
-for any permutation matrix $Q$, where the equality holds if and only if $X$ is a scalar multiple of $YQ$. It follows that the p-value of $\G$ is $0$, which is at the minimal.
+for any permutation $\pi$, where the equality holds if and only if $X$ is a scalar multiple of $Y_{\pi}$, i.e., $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$ for all $i,j$, where $\pi^{-1}(\cdot)$ is the inverse permutation. %It follows that the p-value of $\G$ is $0$, which is at the minimal.
 
-Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, such that the global correlation is the optimal scale for \Mgc~under linear dependency. \cs{i don't get it.}
+The identity permutation is one such example. However, for any permutation $\pi$ such that the equality holds, it is also applicable to rank-truncated comparisons too, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$. Therefore, for any $\pi$ such that $\G(X, Y) = \G(X, Y_{\pi})$, we always have $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$ for all $k,l$; moreover, there may exist other permutations such that $\G^{kl}(X, Y)<\G^{kl}(X, Y_{\pi})$, but there is no $\pi$ such that $\G(X, Y) < \G(X, Y_{\pi})$.
+
+Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc. \cs{i don't get it.} \jovo{expanded a bit now}
 \end{proof}
 
 
@@ -1287,6 +1273,7 @@ Suppose under the alternative, each pair of observation $(\mb{x},\mb{y})$ is sam
 which is a discrete version of the quadratic relationship in the simulations.
 
 At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{17}{70} \approx 0.24$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. \cs{is that (k,l) pair optimal? the p-value is 0.24.  i realize if we set alpha to 0.24 it is dependent, i just wonder whether it is optimal.}
+\jovo{yes, the smallest p-value is 0.24.}
 
 Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
 

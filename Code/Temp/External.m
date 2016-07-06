@@ -1,3 +1,5 @@
+ [powerP]=CorrSimPermScale1(20,1,0.5,100,100,1,0.05)
+
 %Locally linear dependent
 n=7;
 x=-1:2/(n-1):1;
@@ -39,7 +41,7 @@ for i=1:rep1;
     %     %y=mvnrnd(zeros(n,dim),eye(dim),n);
     distC=squareform(pdist(x));
     distPInd=squareform(pdist(y));
-    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest3(distC,distPInd,5,rep2,'BrainCxPInd');
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(distC,distPInd,5,rep2,'BrainCxPInd');
     for j=1:7
         if p(j)<alpha
             power(j)=power(j)+1/rep1;

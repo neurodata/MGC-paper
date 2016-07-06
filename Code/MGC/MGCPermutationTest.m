@@ -1,4 +1,4 @@
-function  [p,pAll,test,testAll,ind]=MGCPermutationTest(A,B,rep,option)
+function  [p,pAll,test,testAll,indAll]=MGCPermutationTest(A,B,rep,option)
 % Author: Cencheng Shen
 % This function tests independent between two data sets, using MGC by a random permutation test.
 %
@@ -39,6 +39,6 @@ pAll=1-pAll;
 pAll(1,:)=1;pAll(:,1)=1;
 
 % verify and estimate the MGC optimal scale
-ind=MGCScaleVerify(pAll);
-p=pAll(ind);
-test=testAll(ind);
+[p,indAll]=MGCScaleVerify(pAll);
+%p=pAll(ind);
+test=testAll(indAll(end));

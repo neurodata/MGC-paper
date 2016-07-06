@@ -10,7 +10,7 @@ VN=V(2:end,2:end);
 p1=Verify(VN);
 p2=Verify(VN);
 p=min(p1,p2);
-p=min(p,V(end));
+%p=min(p,V(end));
 indAll=find(V<=p,1,'last');
 if isempty(indAll);
     indAll=size(V,1)*size(V,2);
@@ -33,7 +33,7 @@ for i=1:m;
 %     pp(i)=pp(i)/i*m;
 %     
     tmp=tmp+rowTmp(i);
-    pp(i)=tmp/i/i/m;
+    pp(i)=tmp/i/i*m;
 end
 p=min(pp);
 

@@ -55,10 +55,13 @@ for tt=type
         power3All=power3All(1:numRange(ind),1:numRange(ind),ind);
     else
         filename=strcat(pre1,'CorrIndTestDimType',num2str(tt),'N',num2str(100),'Dim');
-        load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power1','power2','power3','power7');
+        load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power1','power2','power3','power7','lim');
         ind=[find(power2>=thres,1,'last') 1];
         ind=max(ind);
         dim=dimRange(ind);
+        if lim==21 && ind>1;
+            ind=ind-1;
+        end
         neighbor=neighborhoods(:,ind);
         power1All=power1All(:,:,ind);
         power2All=power2All(:,:,ind);

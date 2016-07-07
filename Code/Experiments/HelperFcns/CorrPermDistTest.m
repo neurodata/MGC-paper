@@ -68,10 +68,8 @@ for r=1:rep
     per=randperm(n);
     DN=D(per,per);
     tmp=HHG(C,DN);
-    p=p+(tmp<=test)/rep;
+    p=p+(tmp>=test)/rep;
 end
 if (sum(p<1/rep)>0)
     p=p+1/rep;
 end
-% Output the p-value
-p=1-p;

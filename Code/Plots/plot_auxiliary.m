@@ -84,16 +84,21 @@ axis('square')
 
 %% Mantel
 
+C=C-mean(C(:));
+D=D-mean(D(:));
+
 % A Mantel
 ax=subplot(s,t,2);
 if sameBar==1
     maxC=ceil(max(max([C,D]))*10)/10;
+    minC=ceil(min(min([C,D]))*10)/10;
 else
     maxC=ceil(max(max(C))*10)/10;
+    minC=ceil(min(min(C))*10)/10;
 end
 imagesc(C');
 colormap(ax,map3);
-caxis([0,maxC]);
+caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 % xlabel('i','FontSize',fontSize,'position',[-10,0]);
@@ -118,20 +123,42 @@ end
 imagesc(D');
 set(gca,'FontSize',16)
 colormap(ax,map3);
-caxis([0,maxC]);
+caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 % xlabel('i','FontSize',fontSize,'position',[-10,0]);
 % ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
-set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
+% set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
+% set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 % title('$\tilde{B}=\delta_{y}(y_{i},y_{j})$','interpreter','latex','FontSize',fontSize);
 title('$\tilde{B}$','interpreter','latex','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 axis('square')
+
+
+% C Mantel
+mantelH=C.*D;
+ax=subplot(s,t,2*t+2);
+MH=ceil(max(max(mantelH(2:end,2:end))));
+mH=floor(min(min(mantelH(2:end,2:end))));
+mH=min(mH,-MH);
+MH=max(MH,-mH);
+imagesc(mantelH');
+set(gca,'YDir','normal')
+colormap(ax,map2)
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
+title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+% colorbar('Ticks',[mH,0,MH],'location','westoutside');
+axis('square')
+caxis([mH,MH]);
+
 
 %% Centering
 RC=disToRanks(C);

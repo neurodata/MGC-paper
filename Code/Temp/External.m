@@ -1,4 +1,4 @@
- [powerP]=CorrSimPermScale1(20,1,0.5,100,100,1,0.05)
+ [powerP]=CorrSimPermTest(20,1,0.5,100,100,1,0.05)
 
 %Locally linear dependent
 n=7;

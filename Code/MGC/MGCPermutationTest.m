@@ -29,13 +29,16 @@ for r=1:rep
     BN=B(per,per);
     tmp=LocalCorr(A,BN,option);
     if r==1
-        pAll=(tmp<testAll)/rep;
+        pAll=(tmp<=testAll)/rep;
     else
-        pAll=pAll+(tmp<testAll)/rep;
+        pAll=pAll+(tmp<=testAll)/rep;
     end
 end
 % set the p-values of local corr at rank 0 to maximum, since they should not be used
 pAll=1-pAll;
+if (sum(pAll<1/rep)>0)
+    pAll=pAll+1/rep;
+end
 pAll(1,:)=1;pAll(:,1)=1;
 
 % verify and estimate the MGC optimal scale

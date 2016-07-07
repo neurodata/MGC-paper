@@ -982,14 +982,18 @@ For any generalized correlation coefficient, its local correlations can be direc
 
 In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. 
 
-As discussed already, our \Mgcd~and \Mgcm~are based on single centering throughout. For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}. In the next lemma, we show that single-centering and double-centering are indeed equivalent for the testing purpose of global correlations.
+As discussed already, our \Mgcd~and \Mgcm~are based on single centering throughout. 
+%For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}. 
+In the next lemma, we show that single-centering and double-centering are indeed equivalent for the testing purpose of global correlations.
 \begin{lem}
-The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. This applies to the modified distance covariance $mcov(X,Y)$ too.
+The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
-Moreover, the permutation p-value and testing power of global \Dcorr is also the same under single centering and double centering, which holds for \Mcorr as well.
+Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+
+The above also holds for \Mcorr asymptotically.
 \end{lem}
 
-Although single centering is equivalent to double centering for the global correlation, single centering is more consistent in preserving ranks, e.g., the ranks by sorting $\tilde{B}$ column-wise are the same as the column ranks of $\tilde{B}H$, which are different from the ranks of $H\tilde{B}H$. Therefore local correlations are more accurate in excluding far-away observations that exhibit insignificant dependency, which is the reason we choose to implement \Mgc~by single centering.
+Although single centering is equivalent to double centering for the global correlation, single centering is more consistent in preserving ranks, e.g., the ranks by sorting $\tilde{B}$ column-wise are the same as the column ranks of $H\tilde{A}$, which are different from the ranks of $H\tilde{A}H$. Therefore local correlations are more accurate in excluding far-away observations that exhibit insignificant dependency, which is the reason we choose to implement \Mgc~by single centering.
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively.
 
@@ -1244,9 +1248,7 @@ Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. In the permutation test, the p-value equals the percentage that the observed test statistic is no more than the permuted test statistic.
-
-Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. In the permutation test, the p-value equals the percentage that the observed test statistic is no more than the permuted test statistic. Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
 
 Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
 \begin{equation*}
@@ -1257,6 +1259,7 @@ for any permutation $\pi$, where the equality holds if and only if $X$ is a scal
 The identity permutation is one such example. However, for any permutation $\pi$ such that the equality holds, it is also applicable to rank-truncated comparisons too, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$. Therefore, for any $\pi$ such that $\G(X, Y) = \G(X, Y_{\pi})$, we always have $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$ for all $k,l$; moreover, there may exist other permutations such that $\G^{kl}(X, Y)<\G^{kl}(X, Y_{\pi})$, but there is no $\pi$ such that $\G(X, Y) < \G(X, Y_{\pi})$.
 
 Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc.
+\cs{proof}
 \end{proof}
 
 
@@ -1287,11 +1290,27 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 \end{proof}
 
 \begin{appLem}
-The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. This applies to the modified distance covariance $mcov(X,Y)$ too.
+The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
-Moreover, the permutation p-value and testing power of global \Dcorr is also the same under single centering and double centering, which holds for \Mcorr as well.
+Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+
+The above also holds for \Mcorr asymptotically.
 \end{appLem}
 \begin{proof}
+For distance covariance, we can re-write it in trace as follows
+\begin{align*}
+dcov(X,Y) &= \frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij} \\
+ &=\frac{1}{n^2} tr(A^{T} \times B) \\
+ &=\frac{1}{n^2} tr(H\tilde{A}^{T}H \times H\tilde{B}H) \\
+ &=\frac{1}{n^2} tr(\tilde{A}^{T}H \times \tilde{B}H) \\
+ &=\frac{1}{n^2} tr((H\tilde{A})^{T} \times (\tilde{B}H)),
+\end{align*}
+where the second to last equality follows because $H$ is symmetric and idempotent. Therefore, single centering and double centering yields the same distance covariance.
+
+Although distance variances may not be the same under the two different centering schemes, in the permutation test the distance variances are merely normalization scalars that do not affect the p-value and power, i.e., the test using distance covariance is the same as the test using distance correlation in the permutation test. Therefore the p-value and power of \Dcorr are also the same under single centering and double centering.
+
+For \Mcorr, it modifies $A$ and $B$ on both the diagonal entries and off-diagonal entries for modified distance covariance. Single centering changes the modified distance covariance only through the off-diagonal modifications, in a magnitude of $O(\frac{1}{n})$ relative to the original products. Thus as $n$ increases, the modified distance covariance is asymptotically equivalent under the two different centering schemes, so are the p-value and power of \Mcorr.
+
 \end{proof}
 
 %\begin{appThm}

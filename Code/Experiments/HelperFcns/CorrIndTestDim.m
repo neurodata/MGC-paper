@@ -181,7 +181,7 @@ if n>1
         for j=1:n;
             dCorT=sort(dCor1N(i,j,:),'descend');
             cut1=dCorT(ceil(rep*alpha));
-            power1(i,j)=mean(dCor1A(i,j,:)>cut1);
+            power1(i,j)=mean(dCor1A(i,j,:)>=cut1);
         end
     end
     power1(1,:)=0;power1(:,1)=0; % Set the powers of all local tests at rank 0 to 0
@@ -189,6 +189,6 @@ if n>1
 else
     dCorT=sort(dCor1N,'descend');
     cut1=dCorT(ceil(rep*alpha));
-    power1=mean(dCor1A>cut1);
+    power1=mean(dCor1A>=cut1);
     n1=0;
 end

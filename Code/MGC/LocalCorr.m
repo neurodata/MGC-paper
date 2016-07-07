@@ -39,9 +39,9 @@ switch option
         EX=repmat(mean(X,1),n,1);
         %EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X)); % this is original double-centering
     case 2
-        EX=repmat(sum(X,1)/(n-1),n,1);
-        %EX=repmat(sum(X,1)/n,n,1);
-        %EX=EX+X/n;
+%         EX=repmat(sum(X,1)/(n-1),n,1);
+        EX=repmat(sum(X,1)/n,n,1);
+        EX=EX+X/n;
     case 3
         EX=sum(sum(X))/n/(n-1);
 end

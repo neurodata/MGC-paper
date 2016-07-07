@@ -106,6 +106,8 @@
 \newtheorem{appThm}{Theorem}
 \setcounter{appThm}{0}
 \newtheorem{lem}{Lemma}
+\newtheorem{appLem}{Lemma}
+\setcounter{appLem}{0}
 \newtheorem{cor}{Corollary}
 \newtheorem*{defi*}{Properties}
 \newtheorem{asn}{Assumption}
@@ -943,12 +945,7 @@ and the sample distance correlation equals
 It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\Dcorr(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variable $\mb{x}$ and $\mb{y}$. The population distance correlation is defined by the characteristic functions, which is $0$ if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is a consistent statistic for testing independence, i.e., the testing power $\beta_{\alpha}(\Dcorr(X,Y))$
 converges to $1$ as $n$ increases, at any type $1$ error level $\alpha$. Note that all of $dcov, dvar$, \Dcorr~are always non-negative; and the consistency result assumes finite second moments of $\mb{x}$ and $\mb{y}$, which holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. Also note that the \Dcorr~above is actually the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
-Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column. Then \Dcorr~by singly centered distance matrices has the same testing power as the original \Dcorr, because distance covariance is equivalent to distance correlation in the permutation test (note that the actual \Dcorr~statistic by single centering is different from the original \Dcorr, as using single centering changes the distance variances). \cs{i don't understand this paragraph}
-\cs{state lemma about dcorr, which includes the result of dcov and dvar's.}
-
-In our implementation of  \Dcorr, we always use singly centered distance matrices rather than doubly centered distance matrices. Although they are equivalent for the testing power of global \Dcorr, our alternative implementation improves the testing power of \Mgcd. This is because the ranking information of $\tilde{A}$ and $\tilde{B}$ are better preserved in singly centered distance matrices, so that \Mgc~is more effective in excluding far-away points that exhibit insignificant dependency. This applies to \Mcorr~as well. 
-\cs{nor this one, not at all.}
-\cs{another lemma about preserving ranks}
+Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column. Our \Mgcd is in fact based on this single-centered \Dcorr, which will be further expanded in Appendix~\ref{appen:mgc}.
 
 \subsection{(Global) Modified Distance Correlation}
 \label{appen:mcorr}
@@ -962,12 +959,10 @@ where $A$ modifies the entries of $\hat{A}$ by
 \[a_{ij} = \left\{
   \begin{array}{lr}
     \hat{a}_{ij}-\frac{\tilde{a}_{ij}}{n}, & \mbox{ if } i \neq j, \\
-    \frac{1}{n}\sum_{i}\tilde{a}_{ii}-\frac{1}{n^2}\sum_{ij}\tilde{a}_{ij}, &\mbox{ if } i = j,
+    \frac{1}{n}\sum_{j}\tilde{a}_{ij}-\frac{1}{n^2}\sum_{ij}\tilde{a}_{ij}, &\mbox{ if } i = j,
   \end{array}
 \right.
 \]
-\cs{why sum over i in the first term and ij in the next? i would think it should be consistent}
-\jovo{that is what Gabor wrote, plus it is not necessary to make them consistent?}
 and  $B$ modifies the entires of $\hat{A}$ similarly;  $mvar(X)$ and $mvar(Y)$ are similarly defined as well.
 
 If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $0$ (negativity can only occur when $n\leq 2$, equality can only happen in some special cases); otherwise it is defined as
@@ -977,7 +972,7 @@ If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $
 
 It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estimator of the population distance correlation $\Dcorr(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it is a consistent statistic for testing independence, but may work better than \Dcorr~under high-dimension dependencies.
 
-Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr, which does not alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for  testing.
+Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr, which does not alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for testing. Our \Mgcm is based on single-centered \Mcorr with the simplified diagonal modification.
 
 %Also note that when there exists repeating points, it is necessary to set $a_{ij}=a_{jj}$ for repeating points during global/local mcorr computation, or exclude repeating observation before-hand, otherwise the diagonal adjustment of mcorr may lose its effect for adjusting high-dimensional bias.
 
@@ -985,10 +980,22 @@ Similar to the alternative implementation of \Dcorr, we can also use singly cent
 \label{appen:mgc}
 For any generalized correlation coefficient, its local correlations can be directly implemented as in Equation~\ref{localCoef}, by plugging in the respective $a_{ij}$ and $b_{ij}$ from Equation~\ref{generalCoef} and rank-truncating  the distance matrices  as in Equation~\ref{localCoef2}.
 
-In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. As discussed already,  \Mgcd~and \Mgcm~are based on single centering throughout. For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}.
+In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. 
 
-Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which indexes all local correlations more conveniently than breaking ties randomly or using average or max ranks.
-\cs{why is this "more convenient"?} 
+As discussed already, our \Mgcd~and \Mgcm~are based on single centering throughout. 
+%For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}. 
+In the next lemma, we show that single-centering and double-centering are indeed equivalent for the testing purpose of global correlations.
+\begin{lem}
+The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
+
+Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+
+The above also holds for \Mcorr asymptotically.
+\end{lem}
+
+Although single centering is equivalent to double centering for the global correlation, single centering is more consistent in preserving ranks, e.g., the ranks by sorting $\tilde{B}$ column-wise are the same as the column ranks of $H\tilde{A}$, which are different from the ranks of $H\tilde{A}H$. Therefore local correlations are more accurate in excluding far-away observations that exhibit insignificant dependency, which is the reason we choose to implement \Mgc~by single centering.
+
+Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively.
 
 Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exists,  is distribution dependent, and is almost always non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
 See Appendix \ref{appen:algorithms} for details of all relevant algorithms.
@@ -1040,13 +1047,11 @@ Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows 
 is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$.  If the majority p-values of  local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations. If there are no valid rows or columns, then \Mgc~takes the largest scale (that is, it is equivalent to  the global correlation). Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns. \cs{i don't understand this last sentence, and i maintain that this approach has no practical or conceptual advantage over the one i proposed.}
 
 Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeatedly simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and Algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by selecting the scale that maximizes power. 
-In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. \cs{is this correct?} \jovo{yes; although in practice it doesn't matter much}
+In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. 
 \cs{fix ties for data and optimal scales.}
 This algorithm is also applicable if there exists training data, 
 % multiple pairs of data with unknown model but similar dependency structure,
 then the alternative statistic can be computed from the training data while the null statistic can be computed from both datasets. The running time is $O(rn^2 \log n)$.
-\cs{is this correct?}
-\jovo{correct}
 
 \begin{algorithm}
 \caption{Local Correlation Computation for One Scale}
@@ -1145,7 +1150,7 @@ then the alternative statistic can be computed from the training data while the 
 
 \begin{algorithmic}[1]
 \Statex
-\Require Same as \textsc{MGCScaleVerify}. \cs{i don't understand this algorithm}
+\Require Same as \textsc{MGCScaleVerify}. 
 \Ensure The indices of valid rows.
 \Function{VerifyRow}{$P$, $\alpha$}
 \State initialize $\K$ as an empty set
@@ -1243,7 +1248,7 @@ Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. In the permutation test, the p-value equals the percentage that the observed test statistic is no more than the permuted test statistic. Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
 
 Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
 \begin{equation*}
@@ -1253,7 +1258,8 @@ for any permutation $\pi$, where the equality holds if and only if $X$ is a scal
 
 The identity permutation is one such example. However, for any permutation $\pi$ such that the equality holds, it is also applicable to rank-truncated comparisons too, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$. Therefore, for any $\pi$ such that $\G(X, Y) = \G(X, Y_{\pi})$, we always have $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$ for all $k,l$; moreover, there may exist other permutations such that $\G^{kl}(X, Y)<\G^{kl}(X, Y_{\pi})$, but there is no $\pi$ such that $\G(X, Y) < \G(X, Y_{\pi})$.
 
-Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc. \cs{i don't get it.} \jovo{expanded a bit now} \cs{connect permutation and p-values.}
+Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc.
+\cs{proof}
 \end{proof}
 
 
@@ -1276,12 +1282,35 @@ Suppose under the alternative, each pair of observation $(\mb{x},\mb{y})$ is sam
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{17}{70} \approx 0.24$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. \cs{is that (k,l) pair optimal? the p-value is 0.24.  i realize if we set alpha to 0.24 it is dependent, i just wonder whether it is optimal.}
-\jovo{yes, the smallest p-value is 0.24.}
+At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{17}{70} \approx 0.24$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. 
 
 Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
 
 Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with more significant p-values; but the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for \Mgcd~and \Mgcp~using the same example.
+\end{proof}
+
+\begin{appLem}
+The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
+
+Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+
+The above also holds for \Mcorr asymptotically.
+\end{appLem}
+\begin{proof}
+For distance covariance, we can re-write it in trace as follows
+\begin{align*}
+dcov(X,Y) &= \frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij} \\
+ &=\frac{1}{n^2} tr(A^{T} \times B) \\
+ &=\frac{1}{n^2} tr(H\tilde{A}^{T}H \times H\tilde{B}H) \\
+ &=\frac{1}{n^2} tr(\tilde{A}^{T}H \times \tilde{B}H) \\
+ &=\frac{1}{n^2} tr((H\tilde{A})^{T} \times (\tilde{B}H)),
+\end{align*}
+where the second to last equality follows because $H$ is symmetric and idempotent. Therefore, single centering and double centering yields the same distance covariance.
+
+Although distance variances may not be the same under the two different centering schemes, in the permutation test the distance variances are merely normalization scalars that do not affect the p-value and power, i.e., the test using distance covariance is the same as the test using distance correlation in the permutation test. Therefore the p-value and power of \Dcorr are also the same under single centering and double centering.
+
+For \Mcorr, it modifies $A$ and $B$ on both the diagonal entries and off-diagonal entries for modified distance covariance. Single centering changes the modified distance covariance only through the off-diagonal modifications, in a magnitude of $O(\frac{1}{n})$ relative to the original products. Thus as $n$ increases, the modified distance covariance is asymptotically equivalent under the two different centering schemes, so are the p-value and power of \Mcorr.
+
 \end{proof}
 
 %\begin{appThm}

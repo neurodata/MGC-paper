@@ -17,4 +17,4 @@ if nargin < 2
 end
 %%
 thres=0.8;dim=1;noise=1;type=1:20;
-[p1]=CorrSimPermScale1(type,dim,thres,rep1,rep2,noise);
+[p1]=CorrSimPermTest(type,dim,thres,rep1,rep2,noise);

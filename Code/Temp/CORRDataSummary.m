@@ -1,8 +1,8 @@
 function [p,pmean,pstd]=CORRDataSummary()
 
 fileDir='../../../../Data/CORR/';
-pre1='../../Data/'; % The folder to locate data
-pre2='../../Draft/Figures/FigReal'; % The folder to save figures
+%pre1='../../Data/'; % The folder to locate data
+%pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 
 allFiles = dir( fileDir );
 allNames = { allFiles.name };
@@ -61,7 +61,7 @@ set(gca,'XTick',[]); % Remove x axis ticks
 ylabel('False Positive Rate','FontSize',16);
 title('False Positive Rates for Brain vs Noise','FontSize',17);
 
-F.fname=strcat(pre2, 'CORR');
-F.wh=[3 2.5]*2;
-print_fig(gcf,F)
-save(strcat(pre1,'CORRSummary.mat'),'p','pmean','pstd','n');
+%F.fname=strcat(pre2, 'CORR');
+%F.wh=[3 2.5]*2;
+%print_fig(gcf,F)
+%save(strcat(pre1,'CORRSummary.mat'),'p','pmean','pstd','n');

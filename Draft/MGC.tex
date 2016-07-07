@@ -298,8 +298,8 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 \caption{
 Flowchart schematizing Multiscale Generalized Correlation (\Mgc). Columns listed from left to right.
 Column 1: Pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
-Column 2: By choosing appropriate distances for $X$ and $Y$, compute the pairwise distance matrices $\tilde{A}$ (top) and $\tilde{B}$ (bottom).  
-Note that heatmaps  are arbitrarily chosen to be sorted by $X$. These are the matrices used by the \Mantel~test \cite{Mantel1967}.
+Column 2: Compute all pairwise distances for $x$ and $y$ yielding
+ $\tilde{A}$ (top) and $\tilde{B}$ (bottom), the two interpoint comparison matrices used by the \Mantel~test \cite{Mantel1967}  (this requires choosing appropriate distances for both $x$ and $y$).  The heatmaps are arbitrarily sorted by $x$'s.
 Column 3: Double centering---subtracting the row-sums and column-sums to eliminate extrema due to individual samples---yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the element-wise product yields the un-normalized observed \Mcorr~statistic \cite{SzekelyRizzo2013a}, which is significant only when that double sum is positive. 
 % As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
 Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly non-negative, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be highly significant.

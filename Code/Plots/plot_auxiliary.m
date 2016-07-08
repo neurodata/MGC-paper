@@ -117,16 +117,11 @@ fprintf(formatSpec,k,l)
 
 formatSpec = '\n & Mantel & Mcorr & MGC \\\\ \n';
 fprintf(formatSpec)
-
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id(1),id(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
                    id(1),id(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
                    mantelH(id(1),id(2)),C(id(1),id(2)),abs(C_MGC(id(1),id(2))))
-
 fprintf('\\hline\n\n')
-
-
-
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
                    id(3),id(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
@@ -147,28 +142,17 @@ else
     minC=ceil(min(min(C))*10)/10;
 end
 imagesc(C');
-colormap(ax,map3);
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
-% xlabel('i','FontSize',fontSize,'position',[-10,0]);
-% ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
 xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
-set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
-% title('Mantel $\tilde{A}=\delta_{x}(x_{i},x_{j})$','interpreter','latex','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
+set(gca,'visible','on')
+set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
 
 % B Mantel
 ax=subplot(s,t,t+2); hold all
@@ -177,26 +161,12 @@ if sameBar~=1
 end
 imagesc(D');
 set(gca,'FontSize',16)
-colormap(ax,map3);
+% colormap(ax,map3);
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
-% xlabel('i','FontSize',fontSize,'position',[-10,0]);
-% ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
-% set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
-% set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
-% title('$\tilde{B}=\delta_{y}(y_{i},y_{j})$','interpreter','latex','FontSize',fontSize);
 title('$\tilde{B}$','interpreter','latex','FontSize',fontSize);
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 % C Mantel
@@ -207,19 +177,10 @@ mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mantelH');
 set(gca,'YDir','normal')
-colormap(ax,map2)
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
 % colorbar('Ticks',[mH,0,MH],'location','westoutside');
 caxis([mH,MH]);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 %% Mcorr
@@ -235,21 +196,12 @@ minC=min(minC,-maxC);maxC=max(maxC,-minC);
 ax=subplot(s,t,3); hold all
 imagesc(A');
 set(gca,'YDir','normal')
-colormap(ax,map2)
 caxis([minC,maxC]);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize);
 % title('Mcorr $$A$$','FontSize',fontSize,'interpreter','latex');
 % title('Mcorr','FontSize',fontSize);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'Mcorr (double center)'}; {' '}],'FontSize',fontSize);
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 % B MCorr
@@ -263,18 +215,9 @@ minD=min(minD,-maxD);maxD=max(maxD,-minD);
 imagesc(B');
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
-colormap(ax,map2)
 caxis([minD,maxD]);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 title('$$B$$','interpreter','latex');
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 % C MCorr
@@ -285,19 +228,9 @@ mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mcorrH');
 set(gca,'YDir','normal')
-colormap(ax,map2)
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
 % colorbar('Ticks',[mH,0,MH],'location','westoutside');
-caxis([mH,MH]);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 
@@ -307,41 +240,23 @@ axis([1 n 1 n])
 % A MGC
 ax=subplot(s,t,4); hold all
 imagesc(A_MGC');
-colormap(ax,map2)
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 % title('MGC $$A^{k^{*}}$$','interpreter','latex');
 % title('MGC');
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 
 % B MGC
 ax=subplot(s,t,t+4); hold all
 imagesc(B_MGC');
 set(gca,'FontSize',fontSize)
-colormap(ax,map2)
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
 title('$$B^{l^{*}}$$','interpreter','latex');
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
 
 % C MGC
 ax=subplot(s,t,2*t+4); cla, hold all
@@ -350,18 +265,10 @@ mH=floor(min(min(C_MGC(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
 imagesc(C_MGC');
 set(gca,'YDir','normal')
-colormap(ax,map2)
 caxis([mH,MH]);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
-plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
-plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
-axis([1 n 1 n])
+clean_panel(ax,map2,pos,id,n)
+
 
 %% Col5 MPM
 set(groot,'defaultAxesColorOrder',map1);

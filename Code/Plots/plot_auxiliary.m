@@ -36,7 +36,6 @@ catch
 end
 pre2=strcat(rootDir,'Figures/Aux/');% The folder to save figures
 
-cc=1;
 fontSize=18;
 mkSize=20;
 sameBar=0;
@@ -60,14 +59,35 @@ set(groot,'defaultAxesColorOrder',map1);
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
+
+
 %%  Col 1
-ax=subplot(s,t,t+1);
+ax=subplot(s,t,t+1); cla, hold all
 % set(ax, 'Position', [0.05, 0.37, 0.92, 0.27])
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 % xlim([-1.2,1.2]);
 % ylim([-1.2,1.2]);
-% axis('tight')
+% % axis('tight')
+
+% id=[24,26,1,50]
+[I,J]=ind2sub([n,n],find(C_MGC>0));
+ids=unique([I,J]);
+IJ=[I, J]';
+IJ=sort(IJ(:));
+id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
+xx=15;
+id=[44,45,45,46];
+
+for ind=[1,2,4]; %length(id)
+    if ind==4;
+        hs=0;
+    else
+        hs=-1.5;
+    end
+    text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color','k')
+    plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color','k');
+end
 
 tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
@@ -80,15 +100,45 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 pos2(2)=pos2(2)+0.15;
 set(ax,'position',pos2);
-axis('square')
+% axis('square')
+
+% make table
+clc
+
+MantelVec=[C(id(1),id(2)), D(id(1),id(2)), mantelH(id(1),id(2)), C(id(3),id(4)), D(id(3),id(4)), mantelH(id(3),id(4)), mantelH(id(1),id(2))+mantelH(id(3),id(4))];
+McorrVec=[A(id(1),id(2)), B(id(1),id(2)), mcorrH(id(1),id(2)), A(id(3),id(4)), B(id(3),id(4)), mcorrH(id(3),id(4)), mcorrH(id(1),id(2))+mcorrH(id(3),id(4))];
+MGCVec=[A_MGC(id(1),id(2)), B_MGC(id(1),id(2)), C_MGC(id(1),id(2)), A_MGC(id(3),id(4)), B_MGC(id(3),id(4)), C_MGC(id(3),id(4)), C_MGC(id(1),id(2))+C_MGC(id(3),id(4))];
+
+[MantelVec; McorrVec; MGCVec]'
+display(['k=', num2str(k), ' l=',num2str(l)])
+
+formatSpec = 'k= %1i, l= %1i\n\n';
+fprintf(formatSpec,k,l) 
+
+formatSpec = '\n & Mantel & Mcorr & MGC \\\\ \n';
+fprintf(formatSpec)
+
+formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
+fprintf(formatSpec,id(1),id(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
+                   id(1),id(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
+                   mantelH(id(1),id(2)),C(id(1),id(2)),abs(C_MGC(id(1),id(2))))
+
+fprintf('\\hline\n\n')
+
+
+
+formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
+fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
+                   id(3),id(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
+                   mantelH(id(3),id(4)),C(id(3),id(4)),C_MGC(id(3),id(4)))
+
+
 
 %% Mantel
 
-C=C-mean(C(:));
-D=D-mean(D(:));
 
 % A Mantel
-ax=subplot(s,t,2);
+ax=subplot(s,t,2); hold all
 if sameBar==1
     maxC=ceil(max(max([C,D]))*10)/10;
     minC=ceil(min(min([C,D]))*10)/10;
@@ -100,7 +150,7 @@ imagesc(C');
 colormap(ax,map3);
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-set(gca,'FontSize',13); % Remove y axis ticks
+set(gca,'FontSize',16); % Remove y axis ticks
 % xlabel('i','FontSize',fontSize,'position',[-10,0]);
 % ylabel('j','Rotation',0,'position',[-10,30],'FontSize',fontSize);
 xlabel('sample index','FontSize',fontSize);
@@ -108,15 +158,20 @@ ylabel('sample index','FontSize',fontSize);
 set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
 % title('Mantel $\tilde{A}=\delta_{x}(x_{i},x_{j})$','interpreter','latex','FontSize',fontSize);
-text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
+text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 % B Mantel
-ax=subplot(s,t,t+2);
+ax=subplot(s,t,t+2); hold all
 if sameBar~=1
     maxC=ceil(max(max(D))*10)/10;
 end
@@ -137,12 +192,15 @@ title('$\tilde{B}$','interpreter','latex','FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 
 % C Mantel
-mantelH=C.*D;
-ax=subplot(s,t,2*t+2);
+ax=subplot(s,t,2*t+2); hold all
 MH=ceil(max(max(mantelH(2:end,2:end))));
 mH=floor(min(min(mantelH(2:end,2:end))));
 mH=min(mH,-MH);
@@ -156,45 +214,15 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 % colorbar('Ticks',[mH,0,MH],'location','westoutside');
-axis('square')
 caxis([mH,MH]);
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 
-%% Centering
-RC=disToRanks(C);
-RD=disToRanks(D);
-if option==3;
-    A=sum(sum(C))/n/(n-1);
-    B=sum(sum(D))/n/(n-1);
-    A=C-A;
-    B=D-B;
-    for j=1:n
-        A(j,j)=0;
-        B(j,j)=0;
-    end
-else
-    H=eye(n)-(1/n)*ones(n,n);
-    A=H*C;
-    B=D*H;
-    % % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
-    if option==2
-        A=A-C/n;
-        B=B-D/n;
-        for j=1:n
-            A(j,j)=0;
-            B(j,j)=0;
-        end
-    end
-end
-%global stat
-if cc==1
-    A=A-mean(mean(A));B=B-mean(mean(B));
-end
-mcorrH=A.*B;
-%
-
-%% Col 3
-ax=subplot(s,t,3);
+%% Mcorr
 if sameBar==1
     minC=floor(min(min([A,B]))*10)/10;maxC=ceil(max(max([A,B]))*10)/10;
 else
@@ -202,7 +230,9 @@ else
 end
 minC=min(minC,-maxC);maxC=max(maxC,-minC);
 
+
 % A Mcorr
+ax=subplot(s,t,3); hold all
 imagesc(A');
 set(gca,'YDir','normal')
 colormap(ax,map2)
@@ -215,11 +245,15 @@ title([{'Mcorr (double center)'}; {' '}],'FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 
 % B MCorr
-ax=subplot(s,t,t+3);
+ax=subplot(s,t,t+3); hold all
 if sameBar==1
     minD=floor(min(min([A,B]))*10)/10;maxD=ceil(max(max([A,B]))*10)/10;
 else
@@ -236,11 +270,15 @@ title('$$B$$','interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 
 % C MCorr
-ax=subplot(s,t,2*t+3);
+ax=subplot(s,t,2*t+3); hold all
 MH=ceil(max(max(mcorrH(2:end,2:end))));
 mH=floor(min(min(mcorrH(2:end,2:end))));
 mH=min(mH,-MH);
@@ -254,26 +292,21 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 % colorbar('Ticks',[mH,0,MH],'location','westoutside');
-axis('square')
 caxis([mH,MH]);
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
-
-%% Global to Local
-RC=(RC>k);
-RD=(RD>l);
-A(RC)=0;
-B(RD)=0;
-if cc==1
-    A=A-mean(mean(A));B=B-mean(mean(B));
-end
 
 
 %% MGC
 
 
 % A MGC
-ax=subplot(s,t,4);
-imagesc(A');
+ax=subplot(s,t,4); hold all
+imagesc(A_MGC');
 colormap(ax,map2)
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
@@ -285,12 +318,16 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 
 % B MGC
-ax=subplot(s,t,t+4);
-imagesc(B');
+ax=subplot(s,t,t+4); hold all
+imagesc(B_MGC');
 set(gca,'FontSize',fontSize)
 colormap(ax,map2)
 caxis([minD,maxD]);
@@ -300,15 +337,18 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove y axis ticks
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 % C MGC
-ax=subplot(s,t,2*t+4);
-mcorrH=A.*B;
-MH=ceil(max(max(mcorrH(2:end,2:end))));
-mH=floor(min(min(mcorrH(2:end,2:end))));
+ax=subplot(s,t,2*t+4); cla, hold all
+MH=ceil(max(max(C_MGC(2:end,2:end))));
+mH=floor(min(min(C_MGC(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
-imagesc(mcorrH');
+imagesc(C_MGC');
 set(gca,'YDir','normal')
 colormap(ax,map2)
 caxis([mH,MH]);
@@ -317,7 +357,11 @@ title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
-axis('square')
+plot([id(1)-0.5 id(4)-0.5],[id(1)-0.5 id(1)-0.5],'k')
+plot([id(1)-0.5 id(4)-0.5],[id(4)+0.5 id(4)+0.5],'k')
+plot([id(1)-0.5 id(1)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+plot([id(4)-0.5 id(4)-0.5],[id(1)-0.5 id(4)+0.5],'k')
+axis([1 n 1 n])
 
 %% Col5 MPM
 set(groot,'defaultAxesColorOrder',map1);
@@ -360,8 +404,9 @@ set(groot,'defaultAxesColorOrder',map1);
 ax=subplot(s,t,t+t);
 kmin=2;
 hold on
+pAll(pAll<=eps)=0.005;
 ph=pAll(2:end,2:end)';
-ph(ph<=eps)=0.0005;
+% ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
@@ -446,8 +491,7 @@ hold off
 % 1-pAll(k,l)
 % power1(end)
 % power1(k,l)
-k
-l
+
 
 %%
 F.fname=strcat(pre2, 'A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));

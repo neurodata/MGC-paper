@@ -294,22 +294,38 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{../Figures/FigA}
-% \includegraphics[width=1.0\textwidth]{../Figures/FigB}
-% \includegraphics[width=1.0\textwidth]{../Figures/FigC}
+\includegraphics[width=0.9\textwidth,trim={5cm 0 0 0},clip]{../Figures/FigA}
+\begin{center}
+\vspace{-35pt}\hspace{-150pt}
+\begin{tabular}{c  c  c  c}
+ $\delta_x$(44,45) & \hspace{1.8em} -1.45 \hspace{1.8em}  & \hspace{1.8em} -2.08 \hspace{1.8em} & \hspace{1.8em} -2.08 \hspace{1.8em}  \\ 
+ $\delta_y$(44,45) & 0.83 & 1.43 & 0.00  \\ 
+ $\delta_x \times \delta_y$ & -1.20 & -1.45 & 0.00  \\ 
+ 
+\hline
+
+
+ $\delta_x$(45,46) & -1.90 & -2.70 & -2.70  \\ 
+ $\delta_y$(45,46) & -2.05 & -2.60 & -2.60  \\ 
+ $\delta_x \times \delta_y$ & 3.90 & -1.90 & 7.01  \\ 
+\end{tabular}
+\end{center}
 \caption{
 Flowchart schematizing Multiscale Generalized Correlation (\Mgc). Columns listed from left to right.
-Column 1: Pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
-Column 2: Compute all pairwise distances for $x$ and $y$ yielding
- $\tilde{A}$ (top) and $\tilde{B}$ (bottom), the two interpoint comparison matrices used by the \Mantel~test \cite{Mantel1967}  (this requires choosing appropriate distances for both $x$ and $y$).  The heatmaps are arbitrarily sorted by $x$'s.
-Column 3: Double centering---subtracting the row-sums and column-sums to eliminate extrema due to individual samples---yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, from which we compute the element-wise product $A \circ B$.  Double summing over the element-wise product yields the un-normalized observed \Mcorr~statistic \cite{SzekelyRizzo2013a}, which is significant only when that double sum is positive. 
-% As the entries of $A$ and $B$ can be either positive or negative, the entry-wise products can be either positive or negative for nonlinear dependencies, which causes $\Mcorr(X,Y)$ to be close to $0$ and the p-value to be in-significant, as shown in column 5.
-Column 4: Local $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,4)$ (which is the optimal scale in this simulation). Note that their element-wise products are mostly non-negative, indicating that its sum, which is the \Mgc~statistic $\G^*$, will be highly significant.
-% The top and bottom panels are the heat maps of local $A$ and $B$, i.e., $A^{k^{*}}=\{a^{k^{*}}_{ij}\}$ and $B^{l^{*}}=\{b^{l^{*}}_{ij}\}$, where $(k^{*},l^{*})=(4,4)$ is the optimal scale for the circle relationship. The center panel is the heat map of the entry-wise products of local $A$ and $B$, summing over which yields the un-normalized \Mgc~statistic $\G^{*}$. 
-Column 5 (Top): The empirical null distribution for \Mcorr, as well as our newly defined \Mgc, and the corresponding observed test statistics for each. \Mcorr, the global test, has  p-value $0.188$ while \Mgc, our multiscale test, has  p-value $<0.001$.
-(Middle) The multiscale p-value map, used in the absense of the true distribution or training data. 
+\textbf{Column 1:} Pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
+% 
+\textbf{Column 2:} Compute all pairwise distances for $x$ and $y$ yielding interpoint comparison matrices
+ $\tilde{A}$ (top) and $\tilde{B}$ (middle), 
+and their element-wise product $\tilde{C}$ (bottom; the heatmaps are arbitrarily sorted by $x$'s), whose sum is the  \Mantel~statistic \cite{Mantel1967}.
+Note that implementing it requires choosing appropriate distances for both $x$ and $y$.  
+% 
+\textbf{Column 3:} Double centering---subtracting the row-sums and column-sums to eliminate extrema due to individual samples---yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which we use to compute $C$, whose sum is the un-normalized \Mcorr~statistic \cite{SzekelyRizzo2013a}.
+% 
+\textbf{Column 4:} Rank truncating yields $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,6)$ (which is the optimal scale in this simulation), from which we can compute $C^{k,l}$, whose  sum is the \Mgc~statistic.  
+\textbf{Column 5:} (Top) The empirical null distribution for \Mcorr, as well as our newly defined \Mgc, and the corresponding observed test statistics for each. \Mcorr, the global test, has  p-value $0.067$ while \Mgc, our multiscale test, has  p-value $0.005$.
+(Middle) The multiscale p-value map, used in the absence of the true distribution or training data. 
 (Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scale and understand the structure of dependence.
-Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that acheive nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
+Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that achieve nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
 }
 \label{f:schematic}
 \end{figure}

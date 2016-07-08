@@ -149,7 +149,7 @@ xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 set(gca,'visible','on')
 set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
@@ -166,7 +166,7 @@ caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 title('$\tilde{B}$','interpreter','latex','FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 % C Mantel
@@ -178,9 +178,8 @@ MH=max(MH,-mH);
 imagesc(mantelH');
 set(gca,'YDir','normal')
 title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
-% colorbar('Ticks',[mH,0,MH],'location','westoutside');
 caxis([mH,MH]);
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 %% Mcorr
@@ -197,11 +196,9 @@ ax=subplot(s,t,3); hold all
 imagesc(A');
 set(gca,'YDir','normal')
 caxis([minC,maxC]);
-% title('Mcorr $$A$$','FontSize',fontSize,'interpreter','latex');
-% title('Mcorr','FontSize',fontSize);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'Mcorr (double center)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 % B MCorr
@@ -217,7 +214,7 @@ set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
 caxis([minD,maxD]);
 title('$$B$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 % C MCorr
@@ -229,8 +226,7 @@ MH=max(MH,-mH);
 imagesc(mcorrH');
 set(gca,'YDir','normal')
 title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
-% colorbar('Ticks',[mH,0,MH],'location','westoutside');
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 
@@ -242,21 +238,18 @@ ax=subplot(s,t,4); hold all
 imagesc(A_MGC');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-% title('MGC $$A^{k^{*}}$$','interpreter','latex');
-% title('MGC');
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 % B MGC
 ax=subplot(s,t,t+4); hold all
 imagesc(B_MGC');
-set(gca,'FontSize',fontSize)
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
 title('$$B^{l^{*}}$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 % C MGC
 ax=subplot(s,t,2*t+4); cla, hold all
@@ -267,7 +260,7 @@ imagesc(C_MGC');
 set(gca,'YDir','normal')
 caxis([mH,MH]);
 title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n)
+clean_panel(ax,map2,pos,id,n,fontSize)
 
 
 %% Col5 MPM
@@ -402,6 +395,6 @@ hold off
 
 %%
 F.fname=strcat(pre2, 'A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
-F.wh=[10 6]*2;F.fname
+F.wh=[10 6.5]*2;F.fname
 
 print_fig(gcf,F)

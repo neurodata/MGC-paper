@@ -34,7 +34,6 @@ catch
     run_fig1Data(type,n,noise);
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 end
-pre2=strcat(rootDir,'Figures/Aux/');% The folder to save figures
 
 fontSize=18;
 mkSize=20;
@@ -59,7 +58,12 @@ set(groot,'defaultAxesColorOrder',map1);
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
+%% permute sample order
 
+xynorm=sum([x,y]').^2';
+[foo, bar]=sort(xynorm);
+% bar=1:n;
+bar=randperm(n);
 
 %%  Col 1
 ax=subplot(s,t,t+1); cla, hold all
@@ -78,6 +82,7 @@ IJ=sort(IJ(:));
 id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 xx=15;
 id=[44,45,45,46];
+col=[1 .5 0];
 
 for ind=[1,2,4]; %length(id)
     if ind==4;
@@ -85,8 +90,8 @@ for ind=[1,2,4]; %length(id)
     else
         hs=-1.5;
     end
-    text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color','k')
-    plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color','k');
+    text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color',col)
+    plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
 end
 
 tname=CorrSimuTitle(type);
@@ -141,7 +146,7 @@ else
     maxC=ceil(max(max(C))*10)/10;
     minC=ceil(min(min(C))*10)/10;
 end
-imagesc(C');
+imagesc(C(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
@@ -149,7 +154,7 @@ xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
 set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
@@ -159,14 +164,14 @@ ax=subplot(s,t,t+2); hold all
 if sameBar~=1
     maxC=ceil(max(max(D))*10)/10;
 end
-imagesc(D');
+imagesc(D(bar,bar)');
 set(gca,'FontSize',16)
 % colormap(ax,map3);
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',13); % Remove y axis ticks
 title('$\tilde{B}$','interpreter','latex','FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C Mantel
@@ -175,11 +180,11 @@ MH=ceil(max(max(mantelH(2:end,2:end))));
 mH=floor(min(min(mantelH(2:end,2:end))));
 mH=min(mH,-MH);
 MH=max(MH,-mH);
-imagesc(mantelH');
+imagesc(mantelH(bar,bar)');
 set(gca,'YDir','normal')
 title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
 caxis([mH,MH]);
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 %% Mcorr
@@ -193,12 +198,12 @@ minC=min(minC,-maxC);maxC=max(maxC,-minC);
 
 % A Mcorr
 ax=subplot(s,t,3); hold all
-imagesc(A');
+imagesc(A(bar,bar)');
 set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'Mcorr (double center)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MCorr
@@ -209,12 +214,12 @@ else
     minD=floor(min(min([B]))*10)/10;maxD=ceil(max(max([B]))*10)/10;
 end
 minD=min(minD,-maxD);maxD=max(maxD,-minD);
-imagesc(B');
+imagesc(B(bar,bar)');
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
 caxis([minD,maxD]);
 title('$$B$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C MCorr
@@ -223,10 +228,10 @@ MH=ceil(max(max(mcorrH(2:end,2:end))));
 mH=floor(min(min(mcorrH(2:end,2:end))));
 mH=min(mH,-MH);
 MH=max(MH,-mH);
-imagesc(mcorrH');
+imagesc(mcorrH(bar,bar)');
 set(gca,'YDir','normal')
 title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 
@@ -235,32 +240,32 @@ clean_panel(ax,map2,pos,id,n,fontSize)
 
 % A MGC
 ax=subplot(s,t,4); hold all
-imagesc(A_MGC');
+imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MGC
 ax=subplot(s,t,t+4); hold all
-imagesc(B_MGC');
+imagesc(B_MGC(bar,bar)');
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
 title('$$B^{l^{*}}$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 % C MGC
 ax=subplot(s,t,2*t+4); cla, hold all
 MH=ceil(max(max(C_MGC(2:end,2:end))));
 mH=floor(min(min(C_MGC(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
-imagesc(C_MGC');
+imagesc(C_MGC(bar,bar)');
 set(gca,'YDir','normal')
 caxis([mH,MH]);
 title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
-clean_panel(ax,map2,pos,id,n,fontSize)
+clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 %% Col5 MPM
@@ -394,7 +399,13 @@ hold off
 
 
 %%
-F.fname=strcat(pre2, 'A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+pre2=strcat(rootDir,'Figures/');% The folder to save figures
+donzo=1;
+if donzo==1
+    F.fname=strcat(pre2, 'FigA');    
+else
+    F.fname=strcat(pre2, 'Aux/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+end
 F.wh=[10 6.5]*2;F.fname
 
 print_fig(gcf,F)

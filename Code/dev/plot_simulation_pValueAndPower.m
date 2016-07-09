@@ -115,6 +115,6 @@ h=suptitle(CorrSimuTitle(type));
 set(h,'FontSize',32);% for 1-Dimensional Simulations'));
 
 %% 
-F.fname=strcat(rootDir, 'Code/Temp/',num2str(type),'_n', num2str(n),'_d', num2str(dim));
+F.fname=strcat(rootDir, 'Figures/Aux/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

@@ -13,11 +13,11 @@ end
 n=size(X,1);
 disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
 
-rk=0;
-if rk==1
-    X=disRank(1:n,1:n)-1;
-    Y=disRank(1:n,n+1:2*n)-1;
-end
+% rk=0;
+% if rk==1
+%     X=disRank(1:n,1:n)-1;
+%     Y=disRank(1:n,n+1:2*n)-1;
+% end
 
 % depending on the choice of the global correlation, properly center the
 % distance matrices
@@ -26,7 +26,7 @@ B=Centering(Y,option);
 
 RX=disRank(1:n,1:n); % the ranks for X
 RY=disRank(1:n,n+1:2*n); % the ranks for Y
-[corrXY,varX,varY]=LocalComputation(A',B,RX,RY); % compute all local corr / var statistics
+[corrXY,varX,varY]=LocalComputation(A',B,RX',RY); % compute all local corr / var statistics
 
 function [A]=Centering(X,option)
 % An auxiliary function that properly centers the distance matrix X,

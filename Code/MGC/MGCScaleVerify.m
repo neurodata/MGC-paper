@@ -32,7 +32,7 @@ function p1=Verify(VN)
 
 rowTmp=median(VN,2)';
 for j=1:m
-    rowTmp(j)=prctile(VN(j,:),55);
+    rowTmp(j)=prctile(VN(j,:),50);
 end
 %rowTmp=min(VN,[],2)';
 indK=find(rowTmp==min(rowTmp),1,'last');

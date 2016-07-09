@@ -262,7 +262,7 @@ All dependence tests start from the same setting: we observe $n$ pairs of observ
 
 Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
-Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, that is, $R(a_{ij})=k$ if $\mb{x}_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_j$, starting from $1$ to $n$, and  define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
+Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_j$ relative to $\mb{x}_i$, that is, $R(a_{ij})=k$ if $\mb{x}_j$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_i$, starting from $1$ to $n$, and define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
 \begin{equation}
 \label{localCoef2}
     \mt{a}_{ij}^k=
@@ -273,21 +273,21 @@ Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}
     \end{cases} \qquad \qquad
     \mt{b}_{ij}^l=
     \begin{cases}
-      b_{ij}, & \text{if } R(b_{ij}) \leq l, \\
+      b_{ij}, & \text{if } R(b_{ji}) \leq l, \\
        % -\bar{b}^{l}, & \text{otherwise};
       0, & \text{otherwise};
     \end{cases}
 \end{equation}
 and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, 
 where $\bar{a}^k$ is the local mean;
-and define $b^k_{ij}$ similarly.
+and define $b^k_{ij}$ similarly, except the rank index is transposed. \jv{note that I transpose the rank above, for symmetry of local correlations}
 % where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  
 We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
 \label{localCoef}
 \G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
 \end{equation}
-where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combination of $k$ and $l$ (more technical details of \Mgc~are in Appendix \ref{appen:mgc}).
+where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combination of $k$ and $l$; and the local correlations are symmetric, see in Appendix \ref{appen:mgc}.
 % As an example, $\G^{kl}$ could be a local distance correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the global distance correlation coefficient $\G$.
 Among all $n^2$ local statistics, $\{\G^{kl}\}$, \Mgc~selects the best local statistic for testing. %(see Appendix \ref{appen:algorithms} for details on how to compute local correlations and estimate \Mgc).
 Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinear dependence structure.
@@ -995,7 +995,7 @@ Similar to the alternative implementation of \Dcorr, we can also use singly cent
 
 \subsection{Multiscale Generalized Correlation (\Mgc)}
 \label{appen:mgc}
-For any generalized correlation coefficient, its local correlations can be directly implemented as in Equation~\ref{localCoef}, by plugging in the respective $a_{ij}$ and $b_{ij}$ from Equation~\ref{generalCoef} and rank-truncating  the distance matrices  as in Equation~\ref{localCoef2}.
+For any generalized correlation coefficient, its local correlations can be directly implemented as in Equation~\ref{localCoef}, by plugging in the respective $a_{ij}$ and $b_{ij}$ from Equation~\ref{generalCoef} and rank-truncating  the distance matrices  as in Equation~\ref{localCoef2}. 
 
 In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. 
 
@@ -1010,7 +1010,17 @@ Moreover, the permutation p-value of global \Dcorr is the same under single cent
 The above also holds for \Mcorr asymptotically.
 \end{lem}
 
-Although single centering is equivalent to double centering for the global correlation, single centering is more consistent in preserving ranks, e.g., the ranks by sorting $\tilde{B}$ column-wise are the same as the column ranks of $H\tilde{A}$, which are different from the ranks of $H\tilde{A}H$. Therefore local correlations are more accurate in excluding far-away observations that exhibit insignificant dependency, which is the reason we choose to implement \Mgc~by single centering.
+Although single centering is equivalent to double centering for the global correlation, single centering is actually consistent in preserving ranks, e.g., the ranks by sorting $\tilde{A}$ within each row are exactly the same as the row ranks of $H\tilde{A}$, which are different from the ranks of $H\tilde{A}H$. This is why we define the rank-truncated comparisons a bit differently for $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$: $\mt{a}_{ij}^k$ is defined based on ranks within each row, while $\mt{b}_{ij}^l$ is defined based on ranks within each column. This not only makes the ranks consistent in the $\tilde{Z}$ and $Z$ for $Z=A,B$, but also makes the resulting local correlations always symmetric even if $A$ and $B$ are not symmetric.
+
+\begin{lem}
+Each local correlation $\G^{kl}$ is always symmetric regardless of the symmetry of $A$ or $B$. Namely for any $k,l$, 
+\begin{align*}
+\G^{kl}(X,Y)=\G^{lk}(Y,X).
+\end{align*}
+
+Furthermore, the row ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the column ranks of $\tilde{B}$ are preserved in $B$ under single centering.
+\end{lem}
+Therefore local correlations become more accurate in excluding far-away observations that exhibit insignificant dependency, when \Mgc~is implemented by single centering.
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively.
 
@@ -1078,7 +1088,8 @@ then the alternative statistic can be computed from the training data while the 
 \Ensure The local correlation coefficient $\G^{kl} \in [-1,1]$ at the given $(k,l)$.
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
 \State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ at $0$.
-\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{column-wise sorting  assuming no ties}
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{row-wise sorting  assuming no ties}
+\State $R^{B}=\textsc{Transpose}(R^{B})$ \Comment{column-wise ranks are used for second data}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}  \Comment{proper centering of the distance matrices}
 
 \For{$i,j:=1,\ldots,n$}
@@ -1103,6 +1114,7 @@ then the alternative statistic can be computed from the training data while the 
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$}
 \State initialize $C$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$}
+\State $R^{B}=\textsc{Transpose}(R^{B})$ 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
 
 \For{$i,j:=1,\ldots,n$}
@@ -1330,6 +1342,16 @@ For \Mcorr, it modifies $A$ and $B$ on both the diagonal entries and off-diagona
 
 \end{proof}
 
+\begin{appLem}
+Each local correlation $\G^{kl}$ is always symmetric. Namely for any $k,l$, 
+\begin{align*}
+\G^{kl}(X,Y)=\G^{lk}(Y,X).
+\end{align*}
+
+Furthermore, the row ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the column ranks of $\tilde{B}$ are preserved in $B$ under single centering.
+\end{appLem}
+\begin{proof}
+\end{proof}
 %\begin{appThm}
 %Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 

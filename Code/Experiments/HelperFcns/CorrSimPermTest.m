@@ -59,9 +59,6 @@ for tt=type
         ind=[find(power2>=thres,1,'last') 1];
         ind=max(ind);
         dim=dimRange(ind);
-        if lim==21 && ind>1;
-            ind=ind-1;
-        end
         neighbor=neighborhoods(:,ind);
         power1All=power1All(:,:,ind);
         power2All=power2All(:,:,ind);

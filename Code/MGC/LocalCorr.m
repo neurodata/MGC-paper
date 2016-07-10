@@ -24,9 +24,9 @@ disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
 A=Centering(X,option);
 B=Centering(Y,option);
 
-RX=disRank(1:n,1:n); % the ranks for X
-RY=disRank(1:n,n+1:2*n); % the ranks for Y
-[corrXY,varX,varY]=LocalComputation(A',B,RX',RY); % compute all local corr / var statistics
+RX=disRank(1:n,1:n); % the column ranks for X
+RY=disRank(1:n,n+1:2*n); % the column ranks for Y
+[corrXY,varX,varY]=LocalComputation(A,B',RX,RY'); % compute all local corr / var statistics
 
 function [A]=Centering(X,option)
 % An auxiliary function that properly centers the distance matrix X,
@@ -36,7 +36,7 @@ n=size(X,1);
 % centering for dcorr / mcorr / Mantel
 switch option
     case 1
-        EX=repmat(mean(X,1),n,1);
+        EX=repmat(mean(X,1),n,1); % column centering
         %EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X)); % this is original double-centering
     case 2
 %         EX=repmat(sum(X,1)/(n-1),n,1);

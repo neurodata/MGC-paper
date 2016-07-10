@@ -262,7 +262,7 @@ All dependence tests start from the same setting: we observe $n$ pairs of observ
 
 Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
-Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_j$ relative to $\mb{x}_i$, that is, $R(a_{ij})=k$ if $\mb{x}_j$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_i$, starting from $1$ to $n$, and define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
+Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, that is, $R(a_{ij})=k$ if $\mb{x}_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_j$, starting from $1$ to $n$, and define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
 \begin{equation}
 \label{localCoef2}
     \mt{a}_{ij}^k=
@@ -280,7 +280,7 @@ Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_j$ relative to $\mb{x}
 \end{equation}
 and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, 
 where $\bar{a}^k$ is the local mean;
-and define $b^k_{ij}$ similarly, except the rank index is transposed. \jv{note that I transpose the rank above, for symmetry of local correlations}
+and define $b^k_{ij}$ similarly, except the rank index is transposed. \jv{I transpose the rank above for symmetry of local correlations}
 % where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  
 We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
@@ -1005,12 +1005,12 @@ In the next lemma, we show that single-centering and double-centering are indeed
 \begin{lem}
 The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
-Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, so is the testing power.
 
-The above also holds for \Mcorr asymptotically.
+The above also holds for \Mcorr~asymptotically.
 \end{lem}
 
-Although single centering is equivalent to double centering for the global correlation, single centering is actually consistent in preserving ranks, e.g., the ranks by sorting $\tilde{A}$ within each row are exactly the same as the row ranks of $H\tilde{A}$, which are different from the ranks of $H\tilde{A}H$. This is why we define the rank-truncated comparisons a bit differently for $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$: $\mt{a}_{ij}^k$ is defined based on ranks within each row, while $\mt{b}_{ij}^l$ is defined based on ranks within each column. This not only makes the ranks consistent in the $\tilde{Z}$ and $Z$ for $Z=A,B$, but also makes the resulting local correlations always symmetric even if $A$ and $B$ are not symmetric.
+Although single centering is equivalent to double centering for the global correlation, single centering is actually consistent in preserving ranks, e.g., the ranks by sorting $\tilde{A}$ within each column are exactly the same as the column ranks of $H\tilde{A}$, which are different from the column ranks of $H\tilde{A}H$. This is why we define the rank-truncated comparisons a bit differently for $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$: $\mt{a}_{ij}^k$ is defined based on ranks within each column, while $\mt{b}_{ij}^l$ is defined based on ranks within each row. This not only makes the ranks consistent in the $\tilde{Z}$ and $Z$ for $Z=A,B$, but also makes the resulting local correlations always symmetric even if $A$ and $B$ are not symmetric.
 
 \begin{lem}
 Each local correlation $\G^{kl}$ is always symmetric regardless of the symmetry of $A$ or $B$. Namely for any $k,l$, 
@@ -1018,7 +1018,7 @@ Each local correlation $\G^{kl}$ is always symmetric regardless of the symmetry 
 \G^{kl}(X,Y)=\G^{lk}(Y,X).
 \end{align*}
 
-Furthermore, the row ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the column ranks of $\tilde{B}$ are preserved in $B$ under single centering.
+Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the row ranks of $\tilde{B}$ are preserved in $B$ under single centering.
 \end{lem}
 Therefore local correlations become more accurate in excluding far-away observations that exhibit insignificant dependency, when \Mgc~is implemented by single centering.
 
@@ -1061,7 +1061,7 @@ More detailed discussions regarding the optimal scale approximation is offered i
 \label{appen:algorithms}
 All algorithms are implemented in Matlab and R with the algorithm shown below. For ease of presentation, we assume there are no repeating observations of \mbx~or \mby, and assume \Dcorr~as the global correlation in the algorithm.
 
-Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient.
+Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient. Note that for our default \Mgc~implementation by single centering, the centering function does centering by column for $A$ and centering by row for $B$, and the sorting function sorts $A$ within column and sorts $B$ within row.
 
 To facilitate  optimal scale estimation, Algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
 whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
@@ -1088,9 +1088,10 @@ then the alternative statistic can be computed from the training data while the 
 \Ensure The local correlation coefficient $\G^{kl} \in [-1,1]$ at the given $(k,l)$.
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
 \State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ at $0$.
-\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{row-wise sorting  assuming no ties}
-\State $R^{B}=\textsc{Transpose}(R^{B})$ \Comment{column-wise ranks are used for second data}
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{proper sorting  assuming no ties}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}  \Comment{proper centering of the distance matrices}
+%\State $R^{B}=\textsc{Transpose}(R^{B})$ \Comment{row-wise ranks are used for second data}
+%\State $B=\textsc{Transpose}(B)$ \Comment{row-wise ranks are used for second data}
 
 \For{$i,j:=1,\ldots,n$}
 \State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{store un-centered local distance covariance}
@@ -1114,7 +1115,7 @@ then the alternative statistic can be computed from the training data while the 
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$}
 \State initialize $C$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$}
-\State $R^{B}=\textsc{Transpose}(R^{B})$ 
+%\State $R^{B}=\textsc{Transpose}(R^{B})$ 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
 
 \For{$i,j:=1,\ldots,n$}
@@ -1277,18 +1278,20 @@ Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
-To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. In the permutation test, the p-value equals the percentage that the observed test statistic is no more than the permuted test statistic. Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, because simple centering or not does not affect the p-value.
+To show that \Mgc~is equivalent to the global correlation coefficient, it suffices to show the p-value of $\G^{kl}$ is always no less than the p-value of $\G$ for all $k,l$ under linear dependence. In the permutation test, the p-value equals the percentage of permutations such that the permuted test statistic is no less than the observed test statistic, so it suffices to compare the number of ``significant'' permutations for $\G$ and $\G^{kl}$.
 
-Under linear dependency, for any global correlation coefficient satisfying Equation~\ref{generalCoef}, by Cauchy-Schwarz inequality it follows that
-\begin{equation*}
-1=\G(X, Y) \geq \G(X, Y_{\pi})
-\end{equation*}
-for any permutation $\pi$, where the equality holds if and only if $X$ is a scalar multiple of $Y_{\pi}$, i.e., $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$ for all $i,j$, where $\pi^{-1}(\cdot)$ is the inverse permutation. %It follows that the p-value of $\G$ is $0$, which is at the minimal.
+Without loss of generality, we assume all of $a_{ij}$, $b_{ij}$, $a_{ij}^{k}$, and $b_{ij}^{l}$ are of zero-mean, as simple centering or not does not affect the p-value; and we assume \Dcorr with double centering are used for proving, as Lemma~\ref{lem1} shows that double centering and simple centering yield the same testing power and p-value.
 
-The identity permutation is one such example. However, for any permutation $\pi$ such that the equality holds, it is also applicable to rank-truncated comparisons too, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$. Therefore, for any $\pi$ such that $\G(X, Y) = \G(X, Y_{\pi})$, we always have $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$ for all $k,l$; moreover, there may exist other permutations such that $\G^{kl}(X, Y)<\G^{kl}(X, Y_{\pi})$, but there is no $\pi$ such that $\G(X, Y) < \G(X, Y_{\pi})$.
+Under linear dependency, by Cauchy-Schwarz inequality the distance correlation satisfies
+\begin{align*}
+& dcov(X,Y) = \sqrt{dvar(X) \cdot dvar(Y)} \\
+& \Rightarrow 1=\G(X, Y) \geq \G(X, Y_{\pi})
+\end{align*}
+for any permutation $\pi$, where the equality holds if and only if $X$ is a scalar multiple of $Y_{\pi}$, i.e., $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$ for all $i,j$, where $\pi^{-1}(\cdot)$ denotes the inverse permutation. %It follows that the p-value of $\G$ is $0$, which is at the minimal.
 
-Therefore the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$ under linear dependency, in which case the global correlation is the optimal scale for \Mgc.
-\cs{proof}
+Thus for the global correlation, there only exist permutations such that the permuted test statistic equals the observed test statistic. However, for all those ``significant'' permutations for $\G$, they are also ``significant'' for each $\G^{kl}$, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$, such that $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$; and there may exist other ``significant'' permutations such that $\G^{kl}(X, Y) \leq \G^{kl}(X, Y_{\pi})$.
+
+Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equal those for $\G$ under linear dependency, and the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$, in which case the global correlation is the optimal scale for \Mgc. 
 \end{proof}
 
 
@@ -1311,35 +1314,35 @@ Suppose under the alternative, each pair of observation $(\mb{x},\mb{y})$ is sam
 \end{align*}
 which is a discrete version of the quadratic relationship in the simulations.
 
-At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{17}{70} \approx 0.24$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. 
+At $n=7$, we can directly calculate $\G^{kl}(X, Y)$ and $\{\G^{kl}(X, YQ)\}$ for all permutation matrices $Q$. It follows that the p-value of \Mcorr~is $\frac{151}{210} \approx 0.72$, while $\G^{kl}(X, Y)=\frac{29}{126} \approx 0.23$ at $(k,l)=(2,4)$. Note that in this case $k$ is bounded above by $n=7$ while $l$ is bounded above by $4$ due the the repeating points in $Y$. 
 
-Then by choosing $\alpha=0.25$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
+Then by choosing $\alpha=0.24$, \Mgc~has power $1$ while global \Mcorr~has power $0$, i.e., \Mgc~successfully identifies the dependency in this example while global \Mcorr~fails.
 
 Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$ and reach the same conclusion with more significant p-values; but the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for \Mgcd~and \Mgcp~using the same example.
 \end{proof}
 
 \begin{appLem}
+\label{lem1}
 The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
-Moreover, the permutation p-value of global \Dcorr is the same under single centering and double centering, so is the testing power.
+Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, so is the testing power.
 
-The above also holds for \Mcorr asymptotically.
+The above also holds for \Mcorr~asymptotically.
 \end{appLem}
 \begin{proof}
-For distance covariance, we can re-write it in trace as follows
+For distance covariance, we can re-write it in matrix trace as follows
 \begin{align*}
 dcov(X,Y) &= \frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij} \\
  &=\frac{1}{n^2} tr(A^{T} \times B) \\
- &=\frac{1}{n^2} tr(H\tilde{A}^{T}H \times H\tilde{B}H) \\
- &=\frac{1}{n^2} tr(\tilde{A}^{T}H \times \tilde{B}H) \\
+ &=\frac{1}{n^2} tr(H\tilde{A}^{T}HH\tilde{B}H) \\
+ &=\frac{1}{n^2} tr(\tilde{A}^{T}H\tilde{B}H) \\
  &=\frac{1}{n^2} tr((H\tilde{A})^{T} \times (\tilde{B}H)),
 \end{align*}
-where the second to last equality follows because $H$ is symmetric and idempotent. Therefore, single centering and double centering yields the same distance covariance.
+where the second to last equality follows because $H$ is symmetric and idempotent. Therefore, single centering and double centering yield the same distance covariance.
 
-Although distance variances may not be the same under the two different centering schemes, in the permutation test the distance variances are merely normalization scalars that do not affect the p-value and power, i.e., the test using distance covariance is the same as the test using distance correlation in the permutation test. Therefore the p-value and power of \Dcorr are also the same under single centering and double centering.
+Although distance variances may not be the same under the two different centering schemes, in the permutation test the distance variances are merely normalization scalars that do not affect the p-value and power, i.e., the test using distance covariance is the same as the test using distance correlation in the permutation test. Therefore the p-value and power of \Dcorr~are also the same under single centering and double centering.
 
 For \Mcorr, it modifies $A$ and $B$ on both the diagonal entries and off-diagonal entries for modified distance covariance. Single centering changes the modified distance covariance only through the off-diagonal modifications, in a magnitude of $O(\frac{1}{n})$ relative to the original products. Thus as $n$ increases, the modified distance covariance is asymptotically equivalent under the two different centering schemes, so are the p-value and power of \Mcorr.
-
 \end{proof}
 
 \begin{appLem}
@@ -1348,33 +1351,21 @@ Each local correlation $\G^{kl}$ is always symmetric. Namely for any $k,l$,
 \G^{kl}(X,Y)=\G^{lk}(Y,X).
 \end{align*}
 
-Furthermore, the row ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the column ranks of $\tilde{B}$ are preserved in $B$ under single centering.
+Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the row ranks of $\tilde{B}$ are preserved in $B$ under single centering.
 \end{appLem}
 \begin{proof}
+For fixed $k,l$, denote $R^{A}$ as the binary matrix such that $R^{A}_{ij}=1$ if $rank(a_{ij}) \leq k$, $R^{A}_{ij}=0$ otherwise; similarly define $R_{B}$. Then the rank-truncated pairwise comparisons $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$ in Equation~\ref{localCoef2} are the entries of $A \circ R^{A}$ and $B \circ {R^{B}}^{T}$ respectively, where $\circ$ denotes the entrywise product.
+
+It follows that the local covariance can be rewritten as
+\begin{align*}
+z_{kl} \G^{kl}(X,Y) &= \textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l \\
+ &= tr((A \circ R_{A})^{T} \times (B \circ R_{B}^{T})) \\
+ &= tr((H\tilde{A} \circ R_{A})^{T} \times (\tilde{B}H \circ R_{B}^{T})) \\
+\end{align*}
+\cs{proof}
+
+As to rank preserving, the column ranks of the Euclidean distance matrix $\tilde{A}$ are the same as the column ranks of $A=H \tilde{A}$, because $H \tilde{A}$ centers each entry of $\tilde{A}$ by column means, while double centering $H \tilde{A} H$ does not always preserve the original ranks. Similarly, the row ranks of $\tilde{B}$ are preserved in $B=\tilde{B}H$ but not $H \tilde{B} H$.
 \end{proof}
-%\begin{appThm}
-%Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
-
-%Therefore, multiscale generalized correlation is consistent against all dependent alternatives of finite second moments, when it is implemented by distance correlation or modified distance correlation.
-%\end{appThm}
-
-%\begin{appThm}
-%Suppose $\mb{x}$ is linearly dependent of $\mb{y}$. Then for any $n$ and $\alpha$ it always holds that
-%\begin{equation}
-%\beta_{\alpha}(\G^{*}) = \beta_{\alpha}(\G).
-%\end{equation}
-
-%Thus multiscale generalized correlation is equivalent to the global correlation coefficient under linear dependency.
-%\end{appThm}
-
-%\begin{appThm}
-%There exists $f_{xy}$, $n$ and $\alpha$ such that
-%\begin{equation}
-%\beta_{\alpha}(\G^{*}) > \beta_{\alpha}(\G).
-%\end{equation}
-
-%Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency.
-%\end{appThm}
 
 
 \end{document}

@@ -1,4 +1,4 @@
-function []=plot_auxiliary(newSim,type,n,noise)
+function []=plot_schematic(newSim,type,n,noise)
 
 % type=6;n=100;dim=1;noise=1;
 % CorrSimPlotsA(type,n,dim,noise,pre1);
@@ -400,7 +400,7 @@ hold off
 
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=1;
+donzo=0;
 if donzo==1
     F.fname=strcat(pre2, 'FigA');    
 else

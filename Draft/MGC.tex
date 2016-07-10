@@ -148,7 +148,7 @@ An ideal test for dependence would have the following properties:
 No existing test satisfies all of these properties.
 In this paper we propose a novel dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of generalized correlation coefficient with multiscale neighborhoods.
 \jv{too many commas below}
-More specifically, we compute the correlation for all neighborhood sizes, and find the optimal one,  yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
+More specifically, we compute the correlation for all neighborhood sizes, and find the optimal ones,  yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
 We demonstrate that \Mgc~has all of the above properties via simulation and theory.
  % via a series of theoretical proofs, numerical simulations, and real data experiments.  
 % \Mgc~performs as well or better than previously proposed methods in essentially all simulations settings. 
@@ -321,10 +321,10 @@ Note that implementing it requires choosing appropriate distances for both $x$ a
 % 
 \textbf{Column 3:} Double centering---subtracting the row-sums and column-sums to eliminate extrema due to individual samples---yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, which we use to compute $C$, whose sum is the un-normalized \Mcorr~statistic \cite{SzekelyRizzo2013a}.
 % 
-\textbf{Column 4:} Rank truncating yields $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,6)$ (which is the optimal scale in this simulation), from which we can compute $C^{k,l}$, whose  sum is the \Mgc~statistic.  
+\textbf{Column 4:} Rank truncating yields $A^{k}$ and $B^{l}$, for a particular choice of $(k,l)=(4,6)$ (which is one optimal scale in this simulation), from which we can compute $C^{k,l}$, whose  sum is the \Mgc~statistic.  
 \textbf{Column 5:} (Top) The empirical null distribution for \Mcorr, as well as our newly defined \Mgc, and the corresponding observed test statistics for each. \Mcorr, the global test, has  p-value $0.067$ while \Mgc, our multiscale test, has  p-value $0.005$.
 (Middle) The multiscale p-value map, used in the absence of the true distribution or training data. 
-(Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scale and understand the structure of dependence.
+(Bottom) The multiscale power map, used when the true distribution or training data are available.  Both maps enable one to select the optimal scales and understand the structure of dependence.
 Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value,  there are many local scales that achieve nearly perfect power, resulting in highly significant p-values, as well as revealing the scales of dependency.
 }
 \label{f:schematic}
@@ -356,7 +356,7 @@ This insight yields an algorithm for exactly computing \emph{all} local correlat
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Algorithm \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find an optimal scale. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absense of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on a p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for neighborhoods of scales for which p-values are consistently low. If no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation); otherwise we take the scale with the smallest p-value in the region as optimal. This is the procedure used for real data experiments, which maintains excellent performance 
+Finally, we must find the optimal scales. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on a p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for neighborhoods of scales for which p-values are consistently low. If no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation); otherwise we take the scale with the smallest p-value in the region as optimal. This is the procedure used for real data experiments, which maintains excellent performance 
 (see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 Figure \ref{f:simPerm} shows the distribution of power for the 20 different simulation settings, for both 1-dimensional and high-dimensional cases, using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
 
@@ -442,7 +442,7 @@ For nearly linear dependencies (1-5), the best neighborhood choice is always the
  % in a distribution dependent fashion. 
  Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6) and W (7) are both polynomials of degree 2 with different coefficients, and their power maps are quite similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
 Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
-Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scale for real data.
+Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scales for real data.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
@@ -474,13 +474,13 @@ $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
 % Suppose for given $f_{xy}$ and $\alpha$, $\beta_{\alpha}(\G) \rightarrow 1$ as $n \rightarrow \infty$, then $\beta_{\alpha}(\G^{*}) \rightarrow 1$ as well.
 \end{thm}
 
-Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. Moreover, if the alternative is in fact independent, once the optimal scale is determined, the power of \Mgc~always equals the type $1$ error level.
+Therefore, \Mgc~is consistent against all dependent alternatives for which its global counterpart is. Moreover, if the alternative is in fact independent, once an optimal scale is determined, the power of \Mgc~always equals the type $1$ error level.
 
 % Asymptotic consistency, however, does not convey to us how quickly \Mgc~achieves optimal power in various settings, and whether it exhibits significant advantage over its global counterpart and other popular methods.  For that, we turn to numerical simulations.
 
 For finite samples, however, things appear more interesting.
 % The above described qualitative descriptions led us to believe the following two conjectures.  
-For linear dependencies,  the optimal \Mgc~scale was empirically always the global one. We therefore conjectured and proved the following:
+For linear dependencies,  the optimal \Mgc~scale is empirically always the global one. We therefore conjectured and proved the following:
 \begin{thm}
 \label{t:linear}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
@@ -677,7 +677,7 @@ Our \Mgc~can be thought of as a regularized, or sparsified variant of generalize
 \jv{perhaps mention our guess that HHG is averaging across all ranks?}
 
 
-There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scale. 
+There are a number of additional potential extensions of this work.  First, additional theoretical claims involving choosing the optimal scales. 
 While in this work we proved that there exist scales that improve upon the global scale, and that many local scales outperform the global scale.
 Supplementary Figure \ref{f:simPerm} shows that estimating scales via Algorithm \ref{alg:best_scale} yields tests with power almost equal to the optimal power, and almost always better power than \Hhg~and \Mcorr.  
 
@@ -1024,7 +1024,7 @@ Therefore local correlations become more accurate in excluding far-away observat
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively.
 
-Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exists,  is distribution dependent, and is almost always non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
+Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exist,  is distribution dependent, and are often non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
 See Appendix \ref{appen:algorithms} for details of all relevant algorithms.
  % proposed herein, including estimating local correlation for a given scale (Algorithm \ref{alg:1scale}), local correlations for all scale (Algorithm \ref{alg:all_scales}), p-value for all scales (Algorithm \ref{alg:pval}), optimal scale using p-values (for real data; Algorithm \ref{alg:best_scale}), and finally power for all scales (Algorithm \ref{alg:power}).
 
@@ -1053,15 +1053,15 @@ The permutation test using the \Hhg~statistic is consistent against all dependen
 \label{appen:tests}
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
-Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, Algorithm~\ref{alg:1scale} computes one local correlation coefficient at a given $(k,l)$; then Algorithm~\ref{alg:all_scales} shows how to compute all local correlations efficiently; Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; Algorithm~\ref{alg:best_scale} approximates the optimal scale for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value of \Mgc; Algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scale for \Mgc.
+Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, Algorithm~\ref{alg:1scale} computes one local correlation coefficient at a given $(k,l)$; then Algorithm~\ref{alg:all_scales} shows how to compute all local correlations efficiently; Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value of \Mgc; Algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scales for \Mgc.
 % ~when the underlying model is known or training data of the same size are given. 
-More detailed discussions regarding the optimal scale approximation is offered in Appendix~\ref{appen:diss}.
+More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
 All algorithms are implemented in Matlab and R with the algorithm shown below. For ease of presentation, we assume there are no repeating observations of \mbx~or \mby, and assume \Dcorr~as the global correlation in the algorithm.
 
-Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when the optimal local scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient. Note that for our default \Mgc~implementation by single centering, the centering function does centering by column for $A$ and centering by row for $B$, and the sorting function sorts $A$ within column and sorts $B$ within row.
+Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when an optimal scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient. Note that for our default \Mgc~implementation by single centering, the centering function does centering by column for $A$ and centering by row for $B$, and the sorting function sorts $A$ within column and sorts $B$ within row.
 
 To facilitate  optimal scale estimation, Algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
 whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
@@ -1074,8 +1074,7 @@ Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows 
 is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$.  If the majority p-values of  local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations. If there are no valid rows or columns, then \Mgc~takes the largest scale (that is, it is equivalent to  the global correlation). Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns. \cs{i don't understand this last sentence, and i maintain that this approach has no practical or conceptual advantage over the one i proposed.}
 
 Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeatedly simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and Algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by selecting the scale that maximizes power. 
-In the case of ties, \Mgc~selects the scale whose product, $k \times l$, is largest. 
-\cs{fix ties for data and optimal scales.}
+In the case of ties (i.e., multiple scales achieving optimal power), it suffices to take one optimal scale among them for later testing.
 This algorithm is also applicable if there exists training data, 
 % multiple pairs of data with unknown model but similar dependency structure,
 then the alternative statistic can be computed from the training data while the null statistic can be computed from both datasets. The running time is $O(rn^2 \log n)$.
@@ -1088,7 +1087,7 @@ then the alternative statistic can be computed from the training data while the 
 \Ensure The local correlation coefficient $\G^{kl} \in [-1,1]$ at the given $(k,l)$.
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$,$k$,$l$}
 \State initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ at $0$.
-\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{proper sorting  assuming no ties}
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{proper sorting  assuming no ties in data}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}  \Comment{proper centering of the distance matrices}
 %\State $R^{B}=\textsc{Transpose}(R^{B})$ \Comment{row-wise ranks are used for second data}
 %\State $B=\textsc{Transpose}(B)$ \Comment{row-wise ranks are used for second data}
@@ -1226,7 +1225,7 @@ then the alternative statistic can be computed from the training data while the 
 \clearpage
 \subsection{Discussions of Optimal Scale Estimation}
 \label{appen:diss}
-Evaluating \Mgc requires estimating the optimal scale. Algorithm~\ref{alg:power} computes the testing powers of all local correlations for known or estimated distribution, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (if there are more than one optimal scales, we pick the scale that maximizes the mean difference of the test statistic under the null and the alternative). Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
+Evaluating \Mgc requires estimating the optimal scales. Algorithm~\ref{alg:power} computes the testing powers of all local correlations for known or estimated distribution, so the optimal scale $(k^{*},l^{*})$ can be directly estimated by maximizing the testing powers (if there are more than one optimal scales, we pick the scale that maximizes the mean difference of the test statistic under the null and the alternative). Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
 If the underlying distribution is unavailable or there is no training data given, we have to approximate the optimal scale by Algorithm~\ref{alg:best_scale}. It makes use of Bonferroni correction to separately verify the set of rows and columns, which guarantees the false positive rate to be no higher than $\alpha$; otherwise the scale is set to the largest option, which guarantees our estimated \Mgc~is at least as powerful as the global correlation. Still, Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, which does not guarantee the optimal local correlation to be always correctly identified.
 
@@ -1243,10 +1242,10 @@ The null is rejected when the p-value is less than $\alpha=0.05$, and the power 
 Figure~\ref{f:simPerm} shows the power differences between each of true \Mgc, \Mcorr, and \Hhg~to the estimated \Mgc. True \Mgc~powers are sometimes better than estimated \Mgc~powers, though often the estimated power is nearly as good as the optimal.  Moreover,  estimated \Mgc~dominates \Mcorr~(is never worse and is often better), and typically has higher power than \Hhg, especially in the high-dimensional settings.
 % : the estimated \Mgc~is always better than \Mcorr as expected, and is overall superior to \Hhg most of the time.
 
-Note that it is tempting to directly use the optimal scale that minimizes all local p-values without the validation by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches are biased such that the false positive rate is often higher than the type $1$ error in the absence of dependency. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. 
+Note that it is tempting to directly use the scale that minimizes all local p-values without the validation by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches are biased such that the false positive rate is often higher than the type $1$ error in the absence of dependency. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. 
  % for given data, a non-optimal scale can happen to have a significant p-value, which may be falsely identified as optimal if we directly minimize all local p-values. 
 Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate bias as much as our proposed strategy. 
-More investigations into the bias and better methods for searching the optimal scale are two worthwhile directions for future work.
+More investigations into the bias and better methods for searching the optimal scales are two worthwhile directions for future work.
 
 %This problem does not exist, if we know the underlying true model, or has multiple pairs of training data from the same model that are independent of the testing pair. In case of a known model, we already showed in the simulations that the theoretical \Mgc~power can be achieved without any inflation of the false positive rate, once an optimal scale is determined. Alternatively, if additional data are available, or the full data set is too large such that sub-sampling is necessary for data analysis, we can use / sub-sample multiple training data for optimal scale estimation based on maximizing the sum of p-values of all local correlations, then use the optimal scale on the testing data for p-value calculation; the alternative approach also achieve the theoretical \Mgc~power without bias.
 
@@ -1291,7 +1290,7 @@ for any permutation $\pi$, where the equality holds if and only if $X$ is a scal
 
 Thus for the global correlation, there only exist permutations such that the permuted test statistic equals the observed test statistic. However, for all those ``significant'' permutations for $\G$, they are also ``significant'' for each $\G^{kl}$, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$, such that $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$; and there may exist other ``significant'' permutations such that $\G^{kl}(X, Y) \leq \G^{kl}(X, Y_{\pi})$.
 
-Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equal those for $\G$ under linear dependency, and the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$, in which case the global correlation is the optimal scale for \Mgc. 
+Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equal those for $\G$ under linear dependency, and the p-value of $\G^{kl}$ cannot be less than the p-value of $\G$, in which case the global correlation is optimal for \Mgc. 
 \end{proof}
 
 
@@ -1354,17 +1353,35 @@ Each local correlation $\G^{kl}$ is always symmetric. Namely for any $k,l$,
 Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the row ranks of $\tilde{B}$ are preserved in $B$ under single centering.
 \end{appLem}
 \begin{proof}
-For fixed $k,l$, denote $R^{A}$ as the binary matrix such that $R^{A}_{ij}=1$ if $rank(a_{ij}) \leq k$, $R^{A}_{ij}=0$ otherwise; similarly define $R_{B}$. Then the rank-truncated pairwise comparisons $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$ in Equation~\ref{localCoef2} are the entries of $A \circ R^{A}$ and $B \circ {R^{B}}^{T}$ respectively, where $\circ$ denotes the entrywise product.
+For fixed $k,l$, denote $R^{A}$ as the binary matrix such that $R_{A}(i,j)=1$ if $rank(a_{ij}) \leq k$, $R_{A}(i,j)=0$ otherwise; similarly define $R_{B}$. Then the rank-truncated pairwise comparisons $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$ in Equation~\ref{localCoef2} are the entries of $A \circ R_{A}$ and $B \circ R_{B}^{T}$ respectively, where $\circ$ denotes the entrywise product and $\cdot^{T}$ denotes the matrix transpose.
 
-It follows that the local covariance can be rewritten as
+By the properties of matrix trace, it follows that the local covariance can be rewritten as
 \begin{align*}
 z_{kl} \G^{kl}(X,Y) &= \textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l \\
  &= tr((A \circ R_{A})^{T} \times (B \circ R_{B}^{T})) \\
- &= tr((H\tilde{A} \circ R_{A})^{T} \times (\tilde{B}H \circ R_{B}^{T})) \\
+ &= tr((B \circ R_{B}^{T}) \times (A \circ R_{A})^{T}) \\
+ &= tr((B^{T} \circ R_{B})^{T} \times (A^{T} \circ R_{A}^{T})).
 \end{align*}
-\cs{proof}
 
-As to rank preserving, the column ranks of the Euclidean distance matrix $\tilde{A}$ are the same as the column ranks of $A=H \tilde{A}$, because $H \tilde{A}$ centers each entry of $\tilde{A}$ by column means, while double centering $H \tilde{A} H$ does not always preserve the original ranks. Similarly, the row ranks of $\tilde{B}$ are preserved in $B=\tilde{B}H$ but not $H \tilde{B} H$.
+When both $A$ and $B$ are symmetric, it is immediate that
+\begin{align*}
+z_{kl} \G^{kl}(X,Y) &= tr((B^{T} \circ R_{B})^{T} \times (A^{T} \circ R_{A}^{T})) \\
+ &= tr((B \circ R_{B})^{T} \times (A \circ R_{A}^{T})) \\
+ &= z_{lk} \G^{lk}(Y,X),
+\end{align*}
+such that $\G^{kl}(X,Y)=\G^{lk}(Y,X)$.
+
+Under single centering, however, $A=H \tilde{A}$ and $B=\tilde{B}H$ are no longer symmetric. Nevertheless, the distance matrices $\tilde{A}$ and $\tilde{B}$ are symmetric, so inserting $A^{T}=\tilde{A}H$ and $B^{T}=H\tilde{B}$ into the second and fourth equalities above yields
+\begin{align*}
+z_{kl} \G^{kl}(X,Y) &= tr(((H \tilde{A}) \circ R_{A})^{T} \times ((\tilde{B}H) \circ R_{B}^{T})) \\
+ &= tr(((H \tilde{B}) \circ R_{B})^{T} \times ((\tilde{A}H) \circ R_{A}^{T})) \\
+ &= z_{lk} \G^{lk}(Y,X),
+\end{align*}
+such that $\G^{kl}(X,Y)=\G^{lk}(Y,X)$ under single centering.
+
+Therefore each local correlation $\G^{kl}$ is always symmetric, for \Dcorr~and \Mcorr~using either double centering or single centering, and \Mantel~as well.
+
+As to rank preserving, the column ranks of the Euclidean distance matrix $\tilde{A}$ are the same as the column ranks of $A=H \tilde{A}$, because $H \tilde{A}$ centers each entry of $\tilde{A}$ by column means, while double centering $H \tilde{A} H$ does not always preserve the original column ranks. Similarly, the row ranks of $\tilde{B}$ are preserved in $B=\tilde{B}H$ but not $H \tilde{B} H$. Note that the ranks are also preserved in \Mantel.
 \end{proof}
 
 

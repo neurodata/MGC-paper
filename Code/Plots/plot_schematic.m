@@ -9,7 +9,7 @@ if nargin<1
     newSim=0;
 end
 if nargin<2
-    type=13;
+    type=16;
 end
 if nargin<3
     n=50;

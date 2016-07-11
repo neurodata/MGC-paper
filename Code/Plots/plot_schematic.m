@@ -62,7 +62,7 @@ set(gcf,'units','normalized','position',[0 0 1 1])
 
 xynorm=sum([x,y]').^2';
 [foo, bar]=sort(xynorm);
-% bar=1:n;
+bar=1:n;
 bar=randperm(n);
 
 %%  Col 1
@@ -88,7 +88,7 @@ for ind=[1,2,4]; %length(id)
     if ind==4;
         hs=0;
     else
-        hs=-1.5;
+        hs=0*-1.5;
     end
     text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color',col)
     plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
@@ -404,7 +404,7 @@ donzo=0;
 if donzo==1
     F.fname=strcat(pre2, 'FigA');    
 else
-    F.fname=strcat(pre2, 'Aux/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+    F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
 F.wh=[10 6.5]*2;F.fname
 

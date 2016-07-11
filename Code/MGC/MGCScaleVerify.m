@@ -35,36 +35,21 @@ p=min(min(P(k,l)));
 indAll=find(P<=p);
 
 
-function k=Verify(VN)
-VN(1,1:end)=0;
-VN(1:end,1)=0;
-[n,~]=size(VN);
-a=mean(VN,2);
-max(a(2:end));
-% a(end)
-c=a(2:n)-a(1:n-1);
-% max(c)
-% figure
-% plot(c)
-%ind=sort(c,'ascend');
-% min(min(c))
-m=mean(c);
-s=std(c);
-ind=find(c<-max(c));
-if isempty(ind);
-    k=n;
-else
-    k=find(c==min(c(ind)),1,'first')+1;
-%     min(min(c))
+function k=Verify(V)
+V(1,1:end)=0;
+V(1:end,1)=0;
+[n,~]=size(V);
+VC=V(:,end);
+maxVC=max(VC(2:end));
+stdVC=std(VC(2:end));
+k=n;
+count=0;
+if (maxVC>VC(end)+stdVC)
+    ind=find(VC==maxVC,1,'last');
+    diff=VC(ind:n)-VC(ind-1:n-1);
+    diff2=diff(1:length(diff)-1).*diff(2:length(diff));
+    count=mean(diff2<0)
 end
-% 
-% rowMin=zeros(m,1);
-% rowMax=zeros(m,1);
-% for j=1:m
-%     rowMin(j)=prctile(VN(j,:),5);
-%     rowMax(j)=prctile(VN(j,:),95);
-% end
-% M=max(rowMax);
 
 % 
 % function [p,indAll]=MGCScaleVerify(V,P)

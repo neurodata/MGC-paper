@@ -1,5 +1,5 @@
 function []=plot_simulation_pValueAndPower(type,n,dim)
-% Compare p-value heatmap with power heatmap 
+% Compare p-value heatmap with power heatmap
 if nargin<1
     type=13;
 end
@@ -38,7 +38,7 @@ else
     [x, y]=CorrSampleGenerator(type,n,dim,1, 1);
 end
 
-% For p-value: 
+% For p-value:
 % Get distance matrix
 C=squareform(pdist(x));
 D=squareform(pdist(y));
@@ -50,18 +50,27 @@ pAll=zeros(n,n);
 for r=1:rep;
     per=randperm(n);
     tmp=LocalCorr(C,D(per,per),2);
-    tN(r,:,:)=tmp;
+    [t1,t2]=size(tmp);
+    tN(r,1:t1,1:t2)=tmp;
     if r==1
         pAll=(tmp<tA)/rep;
     else
         pAll=pAll+(tmp<tA)/rep;
     end
 end
+if t1<n
+    %tN(r,t1+1:n,1:t2)=repmat(tmp(t1,:),n-t1,1);
+    pAll(t1+1:n,1:t2)=repmat(pAll(t1,:),n-t1,1);
+end
+if t2<n
+    %tN(r,:,t2+1:n)=repmat(tmp(r,:,t2),1,n-t2);
+    pAll(:,t2+1:n)=repmat(pAll(:,t2),n-t1,1);
+end
 pAll=1-pAll;
 
 h=figure(type);
 set(h,'units','normalized','position',[0 0 1 1]);
-ax=subplot(1,2,1);
+ax=subplot(2,2,1);
 ph=pAll(2:end,2:end)';
 ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
@@ -96,7 +105,15 @@ if dim==1
 else
     ph=power2All(kmin:n,kmin:n,ind)';
 end
-ax=subplot(1,2,2);
+tt=find(sum(ph,2)==0,1,'first');
+if isempty(tt)==false && tt~=1;
+    ph(tt:end,:)=repmat(ph(tt-1,:),n-tt,1);
+end
+tt=find(sum(ph,1)==0,1,'first');
+if isempty(tt)==false && tt~=1;
+    ph(:,tt:end)=repmat(ph(:,tt-1),1,n-tt);
+end
+ax=subplot(2,2,2);
 imagesc(ph);
 axis('square')
 set(gca,'YDir','normal')
@@ -112,9 +129,49 @@ xlim([1 nn-1]);
 ylim([1 nn-1]);
 title('Multiscale Power Map')
 h=suptitle(CorrSimuTitle(type));
-set(h,'FontSize',32);% for 1-Dimensional Simulations'));
+set(h,'FontSize',26);% for 1-Dimensional Simulations'));
+pos = get(ax,'position');
 
-%% 
+%Optimal Scale map
+pAll=pAll';
+ind=find(pAll==min(min(pAll(2:end,2:end))));
+phS=zeros(size(pAll));
+phS(ind)=1;
+ax=subplot(2,2,3);
+imagesc(phS);
+axis('square')
+set(gca,'YDir','normal')
+set(gca,'FontSize',fontSize);
+nn=size(phS,1);
+set(gca,'XTick',[1,round(nn/2)-1,nn-1],'XTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
+set(gca,'YTick',[1,round(nn/2)-1,nn-1],'YTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
+xlim([1 nn-1]);
+ylim([1 nn-1]);
+title('Optimal Scale by P-value')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%Optimal Scale map
+ind=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
+phS=zeros(size(ph));
+phS(ind)=1;
+ax=subplot(2,2,4);
+imagesc(phS);
+axis('square')
+set(gca,'YDir','normal')
+set(gca,'FontSize',fontSize);
+nn=size(ph,1)+1;
+set(gca,'XTick',[1,round(nn/2)-1,nn-1],'XTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
+set(gca,'YTick',[1,round(nn/2)-1,nn-1],'YTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
+xlim([1 nn-1]);
+ylim([1 nn-1]);
+title('Optimal Scale by Power')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%%
 F.fname=strcat(rootDir, 'Figures/Aux/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

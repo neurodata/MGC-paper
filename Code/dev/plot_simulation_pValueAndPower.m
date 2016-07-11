@@ -172,6 +172,6 @@ pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
 %%
-F.fname=strcat(rootDir, 'Figures/Aux/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
+F.fname=strcat(rootDir, 'Figures/Auxiliary/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

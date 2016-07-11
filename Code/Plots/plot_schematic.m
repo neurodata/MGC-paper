@@ -81,7 +81,7 @@ IJ=[I, J]';
 IJ=sort(IJ(:));
 id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 xx=15;
-id=[44,45,45,46];
+id=[1,2,2,3];
 col=[1 .5 0];
 
 for ind=[1,2,4]; %length(id)
@@ -125,12 +125,12 @@ fprintf(formatSpec)
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id(1),id(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
                    id(1),id(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
-                   mantelH(id(1),id(2)),C(id(1),id(2)),abs(C_MGC(id(1),id(2))))
+                   mantelH(id(1),id(2)),mcorrH(id(1),id(2)),abs(C_MGC(id(1),id(2))))
 fprintf('\\hline\n\n')
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
                    id(3),id(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
-                   mantelH(id(3),id(4)),C(id(3),id(4)),C_MGC(id(3),id(4)))
+                   mantelH(id(3),id(4)),mcorrH(id(3),id(4)),C_MGC(id(3),id(4)))
 
 
 
@@ -184,6 +184,7 @@ imagesc(mantelH(bar,bar)');
 set(gca,'YDir','normal')
 title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
 caxis([mH,MH]);
+colorbar('location','westoutside')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
@@ -202,7 +203,7 @@ imagesc(A(bar,bar)');
 set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
-title([{'Mcorr (double center)'}; {' '}],'FontSize',fontSize);
+title([{'Mcorr (single center)'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
@@ -400,7 +401,7 @@ hold off
 
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=0;
+donzo=1;
 if donzo==1
     F.fname=strcat(pre2, 'FigA');    
 else

@@ -85,11 +85,11 @@ id=[1,2,2,3];
 col=[1 .5 0];
 
 for ind=[1,2,4]; %length(id)
-    if ind==4;
-        hs=0;
-    else
-        hs=0*-1.5;
-    end
+%     if ind==4;
+%         hs=0;
+%     else
+        hs=0.2;
+%     end
     text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color',col)
     plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
 end
@@ -98,7 +98,7 @@ tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
 tname=tname(findex+1:end);
 
-title([{[tname, ' (X,Y)']};  {'Scatter Plot'}])
+title([{[tname]};  {'(X,Y) Scatter Plot'}])
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 pos = get(ax,'position');
 pos2 = get(ax,'position');
@@ -364,8 +364,8 @@ x1=round(tA(end)*100)/100;
 x2=round(tA(k,l)*100)/100;
 plot(x1,0.1,'.','MarkerSize',mkSize,'Color',glob);
 plot(x2,0.1,'*','MarkerSize',10,'Color',loca);
-% set(gca,'XTick',[x1+0.04,x2+0.04],'TickLength',[0 0]);
-set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
+set(gca,'XTick',[x1+0.05,x2+0.05],'TickLength',[0 0]);
+% set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
 ind=find(xi>x1,1,'first');

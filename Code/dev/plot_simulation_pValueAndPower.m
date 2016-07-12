@@ -1,4 +1,4 @@
-function []=plot_simulation_pValueAndPower(type,n,dim)
+function [pval]=plot_simulation_pValueAndPower(type,n,dim)
 % Compare p-value heatmap with power heatmap
 if nargin<1
     type=13;
@@ -152,6 +152,9 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
+pval=unique(pAll(ind));
+
+
 %Optimal Scale map
 ind=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 phS=zeros(size(ph));
@@ -171,7 +174,8 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
+
 %%
-F.fname=strcat(rootDir, 'Figures/Aux/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
+F.fname=strcat(rootDir, 'Figures/Auxiliary/PowerEst_type',num2str(type),'_n', num2str(n),'_d', num2str(dim));
 F.wh=[8 5]*2;
 print_fig(gcf,F)

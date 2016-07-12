@@ -298,16 +298,16 @@ Figure \ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 \begin{center}
 \vspace{-35pt}\hspace{-150pt}
 \begin{tabular}{c  c  c  c}
- $\delta_x$(44,45) & \hspace{1.8em} -1.45 \hspace{1.8em}  & \hspace{1.8em} -2.08 \hspace{1.8em} & \hspace{1.8em} -2.08 \hspace{1.8em}  \\ 
- $\delta_y$(44,45) & 0.83 & 1.43 & 0.00  \\ 
- $\delta_x \times \delta_y$ & -1.20 & -1.45 & 0.00  \\ 
+ $\delta_x$(1,2) & \hspace{1.8em} -0.59 \hspace{1.8em}  & \hspace{1.8em} -0.84 \hspace{1.8em} & \hspace{1.8em} 0.00 \hspace{1.8em}  \\ 
+ $\delta_y$(1,2) & 0.14 & 0.30 & 0.30  \\ 
+ $\delta_x \times \delta_y$ & -0.08 & -0.26 & 0.00  \\ 
  
 \hline
 
 
- $\delta_x$(45,46) & -1.90 & -2.70 & -2.70  \\ 
- $\delta_y$(45,46) & -2.05 & -2.60 & -2.60  \\ 
- $\delta_x \times \delta_y$ & 3.90 & -1.90 & 7.01  \\ 
+ $\delta_x$(2,3) & -0.65 & -0.87 & -0.87  \\ 
+ $\delta_y$(2,3) & -0.65 & -0.75 & -0.75  \\ 
+ $\delta_x \times \delta_y$ & 0.42 & 0.66 & 0.66  \\ 
 \end{tabular}
 \end{center}
 \caption{
@@ -1061,26 +1061,8 @@ More detailed discussions regarding the optimal scales approximation is offered 
 \label{appen:algorithms}
 All algorithms are implemented in Matlab and R with the algorithm shown below. For ease of presentation, we assume there are no repeating observations of \mbx~or \mby, and assume \Dcorr~as the global correlation in the algorithm.
 
-Algorithm~\ref{alg:1scale} shows a straightforward computation of one local correlation coefficient, which requires $O(n^2)$ once the rank information is provided. This is suitable for \Mgc~computation when an optimal scale is known or already estimated. But using Algorithm~\ref{alg:1scale} to compute all local correlations would require iterating through all possible neighborhoods $(k,l)$, which takes $O(n^4)$ and would make the optimal scale estimation computationally inefficient. Note that for our default \Mgc~implementation by single centering, the centering function does centering by column for $A$ and centering by row for $B$, and the sorting function sorts $A$ within column and sorts $B$ within row.
-
-To facilitate  optimal scale estimation, Algorithm~\ref{alg:all_scales} provides a fast method to compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$
-whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$. 
-
-Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$.
-
-Algorithm~\ref{alg:best_scale} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs the estimated \Mgc~p-value. We apply this algorithm whenever the true distribution of the data in unknown and difficult to estimate; otherwise, we estimate the distribution and choose the scale that optimizes power.
-% This is necessary for testing on data without known model or training data, while Algorithm~\ref{alg:power} is more appropriate for known model. 
-Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows $\K=\{k_{1},k_{1}+1,\ldots,k_{2}-1,k_{2}\}$ such that the median p-value of $\{p_{kl},k \in \K, l=2,\ldots,n\}$
-is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$.  If the majority p-values of  local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations. If there are no valid rows or columns, then \Mgc~takes the largest scale (that is, it is equivalent to  the global correlation). Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns. \cs{change this}
-
-Algorithm~\ref{alg:power} computes the testing powers of all local correlations by repeatedly simulating samples generated from the joint distribution $f_{xy}$. Sample data under the null and the alternative are repeatedly generated for $r$ Monte-Carlo replicates, and Algorithm~\ref{alg:all_scales} is applied to compute the sample local correlations under the null and the alternative. Then the testing power at each local correlation can be estimated, and the \Mgc~optimal scale can be found by selecting the scale that maximizes power. 
-In the case of ties (i.e., multiple scales achieving optimal power), it suffices to take one optimal scale among them for later testing.
-This algorithm is also applicable if there exists training data, 
-% multiple pairs of data with unknown model but similar dependency structure,
-then the alternative statistic can be computed from the training data while the null statistic can be computed from both datasets. The running time is $O(rn^2 \log n)$.
-
 \begin{algorithm}
-\caption{Local Correlation Computation for One Scale}
+\caption{Local Correlation Computation for One Scale: this algorithm runs in $O(n^2)$ once the rank information is provided, which is suitable for \Mgc~computation if an optimal scale is already estimated. But it would take $O(n^4)$ if used to compute all local correlations. Note that for the default \Mgc~implementation by single centering, the centering function centers $\tilde{A}$ by column and $\tilde{B}$ by row, and the sorting function sorts $\tilde{A}$ within column and $\tilde{B}$ within row.}
 \label{alg:1scale}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, and the given local scale $(k,l) \in \Real \times \Real$.
@@ -1103,10 +1085,10 @@ then the alternative statistic can be computed from the training data while the 
 
 \EndFunction
 \end{algorithmic}
-\end{algorithm}
+\end{algorithm} 
 
 \begin{algorithm}
-\caption{$O(n^2 \log n)$ Algorithm for Computing All Local Correlations}
+\caption{Local Correlation Computation for All Scales: once the distances are sorted, this algorithm compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$.} %Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.}
 \label{alg:all_scales}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.
@@ -1126,7 +1108,7 @@ then the alternative statistic can be computed from the training data while the 
 \State $E^{A}_{k} \rto E^{A}_{k}+A_{ij}$
 \State $E^{B}_{l} \rto E^{B}_{l}+B_{ij}$
 \EndFor
-%\Statex \Comment{the next two for loops with respect to the scales guarantee the computation of all local covariances and variances in $O(n^2)$} \cs{i don't know what this comment means.}
+
 \For{$k:=1,\ldots,n-1$}
 \State $\G^{1, k+1} \rto \G^{1, k}+\G^{1, k+1}$
 \State $\G^{k+1,1} \rto \G^{k+1,1}+\G^{k+1,1}$
@@ -1146,7 +1128,7 @@ then the alternative statistic can be computed from the training data while the 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{P-value Computation for All Local Correlations}
+\caption{P-value Computation for All Local Correlations: this algorithm computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$. $\pi$ denotes a random permutation, and $\tilde{B}(\pi,\pi)$ denotes the distance matrix with the observation label permuted. }
 \label{alg:pval}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.
@@ -1154,7 +1136,7 @@ then the alternative statistic can be computed from the training data while the 
 \Function{PermutationTest}{$\tilde{A}$,$\tilde{B}$,$r$}
 \State $\G^{kl}=\textsc{LocalCorr}(\tilde{A},\tilde{B})$ \Comment{calculate the observed local correlations}
 \For{$j:=1,\ldots,r$}
-\State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$} \cs{i think we need to define random permutation and the notatio n $B(\pi,\pi)$ for this audience, not sure where that should go, probably in caption.}
+\State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$} 
 \State $\G^{kl}_{0}[j]=\textsc{LocalCorr}(\tilde{A},\tilde{B}(\pi,\pi))$ \Comment{calculate the permuted test statistics}
 \EndFor
 
@@ -1164,7 +1146,11 @@ then the alternative statistic can be computed from the training data while the 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Optimal Local Scale Approximation by P-values}
+\caption{Optimal Local Scale Approximation by P-values:
+Algorithm~\ref{alg:best_scale} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs the estimated \Mgc~p-value. We apply this algorithm whenever the true distribution of the data in unknown and difficult to estimate; otherwise, we estimate the distribution and choose the scale that optimizes power.
+% This is necessary for testing on data without known model or training data, while Algorithm~\ref{alg:power} is more appropriate for known model. 
+Conceptually, the algorithm first searches for a set of ``valid'' adjacent rows $\K=\{k_{1},k_{1}+1,\ldots,k_{2}-1,k_{2}\}$ such that the median p-value of $\{p_{kl},k \in \K, l=2,\ldots,n\}$
+is no larger than $\alpha /(n-1) * |\K|$, otherwise we take $\K=\{n\}$; and similarly determine the set of valid columns $\LL$. Once $\K$ and $\LL$ are determined, the optimal scale $(k^{*},l^{*})$ is found by the scale that minimizes the p-value within $\{p_{kl},k \in \K, l \in \LL\}$.  If the majority p-values of  local correlations are less than $\alpha$, then $\K=\LL=\{1,\ldots,n\}$, and the optimal scale equals the scale that minimizes the p-values among all local correlations. If there are no valid rows or columns, then \Mgc~takes the largest scale (that is, it is equivalent to  the global correlation). Note that the actual algorithm is a simpler version of the above description: instead of considering all possible sets of rows and check the validity, we limit the check to the most likely set of rows, by first looking for the row scale of the smallest p-value, then including all adjacent rows whose minimal p-value on the row is no larger than $\alpha$; similarly for the set of columns. \cs{change this}}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local distance correlations, the type $1$ error level $\alpha$.
@@ -1200,7 +1186,7 @@ then the alternative statistic can be computed from the training data while the 
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Testing Powers Computation for All Local Correlations}
+\caption{Testing Powers Computation for All Local Correlations: this algorithm computes the testing powers of all local correlations. By repeatedly simulating samples by the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all sample local correlations under the null and the alternative are computed by Algorithm~\ref{alg:all_scales}, followed by estimating the testing power at each local correlation. The \Mgc~optimal scale can be found by selecting the scale that maximizes power, and it suffices to pick one optimal scale in case of ties. The running time is $O(rn^2 \log n)$. This algorithm can be similarly adapted to training data, for which the alternative statistic can be computed from the training data while the null statistic can be computed by permutation. }
 \label{alg:power}
 \begin{algorithmic}[1]
 \Require A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.

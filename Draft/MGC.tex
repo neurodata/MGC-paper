@@ -570,7 +570,7 @@ This brain shape versus disease dataset consists of $n=114$ subjects, for each w
 % To start with, we transform the respective data sets into dissimilarity matrices: for the brain data, two dissimilarity matrices representing the left and right hippocampus data are obtained based on landmark
 % matching (see \cite{ParkEtAl2011} for more details on data processing);
 For the discrete disorder variable,
-we use squared Euclidean distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$). 
+we use the Euclidean distance, then add $1$ to every non-diagonal entry (so only the diagonals are of distance $0$). 
 
 We consider two dependence tests, one for each hemisphere: is hippomcapus shape independent of depressive state.
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
@@ -816,10 +816,10 @@ for $d=1,\ldots,D$.
 \mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]}+0.5\epsilon_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
-\item Uncorrelated Binomial $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$,
+\item Uncorrelated Binomial $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$, $\epsilon_{1} \sim \mc{N}(0, I_{D})$, $\epsilon_{2} \sim \mc{N}(0, 1)$,
 \begin{align*}
-\mb{x} &\sim \mc{B}(0.5)^{D},\\
-\mb{y}&=(2u-1)w\T \mb{x}+0.6\epsilon.
+\mb{x} &\sim \mc{B}(0.5)^{D}+0.5\epsilon_{1},\\
+\mb{y}&=(2u-1)w\T \mb{x}+0.5\epsilon_{2}.
 \end{align*}
 \item Independent Clouds $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{N}(0,I_{D})$, $v \sim \mc{N}(0,I_{D})$, $u' \sim \mc{B}(0.5)^{D}$, $v' \sim \mc{B}(0.5)^{D}$. Then
 \begin{align*}

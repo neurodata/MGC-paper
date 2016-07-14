@@ -171,7 +171,7 @@ rep1=200;rep2=200;powerL=zeros(7,1);powerR=zeros(7,1);
 for i=1:rep2;
     yind=unifrnd(0,3,n,1);
     yind=squareform(pdist(ceil(yind)));
-    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(LMRS,yind,rep1,rep2,'BrainLMRxYIndJ');
+    [p(1),p(2),p(3),p(4),p(5),p(6),p(7)]=CorrPermDistTest(yind,y,rep,'BrainLMRxYIndJ');
     for j=1:7
         if p(j)<alpha
             powerR(j)=powerR(j)+1/rep2;

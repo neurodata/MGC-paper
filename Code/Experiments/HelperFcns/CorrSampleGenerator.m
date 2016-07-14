@@ -195,20 +195,18 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         else
            % y=x.*y;
         end
-        y=x.*y+0.5*noise*repmat(eps,1,d);
+        eps=mvnrnd(zeros(n,d),eye(d),n);
+        y=x.*y*A;%+0.5*eps;
         %y=y+0.5*noise*eps;
         if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));
         end
     case 19 %Uncorrelated Binomial
-        x=binornd(1,0.5,n,d);
+        x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);
         y=(binornd(1,0.5,n,1)*2-1);
-        if dim>1
-            noise=1;
-        end
-        y=x*A.*y+0.6*noise*eps;
+        y=x*A.*y+0.5*eps;
         if dependent==0
-            x=binornd(1,0.5,n,d);
+            x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);
         end
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;

@@ -41,6 +41,6 @@ end
 pAll(1,:)=1;pAll(:,1)=1;
 
 % verify and estimate the MGC optimal scale
-[p,indAll]=MGCScaleVerify(pAll,testAll);
+[p,indAll]=MGCScaleVerify(pAll);
 %p=pAll(ind);
 test=testAll(indAll(end));

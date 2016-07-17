@@ -154,12 +154,13 @@ CorrPermDistTest(distM2g(ind,ind),distMigrain(ind,ind),rep,'M2gxMigrain');
 clear
 load('BrainHippoShape')
 n=114;rep=10000;alpha=0.05;
+Label=Label+unifrnd(0,0.01,n,1);
 y=squareform(pdist(Label));
-% y=(y>0)+1;
-y=y+1;
-for i=1:n
-    y(i,i)=0;
-end
+% % y=(y>0)+1;
+% y=y+1;
+% for i=1:n
+%     y(i,i)=0;
+% end
 % y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];

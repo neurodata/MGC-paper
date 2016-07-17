@@ -280,7 +280,7 @@ Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}
 \end{equation}
 and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, 
 where $\bar{a}^k$ is the local mean;
-and define $b^k_{ij}$ similarly, except the rank index is transposed. \jv{I transpose the rank above for symmetry of local correlations}
+and define $b^k_{ij}$ similarly, except the rank index is transposed. 
 % where $\bar{a}^{k}$ and $\bar{b}^{l}$ are the local means such that  $\sum_{i,j=1}^{n} a_{ij}^k = \sum_{i,j=1}^{n} b_{ij}^l=0$.  
 We define a \emph{local} variant of any global generalized correlation coefficient by  excluding large distances: % up-to the centering scalars:
 \begin{equation}
@@ -356,9 +356,9 @@ This insight yields an algorithm for exactly computing \emph{all} local correlat
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Algorithm \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find the optimal scales. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on a p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for neighborhoods of scales for which p-values are consistently low. If no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation); otherwise we take the scale with the smallest p-value in the region as optimal. This is the procedure used for real data experiments, which maintains excellent performance 
+Finally, we must find the optimal scales. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for neighborhoods of scales for which p-values change consistently. If no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation); otherwise we take the scale with the smallest p-value in the region as optimal. This is the procedure used for real data experiments, which maintains excellent performance 
 (see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
-Figure \ref{f:simPerm} shows the distribution of power for the 20 different simulation settings, for both 1-dimensional and high-dimensional cases, using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
+Figure \ref{f:simPerm} shows the distribution of powers for the 20 different simulation settings, for both 1-dimensional and high-dimensional cases, using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
 
 
 
@@ -388,7 +388,7 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 \caption{Powers of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  We used $10$,$000$ Monte-Carlo replicates to estimate the null power, and an additional $2$,$000$  replicates to estimate the optimal scale.
 Each panel shows empirical testing power at a significant level $\alpha=0.05$
 versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
-Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for all settings and all dimensions, 
+Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for almost all settings and all dimensions, 
 % the previous state of the art approaches for all sample sizes on all problems.
 }
 \label{f:nD}
@@ -398,7 +398,7 @@ Except the independent clouds (setting 20), for which all methods yield power $0
 
 Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare  our novel test, \Mgc, with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
 % 
-The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~as the dimension increases.  For the remaining nonlinear dependencies, \Mgc~achieves superior power than \Hhg~and \Mcorr~for \emph{all} functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected according to the theory.
+The advantage of \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~as the dimension increases.  For the remaining nonlinear dependencies, \Mgc~achieves superior power than \Hhg~and \Mcorr~for almost all functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected according to the theory.
 More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios,
 in which we also compare to \Mantel~and \Dcorr, 
 as well as our novel multiscale variants of both \Mantel~and \Dcorr, 
@@ -442,7 +442,8 @@ For nearly linear dependencies (1-5), the best neighborhood choice is always the
  % in a distribution dependent fashion. 
  Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6) and W (7) are both polynomials of degree 2 with different coefficients, and their power maps are quite similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
 Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
-Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scales for real data.
+
+Note that for almost all simulations, there exist a large portion of adjacent local neighborhoods that are equally significant, and the power changes are always smooth in adjacent scales, which is an important observation that we use to approximate the optimal \Mgc~scales for real data by the p-value map.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
@@ -505,7 +506,7 @@ Thus multiscale generalized correlation can be better than its global correlatio
 \end{thm}
 Note that Theorem~\ref{t:linear} and Theorem~\ref{t:non} hold for any of \Mgc~varieties, including  \Dcorr, \Mcorr, and \Mantel.
 %
-The proofs of Theorem~\ref{t:linear} and \ref{t:non} are both in Appendix \ref{appen:proofs}.  The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\ref{t:non} is a constructive one. More specifically, we constructed quadratic function and sampled data a finite number of times and exactly compute the power for both \Mgc~and \Dcorr, proving that \Mgc~has higher power in this setting. This shows that \Mgc~can outperform its global counterpart even for the most modest nonlinear functions.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. %To our knowledge, Theorems \ref{t:linear} and \ref{t:non} are the first finite sample theorems for dependence testing.
+The proofs of Theorem~\ref{t:linear} and \ref{t:non} are both in Appendix \ref{appen:proofs}.  The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\ref{t:non} is a constructive one. More specifically, we constructed a quadratic function and sampled data a finite number of times and exactly compute the p-value for both \Mgc~and \Dcorr, proving that \Mgc~has higher power in this setting. This shows that \Mgc~can outperform its global counterpart even for the most modest nonlinear functions.  Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. %To our knowledge, Theorems \ref{t:linear} and \ref{t:non} are the first finite sample theorems for dependence testing.
 
 The three above theorems taken together lead to the main theoretical result of this manuscript:
 \begin{thm}
@@ -560,6 +561,15 @@ The three above theorems taken together lead to the main theoretical result of t
 \label{numer3}
 
 \subsubsection*{Only Local Scales can Detect Dependence} % Between Hippocampus Shape and Depression}
+\cs{need change here: add p-value, polish CxP, add noise and show p-value map for brain disease}
+
+The first experiment is to detect the relationship between the brain connectome and personality from \cite{AdelsteinEtAl2011}. The sample size is $n=42$, and each person has a $5$ dimensional personality data based on questionnaires and the five-factor personality model. Then the brain activity of each person is measured by fMRI for $197$ brain regions and $194$ time steps. Thus the brain connectome feature is high-dimensional while the personality data is low-dimensional. There seems to exist certain correlation between the brain activity and personality as experimentally shown in \cite{AdelsteinEtAl2011}, but whether the dependency can be detected from the raw data is the question here.
+
+In this experiment, only MGC yields significant p-value that is less than $0.05$, and the estimated optimal neighborhood choice is $k^{*}=9, l^{*}=4$ based on $2$,$000$ repeated noisy samples. No other method yields significant p-value, although HHG is quite close. We also show the p-value heat map of all local tests with respect to different choices of neighborhoods in Figure~\ref{figReal}(a), and we can clearly see a local structure in the data that yield significant p-values for adjacent scales.
+
+In this experiment, only MGC yields significant p-value that is less than $0.05$, and the estimated optimal neighborhood choice is $k^{*}=8, l^{*}=4$ based on $10$,$000$ bootstrap samples. No other method yields significant p-value, although HHG is quite close. We also show the p-value heat map of all local tests with respect to different choices of neighborhoods in Figure~\ref{figReal}(a), and we can clearly see a local structure in the data that yield significant p-values for adjacent scales.
+
+
 
 Our first real data experiment investigates whether brain shape and disease status are  dependent on one another.  Previous investigations have linked major depressive disorder to the hippocampus shape \cite{ParkEtAl2008,PosenerEtAl2003}, though global tests were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level.
 
@@ -626,7 +636,6 @@ The next real data experiment investigates whether brain networks are independen
 
 
 Figure \ref{f:real}B shows that the global dependence tests can ascertain whether the whole brain-network is independent of the subject's creativity.  However, the global test is quite fragile, even ignoring a single subject from the global test can render the test non-significant. On the other hand, \Mgc~is more robust, there is a whole region of neighborhood sizes such that the test is quite significant.  Moreover, that the local tests performs optimally with approximately 30 neighbors suggests that these data have multiple cohorts, for which the dependence structure likely differs.  This result therefore suggests  the next investigatory steps to take to further understand the nature of the dependence structure between brain networks and creativity.
-\cs{MGC p-value report in tex?}
 
 % Next we experiment on \Migraine~vs CCI and \mtg~vs CCI. More specifically, we estimated brain graphs from diffusion MRI data using two different pipelines, one called \Migraine, and the other called \mtg.  The question we have is whether brain graphs are independent of personality.  Because we cannot directly measure brain graphs, we must estimate them from the data.  Currently, the jury is out on which estimation procedure is best.  Therefore, we tried two different brain-graph estimation pipelines to determine which worked better for this particular task.
 
@@ -655,7 +664,6 @@ For each data set, the above test is carried out for each brain region, and the 
 \Mgc~false positive rate is centered around the critical level $0.05$, as it should be.
 % ; the mean/standard deviation is $0.060 \pm 0.025$.
 In contrast,  standard methods for fMRI analysis, such as generalized linear models, significantly increase the false discovery rates, depending on the data \cite{EklundKnutsson2012,Eklund2015}.
-\jv{you wrote "`significantly increase or decrease"', I delete the decrease part, because decreasing the FDR is actually a good thing, and in their paper they solely concentrate on FDR increase?!}
 
 \subsection*{Discussion}
 \label{conclu}
@@ -810,10 +818,10 @@ for $d=1,\ldots,D$.
 \mb{y}&=\sin ( \theta x )+c\epsilon.
 \end{align*}
 \item Sine Period $16\pi$ $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $\theta=16\pi$ and the noise on $\mb{y}$ is changed to $0.5c\epsilon$.
-\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, $\epsilon \sim \mc{N}(0, I_{D})$,
+\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, %$\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
-\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]}+0.5\epsilon_{[d]},
+\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},%+0.5c\epsilon,
 \end{align*}
 for $d=1,\ldots,D$.
 \item Uncorrelated Binomial $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$, $\epsilon_{1} \sim \mc{N}(0, I_{D})$, $\epsilon_{2} \sim \mc{N}(0, 1)$,
@@ -861,7 +869,7 @@ For the increasing dimension simulation in the main paper, we always set $c=0$ a
 \caption{
 Powers of different methods for $20$ different $1$-dimensional dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
 Each panel shows empirical testing power on the abscissa at a significant level $\alpha=0.05$, and sample size on the ordinate.
-\Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on all problems.}
+\Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on almost all problems.}
 \label{f:1DAll}
 \end{figure}
 
@@ -890,7 +898,7 @@ Same as Figure~\ref{f:nD} in main text, but includes all three different \Mgc~al
 \caption{Comparing the estimated \Mgc~powers to the powers of true \Mgc, \Mcorr, and \Hhg, for the $1$-dimensional and high-dimensional simulations. We plot the power difference between each of true \Mgc, \Mcorr, and \Hhg, to the estimated \Mgc. Thus, values larger than zero indicate \emph{better}  than our estimated \Mgc~power, and values smaller than zero indicate \emph{worse}.
 (A) $1$-dimensional simulations, where $n=60$ and $D=1$.
 (B) High-dimensional simulations, where $n=100$ and the dimension is chosen as in Figure~\ref{f:powermaps}.
-Estimated \Mgc~powers, while sometimes less the the \Mgc~power when the distribution is known, dominate to \Mcorr~and almost always improve upon \Hhg's power, especially in the high-dimensionality settings.}
+Estimated \Mgc~powers, while sometimes less than the \Mgc~power computed by distribution directly, dominate to \Mcorr~and almost always improve upon \Hhg's power.} %especially in the high-dimensionality settings.}
 \label{f:simPerm}
 \end{figure}
 
@@ -1053,7 +1061,7 @@ The permutation test using the \Hhg~statistic is consistent against all dependen
 \label{appen:tests}
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
-Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, Algorithm~\ref{alg:1scale} computes one local correlation coefficient at a given $(k,l)$; then Algorithm~\ref{alg:all_scales} shows how to compute all local correlations efficiently; Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value of \Mgc; Algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scales for \Mgc.
+Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, Algorithm~\ref{alg:1scale} directly computes one local correlation coefficient at a given $(k,l)$; Algorithm~\ref{alg:all_scales} shows an efficient method to compute all local correlations simultaneously, in the same running time as computing one local correlation; Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test; Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value and all optimal scales for \Mgc; Algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scales and the testing power for \Mgc.
 % ~when the underlying model is known or training data of the same size are given. 
 More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
@@ -1088,7 +1096,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm} 
 
 \begin{algorithm}
-\caption{Local Correlation Computation for All Scales: once the distances are sorted, this algorithm compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. However, accessing and adding multiple $\G^{kl}$ at the same time is not computationally efficient; instead, for each product, we only add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ (so only one local scale is accessed for each operation), iterate through all products for $i,j=1,\ldots,n$, then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$.} %Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.}
+\caption{Local Correlation Computation for All Scales: once the distances are sorted, this algorithm compute all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. To achieve the above, we iterate through each product, add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ only (so only one local scale is accessed for each operation); then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. The same applies to all local covariances, variances and expectations.} %Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.}
 \label{alg:all_scales}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.

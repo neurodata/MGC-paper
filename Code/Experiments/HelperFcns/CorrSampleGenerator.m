@@ -189,17 +189,11 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, d),eye(d));
-        if dim>1
-            noise=1;
-            %y=sum(x.*y,2);
-        else
-           % y=x.*y;
-        end
-        eps=mvnrnd(zeros(n,d),eye(d),n);
-        y=x.*y*A;%+0.5*eps;
+        %eps=mvnrnd(zeros(n,d),eye(d),n);
+        y=x.*y;%+0.5*noise*eps;
         %y=y+0.5*noise*eps;
         if dependent==0
-            x=mvnrnd(zeros(n, d),eye(d));
+            x=mvnrnd(zeros(n, d),eye(d));%*A;
         end
     case 19 %Uncorrelated Binomial
         x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);

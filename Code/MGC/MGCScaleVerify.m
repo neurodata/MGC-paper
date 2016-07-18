@@ -5,10 +5,10 @@ p1=verifyR(P);
 p2=verifyR(P');
 p=min(p1,p2);
 indAll=find(P==p);
- if p<=0.05 && P(end)>0.05
-    p
-    P(end)
-end
+%  if p<=0.05 && P(end)>0.05
+%     p
+%     P(end)
+% end
 
 %p=max(max(P(indAll)));
 

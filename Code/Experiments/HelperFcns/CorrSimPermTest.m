@@ -40,7 +40,7 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,0];
+option=[0,2,0,4];
 for tt=type
     neighbor=[];
     if dim==1

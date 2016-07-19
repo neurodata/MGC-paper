@@ -6,7 +6,7 @@ function []=CORRData(part,rep,pre1,alpha)
 %     aList = {'BNU1','BNU2','BNU3','DC1','HNU1','IACAS','IBATRT','IPCAS1','IPCAS2','IPCAS5','IPCAS6','IPCAS8','JHNU','KKI21','LMU3','MPG1','MRN','NKI24mx645','NKI24mx1440','NKI24std2500','NYU1','NYU2','SWU1','SWU2','SWU3','SWU4','UM','UPSM1','Utah1','UWM','XHCUMS'};
 % end
 if nargin<2
-    rep=500; %1000
+    rep=100; %1000
 end
 if nargin<3
     pre1='../../../../Data/CORR/';
@@ -24,9 +24,9 @@ switch part
     case 4
         aList= {'IPCAS5','JHNU','KKI21'};
     case 5
-        aList= {'LMU3','MPG1','MRN'};
+        aList= {'LMU3','MRN','NYU1'};
     case 6
-        aList= {'NYU1','NYU2','SWU3','SWU1'};
+        aList= {'NYU2','SWU3','SWU1'};
     case 7
         aList=  {'SWU4','UM','UPSM1','SWU2'};
     case 8
@@ -77,6 +77,6 @@ for l=1:length(aList);
     end
     
     fileS=strcat(pre1,str1,'FalseDetection.mat');
-    save(fileS,'power','alpha','n','timestep','region','str1');
+    save(fileS,'power','alpha','n','timestep','region','str1','rep');
 end
 total

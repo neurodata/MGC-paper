@@ -356,7 +356,7 @@ This insight yields an algorithm for exactly computing \emph{all} local correlat
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Algorithm \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find the optimal scales. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for neighborhoods of scales for which p-values are consistently low, and take the region as optimal; if no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation). This is the procedure used for real data experiments, which maintains excellent performance 
+Finally, we must find the optimal scales. If the underlying joint distribution is known (as in our simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for consecutive regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region; if no such region exists, the optimal scale is set to the largest neighborhood (i.e., \Mgc equals the global correlation). This is the procedure used for real data experiments, which maintains excellent performance 
 (see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 Figure \ref{f:simPerm} shows the distribution of powers for the 20 different simulation settings, for both 1-dimensional and high-dimensional cases, using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
 %\cs{MGCScaleVerify change}
@@ -1060,6 +1060,7 @@ See Appendix \ref{appen:algorithms} for details of all relevant algorithms.
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
 Five algorithms are presented in Appendix~\ref{appen:algorithms}: given the choice of a global correlation coefficient, Algorithm~\ref{alg:1scale} directly computes one local correlation coefficient at a given $(k,l)$. Algorithm~\ref{alg:all_scales} shows an efficient method to compute all local correlations simultaneously, in the same running time as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~based on the p-values of all local correlations, and outputs the approximated p-value and all optimal scales for \Mgc. Algorithm~\ref{alg:power} estimates the testing powers of all local statistics based on a given joint distribution or multiple pairs of data, which can be used to more accurately estimate the optimal scales and the testing power for \Mgc. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
+\cs{change alg4}
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -1153,11 +1154,11 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \caption{Optimal Local Scale Approximation by P-values: Algorithm~\ref{alg:best_scale} approximates the optimal scale $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs the estimated \Mgc~p-value. Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
-\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, the number of permutations $r$.
+\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
-\Function{MGCScaleVerify}{$P, r$}
-\State $[p_{r},\K]=\textsc{Validate}(P)$ \Comment{validate the smoothness within each row of $P$}
-\State $[p_{c},\LL]=\textsc{Validate}(P\T)$ \Comment{validate the smoothness within each column of $P$}
+\Function{MGCScaleVerify}{$P$}
+\State $[p_{r},\K]=\textsc{Validate}(P)$ \Comment{validate consecutive significant scales of $P$ by row}
+\State $[p_{c},\LL]=\textsc{Validate}(P\T)$ \Comment{validate consecutive significant scales of $P$ by column}
 \State $p \rto \min\{p_{r},p_{c}\}$ \Comment{take the smaller value as the approximated p-value for \Mgc}
 \State $[k^{*},l^{*}] \rto \arg_{\left\{k \in \K \mbox{ or } l \in \LL \right\}} P\leq p$ \Comment{return all optimal scales within the validated range}
 \EndFunction
@@ -1167,13 +1168,25 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Statex
 \Require Same as \textsc{MGCScaleVerify}. 
 \Ensure The indices of valid rows $\K$, and the smallest p-value $p$ within the validated range.
-\Function{Validate}{$P, r$}
-\State initialize $\K$ as an empty set, $\psi$ as an $(n-1) \times 1$ vector of ones.
+\Function{Validate}{$P$}
+\State initialize $\K$ as an empty set, $\psi, \rho$ as two $n \times 1$ vector of ones.
+\State $\alpha=0.05$
 \For{$i:=2,\ldots,n$}
-\State $t \rto P[i,2:n]-P[i,1:n-1]$ \Comment{calculate the difference of p-values in adjacent scales}
-\State $\psi_{i-1} \rto \frac{1}{n-3}\sum_{j=1}^{n-3}\mb{I}\{t_{j} \times t_{j-1}<0\} \times \mb{I}\{|t_{j}-t_{j-1}|>\frac{1}{r}\}$ 
+\State $\psi_{i}=\textsc{Median}(P[i,2:n])$ \Comment{the median p-value on each row}
+\State $\LL \rto \{l | P[i,l]<\alpha \mbox{ and } |P[i,l]-P[i,l-1]|<\alpha/2\}$ \Comment{get adjacent significant scale}
+\State $\rho_{i} = \textsc{Consecutive}(\LL) / (n-1)$ \Comment{return the maximal consecutive scales}
+\Lineof{$\rho_{i} <0.5$}{$\rho_{i} \rto 0$} \Comment{disband row indices without enough significant adjacent scales}
 \EndFor
 
+\State $\K = \{k | \psi_{k}<\alpha\}$
+\For{$k \in K$}
+
+$\rto \{k | \psi_{k}<\alpha \mbox{ and } |P[i,l]-P[i,l-1]|<\alpha/2 \}$
+
+\For{$i:=2,\ldots,n$}
+\If{$\textsc{Consecutive}(\psi<\alpha) \times \rho_{i}/(n-1)>0.1$} 
+
+\EndFor
 \State $\lambda \rto \max\{\textsc{Median}(\psi)-2\sigma(\psi),0.1\}$ \Comment{$\sigma$ denotes the standard deviation}
 \State $n_{2} \rto \max\{\left\lceil 0.05n \right\rceil,1\}$ \Comment{$n_{2}$ denotes the number of adjacent scales to check}
 \State $\psi=[0_{n_{2} \times 1};\psi;0_{n_{2} \times 1}]$

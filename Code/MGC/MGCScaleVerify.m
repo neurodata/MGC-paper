@@ -12,10 +12,13 @@ else
     P(K,:)=P(K,:)-1;
     indAll=find(P<=p-1);
 end
-% if (p<=0.05 && P(end)>0.05)
-%     p
-%     P(end)
-% end
+if (p<=0.05 && P(end)>0.05)
+    p
+    P(end)
+%     figure
+%     imagesc(P);
+%     caxis([0 0.05])
+end
 
 function [p,L]=Validate(P,rep)
 n=size(P,2);
@@ -30,6 +33,18 @@ for i=2:n
     tmp=tmp(1:n-3).*tmp(2:n-2);
     rs(i)=mean(tmp<0);
 end
+% min(rs)
+
+if min(pL)<min(2/rep,0.0025)
+    tmp=find(pL>min(pL));
+    tmp=max(diff(tmp));
+    if tmp>2
+        L=find(pL==min(pL));
+        p=min(pL(L));
+        return;
+    end
+end
+
 thres1=min(0.5-4*std(rs(2:end)),0.3);
 pCount=zeros(n,1);
 nn=max(1,round(0.025*n));
@@ -47,7 +62,7 @@ for i=2:n
        if s2>=min(i+nn,n) && s1<=max(2,i-nn)
            pCount(i)=(s2-s1+1)/(n-1);
        end
-           pCount(i)=(pCount(i)>=max(0.1,5/(n-1)));
+           pCount(i)=(round(pCount(i)*100)/100>=max(0.15,5/(n-1)));
     end
 end
 L=find(pCount==1);
@@ -58,38 +73,3 @@ if isempty(L) || p>P(end)
 else
     L=find(pL==p);
 end
-
-
-% thres1=10;
-% thres2=0.5;
-% [m,~]=size(P);
-% coeR=ones(m,1);
-% for i=2:m
-%     d1=diff(P(i,2:end));
-%     %d1(abs(d1)<max(2/rep,0.0025))=0;
-%     d2=d1(1:length(d1)-1).*d1(2:length(d1));
-%     coeR(i)=mean(d2<0);
-% end
-% % coeR=mean(P,2);
-% %coeR=round(coeR*100)/100;
-% %thres1=mean(coeR)-3*std(coeR)
-% thres=max(coeR(end)-2*std(coeR(2:end)),thres1/100);
-% %thres=0.1;
-% 
-% nn=max(ceil(length(coeR)*0.05),1);
-% %nn=1;
-% ind=find(coeR>thres);
-% ind=[1;ind;m+1];
-% t=diff(ind);
-% t=find(t>2*nn+1);
-% K=[];
-% for i=1:length(t);
-%     K=[K ind(t(i))+1:ind(t(i)+1)-1];
-% end
-% 
-% if isempty(K)
-%     K=m;
-%     p=min(min(P(K,2:end),[],2));
-% else
-%     p=min(min(P(K,2:end),[],2));
-% end

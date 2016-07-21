@@ -1,7 +1,7 @@
 function [p,pmean,pstd]=CORRDataSummary()
 
 fileDir='../../../../Data/CORR/';
-%pre1='../../Data/'; % The folder to locate data
+pre2='../../Data/Results/'; % The folder to locate data
 %pre2='../../Draft/Figures/FigReal'; % The folder to save figures
 
 allFiles = dir( fileDir );
@@ -51,17 +51,17 @@ set(groot,'defaultAxesColorOrder',map1);
 %ylim([0,1]);
 
 
-x=ones(size(p,1),1);
-scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
-ylim([0,0.15]);
-set(gca,'FontSize',16);
-ax=gca;
-
-set(gca,'XTick',[]); % Remove x axis ticks
-ylabel('False Positive Rate','FontSize',16);
-title('False Positive Rates for Brain vs Noise','FontSize',17);
-
-%F.fname=strcat(pre2, 'CORR');
-%F.wh=[3 2.5]*2;
-%print_fig(gcf,F)
-%save(strcat(pre1,'CORRSummary.mat'),'p','pmean','pstd','n');
+% x=ones(size(p,1),1);
+% scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
+% ylim([0,0.15]);
+% set(gca,'FontSize',16);
+% ax=gca;
+% 
+% set(gca,'XTick',[]); % Remove x axis ticks
+% ylabel('False Positive Rate','FontSize',16);
+% title('False Positive Rates for Brain vs Noise','FontSize',17);
+% 
+% F.fname=strcat(pre2, 'CORR');
+% F.wh=[3 2.5]*2;
+% print_fig(gcf,F)
+save(strcat(pre2,'CORRBrainNoiseSummary.mat'),'p','pmean','pstd','n');

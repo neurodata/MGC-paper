@@ -43,11 +43,7 @@ for type=1:total
     titlechar=CorrSimuTitle(type);
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-    if type==19
-        sz2=24; % Enlarge the point size for discrete distribution, i.e., uncorrelation binomial
-    else
         sz2=8;
-    end
     hold on
     plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);
     plot(x(:,1),y(:,1),'.','MarkerSize',sz);

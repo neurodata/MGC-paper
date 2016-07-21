@@ -40,15 +40,24 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 powerP=zeros(7,20);
-option=[0,2,0,0];
+option=[0,2,0,4];
 for tt=type
     neighbor=[];
     if dim==1
         filename=strcat(pre1,'CorrIndTestType',num2str(tt),'N',num2str(100),'Dim',num2str(dim));
         load(filename,'neighborhoods','numRange','power1All','power2All','power3All','power1','power2','power3','power7');
+        if thres<=1
         ind=[find(max(power2,[],1)>=thres,1) length(numRange)];
+        else
+            ind=find(numRange==thres);
+        end
+        if isempty(ind)
+            ind=length(numRange);
+            n=thres;
+        else
         ind=min(ind);
         n=numRange(ind);
+        end
         neighbor=neighborhoods(:,ind);
         power1All=power1All(1:numRange(ind),1:numRange(ind),ind);
         power2All=power2All(1:numRange(ind),1:numRange(ind),ind);
@@ -56,7 +65,11 @@ for tt=type
     else
         filename=strcat(pre1,'CorrIndTestDimType',num2str(tt),'N',num2str(100),'Dim');
         load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power1','power2','power3','power7','lim');
-        ind=[find(power2>=thres,1,'last') 1];
+        if thres<=1
+            ind=[find(power2>=thres,1,'last') 1];
+        else
+            ind=find(dimRange==thres);
+        end
         ind=max(ind);
         dim=dimRange(ind);
         neighbor=neighborhoods(:,ind);

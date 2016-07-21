@@ -35,12 +35,13 @@ for r=1:rep
     end
 end
 % set the p-values of local corr at rank 0 to maximum, since they should not be used
-if (sum(pAll<1/rep)>0)
+if (sum(sum(pAll<1/rep))>0)
     pAll=pAll+1/rep;
 end
+pAll(pAll>1)=1;
 pAll(1,:)=1;pAll(:,1)=1;
 
 % verify and estimate the MGC optimal scale
-[p,indAll]=MGCScaleVerify(pAll,testAll);
+[p,indAll]=MGCScaleVerify(pAll,rep);
 %p=pAll(ind);
 test=testAll(indAll(end));

@@ -24,35 +24,6 @@ if option(1)==1
 end
 if option(2)==2
     [p2,p2All,~,t2All,ind2]=MGCPermutationTest(C,D,rep,option(2));
-%     t2All(end)
-%     max(max(t2All))
-%     std(t2All(t2All>-1))
-     map2 = brewermap(128,'PiYG'); % brewmap
-%     n=size(t2All,1);
-%     figure
-%     tmp=t2All(3:end,2:end)-t2All(2:n-1,2:end);
-%     min(min(tmp))
-%     imagesc(tmp);
-%     aa=max(-min(min(tmp)),max(max(tmp)));
-%     caxis([-aa,aa]);
-%     colormap(map2);
-%     colorbar();
-%     figure
-%     n=size(t2All,2);
-%     tmp=t2All(2:end,3:end)-t2All(2:end,2:n-1);
-%     min(min(tmp))
-%     imagesc(tmp);
-%     aa=max(-min(min(tmp)),max(max(tmp)));
-%     caxis([-aa,aa]);
-%     colormap(map2);
-%     colorbar();
-%     figure
-%     tmp=t2All(2:end,2:end);
-%     imagesc(tmp);
-%     aa=max(-min(min(tmp)),max(max(tmp)));
-% %     caxis([-aa,aa]);
-%     colormap(map2);
-%     colorbar();
 end
 if option(3)==3
     [p3,p3All,~,t3All,ind3]=MGCPermutationTest(C,D,rep,option(3));

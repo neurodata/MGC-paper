@@ -29,7 +29,7 @@ thres2=max(0.0025,2/rep);
 rs=ones(1,n);
 for i=2:n
     tmp=diff(P(2:end,i));
-   tmp(abs(tmp)<thres2)=0;
+    tmp(abs(tmp)<thres2)=0;
     tmp=tmp(1:n-3).*tmp(2:n-2);
     rs(i)=mean(tmp<0);
 end

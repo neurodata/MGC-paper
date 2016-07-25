@@ -139,7 +139,7 @@
 % \bigskip
 \begin{abstract}
 Discovering and understanding dependence between multiple  measurements is a fundamental task not just in the natural sciences, but also policy, commerce, and other domains.
-Given a set of paired observations, an ideal dependence test would efficiently detect dependence in both simulated and real ``dirty'' data, regardless of the nature of the dependence structure, including nonlinear,  high-dimensional, low-sample size, and non vector-valued observations.  Moreover, rather than merely providing a theoretically valid p-value, it would also provide insight into the nature of the dependence such as images and text.  
+Given a set of paired observations, such as images and their captions, an ideal dependence test would efficiently detect dependence in both simulated and real ``dirty'' data, regardless of the nature of the dependence structure, including nonlinear,  high-dimensional, low-sample size, and non vector-valued observations.  Moreover, rather than merely providing a theoretically valid p-value, it would also provide insight into the nature of the dependence between the different modalities.  
 % 
 % have the following properties:
 % (1) High power (probability of rejecting false null hypotheses) even for low sample size, without requiring any additional assumptions (such as linear dependence, low dimensional data, or vector-valued observations).
@@ -148,13 +148,12 @@ Given a set of paired observations, an ideal dependence test would efficiently d
 % (3) Provides insight into the nature of the dependence, rather than merely a valid p-value.
 % \jv{make "real data" dirtier, so further distinguish from (1). or, maybe 4 is about doing all of the above even on real data.}
 % (4) Achieves high power and reveals nature of dependence not just on simulations, but also on real ``dirty'' data.
-% No existing test satisfies all of these properties.
-% In this paper w
+No existing test satisfies all of these properties.
 We propose a  dependence test statistic called ``Multiscale Generalized Correlation'' (\Mgc), by combining the ideas of generalized correlation coefficient with multiscale neighborhoods.
 % \jv{too many commas below}
-Our key insight is that if the two different modalities are depdendent, then local distances within one modality (images) should correlate with local distances within the other modality (text).  
+Our key insight is that if the two different modalities are dependent, then local distances within one modality (images) should correlate with local distances within the other modality (text).  
 % More specifically, we compute the correlation for all neighborhood sizes, and find the optimal ones,  yielding a sparse, and therefore regularized, matrix from which we can compute the test statistic.
-We demonstrate that only \Mgc~has all of the above properties via simulation and theory.
+We demonstrate that \Mgc~has all of the above properties via simulation and theory.
  % via a series of theoretical proofs, numerical simulations, and real data experiments.  
 % \Mgc~performs as well or better than previously proposed methods in essentially all simulations settings. 
 % Based on this empirical discovery, we then proved that \Mgc~indeed theoretically dominates global generalized correlation coefficients, improving upon them in finite sample nonlinear settings, which is the setting of all real data experiments. 

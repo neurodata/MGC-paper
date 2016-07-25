@@ -132,6 +132,7 @@ fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),
                    id(3),id(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
                    mantelH(id(3),id(4)),mcorrH(id(3),id(4)),C_MGC(id(3),id(4)))
 
+fprintf('\\hline\n\n')
 
 
 %% Mantel
@@ -401,7 +402,7 @@ hold off
 
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=1;
+donzo=0;
 if donzo==1
     F.fname=strcat(pre2, 'FigA');    
 else

@@ -181,7 +181,7 @@ The founders of statistics first highlighted the importance of this task when Pe
 In the era of big data, several challenges emerge as particularly prevalent and therefore, problematic.
 %
 First, the dependencies between different modalities of data can be highly \textbf{non-linear}.  While this has always been the case, the relative abundance of data has led to an increased demand in checking for dependence in many previously uninvestigated settings.
-%
+
 Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or billions of dimensions per data point. At the same time, the \textbf{sample sizes} are not increasing proportionally, meaning that we often have datasets with very high-dimensions and relatively low sample size.
 %
 Third, the data are often \textbf{complicated}: networks, shapes, questionnaires, semi-structured text are all typical examples.
@@ -312,35 +312,39 @@ Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 \begin{center}
 % \vspace{-35pt}\hspace{-150pt}
 \begin{tabular}{c  c  c  c}
- $\delta_x$(1,2) & \hspace{1.8em} -0.59 \hspace{1.8em}  & \hspace{1.8em} -0.84 \hspace{1.8em} & \hspace{1.8em} 0.00 \hspace{1.8em}  \\ 
- $\delta_y$(1,2) & 0.14 & 0.30 & 0.30  \\ 
- $\delta_x \times \delta_y$ & -0.08 & -0.26 & 0.00  \\ 
+ $\delta_x$(1,3) & \hspace{1.8em} -0.66 \hspace{1.8em}  & \hspace{1.8em} -0.77 \hspace{1.8em} & \hspace{1.8em} -0.73 \hspace{1.8em}  \\ 
+ $\delta_y$(1,3) & -0.52 & -0.41 & -0.19  \\ 
+ $\delta_x \times \delta_y$ & \color{green}0.34 & \color{green}0.32 & \color{green}0.14  \\ 
  
 \hline
 
 
- $\delta_x$(2,3) & -0.65 & -0.87 & -0.87  \\ 
- $\delta_y$(2,3) & -0.65 & -0.75 & -0.75  \\ 
- $\delta_x \times \delta_y$ & 0.42 & 0.66 & 0.66  \\ 
+ $\delta_x$(3,9) & -0.46 & -0.39 & 0.04  \\ 
+ $\delta_y$(3,9) &  0.44 & 0.40 & 0.22  \\ 
+ $\delta_x \times \delta_y$ & \color{magenta}-0.20 & \color{magenta}-0.15 & \color{green}0.01  \\ 
+
+\hline
+ $\sum{\delta_x \times \delta_y}$ &  52.69   & 6.19 & 29.39  \\ 
+$\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  0.07  & 0.01 & 0.26  \\ 
+
 \end{tabular}
 \cs{can you color code this table? maybe just using two colors to denote positive and negative?
 also, do we want another row, that shows the sum across the $\delta_x \times \delta_y$ values?}
+\jv{tried above}
 \end{center}
 % \end{table}
-\caption{See below}
+\caption{(Caption followed in the next page.)}
 \label{f:schematic}
 \end{figure}
-%
-\clearpage
-
-\cs{i hacked this because i couldn't get the caption on the same page and i was on a flight.  i think there is a package for next page captions, but i'm not online as i do this.  one of us should fix this. also, i still might want spiral, i gotta decide}
 
 
-% \begin{minipage}
-Flowchart schematizing Multiscale Generalized Correlation (\Mgc). 
+\addtocounter{figure}{-1}
 
-Columns listed from left to right.
-\textbf{Column 1:} 75 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
+\begin{figure}[htbp]
+\caption{
+%\begin{minipage}
+Flowchart schematizing Multiscale Generalized Correlation (\Mgc). Columns listed from left to right.
+\textbf{Column 1:} 50 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 % 
 \textbf{Column 2:} Compute all pairwise distances for $x$ and $y$ yielding interpoint comparison matrices
  $\tilde{A}$ (top) and $\tilde{B}$ (middle), 
@@ -355,11 +359,13 @@ Note that implementing it requires choosing appropriate distances for both $x$ a
 % \Mcorr, the global test, has  p-value $0.067$ while \Mgc, our multiscale test, has  p-value $0.005$.
 Multiscale  maps are used to determine the optimal scales, using p-values (middle)  in the absence of the true distribution or training data, and simulated power (bottom) when the true distribution or training data are available.  
 % Both maps enable one to select the optimal scales and understand the structure of dependence.
-Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value ($0.067$),  there are many local scales that achieve nearly perfect power, resulting in highly significant p-values ($\approx 0.005$), as well as revealing the scales of dependency.
+Whereas \Mcorr, the global test, has very low power and therefore yields a non-significant p-value ($0.067$),  there are many local scales that achieve nearly perfect power, resulting in highly significant p-values ($\approx 0.005$), as well as revealing the scales of dependency. Table illustrating how \Mgc~is able to detect dependence even in highly nonlinear and low-sample size settings. The three colored points in the scatter plot of Figure~\ref{f:schematic} indicate the three points considered in this table. \Mgc~detects local dependence across $x$ and $y$, whereas the global methods get confused by many nonlinearly related pairs.}
+ %\end{minipage}}
+\end{figure}
+\clearpage
 
-
-Table illustrating how \Mgc~is able to detect dependence even in highly nonlinear and low-sample size settings. The three colored points in the scatter plot of Figure~\ref{f:schematic} indicate the three points considered in this table. \Mgc~detects local dependence across $x$ and $y$, whereas the global methods get confused by many nonlinearly related pairs.
-% \end{minipage}
+\cs{i hacked this because i couldn't get the caption on the same page and i was on a flight.  i think there is a package for next page captions, but i'm not online as i do this.  one of us should fix this. also, i still might want spiral, i gotta decide}
+\jv{tried fix}
 
 
 \clearpage
@@ -389,7 +395,7 @@ The end result is \Mgc~can be computed in  time comparable to the current state-
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Algorithm \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find the optimal scales. If the underlying joint distribution is known (as in simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for  regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region. If no such region exists, the optimal scale is set to the largest neighborhood (that is, \Mgc equals the global correlation 
+Finally, we must find the optimal scales. If the underlying joint distribution is known (as in simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region. If no such region exists, the optimal scale is set to the largest neighborhood (that is, \Mgc equals the global correlation 
 % ). This is the procedure used for real data experiments, which maintains excellent performance 
 (see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 
@@ -414,7 +420,6 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 Each panel shows empirical testing power at a significance level $\alpha=0.05$
 versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
 Except the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for almost all settings and all dimensions, 
-\cs{do we always use the same values for number of replicates to estimate power and scale? if so, let's just define those constants in the algorithm definition caption and not put them here. I assumed so and therefore removed them. }
 }
 \label{f:nD}
 \end{figure}
@@ -439,7 +444,6 @@ Figure \ref{f:pp} show slopegraphs comparing each of the three global correlatio
 Figure \ref{f:simPerm} shows the distribution of powers for the 20 different simulation settings, for both one-dimensional and high-dimensional cases, comparing power estimated using p-value maps, rather than power maps.  
 % using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
 Even when estimating the optimal scales via p-values maps, \Mgc~achieves higher power in nearly all settings, especially high dimensional ones.
-\cs{i moved the above sentence here}
 
 
 
@@ -479,7 +483,7 @@ For nearly linear dependencies (1-5), the best neighborhood choice is always the
 Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, quadratic (6),  W (7), and two-parabolas are all polynomials of degree 2 with different coefficients, and their power maps are  similar to each other. Similarly,  (16) and (17) are the same trigonometry function (sine) with different periods, and they share a narrow range of significant local correlations.
 Both circle (11) and eclipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
 % 
-Note that for all simulations, there always exists a  consecutive region of local scales that are almost equally significant, which is an important observation that we use to approximate the optimal \Mgc~scales by the p-value map for data of unknown distribution.
+Note that for all simulations, there always exists a consecutive region of local scales that are equally significant, which is an important observation that we use to approximate the optimal \Mgc~scales by the p-value map for data of unknown distribution.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/FigHDHeat}
@@ -500,7 +504,6 @@ The formal testing scenario is as follows: we observe $n$ pairs of observations,
 % where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y})$.
 
 The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false, and has power equal to the type $1$ error level when the null is true.
-\cs{i added the above clause and removed the similar one after the theorem.}
 As defined above, a test is consistent if its power converges to unity as sample size increases when $f_{xy} \neq f_x f_y$.
 Let $\G_t$ denote a global generalized correlation coefficient based test statistic, that is, $t$ might indicate \Mantel, \Dcorr, or \Mcorr, and let $\beta(\G_t^*)$ denote the power of the corresponding multiscale version.
 Recall from the work Szekeley et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
@@ -548,16 +551,15 @@ The three above theorems taken together lead to the main theoretical result of t
 \Mgc~dominates its global counterpart, meaning that \Mgc~is always as good as, and sometimes better than, its corresponding global correlation coefficient, even in finite samples. 
 \end{thm}
 
-To our knowlwedge, this is the first domination theorem in dependence testing.
+To our knowlewdge, this is the first domination theorem in dependence testing.
 \cs{is that true?}
+\jv{as far as I know, yes.}
 
 
 \subsection*{Real Data Experiments}
 \label{numer3}
 
 \subsubsection*{Brain activity and personality} % Between Hippocampus Shape and Depression}
-\cs{need change here: add p-value, polish CxP, add noise and show p-value map for brain disease; figure and caption update}
-
 Our first real data experiment investigates whether there is any dependency between the brain activity and personality.
 % , from a data set of small sample size and high-dimensionality. 
 Adelstein et al. \cite{AdelsteinEtAl2011} was able to detect dependence between certain regions and dimensions of personality, but lacked the tools to test for dependence of the whole brain activity against all five dimensions of personality. 
@@ -589,6 +591,7 @@ Our next experiment investigates whether brain shape and disease status are depe
 
 This brain shape versus disease dataset consists of $n=114$ subjects, for each we have a structural MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape modality, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}. For the discrete disorder variable, we add white noise bounded by $0.01$ to each label, then form the Euclidean distance (the noise is used to break ties and make sure only the diagonal entries of the distance matrix are zero).
 \cs{i don't understand the justification for this. why not add 1 everywhere but diagonals like you did before?}
+\jv{because the largest distance is $4$ before, while now it is $114$, such that MGCScaleVerify can be more trustable }
 
 We consider two dependence tests, one for each hemisphere: is hippocampus shape independent of depressive state.
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
@@ -637,6 +640,7 @@ both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown).
 (D) Density estimate for the false positive rates of \Mgc~on the brain vs noise experiments, with the actual rate of each data shown as dots above the x-axis. The mean, median, and standard deviation are $0.0576, 0.0450, 0.0452$ respectively.}
 \label{f:real}
 \cs{i think 4 across would look better for figure}
+\jv{?}
 \end{figure}
 
 \subsubsection*{Brain structural networks and disease}
@@ -905,6 +909,7 @@ Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Not
 \caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global setting.
 \cs{i think the title of this should be ``One-Dimensional Multiscale Power Maps'', and the one in the main paper should be ``High-Dimensional Multiscale Power Maps''.}
 }
+\jv{done}
 \label{f:powermaps1}
 \end{figure}
 
@@ -963,9 +968,18 @@ and the sample distance correlation equals
 It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\Dcorr(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variable $\mb{x}$ and $\mb{y}$. The population distance correlation is defined by the characteristic functions, which is zero if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is a consistent statistic for testing independence, i.e., the testing power $\beta_{\alpha}(\Dcorr(X,Y))$
 converges to unity as $n$ increases, at any type $1$ error level $\alpha$. Note that all of $dcov, dvar$, \Dcorr~are always non-negative; and the consistency result assumes finite second moments of $\mb{x}$ and $\mb{y}$, which holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. Also note that the \Dcorr~above is actually the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
-Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column. Our \Mgcd is in fact based on this single-centered \Dcorr, which will be further expanded in Appendix~\ref{appen:mgc}.
+Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column.
+\begin{lem}
+The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
+
+Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, so is the testing power.
+
+The above also holds for \Mcorr~asymptotically.
+\end{lem}
+Our \Mgcd is in fact based on this single-centered \Dcorr, which is more advantageous than \Mgc based on double-centered \Dcorr (shown in Appendix~\ref{appen:mgc}).
 
 \cs{don't we have a lemma here? also, explain why we left center vs right center (ie, for symmetry)}
+\jv{moved lemma here. Left center and right center is not for symmetry.}
 
 \subsection{(Global) Modified Distance Correlation}
 \label{appen:mcorr}
@@ -993,9 +1007,10 @@ If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $
 
 It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estimator of the population distance correlation $\Dcorr(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it is a consistent statistic for testing independence, and may work better than \Dcorr~under high-dimension dependencies.
 
-Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr, which does not alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for testing. 
+Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr without alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for testing. 
 \cs{another lemma or two here.}
-We use the single-centered \Mcorr~with the simplified diagonal modification for computational expediency and simplicity.
+\jv{probably not necessary?}
+Thus we use the single-centered \Mcorr~with the simplified diagonal modification for computational expediency and simplicity.
 
 %Also note that when there exists repeating points, it is necessary to set $a_{ij}=a_{jj}$ for repeating points during global/local mcorr computation, or exclude repeating observation before-hand, otherwise the diagonal adjustment of mcorr may lose its effect for adjusting high-dimensional bias.
 
@@ -1025,19 +1040,9 @@ For any generalized correlation coefficient, its local correlations can be direc
 
 In particular, \Mantel~sets $a_{ij}$ and $b_{ij}$ as the respective entry of $\tilde{A}$ and $\tilde{B}$ (the Euclidean distances). \Dcorr~lets $a_{ij}$ and $b_{ij}$ be the respective matrix entry of $A$ and $B$ (the doubly centered distance matrices), then the sample means $\bar{a}, \bar{b}$ are automatically $0$. \Mcorr~slightly modifies $a_{ij}$ and $b_{ij}$ of \Dcorr~to adjust their high-dimensional bias. 
 
-As discussed already, our \Mgcd~and \Mgcm~are based on single centering throughout. 
-%For \Mgcm, we take $a_{ij}=b_{ij}=0$ when $i=j$, otherwise set $a_{ij}$ as the matrix entry of $H\tilde{A}-\tilde{A}/n$, and set $b_{ij}$ as the entry of $\tilde{B}H-\tilde{B}/n$. Local versions of \Mcorr~follow from Equation~\ref{localCoef}. 
-In the next lemma, we show that single-centering and double-centering are indeed equivalent for the testing purpose of global correlations.
-\begin{lem}
-The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
+As discussed already, our \Mgcd~and \Mgcm~are based on single centering throughout, not only because single centering is equivalent to double centering for the global correlation, but also because single centering is consistent in preserving ranks while double centering is not, e.g., the ranks by sorting $\tilde{A}$ within each column are exactly the same as the column ranks of $H\tilde{A}$, which are different from the column ranks of $H\tilde{A}H$. 
 
-Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, so is the testing power.
-
-The above also holds for \Mcorr~asymptotically.
-\end{lem}
-\cs{this lemma seems to be in the wrong place? it has nothing to do with \Mgc? i would move it and change corresponding text}
-
-Although single centering is equivalent to double centering for the global correlation, single centering is actually consistent in preserving ranks, e.g., the ranks by sorting $\tilde{A}$ within each column are exactly the same as the column ranks of $H\tilde{A}$, which are different from the column ranks of $H\tilde{A}H$. This is why we define the rank-truncated comparisons a bit differently for $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$: $\mt{a}_{ij}^k$ is defined based on ranks within each column, while $\mt{b}_{ij}^l$ is defined based on ranks within each row. This not only makes the ranks consistent in the $\tilde{Z}$ and $Z$ for $Z=A,B$, but also makes the resulting local correlations always symmetric even if $A$ and $B$ are not symmetric.
+Note that we defined the rank-truncated comparisons differently for $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$: $\mt{a}_{ij}^k$ is defined based on ranks within each column, while $\mt{b}_{ij}^l$ is defined based on ranks within each row. By doing so, the ranks are consistent between $\tilde{Z}$ and $Z$ for either $Z=A,B$, and the resulting local correlations are always symmetric even if $A$ and $B$ are not symmetric.
 
 \begin{lem}
 Each local correlation $\G^{kl}$ is always symmetric regardless of the symmetry of $A$ or $B$. Namely for any $k,l$, 
@@ -1047,9 +1052,10 @@ Each local correlation $\G^{kl}$ is always symmetric regardless of the symmetry 
 
 Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly the row ranks of $\tilde{B}$ are preserved in $B$ under single centering.
 \end{lem}
-Therefore local correlations become more accurate in excluding far-away observations that exhibit insignificant dependency, when \Mgc~is implemented by single centering.
+Therefore local correlations are more faithful in excluding far-away observations that exhibit insignificant dependency, when \Mgc~is implemented by single centering.
 
 \cs{where are the proofs of these lemmas?}
+\jv{in proof section :-)}
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively. Alternatively, one may add a very small amount of white noise to break all ties, like in our real data experiment.
 
@@ -1061,10 +1067,9 @@ Among all possible local correlations, \Mgc~picks the optimal local correlation.
 \label{appen:tests}
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
-Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes  the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
+Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. 
-Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~using the p-value map, 
-% by finding a consecutive region in the p-value map that has smooth p-value change and low median p-value, and 
+Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~using the p-value map, by finding a consecutive region of significant scales in the p-value map and 
 outputting the approximated p-value and all optimal scales for \Mgc. 
 Algorithm~\ref{alg:power} estimates the testing powers of all local statistics using a known or estimated joint distribution, which can be used to more accurately estimate the optimal scales and the testing power for \Mgc. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
@@ -1139,7 +1144,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{P-value Computation for All Local Correlations. This algorithm computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$. $\pi$ denotes a random permutation, and $\tilde{B}(\pi,\pi)$ denotes the distance matrix with the observation label permuted. In practice, we always let $r=10$,$000$. \cs{is this true?}}
+\caption{P-value Computation for All Local Correlations. This algorithm computes the p-values of all local correlation by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$. $\pi$ denotes a random permutation, and $\tilde{B}(\pi,\pi)$ denotes the distance matrix with the observation label permuted. In the real data experiment we always set $r=10$,$000$.}
 \label{alg:pval}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.
@@ -1157,51 +1162,52 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs both the optimal scales and their corresponding  \Mgc~p-value.  The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. \cs{you don't define $v_i$.  what is it? do you mean $v[i]$? and don't define $v$ to be a vector and its own difference, that confuses people and leads to coding errors. also, why $n-3$ for the sum? i don't understand line 10.  what is $k | \psi$?in fact, what is $k$ at all?? also, you require a threshold for smoothness, call it something, provide it as input? so icky :)}}%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
+\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value.  The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. \cs{you don't define $v_i$.  what is it? do you mean $v[i]$? and don't define $v$ to be a vector and its own difference, that confuses people and leads to coding errors. also, why $n-3$ for the sum? i don't understand line 10.  what is $k | \psi$?in fact, what is $k$ at all?? also, you require a threshold for smoothness, call it something, provide it as input? so icky :)}}%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
-\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, the number of permutations $r$.
+\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, a significance level $\alpha$.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
-\Function{MGCScaleVerify}{$P,r$}
-\State $[p_{r},\K]=\textsc{Validate}(P)$ \Comment{find consecutive scales of $P$ by row}
-\State $[p_{c},\LL]=\textsc{Validate}(P\T)$ \Comment{find consecutive scales of $P$ by column}
+\Function{MGCScaleVerify}{$P,\alpha$}
+\State $[p_{r}]=\textsc{Validate}(P,\alpha)$ \Comment{find consecutive scales of $P$ by row}
+\State $[p_{c}]=\textsc{Validate}(P\T,\alpha)$ \Comment{find consecutive scales of $P$ by column}
 \State $p \rto \min\{p_{r},p_{c}\}$ \Comment{take the smaller value as the approximated p-value for \Mgc}
-\State $[k^{*},l^{*}] \rto \argmin_{\left\{k \in \K \mbox{ or } l \in \LL \right\}} P\leq p$ \Comment{return all optimal scales within the validated range}
+\State $[k^{*},l^{*}] \rto \argmin_{\{k,l\}} P_{kl}\leq p$ \Comment{return all optimal scales within the validated range}
 \EndFunction
 \end{algorithmic}
 \begin{algorithmic}[1]
 %\Statex
 \Require Same as \textsc{MGCScaleVerify}. 
 \Ensure The indices of valid rows $\K$, and the approximated \Mgc~p-value $p$.
-\Function{Validate}{$P,r$}
-\State Initialize $\K$ as an empty set, $\psi, \rho$ as two $n$-dimensional vectors of ones.
-\State $\epsilon_{1} \rto \max\{0.0025,2/r\}$ \Comment{a threshold to ignore negligible p-value change}
+\Function{Validate}{$P,\alpha$}
+\State Initialize $\psi$ as a matrix of zeros of the same size as $p$, and $\rho$ as a vector of zeros of size $n$.
+\State $n_{2} \rto \left\lceil 0.05 \times n \right\rceil$ \Comment{Check adjacent column scales}
+\For{$j:=2,\ldots,n$}
+\Lineif{$\min{P[:,j]}>\alpha$}{break} %\Comment{check the region size}
 \For{$i:=2,\ldots,n$}
-\State $v \rto P[i,2:n]$ \Comment{get all p-values on each row}
-\State $\psi_{i}=\textsc{Median}(v)$ \Comment{calculate the median p-value}
-\State $v \rto \textsc{Diff}(v)$ \Comment{consecutive difference of the p-values on the row}
-\State $\rho_{i} \rto \frac{1}{n-3} \sum_{i=1}^{n-3}\mb{I}\{v_{i} \times v_{i+1}<0 \ \& \ |v_{i}|>\epsilon_{1} \ \& \ |v_{i+1}|>\epsilon_{1}\}$ \Comment{the smoothness score}
+\State $\psi[i,j] \rto \mb{I}\{P[i,j]-P[i-1,j] \leq 0\}$ \Comment{Find a region of non-increasing p-values}
 \EndFor
-\State $\K \rto \{k| \psi_{i}< \min\{0.0025,2/r\} \mbox{ for } i=k-1,k,k+1\}$ \Comment{find very significant p-values}
-\If{$\K = \varnothing$} \Comment{otherwise find consecutive smooth rows with low median p-value}
-\State $\epsilon_{2} \rto \min\{0.5-4 \sigma(r),0.3\}$ \Comment{a threshold for the smoothness score}
-\For{$k:=2,\ldots,n$} \Comment{for each $k$, find the largest consecutive dominating region}
-\State $\Omega_{k} \rto \{i=k_{1},k_{1}+1,\ldots,k,\ldots,k_{2} | \psi_{i} \leq \psi_{k} \ \& \ \rho_{i} \leq \rho_{k} \leq \epsilon_{2} \}$ %\Comment{$\Omega_{k}$ denotes consecutive indices including $k$}
-\Lineif{$|\Omega_{k}|/(n-1) \geq \max\{0.15,5/(n-1)\}$}{$\K \rto [\K;k]$} \Comment{check the region size}
 \EndFor
-\EndIf
-\State $p \rto \min_{i \in \K} \{\psi_{i}\}$ \Comment{take the minimal median p-value as an approximation of \Mgc~p-value}
 
-\If{$\K = \varnothing$ or $p > P[n,n]$} 
+\For{$j:=2,\ldots,n$}
+\State $j_{1} \rto \min\{2,j-n_{2}\}$
+\State $j_{2} \rto \min\{n,j+n_{2}\}$
+\State $\rho[j] \rto \max_{\psi[i_{1}:i_{2},j_{1}:j_{2}]=1}{\frac{i_{2}-i_{1}}{n}}$ 
+\EndFor
+
+\State $\epsilon \rto \max(0.2,\rho_{n}+3\textsc{Std}(\rho))$
+
+\If{$\max_{i}{\rho_{i}} \geq \epsilon$} 
+\State $p \rto \min_{\mbox{ all } i \mbox{ with } \rho_{i} \geq \epsilon}{P[:,i]}$
+\Else
 \State $\K=\{n\}$
-\State $p \rto P[n,n]$ \Comment{use the p-value of the global correlation instead}
+\State $p = \min\{P[n,n],\textsc{Median}(P)\}$ \Comment{use the median or the last p-value instead}
 \EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Testing Powers Computation for All Local Correlations: this algorithm computes the testing powers of all local correlations. By repeatedly simulating samples by the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all sample local correlations under the null and the alternative are computed by Algorithm~\ref{alg:all_scales}, followed by estimating the testing power at each local correlation. The \Mgc~optimal scale can be found by selecting the scale that maximizes power, and it suffices to pick one optimal scale in case of ties. The running time is $O(rn^2 \log n)$. This algorithm can be similarly adapted to training data, for which the alternative statistic can be computed from the training data while the null statistic can be computed by permutation. }
+\caption{Testing Powers Computation for All Local Correlations: this algorithm computes the testing powers of all local correlations. By repeatedly simulating samples by the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all sample local correlations under the null and the alternative are computed by Algorithm~\ref{alg:all_scales}, followed by estimating the testing power at each local correlation. The \Mgc~optimal scale can be found by selecting the scale that maximizes power, and it suffices to pick one optimal scale in case of ties. In the simulation we use $r=2$,$000$ MC replicates to estimate the optimal scale, and another $r=10$,$000$ MC replicates to estimate the power. The running time is $O(rn^2 \log n)$. This algorithm can be similarly adapted to training data, for which the alternative statistic can be computed from the training data while the null statistic can be computed by permutation. }
 \label{alg:power}
 \begin{algorithmic}[1]
 \Require A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.

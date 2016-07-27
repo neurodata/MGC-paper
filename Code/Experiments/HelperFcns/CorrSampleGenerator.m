@@ -176,7 +176,10 @@ switch type % In total 20 types of dependency + the type 0 outlier model
             x=u*cos(theta)+v*sin(theta)+eps;
         end
     case {16,17} %Sine 1/2 & 1/8
-        x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        x=repmat(unifrnd(-1,1,n,1),1,d);
+        if noise>0 || d>1
+            x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        end
         if type==16
             theta=4;cc=1;
         else
@@ -184,7 +187,10 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         end
         y=sin(theta*pi*x)+cc*noise*repmat(eps,1,d);
         if dependent==0
-            x=repmat(unifrnd(-1,1,n,1),1,d)+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            x=repmat(unifrnd(-1,1,n,1),1,d);
+            if noise>0 || d>1
+            x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            end
         end
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));

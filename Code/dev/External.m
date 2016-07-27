@@ -1,4 +1,4 @@
-[powerP]=CorrSimPermTest(20,1,0.8,200,500,1,0.05)
+
 [powerP]=CorrSimPermTest(1:10,1,0.8,200,500,1,0.05)
 [powerP]=CorrSimPermTest(11:20,1,0.8,200,500,1,0.05)
 [powerP]=CorrSimPermTest(1:10,2,0.5,100,300,0,0.05)

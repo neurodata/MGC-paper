@@ -66,7 +66,7 @@ ylabel('# of Neighbors for Y','position',[-430 156],'FontSize',24);
 colorbar
 h=colorbar('Ticks',[0,thres/2,thres]);%,'location','westoutside');
 tstring=' of mcorr ';
-h=suptitle(strcat('Multiscale Power Maps'));% for 1-Dimensional Simulations'));
+h=suptitle(strcat('One-Dimensional Multiscale Power Maps'));% for 1-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
@@ -120,7 +120,7 @@ xlabel('# of Neighbors for X','position',[-290 -20],'FontSize',24);
 ylabel('# of Neighbors for Y','position',[-720 260],'FontSize',24);
 h=colorbar('Ticks',[0,thres/2,thres]);%,'location','westoutside');
 set(h,'FontSize',14);
-h=suptitle(strcat('Multiscale Power Maps'));% for High-Dimensional Simulations'));
+h=suptitle(strcat('High-Dimensional Multiscale Power Maps'));% for High-Dimensional Simulations'));
 set(h,'FontSize',24,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);

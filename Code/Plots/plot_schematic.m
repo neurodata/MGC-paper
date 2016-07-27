@@ -81,7 +81,7 @@ IJ=[I, J]';
 IJ=sort(IJ(:));
 id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 xx=15;
-id=[1,2,2,3];
+id=[1,3,3,9];
 col=[1 .5 0];
 
 for ind=[1,2,4]; %length(id)
@@ -133,6 +133,10 @@ fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),
                    mantelH(id(3),id(4)),mcorrH(id(3),id(4)),C_MGC(id(3),id(4)))
 
 fprintf('\\hline\n\n')
+
+formatSpec = '\n $\\sum \\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
+fprintf(formatSpec,sum(sum(mantelH)), sum(sum(mcorrH)),sum(sum(C_MGC)));
+fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'),sum(sum(C_MGC))/norm(A_MGC,'fro')/norm(B_MGC,'fro'));
 
 
 %% Mantel
@@ -361,11 +365,12 @@ hold on
 plot(xi,f,'.-','LineWidth',4,'Color',glob);
 plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
 set(gca,'FontSize',15);
-x1=round(tA(end)*100)/100;
-x2=round(tA(k,l)*100)/100;
+% x1=round(tA(end)*100)/100;
+x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm(A_MGC,'fro')/norm(B_MGC,'fro');
+x1=round(x1*100)/100;x2=round(x2*100)/100;
 plot(x1,0.1,'.','MarkerSize',mkSize,'Color',glob);
 plot(x2,0.1,'*','MarkerSize',10,'Color',loca);
-set(gca,'XTick',[x1+0.05,x2+0.05],'TickLength',[0 0]);
+set(gca,'XTick',[x1+0.05,x2+0.05],'TickLength',[0 0],'XTickLabel',[x1,x2]);
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 x1 = tA(end);
@@ -402,7 +407,7 @@ hold off
 
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=0;
+donzo=1;
 if donzo==1
     F.fname=strcat(pre2, 'FigA');    
 else

@@ -2,7 +2,13 @@ function run_fig1Data(type,n,noise)
 % generate data for figure 1
 %%% File path searching
 if nargin<1
-    type=11;
+    type=16;
+end
+if nargin<2
+    n=50;
+end
+if nargin<3
+    noise=0;
 end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
@@ -77,59 +83,37 @@ pAll=1-pAll;
 
 %% compute stuff that cencheng should have saved :)
 
-cc=1;
-
-% Mantel
-C=C-mean(C(:));
-D=D-mean(D(:));
-mantelH=C.*D;
-
 % Mcorr
 RC=disToRanks(C);
-RD=disToRanks(D);
-if option==3;
-    A=sum(sum(C))/n/(n-1);
-    B=sum(sum(D))/n/(n-1);
-    A=C-A;
-    B=D-B;
-    for j=1:n
-        A(j,j)=0;
-        B(j,j)=0;
-    end
-else
-    H=eye(n)-(1/n)*ones(n,n);
-    A=H*C;
-    B=D*H;
-    % % For mcorr, further adjust the double centered matrices to remove high-dimensional bias
-    if option==2
-        A=A-C/n;
-        B=B-D/n;
-        for j=1:n
-            A(j,j)=0;
-            B(j,j)=0;
-        end
-    end
-end
-%global stat
-if cc==1
-    A=A-mean(mean(A));B=B-mean(mean(B));
+RD=disToRanks(D)';
+        
+H=eye(n)-(1/n)*ones(n,n);
+A=H*C-C/n;
+B=D*H-D/n;
+for j=1:n
+    A(j,j)=0;
+    B(j,j)=0;
 end
 mcorrH=A.*B;
 
+% Mantel
+C=C-sum(sum(C))/n/(n-1);
+D=D-sum(sum(D))/n/(n-1);
+mantelH=C.*D;
 
 % MGC
 RC=(RC>k);
 RD=(RD>l);
 A_MGC=A;
 B_MGC=B;
-if cc==1
-    A_MGC=A_MGC-mean(mean(A_MGC));
-    B_MGC=B_MGC-mean(mean(B_MGC));
-end
 A_MGC(RC)=0;
 B_MGC(RD)=0;
-A_MGC(1:n+1:n^2)=0;
-B_MGC(1:n+1:n^2)=0;
+% if cc==1
+A_MGC=A_MGC-mean(mean(A_MGC));
+B_MGC=B_MGC-mean(mean(B_MGC));
+% end
+%A_MGC(1:n+1:n^2)=0;
+%B_MGC(1:n+1:n^2)=0;
 C_MGC=A_MGC.*B_MGC;
 
 save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');

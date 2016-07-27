@@ -331,6 +331,7 @@ $\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  0.07 
 \cs{can you color code this table? maybe just using two colors to denote positive and negative?
 also, do we want another row, that shows the sum across the $\delta_x \times \delta_y$ values?}
 \jv{tried above}
+\cs{color each value for the top six rows, and change green to be darker. consider matlab outputting the whole table and using an include function.}
 \end{center}
 % \end{table}
 \caption{(Caption followed in the next page.)}
@@ -364,8 +365,6 @@ Whereas \Mcorr, the global test, has very low power and therefore yields a non-s
 \end{figure}
 \clearpage
 
-\cs{i hacked this because i couldn't get the caption on the same page and i was on a flight.  i think there is a package for next page captions, but i'm not online as i do this.  one of us should fix this. also, i still might want spiral, i gotta decide}
-\jv{tried fix}
 
 
 \clearpage
@@ -552,8 +551,6 @@ The three above theorems taken together lead to the main theoretical result of t
 \end{thm}
 
 To our knowlewdge, this is the first domination theorem in dependence testing.
-\cs{is that true?}
-\jv{as far as I know, yes.}
 
 
 \subsection*{Real Data Experiments}
@@ -590,8 +587,6 @@ Our next experiment investigates whether brain shape and disease status are depe
 
 
 This brain shape versus disease dataset consists of $n=114$ subjects, for each we have a structural MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape modality, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}. For the discrete disorder variable, we add white noise bounded by $0.01$ to each label, then form the Euclidean distance (the noise is used to break ties and make sure only the diagonal entries of the distance matrix are zero).
-\cs{i don't understand the justification for this. why not add 1 everywhere but diagonals like you did before?}
-\jv{because the largest distance is $4$ before, while now it is $114$, such that MGCScaleVerify can be more trustable }
 
 We consider two dependence tests, one for each hemisphere: is hippocampus shape independent of depressive state.
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
@@ -626,10 +621,10 @@ both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown).
 
 \begin{figure}
   \centering
-  \begin{tabular}{@{}p{0.5\linewidth}@{\quad}p{0.5\linewidth}@{}}
-	  \centering
-		\subfigimg[width=\linewidth]{A}{../Figures/FigReal1} &
-    \subfigimg[width=\linewidth]{B}{../Figures/FigReal2} \\
+  \begin{tabular}{@{}p{0.24\linewidth}@{\quad}p{0.24\linewidth}@{\quad}p{0.24\linewidth}@{\quad}p{0.24\linewidth}@{}}
+	\centering
+	\subfigimg[width=\linewidth]{A}{../Figures/FigReal1} &
+    \subfigimg[width=\linewidth]{B}{../Figures/FigReal2} &
     \subfigimg[width=\linewidth]{C}{../Figures/FigReal3} &
     \subfigimg[width=\linewidth]{D}{../Figures/FigRealCORR}
   \end{tabular}
@@ -639,8 +634,6 @@ both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown).
 (C) P-value map of all local correlations from $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI. $l=38$ is the largest possible neighborhood size for the CCI data due to repeated entries.
 (D) Density estimate for the false positive rates of \Mgc~on the brain vs noise experiments, with the actual rate of each data shown as dots above the x-axis. The mean, median, and standard deviation are $0.0576, 0.0450, 0.0452$ respectively.}
 \label{f:real}
-\cs{i think 4 across would look better for figure}
-\jv{?}
 \end{figure}
 
 \subsubsection*{Brain structural networks and disease}
@@ -907,8 +900,6 @@ Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Not
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}
 \caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global setting.
-\cs{i think the title of this should be ``One-Dimensional Multiscale Power Maps'', and the one in the main paper should be ``High-Dimensional Multiscale Power Maps''.}
-}
 \jv{done}
 \label{f:powermaps1}
 \end{figure}
@@ -978,8 +969,6 @@ The above also holds for \Mcorr~asymptotically.
 \end{lem}
 Our \Mgcd is in fact based on this single-centered \Dcorr, which is more advantageous than \Mgc based on double-centered \Dcorr (shown in Appendix~\ref{appen:mgc}).
 
-\cs{don't we have a lemma here? also, explain why we left center vs right center (ie, for symmetry)}
-\jv{moved lemma here. Left center and right center is not for symmetry.}
 
 \subsection{(Global) Modified Distance Correlation}
 \label{appen:mcorr}
@@ -1008,8 +997,6 @@ If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $
 It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estimator of the population distance correlation $\Dcorr(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it is a consistent statistic for testing independence, and may work better than \Dcorr~under high-dimension dependencies.
 
 Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr without alter the theoretical advantages of original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for testing. 
-\cs{another lemma or two here.}
-\jv{probably not necessary?}
 Thus we use the single-centered \Mcorr~with the simplified diagonal modification for computational expediency and simplicity.
 
 %Also note that when there exists repeating points, it is necessary to set $a_{ij}=a_{jj}$ for repeating points during global/local mcorr computation, or exclude repeating observation before-hand, otherwise the diagonal adjustment of mcorr may lose its effect for adjusting high-dimensional bias.
@@ -1056,6 +1043,7 @@ Therefore local correlations are more faithful in excluding far-away observation
 
 \cs{where are the proofs of these lemmas?}
 \jv{in proof section :-)}
+\cs{tell the reader, not in a hidden comment just to me :)}
 
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively. Alternatively, one may add a very small amount of white noise to break all ties, like in our real data experiment.
 
@@ -1115,7 +1103,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 %\State $R^{B}=\textsc{Transpose}(R^{B})$ 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
 
-\For{$i,j:=1,\ldots,n$} \cs{name/clarify each loop in notes}
+\For{$i,j:=1,\ldots,n$} \cs{name/clarify each loop in comments}
 \State $k \rto R^{A}_{ij}$
 \State $l \rto R^{B}_{ij}$
 \State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}$
@@ -1136,7 +1124,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $\G^{k+1,l+1} \rto \G^{k+1,l}+\G^{k,l+1}+\G^{k+1,l+1}-\G^{k,l}$
 \EndFor
 
-\For{$k,l:=1,\ldots,n$} \cs{explained this step already in the above pseudo-code, and you did not include comments for lines that were similar to the previous code, so i delete this comment for consistency. } %\Comment{center and normalize all local covariances}
+\For{$k,l:=1,\ldots,n$} 
 \State $\G^{kl} \rto \left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
 \EndFor
 \EndFunction
@@ -1162,7 +1150,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value.  The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. \cs{you don't define $v_i$.  what is it? do you mean $v[i]$? and don't define $v$ to be a vector and its own difference, that confuses people and leads to coding errors. also, why $n-3$ for the sum? i don't understand line 10.  what is $k | \psi$?in fact, what is $k$ at all?? also, you require a threshold for smoothness, call it something, provide it as input? so icky :)}}%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
+\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value.  The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. }%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, a significance level $\alpha$.

@@ -20,6 +20,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[final,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+\definecolor{green}{rgb}{0.1840,0.4362,0.1003} 
 % \usepackage[nottoc,numbib]{tocbibind}
 % \usepackage{flushend}
 
@@ -212,7 +213,7 @@ Interpoint pairwise comparison matrices have been used for over 100 years for va
 One of the earliest examples of using them for dependence testing comes from  Karl Pearson \cite{Pearson1895}, who created  a special case of something subsequently called a ``generalized correlation coefficient'' \cite{KendallBook}.
 Generalized correlation coefficients start with $n$ pairs of observations $(\mb{x}_i,\mb{y}_i)$ for $i=1,\ldots,n$, where $\mb{x}$'s and $\mb{y}$'s both might be vectors of arbitrary dimensions, shapes, networks, etc.  And then, a comparison function is defined for each.  Specifically, let $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$, and let $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
 Thus, $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$ are the $n \times n$ interpoint comparison matrices for $X=\{\mb{x}_{i}\}$ and $Y=\{\mb{y}_{i}\}$, respectively.  
-Without loss of generality, assuming $A$ and $B$ have zero mean, a generalized correlation coefficient can then be written:
+Without loss of generality, assuming $\{a_{ij}\}$ and $\{b_{ij}\}$ have zero mean, a generalized correlation coefficient can then be written:
 \begin{equation}
 \label{generalCoef}
 \G= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}},
@@ -258,7 +259,7 @@ Thus, a gap remains in the literature: a dependence test that has all of the des
 All dependence tests start from the same setting: we observe $n$ pairs of observations $\{(\mb{x}_i,\mb{y}_i)\}$, and we first desire to know whether the \mbx's and \mby's are independent of one another, and if so, what is the nature of that dependence structure.
 
 
-Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with localilty.
+Multiscale Generalized Correlation (\Mgc) combines generalized correlation coefficients with locality.
 % , in an effort to efficiently uncover local relationships and optimize the independence test.  
 Specifically, let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, that is, $R(a_{ij})=k$ if $\mb{x}_i$ is the $k^{th}$ closest point (or ``neighbor'') to $\mb{x}_j$, starting from $1$ to $n$, and define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
 \begin{equation}
@@ -301,7 +302,7 @@ The remaining challenge is to determine the appropriate scales to consider, to b
 
 
 
-Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinear dependence structure, and Table~\ref{t:mgc} provides the exact values for two different pairs of samples.  In particular, Table~\ref{t:mgc} demonstrates that when a pair of points (1,2) are close to each other only in $x$ but not in $y$, \Mgc~ignores it.  However, when a pair of points (2,3) is close in both $x$ and $y$, it considers it.  Since both the local and global methods' test statistics are summations over pairs,  \Mgc~can more powerfully detect dependence in such low-sample size and nonlinear settings.
+Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinear dependence structure, and Table~\ref{t:mgc} provides the exact values for two different pairs of samples.  In particular, Table~\ref{t:mgc} demonstrates that when a pair of points (1,3) are close to each other only in $x$ but not in $y$, \Mgc~ignores it.  However, when a pair of points (3,9) is close in both $x$ and $y$, it considers it.  Since both the local and global methods' test statistics are summations over pairs,  \Mgc~can more powerfully detect dependence in such low-sample size and nonlinear settings.
 
 
 \begin{figure}[htbp]
@@ -312,15 +313,15 @@ Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 \begin{center}
 % \vspace{-35pt}\hspace{-150pt}
 \begin{tabular}{c  c  c  c}
- $\delta_x$(1,3) & \hspace{1.8em} -0.66 \hspace{1.8em}  & \hspace{1.8em} -0.77 \hspace{1.8em} & \hspace{1.8em} -0.73 \hspace{1.8em}  \\ 
- $\delta_y$(1,3) & -0.52 & -0.41 & -0.19  \\ 
+ $\delta_x$(1,3) & \hspace{1.8em} \color{magenta}-0.66 \hspace{1.8em}  & \hspace{1.8em} \color{magenta}-0.77 \hspace{1.8em} & \hspace{1.8em} \color{magenta}-0.73 \hspace{1.8em}  \\ 
+ $\delta_y$(1,3) & \color{magenta}-0.52 & \color{magenta}-0.41 & \color{magenta}-0.19  \\ 
  $\delta_x \times \delta_y$ & \color{green}0.34 & \color{green}0.32 & \color{green}0.14  \\ 
  
 \hline
 
 
- $\delta_x$(3,9) & -0.46 & -0.39 & 0.04  \\ 
- $\delta_y$(3,9) &  0.44 & 0.40 & 0.22  \\ 
+ $\delta_x$(3,9) & \color{magenta}-0.46 & \color{magenta}-0.39 & \color{green}0.04  \\ 
+ $\delta_y$(3,9) &  \color{green}0.44 & \color{green}0.40 & \color{green}0.22  \\ 
  $\delta_x \times \delta_y$ & \color{magenta}-0.20 & \color{magenta}-0.15 & \color{green}0.01  \\ 
 
 \hline
@@ -332,6 +333,7 @@ $\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  0.07 
 also, do we want another row, that shows the sum across the $\delta_x \times \delta_y$ values?}
 \jv{tried above}
 \cs{color each value for the top six rows, and change green to be darker. consider matlab outputting the whole table and using an include function.}
+\jv{re-generate figure and table once you decide which one to use?}
 \end{center}
 % \end{table}
 \caption{(Caption followed in the next page.)}
@@ -525,7 +527,7 @@ For linear dependencies,  the optimal \Mgc~scale was empirically always the glob
 \label{t:linear}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
 \begin{equation}
-\beta(\G^{nn}_t) = \beta(\G^{*}_t) = \beta(\G_t).
+\beta(\G^{*}_t) = \beta(\G_t).
 \end{equation}
 In words, the optimal scale for \Mgc~is the global scale for linearly dependent data.
 \end{thm}
@@ -537,7 +539,7 @@ We therefore conjectured and proved the following:
 \label{t:non}
 There exists $f_{xy}$ and $n$ such that
 \begin{equation}
-\beta(\G^{*}) > \beta(\G).
+\beta(\G^{*}_{t}) > \beta(\G_{t}).
 \end{equation}
 In words, for finite samples, \Mgc~can be better than its global correlation coefficient under certain nonlinear dependency.
 \end{thm}
@@ -564,7 +566,7 @@ Adelstein et al. \cite{AdelsteinEtAl2011} was able to detect dependence between 
 % There exists certain relationship between the brain activity and personality as shown in \cite{AdelsteinEtAl2011}, but existing statistical tests fail to discover any significant dependency from the raw data.
 In this dataset, we have $n=42$ subjects, for each we obtained  $197$ time-steps of resting-state functional MRI activity, as well as her five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. 
 % The data set contains $n=42$ subjects, where each person's personality is assessed by a questionnaire utilizing the five-factor personality model. 
-The raw brain activity was processed using CPAC \cite{CPAC} resulting in $197$ brain regions.
+The raw brain activity was processed using CPAC \cite{CPAC2015} resulting in $197$ brain regions.
  % for $194$ time steps. 
 % Thus the brain connectome modality is high-dimensional while the personality data is low-dimensional. 
 To apply \Mgc, two metrics are required. For the brain activity modality, we ran a spectral analysis on each region, bandpassed and normalized it, and then calculated the Kullback-Leibler divergence across regions and the normalized Hellinger distance between each subject. 
@@ -641,7 +643,7 @@ both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown).
 
 The next real data experiment investigates whether brain structural networks are independent of creativity.  Neural correlates of creativity have previously been investigated, though largely using structural MRI and cortical thickness \cite{Jung2009}.  Here, we used data from a previously published result on graph similarity \cite{Koutra15a}. For  $n=109$ subjects, we have both diffusion weighted (DW-) MRI data as well as the subject's ``creativity composite index'' (CCI).  We processed the raw DW-MRI data via \Migraine, a pipeline for estimating brain networks from diffusion data \cite{Migraine}.   
 The brain network metric we used was based on  the semi-parameteric test statistic \cite{Tang2016} that tests whether pairs of graphs with labeled vertices are sampled from the same distributino.  This test statistic was developed to reduce  the very high-dimensionality of adjacency matrices via employing adjacency spectral graph embedding  \cite{Sussman2013}. For these data, we chose to embed each graph into two dimensions for simplicity. We use Euclidean distance to compare CCI values. 
-
+\jv{missing migrain citation?}
 
 
 Figure \ref{f:real}C shows that the global dependence tests can ascertain whether the whole brain-network is independent of the subject's creativity.  However, the global test is quite fragile, even ignoring a single subject from the global test can render the test non-significant. On the other hand, \Mgc~is much more robust: there is a whole region of neighborhood sizes such that the test is quite significant.  
@@ -664,7 +666,7 @@ A primary goal of statistical analysis and modeling is to suggest the next exper
 \subsubsection*{\Mgc~Does Not Inflate False Positive Rates} %: Brain Activity vs. Noise}
 
 In the last experiment, \Mgc~is applied to test independence between brain voxel activities and non-existent stimulus similar to a pair of studies led by Eklund et al. \cite{EklundKnutsson2012,Eklund2015}. We considered $25$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of $1583$ subjects.
-We used CPAC \cite{CPAC2015} to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps.
+We used CPAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time-series data containing $200$ regions of interest for $200$ time-steps.
 We then also generate an independent stimulus  by sampling from a standard normal at each time step.  Of course, the brain activity data and the stimuli are independent by construction.
 For each brain region, we test: is activity of that  brain region independent of the time-varying stimuli. We pool brain activity over all of the samples from the population.
 Any regions that are detected significant are false positives by definition.  By testing reach brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the significance level, which we set at $0.05$ for this experiment.
@@ -899,8 +901,7 @@ Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Not
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{../Figures/Fig1DHeat}
-\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global setting.
-\jv{done}
+\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global setting.}
 \label{f:powermaps1}
 \end{figure}
 
@@ -967,7 +968,7 @@ Moreover, the permutation p-value of global \Dcorr~is the same under single cent
 
 The above also holds for \Mcorr~asymptotically.
 \end{lem}
-Our \Mgcd is in fact based on this single-centered \Dcorr, which is more advantageous than \Mgc based on double-centered \Dcorr (shown in Appendix~\ref{appen:mgc}).
+Our \Mgcd is in fact based on this single-centered \Dcorr, which is more advantageous than \Mgc based on double-centered \Dcorr (shown in Appendix~\ref{appen:mgc}). And the proofs of all lemmas are in Appendix~\ref{appen:proofs}.
 
 
 \subsection{(Global) Modified Distance Correlation}
@@ -1041,10 +1042,6 @@ Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single c
 \end{lem}
 Therefore local correlations are more faithful in excluding far-away observations that exhibit insignificant dependency, when \Mgc~is implemented by single centering.
 
-\cs{where are the proofs of these lemmas?}
-\jv{in proof section :-)}
-\cs{tell the reader, not in a hidden comment just to me :)}
-
 Generally, there are a total of $\max(R(a_{ij})) \times \max(R(b_{ij}))$ local correlations, which equals $n^2$ when there exists no repeating values of \mbx~or \mby. Note that we use minimal ranks in sorting when ties occur, which guarantees that all local correlations are indexed consecutively. Alternatively, one may add a very small amount of white noise to break all ties, like in our real data experiment.
 
 Among all possible local correlations, \Mgc~picks the optimal local correlation. Optimal scales always exist,  is distribution dependent, and are often non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$ for testing and optimal scale estimation: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and are not meaningful for the testing purpose.
@@ -1103,7 +1100,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 %\State $R^{B}=\textsc{Transpose}(R^{B})$ 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
 
-\For{$i,j:=1,\ldots,n$} \cs{name/clarify each loop in comments}
+\For{$i,j:=1,\ldots,n$} \Comment{iterate through all local scales to calculate each term} 
 \State $k \rto R^{A}_{ij}$
 \State $l \rto R^{B}_{ij}$
 \State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}$
@@ -1113,14 +1110,14 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $E^{B}_{l} \rto E^{B}_{l}+B_{ij}$
 \EndFor
 
-\For{$k:=1,\ldots,n-1$} \cs{name/clarify each loop in notes}
+\For{$k:=1,\ldots,n-1$} \Comment{iterate through each scale again and add up adjacent terms} 
 \State $\G^{1, k+1} \rto \G^{1, k}+\G^{1, k+1}$
 \State $\G^{k+1,1} \rto \G^{k+1,1}+\G^{k+1,1}$
 \Linefor{$Z:=A,B$}{$V^{Z}_{k+1} \rto V^{Z}_{k}+V^{Z}_{k+1}$}
 \Linefor{$Z:=A,B$}{$E^{Z}_{k+1} \rto E^{Z}_{k}+E^{Z}_{k+1}$}
 \EndFor
 
-\For{$k,l:=1,\ldots,n-1$}
+\For{$k,l:=1,\ldots,n-1$} 
 \State $\G^{k+1,l+1} \rto \G^{k+1,l}+\G^{k,l+1}+\G^{k+1,l+1}-\G^{k,l}$
 \EndFor
 
@@ -1266,7 +1263,7 @@ Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In parti
 \label{at:linear}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, so $\mb{x} \propto \mb{y}$, then for any $n$ it always holds that
 \begin{equation*}
-\beta(\G^{nn}) = \beta(\G^{*}) = \beta(\G).
+\beta(\G^{*}) = \beta(\G).
 \end{equation*}
 
 Thus the optimal scale for \Mgc~is the global scale for linearly dependent data.
@@ -1293,7 +1290,7 @@ Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equa
 \begin{appThm}
 There exists $f_{xy}$ and $n$ such that
 \begin{equation*}
-\beta(\G^{*}) > \beta(\G).
+\beta(\G^{*}_{t}) > \beta(\G_{t}).
 \end{equation*}
 
 Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.

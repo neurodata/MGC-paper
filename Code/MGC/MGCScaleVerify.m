@@ -1,11 +1,11 @@
-function [p,indAll,t]=MGCScaleVerify(P,alpha)
+function [p,indAll,t]=MGCScaleVerify(P)
 % % An auxiliary function to verify and estimate the MGC optimal scale based
 % % on the p-values of all local correlations
-if nargin<2
-    alpha=0.05;
-end
-[p1]=Validate(P,alpha);
-[p2]=Validate(P',alpha);
+% if nargin<2
+%     alpha=0.05;
+% end
+[p1]=Validate(P);
+[p2]=Validate(P');
 p=min(p1,p2);
 indAll=find(P<=p);
 if (p<=0.05 && P(end)>0.05)
@@ -16,66 +16,89 @@ if (p<=0.05 && P(end)>0.05)
 %     caxis([0 0.05])
 end
 
-function [p]=Validate(P,alpha)
-alpha=0.05;
+function [p]=Validate(P,prc)
+if nargin<2
+    prc=10:10:50;
+end
 [m,n]=size(P);
-nn=ceil(0.05*n);
-%  nn=1;
-% Find motonocally decreasing p-values on each column
-pdiff=zeros(m-2,n);
-for i=2:n
-    tt=P(2:end,i);
-    ttd=diff(tt);
-    tt=tt(2:end);
-    if  (min(tt)<alpha)
-          pdiff(:,i)=(ttd<=0); %& (tt<alpha);
-          %pdiff(:,i-1)=(tt<alpha);
+p=P(end);
+for j=1:length(prc)
+    alpha=prctile(P(P<1), prc(j));
+    if alpha*j>p
+        break;
     end
+    nn=ceil(0.025*n);
+%       nn=1;
+     
+     pdiff=zeros(m-1,n);
+     for i=2:n
+         tt=P(2:end,i);
+%           ttd=diff(tt);
+%               tt=tt(2:end);
+%          if  (min(tt)<alpha)
+%              pdiff(:,i)=(ttd<=0); %& (tt<alpha);
+             pdiff(:,i)=(tt<alpha);
+%          end
+     end
+     
+     pp=zeros(n,1);
+%      sind=zeros(n,2);
+     for i=2:n
+         is=max(2,i-nn);
+         ie=min(n,i+nn);
+         tmp=sum(pdiff(:,is:ie),2);
+         tmp=find(tmp<ie-is+1);
+         tmp=[1;tmp;m+1];
+         tmp2=diff(tmp);
+         %ind=find(tmp2==max(tmp2),1,'last');
+         jm=max(tmp2);
+%          j=find(tmp2==jm,1,'last');
+         
+         %     if sum(P(tmp(j+1)-1,i-1:i+1)<alpha)==3
+         pp(i)=(jm-1)/(m-2);
+%          sind(i,:)=[tmp(j)+1, tmp(j+1)-1];
+         %     end
+         %      else
+         %           sind(i,:)=[1,1];
+         %      end
+     end
+     
+%      figure
+%      plot(pp)
+% max(pp)
+     thres=max(0.45,min(mean(pp(n))+3*std(pp(2:n)), mean(pp(2:n))+3*std(pp(2:n))));
+     %thres=max(0.2,min(mean(pp(n))+2*std(pp(2:n)), mean(pp(2:n))+2*std(pp(2:n))));
+     if max(pp)>=thres
+         p=alpha;
+         break;
+     end
 end
-% pdiff=[ones(m-2,nn) pdiff];
-% pdiff=[pdiff ones(m-2,nn)];
+% max(pp)
 %
-%nn=1;
-pp=zeros(n,1);
-sind=zeros(n,2);
-for i=2:n
-    is=max(2,i-nn);
-    ie=min(n,i+nn);
-    tmp=sum(pdiff(:,is:ie),2);
-    tmp=find(tmp<ie-is+1);
-    tmp=[1;tmp;m+1];
-    tmp2=diff(tmp);
-    %ind=find(tmp2==max(tmp2),1,'last');
-    jm=max(tmp2);
-    j=find(tmp2==jm,1,'last');
-    
-%     if sum(P(tmp(j+1)-1,i-1:i+1)<alpha)==3
-        pp(i)=(jm-1)/(m-2);
-        sind(i,:)=[tmp(j)+1, tmp(j+1)-1];
-%     end
-%      else
-%           sind(i,:)=[1,1];
-%      end
-end
 
-[mm,i]=max(pp);
-% i
-% figure
-% plot(pp);
-%thres=0.4;
-thres=max(0.2, pp(n)+2*std(pp(2:n)));
-% mm
-% thres
-if mm>=thres;
-%     mm
-%     thres
-    i=find(pp>=thres);
-    p=1;
-    for t=1:length(i)
-        j=i(t);
-         pt=min(min(P(sind(j,1):sind(j,2),j)));
-         p=min(p,pt);
-    end
-else
-    p=min(P(end),median(P(P<1)));
-end
+% [mm,i]=max(pp);
+% % i
+% % figure
+% % plot(pp);
+% %thres=0.4;
+% thres=min([0.5, mean(pp(2:n))+4*std(pp(2:n))]);%,max(pp)]);
+% % mm
+% % thres
+% p=1;
+% if mm>thres
+% %     mm
+% %     thres
+%     i=find(pp>thres);
+%     p=1;
+%     for t=1:length(i)
+%         j=i(t);
+%          pt=min(min(P(sind(j,1):sind(j,2),j)))/pp(j);
+%          p=min(p,pt);
+%     end
+% % else
+% %     if mm>0.2
+% %     %p=min(P(end));%,median(P(P<1)));
+% %     %j=n;
+% %     %p=min(P(sind(j,1):sind(j,2),j))/pp(j);
+% %     end
+% end

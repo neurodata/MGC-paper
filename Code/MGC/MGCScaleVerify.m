@@ -28,6 +28,7 @@ for j=1:length(prc)
         break;
     end
     nn=ceil(0.025*n);
+    %nn=ceil(0.05*n);
 %       nn=1;
      
      pdiff=zeros(m-1,n);
@@ -55,7 +56,7 @@ for j=1:length(prc)
 %          j=find(tmp2==jm,1,'last');
          
          %     if sum(P(tmp(j+1)-1,i-1:i+1)<alpha)==3
-         pp(i)=(jm-1)/(m-2);
+         pp(i)=(jm-1)/(m-1);
 %          sind(i,:)=[tmp(j)+1, tmp(j+1)-1];
          %     end
          %      else
@@ -66,11 +67,12 @@ for j=1:length(prc)
 %      figure
 %      plot(pp)
 % max(pp)
-     thres=max(0.45,min(mean(pp(n))+3*std(pp(2:n)), mean(pp(2:n))+3*std(pp(2:n))));
+     thres=max(0.45,min(pp(n), mean(pp(2:n)))+3*std(pp(2:n)));
+     %thres=max(0.3,min(mean(pp(n))+3*std(pp(2:n)), mean(pp(2:n))+3*std(pp(2:n))));
      %thres=max(0.2,min(mean(pp(n))+2*std(pp(2:n)), mean(pp(2:n))+2*std(pp(2:n))));
      if max(pp)>=thres
          p=alpha;
-         break;
+         %break;
      end
 end
 % max(pp)

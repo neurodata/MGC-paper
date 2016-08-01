@@ -71,25 +71,41 @@
 
 \section{Motivations}
 \begin{frame}{Motivations}
-\begin{itemize}[<+->]
-\item Given a set of paired observations, testing independence is one of the most important and fundamental tasks in statistics and data science.
-\item Indeed, prior to embarking on a predictive machine-learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.
-\item Modern data sets may be high-dimensional, nonlinear, noisy, of small sample size; and different features may come from disparate spaces.
-\item A particular application is to investigate the association between brain activities and various phenotypes, such as brain vs disease, or brain vs personality. Despite recent inventions of many consistent test statistics, existing methods fall short for our real data. 
-\end{itemize}
+Given a set of paired observations, testing independence is one of the most important and fundamental tasks in statistics and data science.
+
+\pause
+\medskip
+Indeed, prior to embarking on a predictive machine-learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.
+
+\pause
+\medskip
+Modern data sets may be high-dimensional, nonlinear, noisy, of small sample size; and different features may come from disparate spaces.
+
+\pause
+\medskip
+A particular application is to investigate the association between brain activities and various phenotypes, such as brain vs disease, or brain vs personality. Despite recent inventions of many consistent test statistics, existing methods fall short for our real data. 
 \end{frame}
 
 \begin{frame}
+We desire a test that
+
+\pause
+\medskip
 \begin{itemize}[<+->]
-\item We desire a test that
-\item 1) is consistent as the sample size increases to infinity for most dependencies.
-\item 2) has a good finite-sample testing power, for data of low or high dimensionality, linear or non-linearity, small sample size, with noise, etc.
-\item 3) does not inflate the false positive rate in the absence of dependency.
-\item 4) easy and efficient to work with for complicated data.
-\item 5) provides insights into the dependency structure.
-\item To that end, we propose multiscale generalized correlation in [\textit{Shen et al.(2016)}]\cite{ShenEtAl2016} for testing independence, which combines distance correlation and nearest-neighbor into the same framework.
-\item \Mgc~is theoretically consistent and efficient to compute, achieves excellent testing powers in a comprehensive set of simulations, sheds light into the underlying dependency structures, and works well for our real data.
+\item is consistent as the sample size increases to infinity for most dependencies.
+\item has a good finite-sample testing power, for data of low or high dimensionality, linear or non-linearity, small sample size, with noise, etc.
+\item does not inflate the false positive rate in the absence of dependency.
+\item is easy and efficient to work with for complicated data.
+\item provides insights into the dependency structure.
 \end{itemize}
+\pause
+\medskip
+
+To that end, we propose multiscale generalized correlation in [\textit{Shen et al.(2016)}]\cite{ShenEtAl2016} for testing independence, which combines distance correlation and nearest-neighbor into the same framework.
+
+\pause
+\medskip
+\Mgc~is theoretically consistent and efficient to compute, achieves excellent testing powers in a comprehensive set of simulations, sheds light into the underlying dependency structures, and works well for our real data.
 \end{frame}
 
 \section{Results}
@@ -172,13 +188,20 @@ There are a maximum of $(n^2-n)/2$ different local correlations, one for each po
 
 \subsection{Multiscale Generalized Correlation}
 \begin{frame}{MGC}
-\begin{itemize}[<+->]
-\item In the family of local correlations $\{\G_{kl}\}$, there always exists an optimal local correlation with respect to the independence testing power. 
-\item The optimal scale exists, is distribution dependent, and may not be unique.
-\item We dub the optimal local correlation coefficient as the multiscale graph correlation, and denote it as $\G^{*}$.
-\item Although each local correlation requires $O(n^2)$ to compute, our formulation allows all local correlations to be simultaneously calculated in $O(n^2)$ as well! (Note: sorting the distance matrix column-wise takes another $O(n^2 \log(n))$).
-\item This allows the optimal scale to be efficiently determined for \Mgc, unlike many other applications by nearest-neighbor (say knn classification, manifold learning, etc.).
-\end{itemize}
+In the family of local correlations $\{\G_{kl}\}$, the optimal local correlation (with respect to the independence testing power) exists, is distribution dependent, and may not be unique.
+
+\pause
+\medskip
+We dub the optimal local correlation coefficient as the multiscale graph correlation, and denote it as $\G^{*}$.
+
+\pause
+\medskip
+Although each local correlation requires $O(n^2)$ to compute, our formulation allows all local correlations to be simultaneously calculated in $O(n^2)$ as well! (Note: sorting the distance matrix column-wise takes another $O(n^2 \log(n))$).
+
+\pause
+\medskip
+This allows the optimal scale to be efficiently determined for \Mgc, unlike many other applications by nearest-neighbor (say knn classification, manifold learning, etc.).
+
 \end{frame}
 
 \begin{frame}{The Testing Framework}
@@ -251,13 +274,24 @@ $\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  \colo
 
 \subsection{Numerical Simulations}
 \begin{frame}{Simulation Set-Up}
-\begin{itemize}[<+->]
-\item We are interested in assessing the performance of our newly proposed multiscale tests in a wide variety of settings to better understand the tests, and gain insight into which to use in different settings. 
-\item In total $20$ different joint distributions $f_{xy}$ are considered, most of which are taken exactly from existing literature, including linear and nearly linear  (1-5), polynomial   (6-12), trigonometric (13-17), uncorrelated but nonlinearly dependent  (18-19), and an independent relationship (20).
-\item For each distribution, we further consider two different scenarios: a $1$-dimensional scenario with increasing sample size, and a high-dimensional scenario with fixed sample size and increasing dimensions.
-\item The benchmarks are distance correlation, modified distance correlation, the Mantel test, and the HHG method proposed in [\textit{Heller et al.(2013)}]\cite{HellerGorfine2013}.
-\item Our \Mgc~implementation is based on modified distance correlation.
-\end{itemize}
+We are interested in assessing the performance of our newly proposed multiscale tests in a wide variety of settings to better understand the tests, and gain insight into which to use in different settings. 
+
+\pause
+\medskip
+In total $20$ different joint distributions $f_{xy}$ are considered, most of which are taken exactly from existing literature, including linear and nearly linear  (1-5), polynomial   (6-12), trigonometric (13-17), uncorrelated but nonlinearly dependent  (18-19), and an independent relationship (20).
+
+\pause
+\medskip
+For each distribution, we further consider two different scenarios: a $1$-dimensional scenario with increasing sample size, and a high-dimensional scenario with fixed sample size and increasing dimensions.
+
+\pause
+\medskip
+The benchmarks are distance correlation, modified distance correlation, the Mantel test, and the HHG method proposed in [\textit{Heller et al.(2013)}]\cite{HellerGorfine2013}.
+
+\pause
+\medskip
+Our \Mgc~implementation is based on modified distance correlation.
+
 \end{frame}
 
 \begin{frame}{Visualizations of Simulation Settings}

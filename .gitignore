@@ -6,6 +6,9 @@ Draft/MGC.pdf
 *.aux
 *.bbl
 *.toc
+*.nav
+*.run.xml
+*.snm
 *.blg
 *.fdb*
 *.fls

@@ -395,7 +395,7 @@ The end result is \Mgc~can be computed in  time comparable to the current state-
 % 
 % Therefore, we can efficiently compute all local correlations for a given pair of data and the permuted data, which yields the p-values for each neighborhood size (see Algorithm \ref{alg:pval} in Appendix \ref{appen:algorithms} for details). But it does not tell us which neighborhood sizes are optimal.
 
-Finally, we must find the optimal scales. If the underlying joint distribution is known (as in simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region. If no such region exists, the optimal scale is set to the largest neighborhood (that is, \Mgc equals the global correlation 
+Finally, we must find the optimal scales. If the underlying joint distribution is known (as in simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region. If no such region exists, the optimal scale is set to the largest neighborhood, that is, \Mgc equals the global correlation
 % ). This is the procedure used for real data experiments, which maintains excellent performance 
 (see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 
@@ -1149,11 +1149,11 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of all local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value.  The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. }%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
-\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, a significance level $\alpha$.
+\Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P,\alpha$}
-\State $[p_{r}]=\textsc{Validate}(P,\alpha)$ \Comment{find consecutive scales of $P$ by row}
-\State $[p_{c}]=\textsc{Validate}(P\T,\alpha)$ \Comment{find consecutive scales of $P$ by column}
+\State $[p_{r}]=\textsc{Validate}(P)$ \Comment{find consecutive scales of $P$ by row}
+\State $[p_{c}]=\textsc{Validate}(P\T)$ \Comment{find consecutive scales of $P$ by column}
 \State $p \rto \min\{p_{r},p_{c}\}$ \Comment{take the smaller value as the approximated p-value for \Mgc}
 \State $[k^{*},l^{*}] \rto \argmin_{\{k,l\}} P_{kl}\leq p$ \Comment{return all optimal scales within the validated range}
 \EndFunction
@@ -1161,31 +1161,24 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \begin{algorithmic}[1]
 %\Statex
 \Require Same as \textsc{MGCScaleVerify}. 
-\Ensure The indices of valid rows $\K$, and the approximated \Mgc~p-value $p$.
+\Ensure The approximated \Mgc~p-value $p$.
 \Function{Validate}{$P,\alpha$}
-\State Initialize $\psi$ as a matrix of zeros of the same size as $p$, and $\rho$ as a vector of zeros of size $n$.
-\State $n_{2} \rto \left\lceil 0.05 \times n \right\rceil$ \Comment{Check adjacent column scales}
-\For{$j:=2,\ldots,n$}
-\Lineif{$\min{P[:,j]}>\alpha$}{break} %\Comment{check the region size}
+\State Initialize $\rho$ as a vector of zeros of size $n$
+\State $p \rto P_{nn}$ \Comment{take the global p-value by default}
+\State $n_{2} \rto \left\lceil 0.025 \times n \right\rceil$ \Comment{number of adjacent columns to check}
+\State $\Gamma \rto \{10,20,\ldots,50\}$ \Comment{specify the percentile of p-values for significance check}
+\For{$j:=1:\textsc{Length}(\Gamma)$}
+\State $\gamma=\textsc{Prctile}(P,\Gamma[j])$ \Comment{check the p-values in order}
+\Lineif{$\gamma \times j>P_{nn}$}{break} \Comment{break if it is checked too many times}
 \For{$i:=2,\ldots,n$}
-\State $\psi[i,j] \rto \mb{I}\{P[i,j]-P[i-1,j] \leq 0\}$ \Comment{Find a region of non-increasing p-values}
+\State $i_{s} \rto \min\{i-n_{2},2\}$
+\State $i_{e} \rto \max\{i+n_{2},n\}$
+\State $\psi \rto \textsc{Find}\{P[i_{s}:i_{e},:] > \gamma\}$ \Comment{find all columns indices larger than $\gamma$}
+\State $\rho[i] \rto (\textsc{Max}(\textsc{Diff}(\psi))-1) / (n-1)$ \Comment{find the largest consecutive region within $\gamma$}
 \EndFor
+\State $\epsilon \rto \min\{\textsc{Mean}(\rho),\rho[n]\}+3\textsc{Std}(\rho)$ \Comment{threshold to check consecutive region size}
+\Lineif{$\max\{\rho\}>\max\{0.3,\epsilon\}$}{$p \rto \gamma$} %\Comment{check the region size}
 \EndFor
-
-\For{$j:=2,\ldots,n$}
-\State $j_{1} \rto \min\{2,j-n_{2}\}$
-\State $j_{2} \rto \min\{n,j+n_{2}\}$
-\State $\rho[j] \rto \max_{\psi[i_{1}:i_{2},j_{1}:j_{2}]=1}{\frac{i_{2}-i_{1}}{n}}$ 
-\EndFor
-
-\State $\epsilon \rto \max(0.2,\rho_{n}+3\textsc{Std}(\rho))$
-
-\If{$\max_{i}{\rho_{i}} \geq \epsilon$} 
-\State $p \rto \min_{\mbox{ all } i \mbox{ with } \rho_{i} \geq \epsilon}{P[:,i]}$
-\Else
-\State $\K=\{n\}$
-\State $p = \min\{P[n,n],\textsc{Median}(P)\}$ \Comment{use the median or the last p-value instead}
-\EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -1218,7 +1211,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{appen:diss}
 Evaluating \Mgc~requires estimating the optimal scales. Algorithm~\ref{alg:power} is used whenever the true distribution of the data in known or easy to estimate or multiple training data are available, otherwise, we shall approximate the optimal scale by Algorithm~\ref{alg:best_scale}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
-To combat bias from noisy p-value, Algorithm~\ref{alg:best_scale} searches the p-value map for a consecutive region of significant p-values, by going through the rows and columns separately. Take the rows for example, the algorithm computes both the median p-value and the smoothness score within each row, where the smoothness score equals the percentage of the p-value difference changes sign, ignoring trivial amount of p-value change determined by $\epsilon_{1}$. If there exists very significant median p-values for at least three consecutive rows, or there exists one row whose median p-value and smoothness score dominate its adjacent rows for at least $0.15n$ rows, we take the corresponding row index as the desired scale; if no such row exists, or the selected row has a median p-value larger than that of the global correlation, we use global correlation as the optimal one instead. 
+%To combat bias from noisy p-value, Algorithm~\ref{alg:best_scale} searches the p-value map for a consecutive region of significant p-values, by going through the rows and columns separately. Take the rows for example, the algorithm computes both the median p-value and the smoothness score within each row, where the smoothness score equals the percentage of the p-value difference changes sign, ignoring trivial amount of p-value change determined by $\epsilon_{1}$. If there exists very significant median p-values for at least three consecutive rows, or there exists one row whose median p-value and smoothness score dominate its adjacent rows for at least $0.15n$ rows, we take the corresponding row index as the desired scale; if no such row exists, or the selected row has a median p-value larger than that of the global correlation, we use global correlation as the optimal one instead. 
 
 Algorithm~\ref{alg:best_scale} is at least as powerful as the global correlation, but does not guarantee the true optimal local correlation to be always correctly identified, as it is a heuristic approach to approximate the optimal local scale. To better justify Algorithm~\ref{alg:best_scale}, we compare the estimated \Mgc~power by Algorithm~\ref{alg:best_scale} to the true \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $20$ dependencies described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($40$ settings overall), and calculate all local p-values using $1$,$000$ random permutations. 
 % By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using 

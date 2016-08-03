@@ -39,7 +39,7 @@
 \providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
 \providecommand{\mt}[1]{\widetilde{#1}}
 \newcommand{\Real}{\mathbb{R}}
-\newcommand{\Mgc}{\sct{Mgc}}
+\newcommand{\Mgc}{\textbf{\sct{Mgc}}}
 \newcommand{\mbx}{\ensuremath{\mb{x}}}
 \newcommand{\mby}{\ensuremath{\mb{y}}}
 
@@ -50,8 +50,11 @@
 {
 \textit{Joint Work with Joshua T. Vogelstein \& Mauro Maggioni \& Carey E. Priebe} \\
 %\medskip
+%\medskip
+%\medskip
 %Department of Statistics \\
 %Temple University \\  % Your institution for the title page
+%https://github.com/jovo/MGC
 }
 \date{August, 2016} % Date, can be changed to a custom date
 
@@ -75,15 +78,15 @@ Given a set of paired observations, testing independence is one of the most impo
 
 \pause
 \medskip
-Indeed, prior to embarking on a predictive machine-learning investigation, one might first check whether any dependence is detectable; if not, high-quality predictions will be unlikely.
+Prior to embarking on a predictive machine-learning investigation, one might first check whether any dependence is detectable.
 
 \pause
 \medskip
-Modern data sets may be high-dimensional, nonlinear, noisy, of small sample size; and different features may come from disparate spaces.
+There are many real-data applications that existing methods fall short of in detecting associations.
 
 \pause
 \medskip
-A particular application is to investigate the association between brain activities and various phenotypes, such as brain vs disease, or brain vs personality. Despite recent inventions of many consistent test statistics, existing methods fall short for our real data. 
+Modern data sets may be \textbf{high-dimensional, nonlinear, noisy, of small sample size, from disparate spaces}, etc.
 \end{frame}
 
 \begin{frame}
@@ -101,11 +104,12 @@ We desire a test that
 \pause
 \medskip
 
-To that end, we propose multiscale generalized correlation in [\textit{Shen et al.(2016)}]\cite{ShenEtAl2016} for testing independence, which combines distance correlation and nearest-neighbor into the same framework.
+To that end, we propose \textbf{multiscale generalized correlation} in [\textit{Shen et al.(2016)}]\cite{ShenEtAl2016}.
 
 \pause
 \medskip
-\Mgc~is theoretically consistent and efficient to compute, achieves excellent testing powers in a comprehensive set of simulations, sheds light into the underlying dependency structures, and works well for our real data.
+\Mgc~combines distance correlation and nearest-neighbor, and is able to satisfy all of the above.
+% for testing independence, which combines distance correlation and nearest-neighbor into the same framework.
 \end{frame}
 
 \section{Results}
@@ -131,11 +135,11 @@ where $z$ is proportional to standard deviations of $A$ and $B$, that is $z=n^2\
 \begin{frame}{Examples}
 A few examples of $\G$:
 \begin{itemize}[<+->]
-\item It equals the Pearson's product-moment correlation coefficient by taking $a_{ij}=x_i$ and $b_{ij}=y_i$.
-\item Setting $a_{ij}$ to be $rank(x_i)-rank(x_j)$ and $sign(x_i-x_j)$ respectively yields Spearman and Kendall's rank correlations.
-\item Using $a_{ij}=|x_i-x_j|_{2}$ (i.e. Euclidean distance) yields the Mantel coefficient [\textit{Mantel (1967)}]\cite{Mantel1967}, a popular test in biology and ecology.
-\item Using the doubly-centered distance entries for $a_{ij}$ and $b_{ij}$ yields the distance correlation [\textit{Szekely et al.(2007)}]\cite{SzekelyRizzoBakirov2007}, which is a consistent test for most dependencies. 
-\item An unbiased version of dcorr can be achieved by slightly tweaking $a_{ij}/b_{ij}$ of dcorr, which yields the modified distance correlation [\textit{Szekely and Rizzo (2013)}] \cite{SzekelyRizzo2013a}.
+\item The Pearson's product-moment correlation coefficient by taking $a_{ij}=x_i$ and $b_{ij}=y_i$.
+\item The Spearman and Kendall's rank correlations by setting $a_{ij}$ to be $rank(x_i)-rank(x_j)$ and $sign(x_i-x_j)$ respectively.
+\item The Mantel coefficient [\textit{Mantel (1967)}]\cite{Mantel1967} by using $a_{ij}=|x_i-x_j|_{2}$ (i.e. Euclidean distance).
+\item The distance correlation [\textit{Szekely et al.(2007)}]\cite{SzekelyRizzoBakirov2007} by using the doubly-centered distance entries for $a_{ij}$ and $b_{ij}$.
+\item The modified distance correlation [\textit{Szekely and Rizzo (2013)}] \cite{SzekelyRizzo2013a} by slightly tweaking $a_{ij}/b_{ij}$ of dcorr.
 \end{itemize}
 \end{frame}
 
@@ -144,7 +148,7 @@ Multiscale Generalized Correlation (\Mgc) combines generalized correlation coeff
 
 \pause
 \medskip
-Let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, starting from $1$ to $n$, that is, and define $R(b_{ij})$ equivalently for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
+Let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, and similarly $R(b_{ij})$ for the \mby's. For any neighborhood size $k$ around each $\mb{x}_i$~and any neighborhood size $l$ around each $\mb{y}_i$, we define the rank-truncated pairwise comparisons:
 
 \pause
 \begin{equation}
@@ -164,7 +168,7 @@ Let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, starting 
 \end{equation}
 
 \pause
-Then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, where $\bar{a}^k$ is the local mean, and $b^k_{ij}$ similarly.
+Then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, where $\bar{a}^k$ is the mean, and $b^k_{ij}$ similarly.
 \end{frame}
 
 \begin{frame}{Local Correlations}
@@ -179,29 +183,24 @@ We can therefore define a \emph{local} variant of any global generalized correla
 
 \pause
 \medskip
-where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. 
+where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$ with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. 
 
 \pause
 \medskip
-There are a maximum of $(n^2-n)/2$ different local correlations, one for each possible combination of $k$ and $l$. And our definition always yields symmetric local correlations, i.e. $\G^{kl}(X,Y)=\G^{lk}(Y,X)$, no matter $A$ and $B$ are symmetric or not.
+There are a maximum of $(n^2+n)/2$ different local correlations, and they are always symmetric, i.e. $\G^{kl}(X,Y)=\G^{lk}(Y,X)$, no matter $A$ and $B$ are symmetric or not.
 \end{frame}
 
 \subsection{Multiscale Generalized Correlation}
 \begin{frame}{MGC}
-In the family of local correlations $\{\G_{kl}\}$, the optimal local correlation (with respect to the independence testing power) exists, is distribution dependent, and may not be unique.
+In $\{\G_{kl}\}$, the optimal local correlation (with respect to the independence testing power) exists, is distribution dependent, and may not be unique.
 
 \pause
 \medskip
-We dub the optimal local correlation coefficient as the multiscale graph correlation, and denote it as $\G^{*}$.
+The optimal local correlation coefficient is dubbed as the multiscale graph correlation $\G^{*}$.
 
 \pause
 \medskip
-Although each local correlation requires $O(n^2)$ to compute, our formulation allows all local correlations to be simultaneously calculated in $O(n^2)$ as well! (Note: sorting the distance matrix column-wise takes another $O(n^2 \log(n))$).
-
-\pause
-\medskip
-This allows the optimal scale to be efficiently determined for \Mgc, unlike many other applications by nearest-neighbor (say knn classification, manifold learning, etc.).
-
+Each local correlation requires $O(n^2)$ to compute. However, once $A$ and $B$ are sorted, \textbf{all local correlations can be simultaneously calculated in $O(n^2)$ as well!!!}
 \end{frame}
 
 \begin{frame}{The Testing Framework}
@@ -218,11 +217,16 @@ where $f_{xy}$ denotes the joint distribution of $(\mb{x},\mb{y})$.
 
 \pause
 \medskip
-To test on a pair of sample data, we can use the p-value of a permutation test, and reject the null when the p-value is sufficiently small.
+To test on a pair of sample data, we use the p-value of a permutation test.% and reject the null when the p-value is sufficiently small.
 
 \pause
 \medskip
-The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false, and has power equal to the type $1$ error level when the null is true. And a test is universally consistent if its power converges to $1$ as $n \rightarrow \infty$ whenever $f_{xy} \neq f_x f_y$.
+A test is universally consistent if its power converges to $1$ as $n \rightarrow \infty$ whenever $f_{xy} \neq f_x f_y$.
+
+\pause
+\medskip
+But we all want a test with high power in finite-sample rather than asymptotically!
+%The power of a test is defined as the probability that it correctly rejects the null when the null is indeed false, and has power equal to the type $1$ error level when the null is true. And a test is universally consistent if its power converges to $1$ as $n \rightarrow \infty$ whenever $f_{xy} \neq f_x f_y$.
 \end{frame}
 
 \subsection{Theoretical Advantages}
@@ -256,33 +260,29 @@ There exists $f_{xy}$ and $n$ such that \Mgc~is better than its global counterpa
  & Mantel & Mcorr & MGC \\
  $\delta_x$(1,2) & \hspace{1.8em} \color{magenta}-2.42 \hspace{1.8em}  & \hspace{1.8em} \color{magenta}-5.21 \hspace{1.8em} & \hspace{1.8em} \color{magenta}-5.07 \hspace{1.8em}  \\ 
  $\delta_y$(1,2) & \color{magenta}-1.58 & \color{magenta}-0.91 & \color{magenta}-0.12  \\ 
- $\delta_x \times \delta_y$ & \color{green}3.82 & \color{green}4.74 & \color{green}0.61  \\ 
+ $\delta_x \times \delta_y$ & \color{blue}3.82 & \color{blue}4.74 & \color{blue}0.61  \\ 
  
 \hline
 
 
- $\delta_x$(2,9) & \color{green}0.70 & \color{green}0.61 & \color{green}0.14  \\ 
- $\delta_y$(2,9) &  \color{magenta}-0.91 & \color{magenta}-0.28 & \color{green}0.12  \\ 
- $\delta_x \times \delta_y$ & \color{magenta}-0.63 & \color{magenta}-0.17 & \color{green}0.02  \\ 
+ $\delta_x$(2,9) & \color{blue}0.70 & \color{blue}0.61 & \color{blue}0.14  \\ 
+ $\delta_y$(2,9) &  \color{magenta}-0.91 & \color{magenta}-0.28 & \color{blue}0.12  \\ 
+ $\delta_x \times \delta_y$ & \color{magenta}-0.63 & \color{magenta}-0.17 & \color{blue}0.02  \\ 
 
 \hline
- $\sum{\delta_x \times \delta_y}$ & \color{magenta}-162.14   & \color{magenta}-93.04 & \color{green}116.41  \\ 
-$\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  \color{magenta}-0.02  & \color{magenta}-0.02 & \color{green}0.16  \\ 
+ $\sum{\delta_x \times \delta_y}$ & \color{magenta}-162.14   & \color{magenta}-93.04 & \color{blue}116.41  \\ 
+$\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  \color{magenta}-0.02  & \color{magenta}-0.02 & \color{blue}0.16  \\ 
 
 \end{tabular}
 \end{frame}
 
 \subsection{Numerical Simulations}
 \begin{frame}{Simulation Set-Up}
-We are interested in assessing the performance of our newly proposed multiscale tests in a wide variety of settings to better understand the tests, and gain insight into which to use in different settings. 
+In total $20$ different joint distributions $f_{xy}$ are considered, including linear and nearly linear  (1-5), polynomial   (6-12), trigonometric (13-17), uncorrelated but nonlinearly dependent  (18-19), and an independent relationship (20).
 
 \pause
 \medskip
-In total $20$ different joint distributions $f_{xy}$ are considered, most of which are taken exactly from existing literature, including linear and nearly linear  (1-5), polynomial   (6-12), trigonometric (13-17), uncorrelated but nonlinearly dependent  (18-19), and an independent relationship (20).
-
-\pause
-\medskip
-For each distribution, we further consider two different scenarios: a $1$-dimensional scenario with increasing sample size, and a high-dimensional scenario with fixed sample size and increasing dimensions.
+For each distribution, we further consider two different scenarios: a $1$-dimensional scenario with increasing sample size, and a high-dimensional scenario with fixed sample size and increasing dimensions (not shown in slides).
 
 \pause
 \medskip
@@ -290,8 +290,7 @@ The benchmarks are distance correlation, modified distance correlation, the Mant
 
 \pause
 \medskip
-Our \Mgc~implementation is based on modified distance correlation.
-
+Our \Mgc~implementation is based on modified distance correlation with single centering.
 \end{frame}
 
 \begin{frame}{Visualizations of Simulation Settings}
@@ -322,23 +321,19 @@ Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~test
 
 \subsection{Real Data Experiments}
 \begin{frame}{Brain vs Personality}
-Our first real data experiment investigates whether there is any dependency between the brain activity and personality.
+[\textit{Adelstein et al.(2011)}] \cite{AdelsteinEtAl2011} was able to detect dependence between certain brain regions and personality, but lacked the tools to test for dependence of the whole brain activity against all five dimensions of personality. 
 
 \pause
 \medskip 
-[\textit{Adelstein et al.(2011)}] \cite{AdelsteinEtAl2011} was able to detect dependence between certain regions and dimensions of personality, but lacked the tools to test for dependence of the whole brain activity against all five dimensions of personality. 
+In this dataset, we have $n=42$ subjects, for each we obtained  $197$ time-steps of resting-state functional MRI activity, as well as the five-factor personality trait as quantified by  the NEO Personality Inventory-Revised. 
 
 \pause
 \medskip 
-In this dataset, we have $n=42$ subjects, for each we obtained  $197$ time-steps of resting-state functional MRI activity, as well as her five-factor personality trait as quantified by  the NEO Personality Inventory-Revised. 
+The raw brain activity was processed using CPAC [\textit{Craddock et al.(2015)}]\cite{CPAC2015}. Then we ran a spectral analysis on each region, bandpassed and normalized it, and then calculated the Kullback-Leibler divergence across regions and the normalized Hellinger distance between each subject.  
 
 \pause
 \medskip 
-The raw brain activity was processed using CPAC [\textit{Craddock et al.(2015)}]\cite{CPAC2015} resulting in $197$ brain regions. We ran a spectral analysis on each region, bandpassed and normalized it, and then calculated the Kullback-Leibler divergence across regions and the normalized Hellinger distance between each subject.  
-
-\pause
-\medskip 
-For the five-factor personality data, we  use the Euclidean distance.
+For the five-factor personality data, we directly use the Euclidean distance.
 \end{frame}
 
 \begin{frame}{Permutation Test P-value map}
@@ -352,21 +347,23 @@ For the five-factor personality data, we  use the Euclidean distance.
 \section{Conclusion}
 \begin{frame}{Advantages of MGC}
 \begin{itemize}[<+->]
-\item 1) \Mgc~is easy and efficient to implement for any generalized correlation.
-\item 2) \Mgc~is consistent for testing independence when based on dcorr or mcorr.
-\item 3) \Mgc~is equivalent to the respective global correlation under linear dependence, but can perform better under nonlinear dependence.
-\item 4) \Mgc~exhibits superior numerical performance in a comprehensive simulation setting, including various linear/nonlinear/high-dimensional/noisy dependency.
-\item 5) \Mgc~not only yields a p-value in real data testing, but also provides useful information on the local scale where the dependency is the strongest, which implies the geometry of the underlying dependency.
+\item 1) \Mgc~is consistent against all distributions of finite second moment when based on dcorr or mcorr.
+\item 2) \Mgc~exhibits superior numerical performance in a comprehensive simulation setting, throughout various linear / nonlinear / high-dimensional / noisy dependencies.
+\item 3) \Mgc~is easy and efficient to implement for any generalized correlation.
+\item 4) \Mgc~not only outputs a p-value in testing, but also provides useful information on the local scale where the dependency is the strongest, and implies the geometry of the underlying dependency.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{What we do not show in slides}
 \begin{itemize}[<+->]
-\item For high-dimensional simulations \Mgc~is superior for almost all simulations, with more 
-\item We applied \Mgc~to detect dependency between brain shape vs disease; and another experiment to show \Mgc~does not inflate false positive error in brain activity vs fake movie.
-\item Our \Mgc~implementation is based on an equivalent but different mcorr version. In particular, we used single-centering rather than double centering, which is equivalent for the global correlation in testing power and p-value, but preserves the rank information better for local correlations.
-\item When applying \Mgc~to sample data without known model or training data, we provide a heuristic algorithm to accurately select the optimal scale by finding consecutive regions of significant p-values.
+\item \Mgc~superiority for high-dimensional simulations.
+\item \Mgc~applications for brain shape vs disease, and brain activity vs fake movie.
+\item \Mgc~implementation by single centered dcorr, which is equivalent to the original dcorr in testing but better preserves the rank information.
+\item \Mgc~scale selection algorithm based on the p-value map, which heuristically selects the optimal scale by finding consecutive regions of significant p-values.
 \end{itemize}
+\pause
+\medskip
+And many other details...
 \end{frame}
 
 %\begin{frame}{What We Do Not Show In Slides}

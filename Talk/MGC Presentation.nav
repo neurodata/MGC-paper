@@ -26,10 +26,10 @@
 \headcommand {\slideentry {2}{0}{10}{31/34}{}{0}}
 \headcommand {\beamer@framepages {31}{34}}
 \headcommand {\beamer@subsectionentry {0}{2}{1}{35}{Multiscale Generalized Correlation}}\headcommand {\beamer@subsectionpages {17}{34}}
-\headcommand {\slideentry {2}{1}{1}{35/38}{Multiscale Generalized Correlation}{0}}
-\headcommand {\beamer@framepages {35}{38}}
-\headcommand {\slideentry {2}{1}{2}{39/42}{Multiscale Generalized Correlation}{0}}
-\headcommand {\beamer@framepages {39}{42}}
+\headcommand {\slideentry {2}{1}{1}{35/37}{Multiscale Generalized Correlation}{0}}
+\headcommand {\beamer@framepages {35}{37}}
+\headcommand {\slideentry {2}{1}{2}{38/42}{Multiscale Generalized Correlation}{0}}
+\headcommand {\beamer@framepages {38}{42}}
 \headcommand {\beamer@subsectionentry {0}{2}{2}{43}{Theoretical Advantages}}\headcommand {\beamer@subsectionpages {35}{42}}
 \headcommand {\slideentry {2}{2}{1}{43/45}{Theoretical Advantages}{0}}
 \headcommand {\beamer@framepages {43}{45}}
@@ -38,32 +38,32 @@
 \headcommand {\slideentry {2}{2}{3}{47/47}{Theoretical Advantages}{0}}
 \headcommand {\beamer@framepages {47}{47}}
 \headcommand {\beamer@subsectionentry {0}{2}{3}{48}{Numerical Simulations}}\headcommand {\beamer@subsectionpages {43}{47}}
-\headcommand {\slideentry {2}{3}{1}{48/52}{Numerical Simulations}{0}}
-\headcommand {\beamer@framepages {48}{52}}
-\headcommand {\slideentry {2}{3}{2}{53/53}{Numerical Simulations}{0}}
+\headcommand {\slideentry {2}{3}{1}{48/51}{Numerical Simulations}{0}}
+\headcommand {\beamer@framepages {48}{51}}
+\headcommand {\slideentry {2}{3}{2}{52/52}{Numerical Simulations}{0}}
+\headcommand {\beamer@framepages {52}{52}}
+\headcommand {\slideentry {2}{3}{3}{53/53}{Numerical Simulations}{0}}
 \headcommand {\beamer@framepages {53}{53}}
-\headcommand {\slideentry {2}{3}{3}{54/54}{Numerical Simulations}{0}}
+\headcommand {\slideentry {2}{3}{4}{54/54}{Numerical Simulations}{0}}
 \headcommand {\beamer@framepages {54}{54}}
-\headcommand {\slideentry {2}{3}{4}{55/55}{Numerical Simulations}{0}}
-\headcommand {\beamer@framepages {55}{55}}
-\headcommand {\beamer@subsectionentry {0}{2}{4}{56}{Real Data Experiments}}\headcommand {\beamer@subsectionpages {48}{55}}
-\headcommand {\slideentry {2}{4}{1}{56/60}{Real Data Experiments}{0}}
-\headcommand {\beamer@framepages {56}{60}}
-\headcommand {\slideentry {2}{4}{2}{61/61}{Real Data Experiments}{0}}
-\headcommand {\beamer@framepages {61}{61}}
-\headcommand {\sectionentry {3}{Conclusion}{62}{Conclusion}{0}}
-\headcommand {\beamer@sectionpages {17}{61}}
-\headcommand {\beamer@subsectionpages {56}{61}}
-\headcommand {\slideentry {3}{0}{3}{62/62}{}{0}}
-\headcommand {\beamer@framepages {62}{62}}
-\headcommand {\slideentry {3}{0}{4}{63/67}{}{0}}
-\headcommand {\beamer@framepages {63}{67}}
-\headcommand {\slideentry {3}{0}{5}{68/71}{}{0}}
-\headcommand {\beamer@framepages {68}{71}}
-\headcommand {\slideentry {3}{0}{6}{72/72}{}{0}}
-\headcommand {\beamer@framepages {72}{72}}
-\headcommand {\beamer@partpages {1}{72}}
-\headcommand {\beamer@subsectionpages {62}{72}}
-\headcommand {\beamer@sectionpages {62}{72}}
-\headcommand {\beamer@documentpages {72}}
+\headcommand {\beamer@subsectionentry {0}{2}{4}{55}{Real Data Experiments}}\headcommand {\beamer@subsectionpages {48}{54}}
+\headcommand {\slideentry {2}{4}{1}{55/58}{Real Data Experiments}{0}}
+\headcommand {\beamer@framepages {55}{58}}
+\headcommand {\slideentry {2}{4}{2}{59/59}{Real Data Experiments}{0}}
+\headcommand {\beamer@framepages {59}{59}}
+\headcommand {\sectionentry {3}{Conclusion}{60}{Conclusion}{0}}
+\headcommand {\beamer@sectionpages {17}{59}}
+\headcommand {\beamer@subsectionpages {55}{59}}
+\headcommand {\slideentry {3}{0}{3}{60/60}{}{0}}
+\headcommand {\beamer@framepages {60}{60}}
+\headcommand {\slideentry {3}{0}{4}{61/64}{}{0}}
+\headcommand {\beamer@framepages {61}{64}}
+\headcommand {\slideentry {3}{0}{5}{65/70}{}{0}}
+\headcommand {\beamer@framepages {65}{70}}
+\headcommand {\slideentry {3}{0}{6}{71/71}{}{0}}
+\headcommand {\beamer@framepages {71}{71}}
+\headcommand {\beamer@partpages {1}{71}}
+\headcommand {\beamer@subsectionpages {60}{71}}
+\headcommand {\beamer@sectionpages {60}{71}}
+\headcommand {\beamer@documentpages {71}}
 \headcommand {\def \inserttotalframenumber {25}}

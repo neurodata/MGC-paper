@@ -28,15 +28,16 @@ for j=1:length(prc)
        CC1=V2(P,alpha);
 %        CC=bwareafilt(CC1,1);    
         CC=ValidateRow(CC1);
-        CC1=V2(P',alpha);
-        CCC=ValidateRow(CC1);
+%        CC=ValidateRow(CC')';       
+%         CC1=V2(P',alpha);
+%         CCC=ValidateRow(CC1);
 %         CCC=bwareafilt(CC1',1);        
 % % %         CC=(CC+CCC')>0;
 % % %                 figure 
 % % %         imagesc(CC)
-        if sum(sum(CCC))>sum(sum(CC))
-            CC=CCC';
-        end
+%         if sum(sum(CCC))>sum(sum(CC))
+%             CC=CCC';
+%         end
 % %        CC=bwareafilt(CC,1);   
     catch
         CC=zeros(m,n);
@@ -44,7 +45,7 @@ for j=1:length(prc)
 %     figure
 %     imagesc(CC)
     mm=sum(sum(CC))/(m-1)/(n-1);
-    thres=max([prc(j)*0.05/100;0.03;1/max(m,n)]);
+    thres=max([prc(j)*0.1/100;0.1]);
     if mm>thres %|| mm>prc(j)*0.8/100
         indAll=(CC==1);
         p=alpha;
@@ -62,8 +63,8 @@ if (p<0.05 && P(end)>0.05)
     %     sum(sum(CC))/(m-1)/(n-1)
 %     figure
 %     imagesc(CC1)
-    figure
-    imagesc(CC')
+%     figure
+%     imagesc(CC')
 mm
 thres
     p
@@ -73,28 +74,39 @@ end
 function CC2=ValidateRow(CC)
 [m,n]=size(CC);
 nn=ceil(0.025*m);
-nn2=ceil(0.05*n);
+nn2=ceil(0.025*n);
+% nn=100;
 % nn=1;
-CC2=CC;
+CC2=(zeros(m,n)==1);
 i=2;
 while i<=m
     is=max(2,i-nn);
     ie=min(m,i+nn);
-    sind=zeros(1,n);
+    %sind=zeros(1,n);
     tmp=find(sum(CC(is:ie,:),1)<ie-is+1);
     tmp=[1;tmp';n+1];
     tmp2=diff(tmp);
-    j=find(tmp2==max(tmp2),1,'last');
-    %if max(tmp2)>ceil(0.02*n)
-    if max(tmp2)>=nn2
-       sind(tmp(j)+1:tmp(j+1)-1)=1;
-       CC2(is:ie,:)=repmat(sind,ie-is+1,1);
-       %CC2(i,:)=sind;
-       i=ie+1;
-    else
-       CC2(i,:)=sind;
-       i=i+1;
+    ind=find(tmp2>=nn*2);
+    i=i+1;
+    if length(ind)>0
+    for t=1:length(ind)
+        j=ind(t);
+        CC2(is:ie,tmp(j)+1:tmp(j+1)-1)=1;
     end
+    i=ie+1;
+    end
+    
+%     j=find(tmp2==max(tmp2),1,'last');
+%     %if max(tmp2)>ceil(0.02*n)
+%     if max(tmp2)>=nn2
+%        sind(tmp(j)+1:tmp(j+1)-1)=1;
+%        CC2(is:ie,:)=repmat(sind,ie-is+1,1);
+%        %CC2(i,:)=sind;
+%        i=ie+1;
+%     else
+%        CC2(i,:)=sind;
+%        i=i+1;
+%     end
 end
 CC2=bwareafilt(CC2,1);    
 
@@ -106,8 +118,8 @@ for i=2:m
     ttd=diff(tt);
     tt=tt(2:end);
 %               if  (min(tt)<alpha)
-    pdiff(i,:)=(ttd<=0) & (tt<alpha);
-    %             pdiff(:,i)=(tt<alpha);
+%     pdiff(i,:)=(ttd<=0) & (tt<alpha);
+                pdiff(i,:)=(tt<alpha);
 %                end
 end
 pdiff=(pdiff==1);

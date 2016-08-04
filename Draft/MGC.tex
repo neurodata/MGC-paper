@@ -285,7 +285,7 @@ We can therefore define a \emph{local} variant of any global generalized correla
 \label{localCoef}
 \G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
 \end{equation}
-where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $(n^2+n)/2$ different local correlations, one for each possible combination of $k$ and $l$ (local correlations are symmetric, see in Appendix \ref{appen:mgc}).
+where $z_{kl}=n^2 \sigma_a^k \sigma_b^l$,  with $\sigma_a^k$ and $\sigma_b^{l}$ being the standard deviations for the truncated pairwise comparisons. There are a maximum of $n^2$ different local correlations, one for each possible combination of $k$ and $l$ (local correlations are symmetric, see in Appendix \ref{appen:mgc}).
 % As an example, $\G^{kl}$ could be a local distance correlation by plugging in the respective $a_{ij}$ and $b_{ij}$ from the global distance correlation coefficient $\G$.
 \Mgc~finds the optimal local scales and their corresponding p-values.
 % Among all local statistics, $\{\G^{kl}\}$, \Mgc~selects the best local statistic for testing. %(see Appendix \ref{appen:algorithms} for details on how to compute local correlations and estimate \Mgc).
@@ -397,7 +397,7 @@ The end result is \Mgc~can be computed in  time comparable to the current state-
 
 Finally, we must find the optimal scales. If the underlying joint distribution is known (as in simulations), or can be reasonably estimated via training data, then the optimal scale can be directly estimated by computing power for all local tests and selecting the scale with maximal power. In the absence of the true distribution or adequate training data, we cannot reasonably compute power; instead we rely on the p-value map.  Because p-values are noisy, and we are checking many of them, we must guard against overfitting and adding bias.  We do so by searching for consecutive regions of scales for which p-values are consistently low, and approximate \Mgc~p-value within the region. If no such region exists, the optimal scale is set to the largest neighborhood, that is, \Mgc equals the global correlation
 % ). This is the procedure used for real data experiments, which maintains excellent performance 
-(see Algorithm \ref{alg:best_scale} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
+(see Algorithm \ref{alg:best_scale} , \ref{alg:best_scale_aux} and \ref{alg:power} in Appendix \ref{appen:algorithms} for method details, and Appendix~\ref{appen:diss} for more discussions).
 
 
 \subsection*{Finite Sample Simulation Experiments}
@@ -1051,10 +1051,11 @@ Among all possible local correlations, \Mgc~picks the optimal local correlation.
 \label{appen:tests}
 In this section we elaborate on the algorithms for computing local correlation and \Mgc, as well as their testing procedures in simulations and real data experiment.
 
-Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
+Six algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. 
 Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~using the p-value map, by finding a consecutive region of significant scales in the p-value map and 
 outputting the approximated p-value and all optimal scales for \Mgc. 
+Algorithm~\ref{alg:best_scale_aux} is an auxiliary function of Algorithm~\ref{alg:best_scale}, which validates that the consecutive region should consists of rectangles.
 Algorithm~\ref{alg:power} estimates the testing powers of all local statistics using a known or estimated joint distribution, which can be used to more accurately estimate the optimal scales and the testing power for \Mgc. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
@@ -1152,39 +1153,51 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P$}
+\State $p \rto P[n,n]$ \Comment{use the global p-value by default}
+\If{$\sum_{kl}(P<p)/n^2>0.05$} 
 \State $\Gamma \rto \{5,10,\ldots,50\}$ \Comment{specify the percentile of p-values for significance check}
 \For{$j:=1:\textsc{Length}(\Gamma)$}
 \State $\gamma=\textsc{Prctile}(P,\Gamma[j])$ \Comment{check the p-values in order}
-\State $PR = \textsc{LargestComponent}(P<\gamma)$ \Comment{find the largest connect component}
-\State $PC=\textsc{ValidateRow}(PR')$
-\State $PR=\textsc{ValidateRow}(PR)$
-\Lineif{$\sum_{ij}PC_{ij} > \sum_{ij}PR_{ij} $}{$PR \rto PC$} \Comment{break if it is checked too many times}
+\State $PR = \textsc{LargestComponent}(P<\gamma)$ \Comment{find the largest connected component}
+\State $PC=\textsc{ValidateRow}(PR^{T})$ \Comment{find consecutive region within row}
+\State $PR=\textsc{ValidateRow}(PR)$ \Comment{find consecutive region within column}
+\Lineif{$\sum_{kl}PC_{kl} > \sum_{kl}PR_{kl} $}{$PR \rto PC$} \Comment{use the larger region}
+\If{$\frac{\sum_{kl}PR_{kl}}{(n-1)^2}>\max\{\Gamma[j]/100 \times 0.2, 0.1\}$}
+\State $p \rto \gamma$;
+\State $[k^{*},l^{*}] \rto \arg_{\{k,l\}} (PR_{kl}=1)$
+\State break
+\EndIf
 \EndFor
-\State $p \rto \min\{p_{r},p_{c}\}$ \Comment{take the smaller value as the approximated p-value for \Mgc}
-\State $[k^{*},l^{*}] \rto \argmin_{\{k,l\}} P_{kl}\leq p$ \Comment{return all optimal scales within the validated range}
+\EndIf
 \EndFunction
 \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Consecutive Region Validation By Row. This algorithm checks the connected component of a binary matrix by adjacent rows, and only keeps the longest consecutive ones in rectangles. }%Since adjacent local correlations are strongly correlated and differ by only one term, this algorithm validates the smoothness of the local p-values by $\psi$ within each row and column respectively, selects the scale that are smooth within consecutive rows or columns, and takes the smallest p-value within the validated region. If no row and column are sufficiently smooth, the largest scale (i.e., the global correlation) are used instead. The running time is $O(n^2)$.}
+\label{alg:best_scale_aux}
 \begin{algorithmic}[1]
 %\Statex
-\Require Same as \textsc{MGCScaleVerify}. 
-\Ensure The approximated \Mgc~p-value $p$.
-\Function{Validate}{$P,\alpha$}
-\State Initialize $\rho$ as a vector of zeros of size $n$
-\State $p \rto P_{nn}$ \Comment{take the global p-value by default}
-\State $n_{2} \rto \left\lceil 0.025 \times n \right\rceil$ \Comment{number of adjacent columns to check}
-\State $\Gamma \rto \{10,20,\ldots,50\}$ \Comment{specify the percentile of p-values for significance check}
-\For{$j:=1:\textsc{Length}(\Gamma)$}
-\State $\gamma=\textsc{Prctile}(P,\Gamma[j])$ \Comment{check the p-values in order}
-\Lineif{$\gamma \times j>P_{nn}$}{break} \Comment{break if it is checked too many times}
-\For{$i:=2,\ldots,n$}
+\Require A binary matrix $PR$.
+\Ensure A binary matrix $PRS$ of connected components that are in rectangles.
+\Function{ValidateRow}{$PR$}
+\State $n_{2} \rto \left\lceil 0.02 \times n \right\rceil$ \Comment{number of adjacent rows to check}
+\State $n_{3} \rto \left\lceil 0.1 \times n \right\rceil$ \Comment{number of adjacent columns to check}
+\State $i \rto 2$
+\While{$i\leq n$}
 \State $i_{s} \rto \max\{i-n_{2},2\}$
 \State $i_{e} \rto \min\{i+n_{2},n\}$
-\State $\psi \rto \textsc{Find}\{P[i,:] > \gamma, \mbox{ for any } i \in \{i_{s},\ldots,i_{e}\}\}$ \Comment{find all columns indices larger than $\gamma$}
-\State $\rho[i] \rto (\textsc{Max}(\textsc{Diff}(\psi))-1) / (n-1)$ \Comment{find the largest consecutive region within $\gamma$}
-\EndFor
-\State $\epsilon \rto \min\{\textsc{Mean}(\rho),\rho[n]\}+3\textsc{Std}(\rho)$ \Comment{threshold to check consecutive region size}
-\Lineif{$\max\{\rho\}>\max\{0.3,\epsilon\}$}{$p \rto \gamma$} %\Comment{check the region size}
-\EndFor
+\State $\psi \rto \textsc{Find}\{PR[i,:] =0, \mbox{ for any } i \in \{i_{s},\ldots,i_{e}\}\}$
+\State $\psi \rto [1;\psi;n+1]$
+\State $j \rto \arg\max(\textsc{Diff}(\psi))$
+\State $ind \rto \psi_{j}+1:\psi_{j+1}-1$
+\State $i=i+1$
+\If{$\textsc{Length}(ind) \geq n_{3}$}
+\State $PRS[i_{s}:i_{e},ind] \rto 1$
+\State $i=i_{e}+1$
+\EndIf
+\EndWhile
+\State $PR = \textsc{LargestComponent}(PR)$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}

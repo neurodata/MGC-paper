@@ -23,16 +23,24 @@ warning ('off','all');
 for j=1:length(prc)
     alpha=prctile(P(P<1), prc(j));
     try
-       CC=(P<=alpha);
-       CC=ValidateRow(CC);
-       CC=ValidateRow(CC')';       
+       %CC=(P<=alpha);
+       CC=V2(P,alpha);
+       CC=ValidateRow(CC,ceil(0.01*m),ceil(0.1*n));
+        %CC=ValidateRow(CC',ceil(0.01*n),ceil(0.01*m))';
+       
+       CCC=V2(P',alpha);
+       CCC=ValidateRow(CCC,ceil(0.01*n),ceil(0.1*m))';
+        %CCC=ValidateRow(CCC',ceil(0.01*m),ceil(0.01*n));
+       if sum(sum(CCC))>sum(sum(CC))
+           CC=CCC;
+       end
     catch
         CC=zeros(m,n);
     end
     mm=sum(sum(CC))/(m-1)/(n-1);
-    thres=max([prc(j)*0.3/100;0.1]);
-    mm2=sum(CC)/(n-1);
-    mm3=sum(CC,2)/(m-1);
+    thres=0.02;%max([prc(j)*0.1/100;0.025])
+%     mm2=sum(CC)/(n-1);
+%     mm3=sum(CC,2)/(m-1);
     if mm>thres
         indAll=(CC==1);
         p=alpha;
@@ -42,17 +50,17 @@ end
 
 if (p<0.05 && P(end)>0.05)
     mm
-    mm2
-    mm3
     thres
+    figure
+    imagesc(CC)
     p
     P(end)
 end
 
-function CC2=ValidateRow(CC)
+function CC2=ValidateRow(CC,nn,nn2)
 [m,n]=size(CC);
-nn=max(ceil(0.025*m),2);
-nn2=max(ceil(0.025*n),2);
+% nn=ceil(0.01*m);
+% nn2=ceil(0.05*n);
 CC2=(zeros(m,n)==1);
 i=2;
 while i<=m
@@ -61,7 +69,8 @@ while i<=m
     tmp=find(sum(CC(is:ie,:),1)<ie-is+1);
     tmp=[1;tmp';n+1];
     tmp2=diff(tmp);
-    ind=find(tmp2>=max(nn2*2,max(tmp2)),1,'last');
+    ind=find(tmp2>=max(nn2,max(tmp2)),1,'last');
+%     ind=find(tmp2>=nn2*2);
     i=i+1;
     if ~isempty(ind)
     for t=1:length(ind) 
@@ -73,18 +82,18 @@ while i<=m
 end
 CC2=bwareafilt(CC2,1);    
 % 
-% function pdiff=V2(P,alpha)
-% [m,n]=size(P);
-% pdiff=zeros(m,n-2);
-% for i=2:m
-%     tt=P(i,2:end);
-%     ttd=diff(tt);
-%     tt=tt(2:end);
-% %               if  (min(tt)<alpha)
-% %     pdiff(i,:)=(ttd<=0) & (tt<alpha);
+function pdiff=V2(P,alpha)
+[m,n]=size(P);
+pdiff=zeros(m,n-2);
+for i=2:m
+    tt=P(i,2:end);
+    ttd=diff(tt);
+    tt=tt(2:end);
+%               if  (min(tt)<alpha)
+    pdiff(i,:)=(ttd<=0) & (tt<alpha);
 %                 pdiff(i,:)=(tt<alpha);
-% %                end
-% end
+%                end
+end
 % pdiff=(pdiff==1);
 % % 
 % % function [CC]=Validate(P)

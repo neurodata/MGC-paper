@@ -7,6 +7,7 @@ plot_simulation_heatmaps();
 plot_simulation_slopegraph();
 %plot_simulation_outliers();
 %plot_simulation_performanceProfiles();
+plot_schematic();
 plot_realData();
 
 plot_simulation_permutation();

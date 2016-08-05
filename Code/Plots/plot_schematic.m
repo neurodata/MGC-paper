@@ -9,7 +9,7 @@ if nargin<1
     newSim=0;
 end
 if nargin<2
-    type=16;
+    type=13;
 end
 if nargin<3
     n=50;
@@ -63,7 +63,7 @@ set(gcf,'units','normalized','position',[0 0 1 1])
 xynorm=sum([x,y]').^2';
 [foo, bar]=sort(xynorm);
 bar=1:n;
-bar=randperm(n);
+%bar=randperm(n);
 
 %%  Col 1
 ax=subplot(s,t,t+1); cla, hold all
@@ -81,16 +81,16 @@ IJ=[I, J]';
 IJ=sort(IJ(:));
 id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 xx=15;
-id=[1,3,3,9];
+id=[1,2,9,2];
 col=[1 .5 0];
 
-for ind=[1,2,4]; %length(id)
+for ind=[1,2,3]; %length(id)
 %     if ind==4;
 %         hs=0;
 %     else
         hs=0.2;
 %     end
-    text(x(id(ind))+hs,y(id(ind)),num2str(id(ind)),'fontsize',fontSize,'color',col)
+    text(x(id(ind))+hs,y(id(ind)),num2str(ind),'fontsize',fontSize,'color',col)
     plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
 end
 
@@ -159,6 +159,7 @@ xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
+title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
 set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
@@ -209,6 +210,7 @@ set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'Mcorr (single center)'}; {' '}],'FontSize',fontSize);
+title([{'Mcorr'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
@@ -251,6 +253,7 @@ caxis([minC,maxC]);
 set(gca,'YDir','normal')
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
+title([{'MGC'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 

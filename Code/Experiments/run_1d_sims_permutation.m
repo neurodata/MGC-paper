@@ -16,5 +16,4 @@ if nargin < 2
     rep2=1000; % number of random permutations for p-value calculation
 end
 %%
-thres=0.8;dim=1;noise=1;type=1:20;
 [p1]=CorrSimPermTest(type,dim,thres,rep1,rep2,noise);

@@ -577,7 +577,7 @@ For the five-factor personality data, we  use the Euclidean distance.
 
 % Figure \ref{f:real}A provides the p-value map of \Mgc
 % , based on $r=10$,$000$ random permutations. 
-Figure \ref{f:real}A  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The approximate \Mgc~p-value is $0.037$, followed by \Hhg~at $0.0588$, with all others have p-values higher than $0.3$.
+Figure \ref{f:real}A  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The approximate \Mgc~p-value is $0.047$ by Algorithm~\ref{alg:best_scale}, followed by \Hhg~at $0.0588$, with all others have p-values higher than $0.3$.
 
 
 \subsubsection*{Brain shape and disease} % Between Hippocampus Shape and Depression}
@@ -592,7 +592,7 @@ This brain shape versus disease dataset consists of $n=114$ subjects, for each w
 We consider two dependence tests, one for each hemisphere: is hippocampus shape independent of depressive state.
 % testing dependency between the left brain and major depressive disorder, and testing dependency between the right brain and major depressive disorder.
 % The resulting p-values based on $r=10$,$000$ random permutations are reported in the first two rows of Table~\ref{table1}. For testing between the left brain and the disorder, \Mgc~/ \Hhg~/ \Mantel~yield significant p-values with \Dcorr~/ \Mcorr~being slightly higher than significance; for testing between the right brain and the disorder, only \Mgc~yields significant p-value, and all benchmarks have p-values higher than significance.
-Figure \ref{f:real}B provides the p-value map for testing on right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The approximate \Mgc~p-value is $0.0260$, and no other dependence tests can identify the underlying  dependence. The left hemisphere seems less dependent on disease status, 
+Figure \ref{f:real}B provides the p-value map for testing on right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The approximate \Mgc~p-value is $0.0205$, and no other dependence tests can identify the underlying  dependence. The left hemisphere seems less dependent on disease status, 
 % is more globally dependent on disease: 
 % however, \Mgc~equals the corresponding global correlation, and 
 both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown). 
@@ -913,7 +913,7 @@ Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Not
   \end{tabular}
 \caption{%
 Comparing the estimated \Mgc~powers to the powers of true \Mgc, \Mcorr, and \Hhg, for the one-dimensional and high-dimensional simulations. We plot the power difference between each of true \Mgc, \Mcorr, and \Hhg, to the estimated \Mgc. Thus, values larger than zero indicate \emph{better}  than \Mgc~power estimated from p-value maps as we do for real data, and values smaller than zero indicate \emph{worse}.
-(A) One-dimensional simulations, where $n=60$ and $D=1$.
+(A) One-dimensional simulations, where $n=80$ and $D=1$.
 (B) High-dimensional simulations, where $n=100$ and the dimension is chosen as in Figure~\ref{f:powermaps}.
 While sometimes less than the optimal \Mgc~powers computed from multiscale power maps, \Mgc~powers estimated from the p-value maps  dominate  \Mcorr~and often improve upon \Hhg's powers, especially in the high-dimensionality settings.}
 \label{f:simPerm}
@@ -1147,7 +1147,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of consecutive local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value. If the global p-value is among the top p-values, we take the global correlation directly. Otherwise we check a list of possible p-values, find the largest connected component in the p-value map that are smaller than each candidate p-value as well as requiring a square of size at least $0.05n$. If there exists a significant area in the p-value map, we take the candidate p-value as the approximated \Mgc~p-value. The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. }
+\caption{Optimal Local Scales Approximation by P-values. This algorithm approximates the optimal scales $(k^{*},l^{*})$ from the p-values of consecutive local correlations, and outputs both the optimal scales and their corresponding \Mgc~p-value. If the global p-value is among the top $10\%$ of all p-values, we take the global correlation directly. Otherwise we check a list of possible p-values from $10\%$ onwards, find the largest connected component in the p-value map that are smaller than each candidate p-value by requiring connection through a square of size at least $0.05n$, and take the candidate p-value as the approximated \Mgc~p-value only when there exists a large area of connected component. The running time is $O(n^2)$; see Appendix~\ref{appen:diss} for more discussion. }
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
@@ -1157,11 +1157,11 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \If{$\sum_{kl}(P<p)/n^2>0.1$} 
 \State $\Gamma \rto \{10,20,\ldots,90\}$ \Comment{specify the percentile of p-values for significance check}
 \For{$j:=1:\textsc{Length}(\Gamma)$}
-\State $\gamma=\textsc{Prctile}(P,\Gamma[j])$ \Comment{check the p-values in order}
-\State $PR = \textsc{LargestComponent}(P<\gamma,\left\lceil 0.05n \right\rceil)$ 
+\State $\gamma=\textsc{Prctile}(P,\Gamma[j])$ \Comment{check the p-values in increasing order}
+\State $PR = \textsc{LargestComponent}(P \leq \gamma,\left\lceil 0.05n \right\rceil)$ 
 \If{$\frac{\sum_{kl}PR_{kl}}{(n-1)^2}>0.1$}
 \State $p \rto \gamma$;
-\State $[k^{*},l^{*}] \rto \arg_{\{k,l\}} (PR_{kl}==1)$
+\State $[k^{*},l^{*}] \rto \arg_{\{k,l\}} (PR_{kl}=1)$
 \State break
 \EndIf
 \EndFor

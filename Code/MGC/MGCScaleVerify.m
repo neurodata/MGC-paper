@@ -1,66 +1,71 @@
-function [p,indAll,t]=MGCScaleVerify(P,alpha)
+function [p,indAll,t]=MGCScaleVerify(P,rep,alpha)
 % % An auxiliary function to verify and estimate the MGC optimal scale based
 % % on the p-values of all local correlations
 if nargin<2
+    rep=500;
+end
+if nargin<3
     alpha=0.05;
 end
 
+delta=10;
+thres=0.025;
+
 % end
 [m,n]=size(P);
-p=P(end);
+p=min(max(max(P(2:end,2:end))),0.5);%P(end);
+indAll=1;
 
-indAll=m*n;
-pc=mean(mean(P<p))*100;
-if pc<=10
-    prc=pc;
+pc=mean(mean(P<=P(end)))*100;
+if pc<delta
+    p=P(end);
+    indAll=m*n;
 else
-    prc=10:10:90;
+    prc=delta:delta:100-delta;
     prc=[prc';pc;mean(mean(P<alpha))*100];
     prc=sort(prc,'ascend');
-%     prc=mean(mean(P<(alpha-0.001)))*100;
-end
-warning ('off','all');
-for j=1:length(prc)
-    alpha=prctile(P(P<1), prc(j));
-    try
-       %CC=(P<=alpha);
-       CC=V2(P,alpha);
-       CC=ValidateRow(CC,ceil(0.01*m),ceil(0.1*n));
-        %CC=ValidateRow(CC',ceil(0.01*n),ceil(0.01*m))';
-       
-       CCC=V2(P',alpha);
-       CCC=ValidateRow(CCC,ceil(0.01*n),ceil(0.1*m))';
-        %CCC=ValidateRow(CCC',ceil(0.01*m),ceil(0.01*n));
-       if sum(sum(CCC))>sum(sum(CC))
-           CC=CCC;
-       end
-    catch
-        CC=zeros(m,n);
+    %     prc=mean(mean(P<(alpha-0.001)))*100;
+    warning ('off','all');
+    C1=V2(P,rep);
+    C2=V2(P',rep);
+    if sum(sum(C2))>sum(sum(C1))
+        C1=C2';
     end
-    mm=sum(sum(CC))/(m-1)/(n-1);
-    thres=0.02;%max([prc(j)*0.1/100;0.025])
-%     mm2=sum(CC)/(n-1);
-%     mm3=sum(CC,2)/(m-1);
-    if mm>thres
-        indAll=(CC==1);
-        p=alpha;
-        break;
+    for j=1:length(prc)
+        alpha=prctile(P(P<1), prc(j));
+        CC=(C1==1) & (P<=alpha);
+        %     CC=V2(P,alpha);
+        CC=ValidateRow(CC,thres);
+%         CC=ValidateRow(CC',thres)';
+            try
+                CC=bwareafilt(CC,1);
+            catch
+                CC=zeros(m,n);
+            end
+        mm=sum(sum(CC))/(m-1)/(n-1);
+%         thres=0.02;
+        %thres2=max([prc(j)*0.04/100;thres]);
+        if mm>thres
+            indAll=(CC==1);
+            p=alpha;
+            break;
+        end
     end
 end
 
-if (p<0.05 && P(end)>0.05)
-    mm
-    thres
-    figure
-    imagesc(CC)
-    p
-    P(end)
-end
+% if (p<0.05 && P(end)>=0.05)
+%     mm
+% %     thres
+% %     figure
+% %     imagesc(CC)
+%     p
+%     P(end)
+% end
 
-function CC2=ValidateRow(CC,nn,nn2)
+function CC2=ValidateRow(CC,thres)
 [m,n]=size(CC);
-% nn=ceil(0.01*m);
-% nn2=ceil(0.05*n);
+nn=ceil(thres*m);
+nn2=ceil(thres*n);
 CC2=(zeros(m,n)==1);
 i=2;
 while i<=m
@@ -69,28 +74,33 @@ while i<=m
     tmp=find(sum(CC(is:ie,:),1)<ie-is+1);
     tmp=[1;tmp';n+1];
     tmp2=diff(tmp);
-    ind=find(tmp2>=max(nn2,max(tmp2)),1,'last');
-%     ind=find(tmp2>=nn2*2);
+    ind=find(tmp2>=max(nn2*2,max(tmp2)));
     i=i+1;
     if ~isempty(ind)
-    for t=1:length(ind) 
-        j=ind(t);
-        CC2(is:ie,tmp(j)+1:tmp(j+1)-1)=1;
-    end
-    i=ie+1;
+        for t=1:length(ind)
+            j=ind(t);
+            CC2(is:ie,tmp(j)+1:tmp(j+1)-1)=1;
+        end
+        i=ie+1;
     end
 end
-CC2=bwareafilt(CC2,1);    
+% try
+%    CC2=bwareafilt(CC2,1);    
+% catch
+%     CC2=zeros(m,n);
+% end
+
 % 
-function pdiff=V2(P,alpha)
+function pdiff=V2(P,rep)
 [m,n]=size(P);
-pdiff=zeros(m,n-2);
+pdiff=zeros(m,n);
+thres=max(1/rep,0.0025);
 for i=2:m
-    tt=P(i,2:end);
+    tt=P(i,:);
     ttd=diff(tt);
-    tt=tt(2:end);
+%     tt=tt(2:end);
 %               if  (min(tt)<alpha)
-    pdiff(i,:)=(ttd<=0) & (tt<alpha);
+    pdiff(i,2:end)=(ttd<=thres); %& (tt<alpha);
 %                 pdiff(i,:)=(tt<alpha);
 %                end
 end

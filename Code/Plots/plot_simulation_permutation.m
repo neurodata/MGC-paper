@@ -44,10 +44,10 @@ for i=1:2
     hold on
     p2=powerP(ind,:);
     p2=p2-repmat(p2(1,:),4,1);
-    plot(-1+ones(20,1)+randn(20,1)/10,p2(3,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+    plot(-1+ones(19,1)+randn(19,1)/10,p2(3,1:19),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
     %plot(ones(20,1)+randn(20,1)/10,p2(1,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
-    plot(0+ones(20,1)+randn(20,1)/10,p2(2,:),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
-    plot(1+ones(20,1)+randn(20,1)/10,p2(4,:),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+    plot(0+ones(19,1)+randn(19,1)/10,p2(2,1:19),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+    plot(1+ones(19,1)+randn(19,1)/10,p2(4,1:19),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
     hold off
     % legend('True MGC','Estimated MGC','Mcorr','HHG','Location','NorthWest');
     set(gca,'FontSize',24);
@@ -57,7 +57,7 @@ for i=1:2
     % xlim([1,20]);
     % ylim([-0.6,1]);
     % set(gca,'XTick',[0,1,2,3],'XtickLabel',[{'True MGC'}; {'Estimated MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
-    set(gca,'XTick',[0,1,2],'XtickLabel',[{'True MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
+    set(gca,'XTick',[0,1,2],'XtickLabel',[{'Oracle MGC'}; {'Mcorr'}; {'HHG'}]); % Remove x axis ticks
     set(gca,'YTick',[-1,-0.5,0,0.5,1]); % Remove x axis ticks
     ax=gca;
     ax.XTickLabelRotation=45;

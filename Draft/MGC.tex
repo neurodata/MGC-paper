@@ -308,15 +308,16 @@ Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 % \begin{table}
 % \caption{ }
 % \label{t:mgc}
-\begin{center}
+% \begin{center}
 % \vspace{-35pt}\hspace{-150pt}
-\begin{tabular}{c c c c}
- $\delta_x$(1,2) & \hspace{1.8em} \color{magenta}-2.42 \hspace{1.8em}  & \hspace{1.8em} \color{magenta}-5.21 \hspace{1.8em} & \hspace{1.8em} \color{magenta}-5.07 \hspace{1.8em}  \\ 
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+% \renewcommand{\arraystretch}{1.5} % Default value: 1
+\begin{tabular}{r  r   r   r}
+ $\delta_x$(1,2) &  \color{magenta}-2.42  & \hspace{2.4em} \color{magenta}-5.21  &  \hspace{2.4em} \color{magenta}-5.07  \\ 
  $\delta_y$(1,2) & \color{magenta}-1.58 & \color{magenta}-0.91 & \color{magenta}-0.12  \\ 
  $\delta_x \times \delta_y$ & \color{green}3.82 & \color{green}4.74 & \color{green}0.61  \\ 
  
 \hline
-
 
  $\delta_x$(2,3) & \color{green}0.70 & \color{green}0.61 & \color{green}0.14  \\ 
  $\delta_y$(2,3) &  \color{magenta}-0.91 & \color{magenta}-0.28 & \color{green}0.12  \\ 
@@ -324,14 +325,17 @@ Figure~\ref{f:schematic} schematically illustrates \Mgc~on a particular nonlinea
 
 \hline
  $\sum{\delta_x \times \delta_y}$ & \color{magenta}-162.14   & \color{magenta}-93.04 & \color{green}116.41  \\ 
-$\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ &  \color{magenta}-0.02  & \color{magenta}-0.02 & \color{green}0.16  \\ 
+ test statistic &  \color{magenta}-0.02  & \color{magenta}-0.02 & \color{green}0.16  \\  
+% $\sum{\delta_x \times \delta_y}/z_{xy}$
+% $\sum{\delta_x \times \delta_y} / \sum{\delta_{x}^2}\sum{\delta_{y}^2}$ 
+
 
 
 \end{tabular}
 \jv{the figure and table may need to be re-aligned. }
-\end{center}
+% \end{center}
 % \end{table}
-\caption{(Caption followed in the next page.)}
+\caption{(caption on next page.)}
 \label{f:schematic}
 \end{figure}
 

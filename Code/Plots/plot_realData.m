@@ -45,8 +45,8 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for Activity','FontSize',20);
-ylabel('# of Neighbors for Personality','FontSize',20);
+xlabel('# of Activity Neighbors','FontSize',22);
+ylabel('# of Personality Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
@@ -78,8 +78,8 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for Shape','FontSize',20);
-ylabel('# of Neighbors for Disease','FontSize',20);
+xlabel('# of Shape Neighbors','FontSize',22);
+ylabel('# of Disease Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
@@ -150,8 +150,8 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for Graph','FontSize',20);
-ylabel('# of Neighbors for Creativity','FontSize',20);
+xlabel('# of Graph Neighbors','FontSize',22);
+ylabel('# of Creativity Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');

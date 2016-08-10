@@ -1,8 +1,24 @@
 
-[powerP]=CorrSimPermTest(1:10,1,80,100,200,1,0.05)
-[powerP]=CorrSimPermTest(11:20,1,80,100,200,1,0.05)
-[powerP]=CorrSimPermTest(1:10,2,0.5,100,200,0,0.05)
-[powerP]=CorrSimPermTest(11:20,2,0.5,100,200,0,0.05)
+[powerP]=CorrSimPermTest(1:10,1,60,200,1000,1,0.05)
+[powerP]=CorrSimPermTest(11:20,1,60,200,1000,1,0.05)
+[powerP]=CorrSimPermTest(1:10,2,0.5,200,1000,0,0.05)
+[powerP]=CorrSimPermTest(11:20,2,0.5,200,1000,0,0.05)
+
+p=zeros(7,20);
+for i=1:5
+[powerP]=CorrSimPermTest(20,1,50,200,500,0,0.05);
+p=p+powerP;
+[powerP]=CorrSimPermTest(20,1,50,200,500,1,0.05);
+p=p+powerP;
+end
+
+p=zeros(7,20);
+for i=1:5
+[powerP]=CorrSimPermTest(20,2,50,200,500,0,0.05);
+p=p+powerP;
+[powerP]=CorrSimPermTest(20,2,50,200,500,1,0.05);
+p=p+powerP;
+end
 
 %Locally linear dependent
 n=7;

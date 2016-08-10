@@ -42,11 +42,11 @@ set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
-set(gca,'FontSize',24);
+set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for X','FontSize',24);
-ylabel('# of Neighbors for Y','FontSize',24);
+xlabel('# of Activity Neighbors','FontSize',22);
+ylabel('# of Personality Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
@@ -54,7 +54,7 @@ set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remov
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Activity vs. Personality','FontSize',24);
+title('Brain Activity vs. Personality','FontSize',22);
 
 F.fname=strcat(pre2, num2str(1));
 F.wh=[3 2.5]*2;
@@ -75,11 +75,11 @@ set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
-set(gca,'FontSize',24);
+set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for X','FontSize',24);
-ylabel('# of Neighbors for Y','FontSize',24);
+xlabel('# of Shape Neighbors','FontSize',22);
+ylabel('# of Disease Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
@@ -87,7 +87,7 @@ set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remov
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Shape vs. Disorder','FontSize',24);
+title('Brain Shape vs. Disorder','FontSize',22);
 
 F.fname=strcat(pre2, num2str(2));
 F.wh=[3 2.5]*2;
@@ -147,11 +147,11 @@ set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
-set(gca,'FontSize',24);
+set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Neighbors for X','FontSize',24);
-ylabel('# of Neighbors for Y','FontSize',24);
+xlabel('# of Graph Neighbors','FontSize',22);
+ylabel('# of Creativity Neighbors','FontSize',22);
 set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
@@ -159,7 +159,7 @@ set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remov
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Graph vs. Creativity','FontSize',24);
+title('Brain Graph vs. Creativity','FontSize',22);
 
 F.fname=strcat(pre2, num2str(3));
 F.wh=[3 2.5]*2;

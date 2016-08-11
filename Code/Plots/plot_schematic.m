@@ -82,6 +82,7 @@ IJ=sort(IJ(:));
 id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 xx=15;
 id=[1,2,9,2];
+id2=[1,2,3,2];
 col=[1 .5 0];
 
 for ind=[1,2,3]; %length(id)
@@ -123,13 +124,13 @@ fprintf(formatSpec,k,l)
 formatSpec = '\n & Mantel & Mcorr & MGC \\\\ \n';
 fprintf(formatSpec)
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
-fprintf(formatSpec,id(1),id(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
-                   id(1),id(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
+fprintf(formatSpec,id2(1),id2(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
+                   id2(1),id2(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
                    mantelH(id(1),id(2)),mcorrH(id(1),id(2)),abs(C_MGC(id(1),id(2))))
 fprintf('\\hline\n\n')
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
-fprintf(formatSpec,id(3),id(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
-                   id(3),id(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
+fprintf(formatSpec,id2(3),id2(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
+                   id2(3),id2(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
                    mantelH(id(3),id(4)),mcorrH(id(3),id(4)),C_MGC(id(3),id(4)))
 
 fprintf('\\hline\n\n')
@@ -159,7 +160,7 @@ xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
-title([{'Mantel'}; {' '}],'FontSize',fontSize);
+% title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
 set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
@@ -210,7 +211,7 @@ set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'Mcorr (single center)'}; {' '}],'FontSize',fontSize);
-title([{'Mcorr'}; {' '}],'FontSize',fontSize);
+% title([{'Mcorr'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
@@ -253,7 +254,7 @@ caxis([minC,maxC]);
 set(gca,'YDir','normal')
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
-title([{'MGC'}; {' '}],'FontSize',fontSize);
+% title([{'MGC'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 

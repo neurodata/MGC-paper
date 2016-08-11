@@ -109,11 +109,11 @@ B_MGC=B;
 A_MGC(RC)=0;
 B_MGC(RD)=0;
 % if cc==1
-A_MGC=A_MGC-mean(mean(A_MGC));
-B_MGC=B_MGC-mean(mean(B_MGC));
+A_MGC=A_MGC;
+B_MGC=B_MGC;
 % end
 %A_MGC(1:n+1:n^2)=0;
 %B_MGC(1:n+1:n^2)=0;
-C_MGC=A_MGC.*B_MGC;
+C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
 save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');

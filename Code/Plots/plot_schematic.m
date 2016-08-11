@@ -75,15 +75,16 @@ plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 % % axis('tight')
 
 % id=[24,26,1,50]
-[I,J]=ind2sub([n,n],find(C_MGC>0));
+[I,J]=ind2sub([n,n],find(C_MGC>0.1,1,'first'));
 ids=unique([I,J]);
-IJ=[I, J]';
-IJ=sort(IJ(:));
-id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
-xx=15;
-id=[1,2,9,2];
+% IJ=[I, J]';
+% IJ=sort(IJ(:));
+% id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
+% xx=15;
+id=[I,J,30,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
+hy=[-0.4,0.4,0];
 
 for ind=[1,2,3]; %length(id)
 %     if ind==4;
@@ -91,7 +92,7 @@ for ind=[1,2,3]; %length(id)
 %     else
         hs=0.2;
 %     end
-    text(x(id(ind))+hs,y(id(ind)),num2str(ind),'fontsize',fontSize,'color',col)
+    text(x(id(ind))+hs,y(id(ind))+hy(ind),num2str(ind),'fontsize',fontSize,'color',col)
     plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
 end
 
@@ -113,7 +114,7 @@ clc
 
 MantelVec=[C(id(1),id(2)), D(id(1),id(2)), mantelH(id(1),id(2)), C(id(3),id(4)), D(id(3),id(4)), mantelH(id(3),id(4)), mantelH(id(1),id(2))+mantelH(id(3),id(4))];
 McorrVec=[A(id(1),id(2)), B(id(1),id(2)), mcorrH(id(1),id(2)), A(id(3),id(4)), B(id(3),id(4)), mcorrH(id(3),id(4)), mcorrH(id(1),id(2))+mcorrH(id(3),id(4))];
-MGCVec=[A_MGC(id(1),id(2)), B_MGC(id(1),id(2)), C_MGC(id(1),id(2)), A_MGC(id(3),id(4)), B_MGC(id(3),id(4)), C_MGC(id(3),id(4)), C_MGC(id(1),id(2))+C_MGC(id(3),id(4))];
+MGCVec=[A_MGC(id(1),id(2)), B_MGC(id(1),id(2)), A_MGC(id(1),id(2))*B_MGC(id(1),id(2)), A_MGC(id(3),id(4)), B_MGC(id(3),id(4)), A_MGC(id(3),id(4)) * B_MGC(id(3),id(4)), A_MGC(id(1),id(2))*B_MGC(id(1),id(2))+A_MGC(id(3),id(4)) * B_MGC(id(3),id(4))];
 
 [MantelVec; McorrVec; MGCVec]'
 display(['k=', num2str(k), ' l=',num2str(l)])
@@ -126,18 +127,18 @@ fprintf(formatSpec)
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id2(1),id2(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
                    id2(1),id2(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
-                   mantelH(id(1),id(2)),mcorrH(id(1),id(2)),abs(C_MGC(id(1),id(2))))
+                   mantelH(id(1),id(2)),mcorrH(id(1),id(2)),A_MGC(id(1),id(2))*B_MGC(id(1),id(2)))
 fprintf('\\hline\n\n')
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id2(3),id2(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
                    id2(3),id2(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
-                   mantelH(id(3),id(4)),mcorrH(id(3),id(4)),C_MGC(id(3),id(4)))
+                   mantelH(id(3),id(4)),mcorrH(id(3),id(4)),A_MGC(id(3),id(4)) * B_MGC(id(3),id(4)))
 
 fprintf('\\hline\n\n')
 
 formatSpec = '\n $\\sum \\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,sum(sum(mantelH)), sum(sum(mcorrH)),sum(sum(C_MGC)));
-fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'),sum(sum(C_MGC))/norm(A_MGC,'fro')/norm(B_MGC,'fro'));
+fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'),sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro'));
 
 
 %% Mantel
@@ -370,7 +371,7 @@ plot(xi,f,'.-','LineWidth',4,'Color',glob);
 plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
 set(gca,'FontSize',15);
 % x1=round(tA(end)*100)/100;
-x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm(A_MGC,'fro')/norm(B_MGC,'fro');
+x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
 x1=round(x1*100)/100;x2=round(x2*100)/100;
 plot(x1,0.1,'.','MarkerSize',mkSize,'Color',glob);
 plot(x2,0.1,'*','MarkerSize',10,'Color',loca);

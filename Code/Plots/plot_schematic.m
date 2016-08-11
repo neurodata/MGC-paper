@@ -76,12 +76,13 @@ plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 
 % id=[24,26,1,50]
 [I,J]=ind2sub([n,n],find(C_MGC>0.1,1,'first'));
+J2=find(mcorrH(J,:)<0,1,'last');
 ids=unique([I,J]);
 % IJ=[I, J]';
 % IJ=sort(IJ(:));
 % id=1:4:50; %[8,13, 45, 46]; %50, IJ(end-1:end)'];
 % xx=15;
-id=[I,J,30,J];
+id=[I,J,J2,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
 hy=[-0.4,0.4,0];

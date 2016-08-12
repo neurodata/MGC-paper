@@ -1,18 +1,17 @@
-function [p,indAll,t]=MGCScaleVerify(P,alpha)
+function [p,indAll,t]=MGCScaleVerify(P)
 % % An auxiliary function to verify and estimate the MGC optimal scale based
 % % on the p-values of all local correlations
-if nargin<2
-    alpha=0.05;
-end
-delta=10;
 thres=0.025;
 
 [m,n]=size(P);
+tt=ceil(thres*[m,n]);
+
 p=min(max(max(P(2:end,2:end))),0.5);
+% p=P(end);
 indAll=1;
 
-pc=mean(mean(P<=P(end)))*100;
-if pc<delta
+pc=mean(mean(P<=P(end)));
+if pc<thres
     p=P(end);
     indAll=m*n;
 else
@@ -24,10 +23,13 @@ else
     PN=floor(P*100)/100;
     
     C1=MonotoneRegion(PN,0);
+    %[~, ~, ~, C1] = FindLargestRectangles((C1==1), [0 0 1],tt);
     C2=MonotoneRegion(PN',0);
+    [~, ~, ~, C2] = FindLargestRectangles((C2==1), [0 0 1],tt);
     if sum(sum(C2))>sum(sum(C1))
         C1=C2';
     end
+    
     tmp=mean(mean(C1));
     if tmp >thres
         p=prctile(P(C1), ceil(thres/tmp*100));
@@ -92,9 +94,5 @@ for i=2:m
     ttd=diff(tt);
     pdiff(i,2:end)=(ttd<=thres); 
 end
-
-tt=ceil(0.025*[m,n]);
-% tt=[2,2];
-[~, ~, ~, pdiff] = FindLargestRectangles((pdiff==1), [0 0 1],tt);
 % figure
 % imagesc(pdiff)

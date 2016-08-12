@@ -7,12 +7,15 @@ if isfield(F,'wh')
     F.PaperSize=F.wh;
     F.PaperPosition=[0 0 F.wh];
 end
+if ~isfield(F,'png'), F.png=0; end
+if ~isfield(F,'fig'), F.fig=0; end
+if ~isfield(F,'pdf'), F.pdf=1; end % default only plot pdf
 if ~isfield(F,'PaperSize'), F.PaperSize=[2 2]; end
 if ~isfield(F,'PaperPosition'), F.PaperPosition=[0 0 F.PaperSize]; end
 if ~isfield(F,'fname'), F.fname='temp_fig'; end
 set(h,'PaperSize',F.PaperSize,'PaperPosition',F.PaperPosition,'color','w');
 set(h, 'InvertHardCopy', 'off');
 set(h,'renderer',F.renderer)
-print(h,F.fname,'-dpdf')
-print(h,F.fname,'-dpng','-r300')
-saveas(h,F.fname,'fig')
+if F.pdf==1, print(h,F.fname,'-dpdf'), end
+if F.png==1, print(h,F.fname,'-dpng','-r300'), end
+if F.fig==1, saveas(h,F.fname,'fig'), end

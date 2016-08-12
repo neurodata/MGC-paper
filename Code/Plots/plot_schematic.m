@@ -58,16 +58,18 @@ map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
 % [left,bottom,width,height]
-height=0.21;
-width=0.17;
+height=0.21; %18; %21;
+width=height-0.04; %17;
 hspace=0;
 vspace=0.09;
-for i=1:5
-    left(i)=-0.01+(i-1)*(width+hspace);
+for i=1:6
+    left(i)=0.0+(i-1)*(width+hspace);
     bottom(i)=0.06+(i-1)*(height+vspace);
 end
 bottom(3)=bottom(3)+0.01;
 left(5)=left(5)+0.02;
+left(6)=left(6)+0.09;
+left(2:end)=left(2:end)+0.02;
 
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
@@ -179,7 +181,7 @@ set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
 xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
-text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
+text(24,53,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'1. Mantel'}; {'(pairwise dist''s)'}; {' ' }],'FontSize',fontSize);
 % title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -236,7 +238,7 @@ hold all
 imagesc(A(bar,bar)');
 set(gca,'YDir','normal')
 caxis([minC,maxC]);
-text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
+text(24,53,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'2. Mcorr'}; {'(single center)'}; {' '}],'FontSize',fontSize);
 % title([{'Mcorr'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -285,8 +287,8 @@ hold all
 imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
-title([{'3. MGC'}; {'(rank truncate)'}; {' '}],'FontSize',fontSize);
+text(24,53,'$A$','interpreter','latex','FontSize',fontSize)
+title([{'3. MGC^k^,^l'}; {'(rank truncate)'}; {' '}],'FontSize',fontSize);
 % title([{'MGC'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
@@ -315,9 +317,15 @@ title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
+%% title for col 5
+ax=subplot('Position',[left(5), bottom(3), width, height]);
+title([{'4. Multiscale Maps'}; {' '}; {' '}],'FontSize',fontSize);
+clean_panel(ax,map2,pos,id,n,col,fontSize)
+
+
 %% Col5 MPM
 % ax=subplot(s,t,2*t+t);
-ax=subplot('Position',[left(5), bottom(1), width, height]);
+ax=subplot('Position',[left(5), bottom(3), width, height]);
 hold on
 
 set(groot,'defaultAxesColorOrder',map1);
@@ -347,9 +355,13 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 %     %set(h,'FontSize',16,'location','southoutside');
-%set(gca,'XTick',[]); % Remove x axis ticks
-%set(gca,'YTick',[]); % Remove y axis ticks
-title('Multiscale Power Map','FontSize',fontSize);
+set(gca,'XTick',[]); % Remove x axis ticks
+set(gca,'YTick',[]); % Remove y axis ticks
+xlabel('# of Neighbors for X','FontSize',16)
+ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
+
+% title('Power','fontweight','normal','FontSize',fontSize);
+text(19,55,'Power','FontSize',fontSize)
 axis('square')
 
 
@@ -392,13 +404,13 @@ set(ax,'position',pos2);
 %     %set(h,'FontSize',16,'location','southoutside');
 %set(gca,'XTick',[]); % Remove x axis ticks
 %set(gca,'YTick',[]); % Remove y axis ticks
-title('Multiscale P-Value Map','FontSize',fontSize);
+title('P-Values','fontweight','normal','FontSize',fontSize);
 %colorbar('location','westoutside');
 axis('square')
 
 %% Col 5 p-value
 % subplot(s,t,t)
-ax=subplot('Position',[left(5), bottom(3), width, height]);
+ax=subplot('Position',[left(5), bottom(1), width, height]);
 
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
@@ -440,11 +452,12 @@ set(b,'FontSize',fontSize);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fontSize);
 ylabel('Density','FontSize',fontSize);
-title([{'4. Test Statistics'}; {' '}; {' '}],'FontSize',fontSize);
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
-axis('square')
+set(gca,'YTick',[])
+title([{'5. Optimal Scales'}; {'& Statistics '}],'FontSize',fontSize);
+% pos2 = get(ax,'position');
+% pos2(3:4) = [pos(3:4)];
+% set(ax,'position',pos2);
+% axis('square')
 hold off
 % axis([0, y2, 0, y2])
 % 1-pAll(end)

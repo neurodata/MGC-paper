@@ -28,7 +28,6 @@ map2 = brewermap(128,'GnBu'); % brewmap
 % 1-d or h-d
 if dim>1
     filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N100Dim.mat');
-    n=100;
     nd=dim;
     [x, y]=CorrSampleGenerator(type,n,dim,1, 0);
 else
@@ -90,7 +89,7 @@ xlim([1 n-1]);
 ylim([1 n-1]);
 title('Multiscale P-value Map')
 
-% For Power
+%% For Power
 load(filename);
 if dim>1
     numRange=dimRange;

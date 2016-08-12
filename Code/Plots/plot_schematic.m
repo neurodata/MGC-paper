@@ -39,6 +39,8 @@ fontSize=18;
 mkSize=20;
 sameBar=0;
 
+%% plotting parameters 
+
 cmap=zeros(2,3);
 gray = [0.5,0.5,0.5];
 map2 = brewermap(128,'PiYG'); % brewmap
@@ -55,6 +57,18 @@ cmap(2,:) = gr;
 map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
+% [left,bottom,width,height]
+height=0.21;
+width=0.17;
+hspace=0;
+vspace=0.09;
+for i=1:5
+    left(i)=-0.01+(i-1)*(width+hspace);
+    bottom(i)=0.06+(i-1)*(height+vspace);
+end
+bottom(3)=bottom(3)+0.01;
+left(5)=left(5)+0.02;
+
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
@@ -65,9 +79,11 @@ xynorm=sum([x,y]').^2';
 bar=1:n;
 %bar=randperm(n);
 
+
 %%  Col 1
-ax=subplot(s,t,t+1); cla, hold all
-% set(ax, 'Position', [0.05, 0.37, 0.92, 0.27])
+% ax=subplot(s,t,t+1); 
+ax=subplot('Position',[left(1), bottom(2)+width/2+0.01, width, height]);
+cla, hold all
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 % xlim([-1.2,1.2]);
@@ -101,14 +117,15 @@ tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
 tname=tname(findex+1:end);
 
-title([{[tname]};  {'(X,Y) Scatter Plot'}])
+title(['0. ', [tname], ' (X,Y)'])
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
-pos = get(ax,'position');
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-pos2(2)=pos2(2)+0.15;
-set(ax,'position',pos2);
-% axis('square')
+% pos = get(ax,'position');
+% pos2 = get(ax,'position');
+% pos2(3:4) = [pos(3:4)];
+% pos2(2)=pos2(2)+0.15;
+% set(ax,'position',pos2);
+pos=[nan, nan, width, height];
+axis('square')
 
 % make table
 clc
@@ -146,7 +163,9 @@ fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH
 
 
 % A Mantel
-ax=subplot(s,t,2); hold all
+% ax=subplot(s,t,2); %  
+ax=subplot('Position',[left(2), bottom(3), width, height]);
+hold all
 if sameBar==1
     maxC=ceil(max(max([C,D]))*10)/10;
     minC=ceil(min(min([C,D]))*10)/10;
@@ -161,7 +180,7 @@ set(gca,'FontSize',16); % Remove y axis ticks
 xlabel('sample index','FontSize',fontSize);
 ylabel('sample index','FontSize',fontSize);
 text(24,55,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
-title([{'Mantel (pairwise dist''s)'}; {' '}],'FontSize',fontSize);
+title([{'1. Mantel'}; {'(pairwise dist''s)'}; {' ' }],'FontSize',fontSize);
 % title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
@@ -169,7 +188,9 @@ set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
 set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
 
 % B Mantel
-ax=subplot(s,t,t+2); hold all
+% ax=subplot(s,t,t+2); 
+ax=subplot('Position',[left(2), bottom(2), width, height]);
+hold all
 if sameBar~=1
     maxC=ceil(max(max(D))*10)/10;
 end
@@ -184,7 +205,9 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C Mantel
-ax=subplot(s,t,2*t+2); hold all
+% ax=subplot(s,t,2*t+2); 
+ax=subplot('Position',[left(2), bottom(1), width, height]);
+hold all
 MH=ceil(max(max(mantelH(2:end,2:end))));
 mH=floor(min(min(mantelH(2:end,2:end))));
 mH=min(mH,-MH);
@@ -207,18 +230,22 @@ minC=min(minC,-maxC);maxC=max(maxC,-minC);
 
 
 % A Mcorr
-ax=subplot(s,t,3); hold all
+% ax=subplot(s,t,3); 
+ax=subplot('Position',[left(3), bottom(3), width, height]);
+hold all
 imagesc(A(bar,bar)');
 set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
-title([{'Mcorr (single center)'}; {' '}],'FontSize',fontSize);
+title([{'2. Mcorr'}; {'(single center)'}; {' '}],'FontSize',fontSize);
 % title([{'Mcorr'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MCorr
-ax=subplot(s,t,t+3); hold all
+% ax=subplot(s,t,t+3); 
+ax=subplot('Position',[left(3), bottom(2), width, height]);
+hold all
 if sameBar==1
     minD=floor(min(min([A,B]))*10)/10;maxD=ceil(max(max([A,B]))*10)/10;
 else
@@ -234,7 +261,9 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C MCorr
-ax=subplot(s,t,2*t+3); hold all
+% ax=subplot(s,t,2*t+3); 
+ax=subplot('Position',[left(3), bottom(1), width, height]);
+hold all
 MH=ceil(max(max(mcorrH(2:end,2:end))));
 mH=floor(min(min(mcorrH(2:end,2:end))));
 mH=min(mH,-MH);
@@ -250,18 +279,22 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % A MGC
-ax=subplot(s,t,4); hold all
+% ax=subplot(s,t,4);
+ax=subplot('Position',[left(4), bottom(3), width, height]);
+hold all
 imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 text(24,55,'$A$','interpreter','latex','FontSize',fontSize)
-title([{'MGC (rank truncate)'}; {' '}],'FontSize',fontSize);
+title([{'3. MGC'}; {'(rank truncate)'}; {' '}],'FontSize',fontSize);
 % title([{'MGC'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MGC
-ax=subplot(s,t,t+4); hold all
+% ax=subplot(s,t,t+4); 
+ax=subplot('Position',[left(4), bottom(2), width, height]);
+hold all
 imagesc(B_MGC(bar,bar)');
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
@@ -269,7 +302,9 @@ title('$$B^{l^{*}}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 % C MGC
-ax=subplot(s,t,2*t+4); cla, hold all
+% ax=subplot(s,t,2*t+4); 
+ax=subplot('Position',[left(4), bottom(1), width, height]);
+cla, hold all
 MH=ceil(max(max(C_MGC(2:end,2:end))));
 mH=floor(min(min(C_MGC(2:end,2:end))));
 mH=min(mH,-MH);MH=max(MH,-mH);
@@ -281,10 +316,12 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 %% Col5 MPM
-set(groot,'defaultAxesColorOrder',map1);
-ax=subplot(s,t,2*t+t);
-kmin=2;
+% ax=subplot(s,t,2*t+t);
+ax=subplot('Position',[left(5), bottom(1), width, height]);
 hold on
+
+set(groot,'defaultAxesColorOrder',map1);
+kmin=2;
 ph=power1(kmin:n,kmin:n)';
 imagesc(ph);
 set(gca,'FontSize',fontSize)
@@ -317,10 +354,12 @@ axis('square')
 
 
 %% Col5 p-value map
-set(groot,'defaultAxesColorOrder',map1);
-ax=subplot(s,t,t+t);
-kmin=2;
+% ax=subplot(s,t,t+t);
+ax=subplot('Position',[left(5), bottom(2), width, height]);
 hold on
+
+set(groot,'defaultAxesColorOrder',map1);
+kmin=2;
 pAll(pAll<=eps)=0.005;
 ph=pAll(2:end,2:end)';
 % ph(ph<=eps)=0.0005;
@@ -334,7 +373,8 @@ colormap(ax,flipud(cmap));
 cticks=[0.001, 0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(h,'FontSize',fontSize);
-set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
+% set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
+set(gca,'XTick',[],'YTick',[])
 %xlabel('# of Neighbors for X','FontSize',16)
 %ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
@@ -357,7 +397,9 @@ title('Multiscale P-Value Map','FontSize',fontSize);
 axis('square')
 
 %% Col 5 p-value
-subplot(s,t,t)
+% subplot(s,t,t)
+ax=subplot('Position',[left(5), bottom(3), width, height]);
+
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
 maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -374,8 +416,8 @@ set(gca,'FontSize',15);
 % x1=round(tA(end)*100)/100;
 x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
 x1=round(x1*100)/100;x2=round(x2*100)/100;
-plot(x1,0.1,'.','MarkerSize',mkSize,'Color',glob);
-plot(x2,0.1,'*','MarkerSize',10,'Color',loca);
+plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
+plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 set(gca,'XTick',[x1+0.05,x2+0.05],'TickLength',[0 0],'XTickLabel',[x1,x2]);
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
@@ -398,7 +440,7 @@ set(b,'FontSize',fontSize);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fontSize);
 ylabel('Density','FontSize',fontSize);
-title([{'Test Statistics'}; {'Distributions'}],'FontSize',fontSize);
+title([{'4. Test Statistics'}; {' '}; {' '}],'FontSize',fontSize);
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);

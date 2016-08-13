@@ -1,4 +1,4 @@
-function [power1, power2, power3, power4,power5,power6,power7]=CorrIndTest(type,n,dim,lim,rep1, rep2,noise,alpha,option)
+function [power1, power2, power3, power4,power5,power6,power7,power1All,power2All,power3All]=CorrIndTest(type,n,dim,lim,rep1, rep2,noise,alpha,option)
 % Author: Cencheng Shen
 % Independence Tests for identifying dependency, with respect to increasing sample size at a fixed dimension.
 % The output are the empirical powers of MGC{dcorr/mcorr/Mantel}, and global dcorr/mcorr/Mantel/HHG.
@@ -47,18 +47,24 @@ power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global 
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
+    if option(1)~=0
     tmp=power1All(1:numRange(i),1:numRange(i),i);
     power1(i)=tmp(neighborhoods(1,i));
     tmp=tmp(tmp>0);
     power4(i)=tmp(end);
+    end
+    if option(2)~=0
     tmp=power2All(1:numRange(i),1:numRange(i),i);
     power2(i)=tmp(neighborhoods(2,i));
     tmp=tmp(tmp>0);
     power5(i)=tmp(end);
+    end
+    if option(3)~=0
     tmp=power3All(1:numRange(i),1:numRange(i),i);
     power3(i)=tmp(neighborhoods(3,i));
     tmp=tmp(tmp>0);
     power6(i)=tmp(end);
+    end
 end
 
 % Save the results

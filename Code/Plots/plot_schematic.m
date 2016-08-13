@@ -326,6 +326,8 @@ hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
 ph=power1(kmin:n,kmin:n)';
+indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
+ph(indPower)=2;
 imagesc(ph);
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
@@ -370,8 +372,11 @@ hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
 pAll(pAll<=eps)=0.005;
+[pval,indP]=MGCScaleVerify(pAll);
+pAll(pAll<=eps)=0.005;
 ph=pAll(2:end,2:end)';
-% ph(ph<=eps)=0.0005;
+indP=indP(2:end,2:end)';
+ph(indP)=0.00001;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 
 set(gca,'FontSize',fontSize)

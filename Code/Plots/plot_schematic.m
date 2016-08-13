@@ -67,7 +67,7 @@ for i=1:6
     bottom(i)=0.06+(i-1)*(height+vspace);
 end
 bottom(3)=bottom(3)+0.01;
-left(5)=left(5)+0.02;
+left(5)=left(5)+0.03;
 left(6)=left(6)+0.09;
 left(2:end)=left(2:end)+0.02;
 
@@ -317,13 +317,8 @@ title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
-%% title for col 5
-ax=subplot('Position',[left(5), bottom(3), width, height]);
-title([{'4. Multiscale Maps'}; {' '}; {' '}],'FontSize',fontSize);
-clean_panel(ax,map2,pos,id,n,col,fontSize)
 
-
-%% Col5 MPM
+%% Col5 Multiscale Power Maps
 % ax=subplot(s,t,2*t+t);
 ax=subplot('Position',[left(5), bottom(3), width, height]);
 hold on
@@ -339,33 +334,35 @@ colormap(ax,cmap)
 caxis([0 1])
 h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
+xlim([1 n-1]);
+ylim([1 n-1]);
 set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 xlabel('# of Neighbors for X','FontSize',fontSize)
 ylabel('# of Neighbors for Y','FontSize',fontSize) %,'Rotation',0,'position',[-7,20]);
-xlim([1 n-1]);
-ylim([1 n-1]);
 
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
+pos = get(ax,'position');
+% pos2(3:4) = [pos(3:4)];
+% set(ax,'position',pos2);
 
 %     imagesc(k,l,1);
 hold off
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
+% pos2 = get(ax,'position');
+% pos2(3:4) = [pos(3:4)];
+% set(ax,'position',pos2);
 %     %set(h,'FontSize',16,'location','southoutside');
-set(gca,'XTick',[]); % Remove x axis ticks
-set(gca,'YTick',[]); % Remove y axis ticks
-xlabel('# of Neighbors for X','FontSize',16)
-ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
+% set(gca,'XTick',[]); % Remove x axis ticks
+% set(gca,'YTick',[]); % Remove y axis ticks
+% xlabel('# of Neighbors for X','FontSize',16)
+% ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 
 % title('Power','fontweight','normal','FontSize',fontSize);
+% title([{'4. Multiscale Maps'}; {' '}; {' '}; {' '}],'FontSize',fontSize);
+text(-1,70,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
 text(19,55,'Power','FontSize',fontSize)
 axis('square')
 
 
-%% Col5 p-value map
+%% Col5 multiscale p-value map
 % ax=subplot(s,t,t+t);
 ax=subplot('Position',[left(5), bottom(2), width, height]);
 hold on
@@ -376,6 +373,7 @@ pAll(pAll<=eps)=0.005;
 ph=pAll(2:end,2:end)';
 % ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
+
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
@@ -391,6 +389,9 @@ set(gca,'XTick',[],'YTick',[])
 %ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
 xlim([1 n-1]);
 ylim([1 n-1]);
+% plot([n-2:n-2],[n-2:n-1],'-m','linewidth',2)
+% plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
+plot(n-1,n-1,'.m','markersize',24)
 
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
@@ -398,9 +399,9 @@ set(ax,'position',pos2);
 
 %     imagesc(k,l,1);
 hold off
-pos2 = get(ax,'position');
-pos2(3:4) = [pos(3:4)];
-set(ax,'position',pos2);
+% pos2 = get(ax,'position');
+% pos2(3:4) = [pos(3:4)];
+% set(ax,'position',pos2);
 %     %set(h,'FontSize',16,'location','southoutside');
 %set(gca,'XTick',[]); % Remove x axis ticks
 %set(gca,'YTick',[]); % Remove y axis ticks
@@ -453,7 +454,7 @@ xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fontSize);
 ylabel('Density','FontSize',fontSize);
 set(gca,'YTick',[])
-title([{'5. Optimal Scales'}; {'& Statistics '}],'FontSize',fontSize);
+title([{'5. Null Distribution'}; {'& Statistics '}],'FontSize',fontSize);
 % pos2 = get(ax,'position');
 % pos2(3:4) = [pos(3:4)];
 % set(ax,'position',pos2);

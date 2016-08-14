@@ -50,18 +50,24 @@ power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global 
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
+    if option(1)~=0
     tmp=power1All(:,:,i);
     power1(i)=tmp(neighborhoods(1,i));
     tmp=tmp(tmp>0);
     power4(i)=tmp(end);
+    end
+    if option(2)~=0
     tmp=power2All(:,:,i);
     power2(i)=tmp(neighborhoods(2,i));
     tmp=tmp(tmp>0);
     power5(i)=tmp(end);
+    end
+    if option(3)~=0
     tmp=power3All(:,:,i);
     power3(i)=tmp(neighborhoods(3,i));
     tmp=tmp(tmp>0);
     power6(i)=tmp(end);
+    end
 end
 
 % Save the results

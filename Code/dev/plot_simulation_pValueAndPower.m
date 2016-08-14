@@ -1,4 +1,4 @@
-function [pval]=plot_simulation_pValueAndPower(type,n,dim)
+function [pval]=plot_simulation_pValueAndPower(type,n,dim,noise)
 % Compare p-value heatmap with power heatmap
 if nargin<1
     type=13;
@@ -8,6 +8,9 @@ if nargin<2
 end
 if nargin<3
     dim=1;
+end
+if nargin<4
+    noise=0;
 end
 rep=1000;
 fontSize=20;
@@ -25,20 +28,9 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 %% Set colors
 map2 = brewermap(128,'GnBu'); % brewmap
 
-% 1-d or h-d
-if dim>1
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N100Dim.mat');
-    nd=dim;
-    [x, y]=CorrSampleGenerator(type,n,dim,1, 0);
-else
-    filename=strcat(pre1,'CorrIndTestType',num2str(type),'N100Dim1.mat');
-    dim=1;
-    nd=n;
-    [x, y]=CorrSampleGenerator(type,n,dim,1, 1);
-end
-
 % For p-value:
 % Get distance matrix
+[x, y]=CorrSampleGenerator(type,n,dim,1, noise);
 C=squareform(pdist(x));
 D=squareform(pdist(y));
 
@@ -90,20 +82,9 @@ ylim([1 n-1]);
 title('Multiscale P-value Map')
 
 %% For Power
-load(filename);
-if dim>1
-    numRange=dimRange;
-end
-ind=find(numRange>=nd,1,'first');
-if lim==21 && ind>1
-    ind=ind-1;
-end
+[~,~,~,~,~,~,~,~,power2All,~]=CorrIndTest(type,n,dim,1,rep, rep,noise,0.05,[0,1,0,0]);
 kmin=2;
-if dim==1
-    ph=power2All(kmin:numRange(ind),kmin:numRange(ind),ind)';
-else
-    ph=power2All(kmin:n,kmin:n,ind)';
-end
+ph=power2All(kmin:end,kmin:end)';
 tt=find(sum(ph,2)==0,1,'first');
 if isempty(tt)==false && tt~=1;
     ph(tt:end,:)=repmat(ph(tt-1,:),n-tt,1);
@@ -133,9 +114,11 @@ pos = get(ax,'position');
 
 %Optimal Scale map
 pAll=pAll';
-ind=find(pAll==min(min(pAll(2:end,2:end))));
-phS=zeros(size(pAll));
-phS(ind)=1;
+% ind=find(pAll==min(min(pAll(2:end,2:end))));
+[pval,phS]=MGCScaleVerify(pAll);
+% ind
+% phS=zeros(size(pAll));
+% phS(ind)=1;
 ax=subplot(2,2,3);
 imagesc(phS);
 axis('square')
@@ -151,7 +134,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-pval=unique(pAll(ind));
+% pval=unique(pAll(ind));
 
 
 %Optimal Scale map

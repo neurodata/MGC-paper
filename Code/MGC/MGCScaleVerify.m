@@ -1,62 +1,85 @@
-function [p,indAll]=MGCScaleVerify(P)
-% % An auxiliary function to verify and estimate the MGC optimal scale based
-% % on the p-values of all local correlations
-thres=0.05;
-thres2=0.005;
+function [p,indAll]=MGCScaleVerify(P,thres,alpha)
+% An auxiliary function to verify and estimate the MGC optimal scale based
+% on the p-values of all local correlations
+if nargin<2
+thres=0.025;
+end
+if nargin<3
+alpha=0.05;
+end
 
 [m,n]=size(P);
-tt=ceil(thres*[m,n]);
-tt=[2,2];
+%tt=0.025*[m,n];
+% tt=[2,2];
+% use global p-value by default
+p=0.5;
+indAll=1;
 
-p=P(end);
-indAll=m*n;
-% sum(sum(P<p))/(m-1)/(n-1)
-if sum(sum(P<p))/(m-1)/(n-1)>thres
-%     PN=floor(P*100)/100;
+% If the global p-value is among the top 2.5% of all local p-values, we
+% take it directly; otherwise find a rectangular region based on
+% monotoneically changing p-values.
+if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
+    p=P(end);
+    indAll=m*n;
+else
+%     [~, ~, ~, indAll]=FindLargestRectangles((P<=0.05), [0 0 1],[2,2]);
+%     if mean(mean(indAll)) >thres
+%         p=0.04;
+%         indAll=(indAll==1);
+%     end
     
-    C1=MonotoneRegion(P,thres2);
-    C3=MonotoneRegion2(P,-thres2);
-    if sum(sum(C3))>sum(sum(C1))
-        C1=C3;
+    % Regularize the p-values by 0.005
+%     PN=floor(P*200)/200; 
+    
+    R=MonotoneRegion(P,alpha); % Find the largest monotonic rectangular region along the row p-values   
+    R2=MonotoneRegion(P',alpha); % Find the largest monotonic rectangular region along the column p-values
+    if sum(sum(R2))>sum(sum(R))
+        R=R2'; % Take the larger region between row and columns
     end
-    C2=MonotoneRegion(P',thres2)';
-    C4=MonotoneRegion2(P',-thres2)';
-    if sum(sum(C4))>sum(sum(C2))
-        C2=C4;
-    end
-    if sum(sum(C2))>sum(sum(C1))
-        C1=C2;
-    end
-    [~, ~, ~, C1] = FindLargestRectangles((C1==1), [0 0 1],tt);
-%     figure
-%     imagesc(C1)
-    tmp=mean(mean(C1));
-    if tmp >0
-        p=prctile(P(C1), min(ceil(thres/tmp*100),100));
-        [~, ~, ~, indAll]=FindLargestRectangles((C1==1) & (P<=p), [0 0 1]);
+
+    % Take the region if and only if its area is larger than 2.5%
+    tmp=mean(mean(R));
+    if tmp >thres
+%         figure
+%         imagesc(P(2:end,2:end))
+%         figure
+%         imagesc(R)
+%         p=min(P(R));
+        p=prctile(P(R), ceil(thres/tmp*100)); % Take the top 2.5% p-value in the region
+        [~, ~, ~, indAll]=FindLargestRectangles((R==1) & (P<=p), [0 0 1]);
+        indAll=(indAll==1);
     end
 end
 
-function pdiff=MonotoneRegion(P,thres)
-if nargin<2
-    thres=0;
-end
+function R=MonotoneRegion(P,alpha)
+% Find the largest monotonically decreasing or increasing rectangular region along the row p-values
 [m,n]=size(P);
+% tt=thres*[m,n]; % default minimal size of a rectangular
+tt=[2,2];
 pdiff=zeros(m,n);
 for i=2:m
     tt=P(i,:);
-    ttd=diff(tt);
-    pdiff(i,2:end)=(ttd<=thres);
+    pdiff(i,2:end)=diff(tt);
+%     pdiffDes(i,2:end)=(ttd<=0); % Verify monotonically decreasing
+%     pdiffAes(i,2:end)=(ttd>=0); % Verify monotonically increasing
+end
+% eps=pdiff(2:end,2:end);
+% eps=prctile(abs(eps(eps>0)),thres*100);
+
+% for i=2:m
+%     tt=P(i,:);
+%     ttd=diff(tt);
+%     pdiffDes(i,2:end)=(ttd<=0); % Verify monotonically decreasing
+%     pdiffAes(i,2:end)=(ttd>=0); % Verify monotonically increasing
+% end
+
+R=(pdiff<=0) & (P<alpha);
+R2=(pdiff>=0) & (P<alpha);
+
+[~, ~, ~,R] = FindLargestRectangles(R, [0 0 1],tt); % Find the largest rectangular within the monotonically decreasing region
+[~, ~, ~, R2] = FindLargestRectangles(R2, [0 0 1],tt); % Find the largest rectangular within the monotonically increasing region
+if sum(sum(R2))>sum(sum(R))
+    R=R2; % Take the larger region between increasing / decreasing
 end
 
-function pdiff=MonotoneRegion2(P,thres)
-if nargin<2
-    thres=0;
-end
-[m,n]=size(P);
-pdiff=zeros(m,n);
-for i=2:m
-    tt=P(i,:);
-    ttd=diff(tt);
-    pdiff(i,2:end)=(ttd>=thres);
-end
+% [~, ~, ~, R] = FindLargestRectangles(R, [0 0 1],tt); % Find the largest rectangular within the monotonically decreasing region

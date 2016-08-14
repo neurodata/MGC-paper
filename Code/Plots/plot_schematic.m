@@ -318,7 +318,7 @@ set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
 ph=power1(kmin:n,kmin:n)';
 indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
-ph(indPower)=2;
+% ph(indPower)=2;
 imagesc(ph);
 hold off
 
@@ -376,18 +376,19 @@ ylim([1 n-1]);
 plot(n-1,n-1,'.m','markersize',24)
 
 % draw boundary around optimal scale
-[pval,indP]=MGCScaleVerify(pAll);
-indP=indP(2:end,2:end)';
+[pval,indP]=MGCScaleVerify(pAll');
+disp(strcat('Approximated MGC p-value: ',pval));
+% indP=indP(2:end,2:end)';
 [I,J]=ind2sub(size(indP),find(indP));
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);
 Xmax=max(J);
 
-plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',2)
-plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',2)
-plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',2)
-plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',2)
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',1.5)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',1.5)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',1.5)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',1.5)
 
 %     imagesc(k,l,1);
 hold off

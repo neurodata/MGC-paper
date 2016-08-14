@@ -173,7 +173,7 @@ ylabel('sample index','FontSize',fontSize, 'Units', 'normalized', ...
 'Position', [-0.3 0.72], 'VerticalAlignment', 'Top')
 % 'Position', [-0.2 -0.05], 'HorizontalAlignment', 'Left')
 text(24,53,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
-title([{'1. Mantel'}; {'(pairwise dist''s)'}; {' ' }],'FontSize',fontSize, 'Units', 'normalized', ...
+title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize, 'Units', 'normalized', ...
 'Position', [0 1.1], 'HorizontalAlignment', 'left');
 % title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -348,11 +348,8 @@ hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
 pAll(pAll<=eps)=0.005;
-[pval,indP]=MGCScaleVerify(pAll);
-pAll(pAll<=eps)=0.005;
 ph=pAll(2:end,2:end)';
-indP=indP(2:end,2:end)';
-ph(indP)=0.00001;
+% ph(indP)=0.00001;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 
 set(gca,'FontSize',fontSize)
@@ -378,17 +375,23 @@ ylim([1 n-1]);
 % plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
 plot(n-1,n-1,'.m','markersize',24)
 
+% draw boundary around optimal scale
+[pval,indP]=MGCScaleVerify(pAll);
+indP=indP(2:end,2:end)';
+[I,J]=ind2sub(size(indP),find(indP));
+Ymin=min(I);
+Ymax=max(I);
+Xmin=min(J);
+Xmax=max(J);
+
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',2)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',2)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',2)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',2)
 
 %     imagesc(k,l,1);
 hold off
-% pos2 = get(ax,'position');
-% pos2(3:4) = [pos(3:4)];
-% set(ax,'position',pos2);
-%     %set(h,'FontSize',16,'location','southoutside');
-%set(gca,'XTick',[]); % Remove x axis ticks
-%set(gca,'YTick',[]); % Remove y axis ticks
 title('P-Values','fontweight','normal','FontSize',fontSize);
-%colorbar('location','westoutside');
 axis('square')
 
 %% Col 5 p-value

@@ -377,7 +377,7 @@ plot(n-1,n-1,'.m','markersize',24)
 
 % draw boundary around optimal scale
 [pval,indP]=MGCScaleVerify(pAll');
-disp(strcat('Approximated MGC p-value: ',pval));
+disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
 [I,J]=ind2sub(size(indP),find(indP));
 Ymin=min(I);

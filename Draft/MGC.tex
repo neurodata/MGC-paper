@@ -1150,7 +1150,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Require The p-value matrix $P \in \Real^{n \times n}$.
 \Ensure A binary matrix $R \in \{0,1\}^{n \times n}$ indicating the largest smooth rectangle in $P$.
 \Function{SmoothRegion}{$P$}
-\State $\tau \rto 0.0025$ \Comment{the threshold to check smoothness}
+\State $\tau \rto 0.005$ \Comment{the threshold to check smoothness}
 \State $P = \textsc{Diff}(P)$ \Comment{p-value difference of adjacent scales within row}
 \State $R = \textsc{LargestRectangle}(P<\tau)$ \Comment{largest rectangle with decreasing trend} 
 \State $R^{'} = \textsc{LargestRectangle}(P>-\tau)$ \Comment{largest rectangle with increasing trend} 

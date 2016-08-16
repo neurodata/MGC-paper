@@ -348,7 +348,7 @@ hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
 pAll(pAll<=eps)=0.005;
-ph=pAll(2:end,2:end)';
+ph=pAll';
 % ph(indP)=0.00001;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 
@@ -369,14 +369,14 @@ set(h,'FontSize',fontSize);
 set(gca,'XTick',[],'YTick',[])
 %xlabel('# of Neighbors for X','FontSize',16)
 %ylabel('# of Neighbors for Y','FontSize',16) %,'Rotation',0,'position',[-7,20]);
-xlim([1 n-1]);
-ylim([1 n-1]);
+% xlim([1 n-1]);
+% ylim([1 n-1]);
 % plot([n-2:n-2],[n-2:n-1],'-m','linewidth',2)
 % plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
-plot(n-1,n-1,'.m','markersize',24)
+plot(n,n,'.m','markersize',24)
 
 % draw boundary around optimal scale
-[pval,indP]=MGCScaleVerify(pAll');
+[pval,indP]=MGCScaleVerify(ph);
 disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
 [I,J]=ind2sub(size(indP),find(indP));
@@ -389,7 +389,8 @@ plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',1.5)
 plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',1.5)
 plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',1.5)
 plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',1.5)
-
+xlim([2,n]);
+ylim([2,n]);
 %     imagesc(k,l,1);
 hold off
 title('P-Values','fontweight','normal','FontSize',fontSize);

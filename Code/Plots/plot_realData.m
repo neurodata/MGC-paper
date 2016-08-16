@@ -36,8 +36,9 @@ load(filename);
 n=size(p2All,1);
 
 figure
+hold on
 kmin=2;
-imagesc(log(p2All(kmin:end,kmin:end)'));
+imagesc(log(p2All'));
 set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
@@ -45,16 +46,31 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Activity Neighbors','FontSize',22);
-ylabel('# of Personality Neighbors','FontSize',22);
-set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlabel('# of Activity Neighbors','FontSize',24);
+ylabel('# of Personality Neighbors','FontSize',24);
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Activity vs. Personality','FontSize',22);
+title('Brain Activity vs. Personality','FontSize',24);
+
+[~,indP]=MGCScaleVerify(p2All');
+[I,J]=ind2sub(size(indP),find(indP));
+Ymin=min(I);
+Ymax=max(I);
+Xmin=min(J);
+Xmax=max(J);
+
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',4)
+set(gca,'XTick',[2,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[2,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlim([2,n1]);
+ylim([2,n2]);
+hold off
 
 F.fname=strcat(pre2, num2str(1));
 F.wh=[3 2.5]*2;
@@ -70,7 +86,8 @@ pp2=p2All(:,end);
 
 figure
 kmin=2;
-imagesc(log(p2All(kmin:end,kmin:end)'));
+hold on
+imagesc(log(p2All'));
 set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
@@ -78,16 +95,31 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Shape Neighbors','FontSize',22);
-ylabel('# of Disease Neighbors','FontSize',22);
-set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlabel('# of Shape Neighbors','FontSize',24);
+ylabel('# of Disease Neighbors','FontSize',24);
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Shape vs. Disorder','FontSize',22);
+title('Brain Shape vs. Disorder','FontSize',24);
+
+[~,indP]=MGCScaleVerify(p2All');
+[I,J]=ind2sub(size(indP),find(indP));
+Ymin=min(I);
+Ymax=max(I);
+Xmin=min(J);
+Xmax=max(J);
+
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',4)
+set(gca,'XTick',[2,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[2,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlim([2,n1]);
+ylim([2,n2]);
+hold off
 
 F.fname=strcat(pre2, num2str(2));
 F.wh=[3 2.5]*2;
@@ -142,7 +174,8 @@ filename=strcat(pre1,'CorrPermDistTestTypeMigrainxCCI.mat');
 load(filename);
 figure
 kmin=2;
-imagesc(log(p2All(kmin:end,kmin:end)'));
+hold on
+imagesc(log(p2All'));
 set(gca,'YDir','normal')
 colormap(flipud(map2))
 cticks=[0.01, 0.1, 0.5];
@@ -150,16 +183,31 @@ h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
 set(gca,'FontSize',20);
 %     if i==3
 [n1,n2]=size(p2All);
-xlabel('# of Graph Neighbors','FontSize',22);
-ylabel('# of Creativity Neighbors','FontSize',22);
-set(gca,'XTick',[1,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlabel('# of Graph Neighbors','FontSize',24);
+ylabel('# of Creativity Neighbors','FontSize',24);
 %h=colorbar('Ticks',[0,0.05,0.1]);%,'location','westoutside');
 %     else
 %         set(gca,'XTick',[]); % Remove x axis ticks
 %         set(gca,'YTick',[]); % Remove y axis ticks
 %     end
-title('Brain Graph vs. Creativity','FontSize',22);
+title('Brain Graph vs. Creativity','FontSize',24);
+
+[~,indP]=MGCScaleVerify(p2All');
+[I,J]=ind2sub(size(indP),find(indP));
+Ymin=min(I);
+Ymax=max(I);
+Xmin=min(J);
+Xmax=max(J);
+
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',4)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',4)
+set(gca,'XTick',[2,round(n1/2)-1,n1-1],'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
+set(gca,'YTick',[2,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
+xlim([2,n1]);
+ylim([2,n2]);
+hold off
 
 F.fname=strcat(pre2, num2str(3));
 F.wh=[3 2.5]*2;
@@ -176,7 +224,7 @@ set(groot,'defaultAxesColorOrder',map1);
 
 figure
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
-pv=p(:,2)
+pv=p(:,2);
  [f,xi]=ksdensity(pv,'support',[0,1]); 
  hold on
  plot(xi,f,'.-','LineWidth',4);

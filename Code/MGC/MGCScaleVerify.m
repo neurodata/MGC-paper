@@ -3,7 +3,7 @@ function [p,indAll]=MGCScaleVerify(P,thres,thres2)
 % This function approximates the MGC optimal scale based
 % on the p-values of all local correlations
 if nargin<2
-    thres=0.03; % The threshold is used to: determine if the global p-value is significant enough, and determine if the rectangular area is significant enough
+    thres=0.04; % The threshold is used to: determine if the global p-value is significant enough, and determine if the rectangular area is significant enough
 end
 if nargin<3
     thres2=0.005; % The threshold to approximate the monotone p-values change

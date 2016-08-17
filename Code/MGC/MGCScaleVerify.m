@@ -3,7 +3,7 @@ function [p,indAll]=MGCScaleVerify(P,thres,thres2)
 % This function approximates the MGC optimal scale based
 % on the p-values of all local correlations
 if nargin<2
-    thres=0.04; % The threshold is used to: determine if the global p-value is significant enough, and determine if the rectangular area is significant enough
+    thres=0.05; % The threshold is used to: determine if the global p-value is significant enough, and determine if the rectangular area is significant enough
 end
 if nargin<3
     thres2=0.005; % The threshold to approximate the monotone p-values change
@@ -11,14 +11,14 @@ end
 [m,n]=size(P);
 
 thres=max(2/min(m,n),thres);
+indAll=zeros(m,n);
 % default p-value and optimal scale
 p=0.5;
-indAll=1;
 
 % Directly use the global p-value if it is among the top thres% of all local p-values
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
-    indAll=m*n;
+    indAll(m,n)=1;
 else
     % otherwise find a rectangular region based on monotoneically changing p-values 
     lim=[2,2]; % The minimal size of a rectangle
@@ -33,8 +33,11 @@ else
     if tmp >thres
         p=prctile(P(R), ceil(thres/tmp*100)); % Take the top p-value in the region
         [~, ~, ~, indAll]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],lim);
-        indAll=(indAll==1);
     end
+end
+
+if sum(sum(indAll))==0;
+    indAll(1,1)=1;
 end
 
 function R=SmoothRegion(P,thres,lim)

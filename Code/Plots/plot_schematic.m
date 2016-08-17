@@ -379,7 +379,7 @@ plot(n,n,'.m','markersize',24)
 [pval,indP]=MGCScaleVerify(ph);
 disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
-[I,J]=ind2sub(size(indP),find(indP));
+[I,J]=ind2sub(size(ph),indP);
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);

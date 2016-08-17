@@ -56,7 +56,7 @@ ylabel('# of Personality Neighbors','FontSize',24);
 title('Brain Activity vs. Personality','FontSize',24);
 
 [~,indP]=MGCScaleVerify(p2All');
-[I,J]=ind2sub(size(indP),find(indP));
+[I,J]=ind2sub(size(p2All'),indP);
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);
@@ -105,7 +105,7 @@ ylabel('# of Disease Neighbors','FontSize',24);
 title('Brain Shape vs. Disorder','FontSize',24);
 
 [~,indP]=MGCScaleVerify(p2All');
-[I,J]=ind2sub(size(indP),find(indP));
+[I,J]=ind2sub(size(p2All'),indP);
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);
@@ -193,7 +193,7 @@ ylabel('# of Creativity Neighbors','FontSize',24);
 title('Brain Graph vs. Creativity','FontSize',24);
 
 [~,indP]=MGCScaleVerify(p2All');
-[I,J]=ind2sub(size(indP),find(indP));
+[I,J]=ind2sub(size(p2All'),indP);
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);

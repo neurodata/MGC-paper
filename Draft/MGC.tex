@@ -187,7 +187,7 @@ First, the dependencies between different modalities of data can be highly \text
 %
 Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or billions of dimensions per data point. At the same time, the \textbf{sample sizes} are not increasing proportionally, meaning that we often have very high-dimensional datasets with relatively low sample sizes.
 %
-Third, the data are often \textbf{structured}: networks, shapes, questionnaires, multivariate time-series, and text are all typical examples.
+Third, the data are often \textbf{structured}: networks, shapes, questionnaires, images, multivariate time-series, and text are all typical examples.
 % * <stefaniejacinto@gmail.com> 2016-08-15T02:14:58.154Z:
 %
 % > \textbf{structured}
@@ -195,6 +195,7 @@ Third, the data are often \textbf{structured}: networks, shapes, questionnaires,
 % Is this structured or unstructured?
 %
 % ^.
+% \sd{undstructure would just be vectors whose order does not matter, in the above, the "order" matters, does that make sense?}
 For example, we may desire to understand whether brain shape and disease status are related, so that we can develop prognostic biomarkers to combat the deleterious efforts of degenerative neurological disorders \cite{ParkEtAl2008}.
 %
 Fourth, because we will often have a data deluge, with myriad different measurements, it is important to have a  \textbf{computationally efficient} method of generating results.
@@ -378,35 +379,20 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDPower}
 \caption{Powers of \Mcorr, \Hhg, and oracle \Mgc~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  
-% * <stefaniejacinto@gmail.com> 2016-08-16T05:48:20.835Z:
-%
-% > Powers
-%
-% In Figure 2, in panels 16 and 17, remove colons after 4 and 16
-%
-% ^.
-% We used $10$,$000$ Monte-Carlo replicates to estimate the null power, and an additional $2$,$000$  replicates to estimate the optimal scale.
-\cs{please put the above content that stefanie removed into the description of the algorithm, and remove the colons}
-\jv{done, in alg 4}
 Each panel shows empirical testing power at a significance level $\alpha=0.05$
 versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
 Excluding the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for almost all settings and all dimensions. 
 }
 \label{f:nD}
 \end{figure}
-
+\cs{please put the above content that stefanie removed into the description of the algorithm, and remove the colons}
+\jv{done, in alg 4}
+\cs{did you update the fig though? i still see colons}
+\jv{corrected...they should be $\pi$ but pdf pics changed them to colon..let's generate figA again though}
 
 
 Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare   \Mgc~with two previously proposed state of the art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
-% * <stefaniejacinto@gmail.com> 2016-08-16T04:58:28.199Z:
 %
-% > with
-%
-% Not sure why, but the whitespace seems to be getting disregarded in between "MGC" and "with" when generating the PDF.
-%
-% ^.
-% 
-% \sd{we need to put a "~" to ensure their is a space because of the way we defined the macro}
 The advantage of oracle \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~for all dimensionalities.  For the remaining nonlinear dependencies, \Mgc~achieves power levels that are superior to that of \Hhg~and \Mcorr~for almost all functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected.
 More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios,
 in which we also compare to \Mantel~and \Dcorr, 
@@ -436,7 +422,7 @@ Even when estimating the optimal scales via p-value maps, the sample \Mgc~achiev
   \centering
   \includegraphics[width=1.0\textwidth]{Figures/FigSlope}
   \caption{
-Average powers slopegraphs comparing tests by global correlation and the respective oracle \Mgc.  Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulations 1-5 and  20. 
+Average power slopegraphs comparing tests by global correlation and the respective oracle \Mgc.  Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulations 1-5 and  20. 
 % * <stefaniejacinto@gmail.com> 2016-08-16T05:35:47.568Z:
 %
 % > powers
@@ -483,13 +469,6 @@ Note that for all simulations, there always exists a consecutive region of local
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
-% * <stefaniejacinto@gmail.com> 2016-08-16T05:50:18.640Z:
-%
-% > Multiscale
-%
-% In Figure 4, in panels 16 and 17, remove colons after 4 and 16
-%
-% ^.
 For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively. For each simulation, the sample size is $n=100$,  and the dimension is determined by the largest dimension for oracle \Mgc~to have power exceeding $0.5$ at significance level  $0.05$. Each simulation yields a different multiscale power map, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure  (see Appendix~\ref{appen:mgc} for details).}
 \label{f:powermaps}
 \end{figure}
@@ -579,14 +558,7 @@ For the five-factor personality data, we  used the Euclidean distance.
 
 % Figure \ref{f:real}A provides the p-value map of \Mgc
 % , based on $r=10$,$000$ random permutations. 
-Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0285$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
-% * <stefaniejacinto@gmail.com> 2016-08-16T06:09:49.146Z:
-%
-% > A
-%
-% Is there any way to get this A into red font, for consistency?
-%
-% ^.
+Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0342$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
 
 
 \subsubsection*{Brain shape and disease} % Between Hippocampus Shape and Depression}
@@ -597,16 +569,7 @@ Our next experiment investigates whether brain shape and disease status are depe
 This brain shape versus disease dataset consists of $n=114$ subjects. Each subject has a structural MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape modality, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}. For the  disorder variable, we add white noise bounded by $0.01$ to each label, then form the Euclidean distance (the noise is used to break ties amongst the discrete values and make sure only the diagonal entries of the distance matrix are zero).
 
 We consider two dependence tests, one for each hemisphere: ``is hippocampus shape independent of depressive state?''
-Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0087$, and no other dependence test can identify significant dependence. The left hemisphere seems less dependent on disease status, 
-% * <stefaniejacinto@gmail.com> 2016-08-16T06:17:07.438Z:
-%
-% > B
-%
-% Try to make this in red font, if possible (for consistency)
-%
-% ^.
-% is more globally dependent on disease: 
-% however, \Mgc~equals the corresponding global correlation, and 
+Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0096$, and no other dependence test can identify significant dependence. The left hemisphere seems less dependent on disease status, 
 as both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown). 
 \jv{let's check whether anybody knew that?}
 \cs{what are p-values for Mcorr and HHG on the right hemisphere?}
@@ -622,9 +585,9 @@ as both local and global tests yield  p-values from $0.05$ to $0.08$ (not shown)
     \subfigimg[width=\linewidth]{D}{Figures/FigRealCORR}
   \end{tabular}
 \caption{
-(A) P-value map of all local correlations for fMRI brain scan vs five-factor personality model.
-(B) P-value map for right hemisphere of brain vs disease.
-(C) P-value map of all local correlations from $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI. $l=38$ is the largest possible neighborhood size for the CCI data due to repeated entries.
+(A) P-value map and optimal scales for fMRI brain scan vs five-factor personality model.
+(B) P-value map and optimal scales for right hemisphere of brain vs disease.
+(C) P-value map and optimal scales from $k=2,\ldots,109$ and $l=2,\ldots,38$ for brain \Migraine~vs CCI. $l=38$ is the largest possible neighborhood size for the CCI data due to repeated entries.
 (D) Density estimate for the false positive rates of sample \Mgc~on the brain vs noise experiments, with the actual rate of each data shown as dots above the x-axis. The mean, median, and standard deviation are $0.0576, 0.0450, 0.0452$ respectively.}
 \label{f:real}
 \end{figure}
@@ -639,11 +602,9 @@ The brain network metric we used was based on  the semi-parametric test statisti
 
 Figure \ref{f:real}{\color{magenta}C} shows that the global dependence tests can ascertain whether the whole brain network is independent of the subject's creativity.  However, the global test is quite fragile, as even ignoring a single subject from the global test can render the test non-significant. On the other hand, the \Mgc~multiscale maps show large regions that are  much more robust: there is a whole region of neighborhood sizes such that the test is quite significant.  
 
-% Moreover, that the local tests performs optimally with approximately 30 neighbors suggests that these data have multiple cohorts, for which the dependence structure likely differs.  
 
 
 A primary goal of statistical analysis and modeling is to suggest the next experiment or analysis.  For all three of the above investigations, \Mgc~not only found dependence, but also indicated the scales of dependence.  
-% Specifically \Mgc~provided the scales for which the dependence is strongest.  
 Thus, to further investigate these datasets---for example, to build a brain-based assay for any of these mental properties---we would start by breaking the data into multiple cohorts, whose sizes correspond to the optimal scales detected here.  Without \Mgc, there would be no dependence test-based justification for any subsequent step.
 % * <stefaniejacinto@gmail.com> 2016-08-17T05:40:52.314Z:
 %
@@ -657,13 +618,6 @@ Thus, to further investigate these datasets---for example, to build a brain-base
 \subsubsection*{Sample \Mgc~Does Not Inflate False Positive Rates} %: Brain Activity vs. Noise}
 
 In the last experiment, sample \Mgc~is applied to test independence between brain voxel activities and a non-existent stimulus, similar to a pair of studies led by Eklund  \cite{EklundKnutsson2012,Eklund2015}. We considered $25$ resting state fMRI data sets from the 1000 functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of $1$,$583$ subjects.
-% * <stefaniejacinto@gmail.com> 2016-08-17T05:43:23.339Z:
-%
-% > a non-existent stimulus
-%
-% Added an "a" here. But if this was supposed to be plural, remove the "a" and change "stimulus" to "stimuli".
-%
-% ^.
 We used CPAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time series data containing $200$ regions of interest for $200$ time-steps.
 % * <stefaniejacinto@gmail.com> 2016-08-17T05:49:41.611Z:
 %
@@ -672,6 +626,7 @@ We used CPAC to estimate regional time-series, in particular, using the sequence
 % I'm not familiar with the term "time-steps". Is this just another word for a time interval?
 %
 % ^.
+% \sd{kinda, it is a pretty common term i think in time-series analysis.  when time is discretized, a time-step is one of the intervals.}
 We then also generate an independent stimulus  by sampling from a standard normal distribution at each time step.  Of course, the brain activity data and the stimuli are independent by construction.
 For each brain region, we test: ``Is activity of that  brain region independent of the time-varying stimuli?'' We pool brain activity over all of the samples from the population.
 Any regions that are detected significant are false positives by definition.  By testing each brain region separately, we obtain a distribution of false positive rates.  If our test is unbiased, that distribution should be centered around the significance level, which we set at $0.05$ for this experiment.
@@ -694,16 +649,7 @@ In contrast,  standard methods for fMRI analysis, such as generalized linear mod
 \label{conclu}
 
 We propose multiscale generalized correlation (\Mgc) to discover the presence and scales of dependence between multiple measurement types or modalities.
-We demonstrate via simulations that \Mgc~performs well empirically regardless of the nonlinearity, dimension, or sample size.  Moreover, in addition to a valid p-value, \Mgc~provides a map enoding which scales contain the dependence structure. We then prove that \Mgc~dominates global generalized correlation coefficients in finite samples.
-% * <stefaniejacinto@gmail.com> 2016-08-17T05:55:44.925Z:
-%
-% > enoding
-%
-% showing? encoding? please confirm
-%
-% ^.
-% , the first finite sample theorems for dependence testing that we are aware of.  
- % achieves optimal power asymptotically no matter what the dependence structure is.  
+We demonstrate via simulations that \Mgc~performs well empirically regardless of the nonlinearity, dimension, or sample size.  Moreover, in addition to a valid p-value, \Mgc~provides a map encoding which scales contain the dependence structure. We then prove that \Mgc~dominates global generalized correlation coefficients in finite samples.
 In real data experiments, \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeeded, and does not falsely detect signals when there are none.
 
 
@@ -711,17 +657,10 @@ Several other approaches to dependence detection are worth mentioning.
 First, a method closely related to distance correlation tests arising from the machine learning community is the kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and the energy statistics work \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we may be able to glean further insights by casting \Mgc~within the kernel framework. Specifically, more efficient tests using asymptotic null distribution approximations for our multiscale tests are possible.
 Second, Dumcke et al. \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support.
 Finally, Reshef et al. \cite{Reshef2011} is another dependence testing methodology, but does not perform as well as the methods compared in this manuscript's  benchmarks \cite{SimonTibshirani2012}, and is designed specifically for $1$-dimensional settings.
-% * <stefaniejacinto@gmail.com> 2016-08-17T06:00:07.399Z:
-%
-% > manuscript's
-%
-% Added " 's" here, please confirm this is what you meant
-%
-% ^.
+
 
  \Mgc~can be thought of as a regularized, or sparsified variant of generalized correlation coefficients.  Regularization is central to high-dimensional and ill-posed problems, where dimensionality is larger than sample size.  Thus, it is not surprising that regularizing interpoint comparison matrices yields improved performance.  This connection, however, between dependence testing and regularization is apparently novel.  It opens the door towards considering other regularization techniques for both generalized correlation based dependence testing, and other testing approaches such as \Hhg. In particular, \Hhg~can be thought of as averaging over all scales, rather than regularizing to only consider the optimal ones.  Therefore, we suspect that this idea could immediately impact other statistical testing frameworks.
 
-% \jv{perhaps mention our guess that HHG is averaging across all ranks?}
 
 
 There are a number of additional potential extensions of this work.  First, theoretical guidance for choosing the optimal scale for finite samples  in the absence of training data, would be desirable. 
@@ -1078,7 +1017,7 @@ In this section we elaborate on the algorithms for computing local correlation a
 Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. 
 Algorithm~\ref{alg:power} estimates the testing powers of all local statistics using a known or estimated joint distribution, which can be used to accurately estimate the optimal scales and the testing power for \Mgc. 
-Algorithm~\ref{alg:best_scale} approximates the optimal scales for \Mgc~by finding the largest rectangular region of scales with smooth p-values, searching for the \Mgc~p-value within the region, and outputting the largest rectangle with same or less p-values within the region for the sample \Mgc. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
+Algorithm~\ref{alg:best_scale} approximates the optimal scales and p-value for sample \Mgc~by finding a smooth region of the p-value map, searching for the \Mgc~p-value within the smooth region, and outputting the largest smooth rectangle with same or less p-values as the optimal scale if and only if the area is large enough. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -1192,22 +1131,23 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Optimal Local Scales Approximation by P-values. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly take the global p-value for \Mgc. Otherwise we verify the smoothness of the p-value map as follows: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Repeat it for decreasing / increasing p-values within each row / column, and take the largest rectangle among the four possible smoothness. If the area of the rectangle is larger than $\gamma$, we take a small p-value within the smooth region; otherwise we let the p-value equal $0.5$. The running time is $O(n^2)$.}
+\caption{Optimal Local Scales Approximation by P-values. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly take the global p-value for \Mgc. Otherwise we locate a smooth region of the p-value map as follows: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it for decreasing / increasing p-values within each row / column, combine all four smooth areas, and locate the largest rectangle region with all p-values less than $0.5$ inside the combination. If the area of the verified smooth region is larger than $\gamma$, we take a small p-value within the region as the p-value for sample \Mgc, and use the largest rectangle that is bounded above by the \Mgc~p-value within the smooth region as the optimal scale. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P$}
 \State $p \rto 0.5$ \Comment{default p-value}
-\State $\gamma \rto 0.04$ \Comment{threshold to check significant global p-value and significant region}
+\State $\gamma \rto 0.05$ \Comment{threshold to check significant global p-value and significant region}
 \If{$\sum (P<P[n,n])/n^2<\gamma$} 
 \State $p \rto P[n,n]$ \Comment{use the global p-value when it is small enough}
-\State $[k^{*},l^{*}] \rto [n,n]$
+\State $[k^{*},l^{*}] = \textsc{LargestRectangle}(P\leq p)$
 \Else
-\State $R=\textsc{SmoothRegion}(P,\tau)$ \Comment{smooth region within p-value map}
-\If{$\frac{\sum R}{(n-1)^2}>\gamma$} \Comment{search the p-value if the region is larger enough}
-\State $p = \textsc{Prctile}(P(R), \frac{\gamma(n-1)^2}{\sum R})$ \Comment{selects the top small p-value within the region}
-\State $[k^{*},l^{*}] = \textsc{LargestRectangle}((R==1)\& (P\leq p))$
+\State $R=\textsc{SmoothRegion}(P,\tau)$ \Comment{the smooth region within p-value map}
+\State $\mu \rto \sum_{k,l} R_{kl} /(n-1)^2$ \Comment{the area of the smooth region}
+\If{$\mu>\gamma$} \Comment{check if the smooth area is large enough}
+\State $p = \textsc{Prctile}(P(R), \gamma / \mu)$ \Comment{get the \Mgc~p-value by percentile}
+\State $[k^{*},l^{*}] = \textsc{LargestRectangle}((R==1)\& (P\leq p))$ \Comment{the optimal scale}
 \EndIf
 \EndIf
 \EndFunction
@@ -1221,11 +1161,12 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $\tau \rto 0.005$ \Comment{the threshold to check smoothness}
 \State $P = \textsc{Diff}(P)$ \Comment{p-value difference of adjacent scales within row}
 \State $P^{'} = \textsc{Diff}(P^{T})$ \Comment{p-value difference of adjacent scales within column}
-\State $R^{1} = \textsc{LargestRectangle}(P<\tau)$ \Comment{largest rectangle with decreasing trend within row} 
-\State $R^{2} = \textsc{LargestRectangle}(P>-\tau)$ \Comment{largest rectangle with increasing trend within row} 
-\State $R^{3} = \textsc{LargestRectangle}(P^{'}<\tau)$
+\State $R^{1} = \textsc{LargestRectangle}(P<\tau)$ \Comment{largest smooth rectangle with decreasing trend} 
+\State $R^{2} = \textsc{LargestRectangle}(P>-\tau)$ \Comment{largest smooth rectangle with increasing trend} 
+\State $R^{3} = \textsc{LargestRectangle}(P^{'}<\tau)$ \Comment{repeat for columns changes}
 \State $R^{4} = \textsc{LargestRectangle}(P^{'}>-\tau)$
-\State $R = \max_{i}\{\sum_{k,l}{R^{i}_{kl}}, i=1,\ldots,4\}$ \Comment{use the largest region}
+\State $R = (R^{1} \mbox{ or } R^{2} \mbox{ or } R^{3} \mbox{ or } R^{4})$ \Comment{combine all smooth rectangles}
+\State $R = \textsc{LargestRectangle}((R==1)\&(P<0.5))$ \Comment{the verified smooth region}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}

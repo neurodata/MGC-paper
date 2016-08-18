@@ -296,11 +296,10 @@ When the underlying joint distribution is known (as in simulations), ``Oracle \M
 %
 % ^.
 
-The fifth step is to estimate the optimal scales and report the corresponding p-value.
-\Mgc~uses the smoothness of these maps to conduct efficient and valid searches.
-Specifically, \Mgc~looks for the largest rectangular region of smooth p-values.
-All consecutive scales within the smooth region having the same or smaller p-values are the estimated optimal scales (Algorithm \ref{alg:best_scale}), and the maximum p-value within that region is the p-value.
+The fifth step is to estimate the optimal scales and report the corresponding p-value. For ``Oracle \Mgc'' the optimal scale can be easily selected by maximizing the power map, while ``sample \Mgc'' uses the smoothness of the p-value map to conduct efficient and valid searches.
+Specifically, sample \Mgc~looks for a consecutive region of smooth p-values, finds a small p-value within the smooth region, and identifies the largest rectangle bounded by the p-value within the smooth region as the estimated optimal scales (Algorithm \ref{alg:best_scale}).
 It is important to note that when searching over multiple hyper-parameters, one is in danger of inducing bias or over-fitting.  We mitigate these issues by ensuring that the region is smooth and sufficiently large, so that it is  highly unlikely to have arisen solely from noise, and only searching over a small number of hyper-parameters  (Supplementary Figure \ref{f:simPerm}).
+\jv{shall we define sample mgc here? As the fifth step in fact is for sample mgc. So I rephrased the above paragraph.}
 
 
 \begin{figure}[htbp]
@@ -378,7 +377,7 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDPower}
-\caption{Powers of \Mcorr, \Hhg, and oracle \Mgc~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  
+\caption{Powers of \Mcorr, \Hhg, and Oracle \Mgc~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  
 Each panel shows empirical testing power at a significance level $\alpha=0.05$
 versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Appendix \ref{appen:function} for details). 
 Excluding the independent clouds (setting 20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state of the art method, for almost all settings and all dimensions. 
@@ -388,7 +387,7 @@ Excluding the independent clouds (setting 20), for which all methods yield power
 
 Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare   \Mgc~with two previously proposed state of the art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
 %
-The advantage of oracle \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~for all dimensionalities.  For the remaining nonlinear dependencies, \Mgc~achieves power levels that are superior to that of \Hhg~and \Mcorr~for almost all functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected.
+The advantage of Oracle \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~for all dimensionalities.  For the remaining nonlinear dependencies, \Mgc~achieves power levels that are superior to that of \Hhg~and \Mcorr~for almost all functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected.
 More exhaustive benchmark experiments, including focusing on the one-dimensional scenarios,
 in which we also compare to \Mantel~and \Dcorr, 
 as well as our  multiscale variants of both \Mantel~and \Dcorr, 
@@ -409,7 +408,7 @@ Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlati
 % ^.
 Figure \ref{f:simPerm} shows the distribution of powers for the 20 different simulation settings, for both one-dimensional and high-dimensional cases, comparing power estimated using p-value maps, rather than power maps.  
 % using the true \Mgc~power, the \Mgc~power estimated via our p-value neighborhood search, as well as \Mcorr~and \Hhg~for reference. 
-Even when estimating the optimal scales via p-value maps, the sample \Mgc~achieves higher power than \Mcorr~and \Hhg~in nearly all settings, often very close to the power of Oracle \Mgc,  especially high-dimensional ones (see Appendix~\ref{appen:figs}).
+Even when estimating the optimal scales via p-value maps, the sample \Mgc~achieves equivalent or higher power than \Mcorr~and \Hhg~in nearly all settings, and is often very close to the power of Oracle \Mgc~(see Appendix~\ref{appen:figs}).
 
 
 
@@ -417,7 +416,7 @@ Even when estimating the optimal scales via p-value maps, the sample \Mgc~achiev
   \centering
   \includegraphics[width=1.0\textwidth]{Figures/FigSlope}
   \caption{
-Average power slopegraphs comparing tests by global correlation and the respective oracle \Mgc.  Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulations 1-5 and  20. 
+Average power slopegraphs comparing tests by global correlation and the respective Oracle \Mgc.  Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for simulations 1-5 and  20. 
 % * <stefaniejacinto@gmail.com> 2016-08-16T05:35:47.568Z:
 %
 % > powers
@@ -452,19 +451,19 @@ Figure~\ref{f:powermaps} provides the multiscale power maps for all 20 different
 % They are plotted at a fixed sample size and a fixed dimension by the same power thresholds as in Figure~\ref{fig:pp}A and C.
 % 
 % The multiscale power map sheds light into the intrinsic dependency structure.
-For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), oracle \Mgc~chooses smaller scales for $x$ or $y$.
+For nearly linear dependencies (1-5), the best neighborhood choice is always the largest scale, i.e., $k=l=n$. For all strongly nonlinear dependencies (6-19), Oracle \Mgc~chooses smaller scales for $x$ or $y$.
 % in a distribution dependent fashion. 
 Furthermore, similar dependencies have similar local correlation structure, and thus similar optimal scales. For example, (9) and (10), though very different functions analytically, are qualitatively similar, and yield very similar multiscale power maps.
 % settings (6), (7), and (8) are all polynomials of degree 2 with different coefficients, and their power maps are  similar to each other. 
 Similarly,  (16) and (17) are trigonometric functions, and they share a narrow range of significant local correlations.
 And both circle (11) and ellipse (12), as well as square (14) and diamond (15), are closely related functions, and have similar multiscale power maps.
 % 
-Note that for all simulations, there always exists a consecutive region of local scales that are equally significant, which is an important observation that we use to approximate the optimal scales of sample \Mgc~by the p-value map for data of unknown distribution.
+Note that for all simulations, there always exists a consecutive region of local scales that are equally significant in the power map, which is an important observation that we use to approximate the optimal scales of sample \Mgc~by smooth regions in the p-value map.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
-For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively. For each simulation, the sample size is $n=100$,  and the dimension is determined by the largest dimension for oracle \Mgc~to have power exceeding $0.5$ at significance level  $0.05$. Each simulation yields a different multiscale power map, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure  (see Appendix~\ref{appen:mgc} for details).}
+For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively. For each simulation, the sample size is $n=100$,  and the dimension is determined by the largest dimension for Oracle \Mgc~to have power exceeding $0.5$ at significance level  $0.05$. Each simulation yields a different multiscale power map, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure  (see Appendix~\ref{appen:mgc} for details).}
 \label{f:powermaps}
 \end{figure}
 
@@ -846,7 +845,7 @@ Each panel shows empirical testing power on the abscissa at a significance level
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDPowerAll}
 \caption{
-Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Note that oracle \Mgc~dominates the other approaches by always being as powerful or more so, regardless of dimensionality and distribution. \Mgc~is always plotted ``on top'' of the global variants, therefore, some of the global variants are not always visible from the display.}
+Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Note that Oracle \Mgc~dominates the other approaches by always being as powerful or more so, regardless of dimensionality and distribution. \Mgc~is always plotted ``on top'' of the global variants, therefore, some of the global variants are not always visible from the display.}
 \label{f:nDAll}
 \end{figure}
 
@@ -865,7 +864,7 @@ Same as Figure~\ref{f:nD} in main text, but with all seven methods compared. Not
     \subfigimg[width=\linewidth]{B}{Figures/FigHDPerm}
   \end{tabular}
 \caption{%
-Comparing the sample \Mgc~powers to the powers of oracle \Mgc, \Mcorr, and \Hhg, for all one-dimensional and high-dimensional simulations except the independent clouds. We plot the power difference between each of oracle \Mgc, \Mcorr, and \Hhg, to the sample \Mgc. Thus, values larger than zero indicate \emph{better}  than \Mgc~power estimated from p-value maps as we do for real data, and values smaller than zero indicate \emph{worse}.
+Comparing the sample \Mgc~powers to the powers of Oracle \Mgc, \Mcorr, and \Hhg, for all one-dimensional and high-dimensional simulations except the independent clouds. We plot the power difference between each of Oracle \Mgc, \Mcorr, and \Hhg, to the sample \Mgc. Thus, values larger than zero indicate \emph{better}  than \Mgc~power estimated from p-value maps as we do for real data, and values smaller than zero indicate \emph{worse}.
 (A) One-dimensional simulations, where $n=60$ and $D=1$.
 (B) High-dimensional simulations, where $n=100$ and the dimension is chosen as in Figure~\ref{f:powermaps}.
 While sometimes less than the optimal \Mgc~powers computed from multiscale power maps, sample \Mgc~powers estimated from the p-value maps still dominate  \Mcorr~and often improve upon \Hhg's powers for most settings.}
@@ -1007,7 +1006,7 @@ In this section we elaborate on the algorithms for computing local correlation a
 Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. 
 Algorithm~\ref{alg:power} estimates the testing powers of all local statistics using a known or estimated joint distribution, which can be used to accurately estimate the optimal scales and the testing power for \Mgc. 
-Algorithm~\ref{alg:best_scale} approximates the optimal scales and p-value for sample \Mgc~by finding a smooth region of the p-value map, searching for the \Mgc~p-value within the smooth region, and outputting the largest smooth rectangle with same or less p-values as the optimal scale if and only if the area is large enough. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
+Algorithm~\ref{alg:best_scale} approximates the optimal scales and p-value for sample \Mgc~by finding a smooth region of the p-value map, searching for the \Mgc~p-value within the smooth region, and outputting the largest smooth rectangle with same or less p-values as the optimal scale if and only if the smooth region is large enough. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -1127,7 +1126,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P$}
-\State $p \rto 0.5$ \Comment{default p-value}
+\State $p \rto 1$ \Comment{default p-value to maximal}
 \State $\gamma \rto 0.05$ \Comment{threshold to check significant global p-value and significant region}
 \State $R=\textsc{SmoothRegion}(P,\tau)$ \Comment{the smooth region within the p-value map}
 \If{$\sum (P<P[n,n])/n^2<\gamma$} \Comment{use the global p-value when it is small enough}
@@ -1166,9 +1165,9 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{appen:diss}
 Evaluating \Mgc~requires estimating the optimal scales. Algorithm~\ref{alg:power} is used whenever the true distribution of the data in known or easy to estimate or multiple training data are available, which yields the oracl \Mgc. Otherwise, we shall approximate the optimal scale by Algorithm~\ref{alg:best_scale}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
-On the other hand, the target of sample \Mgc~is to achieve similar powers as oracle \Mgc, as well as minimizing bias from noisy p-value. To achieve so, Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and take a small p-value within the smooth region or the global p-value when it is small enough. The parameter $\gamma$ is an important threshold to combat the bias and identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Increasing or decreasing the parameter $\tau$ has the same effect as $\gamma$ to a much lesser extent, and a small positive number generally suffices to negate noisy changes. Empirically, our choice of parameters achieve good testing power with minimal bias.
+On the other hand, the target of sample \Mgc~is to achieve similar powers as Oracle \Mgc, as well as minimizing bias from noisy p-value. To achieve so, Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and takes a small p-value within the smooth region if the region is large enough, or directly takes the global p-value when it is small enough. The parameter $\gamma$ is an important threshold to combat the bias and identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Increasing or decreasing the parameter $\tau$ has the same effect as $\gamma$ to a much lesser extent, and a small positive number generally suffices to negate noisy changes. Empirically, our choice of parameters achieve good testing power with minimal bias.
 
-As Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, it does not guarantee the true optimal local correlation to be always correctly identified. To better justify Algorithm~\ref{alg:best_scale}, we compare the sample \Mgc~power by Algorithm~\ref{alg:best_scale} to the oracle \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $20$ dependencies (except the last independent cloud) described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($38$ settings overall), and calculate all local p-values using $1$,$000$ random permutations. 
+As Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, it does not guarantee the true optimal local correlation to be always correctly identified. To better justify Algorithm~\ref{alg:best_scale}, we compare the sample \Mgc~power by Algorithm~\ref{alg:best_scale} to the Oracle \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $19$ dependencies (function $20$ excluded) described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($38$ functions overall), and calculate all local p-values using $1$,$000$ random permutations. 
 % By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using 
 We obtain the true optimal scale for \Mgc~using the approach in Algorithm \ref{alg:power}, and the estimated scale using the approximation described in Algorithm \ref{alg:pval}.  
 % Algorithm~\ref{alg:best_scale} approximates the optimal scale in each setting.
@@ -1176,16 +1175,13 @@ We obtain the true optimal scale for \Mgc~using the approach in Algorithm \ref{a
 % and the p-values of global \Mcorr~and \Hhg~can also be derived. 
 The null is rejected when the p-value is less than $\alpha=0.05$, and the power equals the percentage of correct rejection. 
 
-Figure~\ref{f:simPerm} shows the power differences between each of true \Mgc, \Mcorr, and \Hhg~to the estimated \Mgc. True \Mgc~powers are sometimes better than estimated \Mgc~powers, though often the estimated power is nearly as good as the optimal.  Moreover,  estimated \Mgc~dominates \Mcorr~(is never worse and is often better), and typically has similar or higher power than \Hhg, especially in the high-dimensional settings. Specifically, the estimated \Mgc~is only inferior to the true \Mgc~when the true optimal scale has a narrow region (i.e., function 16, 17, see Figure~\ref{f:powermaps} and ~\ref{f:powermaps1}), but it is still significantly better than all other methods. %\Hhg~is better than true \Mgc~only for function 18 in hd simulations, so estimated \Mgc is inferior for that one point. 
-In general, optimal local correlations limited to a small region is difficult to identify without training data or knowing the joint distribution, as they can also occur from a pair of independently generated data by chance; but otherwise the sample \Mgc~by Algorithm~\ref{alg:best_scale} is excellent in uncovering the local dependency and very close to the oracle \Mgc. 
+Figure~\ref{f:simPerm} shows the power differences between each of Oracle \Mgc, \Mcorr, and \Hhg~to the sample \Mgc~by algorithm~\ref{alg:best_scale}. Oracle \Mgc~powers are better than the sample \Mgc~powers, though they are often very close. Moreover, sample \Mgc~is significantly better than all other methods, i.e., it dominates global \Mcorr, and almost dominates \Hhg~except function $18$ in the high-dimensional setting (for which the discrepancy is due to Oracle \Mgc, see Figure~\ref{f:nD}). 
 
-% : the estimated \Mgc~is always better than \Mcorr as expected, and is overall superior to \Hhg most of the time.
+We observe that the sample \Mgc~is only significantly inferior to the Oracle \Mgc~when the true optimal scale has a narrow region (i.e., function $16$ and $17$ in both settings, plus function $9$ and $10$ in the high-dimensional setting, see Figure~\ref{f:powermaps} and ~\ref{f:powermaps1}), but otherwise very similar. Optimal scales limited to a narrow region are actually purposely excluded by algorithm~\ref{alg:best_scale} using $\gamma=0.05$, and a smaller $\gamma$ can recover such narrow regions and increase the power of sample \Mgc. However, narrow smooth regions may also occur from a pair of independently generated data by chance, so a reasonable $\gamma$ is necessary to keep the bias minimized, and one should not trust narrow smooth regions without training data or knowing the joint distribution.
 
-Note that it is tempting to directly use the scale that minimizes all local p-values without the validation by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches are heavily biased due to noisy p-values, such that the false positive rate is often higher than the type $1$ error in the absence of dependency. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. 
- % for given data, a non-optimal scale can happen to have a significant p-value, which may be falsely identified as optimal if we directly minimize all local p-values. 
-Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate bias as much as our proposed strategy. 
+Note that it is tempting to directly use the scale that minimizes all local p-values without the validation by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches are heavily biased due to noisy p-values, such that the false positive rate is often higher than the type $1$ error in the absence of dependency. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate bias as much as our proposed strategy. 
 
-Our proposed algorithm not only attains decent testing power, but also has negligible bias as seen from the independent simulation and the real data experiments.
+Overall, our proposed algorithm not only attains decent testing power for sample \Mgc, but also has negligible bias as seen from the independent simulation and the real data experiments.
 Still, more investigations into the bias and better methods for searching the optimal scales will be worthwhile, to establish some theoretical supports for the current heuristic approach.
 
 %This problem does not exist, if we know the underlying true model, or has multiple pairs of training data from the same model that are independent of the testing pair. In case of a known model, we already showed in the simulations that the theoretical \Mgc~power can be achieved without any inflation of the false positive rate, once an optimal scale is determined. Alternatively, if additional data are available, or the full data set is too large such that sub-sampling is necessary for data analysis, we can use / sub-sample multiple training data for optimal scale estimation based on maximizing the sum of p-values of all local correlations, then use the optimal scale on the testing data for p-value calculation; the alternative approach also achieve the theoretical \Mgc~power without bias.
@@ -1193,8 +1189,8 @@ Still, more investigations into the bias and better methods for searching the op
 \section{Proofs}
 \label{appen:proofs}
 \begin{appThm}
-$\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$.
-In words, oracle \Mgc~is consistent against all dependent alternatives for which its global counterpart is. 
+$\beta_n(\G_t^*) \rightarrow 1$ as $n \to \infty$ for all $f_{xy}$ in $\mc{F}_t$.
+In words, Oracle \Mgc~is consistent against all dependent alternatives for which its global counterpart is. 
 \end{appThm}
 \begin{proof}
 Define $\beta(\G^{*})=\underset{kl}{\max}\{\beta(\G^{kl})\}$. Therefore, for any $f_{xy}$, the power of multiscale generalized correlation satisfies
@@ -1207,13 +1203,11 @@ Therefore $\beta(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In parti
 \end{proof}
 
 \begin{appThm}
-\label{at:linear}
-If $\mb{x}$ is linearly dependent on $\mb{y}$, so $\mb{x} \propto \mb{y}$, then for any $n$ it always holds that
-\begin{equation*}
-\beta(\G^{*}) = \beta(\G).
-\end{equation*}
-
-Thus the optimal scale for oracle \Mgc~is the global scale for linearly dependent data.
+If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
+\begin{equation}
+\beta(\G^{*}_t) = \beta(\G_t).
+\end{equation}
+In words, the optimal scale for Oracle \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
 
 \begin{proof}
@@ -1236,11 +1230,10 @@ Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equa
 
 \begin{appThm}
 There exists $f_{xy}$ and $n$ such that
-\begin{equation*}
-\beta(\G^{*}_{t}) > \beta(\G_{t}).
-\end{equation*}
-
-Thus multiscale generalized correlation can be better than its global correlation coefficient under certain nonlinear dependency, for finite sample.
+\begin{equation}
+\beta_n(\G^{*}_{t}) \geq \beta_n(\G^{k,l}_{t}) > \beta_n(\G_{t}).
+\end{equation}
+In words, for finite samples, many different scales of \Mgc~can be better than the global scale under certain nonlinear dependency.
 \end{appThm}
 
 \begin{proof}

@@ -13,15 +13,13 @@ if nargin<3
     thres2=0.005; % the threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
-lim=[2,2]; % the minimal size of a rectangle
 thres=max(1/min(m,n),thres); % in case sample size is too small, increase threshold
 
 % default p-value
 p=1;
 indAll=1;
 
-R=SmoothRegion(P,thres2,lim); % find the largest smooth region in the p-value map
-
+R=SmoothRegion(P,thres2); % find the largest smooth region in the p-value map
 % directly use the global p-value if it is among the top thres% of all local p-values
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
@@ -37,18 +35,19 @@ end
 
 % the largest rectangle within the smooth region bounded by the
 % p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],lim);
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1]);
 if sum(sum(R(2:end,2:end)))>0
     indAll=find(R==1);
 end
 
-function R=SmoothRegion(P,thres,lim)
+function R=SmoothRegion(P,thres)
 % Find the largest smooth rectangular region in the p-value map, by considering the
 % largest monotonically decreasing or increasing rectangular region along
 % the row or column p-values, but allowing small p-value increase or
 % decrease as specified by thres. Then further require all p-values in the smooth region
 % to be less than 0.5.
 [m,n]=size(P);
+
 PD=cell(2,1);
 PD{1}=zeros(m,n); % store the difference within rows
 PD{2}=zeros(m,n); % store the difference within columns
@@ -70,8 +69,8 @@ RC{3}=(PD{2}<thres); % repeat for column changes
 RC{4}=(PD{2}>-thres); 
                 
 for i=1:4
-    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i}, [0 0 1],lim); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
+    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i}, [0 0 1]); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
     R=(R==1) | (RC{i}==1); % combine the four rectangular regions
 end
 
-[~,~,~,R]=FindLargestRectangles((R==1) & (P<0.5), [0 0 1],lim); % in the smooth region, find the largest rectangle with all p-values less than 0.5
+[~,~,~,R]=FindLargestRectangles((R==1) & (P<0.5), [0 0 1]); % in the smooth region, find the largest rectangle with all p-values less than 0.5

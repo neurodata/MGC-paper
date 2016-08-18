@@ -1,11 +1,11 @@
 function [p,indAll]=MGCScaleVerify(P,thres,thres2)
 % Author: Cencheng Shen
-% This function approximates the optimal scale and p-value of MGC based
-% on the p-values of all local correlations. 
-% The global p-value is used directly if it is small enough among all local
-% p-values, otherwise the algorithm looks for a sufficiently large and smooth region in the
-% p-value map and approximate the MGC p-value from the smooth region.
-% The smooth rectangle that is bounded by the MGC p-value is taken as the optimal scales. 
+% This function approximates the p-value and the optimal scale for sample MGC, 
+% based on the p-values of all local correlations. 
+% The algorithm first looks for a smooth region in the p-value map.
+% Then it takes the global p-value directly f it is small enough among all local p-values, 
+% otherwise it checks whether the smooth region is large enough and approximate the MGC p-value from the smooth region instead.
+% At last, the smooth rectangle that is bounded by the sample MGC p-value is taken as the optimal scales. 
 if nargin<2
     thres=0.05; % The threshold is used to: determine if the global p-value is significant enough, and determine if the rectangular area is significant enough
 end
@@ -14,43 +14,44 @@ if nargin<3
 end
 [m,n]=size(P);
 lim=[2,2]; % The minimal size of a rectangle
+thres=max(1/min(m,n),thres); % in case sample size is too small, increase threshold
 
-thres=max(1/min(m,n),thres);
-
-% default p-value and optimal scale
+% default p-value
 p=0.5;
-indAll=1;
+indAll=[];
 
 warning('off','all');
+R=SmoothRegion(P,thres2,lim); % Find the largest smooth region in the p-value map
+
 % Directly use the global p-value if it is among the top thres% of all local p-values
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
-    % Identify optimal scales
-    [~, ~, ~, R]=FindLargestRectangles((P<=p), [0 0 1],lim);
-    if sum(sum(R(2:end,2:end)))>=lim(1)*lim(2)
-        indAll=find(R==1);
-    else
-        indAll=m*n;
-    end
+    indAll=m*n;
 else
-    R=SmoothRegion(P,thres2,lim); % Find the largest smooth region in the p-value map
-    
     tmp=mean(mean(R(2:end,2:end)));
-    % Take the smooth region if and only if the area is larger than the threshold
+    % Approximate MGC p-value from the smooth region if and only if the region area is larger than the threshold
     if tmp>thres
         % Select a top p-value in the region based on thres and the area of the region.
         % Alternatively, one can go through a list of candidate p-values, or the significance level alpha
         p=prctile(P(R), min(ceil(thres/tmp*100),100));
 
-        % Find the largest rectangle within the smooth region that are
-        % covered by the candidate p-value
-        [~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],lim);
-        indAll=find(R==1);
 %         if p<0.05
 %             tmp
 %             p
 %             P(end)
 %         end
+    end
+end
+
+% The largest rectangle within the smooth region bounded by the
+% p-value is taken as the optimal scale
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],lim);
+if sum(sum(R(2:end,2:end)))>0
+    indAll=find(R==1);
+else
+    if isempty(indAll)
+        p=0.5;
+        indAll=1;
     end
 end
 %                     figure

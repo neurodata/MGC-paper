@@ -32,9 +32,9 @@ switch type
     case 15
         titlechar=' 15.Diamond';
     case 16
-        titlechar=' 16.Sine Period 4 pi';
+        titlechar=' 16.Sine Period 4 \pi';
     case 17
-        titlechar=' 17.Sine Period 16 pi';
+        titlechar=' 17.Sine Period 16 \pi';
     case 18
         titlechar=' 18.Multiplicative Noise';
     case 19

@@ -46,6 +46,7 @@ for tt=type
     if dim==1
         filename=strcat(pre1,'CorrIndTestType',num2str(tt),'N',num2str(100),'Dim',num2str(dim));
         load(filename,'neighborhoods','numRange','power1All','power2All','power3All','power1','power2','power3','power7');
+        filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'Dim',num2str(dim));
         if thres<=1
         ind=[find(max(power2,[],1)>=thres,1) length(numRange)];
         else
@@ -65,6 +66,7 @@ for tt=type
     else
         filename=strcat(pre1,'CorrIndTestDimType',num2str(tt),'N',num2str(100),'Dim');
         load(filename,'neighborhoods','dimRange','power1All','power2All','power3All','power1','power2','power3','power7','lim');
+        filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'Dim',num2str(dim));
         if thres<=1
             ind=[find(power2>=thres,1,'last') 1];
         else
@@ -122,7 +124,6 @@ for tt=type
 end
 powerP(:,type)
 
-filename=strcat(pre1,'CorrSimPermScale',num2str(type(1)),'-',num2str(type(end)),'Dim',num2str(dim));
 save(filename,'powerP','rep1','rep2','dim','noise','alpha','thres');
 
 figure

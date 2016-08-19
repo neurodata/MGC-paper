@@ -95,10 +95,13 @@ for type=1:total
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     hold off
-    title(titlechar,'FontSize',14);
+    title(titlechar,'FontSize',14) %, ...
+%         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
+    set(gca,'box','off','ycolor','w','xcolor','w')
+
 end
-h=suptitle('Visualization for 20 Simulated Dependencies');
+h=suptitle('Simulated Example for 20 Dependencies');
 set(h,'FontSize',24,'FontWeight','normal');
 
 F.fname=[strcat(pre2, 'SimVisual')];

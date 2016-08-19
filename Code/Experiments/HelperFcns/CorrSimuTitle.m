@@ -2,43 +2,43 @@ function titlechar=CorrSimuTitle(type)
 %%%Used to call the character names of each dependency in the simulation
 switch type
     case 1
-        titlechar=' 1.Linear';
+        titlechar='1. Linear';
     case 2
-        titlechar=' 2.Cubic';
+        titlechar='2. Cubic';
     case 3
-        titlechar=' 3.Exponential';
+        titlechar='3. Exponential';
     case 4
-        titlechar=' 4.Step Function';
+        titlechar='4. Step Function';
     case 5
-        titlechar=' 5.Joint Normal';
+        titlechar='5. Joint Normal';
     case 6
-        titlechar=' 6.Quadratic';
+        titlechar='6. Quadratic';
     case 7
-        titlechar=' 7.W Shape';
+        titlechar='7. W Shape';
     case 8
-        titlechar=' 8.Two Parabolas';
+        titlechar='8. Two Parabolas';
     case 9
-        titlechar=' 9.Fourth Root';
+        titlechar='9. Fourth Root';
     case 10
-        titlechar=' 10.Logarithmic';
+        titlechar='10. Logarithmic';
     case 11
-        titlechar=' 11.Circle';
+        titlechar='11. Circle';
     case 12
-        titlechar=' 12.Ellipse';
+        titlechar='12. Ellipse';
     case 13
-        titlechar=' 13.Spiral';
+        titlechar='13. Spiral';
     case 14
-        titlechar=' 14.Square';
+        titlechar='14. Square';
     case 15
-        titlechar=' 15.Diamond';
+        titlechar='15. Diamond';
     case 16
-        titlechar=' 16.Sine Period 4 \pi';
+        titlechar='16. Sine Period 4\pi';
     case 17
-        titlechar=' 17.Sine Period 16 \pi';
+        titlechar='17. Sine Period 16\pi';
     case 18
-        titlechar=' 18.Multiplicative Noise';
+        titlechar='18. Multiplicative';
     case 19
-        titlechar=' 19.Uncorrelated Binomial';
+        titlechar='19. Binomial';
     case 20
-        titlechar=' 20.Independent Clouds';
+        titlechar='20. Independent';
 end

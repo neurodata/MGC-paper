@@ -63,7 +63,7 @@ for j=1:total
 end
 
 x=1:2;
-str={'Mantel';'Dcorr';'Mcorr'};
+str={'A. Mantel';'B. Dcorr';'C. Mcorr'};
 for j=1:3
     subplot(s,t,j);
     hold on
@@ -73,15 +73,16 @@ for j=1:3
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
+    set(gca,'XTick',[]); % Remove y axis ticks
+    set(gca,'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize);
     if j==1
         ylabel('1-Dimensional','FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
-        set(gca,'ycolor',[1 1 1])
+%         set(gca,'ycolor',[1 1 1])
     end
-    set(gca,'XTick',[]); % Remove y axis ticks
-    set(gca,'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize);
-    title(str(j,:),'FontSize',fontSize);
+    title(str(j,:),'FontSize',fontSize, ...
+        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     hold off
 end
 
@@ -110,13 +111,13 @@ for j=1:3
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
+    set(gca,'XTickLabel',strL,'XTick',[1.15,1.87],'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize,'TickLength',[0 1]);
     if j==1
         ylabel('High-Dimensional','FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
-        set(gca,'ycolor',[1 1 1])
+%         set(gca,'ycolor',[1 1 1])
     end
-    set(gca,'XTickLabel',strL,'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize);
 %     title(str(j,:),'FontSize',32);
     hold off
 end

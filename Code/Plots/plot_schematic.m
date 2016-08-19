@@ -109,6 +109,7 @@ end
 tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
 tname=tname(findex+1:end);
+xlim([min(x)-0.2, max(x)]);
 
 % title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
 title([{'0. Sample Data'}], 'Units', 'normalized', ...
@@ -170,7 +171,7 @@ set(gca,'FontSize',16); % Remove y axis ticks
 xlabel('sample index','FontSize',fontSize, 'Units', 'normalized', ...
 'Position', [0 -0.15], 'HorizontalAlignment', 'left')
 ylabel('sample index','FontSize',fontSize, 'Units', 'normalized', ...
-'Position', [-0.3 0.72], 'VerticalAlignment', 'Top')
+'Position', [-0.3 0.3], 'VerticalAlignment', 'Top')
 % 'Position', [-0.2 -0.05], 'HorizontalAlignment', 'Left')
 text(24,53,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize, 'Units', 'normalized', ...
@@ -178,8 +179,8 @@ title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize, 'Un
 % title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
-set(gca,'XTick',[1,round(n/2),n]); % Remove x axis ticks
-set(gca,'YTick',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'XTick',[2,round(n/2),n],'XtickLabel',[1,round(n/2),n]); % Remove x axis ticks
+set(gca,'YTick',[2.5,round(n/2),n],'YtickLabel',[1,round(n/2),n]); % Remove x axis ticks
 
 % B Mantel
 % ax=subplot(s,t,t+2); 
@@ -331,10 +332,12 @@ h=colorbar('Ticks',[0,0.5,1]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
 xlim([1 n-1]);
 ylim([1 n-1]);
-set(gca,'XTick',[1,round(n/2)-1,n-1],'YTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 pos = get(ax,'position');
-xlabel('# of Neighbors for X','FontSize',fontSize)
-ylabel('# of Neighbors for Y','FontSize',fontSize) %,'Rotation',0,'position',[-7,20]);
+xlabel('# of X Neighbors','FontSize',fontSize, ...
+        'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
+ylabel('# of Y Neighbors','FontSize',fontSize, ...
+        'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
 text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
 text(19,55,'Power','FontSize',fontSize)
 axis('square')
@@ -434,7 +437,7 @@ else
 end
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob);
 b=text(x2,y2,txt2,'VerticalAlignment','middle','HorizontalAlignment','left','Color',loca);
-ylim([0 y1+25]);
+ylim([0 y1+10]);
 set(a,'FontSize',fontSize);
 set(b,'FontSize',fontSize);
 xlim([minp,maxp+0.04]);

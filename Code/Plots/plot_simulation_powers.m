@@ -83,12 +83,13 @@ for j=1:total
     end
     set(gca,'FontSize',14);
 %    set(gca,'XTickLabel','FontSize',16);
-    title(titlechar,'FontSize',14);
+    title(titlechar,'FontSize',14, ...
+        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
 end
 xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
 ylabel('Empirical Testing Power','position',[-687 2.7],'FontSize',24);
-h=suptitle('Testing Powers for 20 Simulated 1-Dimensional Settings');
+h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
@@ -147,13 +148,14 @@ for j=1:total
     end
     set(gca,'XTick',[numRange(1),numRange(end)]); % Remove x axis ticks
     set(gca,'FontSize',14);
-    title(titlechar,'FontSize',14);
+    title(titlechar,'FontSize',14, ...
+         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     %set(gca,'XTickLabel','FontSize',16);
     axis('square');
 end
 xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
 ylabel('Empirical Testing Power','position',[-720 2.7],'FontSize',24);
-h=suptitle('Testing Powers for 20 Simulated High-Dimensional Settings');
+h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;

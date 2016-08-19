@@ -73,7 +73,7 @@ for i=1:3
     xlabel(xlabs{i},'FontSize',fs, ...
        'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
     ylabel(ylabs{i},'FontSize',fs, ...
-        'Units', 'normalized','Position', [-0.13 0], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [-0.16 0], 'HorizontalAlignment', 'left')
     title(tits{i},'FontSize',fs+1, ...
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
@@ -99,6 +99,7 @@ for i=1:3
     hold off
     if i==1
         hc=colorbar('Ticks',log(cticks),'TickLabels',cticks,'location','westoutside','FontSize',fs+1);
+        title(hc,'p-value')
     end
 end
 
@@ -149,5 +150,5 @@ h=suptitle(strcat('Brain vs Mental Properties'));% for 1-Dimensional Simulations
 set(h,'FontSize',15,'FontWeight','normal');
         
 F.fname=pre2; %strcat(pre2, num2str(i));
-F.wh=[8 2];
+F.wh=[8.2 2.2];
 print_fig(gcf,F)

@@ -13,6 +13,7 @@ if nargin<3
     thres2=0.005; % the threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
+sz=[2,2]; % minimal rectangle size
 thres=max(1/min(m,n),thres); % in case sample size is too small, increase threshold
 
 % default p-value
@@ -35,7 +36,7 @@ end
 
 % the largest rectangle within the smooth region bounded by the
 % p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1]);
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],sz);
 if sum(sum(R(2:end,2:end)))>0
     indAll=find(R==1);
 end
@@ -47,6 +48,7 @@ function R=SmoothRegion(P,thres)
 % decrease as specified by thres. Then further require all p-values in the smooth region
 % to be less than 0.5.
 [m,n]=size(P);
+sz=[2,2]; % minimal rectangle size
 
 PD=cell(2,1);
 PD{1}=zeros(m,n); % store the difference within rows
@@ -69,8 +71,8 @@ RC{3}=(PD{2}<thres); % repeat for column changes
 RC{4}=(PD{2}>-thres); 
                 
 for i=1:4
-    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i}, [0 0 1]); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
+    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i}, [0 0 1],sz); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
     R=(R==1) | (RC{i}==1); % combine the four rectangular regions
 end
 
-[~,~,~,R]=FindLargestRectangles((R==1) & (P<0.5), [0 0 1]); % in the smooth region, find the largest rectangle with all p-values less than 0.5
+[~,~,~,R]=FindLargestRectangles((R==1) & (P<0.5), [0 0 1],sz); % in the smooth region, find the largest rectangle with all p-values less than 0.5

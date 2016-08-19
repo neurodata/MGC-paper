@@ -54,6 +54,7 @@ filename=strcat(pre1,fnames{2});
 load(filename);
 cmap2=flipud(map2);
 fs=8;
+cticks=[0.001, 0.01, 0.1, 0.5];
 
 for i=1:3
     filename=strcat(pre1,fnames{i});
@@ -62,21 +63,16 @@ for i=1:3
     
     subplot(1,4,i)
     hold on
-    kmin=2;
     imagesc(log(p2All'));
     set(gca,'YDir','normal')
     colormap(cmap2)
-    cticks=[0.001, 0.01, 0.1, 0.5];
-    if i==3
-        h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
-    end
     set(gca,'FontSize',fs-2);
     %     if i==3
     [n1,n2]=size(p2All);
-    xlabel(xlabs{i},'FontSize',fs, ...
-        'Units', 'normalized','Position', [-0.01, -0.07], 'HorizontalAlignment', 'left')
+    xlabel(xlabs{i},'FontSize',fs);% ...
+%        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
     ylabel(ylabs{i},'FontSize',fs, ...
-        'Units', 'normalized','Position', [-0.1 0], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [-0.13 0], 'HorizontalAlignment', 'left')
     title(tits{i},'FontSize',fs+2, ...
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
@@ -98,10 +94,12 @@ for i=1:3
     set(gca,'YTick',[3,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
     xlim([2,n1]);
     ylim([2,n2]);
+    axis('square');
     hold off
-    
+    if i==1
+        hc=colorbar('Ticks',log(cticks),'TickLabels',cticks,'location','westoutside','FontSize',fs+1);
+    end
 end
-
 
 % plot last figure
 load(strcat(pre1,'CorrBrainNoiseSummary.mat'));
@@ -125,23 +123,30 @@ for i=2:length(pv);
         ord(i)=ord(i-1)+0.4;
     end
 end
-plot(pv,ord,'.','MarkerSize',24);
+plot(pv,ord,'.','MarkerSize',12);
 xlim([0,0.15]);
 ylim([-1 15]);
-set(gca,'FontSize',fs);
+set(gca,'FontSize',fs-2);
 set(gca,'YTick',[]); % Remove y axis ticks
+axis('square');
 hold off
-xlabel('False Positive Rate','FontSize',fs, ...
-    'Units', 'normalized','Position', [-0.05, -0.05], 'HorizontalAlignment', 'left')
-ylabel('Density Function','FontSize',fs, ...
-    'Units', 'normalized','Position', [-0.1 0], 'HorizontalAlignment', 'left')
-title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
+xlabel('False Positive Rate','FontSize',fs)%, ...
+    %'Units', 'normalized','Position', [-0.05, -0.05], 'HorizontalAlignment', 'left')
+ylabel('Density Function','FontSize',fs)%, ...
+    %'Units', 'normalized','Position', [-0.1 0], 'HorizontalAlignment', 'left')
+% title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
+%     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
+title('D','FontSize',fs+2, ...
     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
 
 % F.fname=strcat(pre2, 'CORR');
 % F.wh=[3 2.5]*2;
 % print_fig(gcf,F)
+%colorbar()
 
+h=suptitle(strcat('Brain vs Mental Properties'));% for 1-Dimensional Simulations'));
+set(h,'FontSize',15,'FontWeight','normal');
+        
 F.fname=pre2; %strcat(pre2, num2str(i));
-F.wh=[8 1.5];
+F.wh=[8 2];
 print_fig(gcf,F)

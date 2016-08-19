@@ -1,8 +1,8 @@
 
-[powerP]=CorrSimPermTest(1:10,1,60,100,500,1,0.05)
-[powerP]=CorrSimPermTest(11:20,1,60,100,500,1,0.05)
-[powerP]=CorrSimPermTest(1:10,2,0.5,50,400,0,0.05)
-[powerP]=CorrSimPermTest(11:20,2,0.5,50,400,0,0.05)
+[powerP]=CorrSimPermTest(1:10,1,60,200,1000,1,0.05)
+[powerP]=CorrSimPermTest(11:20,1,60,200,1000,1,0.05)
+[powerP]=CorrSimPermTest(1:10,2,0.5,100,1000,0,0.05)
+[powerP]=CorrSimPermTest(11:20,2,0.5,100,1000,0,0.05)
 
 p=zeros(7,20);
 for i=1:5

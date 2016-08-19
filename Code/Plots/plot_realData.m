@@ -53,8 +53,9 @@ figure(1), clf, hold all
 filename=strcat(pre1,fnames{2});
 load(filename);
 cmap2=flipud(map2);
-fs=8;
+fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
+lw=2;
 
 for i=1:3
     filename=strcat(pre1,fnames{i});
@@ -66,14 +67,14 @@ for i=1:3
     imagesc(log(p2All'));
     set(gca,'YDir','normal')
     colormap(cmap2)
-    set(gca,'FontSize',fs-2);
+    set(gca,'FontSize',fs-1);
     %     if i==3
     [n1,n2]=size(p2All);
-    xlabel(xlabs{i},'FontSize',fs);% ...
-%        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
+    xlabel(xlabs{i},'FontSize',fs, ...
+       'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
     ylabel(ylabs{i},'FontSize',fs, ...
         'Units', 'normalized','Position', [-0.13 0], 'HorizontalAlignment', 'left')
-    title(tits{i},'FontSize',fs+2, ...
+    title(tits{i},'FontSize',fs+1, ...
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
     
@@ -84,10 +85,10 @@ for i=1:3
     Xmin=min(J);
     Xmax=max(J);
     
-    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',4)
-    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',4)
-    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',4)
-    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',4)
+    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
     xticks=[5,round(n1/2)-1,n1-1];
     if i==1,  xticks(1)=3; end
     set(gca,'XTick',xticks,'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
@@ -115,7 +116,7 @@ subplot(1,4,4)
 pv=p(:,2);
 [f,xi]=ksdensity(pv,'support',[0,1]);
 hold on
-plot(xi,f,'.-','LineWidth',4);
+plot(xi,f,'.-','LineWidth',lw);
 pv=sort(pv,'ascend');
 ord=0.01*ones(length(pv),1);
 for i=2:length(pv);
@@ -123,17 +124,17 @@ for i=2:length(pv);
         ord(i)=ord(i-1)+0.4;
     end
 end
-plot(pv,ord,'.','MarkerSize',12);
+plot(pv,ord,'.','MarkerSize',8);
 xlim([0,0.15]);
 ylim([-1 15]);
 set(gca,'FontSize',fs-2);
 set(gca,'YTick',[]); % Remove y axis ticks
 axis('square');
 hold off
-xlabel('False Positive Rate','FontSize',fs)%, ...
-    %'Units', 'normalized','Position', [-0.05, -0.05], 'HorizontalAlignment', 'left')
-ylabel('Density Function','FontSize',fs)%, ...
-    %'Units', 'normalized','Position', [-0.1 0], 'HorizontalAlignment', 'left')
+xlabel('False Positive Rate','FontSize',fs,...
+    'Units', 'normalized','Position', [-0.03, -0.12], 'HorizontalAlignment', 'left')
+ylabel('Density','FontSize',fs, ...
+    'Units', 'normalized','Position', [-0.05 0], 'HorizontalAlignment', 'left')
 % title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
 %     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
 title('D','FontSize',fs+2, ...

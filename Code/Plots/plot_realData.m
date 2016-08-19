@@ -126,7 +126,7 @@ for i=2:length(pv);
 end
 plot(pv,ord,'.','MarkerSize',8);
 xlim([0,0.15]);
-ylim([-1 15]);
+ylim([-1 max(f)+1]);
 set(gca,'FontSize',fs-2);
 set(gca,'YTick',[]); % Remove y axis ticks
 axis('square');

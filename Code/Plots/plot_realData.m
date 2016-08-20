@@ -79,7 +79,12 @@ for i=1:3
     
     
     [~,indP]=MGCScaleVerify(p2All');
-    [I,J]=ind2sub(size(p2All'),indP);
+    if indP(end)==size(p2All,1)*size(p2All,2)
+        indP2=indP(1:end-1);
+    else
+        indP2=indP;
+    end
+    [I,J]=ind2sub(size(p2All'),indP2);
     Ymin=min(I);
     Ymax=max(I);
     Xmin=min(J);
@@ -89,6 +94,9 @@ for i=1:3
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    if indP(end)==size(p2All,1)*size(p2All,2)
+        plot(size(p2All,1),size(p2All,2),'g.','markerSize',16)
+    end
     xticks=[5,round(n1/2)-1,n1-1];
     if i==1,  xticks(1)=3; end
     set(gca,'XTick',xticks,'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks

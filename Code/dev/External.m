@@ -1,22 +1,23 @@
+r1=200;rep=1000;
+[powerP]=CorrSimPermTest(1:10,1,60,r1,rep,1,0.05)
+[powerP]=CorrSimPermTest(11:20,1,60,r1,rep,1,0.05)
+r1=100;rep=1000;
+[powerP]=CorrSimPermTest(1:10,2,0.5,r1,rep,0,0.05)
+[powerP]=CorrSimPermTest(11:20,2,0.5,r1,rep,0,0.05)
 
-[powerP]=CorrSimPermTest(1:10,1,60,200,1000,1,0.05)
-[powerP]=CorrSimPermTest(11:20,1,60,200,1000,1,0.05)
-[powerP]=CorrSimPermTest(1:10,2,0.5,100,1000,0,0.05)
-[powerP]=CorrSimPermTest(11:20,2,0.5,100,1000,0,0.05)
-
-p=zeros(7,20);
+p=zeros(7,20);rep=300;
 for i=1:5
-[powerP]=CorrSimPermTest(20,1,50,100,200,0,0.05);
+[powerP]=CorrSimPermTest(20,1,50,100,rep,0,0.05);
 p=p+powerP;
-[powerP]=CorrSimPermTest(20,1,50,100,200,1,0.05);
+[powerP]=CorrSimPermTest(20,1,50,100,rep,1,0.05);
 p=p+powerP;
 end
 
-p=zeros(7,20);
+p=zeros(7,20);rep=300;
 for i=1:5
-[powerP]=CorrSimPermTest(20,2,0.5,100,200,0,0.05);
+[powerP]=CorrSimPermTest(20,2,0.5,100,rep,0,0.05);
 p=p+powerP;
-[powerP]=CorrSimPermTest(20,2,0.5,100,200,1,0.05);
+[powerP]=CorrSimPermTest(20,2,0.5,100,rep,1,0.05);
 p=p+powerP;
 end
 

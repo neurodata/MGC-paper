@@ -13,33 +13,48 @@ if nargin<3
     thres2=0.005; % the threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
-sz=[2,2]; % minimal rectangle size
 thres=max(1/min(m,n),thres); % in case sample size is too small, increase threshold
 
-% default p-value
+% % default p-value
 p=1;
-indAll=1;
+indAll=[];
 
 R=SmoothRegion(P,thres2); % find the largest smooth region in the p-value map
+% figure
+% imagesc(R)
 % directly use the global p-value if it is among the top thres% of all local p-values
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
-    indAll=m*n;
 else
     tmp=mean(mean(R(2:end,2:end)));
     % approximate MGC p-value from the smooth region if and only if the region area is larger than the threshold
     if tmp>thres
+%         p=max(P(R));
+        %p=median(P(R));
         % select a top p-value in the region based on thres and the area of the region.
         p=prctile(P(R), min(ceil(thres/tmp*100),100));
+    else
+        p=max(P(R));
     end
 end
 
 % the largest rectangle within the smooth region bounded by the
 % p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],sz);
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1]);
 if sum(sum(R(2:end,2:end)))>0
     indAll=find(R==1);
 end
+if p==P(end)
+    indAll=[indAll;m*n];
+else
+    if sum(sum(R))==0
+        p=max(max(P(2:end,2:end)));
+        indAll=find(P==p);
+    end
+end
+% figure
+% imagesc(R)
+% p=max(P(R));
 
 function R=SmoothRegion(P,thres)
 % Find the largest smooth rectangular region in the p-value map, by considering the
@@ -48,7 +63,6 @@ function R=SmoothRegion(P,thres)
 % decrease as specified by thres. Then further require all p-values in the smooth region
 % to be less than 0.5.
 [m,n]=size(P);
-sz=[2,2]; % minimal rectangle size
 
 PD=cell(2,1);
 PD{1}=zeros(m,n); % store the difference within rows
@@ -64,6 +78,7 @@ end
 
 RC=cell(4,1);
 R=zeros(m,n);
+%R=ones(m,n);
 
 RC{1}=(PD{1}<thres); % check monotone decreasing , but also allows small p-value increase no more than the threshold
 RC{2}=(PD{1}>-thres); % check monotone increasing , but also allows small p-value decrease no more than the threshold
@@ -71,8 +86,14 @@ RC{3}=(PD{2}<thres); % repeat for column changes
 RC{4}=(PD{2}>-thres); 
                 
 for i=1:4
-    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i}, [0 0 1],sz); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
-    R=(R==1) | (RC{i}==1); % combine the four rectangular regions
+    %RC{i}=bwareafilt(RC{i},1);
+    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i} & (P<0.5), [0 0 1]); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
+%     figure
+% imagesc(RC{i})
+%    R=(R==1) | (RC{i}==1); % combine the four rectangular regions
+%     if sum(sum(RC{i}))>sum(sum(R))
+%         R=RC{i};
+%     end
 end
-
-[~,~,~,R]=FindLargestRectangles((R==1) & (P<0.5), [0 0 1],sz); % in the smooth region, find the largest rectangle with all p-values less than 0.5
+R=(RC{1} | RC{2}) | (RC{3} | RC{4});
+[~,~,~,R]=FindLargestRectangles((R), [0 0 1]); % in the smooth region, find the largest rectangle with all p-values less than 0.5

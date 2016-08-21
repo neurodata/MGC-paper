@@ -24,8 +24,8 @@ R=SmoothRegion(P,thres2); % find the largest smooth region in the p-value map
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
 else
-    tmp=mean(mean(R(2:end,2:end)));
     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % in the smooth region, find the largest rectangle with all p-values less than 0.5
+    tmp=mean(mean(R(2:end,2:end)));
     % approximate MGC p-value from the smooth region if and only if the region area is larger than the threshold
     if tmp>thres
      % [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % in the smooth region, find the largest rectangle with all p-values less than 0.5

@@ -13,44 +13,44 @@ if nargin<3
     thres2=0.005; % the threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
-thres=max(1/min(m,n),thres); % in case sample size is too small, increase threshold
+thres=max(2/min(m,n),thres); % in case sample size is too small, increase threshold
 
 % % default p-value
-p=1;
+p=max(max(P(2:end,2:end)));
 indAll=[];
 
 R=SmoothRegion(P,thres2); % find the largest smooth region in the p-value map
-% figure
-% imagesc(R)
 % directly use the global p-value if it is among the top thres% of all local p-values
 if sum(sum(P<P(end)))/(m-1)/(n-1)<thres
     p=P(end);
 else
     tmp=mean(mean(R(2:end,2:end)));
+    [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % in the smooth region, find the largest rectangle with all p-values less than 0.5
     % approximate MGC p-value from the smooth region if and only if the region area is larger than the threshold
     if tmp>thres
+     % [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % in the smooth region, find the largest rectangle with all p-values less than 0.5
 %         p=max(P(R));
         %p=median(P(R));
         % select a top p-value in the region based on thres and the area of the region.
         p=prctile(P(R), min(ceil(thres/tmp*100),100));
     else
-        p=max(P(R));
+        p=max(max(P(2:end,2:end)));
+%         if tmp>0
+%            p=max(P(R));
+%         end
     end
 end
 
 % the largest rectangle within the smooth region bounded by the
 % p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1]);
-if sum(sum(R(2:end,2:end)))>0
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
+if sum(sum(R(2:end,2:end)))==0
+    indAll=find(P==p);
+else
     indAll=find(R==1);
 end
 if p==P(end)
     indAll=[indAll;m*n];
-else
-    if sum(sum(R))==0
-        p=max(max(P(2:end,2:end)));
-        indAll=find(P==p);
-    end
 end
 % figure
 % imagesc(R)
@@ -87,13 +87,19 @@ RC{4}=(PD{2}>-thres);
                 
 for i=1:4
     %RC{i}=bwareafilt(RC{i},1);
-    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i} & (P<0.5), [0 0 1]); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
+    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i} & (P<1), [0 0 1],[2,2]); % find the largest rectangles within the (approximately) monotonically decreasing / increasing region
+%     if i==1 || i==2
+%        RT=RT&(RC{3}|RC{4});
+%     else
+%         RT=RT&(RC{1}|RC{2});
+%     end
+%     RC{i}=RC{i}&(RC{3}|RC4);
 %     figure
 % imagesc(RC{i})
 %    R=(R==1) | (RC{i}==1); % combine the four rectangular regions
-%     if sum(sum(RC{i}))>sum(sum(R))
-%         R=RC{i};
+%     if sum(sum(RT))>sum(sum(R))
+%         R=RT;
 %     end
 end
 R=(RC{1} | RC{2}) | (RC{3} | RC{4});
-[~,~,~,R]=FindLargestRectangles((R), [0 0 1]); % in the smooth region, find the largest rectangle with all p-values less than 0.5
+%[~,~,~,R]=FindLargestRectangles((R), [0 0 1],[2,2]); % in the smooth region, find the largest rectangle with all p-values less than 0.5

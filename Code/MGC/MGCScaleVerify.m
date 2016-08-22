@@ -17,7 +17,6 @@ thres=max(2/min(m,n),thres); % in case sample size is too small, increase thresh
 
 % % default p-value
 p=max(max(P(2:end,2:end)));
-indAll=[];
 
 R=SmoothRegion(P,thres2); % find the largest smooth region in the p-value map
 % directly use the global p-value if it is among the top thres% of all local p-values
@@ -36,14 +35,13 @@ end
 % the largest rectangle within the smooth region bounded by the
 % p-value is taken as the optimal scale
 [~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
-if sum(sum(R))==0
-    p=max(max(P(2:end,2:end)));
-    indAll=find(P==p);
-else
-    indAll=find(R==1);
-end
+indAll=find(R==1);
 if p==P(end)
     indAll=[indAll;m*n];
+end
+if isempty(indAll)
+    p=max(max(P(2:end,2:end)));
+    indAll=find(P==p);
 end
 
 function R=SmoothRegion(P,thres)

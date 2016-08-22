@@ -5,15 +5,15 @@ r1=100;rep=1000;
 CorrSimPermTest(1:10,2,0.5,r1,rep,0,0.05)
 CorrSimPermTest(11:20,2,0.5,r1,rep,0,0.05)
 
-p=zeros(7,20);rep=300;
+p=zeros(7,20);rep=500;
 for i=1:5
-[powerP]=CorrSimPermTest(20,1,50,100,rep,0,0.05);
+[powerP]=CorrSimPermTest(20,1,100,100,rep,0,0.05);
 p=p+powerP;
-[powerP]=CorrSimPermTest(20,1,50,100,rep,1,0.05);
+[powerP]=CorrSimPermTest(20,1,100,100,rep,1,0.05);
 p=p+powerP;
 end
 
-p=zeros(7,20);rep=1000;
+p=zeros(7,20);rep=500;
 for i=1:5
 [powerP]=CorrSimPermTest(20,2,0.5,100,rep,0,0.05);
 p=p+powerP;

@@ -2,43 +2,37 @@ function [p,indAll]=MGCScaleVerify(P,gamma,tau)
 % Author: Cencheng Shen
 % This function approximates the p-value and the optimal scale for sample MGC, 
 % based on the p-value map of all local correlations. 
-% The algorithm first looks for a smooth region in the p-value map, and
-% takes the largest p-value in the smooth region.
+% The algorithm first looks for a smooth region in the p-value map, and 
+% uses the mean p-value in the p-value map as default.
 % However, if the global p-value is small enough among all local p-values, 
 % the global scales is used for MGC;
 % and if there exists a smooth rectangular region that is large enough, 
 % a smaller p-value within the smooth rectangle is approximated for MGC.
-% Once we determine the sample MGC p-value, the smooth rectangle that is bounded 
-% by the p-value is taken as the optimal scales (and further include the global scale if necessary).
-% If the optimal scale is empty, we take the largest p-value in the p-value
-% map and all scales (from k,l=2 til n) for MGC.
+% Once we determine the sample MGC p-value, the smooth rectangle that is
+% bounded above by the p-value is taken as the optimal scales (and further include the global scale if necessary).
+% If the optimal scale is empty, we again use the default p-value.
 if nargin<2
-    gamma=0.1; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
 end
 if nargin<3
     tau=0.005; % tau is a threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
-gamma=max(2/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
+p=mean(P(P<1)); % default p-value
 indAll=[]; % optimal scale
 
 % find the largest smooth region in the p-value map
 R=SmoothRegion(P,tau); 
-% p=max(max(P(2:end,2:end)));
-if sum(sum(R))>0
-    p=max(P(R)); % take the largest p-value in the smooth region first, as long as the smooth region is not empty
-end
 
 % further check for global p-value and smooth rectangle
 if sum(sum(P<P(end)))/(m-1)/(n-1)<gamma
-    p=P(end); % directly use the global p-value if it is among the top 10% of all local p-values
+    p=P(end); % directly use the global p-value if it is among the top 100*gamma% of all local p-values
     indAll=m*n;
 else
     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % find the largest rectangle within the smooth region
     tmp=mean(mean(R));
     % approximate a smaller p-value from the smooth rectangle if and only if the area is larger than gamma
     if tmp>gamma
-        p=prctile(P(R), gamma/tmp*50); % take a small p-value that is 5/area(R)% of all p-values in the smooth rectangle
+        p=prctile(P(R), gamma/tmp*50); % take a small p-value that is 100*gamma/2area(R)% of all p-values in the smooth rectangle
     end
 end
 
@@ -46,9 +40,9 @@ end
 [~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
 indAll=[find(R==1);indAll]; % include the global scale if necessary
 
-% use the largest of all p-values when the optimal scale is empty
+% use the default p-values when the optimal scale is empty
 if isempty(indAll)
-    p=max(max(P(2:end,2:end)));
+    p=mean(P(P<1)); % default p-value
     indAll=find(P<=p);
 end
 

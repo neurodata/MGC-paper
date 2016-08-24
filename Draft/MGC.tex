@@ -92,6 +92,7 @@
 \newcommand{\jv}[1]{{\note{jv: #1}}}
 \newcommand{\jovo}[1]{{\note{jv: #1}}}
 \newcommand{\cs}[1]{{\note{cs: #1}}}
+\newcommand{\mm}[1]{{\note{mm: #1}}}
 
 \newcommand{\mbx}{\ensuremath{\mb{x}}}
 \newcommand{\mby}{\ensuremath{\mb{y}}}
@@ -533,13 +534,13 @@ To cast this dependence testing problem as a statistical inference query require
 
 The power of a test is defined as the probability that it correctly rejects the null hypothesis when the null hypothesis is indeed false.
 As defined above, a test is consistent if its power converges to one as sample size increases when $f_{xy} \neq f_x f_y$, and has power equal to the type $1$ error level when $f_{xy}=f_x f_y$.
-Let $\G_t$ denote a global generalized correlation coefficient based test statistic, that is, $t$ might indicate \Mantel, \Dcorr, or \Mcorr, and let $\beta_n(\G_t^*)$ denote the power of the corresponding multiscale version for $n$ samples; and we drop the subscript when considering asymptotic power.
+Let $\G_t$ denote a global generalized correlation coefficient based test statistic, that is, $t$ might indicate \Mantel, \Dcorr, or \Mcorr, and let $\beta_n(\Mgc_t)$ denote the power of the corresponding multiscale version for $n$ samples; and we drop the subscript when considering asymptotic power.
 Recall from the work of Szekeley et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
  % in different scenarios, leads us to our first theorem.
 % A consistent test statistic has power $1$ asymptotically, i.e., the test statistic under the alternative is asymptotically larger than the statistic under the null. Denote the type 1 error level as $\alpha$, the testing power of \Mgc~as $\beta_{\alpha}(\G^{*})$, and the power of the respective global test as $\beta_{\alpha}(\G)$. Assuming the optimal scale is estimated by the testing power, we have the following theorem regarding the consistency of \Mgc, whose proof is provided in Appendix \ref{appen:proofs}:
 \begin{thm}
 \label{thm1}
-$\beta_n(\G_t^*) \rightarrow 1$ as $n \to \infty$ for all $f_{xy}$ in $\mc{F}_t$.
+$\beta_n(\Mgc_t) \rightarrow 1$ as $n \to \infty$ for all $f_{xy}$ in $\mc{F}_t$.
 In words, Oracle \Mgc~is consistent against all dependent alternatives for which its global counterpart is consistent. 
 % * <stefaniejacinto@gmail.com> 2016-08-21T08:07:31.312Z:
 %
@@ -561,7 +562,7 @@ For linear dependencies,  the optimal \Mgc~scale was empirically always the glob
 \label{t:linear}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
 \begin{equation}
-\beta_n(\G^{*}_t) = \beta_n(\G_t).
+\beta_n(\Mgc_t) = \beta_n(\G_t).
 \end{equation}
 In words, the optimal scale for Oracle \Mgc~is the global scale for linearly dependent data.
 \end{thm}
@@ -573,7 +574,7 @@ We therefore conjectured and proved the following:
 \label{t:non}
 There exists $f_{xy}$ and $n$ such that
 \begin{equation}
-\beta_n(\G^{*}_{t}) \geq \beta_n(\G^{k,l}_{t}) > \beta_n(\G_{t}).
+\beta_n(\Mgc_{t}) \geq \beta_n(\G^{k,l}_{t}) > \beta_n(\G_{t}).
 \end{equation}
 In words, for finite samples, many different scales of \Mgc~can be better than the global scale under certain nonlinear dependency.
 \end{thm}
@@ -672,8 +673,8 @@ We then also generate an independent stimulus  by sampling from a standard norma
 For each brain region, we test: ``Is activity of that  brain region independent of the time-varying stimuli?'' We pool brain activity over all of the samples from the population.
 Any regions that are detected significant are false positives by definition.  By testing each brain region separately, we obtain a distribution of false positive rates.  If our test is valid, that distribution should be centered around the significance level, which we set at $0.05$ for this experiment.
 
-To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region $g$, we compute the Euclidean distance pairs of time steps,  $a_{ij}^g=\|\mb{x}_{\cdot i}^g-\mb{x}_{\cdot j}^g\|_2$,  where $\mb{x}_{\cdot i}^g$ denotes the population vector of activity of region $g$ at time-step $i$ for all subjects.
-For the one-dimensional stimulus, we similarly compute the Euclidean distance between the stimulus values at each pair of time-steps: $b_{ij}= \|y_i - y_j\|_2$.
+To conduct this test, we must construct a distance matrix for brain region activity, and another for the stimulus. For each brain region $g$, we compute the Euclidean distance pairs of time steps,  $\tilde{a}_{ij}^g=\|\mb{x}_{\cdot i}^g-\mb{x}_{\cdot j}^g\|_2$,  where $\mb{x}_{\cdot i}^g$ denotes the population vector of activity of region $g$ at time-step $i$ for all subjects.
+For the one-dimensional stimulus, we similarly compute the Euclidean distance between the stimulus values at each pair of time-steps: $\tilde{b}_{ij}= \|y_i - y_j\|_2$.
 Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
 
 % From the two distance matrices, we test the dependency between each brain region and the time-varying stimulus by \Mgc.
@@ -705,7 +706,7 @@ Finally, Reshef et al. \cite{Reshef2011} is another dependence testing methodolo
 
 
 There are a number of additional potential extensions of this work.  First, theoretical guidance for choosing the optimal scale for finite samples  in the absence of training data, would be desirable. 
-In this work we proved that there exist local scales that improve upon the global scale, and demonstrated that sample \Mgc~yields tests with power almost equal to the optimal power, and almost always better power than \Hhg~and \Mcorr.  But  theory connecting Oracle \Mgc~and  sample \Mgc~will yield further insight.
+In this work we proved that there exist local scales that improve upon the global scale, and demonstrated that sample \Mgc~yields tests with power close to the optimal power, and almost always better power than \Hhg~and \Mcorr.  But  theory connecting Oracle \Mgc~and  sample \Mgc~will yield further insight.
 
 
 Second, \Mgc~requires a pair of metrics, one for each data type. In this work we selected such metrics using domain knowledge, and mitigated the potential inopportune choice of metric via locality tuning.  If we were able to choose the optimal metric for a given dataset, this would possibly obviate the need for locality, and further improve power. Skezeley et al. investigated different norms and exponents to ascertain the impact of different metrics, but was unable to determine optimality.
@@ -944,10 +945,10 @@ In this section, we review the \Mantel~test, distance correlation (\Dcorr), modi
 
 \subsection{(Global) \Mantel~Test}
 \label{appen:mantel}
-Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, let  $A=\tilde{A}$, $B=\tilde{B}$, $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$.
+Given the Euclidean distance matrices $\tilde{A}$ and $\tilde{B}$, let $A=\tilde{A}-\bar{a}$ and $B=\tilde{B}-\bar{b}$, where $\bar{a}=\frac{1}{n(n-1)}\sum_{i \neq j}^{n}(a_{ij})$ and similarly for $\bar{b}$.
 The \Mantel~coefficient \cite{Mantel1967} is defined as
 \begin{equation*}
-\Mantel(X,Y)=\frac{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})(b_{ij}-\bar{b})}{\sqrt{\sum_{i \neq j}^{n}(a_{ij}-\bar{a})^2 \sum_{i \neq j}^{n}(b_{ij}-\bar{b})^2}}.
+\Mantel(X,Y)=\frac{\sum_{i \neq j}^{n}a_{ij}b_{ij}}{\sqrt{\sum_{i \neq j}^{n}a_{ij}^2 \sum_{i \neq j}^{n}b_{ij}^2}}.
 \end{equation*}
 Then the \Mantel~test is carried out by the permutation test.
 
@@ -976,7 +977,7 @@ and the sample distance correlation equals
 \Dcorr(X,Y)=\frac{dcov(X,Y)}{\sqrt{dvar(X) \cdot dvar(Y)}}.
 \end{equation*}
 
-It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\Dcorr(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variables $\mb{x}$ and $\mb{y}$. The population distance correlation is defined via the characteristic functions of $X$ and $Y$, in such a way that it is zero if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is a consistent statistic for testing independence, i.e., the testing power $\beta_{\alpha}(\Dcorr(X,Y))$
+It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, $\Dcorr(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variables $\mb{x}$ and $\mb{y}$. The population distance correlation is defined via the characteristic functions of $X$ and $Y$, in such a way that it is zero if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is a consistent statistic for testing independence, i.e., the testing power $\beta_{n}(\Dcorr(X,Y))$
 converges to unity as $n$ increases, at any type $1$ error level $\alpha$. Note that all of $dcov, dvar$, and \Dcorr~are always non-negative; and the consistency result assumes finite second moments of $\mb{x}$ and $\mb{y}$, which holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. Also note that the \Dcorr~above is actually the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
 Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is the same to singly center one distance matrix by row and the other distance matrix by column.
@@ -984,8 +985,6 @@ Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\til
 The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
 Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, and so is the testing power.
-
-The above also holds for \Mcorr~asymptotically.
 \end{lem}
 Our \Mgcd~is in fact based on this single-centered \Dcorr, which is more advantageous than \Mgc~based on double-centered \Dcorr~(shown in Appendix~\ref{appen:mgc}). The proofs of all lemmas are in Appendix~\ref{appen:proofs}.
 
@@ -1018,7 +1017,7 @@ If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $
 It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estimator of the population distance correlation $\Dcorr(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it is a consistent statistic for testing independence, and may work better than \Dcorr~for high-dimension dependencies.
 
 Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $\hat{A}$ and $\hat{B}$ in defining \Mcorr~without altering the theoretical advantages of the original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is asymptotically equivalent for testing. 
-Thus we use the single-centered \Mcorr~with the diagonal modification for computational expediency and simplicity.
+Thus we use the single-centered \Mcorr~with zero diagonals for computational expediency and simplicity.
 
 
 \subsection{Heller, Heller, \& Gorfine (\Hhg)}
@@ -1075,7 +1074,7 @@ In this section, we elaborate on the algorithms for computing local correlation 
 Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of a global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test. 
 Algorithm~\ref{alg:power} estimates the testing powers of all local statistics using a known or estimated joint distribution, which can be used to accurately estimate the optimal scales and the testing power for \Mgc. 
-Algorithm~\ref{alg:best_scale} approximates the optimal scales and p-value for sample \Mgc~by finding a smooth region of the p-value map, searching for the \Mgc~p-value within the smooth region, and outputting the largest smooth rectangle with same or less p-values as the optimal scale if and only if the smooth region is large enough. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
+Algorithm~\ref{alg:best_scale} approximates the optimal scales and p-value for sample \Mgc~by finding a smooth region of the p-value map, searching for the \Mgc~p-value within the smooth region, and outputting the largest smooth rectangle with same or less p-values as the optimal scale. More detailed discussions regarding the optimal scales approximation is offered in Appendix~\ref{appen:diss}.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -1170,7 +1169,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{alg:power}
 \begin{algorithmic}[1]
 \Require A joint distribution $f_{xy}$, the sample size $n$, the number of MC replicates $r$, and the type $1$ error level $\alpha$.
-\Ensure The power matrix $\beta_{\alpha} \in [0,1]^{n \times n}$ for all local correlations, and the \Mgc~optimal scale $(k^{*},l^{*}) \in \mathbb{N} \times \mathbb{N}$.
+\Ensure The power matrix $\beta \in [0,1]^{n \times n}$ for all local correlations, and the \Mgc~optimal scale $(k^{*},l^{*}) \in \mathbb{N} \times \mathbb{N}$.
 \Function{TestingPowers}{$f_{xy}$,$n$, $r$,$\alpha$}
 \For{$j:=1,\ldots,r$}
 \Linefor{$i:=[n]$}{$(X^{1}_{i},Y^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$, $X^{0}_{i} \stackrel{iid}{\sim} f_{x}$, $Y^{0}_{i} \stackrel{iid}{\sim} f_{y}$} 
@@ -1181,43 +1180,50 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 
 \For{$k,l:=1,\ldots,n$}
 \State $c_{\alpha} \rto \textsc{Cdf}_{1-\alpha}(\G^{0}_{kl}[j],j \in [r])$ \Comment{get the critical value by the empirical distributions}
-\State $\beta_{\alpha}^{kl} \rto \sum_{j=1}^{r}(\G^{1}_{kl}[j]>c_{\alpha}) / r$ \Comment{estimate the power}
+\State $\beta_{kl} \rto \sum_{j=1}^{r}(\G^{1}_{kl}[j]>c_{\alpha}) / r$ \Comment{estimate the power}
 \EndFor
-\State $(k^{*},l^{*}) \rto \arg\max(\beta_{\alpha}^{kl})$ \Comment{find the optimal local scale}
+\State $(k^{*},l^{*}) \rto \arg\max(\beta_{kl})$ \Comment{find the optimal local scale}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Computation of p-value and optimal scales for sample \Mgc. First we locate a smooth region of the p-value map as follows: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it for decreasing/increasing p-values within each row/column, combine all four smooth rectangles into one region, then locate the largest rectangle in the region with all p-values less than some large threshold (for example, $0.5$). If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly take the global p-value for sample \Mgc; otherwise if the area of the verified smooth region is larger than $\gamma$, we take a small p-value within the region as the p-value for sample \Mgc. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth region is taken as the optimal scale. The running time is $O(n^2)$.}
+\caption{Computation of p-value and optimal scales for sample \Mgc. First it locates a smooth region of the p-value map: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it p-values change with increasing / decreasing trend within each row / column, and combine the four smooth rectangles into the smooth region. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly use the global p-value for sample \Mgc; otherwise we compute the largest rectangle within the smooth region, and take a smaller p-value within the rectangle as the p-value for sample \Mgc~if the area of the rectangle is larger than $\gamma$. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth region is taken as the optimal scale. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P$}
-\State $p \rto 1$ \Comment{default p-value to maximal}
-\State $\gamma \rto 0.05$ \Comment{threshold to check significant global p-value and significant region}
-\State $R=\textsc{SmoothRegion}(P,\tau)$ \Comment{the smooth region within the p-value map}
-\If{$\sum (P<P[n,n])/n^2<\gamma$} \Comment{use the global p-value when it is small enough}
+\State $\gamma \rto 0.1$ \Comment{threshold to check significant global p-value and significant region}
+\State $R=\textsc{SmoothRegion}(P)$ \Comment{find the smooth region within the p-value map}
+\Lineif{$\sum_{k,l} R_{kl}>0$}{$p\rto \max\{P(R)\}$} \Comment{take the largest p-value in the smooth region}
+
+\If{$\sum (P<P[n,n])/n^2<\gamma$} \Comment{use the global p-value if it is sufficiently small}
 \State $p \rto P[n,n]$ 
 \Else
-\State $\mu \rto \sum_{k,l} R_{kl} /(n-1)^2$
-\If{$\mu>\gamma$} \Comment{check if area of the smooth region is large enough}
-\State $p = \textsc{Prctile}(P(R), \gamma / \mu)$ \Comment{get the \Mgc~p-value by percentile}
+\State $R = \textsc{LargestRectangle}(R)$ \Comment{find the largest smooth rectangle}
+\State $\mu \rto \sum_{k,l} R_{kl} /n^2$ \Comment{area of the smooth rectangle}
+\If{$\mu>\gamma$} \Comment{check if area is large enough}
+\State $p = \textsc{Prctile}(P(R), \gamma / 2\mu)$ \Comment{use a smaller \Mgc~p-value by percentile}
 \EndIf
 \EndIf
-\State $R = \textsc{LargestRectangle}(R \cap (P\leq p))$ \Comment{the optimal scale}
-\State $[k^{*},l^{*}] \rto (R==1)$
+\State $R = \textsc{LargestRectangle}(R \cap (P\leq p))$ \Comment{get the optimal scale}
+\If{$\sum (R)==0$} \Comment{use the largest p-value if the optimal scale is empty}
+\State $p \rto \max\{P\}$ 
+\State $[k^{*},l^{*}] =\textsc{Find}(P \leq p)$
+\Else
+\State $[k^{*},l^{*}] \rto \textsc{Find}(R==1)$
+\Lineif{$p = P[n,n]$}{$[k^{*},l^{*}]=\textsc{Add}([k^{*},l^{*}], [n,n])$} \Comment{add the global scale if necessary}
+\EndIf
 \EndFunction
 \end{algorithmic}
 \
 \
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$.
-\Ensure A binary matrix $R \in \{0,1\}^{n \times n}$ indicating the largest smooth rectangle in $P$.
+\Ensure A binary matrix $R \in \{0,1\}^{n \times n}$ indicating the largest smooth region in $P$.
 \Function{SmoothRegion}{$P$}
 \State $\tau \rto 0.005$ \Comment{threshold to check smoothness}
-\State $\eta \rto 0.5$ \Comment{threshold to check p-value}
 \State $P = \textsc{Diff}(P)$ \Comment{p-value difference of adjacent scales within row}
 \State $P^{'} = \textsc{Diff}(P^{T})$ \Comment{p-value difference of adjacent scales within column}
 \State $R^{1} = \textsc{LargestRectangle}(P<\tau)$ \Comment{largest smooth rectangle with decreasing trend} 
@@ -1225,7 +1231,6 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $R^{3} = \textsc{LargestRectangle}(P^{'}<\tau)$ \Comment{repeat for columns changes}
 \State $R^{4} = \textsc{LargestRectangle}(P^{'}>-\tau)$
 \State $R \rto \bigcup R^{i}$ \Comment{combine all four smooth rectangles}
-\State $R = \textsc{LargestRectangle}(R \cap (P<\eta))$ \Comment{the verified smooth region}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -1235,7 +1240,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{appen:diss}
 Evaluating \Mgc~requires estimating the optimal scales. Algorithm~\ref{alg:power} is used whenever the true distribution of the data is known or easy to estimate or multiple training data are available, which yields Oracle \Mgc. Otherwise, we shall approximate the optimal scale by Algorithm~\ref{alg:best_scale}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
-The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and takes a small p-value within the smooth region if the region is large enough, or directly takes the global p-value when it is small enough. The parameter $\gamma$ is an important threshold to identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Increasing or decreasing the parameter $\tau$ has a similar effect as $\gamma$, though to a lesser extent, and a small positive number generally suffices to negate noisy p-value changes. Empirically, our choice of parameters achieve good testing power under dependence with minimal FDR inflation.
+The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and takes a small p-value within the smooth region if the region is large enough, or directly takes the global p-value when the global p-value is small enough. The parameter $\gamma$ is an important threshold to identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Increasing or decreasing the parameter $\tau$ has a similar effect as $\gamma$, though to a lesser extent, and a small positive number generally suffices to negate noisy p-value changes. Empirically, our choice of parameters achieve good testing power under dependence with minimal FDR inflation.
 
 As Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, it does not guarantee that the true optimal local correlation is always correctly identified. To better justify Algorithm~\ref{alg:best_scale}, we compare the sample \Mgc~power by Algorithm~\ref{alg:best_scale} to the Oracle \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $19$ dependencies (function $20$ excluded) described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($38$ functions overall), and calculate all local p-values using $1$,$000$ random permutations. 
 % By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using 
@@ -1247,7 +1252,7 @@ The null is rejected when the p-value is less than $\alpha=0.05$, and the power 
 
 Figure~\ref{f:simPerm} shows the power differences between each of Oracle \Mgc, \Mcorr, and \Hhg~to the sample \Mgc~by algorithm~\ref{alg:best_scale}. Oracle \Mgc~powers are better than the sample \Mgc~powers, though they are often very close. Moreover, sample \Mgc~is significantly better than all other methods, i.e., it dominates global \Mcorr, and almost dominates \Hhg~except with function $18$ in the high-dimensional setting (for which the discrepancy is due to Oracle \Mgc, see Figure~\ref{f:nD}). 
 
-We further observe that the sample \Mgc~is only significantly inferior to the Oracle \Mgc~when the true optimal scale has a narrow region (e.g., function $16$ and $17$, see Figures~\ref{f:powermaps} and ~\ref{f:powermaps1}), but otherwise they are very similar. As narrow optimal scales may also occur from a pair of independently generated data by chance, narrow smooth regions cannot be trusted without training data or knowing the joint distribution, and are purposely excluded by algorithm~\ref{alg:best_scale} using $\gamma=0.05$.
+We further observe that the sample \Mgc~is only significantly inferior to the Oracle \Mgc~when the true optimal scale has a narrow region (e.g., function $16$ and $17$, see Figures~\ref{f:powermaps} and ~\ref{f:powermaps1}), but otherwise they are very similar. As narrow optimal scales may also occur from a pair of independently generated data by chance, narrow smooth regions cannot be trusted without training data or knowing the joint distribution, and are purposely excluded by the parameters in algorithm~\ref{alg:best_scale}.
 
 Note that it is tempting to directly use the scale that minimizes all local p-values without the validation by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches may significantly inflate the false positive rate due to noisy p-values: when the optimal scales are separately estimated for each test, the resulting FDR is often higher than the pre-set $\alpha$, such that the test is no longer valid. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate this problem as much as our proposed strategy. 
 
@@ -1258,26 +1263,25 @@ Still, more investigations into this problem and better methods for searching th
 
 \section{Proofs}
 \label{appen:proofs}
-\textcolor{green}{MM:should we use the notation $\Mgc_t$ in the statement and proof of the theorem? I'm a bit confused by the notation I think}
 \begin{appThm}
-$\beta_n(\G_t^*) \rightarrow 1$ as $n \to \infty$ for all $f_{xy}$ in $\mc{F}_t$.
+$\beta_n(\Mgc_t) \rightarrow 1$ as $n \to \infty$ for all $f_{xy}$ in $\mc{F}_t$.
 In words, Oracle \Mgc~is consistent with all dependent alternatives for which its global counterpart is consistent. 
 \end{appThm}
 \begin{proof}
-Since $\beta_n(\G_t^*)=\underset{kl}{\max}\{\beta_n(\G_t^{kl})\}$, for any $f_{xy}$ the power of \Mgc~satisfies
+Since $\beta_n(\Mgc_t)=\underset{kl}{\max}\{\beta_n(\G_t^{kl})\}$, for any $f_{xy}$ the power of \Mgc~satisfies
 \begin{equation*}
-\beta_n(\G_t^*) \geq \beta_n(\G_t)
+\beta_n(\Mgc_t) \geq \beta_n(\G_t)
 \end{equation*}
-at any type $1$ error level $\alpha$. So $\beta_n(\G_t^*) \rightarrow 1$ if $\beta_n(\G_t) \rightarrow 1$.
+at any type $1$ error level $\alpha$. So $\beta_n(\Mgc_t) \rightarrow 1$ if $\beta_n(\G_t) \rightarrow 1$.
 % 
-Therefore $\beta_n(\G_t^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent with all alternatives satisfying certain regularity conditions, because \Dcorr~and \Mcorr~are consistent by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. 
+Therefore $\beta_n(\Mgc_t) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}_t$. In particular, \Mgcd~and \Mgcm~are consistent with all alternatives satisfying certain regularity conditions, because \Dcorr~and \Mcorr~are consistent by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. 
 \end{proof}
 
-\textcolor{green}{MM:what do we mean here by "linearly dependent"? $\mb{x}=\alpha\mb{y}$ for some scalar $\alpha$, or $\mb{x}=A\mb{y}$ for some matrix $A$? From the proof I'd say the former, while in the text I was thinking of the latter, and wonder if the conclusions ain't true for the general linear dependence (the latter case). And of course we are talking about $\mb{x}$ and $\mb{y}$ in Euclidean (or some vector) space at this point, maybe worth saying it.}
+\mm{what do we mean here by "linearly dependent"? $\mb{x}=\alpha\mb{y}$ for some scalar $\alpha$, or $\mb{x}=A\mb{y}$ for some matrix $A$? From the proof I'd say the former, while in the text I was thinking of the latter, and wonder if the conclusions ain't true for the general linear dependence (the latter case). And of course we are talking about $\mb{x}$ and $\mb{y}$ in Euclidean (or some vector) space at this point, maybe worth saying it.}
 \begin{appThm}
 If $\mb{x}$ is linearly dependent on $\mb{y}$, then for any $n$ it always holds that
 \begin{equation}
-\beta_n(\G^{*}_t) = \beta_n(\G_t).
+\beta_n(\Mgc_t) = \beta_n(\G_t).
 \end{equation}
 In words, the optimal scale for Oracle \Mgc~is the global scale for linearly dependent data.
 \end{appThm}
@@ -1299,11 +1303,10 @@ Therefore the number of ``significant'' permutations for $\G^{kl}$ at least equa
 
 \end{proof}
 
-\textcolor{green}{MM:should we use the notation $\Mgc_t$ in the statement and proof of the theorem? I'm a bit confused by the notation I think}
 \begin{appThm}
 There exists $f_{xy}$ and $n$ such that
 \begin{equation}
-\beta_n(\G^{*}_{t}) \geq \beta_n(\G^{k,l}_{t}) > \beta_n(\G_{t}).
+\beta_n(\Mgc_{t}) \geq \beta_n(\G^{k,l}_{t}) > \beta_n(\G_{t}).
 \end{equation}
 In words, for finite samples, many different scales of \Mgc~can be better than the global scale under certain nonlinear dependency.
 \end{appThm}
@@ -1330,8 +1333,6 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 The distance covariance $dcov(X,Y)$ is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
 Moreover, the permutation p-value of global \Dcorr~is the same under single centering and double centering, and so is the testing power.
-
-The above also holds for \Mcorr~asymptotically.
 \end{appLem}
 \begin{proof}
 For distance covariance, we can re-write it with matrix traces as follows
@@ -1345,8 +1346,6 @@ dcov(X,Y) &= \frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij} \\
 where the second to last equality follows by using the circular property of traces and because $H$ is symmetric and idempotent. Therefore, single centering and double centering yield the same distance covariance.
 
 Although distance variances may not be the same under the two different centering schemes, in the permutation test the distance variances are merely normalization scalars that do not affect the p-value and power, i.e., the test using distance covariance is the same as the test using distance correlation in the permutation test. Therefore the p-value and power of \Dcorr~are also the same under single centering and double centering.
-
-For \Mcorr, it modifies $A$ and $B$ on both the diagonal entries and off-diagonal entries for modified distance covariance. Single centering changes the modified distance covariance only through the off-diagonal modifications, in a magnitude of $O(\frac{1}{n})$ relative to the original products. Thus as $n$ increases, the modified distance covariance is asymptotically equivalent under the two different centering schemes, and so are the p-value and power of \Mcorr. \textcolor{green}{MM:this is true because the tests are done on quantities computed entry-wise on the covariance matrices (right?), because otherwise a $O(1/n)$ change in each entry, for a total of $O(n^2)$ entries, would not be small. Just checking...}
 \end{proof}
 
 \begin{appLem}

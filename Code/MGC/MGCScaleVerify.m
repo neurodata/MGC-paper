@@ -49,7 +49,7 @@ indAll=[find(R==1);indAll]; % include the global scale if necessary
 % use the largest of all p-values when the optimal scale is empty
 if isempty(indAll)
     p=max(max(P(2:end,2:end)));
-    indAll=find(P==p);
+    indAll=find(P<=p);
 end
 
 function R=SmoothRegion(P,tau)

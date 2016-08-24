@@ -12,11 +12,13 @@ function [p,indAll]=MGCScaleVerify(P,gamma,tau)
 % bounded above by the p-value is taken as the optimal scales (and further include the global scale if necessary).
 % If the optimal scale is empty, we again use the default p-value.
 if nargin<2
+    gamma=0.06; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
 end
 if nargin<3
     tau=0.005; % tau is a threshold to approximate the monotone p-values change
 end
 [m,n]=size(P);
+gamma=max(5/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
 p=mean(P(P<1)); % default p-value
 indAll=[]; % optimal scale
 

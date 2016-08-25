@@ -1,34 +1,29 @@
 function [p,indAll]=MGCScaleVerify(P,gamma,tau)
 % Author: Cencheng Shen
-% This function approximates the p-value and the optimal scale for sample MGC, 
-% based on the p-value map of all local correlations. 
-% The algorithm first looks for a smooth region in the p-value map, and 
-% uses the mean p-value in the p-value map as default.
-% However, if the global p-value is small enough among all local p-values, 
-% the global scales is used for MGC;
-% and if there exists a smooth rectangular region that is large enough, 
+% This function approximates the p-value and the optimal scale for sample MGC,
+% based on the p-value map of all local correlations.
+% The algorithm first searches for a smooth region in the p-value map.
+% If the global p-value is small enough among all local p-values, the global scales is used for MGC;
+% or if there exists a smooth rectangular region that is large enough, 
 % a smaller p-value within the smooth rectangle is approximated for MGC.
 % Once we determine the sample MGC p-value, the smooth rectangle that is
-% bounded above by the p-value is taken as the optimal scales (and further include the global scale if necessary).
-% If the optimal scale is empty, we again use the default p-value.
+% bounded above by the p-value is taken as the optimal scales, which shall include the global scale if necessary.
+% If the resulting optimal scale is empty, we use the median p-value of all local p-values instead.
 if nargin<2
-    gamma=0.06; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
+    gamma=0.08; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
 end
 if nargin<3
-    tau=0.005; % tau is a threshold to approximate the monotone p-values change
+    tau=0.005; % tau is a threshold to approximate the monotone p-values change for smooth region
 end
 [m,n]=size(P);
 gamma=max(5/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
-p=mean(P(P<1)); % default p-value
-indAll=[]; % optimal scale
 
 % find the largest smooth region in the p-value map
-R=SmoothRegion(P,tau); 
+R=SmoothRegion(P,tau);
 
-% further check for global p-value and smooth rectangle
+% check for global p-value and smooth rectangle
 if sum(sum(P<P(end)))/(m-1)/(n-1)<gamma
     p=P(end); % directly use the global p-value if it is among the top 100*gamma% of all local p-values
-    indAll=m*n;
 else
     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % find the largest rectangle within the smooth region
     tmp=mean(mean(R));
@@ -38,14 +33,18 @@ else
     end
 end
 
-% the largest smooth rectangle bounded by the sample MGC p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
-indAll=[find(R==1);indAll]; % include the global scale if necessary
+try
+    % the largest smooth rectangle bounded by the sample MGC p-value is taken as the optimal scale
+    [~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
+catch
+    % use the median p-values if neither the global p-value nor the smooth rectangle area passes the threshold check
+    p=median(P(P<1)); 
+    [~, ~, ~, R]=FindLargestRectangles((P<=p), [0 0 1],[2,2]);
+end
 
-% use the default p-values when the optimal scale is empty
-if isempty(indAll)
-    p=mean(P(P<1)); % default p-value
-    indAll=find(P<=p);
+indAll=find(R==1);
+if (p>=P(end) && R(m*n)==0) % include the global scale if necessary
+    indAll=[indAll;m*n]; 
 end
 
 function R=SmoothRegion(P,tau)

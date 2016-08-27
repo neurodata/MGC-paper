@@ -1,7 +1,7 @@
-r1=200;rep=1000;
+r1=300;rep=1000;
 CorrSimPermTest(1:10,1,60,r1,rep,1,0.05)
 CorrSimPermTest(11:20,1,60,r1,rep,1,0.05)
-r1=100;rep=1000;
+r1=200;rep=1000;
 CorrSimPermTest(1:10,2,0.5,r1,rep,0,0.05)
 CorrSimPermTest(11:20,2,0.5,r1,rep,0,0.05)
 

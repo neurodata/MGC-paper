@@ -316,7 +316,7 @@ By noting that the sufficient statistics for larger neighborhood sizes include t
 
 The fifth step is to estimate the optimal scales and report the corresponding p-value.  ``Oracle \Mgc'' uses the optimal scale, which we define as the scale with maximal power for any finite sample size. In real data settings, the power is not known, so  ``sample \Mgc'' (or just \Mgc) uses the p-values as a surrogate. 
 % uses the smoothness of the p-value map to conduct efficient and valid searches.
-Because the p-value maps are reasonably smooth, sample \Mgc~searches for large smooth regions of the multiscale p-value map.  The largest is the estimated set of optimal scales, and the largest p-value in that region is the p-value (Algorithm \ref{alg:best_scale}).
+Because the p-value maps are reasonably smooth, sample \Mgc~searches for large smooth regions of the multiscale p-value map.  We validate a smooth rectangle as the estimated set of optimal scales, and the largest p-value in that rectangle is the p-value (Algorithm \ref{alg:best_scale}).
 Our estimator therefore does not search over multiple parameters, and therefore does not suffer from multiple hypothesis testing problems \cite{Benjamini1995}.
 % , and still achieves excellent power  (Supplementary Figure \ref{f:simPerm}).
 
@@ -610,7 +610,7 @@ For the five-factor personality data, we  used the Euclidean distance.
 
 % Figure \ref{f:real}A provides the p-value map of \Mgc
 % , based on $r=10$,$000$ random permutations. 
-Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0381$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
+Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0278$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
 
 
 \subsubsection*{Brain Shape vs. Disease} % Between Hippocampus Shape and Depression}
@@ -621,7 +621,7 @@ Our next experiment investigates whether brain shape and disease status are depe
 This brain shape versus disease dataset consists of $n=114$ subjects. Each subject has a structural MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape modality, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}. For the  disorder variable, we add white noise bounded by $0.01$ to each label, then form the Euclidean distance (the noise is used to break ties amongst the discrete values and make sure only the diagonal entries of the distance matrix are zero).
 
 We consider two dependence tests, one for each hemisphere: ``is hippocampus shape independent of depressive state?''
-Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0086$, and no other dependence test can identify significant dependence(e.g., global \Mcorr~and \Hhg~have p-values of $0.1132$ and $0.1208$). The left hemisphere seems less dependent on disease status, as both local and global tests yield p-values from $0.05$ to $0.1$ (not shown). 
+Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0076$, and no other dependence test can identify significant dependence(e.g., global \Mcorr~and \Hhg~have p-values of $0.1132$ and $0.1208$). The left hemisphere seems less dependent on disease status, as both local and global tests yield p-values from $0.05$ to $0.1$ (not shown). 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigReal}
@@ -1186,27 +1186,28 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Computation of p-value and optimal scales for sample \Mgc. First it locates a smooth region of the p-value map: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it p-values change with increasing / decreasing trend within each row / column, and combine the four smooth rectangles into the smooth region. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly use the global p-value for sample \Mgc; otherwise we compute the largest rectangle within the smooth region, and take a smaller p-value within the rectangle as the p-value for sample \Mgc~if the area of the rectangle is larger than $\gamma$. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth region is taken as the optimal scale. The running time is $O(n^2)$.}
+\caption{Computation of p-value and optimal scales for sample \Mgc. First it locates the smooth regions of the p-value map: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number $\tau$ (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it for p-value changes with increasing / decreasing trend within each row / column, and combine the four smooth rectangles into the smooth regions. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly use the global p-value for sample \Mgc; otherwise we compute the largest rectangle within the smooth regions, and take a smaller p-value within the rectangle as the p-value for sample \Mgc~if the area of the rectangle is larger than $\gamma$. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth regions is taken as the optimal scale. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P$}
-\State $\gamma \rto 0.08$ \Comment{threshold to check significant global p-value and significant region}
-\State $R=\textsc{SmoothRegion}(P)$ \Comment{find the smooth region within the p-value map}
+\State $\gamma \rto 0.06$ \Comment{threshold to check significant global p-value and significant region}
+\State $R=\textsc{SmoothRegions}(P)$ \Comment{find the smooth regions within the p-value map}
 
-\If{$\sum_{k,l} (P_{kl}<P[n,n])<\gamma n^2$} \Comment{use the global p-value if it is sufficiently small}
+\If{$\sum_{k,l} (P_{kl}<P[n,n]) \leq \gamma n^2$} \Comment{use the global p-value if it is sufficiently small}
 \State $p \rto P[n,n]$ 
 \Else
 \State $R = \textsc{LargestRectangle}(R)$ \Comment{find the largest smooth rectangle}
 \State $\mu \rto \sum_{k,l} R_{kl} /n^2$ \Comment{area of the smooth rectangle}
-\If{$\mu>\gamma$} \Comment{check if the area is large enough}
-\State $p = \textsc{Prctile}(P(R), \gamma / 2\mu)$ \Comment{use a smaller \Mgc~p-value by percentile}
+\If{$\mu \geq \gamma$} \Comment{check if the area is large enough}
+\State $p = \textsc{Quantile}(P(R), \gamma / 2\mu)$ \Comment{use a smaller \Mgc~p-value by sample quantile}
+\Else 
+\State $p=\textsc{Mean}(P(P<1))$ \Comment{otherwise use the mean p-value}
 \EndIf
 \EndIf
 \State $R = \textsc{LargestRectangle}(R \cap (P\leq p))$ \Comment{calculate the optimal rectangle}
-\If{$\sum_{k,l} R_{kl}==0$} \Comment{use the median p-value if the optimal rectangle is empty}
-\State $p = \textsc{Median}(P)$ 
+\If{$\sum_{k,l} R_{kl}==0$} \Comment{if the above returns empty, relax the smooth region constraint}
 \State $R = \textsc{LargestRectangle}(P\leq p)$
 \EndIf
 \State $[k^{*},l^{*}] \rto \textsc{Find}(R==1)$ \Comment{get the optimal scales}
@@ -1217,15 +1218,15 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$.
-\Ensure A binary matrix $R \in \{0,1\}^{n \times n}$ indicating the largest smooth region in $P$.
-\Function{SmoothRegion}{$P$}
+\Ensure A binary matrix $R \in \{0,1\}^{n \times n}$ indicating the smooth regions in $P$.
+\Function{SmoothRegions}{$P$}
 \State $\tau \rto 0.005$ \Comment{threshold to check smoothness}
 \State $P = \textsc{Diff}(P)$ \Comment{p-value difference of adjacent scales within row}
 \State $P^{'} = \textsc{Diff}(P^{T})$ \Comment{p-value difference of adjacent scales within column}
-\State $R^{1} = \textsc{LargestRectangle}(P<\tau)$ \Comment{largest smooth rectangle with decreasing trend} 
-\State $R^{2} = \textsc{LargestRectangle}(P>-\tau)$ \Comment{largest smooth rectangle with increasing trend} 
-\State $R^{3} = \textsc{LargestRectangle}(P^{'}<\tau)$ \Comment{repeat for columns changes}
-\State $R^{4} = \textsc{LargestRectangle}(P^{'}>-\tau)$
+\State $R^{1} = \textsc{LargestRectangle}(P \leq \tau)$ \Comment{largest smooth rectangle with decreasing trend} 
+\State $R^{2} = \textsc{LargestRectangle}(P \geq -\tau)$ \Comment{largest smooth rectangle with increasing trend} 
+\State $R^{3} = \textsc{LargestRectangle}(P^{'} \leq \tau)$ \Comment{repeat for columns changes}
+\State $R^{4} = \textsc{LargestRectangle}(P^{'} \geq -\tau)$
 \State $R \rto \bigcup R^{i}$ \Comment{combine all four smooth rectangles}
 \EndFunction
 \end{algorithmic}
@@ -1236,7 +1237,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{appen:diss}
 Evaluating \Mgc~requires estimating the optimal scales. Algorithm~\ref{alg:power} is used whenever the true distribution of the data is known or easy to estimate or multiple training data are available, which yields Oracle \Mgc. Otherwise, we shall approximate the optimal scale by Algorithm~\ref{alg:best_scale}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
-The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and takes a small p-value within the smooth rectangle if the area is large enough, or directly takes the global p-value when the global p-value is small enough. The parameter $\gamma$ is an important threshold to identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Decreasing or increasing the parameter $\tau$ has a similar effect, though to a lesser extent, and a small positive number generally suffices to negate noisy p-value changes. Empirically, our choice of parameters achieve good testing power under dependence with minimal FDR inflation.
+The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} searches for a consecutive region that has smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), and takes a small p-value within the smooth rectangle if the area is large enough, or directly takes the global p-value when the global p-value is small enough. The parameter $\gamma$ is an important threshold to identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Decreasing or increasing the parameter $\tau$ has a similar effect, though to a lesser extent, and a small positive number generally suffices to negate noisy p-value changes. Empirically, our choice of parameters achieves good testing powers under dependence with minimal FDR inflation.
 
 As Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, it does not guarantee that the true optimal local correlation is always correctly identified. To better justify Algorithm~\ref{alg:best_scale}, we compare the sample \Mgc~power by Algorithm~\ref{alg:best_scale} to the Oracle \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $19$ dependencies (function $20$ excluded) described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($38$ functions overall), and calculate all local p-values using $1$,$000$ random permutations. 
 % By using the true optimal scale (from the simulation section) consistently for each data pair, the true \Mgc~p-value can be computed; by using 

@@ -39,9 +39,8 @@ FindLargestRectangles <-function(I,crit,minSize){
   W = S; 
   H = S;
   C = ((p[1]+p[2]) + p[3]*S) * S; 
-  d = round((3*n)/4);
-  minH = max(min(minSize[1], d),1);
-  minW = max(min(minSize[2], d),1);
+  minH = max(minSize[1],1);
+  minW = max(minSize[2],1);
   
   hight2width = matrix(0,n+1,1);  
   for (r in (1 : nR)){
@@ -56,9 +55,9 @@ FindLargestRectangles <-function(I,crit,minSize){
           hight2width[hight] = width;
           Crit = p[1]*hight + p[2]*width + p[3]*width*hight;
           if (Crit>MaxCrit){
-             MaxCrit = Crit;    
-             W[r,c]  = width;
-             H[r,c]  = hight;
+            MaxCrit = Crit;    
+            W[r,c]  = width;
+            H[r,c]  = hight;
           }
         }
         C[r,c]  = MaxCrit;
@@ -68,9 +67,9 @@ FindLargestRectangles <-function(I,crit,minSize){
   } 
   
   width2height = matrix(0,n+1,1);  
-  for (r in (1 : nC)){
+  for (c in (1 : nC)){
     width2height = matrix(0,n+1,1);  
-    for (c in (nR: 1)){
+    for (r in (nR: 1)){
       s=S[r,c];
       if(s>0){
         MaxCrit=C[r,c];
@@ -91,20 +90,19 @@ FindLargestRectangles <-function(I,crit,minSize){
     }       
   }
   
-  CC=C;
-  CC[H<minH | W<minW ] = 0;
-  if (sum(CC)>0){
-    C=CC;
-  }
-  pos = which.max(C);
-  
-  r = ((pos-1) %% nR) + 1
-  c = floor((pos-1) / nR) + 1
+  C[H<minH | W<minW ] = 0;
   M = matrix(FALSE,nR,nC);
-  M[ r:(r+H[r,c]-1), c:(c+W[r,c]-1) ] = TRUE;
+  if (max(C)>0){
+    pos=which(C==max(C));
+    for (i in (1:length(pos))){
+      r = ((pos[i]-1) %% nR) + 1
+      c = floor((pos[i]-1) / nR) + 1
+      M[ r:(r+H[r,c]-1), c:(c+W[r,c]-1) ] = TRUE;
+    }
+  }
   result=list(C=C,H=H,W=W,M=M);
   return(result);
-  }
+}
 
 FindLargestSquares <-function(I){
   nr=nrow(I);

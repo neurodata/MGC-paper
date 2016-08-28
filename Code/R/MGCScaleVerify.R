@@ -12,7 +12,7 @@ MGCScaleVerify <-function(P,gamma,tau){
   # bounded above by the p-value is taken as the optimal scales, which shall include the global scale if necessary.
   # Otherwise, we use the mean p-value of all local p-values instead.
   if (missing(gamma)){
-    gamma=0.05; # gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
+    gamma=0.1; # gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
   }
   if (missing(tau)){
     tau=0.005; # tau is a threshold to approximate the monotone p-values change for smooth regions
@@ -35,7 +35,7 @@ MGCScaleVerify <-function(P,gamma,tau){
       # take a small p-value that is 100*gamma/2area(R)% of all p-values in the smooth rectangle. 
       # For example, if the area of R equals gamma, the median
       # p-value within R is use for the MGC p-value.
-      p=quantile(P[R],gamma/tmp);
+      p=quantile(P[R],gamma/2/tmp);
     }else{
       p=mean(P[P<1]); # otherwise, use the mean p-value for MGC
     }

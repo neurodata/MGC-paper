@@ -1,3 +1,5 @@
+source("FindLargestRectangles.R")
+
 MGCScaleVerify <-function(P,gamma,tau){
   # Author: Cencheng Shen
   # This function approximates the p-value and the optimal scale for sample MGC,
@@ -10,7 +12,7 @@ MGCScaleVerify <-function(P,gamma,tau){
   # bounded above by the p-value is taken as the optimal scales, which shall include the global scale if necessary.
   # Otherwise, we use the mean p-value of all local p-values instead.
   if (missing(gamma)){
-    gamma=0.06; # gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
+    gamma=0.05; # gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
   }
   if (missing(tau)){
     tau=0.005; # tau is a threshold to approximate the monotone p-values change for smooth regions
@@ -26,30 +28,30 @@ MGCScaleVerify <-function(P,gamma,tau){
   if (mean(P<P[m,n])<=gamma){
     p=P[m,n]; # directly use the global p-value if it is among the top 100*gamma% of all local p-values
   } else {
-    R=FindLargestRectangles(R); # find the largest rectangle within the smooth regions
+    R=FindLargestRectangles(R)$M; # find the largest rectangle within the smooth regions
     tmp=mean(R);
     # approximate a smaller p-value from the smooth rectangle if and only if the area is no smaller than gamma
     if (tmp>=gamma){
       # take a small p-value that is 100*gamma/2area(R)% of all p-values in the smooth rectangle. 
       # For example, if the area of R equals gamma, the median
       # p-value within R is use for the MGC p-value.
-      p=quantile(P(R),gamma/2/tmp);
+      p=quantile(P[R],gamma/tmp);
     }else{
-      p=mean(P(P<1)); # otherwise, use the mean p-value for MGC
+      p=mean(P[P<1]); # otherwise, use the mean p-value for MGC
     }
   }
   
   # the largest smooth rectangle bounded by the sample MGC p-value is taken as the optimal scale
-  R=FindLargestRectangles((R==1) & (P<=p));
+  R=FindLargestRectangles((R==1) & (P<=p))$M;
   if (sum(R)==0){
     # if the scales from above return empty, relax the smooth region contraint for optimal scale. 
     # This rarely happens except when the mean p-value is taken.
-    R=FindLargestRectangles((P<=p));
+    R=FindLargestRectangles((P<=p))$M;
   }
   
   # include the global scale if necessary
-  ind=find(R==1);
-  if (p>=P(end) && R(m*n)==0){
+  ind=which(R==1);
+  if (p>=P[m*n] && R[m*n]==0){
     ind=c(ind,m*n);
   }
   
@@ -82,12 +84,8 @@ SmoothRegions <- function(P,tau){
   RC[[4]]=(PD[[2]]>=-tau);
   
   for (i in (1:4)){
-    RC[[i]]=FindLargestRectangles(RC[[i]]); # find the largest rectangle within each (approximately) monotonically decreasing / increasing region
+    RC[[i]]=FindLargestRectangles(RC[[i]])$M; # find the largest rectangle within each (approximately) monotonically decreasing / increasing region
   }
   
   R=(RC[[1]] | RC[[2]] | RC[[3]] | RC[[4]]); # combine all four rectangles together into the smooth regions
-}
-
-FindLargestRectangle <-function(R){
-  
 }

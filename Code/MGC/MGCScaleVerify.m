@@ -1,4 +1,4 @@
-function [p,indAll]=MGCScaleVerify(P,gamma,tau)
+function [p,indAll]=MGCScaleVerify(P,rep,gamma)
 % Author: Cencheng Shen
 % This function approximates the p-value and the optimal scale for sample MGC,
 % based on the p-value map of all local correlations.
@@ -9,23 +9,23 @@ function [p,indAll]=MGCScaleVerify(P,gamma,tau)
 % Once we determine the sample MGC p-value, the smooth rectangle that is
 % bounded above by the p-value is taken as the optimal scales, which shall include the global scale if necessary.
 % Otherwise, we use the mean p-value of all local p-values instead.
-if nargin<2
-    gamma=0.06; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
-end
 if nargin<3
-    tau=0.004; % tau is a threshold to approximate the monotone p-values change for smooth regions
+    gamma=0.04; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
 end
+% if nargin<3
+%     tau=0.0002; % tau is a threshold to approximate the monotone p-values change for smooth regions
+% end
 [m,n]=size(P);
 gamma=max(3/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
 
 % find large smooth regions in the p-value map
-R=SmoothRegions(P,tau);
+R=SmoothRegions(P,rep); 
 
 % check for global p-value and smooth rectangle
 if sum(sum(P<P(end)))/(m-1)/(n-1)<=gamma
     p=P(end); % directly use the global p-value if it is among the top 100*gamma% of all local p-values
 else
-    [~,~,~,R]=FindLargestRectangles(R, [0 0 1], [2,2]); % find the largest rectangle within the smooth regions
+   [~,~,~,R]=FindLargestRectangles(R, [0 0 1], [2,2]); % find the largest rectangle within the smooth regions
     tmp=mean(mean(R));
     % approximate a smaller p-value from the smooth rectangle if and only if the area is no smaller than gamma
     if tmp>=gamma
@@ -34,17 +34,16 @@ else
         % p-value within R is use for the MGC p-value.
         p=prctile(P(R), gamma/tmp*50); 
     else
-%         p=mean(P(P<1)); % otherwise, use the mean p-value for MGC
-        p=max(P(P<1));
+        p=mean(P(P<1)); % otherwise, use the mean p-value for MGC
     end
 end
 
 % the largest smooth rectangle bounded by the sample MGC p-value is taken as the optimal scale
-[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],  [2,2]);
+[~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1], [2,2]);
 if sum(sum(R))==0 && p~=P(end)
     % if the scales from above return empty, relax the smooth region contraint for optimal scale. 
     % This rarely happens except when the mean p-value is taken.
-    p=max(P(P<1));
+    p=mean(P(P<1)); 
     [~, ~, ~, R]=FindLargestRectangles((P<=p), [0 0 1], [2,2]);
 end
 
@@ -54,12 +53,13 @@ if (p>=P(end) && R(m*n)==0)
     indAll=[indAll;m*n];
 end
 
-function R=SmoothRegions(P,tau)
+function R=SmoothRegions(P,rep)
 % Find the smooth regions in the p-value map, by considering the
 % largest monotonically decreasing or increasing scales along
 % the row or column p-values, but allowing small p-value increase or
 % decrease as specified by tau. 
 [m,n]=size(P);
+tau=min(2/rep,0.005);
 
 PD=cell(2,1);
 PD{1}=zeros(m,n); % store the p-value changes within rows
@@ -74,9 +74,8 @@ for i=2:n
 end
 
 RC=cell(4,1);
-
-% tau=[abs(PD{1}(PD{1}>-1));abs(PD{2}(PD{2}>-1))];
-% tau=prctile(tau,20);
+% tau=[PD{1}(PD{1}>-1);PD{1}(PD{1}>-1)];
+% tau=prctile(abs(tau),10)
 % tau=min(tau,0.005);
 
 RC{1}=(PD{1}<=tau); % check monotone decreasing , but also allows small p-value increase no more than tau
@@ -85,7 +84,7 @@ RC{3}=(PD{2}<=tau); % repeat for column changes
 RC{4}=(PD{2}>=-tau); 
                 
 for i=1:4
-    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i} & (P<1), [0 0 1],  [2,2]); % find the largest rectangle within each (approximately) monotonically decreasing / increasing region
+    [~, ~, ~,RC{i}] = FindLargestRectangles(RC{i} & (P<1), [0 0 1], [2,2]); % find the largest rectangle within each (approximately) monotonically decreasing / increasing region
 end
 
 R=(RC{1} | RC{2} | RC{3} | RC{4}); % combine all four rectangles together into the smooth regions

@@ -78,7 +78,7 @@ for i=1:3
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
     
-    [~,indP]=MGCScaleVerify(p2All');
+    [~,indP]=MGCScaleVerify(p2All',rep);
     if indP(end)==size(p2All,1)*size(p2All,2)
         indP2=indP(1:end-1);
     else

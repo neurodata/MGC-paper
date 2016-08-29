@@ -164,7 +164,8 @@ else
     maxC=ceil(max(max(C))*10)/10;
     minC=ceil(min(min(C))*10)/10;
 end
-imagesc(C(bar,bar)');
+minC=min(minC,-maxC);maxC=max(maxC,-minC);
+imagesc(C(bar,bar)'-C(1,1));
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
@@ -189,7 +190,7 @@ hold all
 if sameBar~=1
     maxC=ceil(max(max(D))*10)/10;
 end
-imagesc(D(bar,bar)');
+imagesc(D(bar,bar)'-D(1,1));
 set(gca,'FontSize',16)
 % colormap(ax,map3);
 caxis([minC,maxC]);
@@ -280,7 +281,7 @@ hold all
 imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-text(24,53,'$A$','interpreter','latex','FontSize',fontSize)
+text(24,53,'$A^{k}$','interpreter','latex','FontSize',fontSize)
 title([{'3. MGC^k^,^l'}; {'(local scales)'}; {' '}],'FontSize',fontSize,...
     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -293,7 +294,7 @@ hold all
 imagesc(B_MGC(bar,bar)');
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
-title('$$B^{l^{*}}$$','interpreter','latex');
+title('$$B^{l}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 % C MGC

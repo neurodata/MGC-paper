@@ -74,13 +74,6 @@ left(2:end)=left(2:end)+0.02;
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
-%% permute sample order
-
-xynorm=sum([x,y]').^2';
-[foo, bar]=sort(xynorm);
-bar=1:n;
-%bar=randperm(n);
-
 
 %%  Col 1
 % ax=subplot(s,t,t+1); 
@@ -149,7 +142,18 @@ formatSpec = '\n $\\sum \\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\
 fprintf(formatSpec,sum(sum(mantelH)), sum(sum(mcorrH)),sum(sum(C_MGC)));
 fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'),sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro'));
 
+%% permute sample order
 
+xynorm=sum([x,y]').^2';
+[foo, bar]=sort(xynorm);
+bar=1:n;
+bar=randperm(n);
+bar(find(bar==I))=bar(1);
+bar(1)=I;
+bar(find(bar==J))=bar(2);
+bar(2)=J;
+bar(find(bar==J2))=bar(3);
+bar(3)=J2;
 %% Mantel
 
 
@@ -165,7 +169,7 @@ else
     minC=ceil(min(min(C))*10)/10;
 end
 minC=min(minC,-maxC);maxC=max(maxC,-minC);
-imagesc(C(bar,bar)'-C(1,1));
+imagesc(C(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
@@ -190,7 +194,7 @@ hold all
 if sameBar~=1
     maxC=ceil(max(max(D))*10)/10;
 end
-imagesc(D(bar,bar)'-D(1,1));
+imagesc(D(bar,bar)');
 set(gca,'FontSize',16)
 % colormap(ax,map3);
 caxis([minC,maxC]);

@@ -303,20 +303,10 @@ However, doing so na\"ively for each scale separately requires $O(n^4)$ time, be
 % 
 By noting that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, one can simply keep track of the sufficient statistics while iteratively increasing neighborhood size, yielding  \emph{all} local correlations in $\mc{O}(n^2 \log n)$, essentially the same running time complexity as  global correlation coefficients (Algorithms \ref{alg:all_scales} and \ref{alg:pval}). Specifically, \Mantel, \Dcorr, and \Mcorr~require $O(n^2)$ time, and \Hhg, another state-of-the-art approach,  requires $O(n^2 \log n)$ time \cite{HellerGorfine2013}.  Upon computing the test statistics for all scales, \Mgc~yields ``multiscale maps'', which it then uses to estimate the optimal scale. These maps are  related to, but quite distinct from, maps of wavelet coefficients commonly used in geometric counterparts of harmonic analysis \cite{Allard2012,MMS:NoisyDictionaryLearning}.
 
-% 
-% When the underlying joint distribution is known (as in simulations), ``Oracle \Mgc'' computes the power for all local scales (Algorithm \ref{alg:power}). In the absence of the true distribution or adequate training data, \Mgc~must rely on the p-values for the different scales.  In either case, these multiscale maps reveal the scales of dependence in a fashion that is  related to, but quite distinct from, maps of wavelet coefficients commonly used in harmonic analysis \cite{Allard2012}.
-% * <stefaniejacinto@gmail.com> 2016-08-16T04:50:28.381Z:
-%
-% > ``Oracle''
-%
-% What does oracle mean in this context? (domain specific?)
-%
-% ^.
-% \sd{defined}
 
-The fifth step is to estimate the optimal scales and report the corresponding p-value.  ``Oracle \Mgc'' uses the optimal scale, which we define as the scale with maximal power for any finite sample size. In real data settings, the power is not known, so  ``sample \Mgc'' (or just \Mgc) uses the p-values as a surrogate. 
+The fifth step is to estimate the optimal scales and report the corresponding p-value.  ``Oracle \Mgc'' uses the optimal scale, which we define as the scale with maximal power for any finite sample size (power is the probability of correctly rejecting a false null hypothesis). In real data settings, the power of a test cannot be known because the true distribution is unavailable, so  ``sample \Mgc'' (or just \Mgc) uses the p-values as a surrogate. 
 % uses the smoothness of the p-value map to conduct efficient and valid searches.
-Because the p-value maps are reasonably smooth, sample \Mgc~searches for large smooth regions of the multiscale p-value map.  We validate a smooth rectangle as the estimated set of optimal scales, and the largest p-value in that rectangle is the p-value (Algorithm \ref{alg:best_scale}).
+Because the p-value maps are reasonably smooth, sample \Mgc~selects the largest smooth region of the multiscale p-value map as the estimated set of optimal scales, and the largest p-value in that rectangle is the p-value (Algorithm \ref{alg:best_scale}).
 Our estimator therefore does not search over multiple parameters, and therefore does not suffer from multiple hypothesis testing problems \cite{Benjamini1995}.
 % , and still achieves excellent power  (Supplementary Figure \ref{f:simPerm}).
 
@@ -363,7 +353,7 @@ Flowchart  and table demonstrating the ability of Multiscale Generalized Correla
 % ^.
 \textbf{0.} 50 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 % 
-\textbf{1.} Choose a metric on $x$ and another on $y$, and compute all pairwise distances for $x$ and $y$ yielding interpoint comparison matrices
+\textbf{1.} Choose a metric on $x$ and another on $y$, and compute all pairwise distances (centered by the overall means) for $x$ and $y$ yielding interpoint comparison matrices
  $\tilde{A}$ (top) and $\tilde{B}$ (middle), 
 and their element-wise product $\tilde{C}$ (bottom), whose normalized sum is the  \Mantel~statistic \cite{Mantel1967} (bottom row of table).
 % 
@@ -408,7 +398,7 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigHDPower}
 \caption{Powers of \Mcorr, \Hhg, and Oracle \Mgc~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  
-Each panel shows power at significance level $\alpha=0.05$
+Each panel shows the testing power at significance level $\alpha=0.05$
 % * <joshuav@gmail.com> 2016-08-19T07:00:57.013Z:
 %
 % > Each
@@ -890,7 +880,7 @@ The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional setti
 Powers of different methods for $20$ different one-dimensional dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative hypotheses.
  % on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
 This figure includes seven different tests: \Mantel, \Dcorr, and \Mcorr  (magenta dotted, dashed, and solid lines, respectively), as well as their corresponding \Mgc~counterparts, \Mgcp, \Mgcd, \Mgcm~(green with same line styles), as well as \Hhg (gray).
-Each panel shows power on the abscissa at a significance level $\alpha=0.05$, and sample size on the ordinate.
+Each panel shows the testing power on the abscissa at a significance level $\alpha=0.05$, and sample size on the ordinate.
 \Mgc~empirically achieves similar or better power than the previous state of the art approaches for all sample sizes on almost all problems.}
 \label{f:1DAll}
 \end{figure}

@@ -43,9 +43,10 @@ MGCPermutationTest <-function(A,B,rep,option){
   pAll[1,]=1;pAll[,1]=1;
   
   # verify and estimate the MGC optimal scale
-  ind=MGCScaleVerify(pAll);
-  p=pAll[ind];
-  test=testAll[ind];
+  result=MGCScaleVerify(pAll);
+  p=result$p;
+  ind=result$ind;
+  test=testAll[ind[length(ind)]];
   
   result=list(pMGC=p,pAll=pAll,MGC=test,testAll=testAll,ind=ind);
   return(result);

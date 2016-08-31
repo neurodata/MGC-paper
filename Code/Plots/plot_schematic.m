@@ -74,13 +74,6 @@ left(2:end)=left(2:end)+0.02;
 figure(1), clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
-%% permute sample order
-
-xynorm=sum([x,y]').^2';
-[foo, bar]=sort(xynorm);
-bar=1:n;
-%bar=randperm(n);
-
 
 %%  Col 1
 % ax=subplot(s,t,t+1); 
@@ -149,7 +142,18 @@ formatSpec = '\n $\\sum \\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\
 fprintf(formatSpec,sum(sum(mantelH)), sum(sum(mcorrH)),sum(sum(C_MGC)));
 fprintf(formatSpec,sum(sum(mantelH))/norm(C,'fro')/norm(D,'fro'), sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'),sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro'));
 
+%% permute sample order
 
+xynorm=sum([x,y]').^2';
+[foo, bar]=sort(xynorm);
+bar=1:n;
+bar=randperm(n);
+bar(find(bar==I))=bar(1);
+bar(1)=I;
+bar(find(bar==J))=bar(2);
+bar(2)=J;
+bar(find(bar==J2))=bar(3);
+bar(3)=J2;
 %% Mantel
 
 
@@ -164,6 +168,7 @@ else
     maxC=ceil(max(max(C))*10)/10;
     minC=ceil(min(min(C))*10)/10;
 end
+minC=min(minC,-maxC);maxC=max(maxC,-minC);
 imagesc(C(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
@@ -280,7 +285,7 @@ hold all
 imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
-text(24,53,'$A$','interpreter','latex','FontSize',fontSize)
+text(24,53,'$A^{k}$','interpreter','latex','FontSize',fontSize)
 title([{'3. MGC^k^,^l'}; {'(local scales)'}; {' '}],'FontSize',fontSize,...
     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -293,7 +298,7 @@ hold all
 imagesc(B_MGC(bar,bar)');
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
-title('$$B^{l^{*}}$$','interpreter','latex');
+title('$$B^{l}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 % C MGC
@@ -379,7 +384,7 @@ set(gca,'XTick',[],'YTick',[])
 plot(n,n,'.m','markersize',24)
 
 % draw boundary around optimal scale
-[pval,indP]=MGCScaleVerify(ph);
+[pval,indP]=MGCScaleVerify(ph,1000);
 disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
 [I,J]=ind2sub(size(ph),indP);

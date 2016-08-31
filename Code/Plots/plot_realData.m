@@ -35,12 +35,12 @@ set(groot,'defaultAxesColorOrder',map1);
 fnames={'CorrPermDistTestTypeBrainCxP.mat'; ...
     'CorrPermDistTestTypeBrainLMRxY.mat'; ...
     'CorrPermDistTestTypeMigrainxCCI.mat'};
-xlabs={'# of Activity Neighbors'; ...
-    '# of Shape Neighbors';...
-    '# of Graph Neighbors'};
-ylabs={'# of Personality Neighbors'; ...
-    '# of Disease Neighbors';...
-    '# of Creativity Neighbors'};
+xlabs={ 'Activity Neighbors'; ...
+        'Shape Neighbors';...
+        'Graph Neighbors'};
+ylabs={ 'Personality Neighbors'; ...
+        'Disease Neighbors';...
+        'Creativity Neighbors'};
 % tits= {'A. Brain Activity vs. Personality'; ...
 %     'B. Brain Shape vs. Disorder';...
 %     'C. Brain Graph vs. Creativity'};
@@ -78,8 +78,13 @@ for i=1:3
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
     
-    [~,indP]=MGCScaleVerify(p2All');
-    [I,J]=ind2sub(size(p2All'),indP);
+    [~,indP]=MGCScaleVerify(p2All',rep);
+    if indP(end)==size(p2All,1)*size(p2All,2)
+        indP2=indP(1:end-1);
+    else
+        indP2=indP;
+    end
+    [I,J]=ind2sub(size(p2All'),indP2);
     Ymin=min(I);
     Ymax=max(I);
     Xmin=min(J);
@@ -89,6 +94,9 @@ for i=1:3
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    if indP(end)==size(p2All,1)*size(p2All,2)
+        plot(size(p2All,1),size(p2All,2),'g.','markerSize',16)
+    end
     xticks=[5,round(n1/2)-1,n1-1];
     if i==1,  xticks(1)=3; end
     set(gca,'XTick',xticks,'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
@@ -115,7 +123,7 @@ set(groot,'defaultAxesColorOrder',map1);
 subplot(1,4,4)
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
 pv=p(:,2);
-[f,xi]=ksdensity(pv,'support',[0,1]);
+[f,xi]=ksdensity(pv);
 hold on
 plot(xi,f,'.-','LineWidth',lw);
 pv=sort(pv,'ascend');
@@ -126,8 +134,13 @@ for i=2:length(pv);
     end
 end
 plot(pv,ord,'.','MarkerSize',8);
+% <<<<<<< HEAD
 xlim([0,0.15]);
 ylim([-1 max(f)+1]);
+% =======
+% xlim([-0.05,0.15]);
+% ylim([-1 15]);
+% >>>>>>> 7132b2753b089edc2ca608140c119b901e31b17a
 set(gca,'FontSize',fs-2);
 set(gca,'YTick',[]); % Remove y axis ticks
 axis('square');

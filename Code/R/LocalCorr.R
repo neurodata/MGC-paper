@@ -21,7 +21,7 @@ LocalCorr <- function(X,Y,option){
   
   RX=disRank[,1:n]; # the ranks for X
   RY=disRank[,(n+1):(2*n)]; # the ranks for Y
-  result=LocalComputation(t(A),B,RX,RY); # compute all local corr / var statistics
+  result=LocalComputation(A,t(B),RX,t(RY)); # compute all local corr / var statistics
   return(result);
 }
 
@@ -29,24 +29,23 @@ Centering<-function(X,option){
   # An auxiliary function that properly centers the distance matrix X,
   # depending on the choice of global corr.
   n=nrow(X);
+  
+  # centering for dcorr / mcorr / Mantel
+  if (option==1){
+    EX=t(matrix(rep(colMeans(X),n), ncol = n));
+  }
+  if (option==2){
+    EX=t(matrix(rep(colMeans(X),n), ncol = n))+X/n;
+  }
   if (option==3){
-    # centering for Mantel
     EX=sum(X)/n/(n-1);
-    A=X-EX;
+  }
+  A=X-EX;
+  
+  # for mcorr or Mantel, exclude the diagonal entries
+  if (option==2||option==3){
     for (j in (1:n)){
       A[j,j]=0;
-    }
-  } else {
-    # centering for dcorr / mcorr, which uses single centering rather than
-    # the original double centering
-    A=X-t(matrix(rep(colMeans(X),n), ncol = n));
-    
-    # for mcorr, further adjust the centered matrices to remove high-dimensional bias
-    if (option==2){
-      A=A-X/n;
-      for (j in (1:n)){
-        A[j,j]=0;
-      }
     }
   }
   return(A);

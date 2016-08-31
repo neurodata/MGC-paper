@@ -79,7 +79,7 @@ for tt=type
         power2All=power2All(:,:,ind);
         power3All=power3All(:,:,ind);
     end
-    p=zeros(7,1);
+    p=zeros(7,1);pdis=zeros(2,rep1);
     tt
     %CorrIndTest(tt,n,dim,1,rep2,0);
     for r1=1:rep1
@@ -90,7 +90,9 @@ for tt=type
         p(1)=p(1)+(pp1<alpha)/rep1;
         p(2)=p(2)+(p1<alpha)/rep1;
         p(4)=p(4)+(pp2<alpha)/rep1;
+        pdis(1,r1)=pp2;
         p(5)=p(5)+(p2<alpha)/rep1;
+        pdis(2,r1)=p2;
         if isempty(neighbor)==false
             if option(1)==1
                 [k,l]=ind2sub(size(power1All),neighbor(1));
@@ -126,18 +128,23 @@ powerP(:,type)
 
 save(filename,'powerP','rep1','rep2','dim','noise','alpha','thres');
 
-figure
-x=1:20;
-a=2;
-if a==1
-    ind=[1,2,3,7];
-else
-    ind=[4,5,6,7];
-end
-p1=powerP(ind,:);
-plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-',x,p1(4,:),'c.-')
-legend('Estimated MGC','Global Mcorr', 'True MGC','HHG');
-xlabel('Function Type');
-ylabel('Testing Power');
-ylim([0,1]);
-title('Testing Power Comparison for dimension 1 simulation at n=60');
+% figure
+% hist(pdis(1,:),20);
+% figure
+% hist(pdis(2,:),20);
+
+% figure
+% x=1:20;
+% a=2;
+% if a==1
+%     ind=[1,2,3,7];
+% else
+%     ind=[4,5,6,7];
+% end
+% p1=powerP(ind,:);
+% plot(x,p1(1,:),'bo-',x,p1(2,:),'rx--',x,p1(3,:),'ko-',x,p1(4,:),'c.-')
+% legend('Estimated MGC','Global Mcorr', 'True MGC','HHG');
+% xlabel('Function Type');
+% ylabel('Testing Power');
+% ylim([0,1]);
+% title('Testing Power Comparison for dimension 1 simulation at n=60');

@@ -33,9 +33,9 @@ n = max(S(:));
 W = S; % make a carbon copy of the matrix data
 H = S;
 C = ((p(1)+p(2)) + p(3)*S) .* S; % p(1)*width + p(2)*height + p(3)*height*width for height=width=S;
-d = round((3*n)/4);
-minH = max(min(minSize(1), d),1);
-minW = max(min(minSize(2), d),1);
+%d = round((3*n)/4)
+minH = max(minSize(1),1);
+minW = max(minSize(2),1);
 
 %% look for rectangles with width>height
 hight2width = zeros(n+1,1);  % Store array with largest widths aviable for a given height
@@ -89,13 +89,15 @@ for c = 1 : nC               % each column is processed independently
 end
 
 %% Create container mask
-CC = C;
-CC( H<minH | W<minW ) = 0; % first try to obey size restrictions
-[~, pos] = max(CC(:));
-if (isempty(pos)), [~, pos] = max(C(:)); end % but when it fails than drop them
-[r c] = ind2sub(size(C), pos);
+C( H<minH | W<minW ) = 0; % first try to obey size restrictions
 M = false(size(C));
-M( r:(r+H(r,c)-1), c:(c+W(r,c)-1) ) = 1;
+if max(max(C))>0
+    pos = find(C==max(max(C)));
+    for i=1:length(pos)
+        [r c] = ind2sub(size(C), pos(i));
+        M( r:(r+H(r,c)-1), c:(c+W(r,c)-1) ) = 1;
+    end
+end
 
 function S = FindLargestSquares(I)
 %FindLargestSquares - finds largest sqare regions with all points set to 1.

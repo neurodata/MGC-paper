@@ -13,14 +13,7 @@ end
 n=size(X,1);
 disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
 
-% rk=0;
-% if rk==1
-%     X=disRank(1:n,1:n)-1;
-%     Y=disRank(1:n,n+1:2*n)-1;
-% end
-
-% depending on the choice of the global correlation, properly center the
-% distance matrices
+% depending on the choice of the global correlation, properly center the distance matrices
 A=Centering(X,option);
 B=Centering(Y,option);
 
@@ -56,12 +49,8 @@ if option==2 || option==3
     end
 end
 
-% A(A<0)=-1;
-% A(A>0)=1;
-
 function [corrXY,varX,varY]=LocalComputation(A,B,RX,RY)
-% An auxiliary function that computes all local correlations simultaneously
-% in O(n^2)
+% An auxiliary function that computes all local correlations simultaneously in O(n^2)
 n=size(A,1);nX=max(max(RX));nY=max(max(RY));
 corrXY=zeros(nX,nY); varX=zeros(1,nX); varY=zeros(1,nY);
 EX=zeros(1,nX);EY=zeros(1,nY);

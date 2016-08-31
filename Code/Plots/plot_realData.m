@@ -123,7 +123,7 @@ set(groot,'defaultAxesColorOrder',map1);
 subplot(1,4,4)
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
 pv=p(:,2);
-[f,xi]=ksdensity(pv,'support',[0,1]);
+[f,xi]=ksdensity(pv);
 hold on
 plot(xi,f,'.-','LineWidth',lw);
 pv=sort(pv,'ascend');
@@ -134,7 +134,7 @@ for i=2:length(pv);
     end
 end
 plot(pv,ord,'.','MarkerSize',8);
-xlim([0,0.15]);
+xlim([-0.05,0.15]);
 ylim([-1 15]);
 set(gca,'FontSize',fs-2);
 set(gca,'YTick',[]); % Remove y axis ticks

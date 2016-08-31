@@ -11,7 +11,7 @@ function [p,indAll]=MGCScaleVerify(P,rep)
 % Otherwise, we use the mean p-value of all local p-values instead.
 
 gamma=0.05; % gamma is used to: determine if the global p-value is significant enough, determine if the rectangular region is significant enough, and approximate a small p-value in the significant rectangular region
-tau=20;
+tau=10;
 % if nargin<3
 %     tau=0.0002; % tau is a threshold to approximate the monotone p-values change for smooth regions
 % end
@@ -28,7 +28,7 @@ R=SmoothRegions(P,rep);
 if sum(sum(P<P(end)))/(m-1)/(n-1)<=gamma
     p=P(end); % directly use the global p-value if it is among the top 100*gamma% of all local p-values
 else
-%     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % find the largest rectangle within the smooth regions
+     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % find the largest rectangle within the smooth regions
 %     tmp=mean(mean(R));
     % approximate a smaller p-value from the smooth rectangle if and only if the area is no smaller than gamma
     %if tmp>=max(2/min(m,n),gamma) % increase gamma accordingly in case the sample size is too small

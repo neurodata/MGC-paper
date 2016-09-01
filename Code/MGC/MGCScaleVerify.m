@@ -9,9 +9,9 @@ function [p,indAll]=MGCScaleVerify(P,rep)
 % Once we determine the sample MGC p-value, the smooth rectangle that is
 % bounded above by the p-value is taken as the optimal scales, which shall include the global scale if necessary.
 
-gamma=0.04; % gamma is used to: determine if the global p-value is significant enough, and determine if the rectangular region is significant enough
+gamma=0.02; % gamma is used to: determine if the global p-value is significant enough, and determine if the rectangular region is significant enough
 [m,n]=size(P);
-gamma=max(3/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
+gamma=max(2/min(m,n),gamma); % increase gamma accordingly in case the sample size is too small
 
 % find large smooth regions in the p-value map
 R=SmoothRegions(P,rep);
@@ -21,19 +21,18 @@ if sum(sum(P<P(end)))/(m-1)/(n-1)<=gamma
     p=P(end); % directly use the global p-value if it is among the top 100*gamma% of all local p-values
 else
     [~,~,~,R]=FindLargestRectangles(R, [0 0 1],[2,2]); % find the largest rectangle within the smooth regions
-    tmp=mean(mean(R));
-    if tmp>=gamma % if the smooth region is too small, take all scales
-        [h,edges]=histcounts(P(R),min(ceil(sum(sum(R))/20),100)); % partition the smooth p-values into bins
+    if mean(mean(R))>=gamma
+        [h,edges]=histcounts(P(R),min(ceil(sum(sum(R))/10),100)); % partition the smooth p-values into bins
         [~,ii]=max(h); % find the bin with most counts
         p=edges(ii+1); % use the largest p-value in that bin for MGC
     else
-         p=P(end);
+        p=mean(P(P<1)); % if the smooth region is too small, use mean p-value instead
     end
 end
 
 % the largest smooth rectangle bounded by the sample MGC p-value is taken as the optimal scale
 [~, ~, ~, R]=FindLargestRectangles((R==1) & (P<=p), [0 0 1],[2,2]);
-if sum(sum(R))==0
+if mean(mean(R))==0
     p=P(end); % if empty, use the global p-value
 end
 

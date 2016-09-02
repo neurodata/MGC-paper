@@ -145,9 +145,9 @@
 \begin{abstract}
 Discovering and understanding dependence between multiple  measurement types is a fundamental task not just in the natural sciences, but also policy, commerce, and other domains.
 Given a set of paired observations, an ideal dependence test would efficiently detect dependence in both simulated and real, ``dirty'' data, regardless of the nature of the dependence structure. This would include nonlinear,  high-dimensional, low-sample size, and structured observations, such as images and their corresponding captions.  Moreover, rather than merely providing a theoretically consistent test under all those conditions, and state-of-the-art performance empirically, it would also provide insight into the nature of the dependence between the different modalities.  
-Our key insight is that if the two different modalities are dependent, then \emph{local} distances within one modality (images) should correlate with \emph{local} distances within the other modality (captions), but global distances need not correlate for  nonlinear functions.  
 No existing test satisfies all of these properties.
 We propose Multiscale Generalized Correlation (\Mgc), a juxtaposition and unification of  generalized correlation coefficient with nonlinear manifold learning.
+Our key insight is that if the two different modalities are dependent, then \emph{local} distances within one modality (images) should correlate with \emph{local} distances within the other modality (captions), but global distances need not correlate for  nonlinear functions.  
 We demonstrate that \Mgc~has all the above properties via simulation and theory.
 We then apply \Mgc~in several real applications to detect the presence and nature  of dependence between: (i)  brain activity and personality, (ii) brain shape and disorder, and (iii) brain connectivity and creativity. We also demonstrate that \Mgc~does not inflate non-existent dependence between brain activity and spurious stimulation.  
 \Mgc~is therefore poised to be useful in a wide variety of applications, requiring only data and a dissimilarity function for each measurement type.  Both MATLAB and R code are provided here: \website.
@@ -190,30 +190,43 @@ First, the dependencies between different modalities of data can be highly \text
 %
 Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or billions of dimensions. At the same time, the \textbf{sample sizes} are not increasing proportionally, meaning that we often have ultrahigh-dimensional datasets with relatively low sample sizes.
 Third, the data are often \textbf{structured}, such as networks, shapes, images, and text, creating problems for standard methods that operate on scalars or vectors, rather than more complicated objects.
-% \sd{"Third, the data are often \textbf{structured}: networks, shapes, images, and text are all examples." which do you think is better?}
-% For example, we may desire to understand whether brain shape and disease status are related, so that we can develop prognostic biomarkers to combat the deleterious efforts of degenerative neurological disorders \cite{ParkEtAl2008}.
+% \jv{"rather than more complicated objects" not obviously useful}
 %
 Fourth, because we will often have a data deluge, with myriad different measurements, it is important to have a  \textbf{computationally efficient} method of generating results.
 %
 Finally, 
 % as alluded to above, checking for dependence is rarely the final step in the analysis.  Frequently, 
-we not only want to know \textit{whether}  modalities are dependent on each other, but also \textit{how} they do (i.e. their \textbf{scales and structures of dependence}).
-
+we not only want to know \textit{whether}  modalities are dependent on each other, but also \textit{how} they do (i.e. their \textbf{scales and nature of dependence}).
+A method is needed that addresses all of these desiderata in theory, with extensive simulations, and in real data problems.
 
 % the below paragraph needs a bunch of work.
-We developed the Multiscale Generalized Correlation (\Mgc) test to address the challenges above, both in theory as well as in extensive simulations and real data problems.
+We developed the Multiscale Generalized Correlation (\Mgc) test to those needs.
 The key intuition and the five steps behind  \Mgc~are illustrated in Figure \ref{f:schematic} using a canonical nonlinear dependence function: a spiral.  
 \Mgc, like all tests for dependence, starts with observing $n$ pairs of samples, $(\mbx_i,\mby_i)$.  
 For linearly dependent functions, if two samples are close in $x$ they will also be close in $y$.
 We know that nonlinear functions can be \emph{locally approximated} by linear functions \cite{Allard2012}.
 Therefore, even for highly nonlinear dependence functions like a spiral, there are pairs of points that are both close in $x$ and $y$ (such as points $1$ and $2$).  
-But there are also pairs of points that are close only in $x$ and not $y$  (points $2$ and $3$), or only in $y$ and not $x$.  
+But there are also pairs of points that are close only in $y$ and not $x$  (points $2$ and $3$), or only in $x$ and not $y$.  
 Thus, locality is a joint property of both $x$ and $y$.
-Test statistics for dependence typically operate on \emph{all} pairwise relationships.  
-We desire an approach that only considers the jointly local pairs that contain information about the dependence structure, and reveals the associated scales of dependence. 
-A primary challenge that we faced was determining the optimal local scales in a computationally efficient and statistically valid manner. Below, we describe and justify each of the five steps in detail.
+Test statistics for dependence typically operate on \emph{all} pairwise relationships, making them well-suited for detecting global relationships. However, relationships on finer scales can be missed in the global din. \Mgc~solves this problem by identifying the jointly local pairs that contain the most information about the dependence structure, and then using only those scales to conduct its test, thereby revealing both the existence and scales of dependence.
+% flexibly determines the scale(s) at which to conduct its test...
+%
+% We desire an approach that only 
+% MGC ... by 
+% make the connection stronger
+% We desire an approach that only considers the jointly local pairs that contain information about the dependence structure, and reveals the associated scales of dependence. 
 
+A primary challenge that we faced was determining the optimal local scales in a computationally efficient and statistically consistent manner. We constructed a five step approach to address this challenge. 
+The first step is to choose distance functions for both modalities and compute the distance between all pairs of observations within each modality. The choice of distance determines the metric upon which dependence will rest, and is the only choice in the entire algorithm.  
+The second step is to ``single-center'' these matrices to ensure that each data point counts equally (without such centering, single data points far from the others could skew the distances).
+The third step is to compute a local variant of the test, to constraint the test statistic to only consider a particular scale.
+The fourth step is to iterate the third step for all possible scales, which will enable \Mgc~to flexibly determine the scales of interest.
+The fifth and final step is to select the optimal scales, and compute the p-value corresponding to those scales, providing both an assessment of whether the two modalities are consistent, and if so, at which scales. 
 
+% \jv{the only "choice" we have in the algorithm is the choice of what metric to use.}
+% \jv{maybe summarize the 5 steps before getting into the nitty-gritty?}
+% \jv{make first sentence conceptually clear for each of the five steps}
+% 1. 
 The first step is to choose  distance functions---$\delta_x$ for $\mbx$ and $\delta_y$ for $\mb{y}$---and compute the $n \times n$ interpoint comparison matrices $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, where $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$ and  $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
 % Using interpoint pairwise comparison matrices for data science has a rich history, starting with Pearson's statistic, which is a special case of something subsequently called a 
 This ``generalized correlation coefficient'' (because it generalized Pearson's correlation coefficient) \cite{KendallBook}, assuming $A$ and $B$ have zero mean without loss of generality, is written:
@@ -322,7 +335,7 @@ Our estimator does not search over multiple parameters, and therefore does not s
 % \renewcommand{\arraystretch}{1.5} % Default value: 1
 % \vspace{-20pt}
 \begin{tabular}{r  r   r   r}
-\multicolumn{1}{l}{\textbf{Table}} & & & \\
+\multicolumn{1}{l}{\textbf{6. Table}} & & & \\
 $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-2.52  & \hspace{3.5em} \color{magenta}-3.60  &  \hspace{3.0em} \color{magenta}-3.60  \\ 
  $\delta_y$(1,2) & \color{magenta}-1.97 & \color{magenta}-1.52 & \color{magenta}-1.52  \\ 
  $\delta_x \times \delta_y$ & \color{green}4.98 & \color{green}5.48 & \color{green}5.48  \\ 
@@ -367,7 +380,8 @@ and their element-wise product $\tilde{C}$ (bottom), whose normalized sum is the
 % \Mcorr, the global test, has  p-value $0.067$ while \Mgc, our multiscale test, has  p-value $0.005$.
 % Multiscale  maps are used to determine the optimal scales, using p-values (middle)  in the absence of the true distribution or training data, and simulated power (bottom) for Oracle \Mgc.  
 % Both maps enable one to select the optimal scales and understand the structure of dependence.
-Whereas \Mcorr, the global test, has very low power (magenta dot in multiscale p-value map) and therefore yields a non-significant p-value ($0.827$),  there are many local scales that achieve nearly perfect power, so \Mgc~obtains both a highly significant p-value ($\approx 0.005$) and reveals the scales of dependency. \textbf{Table} Numerical demonstration of how \Mgc~is able to detect dependence even in highly nonlinear and low-sample size settings. The three colored points in the scatter plot indicate the three points considered in this table. 
+Whereas \Mcorr, the global test, has very low power (magenta dot in multiscale p-value map) and therefore yields a non-significant p-value ($0.827$),  there are many local scales that achieve nearly perfect power, so \Mgc~obtains both a highly significant p-value ($\approx 0.005$) and reveals the scales of dependency. 
+\textbf{6.} Numerical demonstration of how \Mgc~is able to detect dependence even in highly nonlinear and low-sample size settings. The three colored points in the scatter plot indicate the three points considered in this table. 
 The global methods fail to detect significant dependence since they consider all pairs, including the non-local ones, which \emph{negatively} impact the degree of dependence estimated.
 \Mgc~only considers pairs that are jointly local (such as $(1,2)$), while discarding other pairs (such as $(2,3)$. 
 }
@@ -383,7 +397,7 @@ The table in Figure \ref{f:schematic}  illustrates how \Mgc~is able to detect de
 
 \subsection*{Finite Sample Simulation Experiments}
 
-
+% \jv{the job of a paper characterizing a novel method is to understand the settings in which the new approach outperforms existing approaches, and the settings in which it does not.}
 We are interested in assessing the performance of \Mgc~as compared to existing state-of-the-art tests in a wide variety of settings to better understand them.  
 We therefore consider $20$ different  noisy dependence settings for $f_{xy}$. A large fraction of these are taken exactly from existing literature \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013}.  
 The settings include
@@ -417,18 +431,20 @@ Excluding the independent  setting (\#20), for which all methods yield power $0.
 \label{f:nD}
 \end{figure}
 
-Figure~\ref{f:nD} shows the testing powers versus the dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare   \Mgc~with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
+% \jv{the first sentence should not be merely descriptive, but also get across the concepts of the problem, and motivation/question/gap}
+Figure~\ref{f:nD} shows  testing power versus  dimensionality of \mbx~(the dimensionality of \mby~increases in only a subset of the settings; see Methods for details), with the sample sizes fixed at $n=100$ for each setting.  We compare   \Mgc~with two previously proposed state-of-the-art tests: \Mcorr~\cite{SzekelyRizzo2013a} and \Hhg~\cite{HellerGorfine2013}.  \Hhg~has previously been demonstrated to perform very well on all sorts of nonlinear dependencies, especially in low-dimensional settings, and enjoys strong theoretical guarantees. 
 %
 The advantage of Oracle \Mgc~over its global counterpart \Mcorr~and \Hhg~is  stark. For the nearly linear settings, \Mgc~and \Mcorr~are essentially identical and significantly better than \Hhg~for all dimensionalities.  For the remaining nonlinear dependencies, \Mgc~achieves power levels that are superior to that of \Hhg~and \Mcorr~for almost all functions, often by a significant margin.  For the independent simulation, all tests yield powers at the significance level $\alpha$,  indicating no more false positives than expected.
 More exhaustive benchmark experiments, including those focusing on the one-dimensional scenarios,
 in which we also compare to \Mantel~and \Dcorr, 
 as well as our  multiscale variants of both \Mantel~and \Dcorr, 
  are qualitatively similar, and are therefore relegated to Figure~\ref{f:1DAll} and~\ref{f:nDAll}.
-
+% \jv{last sentence says the "claim" of the paragraph}
 
 
 \subsection*{\Mgc~Empirically Dominates Global Counterparts}
 
+% \jv{model paragraph}
 The above results demonstrate that converting \Mcorr, a global generalized correlation coefficient, to Oracle \Mgc, its multiscale variant, always improves (or does not diminish) the testing power for all considered settings, regardless of the dimensionality and sample size.  This led us to explore whether the multiscale variant of other generalized correlation coefficients would behave similarly.  Specifically, we consider the \Mantel~and \Dcorr~tests, in addition to \Mcorr, and for each, we develop a multiscale variant (see Appendix \ref{appen:methods} for details). 
 Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlations with their corresponding Oracle \Mgc~test.  The top row shows for each of the $20$ settings, with dimensionality of \mbx's and \mby's  fixed at one, the  power averaged over different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but power is averaged over dimensionality of \mbx~while sample size is fixed at $n=100$ as in Figure~\ref{f:nD} and~\ref{f:nDAll}.  In all $40$ settings, for both low and high-dimensions, and for both low and high sample sizes, multiscale methods always either improve on testing power (for nonlinear settings) or keep it constant (for linear and independent settings); they never decrease power. 
 % * <stefaniejacinto@gmail.com> 2016-08-21T07:55:26.101Z:
@@ -600,7 +616,7 @@ For the five-factor personality data, we  used the Euclidean distance.
 
 % Figure \ref{f:real}A provides the p-value map of \Mgc
 % , based on $r=10$,$000$ random permutations. 
-Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0414$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
+Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values (around $0.01$), whereas the global scale fails to detect this significant dependence. The previously proposed dependence test under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) also all fail to detect dependence at a significance level of $0.05$. The sample \Mgc~p-value is $0.0306$, \Hhg~yields a nearly significant p-value $0.0588$, while the rest all have p-values higher than $0.3$, and none of the other tests provide any further insight into the scales of dependence.
 
 
 \subsubsection*{Brain Shape vs. Disease} % Between Hippocampus Shape and Depression}
@@ -611,7 +627,7 @@ Our next experiment investigates whether brain shape and disease status are depe
 This brain shape versus disease dataset consists of $n=114$ subjects. Each subject has a structural MRI scan as well as a discrete variable indicating whether the subject is clinically depressed $(2)$, high-risk $(1)$, or non-affected $(0)$.  From the MRI data, previous work  extracted both the left and right hippocampi.   For the brain shape modality, they computed the interpoint comparison matrices using a nonlinear landmark matching approach \cite{ParkEtAl2008,BegEtAl2005}. For the  disorder variable, we add white noise bounded by $0.01$ to each label, then form the Euclidean distance (the noise is used to break ties amongst the discrete values and make sure only the diagonal entries of the distance matrix are zero).
 
 We consider two dependence tests, one for each hemisphere: ``is hippocampus shape independent of depressive state?''
-Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0158$, and no other dependence test can identify significant dependence(e.g., global \Mcorr~and \Hhg~have p-values of $0.1132$ and $0.1208$). The left hemisphere seems less dependent on disease status, as both local and global tests yield p-values from $0.05$ to $0.1$ (not shown). 
+Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence. The sample \Mgc~p-value is $0.0113$, and no other dependence test can identify significant dependence(e.g., global \Mcorr~and \Hhg~have p-values of $0.1132$ and $0.1208$). The left hemisphere seems less dependent on disease status, as both local and global tests yield p-values from $0.05$ to $0.1$ (not shown). 
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth]{Figures/FigReal}
@@ -1176,35 +1192,29 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Computation of p-value and optimal scales for sample \Mgc. First it locates the smooth regions of the p-value map: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it for p-value changes with increasing / decreasing trend within each row / column, and combine the four smooth rectangles into the smooth regions. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly use the global p-value for sample \Mgc; otherwise we partition the p-values in the smooth regions into at most $100$ bins, find the bin with most p-values, and use the largest p-value of that bin for sample \Mgc. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth regions is taken as the optimal scale. If the resulting rectangle is too small and the global p-value is not used for \Mgc, we use the mean p-value instead. The running time is $O(n^2)$.}
+\caption{Computation of p-value and optimal scales for sample \Mgc. First it locates the smooth regions of the p-value map: we compute the difference of adjacent local p-values within each row, label each difference a smooth change if it is bounded above by a small positive number (i.e., the local p-values have a decreasing trend within the rows), and compute the largest rectangular region of smooth changes. Do it for p-value changes with increasing / decreasing trend within each row / column, and combine the four smooth rectangles into the smooth regions. If the global p-value is among the top p-values, i.e., within $\gamma \%$ of all local p-values, we directly use the global p-value for sample \Mgc; otherwise we partition the p-values in the smooth regions into at most $100$ bins, find the bin with most p-values, and use the largest p-value of that bin for sample \Mgc. Then the largest rectangle that is bounded above by the \Mgc~p-value within the smooth regions is taken as the optimal scale. The running time is $O(n^2)$.}
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require The p-value matrix $P \in \Real^{n \times n}$ of all local correlations, the number of permutations $r$.
 \Ensure The approximated \Mgc~optimal scales $(k^{*},l^{*})$, and the approximated \Mgc~p-value $p$.
 \Function{MGCScaleVerify}{$P,r$}
-\State $\gamma \rto 0.05$ \Comment{threshold to check significant global p-value and significant region}
-\State $\tau \rto 20$ \Comment{determine the number of bins and check the area of optimal scale}
+\State $\gamma \rto 0.02$ \Comment{threshold to check significant global p-value and significant region}
 \State $R=\textsc{SmoothRegions}(P)$ \Comment{find the smooth regions within the p-value map}
 
 \If{$\sum_{k,l} (P_{kl}<P[n,n]) \leq \gamma n^2$} \Comment{use the global p-value if it is sufficiently small}
 \State $p \rto P[n,n]$ 
 \Else
-\State $[H,E]=\textsc{Hist}(P(R),\max\{\sum{R}/\tau,100\})$ \Comment{partition smooth p-values into bins}
+\State $R = \textsc{LargestRectangle}(R)$ \Comment{find the largest smooth rectangle}
+\If{$\sum_{k,l} R_{kl} \geq \gamma n^2$} 
+\State $[H,E]=\textsc{Hist}(P(R),\min\{\sum{R}/10,100\})$ \Comment{partition smooth p-values into bins}
 \State $i \rto \arg\max_{i}\{H_i\}$ \Comment{find the bin with most counts}
 \State $p \rto E_{i+1}$ \Comment{the largest p-value of that bin is used for \Mgc~p-value}
-%\State $R = \textsc{LargestRectangle}(R)$ \Comment{find the largest smooth rectangle}
-%\State $\mu \rto \sum_{k,l} R_{kl} /n^2$ \Comment{area of the smooth rectangle}
-%\If{$\mu \geq \gamma$} \Comment{check if the area is large enough}
-%\State $p = \textsc{Quantile}(P(R), \gamma / 2\mu)$ \Comment{use a smaller \Mgc~p-value by sample quantile}
-%\Else 
-%\State $p=\textsc{Mean}(P(P<1))$ \Comment{otherwise use the mean p-value}
-%\EndIf
+\Else
+\State $p = \textsc{Mean}(P)$ \Comment{use the mean p-value if the rectangle is too small}
 \EndIf
-\State $R = \textsc{LargestRectangle}(R \cap (P\leq p))$ \Comment{calculate the optimal rectangle}
-\If{$\sum_{k,l} R_{kl}<\max\{\gamma n^2/5,\tau\} \ \& \ p\neq P[n,n]$} 
-\State $p=\textsc{Mean}(P(P<1))$ \Comment{use the mean p-value instead}
-\State $R = \textsc{LargestRectangle}(P\leq p)$
 \EndIf
+\State $R = \textsc{LargestRectangle}(R \cap (P\leq p))$ \Comment{calculate the largest rectangle covered by $p$}
+\Lineif{$\sum_{k,l} R_{kl}==0$}{ $p \rto P[n,n]$} \Comment{if empty, use global p-value}
 \State $[k^{*},l^{*}] \rto \textsc{Find}(R==1)$ \Comment{get the optimal scales}
 \Lineif{$p \geq P[n,n]$}{$[k^{*},l^{*}]=\textsc{Add}([k^{*},l^{*}], [n,n])$} \Comment{add the global scale accordingly}
 \EndFunction
@@ -1232,7 +1242,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{appen:diss}
 Evaluating \Mgc~requires estimating the optimal scales. Algorithm~\ref{alg:power} is used whenever the true distribution of the data is known or easy to estimate or multiple training data are available, which yields Oracle \Mgc. Otherwise, we shall approximate the optimal scale by Algorithm~\ref{alg:best_scale}. Once the optimal scale is determined, the testing power of \Mgc~for the given distribution can be quickly determined by Algorithm~\ref{alg:power}, and its p-value for testing on a particular data realization can be determined by Algorithm~\ref{alg:pval}.
 
-The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} first searches for consecutive regions that have smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), then either locates a local p-value by histogram within the smooth regions, or directly takes the global p-value when the global p-value is small enough. As our algorithm makes use of the smoothness property observed in section~\ref{main3} to effectively locate the optimal scales, our sample \Mgc~should yield power close to Oracle \Mgc~for most cases, and optimal scales overlap with those by Oracle \Mgc; and the algorithm does not directly compare local p-values, so it should not inflate the false positive rate.
+The main targets of sample \Mgc~are (i) to achieve similar powers as Oracle \Mgc~under dependence, (ii) estimate the optimal scale, and (iii) not inflate the false positive rate under independence. Algorithm~\ref{alg:best_scale} first searches for consecutive regions that have smooth p-values (i.e., mostly decreasing or increasing along either the row or column indices), then either locates a local p-value by histogram within the smooth regions, or directly takes the global p-value when the global p-value is small enough. As the algorithm makes use of the smooth p-values to effectively locate the optimal scales, our sample \Mgc~should yield power close to Oracle \Mgc~for most cases, and optimal scales overlap with those by Oracle \Mgc; and the algorithm does not directly compare local p-values, so it should not inflate the false positive rate.
 %The parameter $\gamma$ is an important threshold to identify the significant region, which can be increased or decreased to make the algorithm more conservative or aggressive in searching the optimal scale. Decreasing or increasing the parameter $\tau$ has a similar effect, though to a lesser extent, and a small positive number generally suffices to negate noisy p-value changes. Empirically, our choice of parameters achieves good testing powers under dependence with minimal FDR inflation.
 
 As Algorithm~\ref{alg:best_scale} is a heuristic approach to approximate the optimal local scale, it does not guarantee that the true optimal local correlation is always correctly identified. To better justify Algorithm~\ref{alg:best_scale}, we compare the sample \Mgc~power by Algorithm~\ref{alg:best_scale} to the Oracle \Mgc~power by Algorithm~\ref{alg:power}, with  global \Mcorr~and \Hhg~as benchmarks. For each of the $19$ dependencies (function $20$ excluded) described in Appendix \ref{appen:function}, we generate $1$,$000$ samples from $f_{xy}$ for both the low- and high-dimensional settings ($38$ functions overall), and calculate all local p-values using $1$,$000$ random permutations. 
@@ -1245,9 +1255,9 @@ The null is rejected when the p-value is less than $\alpha=0.05$, and the power 
 
 Figure~\ref{f:simPerm} shows the power differences between each of Oracle \Mgc, \Mcorr, and \Hhg~to the sample \Mgc~by algorithm~\ref{alg:best_scale}. Oracle \Mgc~powers are better than the sample \Mgc~powers, though they are often very close. Moreover, sample \Mgc~is significantly better than all other methods, i.e., it dominates global \Mcorr, and almost dominates \Hhg~except with function $18$ in the high-dimensional setting (for which the discrepancy is due to Oracle \Mgc, see Figure~\ref{f:nD}). 
 
-We further observe that the sample \Mgc~is only significantly inferior to the Oracle \Mgc~when the true optimal scale has a small area (e.g., function $16$ and $17$, see Figures~\ref{f:powermaps} and ~\ref{f:powermaps1}), but otherwise they are very similar. As narrow optimal scales are also likely to occur from a pair of independently generated data by chance, they cannot be trusted without training data or knowing the joint distribution, and are purposely excluded by the parameters in algorithm~\ref{alg:best_scale}.
+We further observe that the sample \Mgc~is only significantly inferior to the Oracle \Mgc~when the true optimal scale has a small area (e.g., function $16$ and $17$, see Figures~\ref{f:powermaps} and ~\ref{f:powermaps1}), but otherwise they are very similar. As narrow optimal scales are also likely to occur from a pair of independently generated data by chance, they cannot be trusted without training data or knowing the joint distribution, and are purposely excluded by algorithm~\ref{alg:best_scale}.
 
-Note that it is tempting to directly use the scale that minimizes all local p-values rather than by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches may significantly inflate the false positive rate due to noisy p-values: when the optimal scales are separately estimated for each test, the resulting FPR is often higher than the pre-set $\alpha$, such that the test is no longer valid. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate this problem as much as our proposed strategy. On the other hand, techniques from multiple testing can effectively eliminate FPR inflation, but often yield too low testing powers as there are too many scales in the p-value map.
+Note that it is tempting to directly use the scale that minimizes all local p-values rather than by Algorithm~\ref{alg:best_scale}, or generate random samples based on  data  and use a bootstrap variant of Algorithm~\ref{alg:power}. However, both of those approaches may significantly inflate the false positive rate due to noisy p-values: when the optimal scales are separately estimated for each test, the resulting FPR is often higher than the pre-set $\alpha$, such that the test is no longer valid. This is because p-value is a random variable (it is a function of a random realization from some distribution), so some local p-values will be smaller than the true p-value. Erroneous scales often still exist after a straightforward resampling, so such approaches do not mitigate this problem as much as our proposed strategy. On the other hand, techniques from multiple testing can eliminate FPR inflation, but often yield too low testing powers as there are too many scales in the p-value map.
 
 Overall, our proposed algorithm not only attains decent testing power for sample \Mgc, but also has negligible FPR inflation as seen from the independent simulation and the real data experiments.
 Still, more investigations into this problem and better methods for searching the optimal scales will be worthwhile, to establish some theoretical supports for the current heuristic approach.

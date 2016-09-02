@@ -214,7 +214,7 @@ mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mantelH(bar,bar)');
 set(gca,'YDir','normal')
-title('$$\tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
+title('$$\tilde{C} = \tilde{A} \circ \tilde{B}$$','FontSize',fontSize,'interpreter','latex');
 caxis([mH,MH]);
 colorbar('location','westoutside')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
@@ -270,7 +270,7 @@ mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mcorrH(bar,bar)');
 set(gca,'YDir','normal')
-title('$$A \circ B$$','FontSize',fontSize,'interpreter','latex');
+title('$$C = A \circ B$$','FontSize',fontSize,'interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
@@ -311,7 +311,7 @@ mH=min(mH,-MH);MH=max(MH,-mH);
 imagesc(C_MGC(bar,bar)');
 set(gca,'YDir','normal')
 caxis([mH,MH]);
-title('$$A^{k^{*}} \circ B^{l^{*}}$$','interpreter','latex');
+title('$$C^{kl} = A^{k} \circ B^{l}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 

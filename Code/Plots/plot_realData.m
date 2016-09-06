@@ -85,7 +85,7 @@ for i=1:3
     else
         indP2=indP;
     end
-    [J,I]=ind2sub(size(p2All'),indP2);
+    [J,I]=ind2sub(size(p2All),indP2);
     Ymin=min(I);
     Ymax=max(I);
     Xmin=min(J);

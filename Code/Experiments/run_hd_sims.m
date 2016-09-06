@@ -34,7 +34,7 @@ for i=type
         case {10,19,20}
             dim=100;
     end
-    if i==15 ||i==16||i==17||i==18
+    if i==5 ||i==16||i==17||i==18
         lim=10;
     else
         lim=20;

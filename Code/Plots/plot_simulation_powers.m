@@ -59,19 +59,19 @@ for j=1:total
     %
     hold on
     if select==1
-        h3=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
-        h2=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
-        h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
-        h4=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
+        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
     else
-        h7=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
-        h6=plot(numRange,power6,ls{3},'LineWidth',3,'Color',glob);
-        h5=plot(numRange,power4,ls{2},'LineWidth',3,'Color',glob);
-        h4=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
-        h3=plot(numRange,power3,ls{3},'LineWidth',3,'Color',loca);
-        h2=plot(numRange,power1,ls{2},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
-        h8=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
+        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
+        h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
+        h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h3=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
     end
     hold off
     xlim([numRange(1) numRange(end)]);
@@ -129,19 +129,19 @@ for j=1:total
     titlechar=[CorrSimuTitle(j)]; %, ' d=', num2str(max(dimRange))];
     hold on
     if select==1
-        h3=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
-        h2=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
-        h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
-        h4=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
+        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
     else
-        h7=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
-        h6=plot(numRange,power6,ls{3},'LineWidth',3,'Color',glob);
-        h5=plot(numRange,power4,ls{2},'LineWidth',3,'Color',glob);
-        h4=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
-        h3=plot(numRange,power3,ls{3},'LineWidth',3,'Color',loca);
-        h2=plot(numRange,power1,ls{2},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
-        h8=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
+        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
+        h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
+        h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h3=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
     end
     hold off
     xlim([numRange(1) numRange(end)]);

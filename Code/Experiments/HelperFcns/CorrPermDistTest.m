@@ -1,4 +1,4 @@
-function [p1,p2,p3, p4,p5,p6,p7,p1All,p2All,p3All]=CorrPermDistTest(C,D,rep,titlechar,option)
+function [pMGC,pD,pM,pP, pHHG]=CorrPermDistTest(C,D,rep,titlechar,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by dcorr/mcorr/Mantel, and global dcorr/mcorr/Mantel/HHG.
@@ -18,20 +18,20 @@ if nargin<5
 end
 
 % Global Correlations
-p1All=1;p2All=1;p3All=1;p1=1;p2=1;p3=1;ind1=0;ind2=0;ind3=0;p7=0;t1All=0;t2All=0;t3All=0;
+pDLocal=1;pMLocal=1;pPLocal=1;pD=1;pM=1;pP=1;optimalInd=0;testMGC=0;pMGC=1;testDLocal=0;testMLocal=0;testPLocal=0;pHHG=1;testHHG=0;
 if option(1)==1
-    [p1,p1All,~,t1All,ind1]=MGCPermutationTest(C,D,rep,option(1));
+    [~,~,pDLocal,testDLocal,~]=MGCPermutationTest(C,D,rep,option(1));
 end
 if option(2)==2
-    [p2,p2All,~,t2All,ind2]=MGCPermutationTest(C,D,rep,option(2));
+    [pMGC,testMGC,pMLocal,testMLocal,optimalInd]=MGCPermutationTest(C,D,rep,option(2));
 end
 if option(3)==3
-    [p3,p3All,~,t3All,ind3]=MGCPermutationTest(C,D,rep,option(3));
+    [~,~,pPLocal,testPLocal,~]=MGCPermutationTest(C,D,rep,option(3));
 end
 if option(4)==4
-    [p7]=HHGPermutationTest(C,D,rep);
+    [pHHG,testHHG]=HHGPermutationTest(C,D,rep);
 end
-p4=p1All(end);p5=p2All(end);p6=p3All(end);
+pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);
 
 % if p2<0.05 || p5<0.05
 %     p2
@@ -47,9 +47,9 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-save(filename,'titlechar','rep','option','p1All','p2All','p3All','p4','p5','p6','p7','p1','p2','p3','ind1','ind2','ind3','t1All','t2All','t3All');
+save(filename,'titlechar','rep','option','pDLocal','pMLocal','pPLocal','pHHG','pMGC','pD','pM','pP','optimalInd','testMGC','testDLocal','testMLocal','testMLocal','testHHG');
 
-function  [p, test]=HHGPermutationTest(C,D,rep)
+function  [pHHG, testHHG]=HHGPermutationTest(C,D,rep)
 % Author: Cencheng Shen
 % This is for HHG permutation test.
 % The outputs are the p-values of HHG and the test statistic.
@@ -59,8 +59,8 @@ end
 n=size(C,1);
 
 % Calculate the observed test statistics for the given data sets
-p=0;
-test=HHG(C,D);
+pHHG=0;
+testHHG=HHG(C,D);
 
 % Now Permute the second dataset for rep times, and calculate the p-values
 for r=1:rep
@@ -68,8 +68,8 @@ for r=1:rep
     per=randperm(n);
     DN=D(per,per);
     tmp=HHG(C,DN);
-    p=p+(tmp>=test)/rep;
+    pHHG=pHHG+(tmp>=testHHG)/rep;
 end
-if (sum(p<1/rep)>0)
-    p=p+1/rep;
+if (sum(pHHG<1/rep)>0)
+    pHHG=pHHG+1/rep;
 end

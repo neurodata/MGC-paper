@@ -13,7 +13,7 @@ allNames=allNames(indStr);
 n=length(allNames);
 
 strNames=cell(n,1);
-p=zeros(n,7);
+p=zeros(n,5);
 for j=1:n
     fileName=allNames(j);
     fileName=fileName{1,1};
@@ -26,7 +26,7 @@ pmean=mean(p);
 pstd=std(p);
 
 %%%sort
-[~,ind]=sort(p(:,2),'ascend');
+[~,ind]=sort(p(:,1),'ascend');
 
 cmap=zeros(3,3);
 ma = [1,0,1];

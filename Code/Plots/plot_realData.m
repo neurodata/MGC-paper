@@ -60,16 +60,15 @@ lw=2;
 for i=1:3
     filename=strcat(pre1,fnames{i});
     load(filename);
-    n=size(p2All,1);
+    [m,n]=size(pMLocal);
     
     subplot(1,4,i)
     hold on
-    imagesc(log(p2All'));
+    imagesc(log(pMLocal'));
     set(gca,'YDir','normal')
     colormap(cmap2)
     set(gca,'FontSize',fs-1);
     %     if i==3
-    [n1,n2]=size(p2All);
     xlabel(xlabs{i},'FontSize',fs, ...
        'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
     ylabel(ylabs{i},'FontSize',fs, ...
@@ -79,13 +78,13 @@ for i=1:3
     
     
     %[~,indP]=MGCScaleVerify(p2All',rep);
-    indP=ind2;
-    if indP(end)==size(p2All,1)*size(p2All,2)
+    indP=optimalInd;
+    if indP(end)==m*n
         indP2=indP(1:end-1);
     else
         indP2=indP;
     end
-    [J,I]=ind2sub(size(p2All'),indP2);
+    [J,I]=ind2sub([m,n],indP2);
     Ymin=min(I);
     Ymax=max(I);
     Xmin=min(J);
@@ -95,15 +94,15 @@ for i=1:3
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-    if indP(end)==size(p2All,1)*size(p2All,2)
-        plot(size(p2All,1),size(p2All,2),'g.','markerSize',16)
+    if indP(end)==m*n
+        plot(m,n,'g.','markerSize',16)
     end
-    xticks=[5,round(n1/2)-1,n1-1];
+    xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
-    set(gca,'XTick',xticks,'XTickLabel',[2,round(n1/2),n1]); % Remove x axis ticks
-    set(gca,'YTick',[3,round(n2/2)-1,n2-1],'YTickLabel',[2,round(n2/2),n2]); % Remove x axis ticks
-    xlim([2,n1]);
-    ylim([2,n2]);
+    set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
+    set(gca,'YTick',[3,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
+    xlim([2,m]);
+    ylim([2,n]);
     axis('square');
     hold off
     if i==1
@@ -123,7 +122,7 @@ set(groot,'defaultAxesColorOrder',map1);
 
 subplot(1,4,4)
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
-pv=p(:,2);
+pv=p(:,1);
 [f,xi]=ksdensity(pv);
 hold on
 plot(xi,f,'.-','LineWidth',lw);

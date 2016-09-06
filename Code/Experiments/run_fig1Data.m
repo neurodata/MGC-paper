@@ -37,17 +37,17 @@ tN=zeros(n,n,rep);
         DA=squareform(pdist(y));
         tN(:,:,r)=LocalCorr(CA,DA,2);
     end
-    power1=zeros(n,n);
+    powerMLocal=zeros(n,n);
     alpha=0.05;
     for i=1:n;
         for j=1:n;
             dCorT=sort(tN(i,j,:),'descend');
             cut1=dCorT(ceil(rep*alpha));
-            power1(i,j)=mean(tA(i,j,:)>cut1);
+            powerMLocal(i,j)=mean(tA(i,j,:)>cut1);
         end
     end
-power1(1,:)=0;power1(:,1)=0; % Set the powers of all local tests at rank 0 to 0
-neighbor=maxNeighbors(power1,0,tN,tA);
+powerMLocal(1,:)=0;powerMLocal(:,1)=0; % Set the powers of all local tests at rank 0 to 0
+neighbor=maxNeighbors(powerMLocal,0,tN,tA);
 
 
 % Generate data
@@ -65,26 +65,28 @@ D=squareform(pdist(y));
 tA=LocalCorr(C,D,2);
 test=SampleMGC(tA);
 tN=zeros(rep,n,n);
-pAll=zeros(n,n);
+testN=zeros(rep,1);
+pMLocal=zeros(n,n);
+pMGC=0;
 for r=1:rep;
     per=randperm(n);
     tmp=LocalCorr(C,D(per,per),2);
     tmp2=SampleMGC(tmp);
     tN(r,:,:)=tmp;
-    if r==1
-        pAll=(tmp>=tA)/rep;
-        p=(tmp2>=test)/rep;
-    else
-        pAll=pAll+(tmp>=tA)/rep;
-        p=p+(tmp2>=test)/rep;
-    end
+    testN(r)=tmp2;
+        pMLocal=pMLocal+(tmp>=tA)/rep;
+        pMGC=pMGC+(tmp2>=test)/rep;
 end
-
-[~,~,~,indAll]=FindLargestRectangles((pAll<=p), [0 0 1],[2,2]);
-indAll=find(indAll==1);
-[m,n]=size(pAll);
-if pAll(end)<=p && sum(indAll==m*n)==0
-    indAll=[indAll;m*n];
+if pMGC==0 || min(min(pMLocal(2:end,2:end)))==0
+    pMLocal=pMLocal+1/rep;
+    pMGC=pMGC+1/rep;
+end
+pMLocal(pMLocal>1)=1;
+[~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
+optimalInd=find(optimalInd==1);
+[m,n]=size(pMLocal);
+if pMLocal(end)<=pMGC && sum(optimalInd==m*n)==0
+    optimalInd=[optimalInd;m*n];
 end
 
 l=ceil(neighbor/n);
@@ -126,4 +128,4 @@ B_MGC=B_MGC;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','p','indAll','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','option','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');

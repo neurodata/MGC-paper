@@ -62,6 +62,7 @@ for j=1:total
         h3=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h2=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
         h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
+        h4=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
     else
         h7=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h6=plot(numRange,power6,ls{3},'LineWidth',3,'Color',glob);
@@ -70,6 +71,7 @@ for j=1:total
         h3=plot(numRange,power3,ls{3},'LineWidth',3,'Color',loca);
         h2=plot(numRange,power1,ls{2},'LineWidth',3,'Color',loca);
         h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
+        h8=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
     end
     hold off
     xlim([numRange(1) numRange(end)]);
@@ -94,8 +96,9 @@ set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h4 h3],'MGC','Mcorr','Sample MGC','HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h8 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','Sample MGC_{M}','HHG','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -129,6 +132,7 @@ for j=1:total
         h3=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h2=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
         h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
+        h4=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
     else
         h7=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h6=plot(numRange,power6,ls{3},'LineWidth',3,'Color',glob);
@@ -137,6 +141,7 @@ for j=1:total
         h3=plot(numRange,power3,ls{3},'LineWidth',3,'Color',loca);
         h2=plot(numRange,power1,ls{2},'LineWidth',3,'Color',loca);
         h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
+        h8=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
     end
     hold off
     xlim([numRange(1) numRange(end)]);
@@ -160,8 +165,9 @@ set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h4 h3],'MGC','Mcorr','Sample MGC','HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h8 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','Sample MGC_{M}','HHG','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

@@ -17,21 +17,24 @@ end
 if nargin<4
     option=2;  % use mcorr by default
 end
-n=size(A,1);
+[m,n]=size(A);
 
 % calculate all local correlations between the two data sets
 testAll=LocalCorr(A,B,option);
-
+ test=SampleMGC(testAll);
 % calculate the local correlations under permutation, to yield the p-values of all observed local correlations
 for r=1:rep
     % use random permutations on the second data set
     per=randperm(n);
     BN=B(per,per);
     tmp=LocalCorr(A,BN,option);
+    tmp2=SampleMGC(tmp);
     if r==1
         pAll=(tmp>=testAll)/rep;
+        p=(tmp2>=test)/rep;
     else
         pAll=pAll+(tmp>=testAll)/rep;
+        p=p+(tmp2>=test)/rep;
     end
 end
 % set the p-values of local corr at rank 0 to maximum, since they should not be used
@@ -41,7 +44,11 @@ end
 pAll(pAll>1)=1;
 pAll(1,:)=1;pAll(:,1)=1;
 
-% verify and estimate the MGC optimal scale
-[p,indAll]=MGCScaleVerify(pAll,rep);
-%p=pAll(ind);
-test=testAll(indAll(end));
+% find optimal scale
+warning('off','all');
+[~,~,~,indAll]=FindLargestRectangles((pAll<=p), [0 0 1],[2,2]);
+indAll=find(indAll==1);
+[m,n]=size(pAll);
+if pAll(end)<=p && sum(indAll==m*n)==0
+    indAll=[indAll;m*n];
+end

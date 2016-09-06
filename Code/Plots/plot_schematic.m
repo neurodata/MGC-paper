@@ -384,10 +384,12 @@ set(gca,'XTick',[],'YTick',[])
 plot(n,n,'.m','markersize',24)
 
 % draw boundary around optimal scale
-[pval,indP]=MGCScaleVerify(ph,1000);
+%[pval,indP]=MGCScaleVerify(ph,1000);
+pval=p;
+indP=indAll;
 disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
-[I,J]=ind2sub(size(ph),indP);
+[J,I]=ind2sub(size(ph),indP);
 Ymin=min(I);
 Ymax=max(I);
 Xmin=min(J);

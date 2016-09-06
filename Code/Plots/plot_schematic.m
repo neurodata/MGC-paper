@@ -71,7 +71,7 @@ left(5)=left(5)+0.03;
 left(6)=left(6)+0.09;
 left(2:end)=left(2:end)+0.02;
 
-figure(1), clf
+fig=figure(1); clf
 set(gcf,'units','normalized','position',[0 0 1 1])
 
 
@@ -465,6 +465,24 @@ hold off
 
 
 %%
+% ax=subplot('Position',[left(1), bottom(1), width, height]);
+% 
+% ntab=5;
+% t = uitable(fig,'Data',round([x(1:5),y(1:5)]*10)/10,...
+%     'ColumnWidth',{60},...
+%     'ColumnName',{'x','y'},...
+%     'ColumnFormat',{'bank','bank'},...
+%     'FontSize',18);
+% t.Position(3) = t.Extent(3);
+% t.Position(4) = t.Extent(4);
+% set(gca,'visible','off')
+% set(gca, 'visible', 'off')
+% set(gca,'FontSize',fontSize)
+% set(findall(gca, 'type', 'text'), 'visible', 'on')
+% set(gca,'XTick',[],'YTick',[]); % Remove y axis ticks
+
+
+%%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=1;
 if donzo==1
@@ -472,6 +490,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
-F.wh=[10 6.5]*2;F.fname
+F.wh=[10 6.5]*2;
+F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

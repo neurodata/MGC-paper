@@ -1,4 +1,4 @@
-function [pval]=plot_simulation_pValueAndPower(type,n,dim,noise)
+function [pMGC]=plot_simulation_pValueAndPower(type,n,dim,noise)
 % Compare p-value heatmap with power heatmap
 if nargin<1
     type=13;
@@ -10,9 +10,9 @@ if nargin<3
     dim=1;
 end
 if nargin<4
-    noise=0;
+    noise=1;
 end
-rep=1000;
+rep=200;
 fontSize=20;
 
 %%% File path searching
@@ -36,34 +36,38 @@ D=squareform(pdist(y));
 
 % Calculate permutation p-value
 tA=LocalCorr(C,D,2);
+test=SampleMGC(tA);
 tN=zeros(rep,n,n);
-pAll=zeros(n,n);
+pMLocal=zeros(n,n);
+pMGC=0;
 for r=1:rep;
     per=randperm(n);
     tmp=LocalCorr(C,D(per,per),2);
+    tmp2=SampleMGC(tmp);
     [t1,t2]=size(tmp);
     tN(r,1:t1,1:t2)=tmp;
-    if r==1
-        pAll=(tmp<tA)/rep;
-    else
-        pAll=pAll+(tmp<tA)/rep;
-    end
+    pMLocal=pMLocal+(tmp>=tA)/rep;
+    pMGC=pMGC+(tmp2>=test)/rep;
 end
 if t1<n
     %tN(r,t1+1:n,1:t2)=repmat(tmp(t1,:),n-t1,1);
-    pAll(t1+1:n,1:t2)=repmat(pAll(t1,:),n-t1,1);
+    pMLocal(t1+1:n,1:t2)=repmat(pMLocal(t1,:),n-t1,1);
 end
 if t2<n
     %tN(r,:,t2+1:n)=repmat(tmp(r,:,t2),1,n-t2);
-    pAll(:,t2+1:n)=repmat(pAll(:,t2),n-t1,1);
+    pMLocal(:,t2+1:n)=repmat(pMLocal(:,t2),n-t1,1);
 end
-pAll=1-pAll;
+if pMGC==0 || min(min(pMLocal(2:end,2:end)))==0
+    pMLocal=pMLocal+1/rep;
+    pMGC=pMGC+1/rep;
+end
+pMLocal(pMLocal>1)=1;
 
 h=figure(type);
 set(h,'units','normalized','position',[0 0 1 1]);
 ax=subplot(2,2,1);
-ph=pAll(2:end,2:end)';
-ph(ph<=eps)=0.0005;
+ph=pMLocal(2:end,2:end)';
+% ph(ph<=eps)=0.0005;
 imagesc(log(ph)); %log(ph)-min(log(ph(:))));
 axis('square')
 set(gca,'FontSize',fontSize)
@@ -82,9 +86,9 @@ ylim([1 n-1]);
 title('Multiscale P-value Map')
 
 %% For Power
-[~,~,~,~,~,~,~,~,power2All,~]=CorrIndTest(type,n,dim,1,rep, rep,noise,0.05,[0,1,0,0]);
+[~,~,powerMLocal]=CorrIndTest(type,n,dim,1,rep, rep,noise,0.05,[0,1,0,0]);
 kmin=2;
-ph=power2All(kmin:end,kmin:end)';
+ph=powerMLocal(kmin:end,kmin:end)';
 tt=find(sum(ph,2)==0,1,'first');
 if isempty(tt)==false && tt~=1;
     ph(tt:end,:)=repmat(ph(tt-1,:),n-tt,1);
@@ -113,9 +117,18 @@ set(h,'FontSize',26);% for 1-Dimensional Simulations'));
 pos = get(ax,'position');
 
 %Optimal Scale map
-pAll=pAll';
+pMLocal=pMLocal';
 % ind=find(pAll==min(min(pAll(2:end,2:end))));
-[pval,phS]=MGCScaleVerify(pAll);
+if min(min(pMLocal))>pMGC
+    pMGC=min(min(pMLocal));
+end
+% % [pval,phS]=MGCScaleVerify(pMLocal);
+% phS=(pMLocal<=pMGC);
+[~,~,~,phS]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
+% phS=find(phS==1);
+if pMLocal(end)<=pMGC || sum(sum(phS))==0
+    phS(end)=1;
+end
 % ind
 % phS=zeros(size(pAll));
 % phS(ind)=1;

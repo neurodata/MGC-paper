@@ -52,8 +52,8 @@ for l=1:length(aList);
     X=zeros(n,timestep,region);
     Y=mvnrnd(0,1,timestep);
     distP=squareform(pdist(Y));
-    power=zeros(7,1);
-    p1=zeros(7,1);
+    power=zeros(5,1);
+    p1=zeros(5,1);
     total=total+n;
     
     for j=1:n
@@ -66,8 +66,8 @@ for l=1:length(aList);
 %         r
         distC=squareform(pdist(X(:,:,r)'));
         %distP=squareform(pdist(X2(:,:,i)));
-        [p1(1), p1(2), p1(3), p1(4),p1(5),p1(6),p1(7)]=CorrPermDistTest(distC,distP,rep,'tmp',option);
-        for tt=1:7
+        [p1(1), p1(2), p1(3), p1(4),p1(5)]=CorrPermDistTest(distC,distP,rep,'tmp',option);
+        for tt=1:5
             if p1(tt)<alpha
                 power(tt)=power(tt)+1/region;
             end

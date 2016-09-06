@@ -52,14 +52,14 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
-    AUC(1,j)=mean(power6);
-    AUC(2,j)=mean(power3);
-    AUC(3,j)=mean(power4);
-    AUC(4,j)=mean(power1);
-    AUC(5,j)=mean(power5);
-    AUC(6,j)=mean(power2);
-    AUC(7,j)=mean(power7);
-    AUC(8,j)=mean(power7);
+    AUC(1,j)=mean(powerP);
+    AUC(2,j)=mean(powerMGCP);
+    AUC(3,j)=mean(powerD);
+    AUC(4,j)=mean(powerMGCD);
+    AUC(5,j)=mean(powerM);
+    AUC(6,j)=mean(powerMGCM);
+    AUC(7,j)=mean(powerHHG);
+    AUC(8,j)=mean(powerHHG);
 end
 
 x=1:2;
@@ -92,14 +92,14 @@ AUC=zeros(8,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
-    AUC(1,j)=mean(power6);
-    AUC(2,j)=mean(power3);
-    AUC(3,j)=mean(power4);
-    AUC(4,j)=mean(power1);
-    AUC(5,j)=mean(power5);
-    AUC(6,j)=mean(power2);
-    AUC(7,j)=mean(power7);
-    AUC(8,j)=mean(power7);
+    AUC(1,j)=mean(powerP);
+    AUC(2,j)=mean(powerMGCP);
+    AUC(3,j)=mean(powerD);
+    AUC(4,j)=mean(powerMGCD);
+    AUC(5,j)=mean(powerM);
+    AUC(6,j)=mean(powerMGCM);
+    AUC(7,j)=mean(powerHHG);
+    AUC(8,j)=mean(powerHHG);
 end
 
 for j=1:3

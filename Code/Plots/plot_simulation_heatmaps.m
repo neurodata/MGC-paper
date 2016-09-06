@@ -36,7 +36,7 @@ for j=1:total
     if isempty(ind)
         ind=1;
     end
-    ph=power2All(kmin:numRange(ind),kmin:numRange(ind),ind)';
+    ph=powerMLocal(kmin:numRange(ind),kmin:numRange(ind),ind)';
     tt=find(sum(ph,2)==0,1,'first');
     if isempty(tt)==false && tt~=1;
         ph(tt:end,:)=repmat(ph(tt-1,:),numRange(ind)-tt,1);
@@ -91,7 +91,7 @@ for j=1:total
     if lim==21 && ind>1
         ind=ind-1;
     end
-    ph=power2All(kmin:n,kmin:n,ind)';
+    ph=powerMLocal(kmin:n,kmin:n,ind)';
  tt=find(sum(ph,2)==0,1,'first');
     if isempty(tt)==false && tt~=1;
         ph(tt:end,:)=repmat(ph(tt-1,:),n-tt,1);

@@ -2,7 +2,7 @@ function run_fig1Data(type,n,noise)
 % generate data for figure 1
 %%% File path searching
 if nargin<1
-    type=16;
+    type=13;
 end
 if nargin<2
     n=50;
@@ -63,22 +63,32 @@ D=squareform(pdist(y));
 
 % Permutation p-value
 tA=LocalCorr(C,D,2);
+test=SampleMGC(tA);
 tN=zeros(rep,n,n);
 pAll=zeros(n,n);
 for r=1:rep;
     per=randperm(n);
     tmp=LocalCorr(C,D(per,per),2);
+    tmp2=SampleMGC(tmp);
     tN(r,:,:)=tmp;
     if r==1
-        pAll=(tmp<tA)/rep;
+        pAll=(tmp>=tA)/rep;
+        p=(tmp2>=test)/rep;
     else
-        pAll=pAll+(tmp<tA)/rep;
+        pAll=pAll+(tmp>=tA)/rep;
+        p=p+(tmp2>=test)/rep;
     end
+end
+
+[~,~,~,indAll]=FindLargestRectangles((pAll<=p), [0 0 1],[2,2]);
+indAll=find(indAll==1);
+[m,n]=size(pAll);
+if pAll(end)<=p && sum(indAll==m*n)==0
+    indAll=[indAll;m*n];
 end
 
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
-pAll=1-pAll;
 
 
 %% compute stuff that cencheng should have saved :)
@@ -116,4 +126,4 @@ B_MGC=B_MGC;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','type','n','option','dim','noise','rep','power1','neighbor','pAll','p','indAll','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');

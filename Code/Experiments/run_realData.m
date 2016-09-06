@@ -18,7 +18,7 @@ addpath(genpath(strcat(rootDir,'Code/')));
 %%%
 if select==1 || select==4
 load(strcat(rootDir,'Data/Preprocessed/BrainCP.mat'))
-n=42; rep=10000;
+n=42; 
 CorrPermDistTest(distC,distP,rep,'BrainCxP');
 end
 

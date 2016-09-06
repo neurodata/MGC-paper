@@ -1,4 +1,4 @@
-function [power1All, power2All, power3All, power4,power5,power6,power7]=CorrIndTestDim(type,n,dim,lim,rep1, rep2,noise,alpha,option)
+function [power1All, power2All, power3All, power4,power5,power6,power7,power8]=CorrIndTestDim(type,n,dim,lim,rep1, rep2,noise,alpha,option)
 % Author: Cencheng Shen
 % Independence Tests for identifying dependency, with respect to increasing dimension at a fixed sample size.
 % The output are the empirical powers of MGC{dcorr/mcorr/Mantel}, and global dcorr/mcorr/Mantel/HHG.
@@ -26,7 +26,7 @@ if nargin<8
     alpha=0.05; % Default type 1 error level
 end
 if nargin<9
-    option=[1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
+    option=[0,1,0,1]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -43,10 +43,10 @@ power1=zeros(1,lim);power2=zeros(1,lim);power3=zeros(1,lim);% Powers for MGC{dco
 power4=zeros(1,lim);power5=zeros(1,lim);power6=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
 
 % Run the independence test to first estimate the optimal scale of MGC
-[~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
+[~,~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
 
 % Run the independence test again for the testing powers
-[power1All, power2All, power3All, power7]=IndependenceTestDim(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
+[power1All, power2All, power3All, power7, power8]=IndependenceTestDim(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
@@ -81,9 +81,9 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
-save(filename,'power1','power2','power3','power4','power5','power6','power7','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
+save(filename,'power1','power2','power3','power4','power5','power6','power7','power8','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','power1All','power2All','power3All');
 
-function [power1, power2, power3, power4,neighbor]=IndependenceTestDim(type,n,dim,lim,rep, noise,alpha,option)
+function [power1, power2, power3, power4,power5,neighbor]=IndependenceTestDim(type,n,dim,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of dcorr/mcorr/Mantel, and the power of HHG.
 %
@@ -109,10 +109,12 @@ end
 dCor1N=zeros(n,n,rep);dCor2N=zeros(n,n,rep);dCor3N=zeros(n,n,rep);
 dCor1A=zeros(n,n,rep);dCor2A=zeros(n,n,rep);dCor3A=zeros(n,n,rep);
 dCor4N=zeros(1,rep);dCor4A=zeros(1,rep);
+dCor5N=zeros(1,rep);dCor5A=zeros(1,rep);
 
 % Powers
 power1=zeros(n,n,lim);power2=zeros(n,n,lim);power3=zeros(n,n,lim);%Powers for all local tests of dcorr/mcorr/Mantel
 power4=zeros(1,lim);% Powers for HHG
+power5=zeros(1,lim);% Powers for HHG
 neighbor=zeros(3,lim); % Optimal neighborhoods for local dcorr/mcorr/Mantel
 
 % Iterate through all dimension choices
@@ -133,6 +135,7 @@ for i=1:lim
         if option(2)~=0
             tmp=LocalCorr(C,D,2);
             dCor2N(1:size(tmp,1),1:size(tmp,2),r)=tmp;
+            dCor5N(r)=SampleMGC(tmp);
         end
         if option(3)~=0
             tmp=LocalCorr(C,D,3);
@@ -158,6 +161,7 @@ for i=1:lim
         if option(2)~=0
             tmp=LocalCorr(C,D,2);
             dCor2A(1:size(tmp,1),1:size(tmp,2),r)=tmp;
+            dCor5A(r)=SampleMGC(tmp);
         end
         if option(3)~=0
             tmp=LocalCorr(C,D,3);
@@ -174,6 +178,7 @@ for i=1:lim
     [power2(:,:,i),neighbor(2,i)]=calculatePower(dCor2N,dCor2A,alpha,rep);
     [power3(:,:,i),neighbor(3,i)]=calculatePower(dCor3N,dCor3A,alpha,rep);
     power4(i)=calculatePower(dCor4N,dCor4A,alpha,rep);
+    power5(i)=calculatePower(dCor5N,dCor5A,alpha,rep);
 end
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)

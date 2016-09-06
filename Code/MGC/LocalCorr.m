@@ -14,6 +14,10 @@ n=size(X,1);
 disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
 
 % depending on the choice of the global correlation, properly center the distance matrices
+% A=disRank(1:n,1:n); % the column ranks for X
+% B=disRank(1:n,n+1:2*n); % the column ranks for Y
+% A=Centering(A,option);
+% B=Centering(B,option);
 A=Centering(X,option);
 B=Centering(Y,option);
 

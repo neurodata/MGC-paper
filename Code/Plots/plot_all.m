@@ -10,4 +10,4 @@ plot_simulation_slopegraph();
 plot_schematic();
 plot_realData();
 
-plot_simulation_permutation();
+% plot_simulation_permutation();

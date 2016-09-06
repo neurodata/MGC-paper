@@ -132,9 +132,7 @@ for j=1:total
         h3=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h2=plot(numRange,power5,ls{1},'LineWidth',3,'Color',glob);
         h1=plot(numRange,power2,ls{1},'LineWidth',3,'Color',loca);
-        if ~isempty(power8)
         h4=plot(numRange,power8,ls{1},'LineWidth',3,'Color','cyan');
-        end
     else
         h7=plot(numRange,power7,ls{4},'LineWidth',3,'Color',HHG);
         h6=plot(numRange,power6,ls{3},'LineWidth',3,'Color',glob);

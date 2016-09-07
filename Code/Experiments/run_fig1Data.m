@@ -77,16 +77,29 @@ for r=1:rep;
         pMLocal=pMLocal+(tmp>=tA)/rep;
         pMGC=pMGC+(tmp2>=test)/rep;
 end
+% set the p-values of local corr at rank 0 to maximum, since they should not be used
 if pMGC==0 || min(min(pMLocal(2:end,2:end)))==0
     pMLocal=pMLocal+1/rep;
     pMGC=pMGC+1/rep;
 end
+if min(min(pMLocal))>pMGC
+    pMGC=min(min(pMLocal));
+end
 pMLocal(pMLocal>1)=1;
-[~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
-optimalInd=find(optimalInd==1);
-[m,n]=size(pMLocal);
-if pMLocal(end)<=pMGC && sum(optimalInd==m*n)==0
-    optimalInd=[optimalInd;m*n];
+pMLocal(1,:)=1;pMLocal(:,1)=1;
+
+% find optimal scale
+if pMGC>alpha
+    optimalInd=[];
+else
+    warning('off','all');
+    [~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
+    optimalInd=find(optimalInd==1);
+    if isempty(optimalInd)
+        testMGC=testLocal(end);
+        pMGC=pMLocal(end);
+        optimalInd=m*n;
+    end
 end
 
 l=ceil(neighbor/n);

@@ -1233,18 +1233,18 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \label{alg:best_scale}
 \begin{algorithmic}[1]
 \Require All local statistics $\G^{kl} \in \Real^{n \times n}$.
-\Ensure The sample \Mgc~statistic $\tilde{\G} \in \Real$.
+\Ensure The sample \Mgc~statistic $\hat{\G}^{*} \in \Real$.
 \Function{SampleMGC}{$\G$}
 \State $\gamma \rto 0.03$ %\Comment{threshold to check significant global p-value and significant region}
-\If{$\sum_{k,l} (\G^{kl}>\gamma) \leq 0.2$} 
-\State $\tilde{\G} \rto \G_{nn}$ \Comment{use the global correlation if too few significant local statistics}
+\If{$\sum_{k,l} (\G^{kl}>\gamma) \leq 2n$} 
+\State $\hat{\G}^{*} \rto \G_{nn}$ \Comment{use the global correlation if too few significant local statistics}
 \Else
 \State $\Omega \rto \arg_{k,l}(\G^{kl}\geq \textsc{Quantile}(\G^{kl},99))$ %\Comment{get the optimal scales}
-\State $\tilde{\G}=\max_{kl}(\G^{kl})$
+\State $\hat{\G}^{*}=\max(\G^{kl})$
 \State $i=\textsc{Ceiling}(0.01n)$;
 \For{$(k',l') \in \Omega$}
 \State $\theta = \textsc{Median}(\G^{kl},k \in [k'-i,k'+i] \ \& \ l \in [l'-i,l'+i])$ 
-\Lineif{$\theta < \tilde{\G}$}{ $\tilde{\G} \rto \theta$} %\Comment{if empty, use global p-value}
+\Lineif{$\theta < \hat{\G}^{*}$}{ $\hat{\G}^{*} \rto \theta$} %\Comment{if empty, use global p-value}
 \EndFor
 \EndIf
 \EndFunction

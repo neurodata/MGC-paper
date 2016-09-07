@@ -79,12 +79,7 @@ for i=1:3
     
     %[~,indP]=MGCScaleVerify(p2All',rep);
     indP=optimalInd;
-    if indP(end)==m*n
-        indP2=indP(1:end-1);
-    else
-        indP2=indP;
-    end
-    [J,I]=ind2sub([m,n],indP2);
+    [J,I]=ind2sub([m,n],indP);
     Ymin=min(I);
     Ymax=max(I);
     Xmin=min(J);
@@ -94,13 +89,10 @@ for i=1:3
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-    if indP(end)==m*n
-        plot(m,n,'g.','markerSize',16)
-    end
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
-    set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
-    set(gca,'YTick',[3,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
+  %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
+%    set(gca,'YTick',[3,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
     xlim([2,m]);
     ylim([2,n]);
     axis('square');

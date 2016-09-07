@@ -331,7 +331,8 @@ set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(ax,cmap)
-hm=ceil(max(max(ph))*10)/10;
+hm=ceil(max(max(ph))*100)/100;
+hm=ceil(prctile(ph(ph<1),99)*100)/100;
 caxis([0 hm])
 h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
 set(h,'FontSize',fontSize);
@@ -344,7 +345,8 @@ xlabel('# of X Neighbors','FontSize',fontSize, ...
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
         'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
 text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
-text(19,55,'Local Correlations','FontSize',fontSize)
+title('Local Correlations','fontweight','normal','FontSize',fontSize);
+%text(19,55,'Local Correlations','FontSize',fontSize)
 axis('square')
 
 
@@ -478,22 +480,22 @@ y1=max(f)+2;
 y2 = max(f1)+2;
 y3 = 5;
 %txt1 = {'Mcorr';['p = ' num2str(pMLocal(end))]};
-txt1 = {['p(c) = ' num2str(pMLocal(end))]};
+txt1 = {['$$p(c)$$ =' num2str(pMLocal(end))]};
 if pMLocal(k,l)<0.001;
     %txt2 = {'Oracle MGC';'p < 0.001'};
-    txt2 = {'p($$c^{*}$$) < 0.001'};
+    txt2 = {'$$p(c^{*}) $$< 0.001'};
 else
     %txt2 = {'Oracle MGC';['p = ' num2str(pMLocal(k,l))]};
-    txt2 = {['p($$c^{*}$$) = ' num2str(pMLocal(k,l))]};
+    txt2 = {['$$p(c^{*}) $$= ' num2str(pMLocal(k,l))]};
 end
 if pMGC<0.001;
     %txt3 = {'Sample MGC';'p < 0.001'};
-    txt3 = {'p($$\hat{c}^{*}$$) < 0.001 '};
+    txt3 = {'$$p(\hat{c}^{*}) $$< 0.001 '};
 else
     %txt3 = {'Sample MGC';['p = ' num2str(pMGC)]};
-    txt3 = {['p($$\hat{c}^{*}$$) = ' num2str(pMGC)]};
+    txt3 = {['$$p(\hat{c}^{*}) $$= ' num2str(pMGC)]};
 end
-a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob);
+a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
 ylim([0 y1+10]);

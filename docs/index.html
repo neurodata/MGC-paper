@@ -277,312 +277,124 @@ name:opening
 
 ## Discovering the Nature of Nonlinear Relationships
 
-Cencheng Shen, Carey E Priebe, Mauro Maggioni, Joshua T Vogelstein
+Cencheng Shen, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo@jhu.edu)
+
+<br>
 
 .center[
-presented by, Joshua T. Vogelstein
+<!-- presented by, Joshua T. Vogelstein -->
+<!-- <br> -->
+<!-- {[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),kavli,[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/) -->
 <br>
-{[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),kavli,[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
-<br>
-please ask questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)!
+<!-- please ask questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)! -->
 <br>
 these slides: <http://docs.neurodata.io/mgc>
 
 ]
 
-
-
 ---
+class: center, middle
 
-# Details
+ Multiscale Generalized Correlation (MGC)
 
-
-<br>
-- 60+ scientists
-- 15 "observers" (NIH, NSF, DARPA, IARPA, Simons, Kavli)
-- 12 countries
-- Report available from [arXiv:1608.06548](http://arxiv.org/abs/1608.06548)
-- Invited for Neuron Special Issue on Big Data
-
----
-
-# Goals
-
-Identify globally beneficial brain science projects:
-- .w[Significant]: they will yield tangible  benefits to the world
-- .w[Feasible]: we can achieve major milestones given existing funding 
-- .w[Inclusive]: all nations can meaningfully contribute  and benefit
-- .w[Collectively diverse]:  span a wide range of brain sciences
-
-
----
-
-## 3 Challenges...
-
-- What makes our brains unique?
-- How does the brain solve the complex  problems of intelligence?
-- How can we augment mental health decision­s with data? 
-
-<br>
-
-##  and 1 Universal Resource...
-
-<!-- <br>
-
-<center><Big>The International Brain Station (TIBS)</Big></center>
- --> 
-
----
-class: center
-
-## The International Brain Station (TIBS)
-
-<img src="images/circle6.png" alt="Drawing" style="width: 550px;"/>
-<!-- <img src="https://github.com/neurodata/ndpaper/raw/master/figure0.png" alt="Drawing" style="width: 700px;"/> -->
-
-<br />
-
-<!-- <center>Goal: Eliminate "pain point" for each stage of discovery</center> -->
-
-
-
----
-
-## Design Goals
-
-<br>
-
-
-- Democratize neuroscience
-- Eliminate "pain point" for each stage of discovery
-- Encourage/incentivize open science (data and tools)
-- Enable global collaborations
-- Make reference research artifacts freely available
-- Build off principles of continuous integration and agile development
-- Be culturally sensitivite
-
-
----
-
-# Collect
-
-<br>
-
-.pull-left[
-- Pain-point: Locally "baby-sitting" hardware
-- Solution:  *Data Collection Dashboards*
-
-<br>
-- Interface directly with measurement machines
-- Live status updates and summaries
-- Enables remote intervention
-- Automatic metadata generation
+.center[
+<img src="../Figures/FigA.png" alt="Drawing" style="width: 550px;"/>
 ]
 
-.pull-right[
-<figure>
-<img src="images/deluge.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:economist.com</small></figcaption>
-</figure>
-]
+---
+class: center, middle
 
+$$a_{ij}=\delta_x(x_i,x_j)$$
+
+$$b_{ij}=\delta_y(y_i,y_j)$$
+
+$$C^{kl}=\dfrac{1}{z_{kl}}  \langle A^{k},  B^j \rangle $$
 
 
 ---
+class: center, middle
 
-# Store
+20 Different Functions (1D version showing)
 
-<br>
-
-.pull-left[
-- Pain-point: Data too large to store/analyze locally
-- Solution:  *Multimodal Cloud Storage*
-
-<br>
-
-- Interface directly with collection machines
-- Organizes data for efficient queries
-]
-
-.pull-right[
-<figure>
-<img src="images/sejnowski.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:nature.com</small></figcaption>
-</figure>
-]
-
-
-
----
-
-# Explore
-
-<br>
-
-.pull-left[
-- Pain-point: Want to see data from anywhere
-- Solution:  *Interactive Data Explorers*
-
-<br>
-
-- Mobile compliant (1 billion+ additional users)
-- Augmented reality environments
-]
-
-.pull-right[
-<figure>
-<img src="images/explore.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:ultravr.org</small></figcaption>
-</figure>
+.center[
+<img src="../Figures/FigSimVisual.png" alt="Drawing" style="width: 550px;"/>
 ]
 
 
 ---
+class: center, middle
+ 
+Oracle & Sample MGC Outperform Benchmarks
 
-# Analyze
-
-
-<br>
-
-.pull-left[
-- Pain-point: Raw data are messy and stored differently
-- Solution: *Reference Analysis Pipelines*
-
-<br>
-
-- Streaming analysis
-- Continuously integrated with new data & methods
-- Notebooks for easy replication and extension
-]
-
-.pull-right[
-<figure>
-<img src="images/jupyter.png" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:treasuredata.com</small></figcaption>
-</figure>
+.center[
+<img src="../Figures/FigHDPower.png" alt="Drawing" style="width: 550px;"/>
 ]
 
 ---
+class: center, middle
 
-# Model
+MGC Empirically Dominates Global Methods
 
-
-<br>
-
-.pull-left[
-- Pain-point: Model and data are incommensurate
-- Solution: *Data Modeling Bots*
-
-<br>
-
-- Automatically fit new models to old data, and new data to old models
-- Community driven metrics, benchmarks, and leaderboards
+.center[
+<img src="../Figures/FigSlope.png" alt="Drawing" style="width: 550px;"/>
 ]
 
-.pull-right[
-<figure>
-<img src="images/hubel1.jpg" alt="Drawing" style="width: 300px;"/>
-<img src="images/hubel2.png" alt="Drawing" style="width: 300px;"/>  
-<figcaption><small>source:wordpress.com</small></figcaption>
-</figure>
+---
+class: center, middle
+
+MGC Reveals Scales of Dependence
+
+.center[
+<img src="../Figures/FigHDHeat.png" alt="Drawing" style="width: 550px;"/>
 ]
+
+---
+class: center, middle
+
+Thm 1: $$\beta_n(c_t^*) \rightarrow 1 \text{ as } n \to \infty$$
+<!-- Oracle MGC is consistent whenever Global Counterpart is
+<br>
+ -->
 
 
 ---
+class: center, middle
 
-# Design
+Thm 2: If x is linearly dependent on y, then for any n it always holds that
 
-<br>
+$$\beta_n(c_t^*) = \beta_n(c_t)$$
 
-.pull-left[
-- Pain-point: Extensive simulations
-- Solution:  *Synthetic Data Simulation Environment*
+---
+class: center, middle
 
-<br>
 
-- Extracts simulation parameters from datasets
-- Runs virtual experiments
-]
+Thm 3: There exists f and n such that
 
-.pull-right[
-<figure>
-<img src="images/tea.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:lady tasting tea</small></figcaption>
-</figure>
-]
+$$\beta( c^{k,l}_{t} ) > \beta(c_t) $$
 
 
 ---
+class: center, middle
 
-# Search
 
-<br>
-
-.pull-left[
-- Pain-point: Data are scattered and poorly labeled
-- Solution: *Metadata Query Service*
-
-<br>
-
-- All data  and code will have community driven metadata
-- Queries to support multiple languages
-]
-
-.pull-right[
-<figure>
-<img src="images/search.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:Minority Report</small></figcaption>
-</figure>
-]
+Thm 4: Oracle MGC dominates its global counterpart
 
 
 ---
+class: center, middle
 
-# Educate 
+MGC Discovers Relationships between Brain & Mental Properties
 
-<br>
-
-.pull-left[
-- Pain-point: New research platform
-- Solution: *Extensive educational focus*
-
-<br>
-
-- Culturally sensitive MOOCs
-- Quarterly training workshops
-- Wiki-style documentation and tutorials
+.center[
+<img src="../Figures/FigReal.png" alt="Drawing" style="width: 550px;"/>
 ]
 
-.pull-right[
-<figure>
-<img src="images/educate.jpg" alt="Drawing" style="width: 300px;"/>
-  <figcaption><small>source:wikipedia.org</small></figcaption>
-</figure>
+Table
+
+
+.center[
+<img src="../Figures/FigReal.png" alt="Drawing" style="width: 550px;"/>
 ]
-
-
-
----
-
-## Challenges
-
-<br>
-
-- Cultural shift in neuroscience
-- But cosmology and molecular genetics did it
-
-
----
-
-## Implications for ODEN
-
-<br>
-
-
-- .w[Incentives]: lowers the barrier to entry into each stage of analysis
-- .w[Sustainability]: resources (data & code) can trivially be supported by communities who use them
-- .w[Discoverability]: all resources will, by default, include extensive metadata
-
 
 ---
 class:   middle, center

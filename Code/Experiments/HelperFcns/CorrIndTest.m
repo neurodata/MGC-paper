@@ -26,7 +26,7 @@ if nargin<8
     alpha=0.05; % Default type 1 error level
 end
 if nargin<9
-    option=[0,1,0,1]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
+    option=[1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -38,7 +38,7 @@ lim=length(numRange);
 
 powerMGCD=zeros(1,lim);powerMGCM=zeros(1,lim);powerMGCP=zeros(1,lim);% Powers for MGC{dcorr/mcorr/Mantel}
 powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
-powerHHG=zeros(1,lim);powerMGC=zeros(1,lim);
+% powerHHG=zeros(1,lim);powerMGC=zeros(1,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
 [~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
@@ -140,16 +140,16 @@ for i=1:lim
         C=DataN(1:nn,1:nn,r);
         D=DataN(1:nn,n+1:n+nn,r);
         if option(1)~=0
-            tmp=LocalCorr(C,D,1);
+            tmp=LocalCorr(C,D,'dcor');
             dCorDN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=LocalCorr(C,D,2);
+            tmp=LocalCorr(C,D,'mcor');
             dCorMN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
             dCorMGCN(r)=SampleMGC(tmp);
         end
         if option(3)~=0
-            tmp=LocalCorr(C,D,3);
+            tmp=LocalCorr(C,D,'mantel');
             dCorPN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
@@ -162,16 +162,16 @@ for i=1:lim
         C=DataA(1:nn,1:nn,r);
         D=DataA(1:nn,n+1:n+nn,r);
         if option(1)~=0
-            tmp=LocalCorr(C,D,1);
+            tmp=LocalCorr(C,D,'dcor');
             dCorDA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=LocalCorr(C,D,2);
+            tmp=LocalCorr(C,D,'mcor');
             dCorMA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
             dCorMGCA(r)=SampleMGC(tmp);
         end
         if option(3)~=0
-            tmp=LocalCorr(C,D,3);
+            tmp=LocalCorr(C,D,'mantel');
             dCorPA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0

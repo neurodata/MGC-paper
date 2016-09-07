@@ -21,6 +21,10 @@
 \usepackage[final,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \definecolor{green}{rgb}{0.1840,0.4362,0.1003} 
+
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{calc}
 % \usepackage[nottoc,numbib]{tocbibind}
 % \usepackage{flushend}
 
@@ -271,6 +275,15 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-2.52  & \hspace{3.5em} \color
 \end{tabular}
 % \end{center}
 % \end{table}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node[xshift=-5.2cm,yshift=-0.6cm] at (current page.east){%
+    \includegraphics[width=0.35\textwidth]{Figures/FigB}};
+
+  %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
+   %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
+  %};
+\end{tikzpicture}
 \caption{
 % (caption on next page.)
 Flowchart  and table demonstrating the ability of Multiscale Generalized Correlation (\Mgc) to detect dependence in nonlinear settings. 
@@ -304,7 +317,6 @@ The global methods fail to detect significant dependence since they consider all
 }
 \label{f:schematic}
 \end{figure}
-
 
 % jv{kernel machines project data into a linear regime}
 The first step is to choose distance functions for both modalities---this serves to transform each data point $(\mbx_i,\mby_i)$, to a different representation in which linearity implies nonlinearities in the original space 

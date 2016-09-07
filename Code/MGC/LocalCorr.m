@@ -8,7 +8,7 @@ function [corrXY,varX,varY] = LocalCorr(X,Y,option)
 %
 % The outputs are all local correlations and all local variances.
 if nargin < 3
-    option=2; % use mcorr by default
+    option='mcor'; % use mcorr by default
 end
 n=size(X,1);
 disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
@@ -32,20 +32,20 @@ n=size(X,1);
 
 % centering for dcorr / mcorr / Mantel
 switch option
-    case 1
+    case 'dcor'
         EX=repmat(mean(X,1),n,1); % column centering
         %EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X)); % this is original double-centering
-    case 2
+    case 'mcor'
 %         EX=repmat(sum(X,1)/(n-1),n,1);
         EX=repmat(sum(X,1)/n,n,1);
         EX=EX+X/n;
-    case 3
+    case 'mantel'
         EX=sum(sum(X))/n/(n-1);
 end
 A=X-EX;
 
 % for mcorr or Mantel, exclude the diagonal entries
-if option==2 || option==3
+if strcmp(option,'mcor') || strcmp(option,'mantel')
     %%%   meanX=sum(sum(X))/n^2;
     for j=1:n
         A(j,j)=0;

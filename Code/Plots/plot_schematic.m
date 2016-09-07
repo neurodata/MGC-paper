@@ -445,10 +445,26 @@ ylim([2,n]);
 hold off
 title('P-Values','fontweight','normal','FontSize',fontSize);
 axis('square')
+
+%%
+pre2=strcat(rootDir,'Figures/');% The folder to save figures
+donzo=1;
+if donzo==1
+    F.fname=strcat(pre2, 'FigA');    
+else
+    F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+end
+F.wh=[10 6.5]*2;
+F.PaperPositionMode='auto';
+
+print_fig(gcf,F)
+
 % 
 %% Col 5 p-value
 % subplot(s,t,t)
-ax=subplot('Position',[left(1), bottom(1)+width/2+0.01, width, height]);
+fig=figure(2); 
+fontSize=fontSize+8;
+%ax=subplot('Position',[left(1), bottom(1)+width/2+0.01, width, height]);
 
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
@@ -472,9 +488,11 @@ x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
 plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
-% try
-% set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
-% end
+    if abs(x2-x3)<0.03
+        set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
+    else
+set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+    end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 % x1 = tA(end);
@@ -485,21 +503,9 @@ y1=max(f)+2;
 y2 = max(f1)+2;
 y3 = 5;
 %txt1 = {'Mcorr';['p = ' num2str(pMLocal(end))]};
-txt1 = {['$$p(c)$$ =' num2str(pMLocal(end))]};
-if pMLocal(k,l)<0.001;
-    %txt2 = {'Oracle MGC';'p < 0.001'};
-    txt2 = {'$$p(c^{*}) $$< 0.001'};
-else
-    %txt2 = {'Oracle MGC';['p = ' num2str(pMLocal(k,l))]};
-    txt2 = {['$$p(c^{*}) $$= ' num2str(pMLocal(k,l))]};
-end
-if pMGC<0.001;
-    %txt3 = {'Sample MGC';'p < 0.001'};
-    txt3 = {'$$p(\hat{c}^{*}) $$< 0.001 '};
-else
-    %txt3 = {'Sample MGC';['p = ' num2str(pMGC)]};
-    txt3 = {['$$p(\hat{c}^{*}) $$= ' num2str(pMGC)]};
-end
+txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
+txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
+txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMLocal(k,l)),'$$');
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
@@ -508,8 +514,8 @@ set(a,'FontSize',fontSize);
 set(b,'FontSize',fontSize);
 set(c,'FontSize',fontSize);
 xlim([minp,maxp+0.04]);
-xlabel('Test Statistic','FontSize',fontSize,'HorizontalAlignment','right');
-ylabel('Density','FontSize',fontSize, ...
+xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
+ylabel('Density','FontSize',fontSize-5, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
 title([{'5. Test using'}; {'Optimal Scales'}],'FontSize',fontSize, ...
@@ -543,16 +549,15 @@ hold off
 % set(findall(gca, 'type', 'text'), 'visible', 'on')
 % set(gca,'XTick',[],'YTick',[]); % Remove y axis ticks
 
-
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=1;
 if donzo==1
-    F.fname=strcat(pre2, 'FigA');    
+    F.fname=strcat(pre2, 'FigB');    
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
-F.wh=[10 6.5]*2;
+F.wh=[3 2]*2;
 F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

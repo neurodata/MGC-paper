@@ -1,4 +1,4 @@
-function run_fig1Data(type,n,noise)
+function run_fig1Data(type,n,noise,rep)
 % generate data for figure 1
 %%% File path searching
 if nargin<1
@@ -10,6 +10,9 @@ end
 if nargin<3
     noise=0;
 end
+if nargin<4
+    rep=1000;
+end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -18,11 +21,9 @@ strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
 %type=11;
-option=2;
 %n=50;
 dim=1;
 %noise=0;
-rep=1000;
 
 % optimal scale
 tA=zeros(n,n,rep);
@@ -31,11 +32,11 @@ tN=zeros(n,n,rep);
         [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
         CA=squareform(pdist(x));
         DA=squareform(pdist(y));
-        tA(:,:,r)=LocalCorr(CA,DA,2);
+        tA(:,:,r)=LocalCorr(CA,DA,'mcor');
         [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
         CA=squareform(pdist(x));
         DA=squareform(pdist(y));
-        tN(:,:,r)=LocalCorr(CA,DA,2);
+        tN(:,:,r)=LocalCorr(CA,DA,'mcor');
     end
     powerMLocal=zeros(n,n);
     alpha=0.05;
@@ -62,7 +63,7 @@ C=squareform(pdist(x));
 D=squareform(pdist(y));
 
 % Permutation p-value
-tA=LocalCorr(C,D,2);
+tA=LocalCorr(C,D,'mcor');
 test=SampleMGC(tA);
 tN=zeros(rep,n,n);
 testN=zeros(rep,1);
@@ -70,7 +71,7 @@ pMLocal=zeros(n,n);
 pMGC=0;
 for r=1:rep;
     per=randperm(n);
-    tmp=LocalCorr(C,D(per,per),2);
+    tmp=LocalCorr(C,D(per,per),'mcor');
     tmp2=SampleMGC(tmp);
     tN(r,:,:)=tmp;
     testN(r)=tmp2;
@@ -141,4 +142,4 @@ B_MGC=B_MGC;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','option','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC');

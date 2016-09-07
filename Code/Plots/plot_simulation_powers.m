@@ -90,15 +90,15 @@ for j=1:total
     axis('square');
 end
 xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-687 2.7],'FontSize',24);
+ylabel('Power','position',[-687 2.7],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
-    h=legend([h1 h2 h4 h3],'MGC','Mcorr','Sample MGC','HHG','Location',lgdPosition);
+   % h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
+    h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h8 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','Sample MGC_{M}','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -159,15 +159,15 @@ for j=1:total
     axis('square');
 end
 xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
-ylabel('Empirical Testing Power','position',[-720 2.7],'FontSize',24);
+ylabel('Power','position',[-720 2.7],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
-    h=legend([h1 h2 h4 h3],'MGC','Mcorr','Sample MGC','HHG','Location',lgdPosition);
+    %h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
+    h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h4 h5 h6 h8 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','Sample MGC_{M}','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

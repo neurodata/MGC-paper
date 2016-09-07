@@ -5,7 +5,7 @@ function  [pMGC,testMGC,pLocal,testLocal,optimalInd]=MGCPermutationTest(A,B,rep,
 % The inputs are:
 % two n*n distance matrices A & B,
 % a parameter rep to specify the number of random permutations,
-% an option to specify which global test to use, set to 1,2,3 for dcorr / mcorr / Mantel.
+% an option to specify which global test to use, set to 1,2,3 for mcor / dcor / Mantel.
 %
 % The outputs are:
 % the estimated MGC p-value, the p-values of all local tests,
@@ -15,16 +15,21 @@ if nargin<3
     rep=1000; % use 1000 random permutations by default
 end
 if nargin<4
-    option=2;  % use mcorr by default
+    option='mcor';  % use mcorr by default
 end
 if nargin<5
     alpha=0.05;  % use mcorr by default
 end
 [m,n]=size(A);
 
+if strcmp(option,'mcor')
+    ind=1;
+else
+    ind=0;
+end
 % calculate all local correlations between the two data sets
 testLocal=LocalCorr(A,B,option);
-if option==2
+if ind==1
     testMGC=SampleMGC(testLocal);
 end
 pLocal=zeros(size(testLocal));pMGC=0;
@@ -36,11 +41,11 @@ for r=1:rep
     tmp=LocalCorr(A,BN,option);
     tmp2=SampleMGC(tmp);
     pLocal=pLocal+(tmp>=testLocal)/rep;
-    if option==2
+    if ind==1
         pMGC=pMGC+(tmp2>=testMGC)/rep;
     end
 end
-if option~=2
+if ind~=1
     pMGC=1;
     testMGC=0;
 end

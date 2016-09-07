@@ -20,13 +20,13 @@ end
 % Global Correlations
 pDLocal=1;pMLocal=1;pPLocal=1;pD=1;pM=1;pP=1;optimalInd=0;testMGC=0;pMGC=1;testDLocal=0;testMLocal=0;testPLocal=0;pHHG=1;testHHG=0;
 if option(1)==1
-    [~,~,pDLocal,testDLocal,~]=MGCPermutationTest(C,D,rep,option(1));
+    [~,~,pDLocal,testDLocal,~]=MGCPermutationTest(C,D,rep,'dcor');
 end
 if option(2)==2
-    [pMGC,testMGC,pMLocal,testMLocal,optimalInd]=MGCPermutationTest(C,D,rep,option(2));
+    [pMGC,testMGC,pMLocal,testMLocal,optimalInd]=MGCPermutationTest(C,D,rep,'mcor');
 end
 if option(3)==3
-    [~,~,pPLocal,testPLocal,~]=MGCPermutationTest(C,D,rep,option(3));
+    [~,~,pPLocal,testPLocal,~]=MGCPermutationTest(C,D,rep,'mantel');
 end
 if option(4)==4
     [pHHG,testHHG]=HHGPermutationTest(C,D,rep);

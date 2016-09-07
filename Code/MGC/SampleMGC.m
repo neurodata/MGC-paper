@@ -40,8 +40,8 @@ else
     ln=1;
 %      [k,l]=find(P==max(max(P)));
     [k,l]=find(P>=prctile(P(P<2),99));
-%     test=max(max(P));
-test=0;
+    test=max(max(P));
+% test=0;
     for i=1:length(k)      
         ki=k(i);
         li=l(i);
@@ -52,7 +52,7 @@ test=0;
         down=min(m,ki+lm);
         tmp=P(upper:down,left:right);
         tmp=median(tmp(tmp<1));
-        if tmp>test
+        if tmp<test
             test=tmp;
         end
     end

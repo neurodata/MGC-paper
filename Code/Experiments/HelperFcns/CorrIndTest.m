@@ -41,10 +41,10 @@ powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global 
 powerHHG=zeros(1,lim);powerMGC=zeros(1,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
-[~,~,~,~,~,neighborhoods]=IndependenceTest(type,n,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
+[~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
 
 % Run the independence test again for the testing powers
-[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG]=IndependenceTest(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
+[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG]=IndependenceTest(type,numRange,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
@@ -84,7 +84,7 @@ if type==0;
 end
 save(filename,'powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerMGC','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
 
-function [powerMGC,powerD, powerM, powerP, powerHHG,neighbor]=IndependenceTest(type,n,dim,lim,rep, noise,alpha,option)
+function [powerMGC,powerD, powerM, powerP, powerHHG,neighbor]=IndependenceTest(type,numRange,dim,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of dcorr/mcorr/Mantel, and the power of HHG.
 %
@@ -95,13 +95,14 @@ if nargin<8
     option=[1,1,1,0]; % Default option. Setting each entry to 0 to disable the calculation of local dcorr/mcorr/Mantel, or HHG.
 end
 
-if lim==0
-    numRange=n; % Test at sample size n only
-else
-    numRange=ceil(n/lim):ceil(n/lim):n; % Test using sample sizes at the interval of ceil(n/lim).
-end
-lim=length(numRange);
+% if lim==0
+%     numRange=n; % Test at sample size n only
+% else
+%     numRange=ceil(n/lim):ceil(n/lim):n; % Test using sample sizes at the interval of ceil(n/lim).
+% end
+% lim=length(numRange);
 d=dim;
+n=numRange(end);
 
 % Store the test statistics under the null and the alternative
 dCorDN=zeros(n,n,rep);dCorMN=zeros(n,n,rep);dCorPN=zeros(n,n,rep);
@@ -185,6 +186,21 @@ for i=1:lim
     [powerP(1:nn,1:nn,i),neighbor(3,i)]=calculatePower(dCorPN(1:nn,1:nn,:),dCorPA(1:nn,1:nn,:),alpha,rep);
     powerHHG(i)=calculatePower(dCorHHGN,dCorHHGA,alpha,rep);
     powerMGC(i)=calculatePower(dCorMGCN,dCorMGCA,alpha,rep);
+%     figure
+%     hold on 
+%     ksdensity(dCorMGCN)
+%     ksdensity(dCorMGCA)
+%     hold off 
+%     figure
+%     hold on 
+%     ksdensity(dCorHHGN)
+%     ksdensity(dCorHHGA)
+%     hold off 
+%     figure
+%     hold on 
+%     ksdensity(reshape(dCorMN(nn,nn,:),1,rep))
+%     ksdensity(reshape(dCorMA(nn,nn,:),1,rep))
+%     hold off 
 end
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)

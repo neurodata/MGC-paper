@@ -44,10 +44,10 @@ powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global 
 powerHHG=zeros(1,lim);powerMGC=zeros(1,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
-[~,~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
+[~,~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dimRange,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
 
 % Run the independence test again for the testing powers
-[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG]=IndependenceTestDim(type,n,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
+[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG]=IndependenceTestDim(type,n,dimRange,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
@@ -84,7 +84,7 @@ pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
 save(filename,'powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerMGC','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
 
-function [powerMGC,powerD, powerM, powerP, powerHHG,neighbor]=IndependenceTestDim(type,n,dim,lim,rep, noise,alpha,option)
+function [powerMGC,powerD, powerM, powerP, powerHHG,neighbor]=IndependenceTestDim(type,n,dimRange,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of dcorr/mcorr/Mantel, and the power of HHG.
 %
@@ -95,16 +95,16 @@ if nargin<8
     option=[1,1,1,0]; % Default option. Setting each entry to 0 to disable the calculation of local dcorr/mcorr/Mantel, or HHG.
 end
 
-if lim==0
-    dimRange=dim; % Test at dim only
-    lim=1;
-else
-    dimRange=ceil(dim/lim):ceil(dim/lim):dim; % Test using dimension choices at the interval of ceil(dim/lim).
-end
-if ceil(dim/lim)~=1
-    dimRange=[1 dimRange];
-    lim=length(dimRange);
-end
+% if lim==0
+%     dimRange=dim; % Test at dim only
+%     lim=1;
+% else
+%     dimRange=ceil(dim/lim):ceil(dim/lim):dim; % Test using dimension choices at the interval of ceil(dim/lim).
+% end
+% if ceil(dim/lim)~=1
+%     dimRange=[1 dimRange];
+%     lim=length(dimRange);
+% end
 
 % Store the test statistics under the null and the alternative
 dCorDN=zeros(n,n,rep);dCorMN=zeros(n,n,rep);dCorPN=zeros(n,n,rep);

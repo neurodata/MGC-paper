@@ -26,7 +26,7 @@ end
 if select==2 || select==4
     load(strcat(rootDir,'Data/Preprocessed/BrainHippoShape.mat'))
     n=114;
-    Label=Label+unifrnd(0,0.1,n,1);
+    Label=Label+unifrnd(0,0.01,n,1);
     y=squareform(pdist(Label));
 %     y=squareform(pdist(Label));
 %     y=y+1;

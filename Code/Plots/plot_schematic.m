@@ -79,7 +79,10 @@ set(gcf,'units','normalized','position',[0 0 1 1])
 %%  Col 1
 % ax=subplot(s,t,t+1); 
 ax=subplot('Position',[left(1), bottom(2)+width/2+0.01, width, height]);
-cla, hold all
+cla, 
+
+
+hold all
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 xlabel('x')
@@ -104,6 +107,7 @@ tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
 tname=tname(findex+1:end);
 xlim([min(x)-0.2, max(x)]);
+ylim([min(y)-0.2, max(y)]);
 
 % title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
 title([{'0. Sample Data'}], 'Units', 'normalized', ...
@@ -111,6 +115,7 @@ title([{'0. Sample Data'}], 'Units', 'normalized', ...
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 pos=[nan, nan, width, height];
 axis('square')
+
 
 % make table
 clc

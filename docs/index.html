@@ -204,6 +204,14 @@
       }
       #frame { zoom: 0.75; -moz-transform: scale(0.75); -moz-transform-origin: 0 0; }
 
+      #outer {
+        width: 100%;
+        text-align: center;
+      }
+      #inner {
+        display: inline-block;
+      }
+
       /* Slide-specific styling */
       #slide-inverse .footnote {
         bottom: 12px;
@@ -291,6 +299,73 @@ Cencheng Shen, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo
 these slides: <http://docs.neurodata.io/mgc>
 
 ]
+
+
+
+---
+class: center, middle
+
+One often desires to test for independence
+
+<table align="center" style="margin: 0px auto;">
+  <tr>
+    <th>x</th>
+    <th>y</th> 
+  </tr>
+  <tr>
+    <td>clouds</td>
+    <td>grass wetness</td> 
+  </tr>
+  <tr>
+    <td>brain activity</td>
+    <td>personality</td> 
+  </tr>
+  <tr>
+    <td>brain shape</td>
+    <td>disorder</td> 
+  </tr>
+  <tr>
+    <td>brain connectivity</td>
+    <td>creativity</td> 
+  </tr>
+</table>
+
+---
+class:  middle
+
+
+### Challenges
+
+1. high-dimensional
+2. structured data (eg, sequences, images, networks, shapes, text)
+3. low sample-sizes
+4. nonlinear relationships
+5. computational efficiency
+6. nature of dependence
+
+---
+class: center, middle
+
+### Our intuition
+
+.center[
+<img src="images/spiral.png" alt="Drawing" style="width: 550px;"/>
+]
+
+
+---
+class: center, middle
+
+Pearson proposed Product-Moment Correlation
+
+$$a_{ij} = \sigma(x_i,x_j)$$
+
+$$b_{ij} = \sigma(y_i,y_j)$$
+
+$$C = A \circ B$$
+
+$$ c = \sum_{ij} C $$
+
 
 ---
 class: center, middle

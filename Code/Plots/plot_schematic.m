@@ -292,7 +292,7 @@ imagesc(A_MGC(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 text(24,53,'$A^{k}$','interpreter','latex','FontSize',fontSize)
-title([{'3. MGC^k^,^l'}; {'(local scales)'}; {' '}],'FontSize',fontSize,...
+title([{'3. MGC^k^,^l'}; {'(local scale)'}; {' '}],'FontSize',fontSize,...
     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
@@ -349,9 +349,12 @@ xlabel('# of X Neighbors','FontSize',fontSize, ...
         'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
         'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
-text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
-title('Local Correlations','fontweight','normal','FontSize',fontSize);
-%text(19,55,'Local Correlations','FontSize',fontSize)
+% text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
+% title(1,60,[{'4. Multiscale Maps'}; {'(all scales)'}; {' '}],'FontSize',fontSize,...
+%     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
+ text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
+% title('Local Correlations','fontweight','normal','FontSize',fontSize);
+text(10,55,'Test Statistics','FontSize',fontSize)
 axis('square')
 
 
@@ -462,8 +465,8 @@ print_fig(gcf,F)
 % 
 %% Col 5 p-value
 % subplot(s,t,t)
-fig=figure(2); 
-fontSize=fontSize+8;
+fig=figure(2); clf
+fs=fontSize+8;
 %ax=subplot('Position',[left(1), bottom(1)+width/2+0.01, width, height]);
 
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -510,16 +513,16 @@ a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Col
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
 ylim([0 y1+10]);
-set(a,'FontSize',fontSize);
-set(b,'FontSize',fontSize);
-set(c,'FontSize',fontSize);
+set(a,'FontSize',fs);
+set(b,'FontSize',fs);
+set(c,'FontSize',fs);
 xlim([minp,maxp+0.04]);
-xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
-ylabel('Density','FontSize',fontSize-5, ...
+xlabel('Test Statistic','FontSize',fs-5,'HorizontalAlignment','right');
+ylabel('Density','FontSize',fs-5, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
-title([{'5. Test using'}; {'Optimal Scales'}],'FontSize',fontSize, ...
-    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+title([{'5. Test using Optimal Scales'}],'FontSize',fs, ...
+    'Units', 'normalized', 'Position', [0 1.0], 'HorizontalAlignment', 'left')
 % pos2 = get(ax,'position');
 % pos2(3:4) = [pos(3:4)];
 % set(ax,'position',pos2);
@@ -532,7 +535,7 @@ hold off
 % power1(k,l)
 
 
-%%
+%
 % ax=subplot('Position',[left(1), bottom(1), width, height]);
 % 
 % ntab=5;
@@ -549,7 +552,7 @@ hold off
 % set(findall(gca, 'type', 'text'), 'visible', 'on')
 % set(gca,'XTick',[],'YTick',[]); % Remove y axis ticks
 
-%%
+%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=1;
 if donzo==1
@@ -557,7 +560,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
-F.wh=[3 2]*2;
+F.wh=[4 2.5]*2;
 F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

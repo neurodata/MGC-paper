@@ -23,31 +23,34 @@ ls{3}='.-';
 ls{4}='.-';
 ls{5}='.';
 ls{6}='-';
- ind=[4,5,6,7];
 
 % set(groot,'defaultAxesColorOrder',map1);
 
 %% 1-d
 for i=1:2
-    if i==1
-        figNumber='1DPerm';
-        filename=strcat(pre1,'CorrSimPermScale1-20Dim1');
-        tstr='1-Dimensional Simulations';
-    else
-        figNumber='HDPerm';
-        filename=strcat(pre1,'CorrSimPermScale1-20Dim2');
-        tstr='High-Dimensional Simulations';
+    power=zeros(4,19);
+    total=20;
+    for j=1:total
+        if i==1
+             filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
+        else
+             filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
+        end
+        load(filename)
+        sz=ceil(length(powerMGC)/2);
+        power(1,j)=powerMGC(sz);
+        power(2,j)=powerM(sz);
+        power(3,j)=powerMGCM(sz);
+        power(4,j)=powerHHG(sz);
     end
-    load(filename)
-    
+
     figure
     hold on
-    p2=powerP(ind,:);
-    p2=p2-repmat(p2(1,:),4,1);
-    plot(-1+ones(19,1)+randn(19,1)/10,p2(3,1:19),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
+    power=power-repmat(power(1,:),4,1);
+    plot(-1+ones(19,1)+randn(19,1)/10,power(3,1:19),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
     %plot(ones(20,1)+randn(20,1)/10,p2(1,:),ls{5},'Color',loca,'LineWidth',4,'MarkerSize',mk);
-    plot(0+ones(19,1)+randn(19,1)/10,p2(2,1:19),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
-    plot(1+ones(19,1)+randn(19,1)/10,p2(4,1:19),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
+    plot(0+ones(19,1)+randn(19,1)/10,power(2,1:19),ls{5},'Color',glob,'LineWidth',4,'MarkerSize',mk);
+    plot(1+ones(19,1)+randn(19,1)/10,power(4,1:19),ls{5},'Color',HHG,'LineWidth',4,'MarkerSize',mk);
     hold off
     % legend('True MGC','Estimated MGC','Mcorr','HHG','Location','NorthWest');
     set(gca,'FontSize',24);
@@ -61,6 +64,13 @@ for i=1:2
     set(gca,'YTick',[-1,-0.5,0,0.5,1]); % Remove x axis ticks
     ax=gca;
     ax.XTickLabelRotation=45;
+    if i==1
+         figNumber='1DPerm';
+        tstr='1-Dimensional Simulations';
+    else
+        figNumber='HDPerm';
+        tstr='High-Dimensional Simulations';
+    end
     title(tstr,'FontSize',24);
     grid on
     xlim([-0.3, 2.3])

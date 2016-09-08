@@ -96,7 +96,7 @@ else
     [~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
     optimalInd=find(optimalInd==1);
     if isempty(optimalInd) || (pMLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
-        optimalInd=m*n;
+        optimalInd=n*n;
     end
 end
 

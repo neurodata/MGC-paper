@@ -25,11 +25,11 @@ for i=type
     switch i
         case {1,2,3}
             dim=1000;
-        case {4,11,12,13}
+        case {4,6,7,8,9,11,12,13}
             dim=20;
         case {5,16,17,18}
             dim=10;
-        case {6,7,8,9,14,15}
+        case {14,15}
             dim=40;
         case {10,19,20}
             dim=100;

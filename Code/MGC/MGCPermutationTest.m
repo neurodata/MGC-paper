@@ -50,9 +50,8 @@ if ind~=1
     testMGC=0;
 end
 % set the p-values of local corr at rank 0 to maximum, since they should not be used
-if pMGC==0 || min(min(pLocal(2:end,2:end)))==0
+if min(min(pLocal(2:end,2:end)))==0
     pLocal=pLocal+1/rep;
-    pMGC=pMGC+1/rep;
 end
 if min(min(pLocal))>pMGC
     pMGC=min(min(pLocal));
@@ -67,12 +66,7 @@ else
     warning('off','all');
     [~,~,~,optimalInd]=FindLargestRectangles((pLocal<=pMGC), [0 0 1],[2,2]);
     optimalInd=find(optimalInd==1);
-    %     if pLocal(end)<=pMGC && (isempty(optimalInd) || sum(optimalInd==m*n)==0)
-    %         optimalInd=[optimalInd;m*n];
-    %     end
-    if isempty(optimalInd)
-        testMGC=testLocal(end);
-        pMGC=pLocal(end);
+    if isempty(optimalInd) || (pLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
         optimalInd=m*n;
     end
 end

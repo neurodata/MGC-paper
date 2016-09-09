@@ -425,7 +425,6 @@ plot(n,n,'.m','markersize',24)
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);
-pval=pMGC;
 indP=optimalInd;
 %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
@@ -505,7 +504,7 @@ y3 = 5;
 %txt1 = {'Mcorr';['p = ' num2str(pMLocal(end))]};
 txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
 txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
-txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMLocal(k,l)),'$$');
+txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');

@@ -53,8 +53,8 @@ end
 if min(min(pLocal(2:end,2:end)))==0
     pLocal=pLocal+1/rep;
 end
-if min(min(pLocal))>pMGC
-    pMGC=min(min(pLocal));
+if min(min(pLocal(2:end,2:end)))>pMGC
+    pMGC=min(min(pLocal(2:end,2:end)));
 end
 pLocal(pLocal>1)=1;
 pLocal(1,:)=1;pLocal(:,1)=1;

@@ -1217,7 +1217,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $\hat{\G}^{*} \rto \G_{nn}$ \Comment{default to the global correlation}
 \Else
 \State $\Omega \rto \arg_{k,l}\{(\G^{kl}\geq \textsc{Quantile}(\G^{kl},99)) \bigcap (R_{kl}=1)\}$ \Comment{all scales with large correlations}
-\State $\hat{\G}^{*}=\max(\G^{kl})$
+\State $\hat{\G}^{*}=\max(\G^{kl}, \forall k,l)$
 \State $i=\textsc{Ceiling}(0.01n)$;
 \For{$(k',l') \in \Omega$}
 \State $\theta = \textsc{Median}(\G^{kl},k \in [k'-i,k'+i] \ \& \ l \in [l'-i,l'+i])$ 

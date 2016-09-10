@@ -1,4 +1,4 @@
-function  [pMGC,testMGC,pLocal,testLocal,optimalInd]=MGCPermutationTest(A,B,rep,option,alpha)
+function  [pMGC,testMGC,pLocal,testLocal,optimalInd]=MGCPermutationTest(A,B,rep,option)
 % Author: Cencheng Shen
 % This function tests independent between two data sets, using MGC by a random permutation test.
 %
@@ -16,9 +16,6 @@ if nargin<3
 end
 if nargin<4
     option='mcor';  % use mcorr by default
-end
-if nargin<5
-    alpha=0.05;  % use mcorr by default
 end
 [m,n]=size(A);
 
@@ -60,13 +57,9 @@ pLocal(pLocal>1)=1;
 pLocal(1,:)=1;pLocal(:,1)=1;
 
 % find optimal scale
-if pMGC>alpha
-    optimalInd=[];
-else
-    warning('off','all');
-    [~,~,~,optimalInd]=FindLargestRectangles((pLocal<=pMGC), [0 0 1],[2,2]);
-    optimalInd=find(optimalInd==1);
-    if isempty(optimalInd) || (pLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
-        optimalInd=m*n;
-    end
+warning('off','all');
+[~,~,~,optimalInd]=FindLargestRectangles((pLocal<=pMGC), [0 0 1],[2,2]);
+optimalInd=find(optimalInd==1);
+if (pLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
+    optimalInd=m*n;
 end

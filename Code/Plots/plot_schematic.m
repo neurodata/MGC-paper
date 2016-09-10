@@ -490,7 +490,7 @@ plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
     if abs(x2-x3)<0.03
         set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
     else
-set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+        set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
     end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 

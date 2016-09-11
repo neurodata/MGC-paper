@@ -190,16 +190,26 @@ for i=1:lim
 %     hold on 
 %     ksdensity(dCorMGCN)
 %     ksdensity(dCorMGCA)
+%     tmpN=prctile(dCorMGCN,95);
+%     text(tmpN,1,num2str(powerMGC(i)),'Color','Cyan');
+%     text(0,1,num2str(powerHHG(i)));
+%     xlim([min(dCorMGCN),max(dCorMGCA)]);
 %     hold off 
+% %     figure
+% %     hold on 
+% %     ksdensity(dCorHHGN)
+% %     ksdensity(dCorHHGA)
+% %     hold off 
 %     figure
 %     hold on 
-%     ksdensity(dCorHHGN)
-%     ksdensity(dCorHHGA)
-%     hold off 
-%     figure
-%     hold on 
-%     ksdensity(reshape(dCorMN(nn,nn,:),1,rep))
-%     ksdensity(reshape(dCorMA(nn,nn,:),1,rep))
+%     [k,l]=ind2sub([nn,nn],neighbor(2,i));
+%     tN=reshape(dCorMN(k,l,:),1,rep);
+%     tA=reshape(dCorMA(k,l,:),1,rep);
+%     tmpN=prctile(tN,95);
+%     ksdensity(tN)
+%     ksdensity(tA)
+%     text(tmpN,1,num2str(powerM(k,l,i)));
+%     xlim([min(dCorMGCN),max(dCorMGCA)]);
 %     hold off 
 end
 

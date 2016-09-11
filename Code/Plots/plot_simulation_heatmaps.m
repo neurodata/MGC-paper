@@ -84,12 +84,9 @@ for j=1:total
     subplot(s,t,j)
     titlechar=CorrSimuTitle(j);
     kmin=2;thres=0.5;
-    ind=find(max(power2,[],1)>=thres,1,'last');
+    ind=find(max(powerMGCM,[],1)>=thres,1,'last');
     if isempty(ind)
         ind=1;
-    end
-    if lim==21 && ind>1
-        ind=ind-1;
     end
     ph=powerMLocal(kmin:n,kmin:n,ind)';
  tt=find(sum(ph,2)==0,1,'first');

@@ -55,7 +55,7 @@ load(filename);
 cmap2=flipud(map2);
 fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
-lw=2;
+lw=3;
 
 for i=1:3
     filename=strcat(pre1,fnames{i});
@@ -84,14 +84,18 @@ for i=1:3
     Ymax=max(I);
     Xmin=min(J);
     Xmax=max(J);
-    
-    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    %
+    if Xmin==Xmax && Ymin==Ymax
+         plot(Xmin,Ymin,'gs','markerSize',5,'MarkerFaceColor','g')  
+    else
+        plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+        plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+        plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+        plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    end
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
-  %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
+    %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
 %    set(gca,'YTick',[3,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
     xlim([2,m]);
     ylim([2,n]);

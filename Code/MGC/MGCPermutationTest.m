@@ -17,7 +17,7 @@ end
 if nargin<4
     option='mcor';  % use mcorr by default
 end
-[m,n]=size(A);
+% [m,n]=size(A);
 
 if strcmp(option,'mcor')
     ind=1;
@@ -26,14 +26,16 @@ else
 end
 % calculate all local correlations between the two data sets
 testLocal=LocalCorr(A,B,option);
+[m,n]=size(testLocal);
 if ind==1
     testMGC=SampleMGC(testLocal);
 end
 pLocal=zeros(size(testLocal));pMGC=0;
+n2=size(B,2);
 % calculate the local correlations under permutation, to yield the p-values of all observed local correlations
 for r=1:rep
     % use random permutations on the second data set
-    per=randperm(n);
+    per=randperm(n2);
     BN=B(per,per);
     tmp=LocalCorr(A,BN,option);
     tmp2=SampleMGC(tmp);

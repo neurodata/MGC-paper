@@ -95,7 +95,7 @@ ids=unique([I,J]);
 id=[I,J,J2,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
-hy=[+0.5,-0.5,0];
+hy=[-0.5,+0.5,0];
 
 for ind=[1,2,3]; %length(id)
     hs=0.2;
@@ -434,10 +434,10 @@ Ymax=max(I);
 Xmin=min(J);
 Xmax=max(J);
 
-plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',1.5)
-plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',1.5)
-plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',1.5)
-plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',1.5)
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);
@@ -490,7 +490,7 @@ plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
     if abs(x2-x3)<0.03
         set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
     else
-        set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+        set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
     end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
@@ -512,7 +512,7 @@ ylim([0 y1+10]);
 set(a,'FontSize',fontSize);
 set(b,'FontSize',fontSize);
 set(c,'FontSize',fontSize);
-xlim([minp,maxp+0.04]);
+xlim([minp,maxp+0.1]);
 xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
 ylabel('Density','FontSize',fontSize-5, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')

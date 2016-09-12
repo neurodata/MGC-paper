@@ -512,13 +512,14 @@ a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Col
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
 ylim([0 y1+10]);
-<<<<<<< HEAD
+% <<<<<<< HEAD
 set(a,'FontSize',fs);
 set(b,'FontSize',fs);
 set(c,'FontSize',fs);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fs-5,'HorizontalAlignment','right');
 ylabel('Density','FontSize',fs-5, ...
+    'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 % =======
 % set(a,'FontSize',fontSize);
 % set(b,'FontSize',fontSize);

@@ -59,12 +59,11 @@ for j=1:total
     %
     hold on
     if select==1
-        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
         h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
         h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
         h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
+        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
     else
-        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
         h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
         h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
         h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
@@ -72,6 +71,7 @@ for j=1:total
         h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
         h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
         h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
+        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
     end
     hold off
     xlim([numRange(1) numRange(end)]);
@@ -84,7 +84,7 @@ for j=1:total
         set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
     end
     set(gca,'FontSize',14);
-%    set(gca,'XTickLabel','FontSize',16);
+    %    set(gca,'XTickLabel','FontSize',16);
     title(titlechar,'FontSize',14, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
@@ -95,7 +95,7 @@ h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-   % h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
+    % h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
     h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
     h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
@@ -129,12 +129,11 @@ for j=1:total
     titlechar=[CorrSimuTitle(j)]; %, ' d=', num2str(max(dimRange))];
     hold on
     if select==1
-        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
         h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
         h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
         h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
+        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
     else
-        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
         h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
         h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
         h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
@@ -142,6 +141,7 @@ for j=1:total
         h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
         h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
         h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
+        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
     end
     hold off
     xlim([numRange(1) numRange(end)]);
@@ -154,7 +154,7 @@ for j=1:total
     set(gca,'XTick',[numRange(1),numRange(end)]); % Remove x axis ticks
     set(gca,'FontSize',14);
     title(titlechar,'FontSize',14, ...
-         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     %set(gca,'XTickLabel','FontSize',16);
     axis('square');
 end

@@ -180,6 +180,33 @@ for i=1:lim
     [powerP(:,:,i),neighbor(3,i)]=calculatePower(dCorPN,dCorPA,alpha,rep);
     powerHHG(i)=calculatePower(dCorHHGN,dCorHHGA,alpha,rep);
     powerMGC(i)=calculatePower(dCorMGCN,dCorMGCA,alpha,rep);
+    
+%         figure
+%     hold on 
+%     ksdensity(dCorMGCN)
+%     ksdensity(dCorMGCA)
+%     tmpN=prctile(dCorMGCN,95);
+%     text(tmpN,1,num2str(powerMGC(i)),'Color','Cyan');
+%     text(0,1,num2str(powerHHG(i)));
+%     xlim([min(dCorMGCN),max(dCorMGCA)]);
+%     hold off 
+% %     figure
+% %     hold on 
+% %     ksdensity(dCorHHGN)
+% %     ksdensity(dCorHHGA)
+% %     hold off 
+%     figure
+%     hold on 
+%     nn=n;
+%     [k,l]=ind2sub([nn,nn],neighbor(2,i));
+%     tN=reshape(dCorMN(k,l,:),1,rep);
+%     tA=reshape(dCorMA(k,l,:),1,rep);
+%     tmpN=prctile(tN,95);
+%     ksdensity(tN)
+%     ksdensity(tA)
+%     text(tmpN,1,num2str(powerM(k,l,i)));
+%     xlim([min(dCorMGCN),max(dCorMGCA)]);
+%     hold off 
 end
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)

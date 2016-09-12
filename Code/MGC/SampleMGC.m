@@ -6,63 +6,62 @@ function test=SampleMGC(P)
 [m,n]=size(P);
 P2=P(2:end,2:end);
 P2=P2(P2<0);
-st=max(norm(P2,'fro')/sqrt(length(P2)),0.005);
 thres=1/min(m,n);
-%st=max(3*norm(P2(2:end,2:end),'fro')/sqrt((m-1)*(n-1)),0.03)
-% (prctile(P2(P2>0),95))/st
-% (prctile(P2(P2>0),90))/st
-% (prctile(P2(P2>-1),80))/st
-warning('off','all');
-R=(P>P(end)+6*st);
-if mean(mean(R))>=thres
-    R=bwareafilt(R,1);
-end
-% mean(mean(R))
+t=3.5*max(norm(P2,'fro')/sqrt(length(P2)),0.01);
+R=(P>t);
+test=P(end);
 
-% mean(mean(tmp))
-% % if mean(mean(tmp))>2/min(m,n)
-%     warning('off','all');
-%     tmp=bwareafilt(tmp,1);
-% end
-if mean(mean(R))<thres
-    %     tmp=bwareafilt(tmp,1);
-    test=P(end);
-else
-    %     test=median(P(R));
-    %     test=min(min(P(tmp)));
-    %     test=median((P2(tmp)));
-    % t1=max(median(P2,1));
-    % t2=max(median(P2,2));
-    % test=max([t1,t2]);
-    % test=prctile(P(P>0),90);
-    % %     cc=[];
-    lm=ceil(0.01*m);
-    ln=ceil(0.01*n);
-%         lm=1;
-%         ln=1;
-    %[k,l]=find(P==max(max(P)));
-   [k,l]=find(P>=prctile(P(R),99));
-        test=max(max(P));
-%     test=0;
-    for i=1:length(k)
-        ki=k(i);
-        li=l(i);
-        if R(ki,li)==1
+if mean(mean(R))>2*thres
+    R=Smooth(P,R);
+    %     [~, ~, ~, R] = FindLargestRectangles(Smooth(P,R), [0,0,1],[2,2]);
+    if mean(mean(R))>0
+        [k,l]=find((P>=max(max(P(R))))&(R==1));
+        ln=ceil(0.1*m);
+        lm=ceil(0.1*n);
+        for i=1:length(k)
+            ki=k(i);
+            li=l(i);
             left=max(2,li-ln);
             right=min(n,li+ln);
             upper=max(2,ki-lm);
             down=min(m,ki+lm);
-            
-            tmp=P(upper:down,left:right);
-            tmp=median(tmp(tmp<2));
-%             tmp2=min(P(upper:down,li));
-%             tmp=max(tmp1,tmp2);
-            if tmp<test
+            tmp1=min(P(upper:down,li));
+            tmp2=min(P(ki,left:right));
+            tmp=max(tmp1,tmp2);
+            %                 tmp=P(upper:down,left:right);
+            %                 tmp=median(tmp(tmp<2));
+            if tmp>test
                 test=tmp;
             end
         end
     end
-    if test<P(end)+6*st
-        test=P(end);
+end
+
+function [R]=Smooth(P,R)
+if nargin<2
+    R=ones(size(P));
+end
+[m,n]=size(P);
+R2=cell(4,1);
+PD1=zeros(m,n);
+PD2=zeros(m,n);
+for i=2:m
+    PD1(i,2:end)=diff(P(i,:));
+end
+for i=2:n
+    PD2(2:end,i)=diff(P(:,i));
+end
+
+R2{1}=(PD1>=0)&R;
+R2{2}=(PD1<=0)&R;
+R2{3}=(PD2>=0)&R;
+R2{4}=(PD2<=0)&R;
+R=false(m,n);
+warning('off','all');
+for i=1:4
+    t=sum(sum(R2{i}));
+    if t>0
+        R2{i}=bwareafilt(R2{i},1);
+        R= (R | R2{i});
     end
 end

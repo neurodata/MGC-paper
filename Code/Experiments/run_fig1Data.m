@@ -82,23 +82,19 @@ end
 if min(min(pMLocal(2:end,2:end)))==0
     pMLocal=pMLocal+1/rep;
 end
-if min(min(pMLocal))>pMGC
-    pMGC=min(min(pMLocal));
+if min(min(pMLocal(2:end,2:end)))>pMGC
+    pMGC=min(min(pMLocal(2:end,2:end)));
 end
 pMLocal(pMLocal>1)=1;
 pMLocal(1,:)=1;pMLocal(:,1)=1;
 
 % find optimal scale
-if pMGC>alpha
-    optimalInd=[];
-else
     warning('off','all');
     [~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
     optimalInd=find(optimalInd==1);
-    if isempty(optimalInd) || (pMLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
+    if (pMLocal(end)<pMGC && isempty(find(optimalInd==n*n, 1)))
         optimalInd=n*n;
     end
-end
 
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);

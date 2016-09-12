@@ -1,4 +1,4 @@
-function  [pMGC,testMGC,pLocal,testLocal,optimalInd]=MGCPermutationTest(A,B,rep,option,alpha)
+function  [pMGC,testMGC,pLocal,testLocal,optimalInd]=MGCPermutationTest(A,B,rep,option)
 % Author: Cencheng Shen
 % This function tests independent between two data sets, using MGC by a random permutation test.
 %
@@ -17,10 +17,7 @@ end
 if nargin<4
     option='mcor';  % use mcorr by default
 end
-if nargin<5
-    alpha=0.05;  % use mcorr by default
-end
-[m,n]=size(A);
+% [m,n]=size(A);
 
 if strcmp(option,'mcor')
     ind=1;
@@ -29,14 +26,16 @@ else
 end
 % calculate all local correlations between the two data sets
 testLocal=LocalCorr(A,B,option);
+[m,n]=size(testLocal);
 if ind==1
     testMGC=SampleMGC(testLocal);
 end
 pLocal=zeros(size(testLocal));pMGC=0;
+n2=size(B,2);
 % calculate the local correlations under permutation, to yield the p-values of all observed local correlations
 for r=1:rep
     % use random permutations on the second data set
-    per=randperm(n);
+    per=randperm(n2);
     BN=B(per,per);
     tmp=LocalCorr(A,BN,option);
     tmp2=SampleMGC(tmp);
@@ -53,20 +52,16 @@ end
 if min(min(pLocal(2:end,2:end)))==0
     pLocal=pLocal+1/rep;
 end
-if min(min(pLocal))>pMGC
-    pMGC=min(min(pLocal));
+if min(min(pLocal(2:end,2:end)))>pMGC
+    pMGC=min(min(pLocal(2:end,2:end)));
 end
 pLocal(pLocal>1)=1;
 pLocal(1,:)=1;pLocal(:,1)=1;
 
 % find optimal scale
-if pMGC>alpha
-    optimalInd=[];
-else
-    warning('off','all');
-    [~,~,~,optimalInd]=FindLargestRectangles((pLocal<=pMGC), [0 0 1],[2,2]);
-    optimalInd=find(optimalInd==1);
-    if isempty(optimalInd) || (pLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
-        optimalInd=m*n;
-    end
+warning('off','all');
+[~,~,~,optimalInd]=FindLargestRectangles((pLocal<=pMGC), [0 0 1],[2,2]);
+optimalInd=find(optimalInd==1);
+if (pLocal(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
+    optimalInd=m*n;
 end

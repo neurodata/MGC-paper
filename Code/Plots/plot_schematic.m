@@ -95,7 +95,7 @@ ids=unique([I,J]);
 id=[I,J,J2,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
-hy=[+0.5,-0.5,0];
+hy=[-0.5,+0.5,0];
 
 for ind=[1,2,3]; %length(id)
     hs=0.2;
@@ -428,7 +428,6 @@ plot(n,n,'.m','markersize',24)
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);
-pval=pMGC;
 indP=optimalInd;
 %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
@@ -438,10 +437,10 @@ Ymax=max(I);
 Xmin=min(J);
 Xmax=max(J);
 
-plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',1.5)
-plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',1.5)
-plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',1.5)
-plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',1.5)
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);
@@ -494,7 +493,7 @@ plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
     if abs(x2-x3)<0.03
         set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
     else
-set(gca,'XTick',sort([x1+0.02,x2+0.04,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+        set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
     end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
@@ -508,17 +507,26 @@ y3 = 5;
 %txt1 = {'Mcorr';['p = ' num2str(pMLocal(end))]};
 txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
 txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
-txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMLocal(k,l)),'$$');
+txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
 ylim([0 y1+10]);
+<<<<<<< HEAD
 set(a,'FontSize',fs);
 set(b,'FontSize',fs);
 set(c,'FontSize',fs);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fs-5,'HorizontalAlignment','right');
 ylabel('Density','FontSize',fs-5, ...
+=======
+set(a,'FontSize',fontSize);
+set(b,'FontSize',fontSize);
+set(c,'FontSize',fontSize);
+xlim([minp,maxp+0.1]);
+xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
+ylabel('Density','FontSize',fontSize-5, ...
+>>>>>>> c55135b820b0d669c0dcdac7dc915b0200706c61
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
 title([{'5. Test using Optimal Scales'}],'FontSize',fs, ...

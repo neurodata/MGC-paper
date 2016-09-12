@@ -519,15 +519,15 @@ set(c,'FontSize',fs);
 xlim([minp,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fs-5,'HorizontalAlignment','right');
 ylabel('Density','FontSize',fs-5, ...
-=======
-set(a,'FontSize',fontSize);
-set(b,'FontSize',fontSize);
-set(c,'FontSize',fontSize);
-xlim([minp,maxp+0.1]);
-xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
-ylabel('Density','FontSize',fontSize-5, ...
->>>>>>> c55135b820b0d669c0dcdac7dc915b0200706c61
-    'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
+% =======
+% set(a,'FontSize',fontSize);
+% set(b,'FontSize',fontSize);
+% set(c,'FontSize',fontSize);
+% xlim([minp,maxp+0.1]);
+% xlabel('Test Statistic','FontSize',fontSize-5,'HorizontalAlignment','right');
+% ylabel('Density','FontSize',fontSize-5, ...
+% >>>>>>> c55135b820b0d669c0dcdac7dc915b0200706c61
+%     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
 title([{'5. Test using Optimal Scales'}],'FontSize',fs, ...
     'Units', 'normalized', 'Position', [0 1.0], 'HorizontalAlignment', 'left')

@@ -131,6 +131,7 @@
 
 % \title{\bf Dependence Discovery from Multimodal Data via  Multiscale Generalized Correlation}
 \title{\bf Discovering the Nature of Nonlinear Relationships}
+% Discovering the Nature of Relationships
 % \title{\bf Revealing the Scales of Dependency Between Multiple Data Modalities}
  % Datasets via  Multiscale Generalized Correlation}
 \author[1,2]{Cencheng Shen} %\thanks{cshen@temple.edu}}
@@ -150,7 +151,7 @@
 % \bigskip
 \begin{abstract}
 As data collection is becoming easier, it is becoming increasingly difficult and important to answer questions of the form:
-is one property (e.g., clouds) related to another (e.g., grass wetness).  Only If we can determine that these two properties are related to --- or statistically dependent on --- one another does it make sense to further investigate the nature of this relationship. Unfortunately, reliably establishing such a relationship can be  challenging, especially when the properties themselves are complex and the relationship is nonlinear and high-dimensional. Here, we describe a procedure, called Multiscale Generalized Correlation (\Mgc), that addresses these challenges. Our key insight is that if two properties are related, comparisons between measurements of similar pairs of the first property (e.g., similarly shaped clouds) should be correlated with the comparisons between corresponding pairs of the second property (grass wetness under those clouds). We demonstrate the statistical and computational efficiency of \Mgc~in both simulations and theory.  We then apply it to detect the presence and nature of the relationships between brain activity and personality, brain shape and disorder, and  brain connectivity and creativity.  Finally, we demonstrate that \Mgc~does not suffer from the false positives that have plagued searches for dependence. 
+is one property (e.g., clouds) related to another (e.g., grass wetness).  Only If we can determine that these two properties are related to --- or statistically dependent on --- one another does it make sense to further investigate the nature of this relationship. Unfortunately, reliably establishing such a relationship can be  challenging, especially when the properties themselves are complex and the relationship is nonlinear and high-dimensional. Here, we describe a procedure, called Multiscale Generalized Correlation (\Mgc), that addresses these challenges. Our key insight is that if two properties are related, comparisons between measurements of similar pairs of the first property (e.g., similarly shaped clouds) should be correlated with the comparisons between corresponding pairs of the second property (grass wetness under those clouds). We demonstrate the statistical and computational efficiency of \Mgc~in both simulations and theory.  We then apply it to detect the presence and nature of the relationships between brain activity and personality, brain shape and disorder, and  brain connectivity and creativity.  Finally, we demonstrate that \Mgc~does not suffer from the false positives that have plagued searches for dependence by parametric methods. 
 Our open source implementation of \Mgc~is applicable to fundamental questions confronting science, government, finance, and many other disciplines. 
 \end{abstract}
 \cs{title good?}
@@ -313,7 +314,8 @@ The global methods fail to detect significant dependence since they consider all
 % jv{kernel machines project data into a linear regime}
 The first step is to choose distance functions for both modalities --- this serves to transform each data point $(\mbx_i,\mby_i)$, to a different representation in which linearity implies nonlinearities in the original space 
 (much like kernel machines \cite{scholkopf2002learning}).  
-These choices of distances are the only choices in the algorithm. \cs{not sure whether the above sentence is clear and right, you probably mean using Euclidean distance?}
+These choices of distances are the only choices in the algorithm. 
+\cs{I was confused here, as I thought you mean which distance metrics to use; but you probably meant we always use distance measures for pairwise comparisons of the data.}
 Given these choices, compute the distance between all pairs of observations within each modality.  More formally, let $\delta_x$ be the distance for $\mbx$ and $\delta_y$ for $\mb{y}$, and compute the $n \times n$ interpoint comparison matrices $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$, where $a_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$ and  $b_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$.  
 % Using interpoint pairwise comparison matrices for data science has a rich history, starting with Pearson's statistic, which is a special case of something subsequently called a 
 This ``generalized correlation coefficient''  \cite{Spearman1904,Mantel1967,KendallBook}, assuming $A$ and $B$ have zero mean without loss of generality, is written:
@@ -651,7 +653,7 @@ The next real data experiment investigates whether brain structural networks are
 The brain network metric we used was based on  the semi-parametric test statistic \cite{Tang2016} that tests whether pairs of graphs with labeled vertices are sampled from the same distribution.  This test statistic was developed to reduce  the very high dimensionality of adjacency matrices via employing adjacency spectral graph embedding  \cite{Sussman2013}. For these data, we chose to embed each graph into two dimensions for simplicity. We used Euclidean distance to compare CCI values. 
 
 
-
+\jv{highlight that we are the only obvious way to determine that the relationship is linear for high dimensional data (otherwise, one needs to compute the linear regression with inverting the covariance matrix which is poorly sacled in high dimensions?}
 Figure \ref{f:real}{\color{magenta}C} shows that even a global dependence test can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. 
 % However, the global test is quite fragile,  even ignoring a single subject from the global test can render the test non-significant. On the other hand, the \Mgc~multiscale map shows a large region that is quite significant  (Table \ref{t:real}).  
 
@@ -692,9 +694,7 @@ Note that the distance matrices at different brain regions are distinct, but the
 % The p-values are based on $1000$ random permutations.
 
 For each data set, the above test is carried out for each brain region; the false positive rates of sample \Mgc~for each dataset are shown in Figure~\ref{f:real}{\color{magenta}D}, which are centered around the critical level $0.05$, as it should be.
-In contrast,  standard methods for fMRI analysis, such as generalized linear models, can significantly increase the false discovery rates, depending on the data and pre-processing details \cite{EklundKnutsson2012,Eklund2015}. Moreover, even the proposed solutions to those issues make linearity assumptions, thereby limiting detection to only a small subset of possible dependence functions.
-\cs{false positive? false discovery? let us talk}
-\cs{is sample mgc the right name??}
+In contrast, many standard parametric methods for fMRI analysis, such as generalized linear models, can significantly increase the false positive rates, depending on the data and pre-processing details \cite{EklundKnutsson2012,Eklund2015}. Moreover, even the proposed solutions to those issues make linearity assumptions, thereby limiting detection to only a small subset of possible dependence functions.
 
 \subsection*{Discussion}
 \label{conclu}

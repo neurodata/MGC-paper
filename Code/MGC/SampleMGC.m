@@ -11,8 +11,8 @@ t=3.5*max(norm(P2,'fro')/sqrt(length(P2)),0.01);
 R=(P>t);
 test=P(end);
 
-if mean(mean(R))>2*thres
-    R=Smooth(P,R);
+if mean(mean(R))>=min(2*thres,0.05)
+    R=Monotone(P,R);
     %     [~, ~, ~, R] = FindLargestRectangles(Smooth(P,R), [0,0,1],[2,2]);
     if mean(mean(R))>0
         [k,l]=find((P>=max(max(P(R))))&(R==1));
@@ -28,8 +28,6 @@ if mean(mean(R))>2*thres
             tmp1=min(P(upper:down,li));
             tmp2=min(P(ki,left:right));
             tmp=max(tmp1,tmp2);
-            %                 tmp=P(upper:down,left:right);
-            %                 tmp=median(tmp(tmp<2));
             if tmp>test
                 test=tmp;
             end
@@ -37,7 +35,7 @@ if mean(mean(R))>2*thres
     end
 end
 
-function [R]=Smooth(P,R)
+function [R]=Monotone(P,R)
 if nargin<2
     R=ones(size(P));
 end

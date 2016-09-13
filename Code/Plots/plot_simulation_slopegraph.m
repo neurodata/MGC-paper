@@ -114,6 +114,7 @@ for j=1:4
     end
     hold off
 end
+F.png=1;
 F.fname=strcat(pre2,'Slope');
 F.wh=[6 2.4]*2;
 print_fig(gcf,F)

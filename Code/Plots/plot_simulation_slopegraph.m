@@ -94,7 +94,7 @@ for j=1:total
     AUC(8,j)=mean(powerMGC);
 end
 
-strL={'Global';'MGC'};
+strL={'Global';'OMGC'};
 for j=1:4
     subplot(s,t,4+j);
     hold on
@@ -104,7 +104,7 @@ for j=1:4
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
     if j==4
-        strL={'Global';'Sample MGC'};
+        strL={'Global';'SMGC'};
     end
     set(gca,'XTickLabel',strL,'XTick',[1.1,1.9],'YTickLabel',[0,1],'YTick',0:1,'FontSize',fontSize,'TickLength',[0 1]);
     if j==1

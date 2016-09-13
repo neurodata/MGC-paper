@@ -464,13 +464,13 @@ as well as the multiscale variants of both \Mantel~and \Dcorr,
 \subsection*{\Mgc~Empirically Dominates Global Counterparts}
 
 The above results demonstrate that converting \Mcorr, a global generalized correlation coefficient, to Oracle \Mgc, its multiscale variant, always improves (or does not diminish) the testing power for all considered settings, regardless of the dimensionality and sample size.  This led us to explore whether the multiscale variant of other generalized correlation coefficients would behave similarly.  Specifically, we consider the \Mantel~and \Dcorr~tests, in addition to \Mcorr, and for each, we develop a multiscale variant (see Appendix \ref{appen:methods} for details). 
-Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlations with their corresponding Oracle \Mgc~test.  The top row shows for each of the $20$ settings, with dimensionality of \mbx's and \mby's  fixed at one, the  power averaged over different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but power is averaged over dimensionality of \mbx~while sample size is fixed at $n=100$ as in Figure~\ref{f:nD} and~\ref{f:nDAll}.  In all $40$ settings, for both low and high-dimensions, and for both low and high sample sizes, multiscale methods always either improve on testing power (for nonlinear settings) or keep it constant (for linear and independent settings); they never decrease power. 
+Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlations with their corresponding Oracle \Mgc~test, as well as global \Mcorr~vs its sample \Mgc.  The top row shows for each of the $20$ settings, with dimensionality of \mbx's and \mby's  fixed at one, the  power averaged over different sample sizes as in Figure~\ref{f:1DAll}.  The bottom row shows the same, but power is averaged over dimensionality of \mbx~while sample size is fixed at $n=100$ as in Figure~\ref{f:nD} and~\ref{f:nDAll}.  In all $40$ settings, for both low and high-dimensions, and for both low and high sample sizes, multiscale methods always either improve on testing power (for nonlinear settings) or keep it almost constant (for linear and independent settings). 
 
 \begin{figure}
   \centering
   \includegraphics[width=1.0\textwidth]{Figures/FigSlope}
   \caption{
-Slopegraphs comparing average power of three different global correlation tests and their respective Oracle \Mgc.  Each panel shows average power for settings 6-19, because \Mgc~equals the global correlation for settings 1-5 and  20. 
+Slopegraphs comparing average power of three different global correlation tests and their respective Oracle \Mgc, as well as global \Mcorr~vs its sample \Mgc.  Each panel shows average power for settings 6-19, because Oracle \Mgc~equals the global correlation for settings 1-5 and  20. 
 % * <stefaniejacinto@gmail.com> 2016-08-16T05:35:47.568Z:
 %
 % > powers

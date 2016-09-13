@@ -43,7 +43,7 @@ for type=1:total
     titlechar=CorrSimuTitle(type);
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-        sz2=8;
+    sz2=8;
     hold on
     plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);
     plot(x(:,1),y(:,1),'.','MarkerSize',sz);
@@ -95,11 +95,9 @@ for type=1:total
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
     hold off
-    title(titlechar,'FontSize',14) %, ...
-%         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
+    title(titlechar,'FontSize',14)
     axis('square');
     set(gca,'box','off','ycolor','w','xcolor','w')
-
 end
 h=suptitle('Simulated Example for 20 Dependencies');
 set(h,'FontSize',24,'FontWeight','normal');

@@ -1,5 +1,5 @@
-function [disRank]=disToRanks(dis)
-% An auxiliary function that sorts the entries within each column by ascending order.
+function [disRank]=DistRanks(dis)
+% An auxiliary function that sorts the distance entries within each column by ascending order.
 %
 % The input is assumed to be a distance matrix.
 %

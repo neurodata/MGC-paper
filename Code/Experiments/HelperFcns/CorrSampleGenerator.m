@@ -7,7 +7,7 @@ function [x, y]=CorrSampleGenerator(type,n,dim,dependent, noise)
 % type specifies the type of distribution,
 % n is the sample size, dim is the dimension
 % dependent specifies whether the data are dependent or not, by default 1
-% noise specifies the noise level, by default 0. 
+% noise specifies the noise level, by default 0.
 if nargin<4
     dependent=1; % by default generate dependent samples
 end
@@ -16,11 +16,6 @@ if nargin<5
 end
 
 eps=mvnrnd(0,1,n); % Gaussian noise added to Y
-% if noise~=0
-%     eps=mvnrnd(0,1,n); % Gaussian noise added to Y
-% else
-%     eps=zeros(n,1);
-% end
 
 % High-dimensional decay
 A=ones(dim,1);
@@ -38,34 +33,7 @@ if dependent==0
     x=unifrnd(-1,1,n,d);
 end
 
-% The following paramter is used for the type 0 outlier model only.
-% Note that the mixture probability is specified by noise, which should be
-% in [0,1].
-pp=noise;
-mix=zeros(n,1);
-mix(1:ceil(n*pp))=1;
-u=mix;
-
 switch type % In total 20 types of dependency + the type 0 outlier model
-%     case 0 %Test Outlier Model
-%         sigma=eye(2);
-%         sigma(1,2)=0.9;sigma(2,1)=0.9;
-%         x=mvnrnd(zeros(n,2),sigma);
-%         y=repmat((u>0),1,d).*(x(:,1)) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-%         x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         if dependent==0
-%             x=mvnrnd(zeros(n,2),sigma);
-%             x=repmat((u>0),1,d).*(x(:,2))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         end
-%         sigma=eye(2);
-%         sigma(1,2)=0.9;sigma(2,1)=0.9;
-%         x=mvnrnd(zeros(n,2),sigma);
-%         y=repmat((u>0),1,d).*(x(:,1).^2) + repmat((u==0),1,d).*mvnrnd(-5*ones(n, d),eye(d));
-%         x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         if dependent==0
-%             x=mvnrnd(zeros(n,2),sigma);
-%             x=repmat((u>0),1,d).*(x(:,1))+repmat((u==0),1,d).*mvnrnd(5*ones(n, d),eye(d));
-%         end
     case 1 %Linear
         y=xA+1*noise*eps;
     case 2 %Cubic
@@ -117,7 +85,7 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         if type==12
             rx=5*ones(n,d);
         end
- 
+        
         if type==13
             rx=unifrnd(0,5,n,1);
             ry=rx;
@@ -189,17 +157,15 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         if dependent==0
             x=repmat(unifrnd(-1,1,n,1),1,d);
             if noise>0 || d>1
-            x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+                x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
             end
         end
     case 18 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, d),eye(d));
-        %eps=mvnrnd(zeros(n,d),eye(d),n);
-        y=x.*y;%+0.5*noise*eps;
-        %y=y+0.5*noise*eps;
+        y=x.*y;
         if dependent==0
-            x=mvnrnd(zeros(n, d),eye(d));%*A;
+            x=mvnrnd(zeros(n, d),eye(d));
         end
     case 19 %Uncorrelated Binomial
         x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);
@@ -211,12 +177,6 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
         y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
-%     case 21 %A more extreme Exponential for plot_auxiliary
-%         x=unifrnd(0,30,n,d)+10*noise*eps;
-%         y=exp(x*A);
-%         if dependent==0
-%             x=unifrnd(0,30,n,d)+10*noise*eps;
-%         end
 end
 
 %affine invariant

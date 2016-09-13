@@ -38,10 +38,9 @@ lim=length(numRange);
 
 powerMGCD=zeros(1,lim);powerMGCM=zeros(1,lim);powerMGCP=zeros(1,lim);% Powers for MGC{dcorr/mcorr/Mantel}
 powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
-% powerHHG=zeros(1,lim);powerMGC=zeros(1,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
-[~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size. 
+[~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
 
 % Run the independence test again for the testing powers
 [powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG]=IndependenceTest(type,numRange,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
@@ -49,22 +48,22 @@ powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
     if option(1)~=0
-    tmp=powerDLocal(1:numRange(i),1:numRange(i),i);
-    powerMGCD(i)=tmp(neighborhoods(1,i));
-    tmp=tmp(tmp>0);
-    powerD(i)=tmp(end);
+        tmp=powerDLocal(1:numRange(i),1:numRange(i),i);
+        powerMGCD(i)=tmp(neighborhoods(1,i));
+        tmp=tmp(tmp>0);
+        powerD(i)=tmp(end);
     end
     if option(2)~=0
-    tmp=powerMLocal(1:numRange(i),1:numRange(i),i);
-    powerMGCM(i)=tmp(neighborhoods(2,i));
-    tmp=tmp(tmp>0);
-    powerM(i)=tmp(end);
+        tmp=powerMLocal(1:numRange(i),1:numRange(i),i);
+        powerMGCM(i)=tmp(neighborhoods(2,i));
+        tmp=tmp(tmp>0);
+        powerM(i)=tmp(end);
     end
     if option(3)~=0
-    tmp=powerPLocal(1:numRange(i),1:numRange(i),i);
-    powerMGCP(i)=tmp(neighborhoods(3,i));
-    tmp=tmp(tmp>0);
-    powerP(i)=tmp(end);
+        tmp=powerPLocal(1:numRange(i),1:numRange(i),i);
+        powerMGCP(i)=tmp(neighborhoods(3,i));
+        tmp=tmp(tmp>0);
+        powerP(i)=tmp(end);
     end
 end
 
@@ -95,12 +94,6 @@ if nargin<8
     option=[1,1,1,0]; % Default option. Setting each entry to 0 to disable the calculation of local dcorr/mcorr/Mantel, or HHG.
 end
 
-% if lim==0
-%     numRange=n; % Test at sample size n only
-% else
-%     numRange=ceil(n/lim):ceil(n/lim):n; % Test using sample sizes at the interval of ceil(n/lim).
-% end
-% lim=length(numRange);
 d=dim;
 n=numRange(end);
 
@@ -146,7 +139,7 @@ for i=1:lim
         if option(2)~=0
             tmp=LocalCorr(C,D,'mcor');
             dCorMN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
-            dCorMGCN(r)=SampleMGC(tmp);
+            dCorMGCN(r)=MGCSampleStat(tmp);
         end
         if option(3)~=0
             tmp=LocalCorr(C,D,'mantel');
@@ -168,7 +161,7 @@ for i=1:lim
         if option(2)~=0
             tmp=LocalCorr(C,D,'mcor');
             dCorMA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
-            dCorMGCA(r)=SampleMGC(tmp);
+            dCorMGCA(r)=MGCSampleStat(tmp);
         end
         if option(3)~=0
             tmp=LocalCorr(C,D,'mantel');
@@ -186,31 +179,6 @@ for i=1:lim
     [powerP(1:nn,1:nn,i),neighbor(3,i)]=calculatePower(dCorPN(1:nn,1:nn,:),dCorPA(1:nn,1:nn,:),alpha,rep);
     powerHHG(i)=calculatePower(dCorHHGN,dCorHHGA,alpha,rep);
     powerMGC(i)=calculatePower(dCorMGCN,dCorMGCA,alpha,rep);
-%     figure
-%     hold on 
-%     ksdensity(dCorMGCN)
-%     ksdensity(dCorMGCA)
-%     tmpN=prctile(dCorMGCN,95);
-%     text(tmpN,1,num2str(powerMGC(i)),'Color','Cyan');
-%     text(0,1,num2str(powerHHG(i)));
-%     xlim([min(dCorMGCN),max(dCorMGCA)]);
-%     hold off 
-% %     figure
-% %     hold on 
-% %     ksdensity(dCorHHGN)
-% %     ksdensity(dCorHHGA)
-% %     hold off 
-%     figure
-%     hold on 
-%     [k,l]=ind2sub([nn,nn],neighbor(2,i));
-%     tN=reshape(dCorMN(k,l,:),1,rep);
-%     tA=reshape(dCorMA(k,l,:),1,rep);
-%     tmpN=prctile(tN,95);
-%     ksdensity(tN)
-%     ksdensity(tA)
-%     text(tmpN,1,num2str(powerM(k,l,i)));
-%     xlim([min(dCorMGCN),max(dCorMGCA)]);
-%     hold off 
 end
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)

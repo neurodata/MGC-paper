@@ -33,10 +33,6 @@ if option(4)==4
 end
 pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);
 
-% if p2<0.05 || p5<0.05
-%     p2
-%     p5
-% end
 %%% File path searching
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');

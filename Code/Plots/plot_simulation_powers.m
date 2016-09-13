@@ -21,26 +21,15 @@ if nargin<1
 end
 total=20;
 
-lowd=0;
-highd=1;
-
 %% Set colors
-map2 = brewermap(128,'PiYG'); % brewmap
-%loca=map2(110,:);
-%glob=map2(18,:);
 loca=[0,1,0];
 glob= [1,0,1];
 HHG   = [0.5,0.5,0.5];
 
-%set(groot,'defaultAxesColorOrder',map1);
-
 ls{1}='-';
 ls{2}='--';
 ls{3}=':';
-%ls{4}='.:';
 ls{4}='--';
-
-close all
 
 %% figure1-4
 figNumber='1DPower';
@@ -48,7 +37,6 @@ if select~=1
     figNumber='1DPowerAll';
 end
 figure('units','normalized','position',[0 0 1 1])
-%set(groot,'defaultAxesColorOrder',map1);
 s=4;
 t=5;
 for j=1:total
@@ -84,7 +72,6 @@ for j=1:total
         set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
     end
     set(gca,'FontSize',14);
-    %    set(gca,'XTickLabel','FontSize',16);
     title(titlechar,'FontSize',14, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
@@ -95,7 +82,6 @@ h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    % h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
     h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
     h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
@@ -103,22 +89,16 @@ end
 legend boxoff
 set(h,'FontSize',14);
 %
-F.fname=[strcat(pre2, figNumber)]; %, '_', num2str(cm)];
+F.fname=[strcat(pre2, figNumber)];
 F.wh=[8 5]*2;
 print_fig(gcf,F)
 
 %% Plot 5-8
-% if select==1;
-% map1(1,:)=mcorr; map1(3,:)=mcorr; % The color for MGC{dcorr} and global dcorr.
-% map1(2,:)=HHG; % The color for HHG
-% end
-
 figNumber='HDPower';
 if select~=1
     figNumber='HDPowerAll';
 end
 figure('units','normalized','position',[0 0 1 1])
-%set(groot,'defaultAxesColorOrder',map1)
 s=4;
 t=5;
 for j=1:total
@@ -126,7 +106,7 @@ for j=1:total
     load(filename)
     numRange=dimRange;
     subplot(s,t,j)
-    titlechar=[CorrSimuTitle(j)]; %, ' d=', num2str(max(dimRange))];
+    titlechar=[CorrSimuTitle(j)];
     hold on
     if select==1
         h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
@@ -155,7 +135,6 @@ for j=1:total
     set(gca,'FontSize',14);
     title(titlechar,'FontSize',14, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
-    %set(gca,'XTickLabel','FontSize',16);
     axis('square');
 end
 xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
@@ -164,7 +143,6 @@ h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
 if select==1;
-    %h=legend([h1 h2 h3],'MGC','Mcorr','HHG','Location',lgdPosition);
     h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
     h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);

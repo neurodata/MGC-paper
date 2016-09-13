@@ -1,59 +1,40 @@
-function [corrXY,varX,varY] = LocalCorr(X,Y,option)
+function [corrXY,varX,varY, weightXY] = LocalCorr(X,Y,option, optimalInd)
 % Author: Cencheng Shen
 % The main function that calculates all local correlation coefficients.
 %
 % The inputs are: 
 % two distance matrices X and Y;
-% an option that specifies which global correlation to use, set to 1,2,3 for dcorr / mcorr / Mantel.
+% an option that specifies which global correlation to use, including 'mcor','dcor','mantel'.
 %
 % The outputs are all local correlations and all local variances.
+%
+% Alternatively, specifying optimalInd by a matrix single index will return a
+% weightXY matrix that shows the contribution of each distance entries to
+% the eventual local distance correlation at the given index.
 if nargin < 3
     option='mcor'; % use mcorr by default
 end
+if nargin < 4
+    optimalInd=[];
+end
 n=size(X,1);
-disRank=[disToRanks(X) disToRanks(Y)]; % sort distances within columns
+disRank=[DistRanks(X) DistRanks(Y)]; % sort distances within columns
 
 % depending on the choice of the global correlation, properly center the distance matrices
-% A=disRank(1:n,1:n); % the column ranks for X
-% B=disRank(1:n,n+1:2*n); % the column ranks for Y
-% A=Centering(A,option);
-% B=Centering(B,option);
-A=Centering(X,option);
-B=Centering(Y,option);
+A=DistCentering(X,option);
+B=DistCentering(Y,option);
 
 RX=disRank(1:n,1:n); % the column ranks for X
 RY=disRank(1:n,n+1:2*n); % the column ranks for Y
-[corrXY,varX,varY]=LocalComputation(A,B',RX,RY'); % compute all local corr / var statistics
-
-function [A]=Centering(X,option)
-% An auxiliary function that properly centers the distance matrix X,
-% depending on the choice of global corr.
-n=size(X,1);
-
-% centering for dcorr / mcorr / Mantel
-switch option
-    case 'dcor'
-        EX=repmat(mean(X,1),n,1); % column centering
-        %EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X)); % this is original double-centering
-    case 'mcor'
-%         EX=repmat(sum(X,1)/(n-1),n,1);
-        EX=repmat(sum(X,1)/n,n,1);
-        EX=EX+X/n;
-    case 'mantel'
-        EX=sum(sum(X))/n/(n-1);
-end
-A=X-EX;
-
-% for mcorr or Mantel, exclude the diagonal entries
-if strcmp(option,'mcor') || strcmp(option,'mantel')
-    %%%   meanX=sum(sum(X))/n^2;
-    for j=1:n
-        A(j,j)=0;
-        %%% A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;  % the original diagonal modification of mcorr
-    end
+if isempty(optimalInd)
+    [corrXY,varX,varY]=LocalCorrelationComputation(A,B',RX,RY'); % compute all local corr / var statistics
+    weightXY=[];
+else
+    corrXY=[]; varX=[]; varY=[];
+    weightXY=LocalWeightComputation(A,B',RX,RY', optimalInd); % compute distance entry contributions
 end
 
-function [corrXY,varX,varY]=LocalComputation(A,B,RX,RY)
+function [corrXY,varX,varY]=LocalCorrelationComputation(A,B,RX,RY)
 % An auxiliary function that computes all local correlations simultaneously in O(n^2)
 n=size(A,1);nX=max(max(RX));nY=max(max(RY));
 corrXY=zeros(nX,nY); varX=zeros(1,nX); varY=zeros(1,nY);
@@ -104,6 +85,17 @@ for l=1:nY
         corrXY(:,l)=0;
     end
 end
+
+function weightXY=LocalWeightComputation(A,B,RX,RY,ind)
+% An auxiliary function that computes the contributions of each distance entries to
+% the local distance correlation at a given scale.
+nX=max(max(RX));nY=max(max(RY));
+[k,l]=ind2sub([nX,nY],ind);
+RX=(RX>k);
+RY=(RY>l);
+A(RX)=0;
+B(RY)=0;
+weightXY=(A-mean(mean(A))).*(B-mean(mean(B)));
 
 % function [corrXY,varX,varY]=GlobalComputation(A,B)
 % corrXY=sum(sum(A.*B));

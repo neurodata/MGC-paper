@@ -39,7 +39,7 @@ fontSize=18;
 mkSize=20;
 sameBar=0;
 
-%% plotting parameters 
+%% plotting parameters
 
 cmap=zeros(2,3);
 gray = [0.5,0.5,0.5];
@@ -77,9 +77,9 @@ set(gcf,'units','normalized','position',[0 0 1 1])
 
 
 %%  Col 1
-% ax=subplot(s,t,t+1); 
+% ax=subplot(s,t,t+1);
 ax=subplot('Position',[left(1), bottom(2)+width/2+0.01, width, height]);
-cla, 
+cla,
 
 
 hold all
@@ -111,7 +111,7 @@ ylim([min(y)-0.2, max(y)]);
 
 % title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
 title([{'0. Sample Data'}], 'Units', 'normalized', ...
-'Position', [0 1.1], 'HorizontalAlignment', 'left')
+    'Position', [0 1.1], 'HorizontalAlignment', 'left')
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 pos=[nan, nan, width, height];
 axis('square')
@@ -128,19 +128,19 @@ MGCVec=[A_MGC(id(1),id(2)), B_MGC(id(1),id(2)), A_MGC(id(1),id(2))*B_MGC(id(1),i
 display(['k=', num2str(k), ' l=',num2str(l)])
 
 formatSpec = 'k= %1i, l= %1i\n\n';
-fprintf(formatSpec,k,l) 
+fprintf(formatSpec,k,l)
 
 formatSpec = '\n & Mantel & Mcorr & MGC \\\\ \n';
 fprintf(formatSpec)
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id2(1),id2(2),C(id(1),id(2)),A(id(1),id(2)),A_MGC(id(1),id(2)),...
-                   id2(1),id2(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
-                   mantelH(id(1),id(2)),mcorrH(id(1),id(2)),A_MGC(id(1),id(2))*B_MGC(id(1),id(2)))
+    id2(1),id2(2),D(id(1),id(2)),B(id(1),id(2)),B_MGC(id(1),id(2)),...
+    mantelH(id(1),id(2)),mcorrH(id(1),id(2)),A_MGC(id(1),id(2))*B_MGC(id(1),id(2)))
 fprintf('\\hline\n\n')
 formatSpec = '\n $\\delta_x$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_y$(%i,%i) & %1.2f & %1.2f & %1.2f  \\\\ \n $\\delta_x \\times \\delta_y$ & %1.2f & %1.2f & %1.2f  \\\\ \n \n';
 fprintf(formatSpec,id2(3),id2(4),C(id(3),id(4)),A(id(3),id(4)),A_MGC(id(3),id(4)),...
-                   id2(3),id2(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
-                   mantelH(id(3),id(4)),mcorrH(id(3),id(4)),A_MGC(id(3),id(4)) * B_MGC(id(3),id(4)))
+    id2(3),id2(4),D(id(3),id(4)),B(id(3),id(4)),B_MGC(id(3),id(4)),...
+    mantelH(id(3),id(4)),mcorrH(id(3),id(4)),A_MGC(id(3),id(4)) * B_MGC(id(3),id(4)))
 
 fprintf('\\hline\n\n')
 
@@ -164,7 +164,7 @@ bar(3)=J2;
 
 
 % A Mantel
-% ax=subplot(s,t,2); %  
+% ax=subplot(s,t,2); %
 ax=subplot('Position',[left(2), bottom(3), width, height]);
 hold all
 if sameBar==1
@@ -180,13 +180,13 @@ caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
 xlabel('sample index','FontSize',fontSize, 'Units', 'normalized', ...
-'Position', [0 -0.15], 'HorizontalAlignment', 'left')
+    'Position', [0 -0.15], 'HorizontalAlignment', 'left')
 ylabel('sample index','FontSize',fontSize, 'Units', 'normalized', ...
-'Position', [-0.3 0.3], 'VerticalAlignment', 'Top')
+    'Position', [-0.3 0.3], 'VerticalAlignment', 'Top')
 % 'Position', [-0.2 -0.05], 'HorizontalAlignment', 'Left')
 text(24,53,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize, 'Units', 'normalized', ...
-'Position', [0 1.1], 'HorizontalAlignment', 'left');
+    'Position', [0 1.1], 'HorizontalAlignment', 'left');
 % title([{'Mantel'}; {' '}],'FontSize',fontSize);
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 set(gca,'visible','on')
@@ -194,7 +194,7 @@ set(gca,'XTick',[2,round(n/2),n],'XtickLabel',[1,round(n/2),n]); % Remove x axis
 set(gca,'YTick',[2.5,round(n/2),n],'YtickLabel',[1,round(n/2),n]); % Remove x axis ticks
 
 % B Mantel
-% ax=subplot(s,t,t+2); 
+% ax=subplot(s,t,t+2);
 ax=subplot('Position',[left(2), bottom(2), width, height]);
 hold all
 if sameBar~=1
@@ -211,7 +211,7 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C Mantel
-% ax=subplot(s,t,2*t+2); 
+% ax=subplot(s,t,2*t+2);
 ax=subplot('Position',[left(2), bottom(1), width, height]);
 hold all
 MH=ceil(max(max(mantelH(2:end,2:end))));
@@ -236,7 +236,7 @@ minC=min(minC,-maxC);maxC=max(maxC,-minC);
 
 
 % A Mcorr
-% ax=subplot(s,t,3); 
+% ax=subplot(s,t,3);
 ax=subplot('Position',[left(3), bottom(3), width, height]);
 hold all
 imagesc(A(bar,bar)');
@@ -244,12 +244,12 @@ set(gca,'YDir','normal')
 caxis([minC,maxC]);
 text(24,53,'$A$','interpreter','latex','FontSize',fontSize)
 title([{'2. Mcorr'}; {'(single center)'}; {' '}],'FontSize',fontSize, 'Units', 'normalized', ...
-'Position', [0 1.1], 'HorizontalAlignment', 'left')
+    'Position', [0 1.1], 'HorizontalAlignment', 'left')
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MCorr
-% ax=subplot(s,t,t+3); 
+% ax=subplot(s,t,t+3);
 ax=subplot('Position',[left(3), bottom(2), width, height]);
 hold all
 if sameBar==1
@@ -267,7 +267,7 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % C MCorr
-% ax=subplot(s,t,2*t+3); 
+% ax=subplot(s,t,2*t+3);
 ax=subplot('Position',[left(3), bottom(1), width, height]);
 hold all
 MH=ceil(max(max(mcorrH(2:end,2:end))));
@@ -298,7 +298,7 @@ clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 
 % B MGC
-% ax=subplot(s,t,t+4); 
+% ax=subplot(s,t,t+4);
 ax=subplot('Position',[left(4), bottom(2), width, height]);
 hold all
 imagesc(B_MGC(bar,bar)');
@@ -308,7 +308,7 @@ title('$$B^{l}$$','interpreter','latex');
 clean_panel(ax,map2,pos,id,n,col,fontSize)
 
 % C MGC
-% ax=subplot(s,t,2*t+4); 
+% ax=subplot(s,t,2*t+4);
 ax=subplot('Position',[left(4), bottom(1), width, height]);
 cla, hold all
 MH=ceil(max(max(C_MGC(2:end,2:end))));
@@ -346,13 +346,13 @@ ylim([1 n-1]);
 set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 pos = get(ax,'position');
 xlabel('# of X Neighbors','FontSize',fontSize, ...
-        'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
-        'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
 % text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
 % title(1,60,[{'4. Multiscale Maps'}; {'(all scales)'}; {' '}],'FontSize',fontSize,...
 %     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
- text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
+text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
 % title('Local Correlations','fontweight','normal','FontSize',fontSize);
 text(10,55,'Test Statistics','FontSize',fontSize)
 axis('square')
@@ -382,9 +382,9 @@ ylim([1 n-1]);
 set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
 pos = get(ax,'position');
 %xlabel('# of X Neighbors','FontSize',fontSize, ...
-  %      'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
+%      'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
 %ylabel('# of Y Neighbors','FontSize',fontSize, ...
- %       'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
+%       'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
 %text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
 %text(19,55,'Power','FontSize',fontSize)
 title('Powers','fontweight','normal','FontSize',fontSize);
@@ -452,7 +452,7 @@ axis('square')
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=1;
 if donzo==1
-    F.fname=strcat(pre2, 'FigA');    
+    F.fname=strcat(pre2, 'FigA');
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
@@ -461,7 +461,7 @@ F.PaperPositionMode='auto';
 
 print_fig(gcf,F)
 
-% 
+%
 %% Col 5 p-value
 % subplot(s,t,t)
 fig=figure(2); clf
@@ -490,11 +490,11 @@ x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
 plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
-    if abs(x2-x3)<0.03
-        set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
-    else
-        set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
-    end
+if abs(x2-x3)<0.03
+    set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
+else
+    set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 % x1 = tA(end);
@@ -546,7 +546,7 @@ hold off
 
 %
 % ax=subplot('Position',[left(1), bottom(1), width, height]);
-% 
+%
 % ntab=5;
 % t = uitable(fig,'Data',round([x(1:5),y(1:5)]*10)/10,...
 %     'ColumnWidth',{60},...
@@ -565,7 +565,7 @@ hold off
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=1;
 if donzo==1
-    F.fname=strcat(pre2, 'FigB');    
+    F.fname=strcat(pre2, 'FigB');
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end

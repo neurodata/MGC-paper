@@ -20,9 +20,6 @@ fontSize=20;
 %% Set colors
 map1=zeros(7,3);
 gr = [0.5,0.5,0.5];
-% gr = [0,1,0];
-% ma = [1,0,1];
-% cy = [0,1,1];
 cmap(1,:) = gr;
 cmap(2,:) = gr;
 cmap(3,:) = gr;
@@ -37,14 +34,12 @@ map1(3,:)=mcorr; map1(7,:)=mcorr; % The color for MGC{Mantel} and global Mantel.
 map1(4,:)=HHG; % The color for HHG
 set(groot,'defaultAxesColorOrder',map1);
 strL={'Global';'MGC'};
-average=0;
 
 figure('units','normalized','position',[0 0 1 1])
 s=2;t=3;
 ls{3}='-';
 ls{2}='--';
 ls{1}=':';
-%ls{4}='.:';
 ls{4}='--';
 
 AUC=zeros(8,20);
@@ -69,7 +64,6 @@ for j=1:3
     hold on
     for i=6:19
         plot(x,AUC(2*j-1:2*j,i),ls{j},'LineWidth',1,'Color',map1(j,:));
-        %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
@@ -79,7 +73,6 @@ for j=1:3
         ylabel('1-Dimensional','FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
-%         set(gca,'ycolor',[1 1 1])
     end
     title(str(j,:),'FontSize',fontSize, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
@@ -107,7 +100,6 @@ for j=1:3
     hold on
     for i=6:19
         plot(x,AUC(2*j-1:2*j,i),ls{j},'LineWidth',1,'Color',map1(j,:));
-        %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
     end
     plot(x,[mean(AUC(2*j-1,6:19)) mean(AUC(2*j,6:19))],ls{j},'LineWidth',10,'Color',map1(j,:));
     ylim([0,1]);
@@ -116,26 +108,9 @@ for j=1:3
         ylabel('High-Dimensional','FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
-%         set(gca,'ycolor',[1 1 1])
     end
-%     title(str(j,:),'FontSize',32);
     hold off
 end
 F.fname=strcat(pre2,'Slope');
-    F.wh=[6 3]*2;
-    print_fig(gcf,F)
-% figure
-% hold on
-% for i=6:19
-%         plot(x,[max(AUC([1,3,5,7],i)), max(AUC([2,4,6],i))],'.:','LineWidth',2,'Color',map1(4,:));
-%         %plot(x,AUC(7:8,i),'.--','LineWidth',3,'Color',map1(4,:));
-% end
-% plot(x,[mean(max(AUC([1,3,5,7],1:19),[],1)) mean(max(AUC([2,4,6],1:19),[],1))],'.-','LineWidth',10,'Color',map1(4,:));
-% ylim([0 1])
-% hold off
-% set(gca,'YTick',[]); % Remove y axis ticks
-% set(gca,'ycolor',[1 1 1])
-% set(gca,'XTickLabel',{'Best Global';'Best MGC'},'XTick',1:2,'YTickLabel',[0,1],'YTick',0:1,'FontSize',30);
-% F.fname=strcat(pre2,'HDAll');
-% F.wh=[3 2.5]*2;
-% print_fig(gcf,F)
+F.wh=[6 3]*2;
+print_fig(gcf,F)

@@ -28,25 +28,25 @@ dim=1;
 % optimal scale
 tA=zeros(n,n,rep);
 tN=zeros(n,n,rep);
-    for r=1:rep;
-        [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-        CA=squareform(pdist(x));
-        DA=squareform(pdist(y));
-        tA(:,:,r)=LocalCorr(CA,DA,'mcor');
-        [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
-        CA=squareform(pdist(x));
-        DA=squareform(pdist(y));
-        tN(:,:,r)=LocalCorr(CA,DA,'mcor');
+for r=1:rep;
+    [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
+    CA=squareform(pdist(x));
+    DA=squareform(pdist(y));
+    tA(:,:,r)=LocalCorr(CA,DA,'mcor');
+    [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
+    CA=squareform(pdist(x));
+    DA=squareform(pdist(y));
+    tN(:,:,r)=LocalCorr(CA,DA,'mcor');
+end
+powerMLocal=zeros(n,n);
+alpha=0.05;
+for i=1:n;
+    for j=1:n;
+        dCorT=sort(tN(i,j,:),'descend');
+        cut1=dCorT(ceil(rep*alpha));
+        powerMLocal(i,j)=mean(tA(i,j,:)>cut1);
     end
-    powerMLocal=zeros(n,n);
-    alpha=0.05;
-    for i=1:n;
-        for j=1:n;
-            dCorT=sort(tN(i,j,:),'descend');
-            cut1=dCorT(ceil(rep*alpha));
-            powerMLocal(i,j)=mean(tA(i,j,:)>cut1);
-        end
-    end
+end
 powerMLocal(1,:)=0;powerMLocal(:,1)=0; % Set the powers of all local tests at rank 0 to 0
 neighbor=maxNeighbors(powerMLocal,0,tN,tA);
 
@@ -64,7 +64,7 @@ D=squareform(pdist(y));
 
 % Permutation p-value
 tA=LocalCorr(C,D,'mcor');
-test=SampleMGC(tA);
+test=MGCSampleStat(tA);
 tN=zeros(rep,n,n);
 testN=zeros(rep,1);
 pMLocal=zeros(n,n);
@@ -72,11 +72,11 @@ pMGC=0;
 for r=1:rep;
     per=randperm(n);
     tmp=LocalCorr(C,D(per,per),'mcor');
-    tmp2=SampleMGC(tmp);
+    tmp2=MGCSampleStat(tmp);
     tN(r,:,:)=tmp;
     testN(r)=tmp2;
-        pMLocal=pMLocal+(tmp>=tA)/rep;
-        pMGC=pMGC+(tmp2>=test)/rep;
+    pMLocal=pMLocal+(tmp>=tA)/rep;
+    pMGC=pMGC+(tmp2>=test)/rep;
 end
 % set the p-values of local corr at rank 0 to maximum, since they should not be used
 if min(min(pMLocal(2:end,2:end)))==0
@@ -89,23 +89,19 @@ pMLocal(pMLocal>1)=1;
 pMLocal(1,:)=1;pMLocal(:,1)=1;
 
 % find optimal scale
-    warning('off','all');
-    [~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
-    optimalInd=find(optimalInd==1);
-    if (pMLocal(end)<pMGC && isempty(find(optimalInd==n*n, 1)))
-        optimalInd=n*n;
-    end
-
+warning('off','all');
+[~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
+optimalInd=find(optimalInd==1);
+if (pMLocal(end)<pMGC && isempty(find(optimalInd==n*n, 1)))
+    optimalInd=n*n;
+end
 l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 
-
-%% compute stuff that cencheng should have saved :)
-
 % Mcorr
-RC=disToRanks(C);
-RD=disToRanks(D)';
-        
+RC=DistRanks(C);
+RD=DistRanks(D)';
+
 H=eye(n)-(1/n)*ones(n,n);
 A=H*C-C/n;
 B=D*H-D/n;
@@ -127,10 +123,8 @@ A_MGC=A;
 B_MGC=B;
 A_MGC(RC)=0;
 B_MGC(RD)=0;
-% if cc==1
-A_MGC=A_MGC;
-B_MGC=B_MGC;
-% end
+% A_MGC=A_MGC;
+% B_MGC=B_MGC;
 %A_MGC(1:n+1:n^2)=0;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));

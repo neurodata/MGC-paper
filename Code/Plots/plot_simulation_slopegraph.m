@@ -16,7 +16,7 @@ pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 total=20;
-fontSize=24;
+fontSize=20;
 %% Set colors
 map1=zeros(7,3);
 gr = [0.5,0.5,0.5];
@@ -115,5 +115,5 @@ for j=1:4
     hold off
 end
 F.fname=strcat(pre2,'Slope');
-F.wh=[8 3]*2;
+F.wh=[6 2.4]*2;
 print_fig(gcf,F)

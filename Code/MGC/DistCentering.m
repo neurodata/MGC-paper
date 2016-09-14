@@ -3,7 +3,8 @@ function [A]=DistCentering(X,option)
 % depending on the choice of global corr.
 n=size(X,1);
 
-% centering for dcorr / mcorr / Mantel
+% centering for distance correlation / modified distance correlation /
+% Mantel coefficient
 switch option
     case 'dcor'
         EX=repmat(mean(X,1),n,1); % column centering

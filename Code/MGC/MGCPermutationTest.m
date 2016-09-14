@@ -24,16 +24,15 @@ if nargin<4
     option='mcor';  % use mcorr by default
 end
 
+sampleIndicator=0;
 if strcmp(option,'mcor')
-    ind=1; % only compute sample MGC for mcorr
-else
-    ind=0;
+    sampleIndicator=1; % only compute sample MGC for mcorr
 end
 
 % calculate all local correlations between the two data sets
-localCorr=LocalCorr(A,B,option);
+localCorr=MGCLocalCorr(A,B,option);
 [m,n]=size(localCorr);
-if ind==1
+if sampleIndicator==1
     statMGC=MGCSampleStat(localCorr); % sample MGC for the observed data
 end
 pLocalCorr=zeros(size(localCorr));pMGC=0;
@@ -44,30 +43,29 @@ for r=1:rep
     % use random permutations on the second data set
     per=randperm(n2);
     BN=B(per,per);
-    tmp=LocalCorr(A,BN,option);
-    tmp2=MGCSampleStat(tmp);
+    tmp=MGCLocalCorr(A,BN,option);
     pLocalCorr=pLocalCorr+(tmp>=localCorr)/rep;
-    if ind==1
+    if sampleIndicator==1
+        tmp2=MGCSampleStat(tmp); % sample MGC for permuted data
         pMGC=pMGC+(tmp2>=statMGC)/rep;
     end
 end
-if ind~=1
-    pMGC=1;
-    statMGC=0;
+if sampleIndicator~=1 % other than mcorr, we do not implemented sample MGC yet, and the global statistic is always used
+    pMGC=pLocalCorr(end);
+    statMGC=localCorr(end);
 end
 % if p-value equals 0, enlarge it to 1/rep, since the identity permutation is always
 % one such permutation.
 if min(min(pLocalCorr(2:end,2:end)))==0
     pLocalCorr=pLocalCorr+1/rep;
 end
+pLocalCorr(pLocalCorr>1)=1;
+pLocalCorr(1,:)=1;pLocalCorr(:,1)=1;
 if min(min(pLocalCorr(2:end,2:end)))>pMGC
     pMGC=min(min(pLocalCorr(2:end,2:end)));
 end
-pLocalCorr(pLocalCorr>1)=1;
-pLocalCorr(1,:)=1;pLocalCorr(:,1)=1;
 
 % estimate the optimal scales
-warning('off','all');
 [~,~,~,optimalInd]=FindLargestRectangles((pLocalCorr<=pMGC), [0 0 1],[2,2]);
 optimalInd=find(optimalInd==1);
 if (pLocalCorr(end)<pMGC && isempty(find(optimalInd==m*n, 1)))

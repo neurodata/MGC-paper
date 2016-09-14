@@ -74,7 +74,7 @@ warning('off','all');
 for i=1:4
     t=sum(sum(R2{i}));
     if t>0
-        R2{i}=bwareafilt(R2{i},1); % largest connected component of each region 
-        R= (R | R2{i}); % combine all monotonically changing and significant regions
+        t=bwareafilt(R2{i},1); % largest connected component of each region 
+        R= (R | t); % combine all monotonically changing and significant regions
     end
 end

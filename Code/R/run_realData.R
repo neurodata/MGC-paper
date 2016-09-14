@@ -4,11 +4,11 @@ load("BrainHippoShape.RData")
 library(ecodist)
 library(energy)
 library(HHG)
-source("LocalCorr.R")
-C=LMLS;P=as.matrix(dist(Label))+1;diag(P)=0;
-ldcorr=LocalCorr(C,P,option=1)$corr;
-lmdcorr=LocalCorr(C,P,option=2)$corr;
-lmantel=LocalCorr(C,P,option=3)$corr;
+source("MGCLocalCorr.R")
+C=LMRS;P=as.matrix(dist(Label+0.01*runif(n)));
+ldcorr=MGCLocalCorr(C,P,option='dcor')$corr;
+lmdcorr=MGCLocalCorr(C,P,option='mcor')$corr;
+lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
 ### Global corr from the original authors. 
 ### Their p-values in permutation test should be very similar to our local corr at largest scale,
 ### but the actual statistic can be slightly different.
@@ -24,21 +24,21 @@ hhgr=hhg.test(C,P,nr.perm=1000);
 
 ### Permutation Test of local corr
 source("MGCPermutationTest.R")
-test=MGCPermutationTest(C,P,rep=100,option=2)
-C=LMRS;
-test=MGCPermutationTest(C,P,rep=100,option=2)
+C=LMRS;P=as.matrix(dist(Label+0.01*runif(n)));
+test=MGCPermutationTest(C,P,rep=1000,option='mcor')
 
 
 
 load("BrainCPData.RData")
-source("LocalCorr.R")
+source("MGCLocalCorr.R")
 library(ecodist)
 library(energy)
 library(HHG)
-C=distC;P=distP;
-ldcorr=LocalCorr(C,P,option=1)$corr;
-lmdcorr=LocalCorr(C,P,option=2)$corr;
-lmantel=LocalCorr(C,P,option=3)$corr;
+C=distC;P=distP;ind=723;
+ldcorr=MGCLocalCorr(C,P,option='dcor')$corr;
+lmdcorr=MGCLocalCorr(C,P,option='mcor')$corr;
+weight=MGCLocalCorr(C,P,option='mcor',ind);
+lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
 dcorr=dcor(as.dist(C),as.dist(P));
 mdcorr=dcor.ttest(C,P,distance=TRUE);
 mantel=mantel(as.dist(C)~as.dist(P),nperm=1000);
@@ -46,4 +46,4 @@ hhgr=hhg.test(C,P,nr.perm=1000);
 
 ### Permutation Test of local corr
 source("MGCPermutationTest.R")
-test=MGCPermutationTest(C,P,rep=1000,option=2)
+test=MGCPermutationTest(C,P,rep=1000,option='mcor')

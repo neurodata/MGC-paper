@@ -1,6 +1,6 @@
-# source("disToRanks.R")
+# source("DisRanks.R")
 
-disToRanks <- function(dis) {
+DistRanks <- function(dis) {
   # An auxiliary function that sorts the entries within each column by ascending order.
   #
   # The input is assumed to be a distance matrix.

@@ -516,9 +516,10 @@ ylim([0 y1+10]);
 set(a,'FontSize',fs);
 set(b,'FontSize',fs);
 set(c,'FontSize',fs);
-xlim([minp,maxp+0.04]);
-xlabel('Test Statistic','FontSize',fs-5,'HorizontalAlignment','right');
-ylabel('Density','FontSize',fs-5, ...
+xlim([minp,maxp+0.1]);
+xlabel('Test Statistic','FontSize',fs,...
+    'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+ylabel('Density','FontSize',fs, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 % =======
 % set(a,'FontSize',fontSize);

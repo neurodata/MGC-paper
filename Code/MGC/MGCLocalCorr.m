@@ -1,4 +1,4 @@
-function [corrXY,varX,varY, weight] = MGCLocalCorr(X,Y,option, ind)
+function [corr,varX,varY, weight] = MGCLocalCorr(X,Y,option, ind)
 % Author: Cencheng Shen
 % The main function that calculates all local correlation coefficients.
 %
@@ -27,10 +27,10 @@ B=DistCentering(Y,option);
 RX=disRank(1:n,1:n); % the column ranks for X
 RY=disRank(1:n,n+1:2*n); % the column ranks for Y
 if length(ind)~=1
-    [corrXY,varX,varY]=LocalCorrelations(A,B',RX,RY'); % compute all local corr / var statistics
+    [corr,varX,varY]=LocalCorrelations(A,B',RX,RY'); % compute all local corr / var statistics
     weight=[];
 else
-    corrXY=[]; varX=[]; varY=[];
+    corr=[]; varX=[]; varY=[];
     weight=LocalWeights(A,B',RX,RY', ind); % compute distance entry contributions at a given scale
 end
 

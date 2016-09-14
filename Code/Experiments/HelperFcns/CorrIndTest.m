@@ -133,16 +133,16 @@ for i=1:lim
         C=DataN(1:nn,1:nn,r);
         D=DataN(1:nn,n+1:n+nn,r);
         if option(1)~=0
-            tmp=LocalCorr(C,D,'dcor');
+            tmp=MGCLocalCorr(C,D,'dcor');
             dCorDN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=LocalCorr(C,D,'mcor');
+            tmp=MGCLocalCorr(C,D,'mcor');
             dCorMN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
             dCorMGCN(r)=MGCSampleStat(tmp);
         end
         if option(3)~=0
-            tmp=LocalCorr(C,D,'mantel');
+            tmp=MGCLocalCorr(C,D,'mantel');
             dCorPN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
@@ -155,16 +155,16 @@ for i=1:lim
         C=DataA(1:nn,1:nn,r);
         D=DataA(1:nn,n+1:n+nn,r);
         if option(1)~=0
-            tmp=LocalCorr(C,D,'dcor');
+            tmp=MGCLocalCorr(C,D,'dcor');
             dCorDA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=LocalCorr(C,D,'mcor');
+            tmp=MGCLocalCorr(C,D,'mcor');
             dCorMA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
             dCorMGCA(r)=MGCSampleStat(tmp);
         end
         if option(3)~=0
-            tmp=LocalCorr(C,D,'mantel');
+            tmp=MGCLocalCorr(C,D,'mantel');
             dCorPA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0

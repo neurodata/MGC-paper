@@ -1,53 +1,82 @@
-source("disToRanks.R")
-source("LocalCorr.R")
-source("MGCScaleVerify.R")
+source("MGCLocalCorr.R")
+source("MGCSampleStat.R")
+source("FindLargestRectangles.R")
 
 MGCPermutationTest <-function(A,B,rep,option){
   # Author: Cencheng Shen
   # This function tests independent between two data sets, using MGC by a random permutation test.
+  # It outputs all local correlations, the sample MGC statistic, their
+  # p-values, and the estimated optimal scales.
   #
   # The inputs are:
-  # two n*n distance matrices A & B,
+  # two distance matrices A & B,
   # a parameter rep to specify the number of random permutations,
-  # an option to specify which global test to use, set to 1,2,3 for dcorr / mcorr / Mantel.
+  # an option to specify which global test to use, by 'mcor', 'dcor', 'mantel'.
   #
   # The outputs are:
-  # the estimated MGC p-value, the p-values of all local tests, 
-  # the estimated MGC test statistic, all local test statistics, and the estimated optimal scale. 
+  # the sample MGC p-value, sample MGC test statistic,
+  # all local p-values, all local correlations, and the estimated optimal scales.
+  #
+  # Note that the sample MGC p-value / test statistic / optimal scales are
+  # not calculated unless the global correlation is 'specified as mcor', and
+  # the optimal scales are output as matrix single indices.
   if (missing(rep)){
     rep=1000; # use 1000 random permutations by default
   }
   if (missing(option)){
-    option=1; # use mcorr by default
+    option='mcor'; # use mcorr by default
   }
-  n=nrow(A);
   
+  sampleIndicator=0;
+  if (option=='mcor'){
+    sampleIndicator=1; # only compute sample MGC for mcorr
+  } 
   # calculate all local correlations between the two data sets
-  testAll=LocalCorr(A,B,option)$corr;
+  localCorr=MGCLocalCorr(A,B,option)$corr;
+  if (sampleIndicator==1){
+    statMGC=MGCSampleStat(localCorr) # sample MGC for the observed data
+  } 
+  m=nrow(localCorr);
+  n=ncol(localCorr);
+  pLocalCorr=matrix(0,m,n);
+  pMGC=0;
+  n2=nrow(B);
   
   # calculate the local correlations under permutation, to yield the p-values of all observed local correlations
   for (r in (1:rep)){
     # use random permutations on the second data set
-    per=sample(n);
+    per=sample(n2);
     BN=B[per,per];
-    tmp=LocalCorr(A,BN,option)$corr;
-    if (r==1){
-      pAll=(tmp<testAll)*1/rep;
-    }else{
-      pAll=pAll+(tmp<testAll)*1/rep;
+    tmp=MGCLocalCorr(A,BN,option)$corr;
+    pLocalCorr=pLocalCorr+(tmp>=localCorr)*1/rep;
+    if (sampleIndicator==1){
+      tmp2=MGCSampleStat(tmp) # sample MGC for permuted data
+      pMGC=pMGC+(tmp2>=statMGC)*1/rep;
     }
   }
+  if (sampleIndicator!=1){ # other than mcorr, we do not implemented sample MGC yet, and the global statistic is always used
+    pMGC=pLocalCorr[m,n];
+    statMGC=localCorr[m,n];
+  }
   
-  # set the p-values of local corr at rank 0 to maximum, since they should not be used
-  pAll=1-pAll;
-  pAll[1,]=1;pAll[,1]=1;
+  # if p-value equals 0, enlarge it to 1/rep, since the identity permutation is always
+  # one such permutation.
+  if (min(pLocalCorr)==0){
+    pLocalCorr=pLocalCorr+1/rep;
+  }
+  pLocalCorr[pLocalCorr>1]=1;
+  pLocalCorr[1,]=1;pLocalCorr[,1]=1;
+  if (min(pLocalCorr[2:m,2:n])>pMGC){
+    pMGC=min(pLocalCorr[2:m,2:n]);
+  }
   
-  # verify and estimate the MGC optimal scale
-  result=MGCScaleVerify(pAll);
-  p=result$p;
-  ind=result$ind;
-  test=testAll[ind[length(ind)]];
+  # estimate the optimal scales
+  optimalInd=FindLargestRectangles((pLocalCorr<=pMGC))$M;
+  optimalInd=which(optimalInd==1);
+  if (pLocalCorr[m,n]<pMGC && length(which(optimalInd==m*n))==0){
+    optimalInd=m*n; # if the global scale is not selected in the largest rectangle while being optimal, we take the global scale instead.
+  }
   
-  result=list(pMGC=p,pAll=pAll,MGC=test,testAll=testAll,ind=ind);
+  result=list(pMGC=pMGC,statMGC=statMGC,pLocalCorr=pLocalCorr,localCorr=localCorr,optimalInd=optimalInd);
   return(result);
 }

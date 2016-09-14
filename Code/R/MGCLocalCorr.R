@@ -1,57 +1,43 @@
-source("disToRanks.R")
+source("DistRanks.R")
+source("DistCentering.R")
 
-LocalCorr <- function(X,Y,option){
+MGCLocalCorr <- function(X,Y,option, ind){
   # Author: Cencheng Shen
   # The main function that calculates all local correlation coefficients.
   #
   # The inputs are: 
   # two distance matrices X and Y;
-  # an option that specifies which global correlation to use, set to 1,2,3 for dcorr / mcorr / Mantel.
+  # an option that specifies which global correlation to use, including 'mcor','dcor','mantel'.
   #
   # The outputs are all local correlations and all local variances.
+  #
+  # Alternatively, specifying ind by a matrix single index will return a
+  # weight matrix that shows the contribution of each distance entries to
+  # the eventual local distance correlation at the given index.
   if (missing(option)){
-    option=2; # use mcorr by default
+    option='mcor'; # use mcorr by default
+  }
+  if (missing(ind)){
+    ind=numeric(0);
   }
   n=nrow(X);
-  disRank=cbind(disToRanks(X), disToRanks(Y)); # sort distances within columns
+  disRank=cbind(DistRanks(X), DistRanks(Y)); # sort distances within columns
   
   # depending on the choice of the global correlation, properly center the distance matrices
-  A=Centering(X,option);
-  B=Centering(Y,option);
+  A=DistCentering(X,option);
+  B=DistCentering(Y,option);
   
   RX=disRank[,1:n]; # the ranks for X
   RY=disRank[,(n+1):(2*n)]; # the ranks for Y
-  result=LocalComputation(A,t(B),RX,t(RY)); # compute all local corr / var statistics
+  if (length(ind)!=1){
+    result=LocalCorrelations(A,t(B),RX,t(RY)); # compute all local corr / var statistics
+  } else {
+    result=LocalWeights(A,t(B),RX,t(RY),ind); # compute distance entry contributions at a given scale
+  }
   return(result);
 }
 
-Centering<-function(X,option){
-  # An auxiliary function that properly centers the distance matrix X,
-  # depending on the choice of global corr.
-  n=nrow(X);
-  
-  # centering for dcorr / mcorr / Mantel
-  if (option==1){
-    EX=t(matrix(rep(colMeans(X),n), ncol = n));
-  }
-  if (option==2){
-    EX=t(matrix(rep(colMeans(X),n), ncol = n))+X/n;
-  }
-  if (option==3){
-    EX=sum(X)/n/(n-1);
-  }
-  A=X-EX;
-  
-  # for mcorr or Mantel, exclude the diagonal entries
-  if (option==2||option==3){
-    for (j in (1:n)){
-      A[j,j]=0;
-    }
-  }
-  return(A);
-}
-
-LocalComputation <- function(A,B,RX,RY){
+LocalCorrelations <- function(A,B,RX,RY){
   # An auxiliary function that computes all local correlations simultaneously in O(n^2)
   n=nrow(A);nX=max(RX);nY=max(RY);
   corrXY=matrix(0,nX,nY);varX=rep(0,nX);varY=rep(0,nY);
@@ -110,4 +96,21 @@ LocalComputation <- function(A,B,RX,RY){
   }
   result=list(corr=corrXY,varX=varX,varY=varY);
   return(result);
+}
+
+LocalWeights <- function(A,B,RX,RY,ind){
+  # An auxiliary function that computes the contributions of each distance entries to
+  # the local distance correlation at a given scale.
+  nX=max(RX);nY=max(RY);
+  if (ind>nX*nY || ind<1){
+    ind=nX*nY; # default to global scale when the specified index is out of range
+  }
+  k = ((ind-1) %% nX) + 1
+  l = floor((ind-1) / nX) + 1
+  RX=(RX>k);
+  RY=(RY>l);
+  A[RX]=0;
+  B[RY]=0;
+  weight=(A-mean(A))*(B-mean(B));
+  return(weight);
 }

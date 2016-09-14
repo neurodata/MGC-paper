@@ -32,11 +32,11 @@ for r=1:rep;
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     CA=squareform(pdist(x));
     DA=squareform(pdist(y));
-    tA(:,:,r)=LocalCorr(CA,DA,'mcor');
+    tA(:,:,r)=MGCLocalCorr(CA,DA,'mcor');
     [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
     CA=squareform(pdist(x));
     DA=squareform(pdist(y));
-    tN(:,:,r)=LocalCorr(CA,DA,'mcor');
+    tN(:,:,r)=MGCLocalCorr(CA,DA,'mcor');
 end
 powerMLocal=zeros(n,n);
 alpha=0.05;
@@ -63,7 +63,7 @@ C=squareform(pdist(x));
 D=squareform(pdist(y));
 
 % Permutation p-value
-tA=LocalCorr(C,D,'mcor');
+tA=MGCLocalCorr(C,D,'mcor');
 test=MGCSampleStat(tA);
 tN=zeros(rep,n,n);
 testN=zeros(rep,1);
@@ -71,7 +71,7 @@ pMLocal=zeros(n,n);
 pMGC=0;
 for r=1:rep;
     per=randperm(n);
-    tmp=LocalCorr(C,D(per,per),'mcor');
+    tmp=MGCLocalCorr(C,D(per,per),'mcor');
     tmp2=MGCSampleStat(tmp);
     tN(r,:,:)=tmp;
     testN(r)=tmp2;

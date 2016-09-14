@@ -28,13 +28,11 @@
 % \usepackage[nottoc,numbib]{tocbibind}
 % \usepackage{flushend}
 
-
 %better toc
 % \usepackage{tocloft}
 % \setlength\cftparskip{-1pt}
 % \setlength\cftbeforesecskip{2pt}
 % \setlength\cftaftertoctitleskip{4pt}
-
 
 \pagestyle{fancy}
 % \oddsidemargin=-0.5in
@@ -56,7 +54,6 @@
 % \addtolength{\textwidth}{1in}%
 % \addtolength{\textheight}{-.3in}%
 % \addtolength{\topmargin}{-.8in}%
-
 
 %\providecommageneralizednd{\sct}[1]{{\sc \texttt{#1}}}
 \providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
@@ -102,9 +99,6 @@
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
 
-
-
-
 %environment
 \newtheorem{thm}{Theorem}
 \newtheorem{appThm}{Theorem}
@@ -134,7 +128,7 @@
 % Discovering Relationships Among Multiple Multifarious Datatypes 
 % \title{\bf Revealing the Scales of Dependency Between Multiple Data Modalities}
  % Datasets via  Multiscale Generalized Correlation}
-\author[1,2]{Cencheng Shen} %\thanks{cshen@temple.edu}}
+\author[1,2]{Cencheng Shen} %\thanks{cshen6@jhu.edu}}
 \author[1,3]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
 \author[3,4,6]{Mauro Maggioni}%\thanks{mauro.maggioni@jhu.edu}}
 \author[1,5,6,7]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
@@ -182,10 +176,6 @@ As data collection is becoming easier, it is becoming increasingly difficult and
 % \newpage
 % \spacingset{1.45}
 
-
-
-
-
 \jv{to all science seems too narrow}
 Discovering whether certain properties are associated with other properties is fundamental to all science. Identifying the existence of a relationship is a precursor to investigating the structure of the relationship, and whether it has predictive power, or reflects causality.
 One of the first statistical approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation   (published in 1895 \cite{Pearson1895}). This seminal advance   prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
@@ -220,7 +210,7 @@ A primary challenge that we faced was determining the optimal local scales in a 
 
 \begin{figure}[htbp]
 \vspace{-50pt}
-\includegraphics[width=1.0\textwidth,trim={0 0 1cm 0},clip]{Figures/FigA}
+\includegraphics[width=1.0\textwidth,trim={0 0 2cm 0},clip]{Figures/FigA}
 \setlength{\tabcolsep}{10pt} % Default value: 6pt
 \begin{tabular}{r r r r}
 \multicolumn{1}{l}{{\small \textbf{6. Table}}} & & & \\
@@ -241,7 +231,7 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-1.75  & \hspace{3.5em} \color
 
 \begin{tikzpicture}[remember picture,overlay]
 \node[xshift=-5.2cm,yshift=-0.6cm] at (current page.east){%
-    \includegraphics[width=0.35\textwidth]{Figures/FigB}};
+    \includegraphics[width=0.35\textwidth,trim={1.5cm 0 2cm 0},clip]{Figures/FigB}};
   %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
    %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
   %};
@@ -249,6 +239,7 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-1.75  & \hspace{3.5em} \color
 \caption{
 Flowchart  and table demonstrating the ability of Multiscale Generalized Correlation (\Mgc) to detect dependence in nonlinear settings. 
 % \jv{sd says: The description for Figure 1 contains inconsistent verb tenses. e.g. "Choose" vs "subtracting". It would be better to be consistent.}
+%\cs{I have made them the same, i.e. subtract}
 \textbf{0.} 50 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 % 
 \textbf{1.} Choose a metric on $x$ and another on $y$, and compute all pairwise distances (centered by the overall means) for $x$ and $y$ yielding interpoint comparison matrices
@@ -337,7 +328,6 @@ Many manifold learning algorithms require that the user essentially runs the ent
 Since there are $n^2$ different local tests, one for each possible combination of $k$ and $l$, the challenge is to find a way to compute all local tests in a computationally efficient fashion. 
 
 
-
 The fourth step is therefore to compute all local tests in a nested algorithm, re-using adjacent smaller local correlations to procedurally build all local statistics, and efficiently yielding multiscale maps that reveal the scales of dependence. 
 For a given scale, once the rank information is provided, the local correlation takes $O(n^2)$ time to compute (because it requires calculating a distance for all pairs; see Algorithm \ref{alg:1scale}). 
 % 
@@ -374,7 +364,7 @@ Details for each setting are given in Appendix \ref{appen:function}, with a visu
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/FigHDPower}
+\includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPower}
 \caption{Power of Oracle \Mgc, sample \Mgc, \Mcorr, and \Hhg~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Appendix \ref{appen:algorithms} for details).  
 Each panel shows the testing power at significance level $\alpha=0.05$
 % \jv{should we include `# of' or just leave it off? technically, isn't everything "# of"?}
@@ -400,10 +390,11 @@ Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlati
 
 \begin{figure}
   \centering
-  \includegraphics[width=1.0\textwidth]{Figures/FigSlope}
+  \includegraphics[width=1.0\textwidth,trim={2cm 0 3cm 0},clip]{Figures/FigSlope}
   \caption{
 Slopegraphs comparing average power of three different global correlation tests and their respective Oracle \Mgc~(O\Mgc), as well as global \Mcorr~vs its sample \Mgc~(S\Mgc).  Each panel shows average power for settings 6-19, because Oracle \Mgc~equals the global correlation for settings 1-5 and  20. 
 % \jv{It's not clear to me when we should be saying "power" vs "powers".} 
+%\cs{I have changed to power throughout for consistency}
 The left side of each panel shows the global correlation's average power, and 
 the right side shows the corresponding \Mgc's average power. The thick line shows the average within that panel. 
 One-dimensional power is averaged over sample size (top)  and high-dimensional power is averaged over dimensionality (bottom), corresponding to Figures~\ref{f:1DAll} and~\ref{f:nDAll}, respectively.
@@ -411,9 +402,6 @@ This figure suggests that \Mgc~theoretically dominates its global counterparts, 
 }
 \label{f:pp}
 \end{figure}
-
-
-
 
 
 % 31 lines; target = 64
@@ -430,7 +418,7 @@ Note that the local structures can be similarly identified by the p-value or tes
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/FigHDHeat}
+\includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
 For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively. For each simulation, the sample size is $n=100$,  and the dimension is determined by the largest dimension for Oracle \Mgc~to have power exceeding $0.5$ at significance level  $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure.}
 \label{f:powermaps}
@@ -515,7 +503,7 @@ This brain shape versus disease dataset consists of $n=114$ subjects. Each subje
 Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas the global scale does not detect a significant dependence  (see Table \ref{t:real}). 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/FigReal}
+\includegraphics[width=1.0\textwidth,trim={0 0 1.5cm 0},clip]{Figures/FigReal}
 \caption{Sample \Mgc~discovers the scales of dependence between various brain and mental properties when they exist, and does not detect dependence when it does not exist.  The left three panels show multiscale p-value maps and their corresponding estimated optimal scales for three different settings: \textbf{A.}  brain activity vs. five-factor personality model, \textbf{B.}  brain shape vs depressive disease, and \textbf{C.} brain networks vs. creativity. Sample size is $42$, $114$, and $109$, respectively, though the ordinate of these panels only goes as high as the largest possible neighborhood size due to repeated entries.  
 For all three, \Mgc~yields significant p-value and reveals the optimal scales of dependence (green rectangles).
 \textbf{D.} Density estimate for the false positive rates of sample \Mgc~on the brain vs synthetic independent noise experiments, with the actual rate of each experiment shown as dots above the x-axis. The mean $\pm$ standard deviation is $0.0538 \pm 0.0394$ respectively, demonstrating that \Mgc~is a valid test and does not inflate the false positives for these real data.}
@@ -545,7 +533,7 @@ The next real data experiment investigates whether brain structural networks are
 The brain network metric we used was based on  the semi-parametric test statistic \cite{Tang2016} that tests whether pairs of graphs with labeled vertices are sampled from the same distribution.  This test statistic was developed to reduce  the very high dimensionality of adjacency matrices via employing adjacency spectral graph embedding  \cite{Sussman2013}. For these data, we chose to embed each graph into two dimensions for simplicity. We used Euclidean distance to compare CCI values. 
 
 
-\jv{highlight that we are the only obvious way to determine that the relationship is linear for high dimensional data (otherwise, one needs to compute the linear regression with inverting the covariance matrix which is poorly sacled in high dimensions?}
+\jv{highlight that we are the only obvious way to determine that the relationship is linear for high dimensional data (otherwise, one needs to compute the linear regression with inverting the covariance matrix which is poorly scaled in high dimensions?}
 Figure \ref{f:real}{\color{magenta}C} shows that even a global dependence test can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting with high-dimensional and structured data samples and low-sample size, there is no other obvious way that we could effectively determine that the relationship is approximately linear.
 
 
@@ -763,16 +751,14 @@ The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional setti
 
 
 \begin{figure}[htbp]
-\includegraphics[trim={5cm 0 3.5cm 0},clip, width=1.0\textwidth]{Figures/FigSimVisual}
+\includegraphics[trim={5cm 1.5cm 4cm 0.5cm},clip, width=1.0\textwidth]{Figures/FigSimVisual}
 \caption{Visualization of the $20$ dependencies at $D=D_{y}=1$. For each, we sampled $n=100$ points with noise ($c=1$) to show the actual sample data used for 1-dimensional settings (gray dots). For comparison purposes, we also sampled $n=1000$ points without noise ($c=0$) to highlight each underlying dependency (black dots).
 }
 \label{f:dependencies}
 \end{figure}
 
-
-
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/Fig1DPowerAll}
+\includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/Fig1DPowerAll}
 \caption{
 Power of different methods for $20$ different one-dimensional dependence structures, estimated by the empirical distributions of the test statistics under the null and the alternative hypotheses.
  % on the basis of $10$,$000$ Monte-Carlo replicates. $2$,$000$ additional MC replicates are used for optimal scale estimation for \Mgc.
@@ -783,7 +769,7 @@ Oracle \Mgc~empirically achieves similar or better power than the previous state
 \end{figure}
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/FigHDPowerAll}
+\includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPowerAll}
 \caption{
 Same as Figure~\ref{f:nD} in main text, but with all eight methods compared. Oracle and sample \Mgc~dominate the other approaches by being as powerful or more so for almost all simulations, regardless of the dimensionality. \Mgc~is always plotted ``on top'' of the global variants if there is overlap, therefore, some of the global variants are not always visible from the display.}
 % * <stefaniejacinto@gmail.com> 2016-08-20T23:33:38.278Z:
@@ -799,7 +785,7 @@ Same as Figure~\ref{f:nD} in main text, but with all eight methods compared. Ora
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth]{Figures/Fig1DHeat}
+\includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/Fig1DHeat}
 \caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global scale.}
 \label{f:powermaps1}
 \end{figure}

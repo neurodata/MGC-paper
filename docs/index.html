@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="fonts/arnhem/arnhem.css">
     <!-- endbower -->
 
-    <title>NeuroData Intro</title>
+    <title>MGC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style type="text/css">
 
@@ -283,7 +283,7 @@ class: center, middle
 
 name:opening
 
-## Discovering the Nature of Nonlinear Relationships
+## Discovering Relationships Across Disparate Data Modalities
 
 Cencheng Shen, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo@jhu.edu)
 
@@ -305,7 +305,7 @@ these slides: <http://docs.neurodata.io/mgc>
 ---
 class: center, middle
 
-One often desires to test for independence
+### One often desires to test for independence
 
 <table align="center" style="margin: 0px auto;">
   <tr>
@@ -343,6 +343,22 @@ class:  middle
 5. computational efficiency
 6. nature of dependence
 
+
+---
+class: center, middle
+
+Generalized Correlation Coefficient
+
+$$a_{ij} = \sigma(x_i,x_j)$$
+
+$$b_{ij} = \sigma(y_i,y_j)$$
+
+$$C = A \circ B$$
+
+$$ c = \sum_{ij} C $$
+
+permutation test to obtain p-value
+
 ---
 class: center, middle
 
@@ -353,74 +369,49 @@ class: center, middle
 ]
 
 
+
 ---
 class: center, middle
 
-Pearson proposed Product-Moment Correlation
+### Multiscale Generalized Correlation (MGC)
 
-$$a_{ij} = \sigma(x_i,x_j)$$
+<img src="images/FigA.png" alt="Drawing" style="width: 900px;"/>
 
-$$b_{ij} = \sigma(y_i,y_j)$$
-
-$$C = A \circ B$$
-
-$$ c = \sum_{ij} C $$
 
 
 ---
 class: center, middle
 
- Multiscale Generalized Correlation (MGC)
+### 20 Different Functions (1D version showing)
 
-.center[
-<img src="images/FigA.png" alt="Drawing" style="width: 550px;"/>
-]
-
----
-class: center, middle
-
-$$a_{ij}=\delta_x(x_i,x_j)$$
-
-$$b_{ij}=\delta_y(y_i,y_j)$$
-
-$$C^{kl}=\dfrac{1}{z_{kl}}  \langle A^{k},  B^j \rangle $$
-
-
----
-class: center, middle
-
-20 Different Functions (1D version showing)
-
-.center[
-<img src="images/FigSimVisual.png" alt="Drawing" style="width: 550px;"/>
-]
+<img src="images/FigSimVisual.png" alt="Drawing" style="width: 900px;"/>
 
 
 ---
 class: center, middle
  
-Oracle & Sample MGC Outperform Benchmarks
+### Oracle & Sample MGC Outperform Benchmarks
 
 .center[
-<img src="images/FigHDPower.png" alt="Drawing" style="width: 550px;"/>
+<img src="images/FigHDPower.png" alt="Drawing" style="width: 900px;"/>
 ]
 
 ---
 class: center, middle
 
-MGC Empirically Dominates Global Methods
+### MGC Empirically Dominates Global Methods
 
 .center[
-<img src="images/FigSlope.png" alt="Drawing" style="width: 550px;"/>
+<img src="images/FigSlope.png" alt="Drawing" style="width: 900px;"/>
 ]
 
 ---
 class: center, middle
 
-MGC Reveals Scales of Dependence
+### MGC Reveals Scales of Dependence
 
 .center[
-<img src="images/FigHDHeat.png" alt="Drawing" style="width: 550px;"/>
+<img src="images/FigHDHeat.png" alt="Drawing" style="width: 900px;"/>
 ]
 
 ---
@@ -452,25 +443,25 @@ $$\beta( c^{k,l}_{t} ) > \beta(c_t) $$
 class: center, middle
 
 
-Thm 4: Oracle MGC dominates its global counterpart
+#### Thm 4: Oracle MGC dominates its global counterpart
 
 
 ---
 class: center, middle
 
-MGC Discovers Relationships between Brain & Mental Properties
+### MGC Discovers Relationships between Brain & Mental Properties
+
+<img src="images/FigReal.png" alt="Drawing" style="width: 900px;"/>
+
+<img src="images/table.png" alt="Drawing" style="width: 900px;"/>
+
+<!-- Table
+
 
 .center[
 <img src="images/FigReal.png" alt="Drawing" style="width: 550px;"/>
 ]
-
-Table
-
-
-.center[
-<img src="images/FigReal.png" alt="Drawing" style="width: 550px;"/>
-]
-
+ -->
 ---
 class:   middle, center
 

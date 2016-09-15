@@ -296,7 +296,7 @@ Cencheng Shen, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo
 <br>
 <!-- please ask questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)! -->
 <br>
-these slides: <http://docs.neurodata.io/mgc>
+these slides: <http://docs.neurodata.io/MGC>
 
 ]
 
@@ -330,19 +330,6 @@ class: center, middle
   </tr>
 </table>
 
----
-class:  middle
-
-
-### Challenges
-
-1. high-dimensional
-2. structured data (eg, sequences, images, networks, shapes, text)
-3. low sample-sizes
-4. nonlinear relationships
-5. computational efficiency
-6. nature of dependence
-
 
 ---
 class: center, middle
@@ -358,6 +345,24 @@ $$C = A \circ B$$
 $$ c = \sum_{ij} C $$
 
 permutation test to obtain p-value
+
+
+
+---
+class:  middle
+
+
+### Challenges
+
+1. high-dimensional
+2. structured data (eg, sequences, images, networks, shapes, text)
+3. low sample-sizes
+4. nonlinear relationships
+5. computational efficiency
+6. nature of dependence
+
+
+
 
 ---
 class: center, middle
@@ -375,16 +380,17 @@ class: center, middle
 
 ### Multiscale Generalized Correlation (MGC)
 
-<img src="images/FigA.png" alt="Drawing" style="width: 900px;"/>
+
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigA.png" alt="Drawing" style="width: 900px;"/>
 
 
 
 ---
 class: center, middle
 
-### 20 Different Functions (1D version showing)
+### 20 Different Functions (1D version)
 
-<img src="images/FigSimVisual.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigSimVisual.png" alt="Drawing" style="width: 900px;"/>
 
 
 ---
@@ -392,8 +398,9 @@ class: center, middle
  
 ### Oracle & Sample MGC Outperform Benchmarks
 
+
 .center[
-<img src="images/FigHDPower.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPower.png" alt="Drawing" style="width: 900px;"/>
 ]
 
 ---
@@ -402,7 +409,7 @@ class: center, middle
 ### MGC Empirically Dominates Global Methods
 
 .center[
-<img src="images/FigSlope.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigSlope.png" alt="Drawing" style="width: 900px;"/>
 ]
 
 ---
@@ -411,8 +418,22 @@ class: center, middle
 ### MGC Reveals Scales of Dependence
 
 .center[
-<img src="images/FigHDHeat.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png" alt="Drawing" style="width: 900px;"/>
 ]
+
+---
+class: center
+
+
+### Computational Complexity
+
+
+<br><br><br><br><br>
+
+- Dcorr:  n^2 
+- HHG:  n^2 log n 
+- MGC:  n^2 log n 
+
 
 ---
 class: center, middle
@@ -451,7 +472,7 @@ class: center, middle
 
 ### MGC Discovers Relationships between Brain & Mental Properties
 
-<img src="images/FigReal.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigReal.png" alt="Drawing" style="width: 900px;"/>
 
 <img src="images/table.png" alt="Drawing" style="width: 900px;"/>
 

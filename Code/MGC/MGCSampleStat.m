@@ -1,4 +1,4 @@
-function statMGC=MGCSampleStat(localCorr)
+function statMGC=MGCSampleStat(A,B)
 % Author: Cencheng Shen
 % This function estimate the Oracle MGC (i.e., optimal local correlation)
 % from the local correlation map, which we call sample MGC statistic.
@@ -9,8 +9,13 @@ function statMGC=MGCSampleStat(localCorr)
 % is used as sample MGC. If no such region exists, use the global
 % correlation instead.
 %
-% Input: a size m*n local correlation map.
+% Input: either a size m*n local correlation map, or two n*n distance matrices A and B.
 % Output: the sample MGC statistic within [-1,1].
+if nargin<2
+    localCorr=A; % if there is only one input, asume the localCorr is given as A
+else
+    localCorr=MGCLocalCorr(A,B); % otherwise compute the localCorr from given distance matrices
+end
 [m,n]=size(localCorr);
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations

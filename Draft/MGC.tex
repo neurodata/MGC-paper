@@ -161,7 +161,6 @@
 \begin{abstract}
 As data collection is becoming easier, it is becoming increasingly difficult and important to determine whether one property (e.g., clouds) is related to another (e.g., grass wetness).  Only If they are related does it make sense to further investigate the nature of the relationship. Unfortunately, reliably identifying relationships can be challenging, especially when the properties themselves are complex and the relationship is nonlinear and high-dimensional. Here, we describe a procedure,  Multiscale Generalized Correlation (\Mgc), that addresses these challenges. Our key insight is that if two properties are related, comparisons between measurements of similar pairs of the first property (e.g., similarly shaped clouds) should be correlated with the comparisons between corresponding pairs of the second property (grass wetness under those clouds). We demonstrate the statistical and computational efficiency of \Mgc~in both simulations and theory.  We then apply it to detect the presence and nature of the relationships between brain activity and personality, brain shape and disorder, and  brain connectivity and creativity.  Finally, we demonstrate that \Mgc~does not suffer from the false positives that have plagued parametric methods.  Our open source implementation of \Mgc~is applicable to fundamental questions confronting science, government, finance, and many other disciplines. 
 \end{abstract}
-\cs{title good?}
 
 \noindent%
 {\it Keywords: testing independence, distance correlation, k-nearest-neighbor, kernel test, permutation test}
@@ -231,15 +230,13 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-1.75  & \hspace{3.5em} \color
 
 \begin{tikzpicture}[remember picture,overlay]
 \node[xshift=-5.2cm,yshift=-0.6cm] at (current page.east){%
-    \includegraphics[width=0.35\textwidth,trim={1.5cm 0 1.5cm 0},clip]{Figures/FigB}};
+    \includegraphics[width=0.35\textwidth,trim={1.5cm 0 1.8cm 0},clip]{Figures/FigB}};
   %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
    %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
   %};
 \end{tikzpicture}
 \caption{
 Flowchart  and table demonstrating the ability of Multiscale Generalized Correlation (\Mgc) to detect dependence in nonlinear settings. 
-% \jv{sd says: The description for Figure 1 contains inconsistent verb tenses. e.g. "Choose" vs "subtracting". It would be better to be consistent.}
-%\cs{I have made them the same, i.e. subtract}
 \textbf{0.} 50 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 % 
 \textbf{1.} Choose a metric on $x$ and another on $y$, and compute all pairwise distances (centered by the overall means) for $x$ and $y$ yielding interpoint comparison matrices
@@ -343,7 +340,7 @@ In real data without sufficient training data, the true distribution is unavaila
 We therefore designed  ``sample \Mgc'' to estimate  them without relying on the power map. 
 From the multiscale test statistic map, sample \Mgc~finds the region with the largest test statistic (ignoring sparse noisy scales, Algorithm \ref{alg:sample_mgc}).  The p-value of sample \Mgc, $p(\hat{c}^*)$, follows from a permutation test using the estimated optimal statistic within that region.
 To determine the optimal scales, we find the tightest bounding box around all local scales with a p-value equal to or lower than $p(\hat{c}^*)$ (Algorithm \ref{alg:pval}).
-Because neither the Oracle \Mgc~nor sample \Mgc~compares multiple p-values, neither suffers from the multiple hypothesis testing problem \cite{Benjamini1995}.
+Because neither the Oracle \Mgc~nor sample \Mgc~compares multiple statistics, neither suffers from the multiple hypothesis testing problem \cite{Benjamini1995}.
 
 The table in Figure \ref{f:schematic} illustrates how \Mgc~is able to detect dependence, even in this spiral example with only $50$ samples, while the global correlation tests fail.  Samples $1$ and $2$ are close to each other in both $x$ and $y$; they therefore contribute to \emph{positive} dependence for all three tests.  However, samples $2$ and $3$ are only close in $x$, not in $y$.  Therefore, in the global tests, \Mantel~and \Mcorr, pair $(2,3)$   \emph{negatively} contributes to dependence testing.  \Mgc~achieves a larger value of the test statistic in this scenario by ignoring  pairs like that, thereby achieving a smaller p-value, implying greater power in general nonlinear settings.  
 
@@ -393,8 +390,6 @@ Figure \ref{f:pp} shows slopegraphs comparing each of the three global correlati
   \includegraphics[width=1.0\textwidth,trim={2cm 0 3cm 0},clip]{Figures/FigSlope}
   \caption{
 Slopegraphs comparing average power of three different global correlation tests and their respective Oracle \Mgc~(O\Mgc), as well as global \Mcorr~vs its sample \Mgc~(S\Mgc).  Each panel shows average power for settings 6-19, because Oracle \Mgc~equals the global correlation for settings 1-5 and  20. 
-% \jv{It's not clear to me when we should be saying "power" vs "powers".} 
-%\cs{I have changed to power throughout for consistency}
 The left side of each panel shows the global correlation's average power, and 
 the right side shows the corresponding \Mgc's average power. The thick line shows the average within that panel. 
 One-dimensional power is averaged over sample size (top)  and high-dimensional power is averaged over dimensionality (bottom), corresponding to Figures~\ref{f:1DAll} and~\ref{f:nDAll}, respectively.
@@ -533,7 +528,7 @@ The next real data experiment investigates whether brain structural networks are
 The brain network metric we used was based on  the semi-parametric test statistic \cite{Tang2016} that tests whether pairs of graphs with labeled vertices are sampled from the same distribution.  This test statistic was developed to reduce  the very high dimensionality of adjacency matrices via employing adjacency spectral graph embedding  \cite{Sussman2013}. For these data, we chose to embed each graph into two dimensions for simplicity. We used Euclidean distance to compare CCI values. 
 
 
-\jv{highlight that we are the only obvious way to determine that the relationship is linear for high dimensional data (otherwise, one needs to compute the linear regression with inverting the covariance matrix which is poorly scaled in high dimensions?}
+
 Figure \ref{f:real}{\color{magenta}C} shows that even a global dependence test can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting with high-dimensional and structured data samples and low-sample size, there is no other obvious way that we could effectively determine that the relationship is approximately linear.
 
 
@@ -1071,7 +1066,8 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Compute p-values for all local tests and sample \Mgc, and estimate the optimal scales. This algorithm computes the p-values of all local correlations and sample \Mgc~by the permutation test with $r$ random permutations, which takes $O(rn^2 \log n)$. Then we estimate the optimal scales by the largest rectangle with local p-values less than or equals to the p-value of sample \Mgc. $\pi$ denotes a random permutation, and $\tilde{B}(\pi,\pi)$ denotes the distance matrix with the observation label permuted. In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other benchmark follows from the same algorithm by replacing sample \Mgc~with the respective test statistic without the optimal scale estimation.}
+\caption{Compute p-value  Sample \Mgc, and estimate the optimal scales. This algorithm uses a permutation test with $r-1$ random permutations, requiring $O(rn^2 \log n)$. Specifically, it computes the multiscale test-statistic map from the real data and from $r-1$ resamples.   For each, it then computes $c^{kl}_0$, which is the ``optimal'' test statistic.  The p-value is estimated using the permutation test.  Then, it estimates the optimal scales by computing the p-values for all scales, and letting the largest rectangle with local p-values less than or equals to the p-value of sample \Mgc.  In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other global generalized correlation coefficient follows from the same algorithm by replacing sample \Mgc~with the respective test statistic.
+}
 \label{alg:pval}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$.

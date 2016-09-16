@@ -38,7 +38,7 @@ switch type
     case 18
         titlechar='18. Multiplicative';
     case 19
-        titlechar='19. Binomial';
+        titlechar='19. Bernoulli';
     case 20
         titlechar='20. Independent';
 end

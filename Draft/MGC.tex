@@ -159,7 +159,10 @@
 
 % \bigskip
 \begin{abstract}
-As data collection is becoming easier, it is becoming increasingly difficult and important to determine whether one property (e.g., clouds) is related to another (e.g., grass wetness).  Only If they are related does it make sense to further investigate the nature of the relationship. Unfortunately, reliably identifying relationships can be challenging, especially when the properties themselves are complex and the relationship is nonlinear and high-dimensional. Here, we describe a procedure,  Multiscale Generalized Correlation (\Mgc), that addresses these challenges. Our key insight is that if two properties are related, comparisons between measurements of similar pairs of the first property (e.g., similarly shaped clouds) should be correlated with the comparisons between corresponding pairs of the second property (grass wetness under those clouds). We demonstrate the statistical and computational efficiency of \Mgc~in both simulations and theory.  We then apply it to detect the presence and nature of the relationships between brain activity and personality, brain shape and disorder, and  brain connectivity and creativity.  Finally, we demonstrate that \Mgc~does not suffer from the false positives that have plagued parametric methods.  Our open source implementation of \Mgc~is applicable to fundamental questions confronting science, government, finance, and many other disciplines. 
+Discovering whether certain properties are associated with other properties is fundamental to all science.
+% \jv{all of science seems limiting}
+As the amount of data increases, it is becoming increasingly difficult and important to determine whether one property of the data (e.g., cloud density) is related to another (e.g., grass wetness).  Only If they are related does it make sense to further investigate the nature of the relationship. Unfortunately, reliably identifying relationships can be challenging, especially when the properties themselves are complex and the relationship is nonlinear and high-dimensional. Here, we describe a procedure,  Multiscale Generalized Correlation (\Mgc), that addresses these challenges. 
+Our key insight is that if two properties are related, comparisons between measurements of similar pairs of the first property (e.g., two clouds of similar density) should be correlated with the comparisons between corresponding measurements of the second property (grass wetness under those clouds). We demonstrate the statistical and computational efficiency of \Mgc~in both simulations and theory.  We then apply it to detect the presence and nature of the relationships between brain activity and personality, brain shape and disorder, and  brain connectivity and creativity.  Finally, we demonstrate that \Mgc~does not suffer from the false positives that have plagued parametric methods.  Our open source implementation of \Mgc~is applicable to fundamental questions confronting science, government, finance, and many other disciplines. 
 \end{abstract}
 
 \noindent%
@@ -175,36 +178,39 @@ As data collection is becoming easier, it is becoming increasingly difficult and
 % \newpage
 % \spacingset{1.45}
 
-\jv{to all science seems too narrow}
-Discovering whether certain properties are associated with other properties is fundamental to all science. Identifying the existence of a relationship is a precursor to investigating the structure of the relationship, and whether it has predictive power, or reflects causality.
-One of the first statistical approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation   (published in 1895 \cite{Pearson1895}). This seminal advance   prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
+Identifying the existence of a relationship is a precursor to investigating the structure of the relationship,  whether it has predictive power, and whether it reflects causality.
+One of the first statistical approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal advance   prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
 
 
 Modern datasets, however, present particularly vexing challenges for dependence-testing, that were not foreseen in Pearson's era.
 %
-First, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics data, for example, often accruing millions or even billions of dimensions. 
+First, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics datasets, for example, often encompassing millions or even billions of dimensions. 
 Second, the data are often \textbf{structured}---sequences, images, networks, shapes, and text---creating problems for standard methods that were developed for unstructured feature sets.
 %
 Third, the \textbf{sample sizes} are not increasing proportionally, meaning that we are often confronted with ultrahigh-dimensional datasets derived from relatively few samples.
 % 
-Fourth, the dependencies between different properties (or experimental modalities) of data can be highly \textbf{nonlinear}, posing additional obstacles for the analysis of very large datasets.
+Fourth, the dependencies between different properties 
+of data can be highly \textbf{nonlinear}, posing additional obstacles for the analysis of very large datasets.
 %
-Fifth, because of the near ubiquity of data deluges,  \textbf{computationally efficient} methods for analysis are critical for generating results within acceptable time frames
+Fifth, because of the continuing data deluge,  \textbf{computationally efficient} methods for analysis are critical for generating results within acceptable time frames
 %
 And finally, we not only want to know \textit{whether}  properties are dependent on each other, but also \textit{how} they are related.
-A method is needed that has compelling evidence---including extensive simulations, theoretical claims, and real data applications---that  satisfactorily addresses all of these challenges. 
+There is thus a  need for methods that satisfactorily address all of these challenges and is supported by compelling evidence for its theoretical efficacy and practical utility.
+% \jv{"and is" doesn't seem right above}
 
 We developed the Multiscale Generalized Correlation (\Mgc) test to address those needs.
 The key intuition behind  \Mgc~is illustrated in Figure \ref{f:schematic} using a canonical nonlinear  function: a spiral.  
 \Mgc, like all tests for dependence, starts with observing $n$ samples, $(\mbx_i,\mby_i)$. 
 While for linear functions, if a pair of samples are close in $x$ they will also be close in $y$, this is not always true for nonlinear functions.
 In this specific example, points $1$ and $2$ are close in both $x$ and $y$, whereas points $2$ and $3$ are close only in $y$ and not $x$.
-Thus, if one desires to determine whether $x$ and $y$ are in fact dependent on one another, it would be wise to restrict the analysis to the pairs that are close in both $x$ and $y$---the \emph{jointly local pairs}---rather than all pairs.  
+Thus, if one desires to determine whether $x$ and $y$ are in fact dependent on one another, 
+restricting the analysis to the pairs that are close in both $x$ and $y$---the \emph{jointly local pairs}---rather than all pairs, could yield dramatic improvements.  
 \Mgc~achieves this by identifying the jointly local pairs, 
-and then using only those scales to conduct its test, thereby revealing both the existence and scales of dependence.
+and then using restricting its test to only those scales, thereby revealing both the existence and scales of dependence.
 %
-A primary challenge that we faced was determining the optimal local scales in a computationally efficient and statistically consistent manner. We constructed a five step approach to address this challenge. 
-\jv{the past paragraph ended with a challenge, and so does this one. seems like maybe another word would be ideal here.}
+% A primary challenge that we faced was the determination the optimal local scales in a computationally efficient and statistically consistent manner. We constructed a five step approach to address this challenge. 
+% \jv{the past paragraph ended with a challenge, and so does this one. seems like maybe another word would be ideal here.}
+Given the above intuition, the remaining challenge was to ensure that \Mgc~could estimate the  optimal local scales in a computationally efficient and statistically consistent manner. We constructed a five step approach to address this challenge.
 
 
 \begin{figure}[htbp]
@@ -558,15 +564,15 @@ In contrast, many standard parametric methods for fMRI analysis, such as general
 \subsection*{Discussion}
 \label{conclu}
 
-We propose multiscale generalized correlation (\Mgc) to discover the presence and scales of dependence between multiple measurement types or modalities.
-We proved that Oracle \Mgc~dominates global approaches in finite samples.  This proof relies on showing first that \Mgc~performs as well as global approaches in certain settings (the linear ones), and then showing that \Mgc~performs \emph{better} than global approaches in other settings (nonlinear ones).  Only theoretical proofs would have been insufficient.  
-We therefore empirically demonstrate via simulations that \Mgc~outperforms global methods regardless of the nonlinearity, dimension, or sample size.  Moreover, in addition to a consistent test, \Mgc~provides a map encoding, which scales contain the dependence structure. 
+We propose multiscale generalized correlation (\Mgc) to discover the presence and scales of dependence across disparate properties of data.
+We proved that Oracle \Mgc~dominates global approaches in finite samples.  This proof relies on showing first that \Mgc~performs as well as global approaches in certain settings (the linear ones), and then showing that \Mgc~performs \emph{better} than global approaches in other settings (nonlinear ones). 
+We further empirically demonstrate via simulations that \Mgc~outperforms global methods regardless of the dimension, sample size, or nonlinearity.  Moreover, in addition to a consistent test, \Mgc~provides a map encoding which scales contain the dependence structure. 
 In real data experiments, \Mgc~reveals dependence where global methods fail, discovers the scale of dependence where global methods succeed, and does not falsely detect signals when there are none.
 
 
 Several other approaches to dependence detection are worth mentioning.
-First, a method closely related to distance correlation tests arising from the machine learning community is the kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and  energy statistics  \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we may be able to glean further insights by casting \Mgc~within the kernel framework. Specifically, more efficient tests using asymptotic null distribution approximations for our multiscale tests are possible.
-Second, Dumcke et al. \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relative high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support.
+First, a method closely related to distance correlation tests,  is the kernel-based independence test  \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}.  Recent work has demonstrated the equivalence between these kernel tests and  energy statistics  \cite{SejdinovicEtAl2013, RamdasEtAl2015}. Thus, we may be able to glean further insights by casting \Mgc~within the kernel framework. Specifically, more efficient tests using asymptotic null distribution approximations for our multiscale tests are possible.
+Second, Dumcke et al. \cite{Dumcke2014} recently proposed a related nearest-neighbor based test.  Unfortunately, their proposed test requires estimating relatively high-dimensional densities, and therefore, does not perform particularly well, nor does it have strong theoretical support.
 Finally, Reshef et al. \cite{Reshef2011} and Heller et al. \cite{heller2016consistent} are both $1$-dimensional tests, and therefore, not appropriate for our applications (see \cite{SimonTibshirani2012} and \cite{reshef2015empirical} for extensive simulation comparisons demonstrating extensions of their original work).
 
 
@@ -577,16 +583,20 @@ Finally, Reshef et al. \cite{Reshef2011} and Heller et al. \cite{heller2016consi
 
 
 There are a number of additional potential extensions of this work.  First, theoretical guidance for choosing the optimal scale for finite samples  in the absence of training data, would be desirable. 
-In this work we proved that there exist local scales that improve upon the global scale, and demonstrated that sample \Mgc~yields tests with power very close to the optimal power, often better than \Hhg~and \Mcorr, and with significant p-values and accurate optimal scale estimation for the real data.  But more theory connecting Oracle \Mgc~and  sample \Mgc~will yield further insight.
+In this work we proved that there exist local scales that improve upon the global scale, and demonstrated that sample \Mgc~yields tests with power very close to the optimal power, often better than \Hhg~and \Mcorr, and with significant p-values and accurate optimal scale estimation for the real data.  But more theory connecting Oracle \Mgc~and  Sample \Mgc~will yield further insight.
 
 
 Second, \Mgc~requires a pair of metrics, one for each data type. In this work we selected such metrics using domain knowledge, and mitigated the potential inopportune choice of metric via locality tuning.  If we were able to choose the optimal metric for a given dataset, this would possibly obviate the need for locality, and further improve power. Szekely et al. investigated different norms and exponents to ascertain the impact of different metrics, but was unable to determine optimality.
-Perhaps a different one-dimensional family of metrics could yield additional insights into choosing an optimal metric and scale.
+Metric learning \cite{xing2003distance} addresses learning metrics for different exploitation tasks, so perhaps ideas from that literature can be brought to bear on this problems.  Specifically, perhaps a different one-dimensional family of metrics could yield additional insights into choosing an optimal metric and scale.
 
 Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work from Huo and Szekely  has demonstrated efficient algorithms that are linear in sample size  for one-dimensional data \cite{Huo2016}.  Although it is not clear how to extend the Huo and Szekely approach  to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even when subsampling the data points significantly (not shown), suggesting that subsampling data or pairwise comparisons  could yield an approximate linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using solid state disk space in a streaming fashion to both speed up computations for big data and enable storing interpoint pairwise comparison matrices larger than what can fit in RAM.
 
-Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics'' --- for which $\Dcorr$ and $\Mcorr$ are special cases --- have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},  two-sample tests \cite{Szekely2004}, and feature selection \cite{LiZhongZhu2012,Zhong2015}.   
+Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},   and feature selection \cite{LiZhongZhu2012,Zhong2015}.     
+\Mgc~is fact can be thought of as implementing two-sample (or even $K$-sample) tests \cite{Szekely2004}, whenever $x$ or $y$ is categorical.  
+Thus, further investigation comparing the advances of \Mgc~to standard methods for two-sample tests is appealing.
 Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the scales of dependence which can easily be employed in such problems.
+
+To facilitate the reproducability of this work, as well as myriad applications and extensions, all source code for performing the experiments, generating figures, and the functions themselves are provided in the website, \website, including both R and MATLAB implementations.
 
 
 \clearpage
@@ -717,7 +727,7 @@ for $d=1,\ldots,D$.
 \mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},%+0.5c\epsilon,
 \end{align*}
 for $d=1,\ldots,D$.
-\item Binomial $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$, $\epsilon_{1} \sim \mc{N}(0, I_{D})$, $\epsilon_{2} \sim \mc{N}(0, 1)$,
+\item Uncorrelated Bernoulli $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$, $\epsilon_{1} \sim \mc{N}(0, I_{D})$, $\epsilon_{2} \sim \mc{N}(0, 1)$,
 \begin{align*}
 \mb{x} &\sim \mc{B}(0.5)^{D}+0.5\epsilon_{1},\\
 \mb{y}&=(2u-1)w\T \mb{x}+0.5\epsilon_{2}.

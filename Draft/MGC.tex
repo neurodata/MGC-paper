@@ -2,21 +2,18 @@
 \usepackage{amsfonts,amsmath,amssymb,amsthm}
 \usepackage{graphicx,psfrag,epsf}
 \usepackage{enumerate}
-\usepackage{url} % not crucial - just used below for the URL
+\usepackage{url} 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{subfig}
 \usepackage{authblk}
-\usepackage{verbatim} %used to comment out unnecessary contents
 \usepackage{helvet}
 \usepackage[colorlinks=true,pagebackref,linkcolor=magenta]{hyperref}
 \usepackage[sort&compress,comma,square,numbers]{natbib}
 \usepackage{fullpage,fancyhdr}
 \renewcommand{\familydefault}{\sfdefault}
-\usepackage{color} %used to highlight changes
+\usepackage{color} 
 \usepackage{paralist}
 \usepackage{lineno}
-% \usepackage{todonotes}
 \usepackage[font=footnotesize,labelfont=bf]{caption}
 \usepackage[final,authormarkup=none]{changes}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
@@ -25,18 +22,8 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usetikzlibrary{calc}
-% \usepackage[nottoc,numbib]{tocbibind}
-% \usepackage{flushend}
-
-%better toc
-% \usepackage{tocloft}
-% \setlength\cftparskip{-1pt}
-% \setlength\cftbeforesecskip{2pt}
-% \setlength\cftaftertoctitleskip{4pt}
 
 \pagestyle{fancy}
-% \oddsidemargin=-0.5in
-% \evensidemargin=-0.5in
 \textwidth=6.5in
 \headwidth=6.5in
 \textheight=9.0in
@@ -48,14 +35,6 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.7em}
 
-% % DON'T change margins - should be 1 inch all around.
-% \addtolength{\oddsidemargin}{-.5in}%
-% \addtolength{\evensidemargin}{-.5in}%
-% \addtolength{\textwidth}{1in}%
-% \addtolength{\textheight}{-.3in}%
-% \addtolength{\topmargin}{-.8in}%
-
-%\providecommageneralizednd{\sct}[1]{{\sc \texttt{#1}}}
 \providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
 \providecommand{\mt}[1]{\widetilde{#1}}
 \providecommand{\mb}[1]{\boldsymbol{#1}}
@@ -72,13 +51,9 @@
 }
 \newcommand{\Lineif}[2]{%
     \State \algorithmicif\ {#1}\ \algorithmicdo\ {#2} \algorithmicend\ \algorithmicif%
-}\newcommand{\subfigimg}[3][,]{%
-  \setbox1=\hbox{\includegraphics[#1]{#3}}% Store image in box
-  \leavevmode\rlap{\usebox1}% Print image
-  \rlap{\hspace*{12pt}\raisebox{\dimexpr\ht1-0\baselineskip}{#2}}% Print label
-  \phantom{\usebox1}% Insert appropriate spcing
 }
 
+\normalem
 \newcommand{\Mgc}{\sct{Mgc}}
 \newcommand{\Mgcp}{\sct{Mgc$_P$}}
 \newcommand{\Mgcd}{\sct{Mgc$_D$}}
@@ -99,23 +74,19 @@
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
 
-%environment
 \newtheorem{thm}{Theorem}
 \newtheorem{appThm}{Theorem}
 \setcounter{appThm}{0}
 \newtheorem{lem}{Lemma}
 \newtheorem{appLem}{Lemma}
 \setcounter{appLem}{0}
-\newtheorem{cor}{Corollary}
-\newtheorem*{defi*}{Properties}
-\newtheorem{asn}{Assumption}
 \newcommand*\mean[1]{\bar{#1}}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \pagenumbering{arabic}
-\linenumbers
+%\linenumbers
 
 
 \begin{document}
@@ -123,11 +94,7 @@
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
 
-% \title{\bf Dependence Discovery from Multimodal Data via  Multiscale Generalized Correlation}
 \title{\bf Discovering Relationships Across Disparate Data Modalities}
-% Discovering Relationships Among Multiple Multifarious Datatypes 
-% \title{\bf Revealing the Scales of Dependency Between Multiple Data Modalities}
- % Datasets via  Multiscale Generalized Correlation}
 \author[1,2]{Cencheng Shen} %\thanks{cshen6@jhu.edu}}
 \author[1,3]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
 \author[3,4,6]{Mauro Maggioni}%\thanks{mauro.maggioni@jhu.edu}}
@@ -140,22 +107,6 @@
 \affil[6]{Institute for Data-Intensive Engineering \& Science, Johns Hopkins University}
 \affil[7]{Institute for Computational Medicine, Johns Hopkins University}
 \maketitle
-%\pagestyle{empty}
-
-% submitting to science, we get 320 for content
-% total: 455, need to remove >100 lines, almost entirely from results.
-
-% 125 lines; target = 64
-% \section{Introduction}
-
-% number of lines per caption
-% 1: 20 
-% 2: 6
-% 3: 6
-% 4: 6
-% 5: 9
-% 6: 2
-% total: ~60
 
 % \bigskip
 \begin{abstract}
@@ -167,16 +118,9 @@ Our key insight is that if two properties are related, comparisons between measu
 
 \noindent%
 {\it Keywords: testing independence, distance correlation, k-nearest-neighbor, kernel test, permutation test}
-% \vfill
 
 \clearpage
-\setcounter{tocdepth}{2}% paragraphs and above
-% {\small\tableofcontents}
-% \addtocontents{toc}{\vspace{-3\baselineskip}}
-% \listofchanges[style=list]
-
-% \newpage
-% \spacingset{1.45}
+\setcounter{tocdepth}{2}
 
 Identifying the existence of a relationship is a precursor to investigating the structure of the relationship,  whether it has predictive power, and whether it reflects causality.
 One of the first statistical approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal advance   prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
@@ -305,20 +249,18 @@ let $R(a_{ij})$  be the ``rank'' of $\mb{x}_i$ relative to $\mb{x}_j$, that is, 
 \label{localCoef2}
     \mt{a}_{ij}^k=
     \begin{cases}
-      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\
-       % -\bar{a}^{k}, & \text{otherwise};      
+      a_{ij}, & \text{if } R(a_{ij}) \leq k, \\    
       0, & \text{otherwise};
     \end{cases} \qquad \qquad
     \mt{b}_{ij}^l=
     \begin{cases}
       b_{ij}, & \text{if } R(b_{ji}) \leq l, \\
-       % -\bar{b}^{l}, & \text{otherwise};
       0, & \text{otherwise};
     \end{cases}
 \end{equation}
 and then let $a^k_{ij}=\mt{a}^k_{ij} - \bar{a}^k$, 
 where $\bar{a}^k$ is the local mean. Then, define $b^k_{ij}$ similarly, except the rank index is transposed. 
-The \emph{local} variant of any global generalized correlation coefficient therefore  excludes large distances: % up-to the centering scalars:
+The \emph{local} variant of any global generalized correlation coefficient therefore  excludes large distances:
 \begin{equation}
 \label{localCoef}
 \G^{kl}=\dfrac{1}{z_{kl}} {\textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l},
@@ -405,7 +347,6 @@ This figure suggests that \Mgc~theoretically dominates its global counterparts, 
 \end{figure}
 
 
-% 31 lines; target = 64
 \subsection*{Discovery of Dependency Across Scales}
 \label{main3}
 
@@ -436,7 +377,7 @@ Assume $(\mb{x}_i,\mb{y}_i)$ is independently identically distributed as $(\mbx,
 & H_{A}: f_{xy} \neq f_{x}f_{y}.
 \end{align*}
 The power of a test is defined as the probability that it correctly rejects the null hypothesis when the null hypothesis is indeed false.
-% As defined above, 
+% 
 A test is consistent if its power converges to one as sample size increases when the null is false, and has power equal to the type $1$ error level when the null is true.
 Let $\G_t$ denote a global generalized correlation coefficient based test statistic, that is, $t$ might indicate \Mantel, \Dcorr, or \Mcorr, and let $\beta_n(\G_t^*)$ denote the power of the corresponding Oracle multiscale version for $n$ samples; and we drop the subscript when considering asymptotic power.
 Recall from the work of Szekely et al. that \Dcorr~and \Mcorr~are both consistent tests. More specifically, \Dcorr~is consistent whenever $f_{xy}$ has finite dimension and bounded variance, and \Mcorr~is consistent even as dimension increases to infinity.  Denote the set of distributions satisfying consistency for a given test by $\mc{F}_t$, where $t$ indicates which test we are referring to. Then, we have the following theorem:
@@ -592,11 +533,10 @@ Metric learning \cite{xing2003distance} addresses learning metrics for different
 Third, essentially all of the tests described in this manuscript are quadratic in sample size.  When sample size gets very large, such a computational burden is intractable.  Recent work from Huo and Szekely  has demonstrated efficient algorithms that are linear in sample size  for one-dimensional data \cite{Huo2016}.  Although it is not clear how to extend the Huo and Szekely approach  to multidimensional data, a subsampling strategy seems viable.  In fact, the multiscale power maps are accurate even when subsampling the data points significantly (not shown), suggesting that subsampling data or pairwise comparisons  could yield an approximate linear time algorithm.  One could also implement \Mgc~using a semi-external computing model \cite{Zheng2016},  which could enable using solid state disk space in a streaming fashion to both speed up computations for big data and enable storing interpoint pairwise comparison matrices larger than what can fit in RAM.
 
 Finally, the notion of multiscale generalized correlations could be used in a wide variety of related exploitation tasks.  In particular, ``energy statistics''---for which $\Dcorr$ and $\Mcorr$ are special cases---have been applied to many different testing scenarios, including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},   and feature selection \cite{LiZhongZhu2012,Zhong2015}.     
-\Mgc~is fact can be thought of as implementing two-sample (or even $K$-sample) tests \cite{Szekely2004}, whenever $x$ or $y$ is categorical.  
-Thus, further investigation comparing the advances of \Mgc~to standard methods for two-sample tests is appealing.
+In fact, \Mgc~also implements the two-sample (or generally the $K$-sample) test \cite{Szekely2004, heller2016consistent}, and further investigation comparing the advances of \Mgc~to standard methods for two-sample tests is appealing.
 Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application.  And while not previously addressed, using the \Mgc~intuition for dimensionality reduction, classification, and regression seem like very promising future directions, especially because \Mgc~reveals the scales of dependence which can easily be employed in such problems.
 
-To facilitate the reproducability of this work, as well as myriad applications and extensions, all source code for performing the experiments, generating figures, and the functions themselves are provided in the website, \website, including both R and MATLAB implementations.
+To facilitate the reproducibility of this work, as well as myriad applications and extensions, all source code for performing the experiments, generating figures, and the functions themselves are provided in the website, \website, including both R and MATLAB implementations.
 
 
 \clearpage
@@ -665,7 +605,6 @@ where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever 
 \item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}& (1+0.5c) I_{D} \end{bmatrix}$. Then let $\epsilon \sim \mc{N}(0, I_{D})$,
 \begin{align*}
 (\mb{x}, \mb{y}) &\sim \mc{N}(0, \Sigma). 
-% \\\mb{y} &=\mb{y}+0.5c\epsilon.
 \end{align*}
 \item Quadratic $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$:
 \begin{align*}
@@ -721,10 +660,10 @@ for $d=1,\ldots,D$.
 \mb{y}&=\sin ( \theta x )+c\epsilon.
 \end{align*}
 \item Sine Period $16\pi$ $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $\theta=16\pi$ and the noise on $\mb{y}$ is changed to $0.5c\epsilon$.
-\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, %$\epsilon \sim \mc{N}(0, I_{D})$,
+\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, 
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
-\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},%+0.5c\epsilon,
+\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
 \item Uncorrelated Bernoulli $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: $u \sim \mc{B}(0.5)$, $\epsilon_{1} \sim \mc{N}(0, I_{D})$, $\epsilon_{2} \sim \mc{N}(0, 1)$,
@@ -777,14 +716,6 @@ Oracle \Mgc~empirically achieves similar or better power than the previous state
 \includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPowerAll}
 \caption{
 Same as Figure~\ref{f:nD} in main text, but with all eight methods compared. Oracle and sample \Mgc~dominate the other approaches by being as powerful or more so for almost all simulations, regardless of the dimensionality. \Mgc~is always plotted ``on top'' of the global variants if there is overlap, therefore, some of the global variants are not always visible from the display.}
-% * <stefaniejacinto@gmail.com> 2016-08-20T23:33:38.278Z:
-%
-% > if there is overlap
-%
-% What do you think about adding this phrase, for clarity?
-%
-% ^.
-% \sd{its always on top though?}
 \label{f:nDAll}
 \end{figure}
 
@@ -811,13 +742,6 @@ The \Mantel~coefficient \cite{Mantel1967} is defined as
 Then the \Mantel~test is carried out by the permutation test.
 
 Unlike distance correlation and \Hhg, the \Mantel~test is not consistent against all dependent alternatives, but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectiveness. One can observe from Figure~\ref{f:1DAll} and ~\ref{f:nDAll} that global \Mantel~is sub-optimal relative to much more recently proposed tests (\Mantel~was proposed in 1967, \Dcorr~was not proposed until about 40 years later), and appears to be inconsistent for many dependencies. Nonetheless, Oracle \Mgcp~achieves comparable performance to other variants of \Mgc, which implies that \Mgcp~may be consistent with most, if not all dependent alternatives.
-% * <stefaniejacinto@gmail.com> 2016-08-20T23:44:01.223Z:
-%
-% > achieves comparable performances to other variants of \Mgc, which implies that \Mgcp~may be consistent with most, if not all dependent alternatives.
-%
-% I corrected some prepositions. Please check to ensure intended meaning was preserved.
-%
-% ^.
 
 \subsection{(Global) Distance Correlation}
 \label{appen:dcorr}
@@ -934,8 +858,7 @@ In this section, we elaborate on the algorithms for computing all local correlat
 Five algorithms are presented in Appendix~\ref{appen:algorithms}: Algorithm~\ref{alg:1scale} directly computes the local correlation coefficient at a given scale $(k,l)$, for a given choice of the global correlation coefficient.
 Algorithm~\ref{alg:all_scales} provides an efficient method to compute all local correlations simultaneously, in the same running time complexity as computing one local correlation. 
 Algorithm~\ref{alg:power} computes the testing power of all local statistics using a known or estimated joint distribution, which can be used to accurately determine the optimal scales and test statistic for Oracle \Mgc~by simulations. 
-Algorithm~\ref{alg:sample_mgc} is the sample \Mgc~algorithm, which provides an estimate of the Oracle \Mgc~among all local correlations. It finds a sufficiently large region with significantly large and monotonically changing local correlations, and uses a large local correlation within the region as the sample \Mgc~statistic; otherwise it uses the global correlation. %More detailed discussions regarding sample \Mgc~is offered in Appendix~\ref{appen:diss}.
-Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test, which also includes the p-value computation and the optimal scale estimation by sample \Mgc.
+Algorithm~\ref{alg:sample_mgc} is the sample \Mgc~algorithm, which provides an estimate of the Oracle \Mgc~among all local correlations. It finds a sufficiently large region with significantly large and monotonically changing local correlations, and uses a large local correlation within the region as the sample \Mgc~statistic; otherwise it uses the global correlation. Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test, which also includes the p-value computation and the optimal scale estimation by sample \Mgc.
 
 \subsection{Algorithms}
 \label{appen:algorithms}
@@ -951,8 +874,6 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State Initialize $\G^{kl}$, $V^{A}_{k}$, $V^{B}_{l}$, $E^{A}_{k}$, $E^{B}_{l}$ at $0$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$} \Comment{sort distances}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}  \Comment{center distance matrices}
-%\State $R^{B}=\textsc{Transpose}(R^{B})$ \Comment{row-wise ranks are used for second data}
-%\State $B=\textsc{Transpose}(B)$ \Comment{row-wise ranks are used for second data}
 
 \For{$i,j:=1,\ldots,n$}
 \State $\G^{kl} \rto \G^{kl}+A_{ij}B_{ij}\mb{I}(R^{A}_{ij} \leq k)\mb{I}(R^{B}_{ij} \leq l)$ \Comment{update un-centered local distance covariance}
@@ -961,14 +882,13 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \EndFor
 
 \State $\G^{kl} \rto \left(\G^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$ \Comment{center and normalize} 
-% the local covariances}
 
 \EndFunction
 \end{algorithmic}
 \end{algorithm} 
 
 \begin{algorithm}
-\caption{Compute local test statistic for all scales in $O(n^2 \log n)$. Once the distances are sorted, this algorithm computes all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. To achieve the above, we iterate through each product, add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ only (so only one local scale is accessed for each operation); then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. The same applies to all local covariances, variances, and expectations.} %Thus all local correlations can be computed in $O(n^2)$, which has the same running time complexity as the global distance correlation. There are two additional overheads: sorting the distance matrices column-wise takes $O(n^2 \log n)$, and properly centering the distance matrices takes $O(n^2)$.}
+\caption{Compute local test statistic for all scales in $O(n^2 \log n)$. Once the distances are sorted, this algorithm computes all local correlations in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\G^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(a_{ij})$ and $l\leq R(b_{ij})$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j=1,\ldots,n$, and add the product simultaneously to all $\G^{kl}$ whose scales are no more than $(R(a_{ij}),R(b_{ij}))$. To achieve the above, we iterate through each product, add it to $\G^{kl}$ at $(k,l)=(R(a_{ij}),R(b_{ij}))$ only (so only one local scale is accessed for each operation); then add up adjacent $\G^{kl}$ for $k,l=1,\ldots,n$. The same applies to all local covariances, variances, and expectations.} 
 \label{alg:all_scales}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(\tilde{A},\tilde{B}) \in \Real^{n \times n} \times \Real^{n \times n}$.
@@ -976,7 +896,6 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Function{LocalCorr}{$\tilde{A}$,$\tilde{B}$}
 \State Initialize $C$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
 \Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(\tilde{Z})$}
-%\State $R^{B}=\textsc{Transpose}(R^{B})$ 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(\tilde{Z})$}
 
 \For{$i,j:=1,\ldots,n$} \Comment{iterate through all local scales to calculate each term} 
@@ -1041,7 +960,6 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State $\epsilon \rto 3.5\max\{0.01,\sqrt{\epsilon}\}$ \Comment{threshold for identifying significant local correlations}
 \State $\hat{\G}^{*} \rto \G^{nn}$ \Comment{use the global correlation by default}
 
-%\State $R=\textsc{Connected}(\G^{kl}>\epsilon)$ \Comment{a binary matrix indicating largest connected component}
 \If{$\sum_{k,l} R_{kl} \geq 2n$} \Comment{proceed when the region is sufficiently large}
 \State $R = \textsc{Monotone}(\{\G^{kl}\},R)$ \Comment{check monotonically changing local correlations} 
 \State $\Omega \rto \arg_{k,l}\{(\G^{kl}\geq \max_{R_{kl}=1} \G^{kl}) \cap (R_{kl}=1)\}$ \Comment{scale with largest correlation in $R$}
@@ -1134,7 +1052,7 @@ Under linear dependency, by Cauchy-Schwarz inequality the distance correlation s
 \begin{align*}
 & dcov(X,Y) = \sqrt{dvar(X) \cdot dvar(Y)} \quad\Rightarrow\quad 1=\G(X, Y) \geq \G(X, Y_{\pi})
 \end{align*}
-for any permutation $\pi$, where the equality holds if and only if $X$ is a scalar multiple of $Y_{\pi}$, i.e., $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$ for all $i,j$, where $\pi^{-1}(\cdot)$ denotes the inverse permutation. %It follows that the p-value of $\G$ is $0$, which is at the minimal.
+for any permutation $\pi$, where the equality holds if and only if $X$ is a scalar multiple of $Y_{\pi}$, i.e., $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$ for all $i,j$, where $\pi^{-1}(\cdot)$ denotes the inverse permutation. 
 
 Thus for the global correlation, there only exist permutations such that the permuted test statistic equals the observed test statistic. However, for all those ``significant'' permutations for $\G$, they are also ``significant'' for each $\G^{kl}$, i.e., $a_{ij}^{k}=b_{\pi^{-1}(i) \pi^{-1}(j)}^{l}$ if $a_{ij}=b_{\pi^{-1}(i) \pi^{-1}(j)}$, such that $\G^{kl}(X, Y)=\G^{kl}(X, Y_{\pi})$; and there may exist other ``significant'' permutations such that $\G^{kl}(X, Y) \leq \G^{kl}(X, Y_{\pi})$.
 
@@ -1176,10 +1094,10 @@ Moreover, the permutation p-value of global \Dcorr~is the same under single cent
 For distance covariance, we can re-write it with matrix traces as follows
 \begin{align*}
 dcov(X,Y) &= \frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij} \\
- &=\frac{1}{n^2} tr(A^{T} \times B) \\
- &=\frac{1}{n^2} tr(H\tilde{A}^{T}HH\tilde{B}H) \\
- &=\frac{1}{n^2} tr(\tilde{A}^{T}H\tilde{B}H) \\
- &=\frac{1}{n^2} tr((H\tilde{A})^{T} \times (\tilde{B}H)),
+ &=\frac{1}{n^2} tr(A\T \times B) \\
+ &=\frac{1}{n^2} tr(H\tilde{A}\T HH\tilde{B}H) \\
+ &=\frac{1}{n^2} tr(\tilde{A}\T \tilde{B}H) \\
+ &=\frac{1}{n^2} tr((H\tilde{A})\T \times (\tilde{B}H)),
 \end{align*}
 where the second to last equality follows by using the circular property of traces and because $H$ is symmetric and idempotent. Therefore, single centering and double centering yield the same distance covariance.
 
@@ -1194,28 +1112,28 @@ Each local correlation $\G^{kl}$ is always symmetric. Namely for any $k,l$,
 Furthermore, the column ranks of $\tilde{A}$ are preserved in $A$ under single centering but not double centering; similarly, the row ranks of $\tilde{B}$ are preserved in $B$ under single centering.
 \end{appLem}
 \begin{proof}
-For fixed $k,l$, denote $R^{A}$ as the binary matrix such that $R_{A}(i,j)=1$ if $rank(a_{ij}) \leq k$, $R_{A}(i,j)=0$ otherwise. Define $R_{B}$ similarly. Then the rank-truncated pairwise comparisons $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$ in Equation~\ref{localCoef2} are the entries of $A \circ R_{A}$ and $B \circ R_{B}^{T}$ respectively, where $\circ$ denotes the entrywise product and $\cdot^{T}$ denotes the matrix transpose.
+For fixed $k,l$, denote $R^{A}$ as the binary matrix such that $R_{A}(i,j)=1$ if $rank(a_{ij}) \leq k$, $R_{A}(i,j)=0$ otherwise. Define $R_{B}$ similarly. Then the rank-truncated pairwise comparisons $\mt{a}_{ij}^k$ and $\mt{b}_{ij}^l$ in Equation~\ref{localCoef2} are the entries of $A \circ R_{A}$ and $B \circ R_{B}\T$ respectively, where $\circ$ denotes the entry-wise product and $\cdot\T$ denotes the matrix transpose.
 
 By the properties of matrix trace, it follows that the local covariance can be rewritten as
 \begin{align*}
 z_{kl} \G^{kl}(X,Y) &= \textstyle \sum_{i,j=1}^n a_{ij}^k b_{ij}^l \\
- &= tr((A \circ R_{A})^{T} \times (B \circ R_{B}^{T})) \\
- &= tr((B \circ R_{B}^{T}) \times (A \circ R_{A})^{T}) \\
- &= tr((B^{T} \circ R_{B})^{T} \times (A^{T} \circ R_{A}^{T})).
+ &= tr((A \circ R_{A})\T \times (B \circ R_{B}\T)) \\
+ &= tr((B \circ R_{B}\T) \times (A \circ R_{A})\T) \\
+ &= tr((B\T \circ R_{B})\T \times (A\T \circ R_{A}\T)).
 \end{align*}
 
 When both $A$ and $B$ are symmetric, it is immediate that
 \begin{align*}
-z_{kl} \G^{kl}(X,Y) &= tr((B^{T} \circ R_{B})^{T} \times (A^{T} \circ R_{A}^{T})) \\
- &= tr((B \circ R_{B})^{T} \times (A \circ R_{A}^{T})) \\
+z_{kl} \G^{kl}(X,Y) &= tr((B\T \circ R_{B})\T \times (A\T \circ R_{A}\T)) \\
+ &= tr((B \circ R_{B})\T \times (A \circ R_{A}\T)) \\
  &= z_{lk} \G^{lk}(Y,X),
 \end{align*}
 such that $\G^{kl}(X,Y)=\G^{lk}(Y,X)$.
 
-Under single centering, however, $A=H \tilde{A}$ and $B=\tilde{B}H$ are no longer symmetric. Nevertheless, the distance matrices $\tilde{A}$ and $\tilde{B}$ are symmetric, so inserting $A^{T}=\tilde{A}H$ and $B^{T}=H\tilde{B}$ into the second and fourth equalities above yields
+Under single centering, however, $A=H \tilde{A}$ and $B=\tilde{B}H$ are no longer symmetric. Nevertheless, the distance matrices $\tilde{A}$ and $\tilde{B}$ are symmetric, so inserting $A\T=\tilde{A}H$ and $B\T=H\tilde{B}$ into the second and fourth equalities above yields
 \begin{align*}
-z_{kl} \G^{kl}(X,Y) &= tr(((H \tilde{A}) \circ R_{A})^{T} \times ((\tilde{B}H) \circ R_{B}^{T})) \\
- &= tr(((H \tilde{B}) \circ R_{B})^{T} \times ((\tilde{A}H) \circ R_{A}^{T})) \\
+z_{kl} \G^{kl}(X,Y) &= tr(((H \tilde{A}) \circ R_{A})\T \times ((\tilde{B}H) \circ R_{B}\T)) \\
+ &= tr(((H \tilde{B}) \circ R_{B})\T \times ((\tilde{A}H) \circ R_{A}\T)) \\
  &= z_{lk} \G^{lk}(Y,X),
 \end{align*}
 so that $\G^{kl}(X,Y)=\G^{lk}(Y,X)$ under single centering.

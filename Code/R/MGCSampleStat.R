@@ -1,6 +1,8 @@
 library(ecodist)
 library(SDMTools)
-MGCSampleStat <- function(localCorr){
+source("MGCLocalCorr.R")
+
+MGCSampleStat <- function(A,B){
   # Author: Cencheng Shen
   # This function estimate the Oracle MGC (i.e., optimal local correlation)
   # from the local correlation map, which we call sample MGC statistic.
@@ -11,8 +13,13 @@ MGCSampleStat <- function(localCorr){
   # is used as sample MGC. If no such region exists, use the global
   # correlation instead.
   #
-  # Input: a size m*n local correlation map.
+  # Input: either a size m*n local correlation map, or two n*n distance matrices A and B.
   # Output: the sample MGC statistic within [-1,1].
+  if (missing(B)){
+    localCorr=A; # if there is only one input, asume the localCorr is given as A
+  } else {
+    localCorr=MGCLocalCorr(A,B)$corr; # otherwise compute the localCorr from given distance matrices
+  }
   m=nrow(localCorr);
   n=ncol(localCorr);
   negCorr=localCorr[2:m,2:n];

@@ -20,6 +20,7 @@ fontSize=20;
 %% Set colors
 map1=zeros(7,3);
 gr = [0.5,0.5,0.5];
+bl=[1,1,1];
 cmap(1,:) = gr;
 cmap(2,:) = gr;
 cmap(3,:) = gr;

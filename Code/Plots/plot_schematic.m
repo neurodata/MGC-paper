@@ -51,7 +51,7 @@ s=3;t=5;
 gr=map2(120,:);
 pu=map2(8,:);
 loca=[0,1,0];
-glob= [1,0,1];
+glob=[0.5,0.5,0.5];
 mgc='Cyan';
 cmap(1,:) = pu;
 cmap(2,:) = gr;

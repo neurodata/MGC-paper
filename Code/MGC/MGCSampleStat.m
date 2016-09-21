@@ -1,4 +1,4 @@
-function statMGC=MGCSampleStat(A,B)
+function [statMGC,R]=MGCSampleStat(A,B)
 % Author: Cencheng Shen
 % This function estimate the Oracle MGC (i.e., optimal local correlation)
 % from the local correlation map, which we call sample MGC statistic.
@@ -46,6 +46,9 @@ if mean(mean(R))>=thres
             tmp=max(tmp1,tmp2); % take the max of the minimal correlations, which should be relatively large but does not inflate much over the true optimal statistic
             if tmp>statMGC
                 statMGC=tmp; 
+            else
+                R=zeros(m,n);
+                R(m,n)=1;
             end
         end
     end

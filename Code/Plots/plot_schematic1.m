@@ -22,7 +22,7 @@ strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
 figure('units','normalized','position',[0 0 1 1])
-s=1;t=3;
+s=1;t=6;
 try
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 catch
@@ -31,7 +31,7 @@ catch
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 end
 
-fontSize=18;
+fontSize=12;
 mkSize=20;
 sameBar=0;
 
@@ -40,6 +40,7 @@ sameBar=0;
 
 cmap=zeros(2,3);
 gray = [0.5,0.5,0.5];
+black=[0,0,0];
 map2 = brewermap(128,'PiYG'); % brewmap
 map3 = map2(size(map2,1)/2+1:end,:);
 % map3 = brewermap(128,'Greens'); % brewmap
@@ -121,7 +122,176 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 axis('square')
 pos = get(ax,'position');
 
+%%  Col 2
+% ax=subplot(s,t,t+1);
 ax=subplot(s,t,2);
+x=reshape(C,n^2,1);
+y=reshape(D,n^2,1);
+ind1=reshape(RC|RD,n^2,1);
+hold on
+set(groot,'defaultAxesColorOrder',map2);
+plot(x(ind1==1),y(ind1==1),'.','MarkerSize',5,'Color',gray);
+plot(x(ind1==0),y(ind1==0),'+','MarkerSize',2,'Color',black);
+hold off
+% if type==1 && noise==1
+% xlabel('Cloud Shape','FontSize',fontSize,...
+%     'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+% ylabel('Ground Wetness','FontSize',fontSize, ...
+%     'Units', 'normalized', 'Position', [-0.03 0], 'HorizontalAlignment', 'left')
+% else
+% xlabel('X','FontSize',fontSize,...
+%     'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+% ylabel('Y','FontSize',fontSize, ...
+%     'Units', 'normalized', 'Position', [-0.03 0], 'HorizontalAlignment', 'left')
+% end
+
+tname=CorrSimuTitle(type);
+findex=strfind(tname,'.');
+tname=tname(findex+1:end);
+xlim([min(x)-0.2, max(x)]);
+ylim([min(y)-0.2, max(y)]);
+
+% title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
+title([{'Distances'}], 'Units', 'normalized', ...
+    'Position', [0 1.1], 'HorizontalAlignment', 'left')
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
+%pos=[nan, nan, width, height];
+axis('square')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%%%%%%%%%%%%%%
+ax=subplot(s,t,3);
+hold on
+set(groot,'defaultAxesColorOrder',map1);
+kmin=2;
+ph=tA(kmin:n,kmin:n)';
+%indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
+% ph(indPower)=2;
+imagesc(ph);
+
+% draw boundary around optimal scale
+%[pval,indP]=MGCScaleVerify(ph,1000);
+% indP=optimalInd;
+% %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
+% % indP=indP(2:end,2:end)';
+% [J,I]=ind2sub(size(ph),indP);
+% Ymin=min(I);
+% Ymax=max(I);
+% Xmin=min(J);
+% Xmax=max(J);
+% 
+% plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
+% plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
+% plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
+% plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
+% xlim([2,n]);
+% ylim([2,n]);
+%     imagesc(k,l,1);
+hold off
+
+set(gca,'FontSize',fontSize)
+set(gca,'YDir','normal')
+cmap=map4;
+colormap(cmap)
+%hm=ceil(max(max(ph))*100)/100;
+hm=ceil(prctile(ph(ph<1),99)*100)/100;
+caxis([0 hm])
+% h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
+% set(h,'FontSize',fontSize);
+xlim([1 n-1]);
+ylim([1 n-1]);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
+xlabel('# of X Neighbors','FontSize',fontSize,...
+    'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+ylabel('# of Y Neighbors','FontSize',fontSize, ...
+    'Units', 'normalized', 'Position', [-0.1 0], 'HorizontalAlignment', 'left')
+title([{'Multiscale Correlation Map'}],'FontSize',fontSize, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+% xlabel('# of X Neighbors','FontSize',fontSize, ...
+%     'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
+% ylabel('# of Y Neighbors','FontSize',fontSize, ...
+%     'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
+% text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
+% title(1,60,[{'4. Multiscale Maps'}; {'(all scales)'}; {' '}],'FontSize',fontSize,...
+%     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
+%text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
+% title('Local Correlations','fontweight','normal','FontSize',fontSize);
+%text(10,55,'Test Statistics','FontSize',fontSize)
+axis('square')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%%%%%%%%%%%%%%
+ax=subplot(s,t,4);
+hold on
+set(groot,'defaultAxesColorOrder',map1);
+kmin=2;
+% tmp=zeros(n,n);
+ph=R(kmin:n,kmin:n)';
+%indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
+% ph(indPower)=2;
+imagesc(ph);
+[k,l]=find(tA==test);
+% tmp(indKL)=1;
+plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')  
+% draw boundary around optimal scale
+%[pval,indP]=MGCScaleVerify(ph,1000);
+% indP=optimalInd;
+% %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
+% % indP=indP(2:end,2:end)';
+% [J,I]=ind2sub(size(ph),indP);
+% Ymin=min(I);
+% Ymax=max(I);
+% Xmin=min(J);
+% Xmax=max(J);
+% 
+% plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
+% plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
+% plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
+% plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
+% xlim([2,n]);
+% ylim([2,n]);
+%     imagesc(k,l,1);
+hold off
+
+set(gca,'FontSize',fontSize)
+set(gca,'YDir','normal')
+cmap=map4;
+colormap(cmap)
+% %hm=ceil(max(max(ph))*100)/100;
+% hm=ceil(prctile(ph(ph<1),99)*100)/100;
+% caxis([0 hm])
+% h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
+% set(h,'FontSize',fontSize);
+xlim([1 n-1]);
+ylim([1 n-1]);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
+% xlabel('# of X Neighbors','FontSize',fontSize,...
+%     'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+% ylabel('# of Y Neighbors','FontSize',fontSize, ...
+%     'Units', 'normalized', 'Position', [-0.1 0], 'HorizontalAlignment', 'left')
+title([{'Optimal Location'}],'FontSize',fontSize, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+% xlabel('# of X Neighbors','FontSize',fontSize, ...
+%     'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
+% ylabel('# of Y Neighbors','FontSize',fontSize, ...
+%     'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
+% text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
+% title(1,60,[{'4. Multiscale Maps'}; {'(all scales)'}; {' '}],'FontSize',fontSize,...
+%     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
+%text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
+% title('Local Correlations','fontweight','normal','FontSize',fontSize);
+%text(10,55,'Test Statistics','FontSize',fontSize)
+axis('square')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%%%%%%%%%%%%%
+ax=subplot(s,t,5);
 %ax=subplot('Position',[left(1), bottom(1)+width/2+0.01, width, height]);
 
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -146,9 +316,9 @@ x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
 plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
-h=legend('Mcorr','OMGC','SMGC','Location','NorthEast');
-legend boxoff
-set(h,'FontSize',fontSize-3);
+%h=legend('Mcorr','OMGC','SMGC','Location','NorthEast');
+%legend boxoff
+%set(h,'FontSize',fontSize-3);
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
 % x1 = tA(end);
@@ -176,7 +346,7 @@ set(a,'FontSize',fontSize);
 set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
 end
 a = get(gca,'XTickLabel');
-set(gca,'XTickLabel',a,'FontSize',fontSize-6);
+set(gca,'XTickLabel',a,'FontSize',fontSize);
 ylim([0 y1+10]);
 % <<<<<<< HEAD
 xlim([minp,maxp+0.1]);
@@ -194,7 +364,7 @@ ylabel('Density','FontSize',fontSize, ...
 % >>>>>>> c55135b820b0d669c0dcdac7dc915b0200706c61
 %     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
-title([{'Tests by Mcorr and its MGC'}],'FontSize',fontSize, ...
+title([{'Tests'}],'FontSize',fontSize, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
 % pos2 = get(ax,'position');
 % pos2(3:4) = [pos(3:4)];
@@ -205,30 +375,31 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-ax=subplot(s,t,3);
+%%%%%%%%%%%%%%
+ax=subplot(s,t,6);
 hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
-ph=tA(kmin:n,kmin:n)';
+ph=pMLocal(kmin:n,kmin:n)';
 %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
-imagesc(ph);
+imagesc(log(ph));
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);
 indP=optimalInd;
 %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
 % indP=indP(2:end,2:end)';
-[J,I]=ind2sub(size(ph),indP);
-Ymin=min(I);
-Ymax=max(I);
-Xmin=min(J);
-Xmax=max(J);
-
-plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
-plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
-plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
-plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
+[J,I]=ind2sub(size(pMLocal),indP);
+Ymin=min(I)-1;
+Ymax=max(I)-1;
+Xmin=min(J)-1;
+Xmax=max(J)-1;
+lw=5;
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);
@@ -237,20 +408,20 @@ hold off
 set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
-colormap(cmap)
-%hm=ceil(max(max(ph))*100)/100;
-hm=ceil(prctile(ph(ph<1),99)*100)/100;
-caxis([0 hm])
-h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-set(h,'FontSize',fontSize-6);
+colormap(ax,flipud(cmap));
+%ceil(max(max(ph))*10)/10
+% caxis([0 1]);
+cticks=[0.001, 0.01, 0.1, 0.5];
+h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','westoutside');
+set(h,'FontSize',fontSize);
 xlim([1 n-1]);
 ylim([1 n-1]);
-set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize-6);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
 xlabel('# of X Neighbors','FontSize',fontSize,...
     'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.1 0], 'HorizontalAlignment', 'left')
-title([{'Multiscale Correlation Map'}],'FontSize',fontSize, ...
+title([{'Multiscale P-Value Map'}],'FontSize',fontSize, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
 % xlabel('# of X Neighbors','FontSize',fontSize, ...
 %     'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
@@ -275,7 +446,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
-F.wh=[8 3]*2;
+F.wh=[15 5]*2;
 F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

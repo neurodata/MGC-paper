@@ -7,12 +7,12 @@ function []=plot_schematic1(type)
 %% % File path searching
 if nargin<1
     type=1;
-    n=50;
+end
+
+n=50;
+noise=0;
+if type==1
     noise=0.5;
-else
-    type=8;
-    n=50;
-    noise=0;
 end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
@@ -53,18 +53,18 @@ cmap(2,:) = gr;
 map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
-height=0.21; %18; %21;
-width=height-0.04; %17;
-hspace=0.01;
+height=0.35; %18; %21;
+width=0.15; %17;
+hspace=0.05;
 vspace=0.09;
 for i=1:6
     left(i)=0.01+(i-1)*(width+hspace);
 %     bottom(i)=0.06+(i-1)*(height+vspace);
 end
-left(4:end)=left(4:end)+0.01;
+% left(4:end)=left(4:end)+0.01;
 % height=0.2; %18; %21;
 % width=0.2;
-bottom=0.4;
+bottom=0.3;
 % % hspace=-0;
 % % vspace=0.1;
 % % bottom=0.06+(height+vspace);
@@ -77,8 +77,8 @@ bottom=0.4;
 % left(2:end)=left(2:end)+0.02;
 
 %%  Col 1
-ax=subplot(s,t,1);
-% ax=subplot('Position',[left(1), bottom, width, height]);
+% ax=subplot(s,t,1);
+ax=subplot('Position',[left(1), bottom, width, height]);
 hold all
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
@@ -103,7 +103,7 @@ end
 id=[I,J,J2,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
-hy=[-5,+5,0]/100*(max(y)-min(y));
+hy=[+1,-1,0]/100*(max(y)-min(y));
 hs=2/100*(max(x)-min(x));
 
 for ind=[1,2,3]; %length(id)
@@ -124,8 +124,8 @@ axis('square')
 pos = get(ax,'position');
 
 %%  Col 2
-% ax=subplot('Position',[left(2), bottom, width, height]);
-ax=subplot(s,t,2);
+ax=subplot('Position',[left(2), bottom, width, height]);
+% ax=subplot(s,t,2);
 x=reshape(C,n^2,1);
 y=reshape(D,n^2,1);
 ind1=reshape(RC|RD,n^2,1);
@@ -156,8 +156,8 @@ pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
 %%%%%%%%%%%%%%
-% ax=subplot('Position',[left(3), bottom, width, height]);
-ax=subplot(s,t,3);
+ax=subplot('Position',[left(3), bottom, width, height]);
+% ax=subplot(s,t,3);
 hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
@@ -176,14 +176,14 @@ colormap(cmap)
 % hm=ceil(max(max(ph))*100)/100;
 hm=ceil(prctile(ph(ph<1),99)*100)/100;
 caxis([0 hm])
-% h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-% set(h,'FontSize',fontSize);
-% axpos = ax.Position;
-% hpos=h.Position;
-% hpos(3)=0.5*hpos(3);
-% hpos(1)=hpos(1)+0.01;
-% h.Position=hpos;
-% ax.Position = axpos;
+h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
+set(h,'FontSize',fontSize);
+axpos = ax.Position;
+hpos=h.Position;
+hpos(3)=0.5*hpos(3);
+hpos(1)=hpos(1)+0.02;
+h.Position=hpos;
+ax.Position = axpos;
 xlim([1 n-1]);
 ylim([1 n-1]);
 set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
@@ -198,75 +198,9 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-% %%%%%%%%%%%%%%
-% ax=subplot(s,t,4);
-% hold on
-% set(groot,'defaultAxesColorOrder',map1);
-% kmin=2;
-% % tmp=zeros(n,n);
-% ph=R(kmin:n,kmin:n)';
-% %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
-% % ph(indPower)=2;
-% imagesc(ph);
-% [k,l]=find(tA==test);
-% % tmp(indKL)=1;
-% plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')  
-% % draw boundary around optimal scale
-% %[pval,indP]=MGCScaleVerify(ph,1000);
-% % indP=optimalInd;
-% % %disp(strcat('Approximated MGC p-value: ',num2str(pval)));
-% % % indP=indP(2:end,2:end)';
-% % [J,I]=ind2sub(size(ph),indP);
-% % Ymin=min(I);
-% % Ymax=max(I);
-% % Xmin=min(J);
-% % Xmax=max(J);
-% % 
-% % plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
-% % plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
-% % plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
-% % plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
-% % xlim([2,n]);
-% % ylim([2,n]);
-% %     imagesc(k,l,1);
-% hold off
-% 
-% set(gca,'FontSize',fontSize)
-% set(gca,'YDir','normal')
-% cmap=map4;
-% colormap(cmap)
-% % %hm=ceil(max(max(ph))*100)/100;
-% % hm=ceil(prctile(ph(ph<1),99)*100)/100;
-% % caxis([0 hm])
-% % h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-% % set(h,'FontSize',fontSize);
-% xlim([1 n-1]);
-% ylim([1 n-1]);
-% set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
-% % xlabel('# of X Neighbors','FontSize',fontSize,...
-% %     'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
-% % ylabel('# of Y Neighbors','FontSize',fontSize, ...
-% %     'Units', 'normalized', 'Position', [-0.1 0], 'HorizontalAlignment', 'left')
-% title([{'Optimal Location'}],'FontSize',fontSize, ...
-%    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
-% % xlabel('# of X Neighbors','FontSize',fontSize, ...
-% %     'Units', 'normalized','Position', [0 -0.2], 'HorizontalAlignment', 'left')
-% % ylabel('# of Y Neighbors','FontSize',fontSize, ...
-% %     'Units', 'normalized','Position', [-0.2 0], 'HorizontalAlignment', 'left')
-% % text(-1,73,'4. Multiscale Maps','fontSize',fontSize,'fontweight','bold');
-% % title(1,60,[{'4. Multiscale Maps'}; {'(all scales)'}; {' '}],'FontSize',fontSize,...
-% %     'Units', 'normalized','Position', [0 1.1], 'HorizontalAlignment', 'left')
-% %text(-1,70,[{'4. Multiscale Maps'};{'(all scales)'}],'fontSize',fontSize,'fontweight','bold');
-% % title('Local Correlations','fontweight','normal','FontSize',fontSize);
-% %text(10,55,'Test Statistics','FontSize',fontSize)
-% axis('square')
-% pos2 = get(ax,'position');
-% pos2(3:4) = [pos(3:4)];
-% set(ax,'position',pos2);
-
 %%%%%%%%%%%%%
-%ax=subplot('Position',[left(4), bottom, width, height]);
-ax=subplot(s,t,4);
+ax=subplot('Position',[left(4), bottom, width, height]);
+% ax=subplot(s,t,4);
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
 minp=floor(minp*10)/10;
 maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -322,7 +256,7 @@ xlabel('Test Statistic','FontSize',fontSize,...
 ylabel('Density','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.10, 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
-title([{'Tests'}],'FontSize',fontSize, ...
+title([{'Tests by Mcorr and MGC'}],'FontSize',fontSize, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
 axis('square')
 hold off
@@ -331,8 +265,8 @@ pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
 %%%%%%%%%%%%%%
-% ax=subplot('Position',[left(5), bottom, width, height]);
-ax=subplot(s,t,5);
+ax=subplot('Position',[left(5), bottom, width, height]);
+% ax=subplot(s,t,5);
 hold on
 set(groot,'defaultAxesColorOrder',map1);
 kmin=2;
@@ -346,7 +280,7 @@ Ymin=min(I)-1;
 Ymax=max(I)-1;
 Xmin=min(J)-1;
 Xmax=max(J)-1;
-lw=5;
+lw=3;
 plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
 plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
 plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
@@ -365,12 +299,12 @@ colormap(ax,flipud(cmap));
 cticks=[0.001, 0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','eastoutside');
 set(h,'FontSize',fontSize);
-% axpos = ax.Position;
-% hpos=h.Position;
-% hpos(3)=0.5*hpos(3);
-% hpos(1)=hpos(1)+0.01;
-% h.Position=hpos;
-% ax.Position = axpos;
+axpos = ax.Position;
+hpos=h.Position;
+hpos(3)=0.5*hpos(3);
+hpos(1)=hpos(1)+0.028;
+h.Position=hpos;
+ax.Position = axpos;
 xlim([1 n-1]);
 ylim([1 n-1]);
 set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
@@ -393,7 +327,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
 end
-F.wh=[15 5]*2;
+F.wh=[10 3]*2;
 F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

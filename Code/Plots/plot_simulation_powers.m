@@ -17,7 +17,7 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 %%
 if nargin<1
-    select=1;
+    select=0;
 end
 total=20;
 
@@ -25,11 +25,11 @@ total=20;
 loca=[0,1,0];
 glob= [0.5,0.5,0.5];
 HHG   = [0.5,0.5,0.5];
-
+lw=3;
 ls{1}='-';
 ls{2}='--';
-ls{3}=':';
-ls{4}='--';
+ls{3}='-.';
+ls{4}=':';
 
 %% figure1-4
 figNumber='1DPower';
@@ -80,7 +80,7 @@ xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
 ylabel('Power','position',[-687 2.7],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
+lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else
@@ -141,7 +141,7 @@ xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
 ylabel('Power','position',[-720 2.7],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
-lgdPosition = [0.03, 0.85, .05, .05]; %Legend Position
+lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
     h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
 else

@@ -25,16 +25,16 @@ for i=type
     switch i
         case {1,2,3}
             dim=1000;
-        case {4,6,7,8,9,11,12,13}
+        case {5,6,7,15,11,16,17,8}
             dim=20;
-        case {5,16,17,18}
+        case {4,12,13,18}
             dim=10;
-        case {14,15}
+        case {14,19}
             dim=40;
-        case {10,19,20}
+        case {10,9,20}
             dim=100;
     end
-    if i==5 ||i==16||i==17||i==18
+    if i==4 ||i==12||i==13||i==19
         lim=10;
     else
         lim=20;

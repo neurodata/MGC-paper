@@ -36,20 +36,15 @@ end
 switch type % In total 20 types of dependency + the type 0 outlier model
     case 1 %Linear
         y=xA+1*noise*eps;
-    case 2 %Cubic
-        y=128*(xA-1/3).^3+48*(xA-1/3).^2-12*(xA-1/3)+80*noise*eps;
-    case 3 %Exponential
+    case 2 %Exponential
         x=unifrnd(0,3,n,d);
         y=exp(x*A)+10*noise*eps;
         if dependent==0
             x=unifrnd(0,3,n,d);
         end
-    case 4 %Step Function
-        if dim>1
-            noise=1;
-        end
-        y=(xA>0)+1*noise*eps;
-    case 5 %Joint Normal; note that dim should be no more than 10 as the covariance matrix for dim>10 is no longer positive semi-definite
+    case 3 %Cubic
+        y=128*(xA-1/3).^3+48*(xA-1/3).^2-12*(xA-1/3)+80*noise*eps;
+    case 4 %Joint Normal; note that dim should be no more than 10 as the covariance matrix for dim>10 is no longer positive semi-definite
         rho=1/(d*2);
         cov1=[eye(d) rho*ones(d)];
         cov2=[rho*ones(d) eye(d)];
@@ -60,33 +55,46 @@ switch type % In total 20 types of dependency + the type 0 outlier model
             x=mvnrnd(zeros(n,2*d),covT,n);
         end
         x=x(:,1:d);
+    case 5 %Step Function
+        if dim>1
+            noise=1;
+        end
+        y=(xA>0)+1*noise*eps;
     case 6 %Quadratic
         y=(xA).^2+0.5*noise*eps;
     case 7 %W Shape
         y=4*( ( xA.^2 - 1/2 ).^2 + unifrnd(0,1,n,d)*A/500 )+0.5*noise*eps;
-    case 8 %Two Parabolas
-        y=( xA.^2  + 2*noise*unifrnd(0,1,n,1)).*(binornd(1,0.5,n,1)-0.5);
-    case 9 %Fourth root
-        y=abs(xA).^(0.25)+noise/4*eps;
+    case 9 %Uncorrelated Binomial
+        if d>1
+            noise=1;
+        end
+        x=binornd(1,0.5,n,d)+0.5*noise*mvnrnd(zeros(n,d),eye(d),n);
+        y=(binornd(1,0.5,n,1)*2-1);
+        y=x*A.*y+0.5*noise*eps;
+        if dependent==0
+            x=binornd(1,0.5,n,d)+0.5*noise*mvnrnd(zeros(n,d),eye(d),n);
+        end
     case 10 %Log(X^2)
         x=mvnrnd(zeros(n, d),eye(d));
         y=log(x.^2)+3*noise*repmat(eps,1,d);
         if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));
         end
-    case {11,12,13} %Circle & Ecllipse & Spiral
+    case 11 %Fourth root
+        y=abs(xA).^(0.25)+noise/4*eps;
+    case {8,16,17} %Circle & Ecllipse & Spiral
         if d>1
             noise=1;
         end
         cc=0.4;
-        if type==11
+        if type==16
             rx=ones(n,d);
         end
-        if type==12
+        if type==17
             rx=5*ones(n,d);
         end
         
-        if type==13
+        if type==8
             rx=unifrnd(0,5,n,1);
             ry=rx;
             rx=repmat(rx,1,d);
@@ -102,13 +110,13 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         end
         x=rx.*x;
         y=ry.*sin(z(:,1)*pi);
-        if type==13
+        if type==8
             y=y+cc*(dim-1)*noise*mvnrnd(zeros(n, 1),eye(1));
         else
             x=x+cc*noise*rx.*mvnrnd(zeros(n, d),eye(d));
         end
         if dependent==0
-            if type==13
+            if type==8
                 rx=unifrnd(0,5,n,1);
                 rx=repmat(rx,1,d);
                 z=rx;
@@ -121,12 +129,29 @@ switch type % In total 20 types of dependency + the type 0 outlier model
                 x(:,i)=x(:,i).*sin(z(:,i+1)*pi);
             end
             x=rx.*x;
-            if type==13
+            if type==8
             else
                 x=x+cc*noise*rx.*mvnrnd(zeros(n, d),eye(d));
             end
         end
-    case {14,15} %Square & Diamond
+    case {12,13} %Sine 1/2 & 1/8
+        x=repmat(unifrnd(-1,1,n,1),1,d);
+        if noise>0 || d>1
+            x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+        end
+        if type==12
+            theta=4;cc=1;
+        else
+            theta=16;cc=0.5;
+        end
+        y=sin(theta*pi*x)+cc*noise*repmat(eps,1,d);
+        if dependent==0
+            x=repmat(unifrnd(-1,1,n,1),1,d);
+            if noise>0 || d>1
+                x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
+            end
+        end
+    case {14,18} %Square & Diamond
         u=repmat(unifrnd(-1,1,n,1),1,d);
         v=repmat(unifrnd(-1,1,n,1),1,d);
         if type==14
@@ -143,36 +168,14 @@ switch type % In total 20 types of dependency + the type 0 outlier model
             eps=0.05*(d)*mvnrnd(zeros(n,d),eye(d),n);
             x=u*cos(theta)+v*sin(theta)+eps;
         end
-    case {16,17} %Sine 1/2 & 1/8
-        x=repmat(unifrnd(-1,1,n,1),1,d);
-        if noise>0 || d>1
-            x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
-        end
-        if type==16
-            theta=4;cc=1;
-        else
-            theta=16;cc=0.5;
-        end
-        y=sin(theta*pi*x)+cc*noise*repmat(eps,1,d);
-        if dependent==0
-            x=repmat(unifrnd(-1,1,n,1),1,d);
-            if noise>0 || d>1
-                x=x+0.02*(d)*mvnrnd(zeros(n,d),eye(d),n);
-            end
-        end
-    case 18 %Multiplicative Noise
+    case 15 %Two Parabolas
+        y=( xA.^2  + 2*noise*unifrnd(0,1,n,1)).*(binornd(1,0.5,n,1)-0.5);
+    case 19 %Multiplicative Noise
         x=mvnrnd(zeros(n, d),eye(d));
         y=mvnrnd(zeros(n, d),eye(d));
         y=x.*y;
         if dependent==0
             x=mvnrnd(zeros(n, d),eye(d));
-        end
-    case 19 %Uncorrelated Binomial
-        x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);
-        y=(binornd(1,0.5,n,1)*2-1);
-        y=x*A.*y+0.5*eps;
-        if dependent==0
-            x=binornd(1,0.5,n,d)+0.5*mvnrnd(zeros(n,d),eye(d),n);
         end
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;

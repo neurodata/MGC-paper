@@ -2,7 +2,7 @@ function run_fig1Data(type,n,noise,rep)
 % generate data for figure 1
 %%% File path searching
 if nargin<1
-    type=13;
+    type=8;
 end
 if nargin<2
     n=50;

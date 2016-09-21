@@ -336,13 +336,19 @@ class: center, middle
 
 Generalized Correlation Coefficient
 
-$$a_{ij} = \sigma(x_i,x_j)$$
+<!-- $$a_{ij} = \sigma(x_i,x_j)$$
 
 $$b_{ij} = \sigma(y_i,y_j)$$
 
 $$C = A \circ B$$
 
 $$ c = \sum_{ij} C $$
+ -->
+
+.center[
+<img src="images/gcc.png" alt="Drawing" style="height: 200px;"/>
+]
+
 
 permutation test to obtain p-value
 
@@ -400,17 +406,9 @@ class: center, middle
 
 
 .center[
-<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPower.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPowerMGCM.png" alt="Drawing" style="width: 900px;"/>
 ]
 
----
-class: center, middle
-
-### MGC Empirically Dominates Global Methods
-
-.center[
-<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigSlope.png" alt="Drawing" style="width: 900px;"/>
-]
 
 ---
 class: center, middle
@@ -418,7 +416,7 @@ class: center, middle
 ### MGC Reveals Scales of Dependence
 
 .center[
-<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png" alt="Drawing" style="width: 900px;"/>
+<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png"  style="width: 900px;"/>
 ]
 
 ---
@@ -430,41 +428,49 @@ class: center
 
 <br><br><br><br><br>
 
-- Dcorr:  n^2
-- HHG:  n^2 log n
-- MGC:  n^2 log n
+- Dcorr:  n<sup>2</sup> 
+- HHG:  n<sup>2</sup> log n
+- MGC:  n<sup>2</sup> log n
 
 
 ---
 class: center, middle
 
-Thm 1: $$\beta_n(c_t^*) \rightarrow 1 \text{ as } n \to \infty$$
+<!-- Thm 1: $$\beta_n(c_t^*) \rightarrow 1 \text{ as } n \to \infty$$ -->
 <!-- Oracle MGC is consistent whenever Global Counterpart is
 <br>
  -->
 
+<img src="images/thm1.png"  style="height: 40px;"/>
 
 ---
 class: center, middle
 
-Thm 2: If x is linearly dependent on y, then for any n it always holds that
+<!-- Thm 2: If x is linearly dependent on y, then for any n it always holds that $\beta_n(c_t^*) = \beta_n(c_t)$ -->
 
-$$\beta_n(c_t^*) = \beta_n(c_t)$$
+<img src="images/thm2.png"  style="width: 800px;"/>
+
 
 ---
 class: center, middle
 
 
-Thm 3: There exists f and n such that
+<!-- Thm 3: There exists f and n such that
 
 $$\beta( c^{k,l}_{t} ) > \beta(c_t) $$
+ -->
+
+<img src="images/thm3.png"  style="width: 800px;"/>
 
 
 ---
 class: center, middle
 
 
-#### Thm 4: Oracle MGC dominates its global counterpart
+<!-- #### Thm 4: Oracle MGC dominates its global counterpart -->
+
+
+<img src="images/thm4.png"  style="width: 800px;"/>
 
 
 ---

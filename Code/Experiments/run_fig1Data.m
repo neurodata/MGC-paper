@@ -64,7 +64,7 @@ D=squareform(pdist(y));
 
 % Permutation p-value
 tA=MGCLocalCorr(C,D,'mcor');
-[test,R]=MGCSampleStat(tA);
+[test]=MGCSampleStat(tA);
 tN=zeros(rep,n,n);
 testN=zeros(rep,1);
 pMLocal=zeros(n,n);
@@ -129,4 +129,4 @@ B_MGC(RD)=0;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD','R');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD');

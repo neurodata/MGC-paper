@@ -92,7 +92,7 @@ pMLocal(1,:)=1;pMLocal(:,1)=1;
 warning('off','all');
 [~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
 optimalInd=find(optimalInd==1);
-if (pMLocal(end)<pMGC && isempty(find(optimalInd==n*n, 1)))
+if (pMLocal(end)<=pMGC && isempty(find(optimalInd==n*n, 1)))
     optimalInd=n*n;
 end
 l=ceil(neighbor/n);

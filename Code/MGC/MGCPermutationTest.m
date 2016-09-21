@@ -68,6 +68,6 @@ end
 % estimate the optimal scales
 [~,~,~,optimalInd]=FindLargestRectangles((pLocalCorr<=pMGC), [0 0 1],[2,2]);
 optimalInd=find(optimalInd==1);
-if (pLocalCorr(end)<pMGC && isempty(find(optimalInd==m*n, 1)))
+if (pLocalCorr(end)<=pMGC && isempty(find(optimalInd==m*n, 1)))
     optimalInd=m*n; % if the global scale is not selected in the largest rectangle while being optimal, we take the global scale instead.
 end

@@ -103,7 +103,11 @@ end
 id=[I,J,J2,J];
 id2=[1,2,3,2];
 col=[1 .5 0];
-hy=[+1,-1,0]/100*(max(y)-min(y));
+if abs(y(id(1))-y(id(2)))/(max(y)-min(y))<0.02
+hy=[+5,-5,0]/100*(max(y)-min(y));
+else
+    hy=zeros(3,1);
+end
 hs=2/100*(max(x)-min(x));
 
 for ind=[1,2,3]; %length(id)

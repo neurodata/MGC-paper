@@ -33,7 +33,7 @@ catch
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 end
 
-fontSize=15;
+fontSize=20;
 mkSize=20;
 
 %% plotting parameters
@@ -119,6 +119,7 @@ xlim([min(x)-0.2, max(x)]);
 ylim([min(y)-0.2, max(y)]);
 
 if type == 1, AB='A'; else AB='B'; end
+AB='';
 tit1=strcat('0', AB ,'. Sample Data');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left')

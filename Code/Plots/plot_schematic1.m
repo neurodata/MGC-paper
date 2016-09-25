@@ -50,6 +50,7 @@ pu=map2(8,:);
 loca=[0,1,0];
 glob=[0.5,0.5,0.5];
 mgc='Cyan';
+mgc=loca;
 cmap(1,:) = pu;
 cmap(2,:) = gr;
 map1=cmap;
@@ -62,8 +63,16 @@ vspace=0.09;
 for i=1:6
     left(i)=0.01+(i-1)*(width+hspace);
 end
+left(1)=0.025;
 bottom=0.3;
 
+% optimal scales
+indP=optimalInd;
+[J,I]=ind2sub(size(pMLocal),indP);
+Ymin=min(I)-1;
+Ymax=max(I)-1;
+Xmin=min(J)-1;
+Xmax=max(J)-1;
 %%  Col 1
 % ax=subplot(s,t,1);
 ax=subplot('Position',[left(1), bottom, width, height]);
@@ -90,7 +99,7 @@ else
 end
 id=[I,J,J2,J];
 id2=[1,2,3,2];
-col=[1 .5 0];
+col=[0 0 0];
 if abs(y(id(1))-y(id(2)))/(max(y)-min(y))<0.02
 hy=[+5,-5,0]/100*(max(y)-min(y));
 else
@@ -110,7 +119,6 @@ xlim([min(x)-0.2, max(x)]);
 ylim([min(y)-0.2, max(y)]);
 
 if type == 1, AB='A'; else AB='B'; end
-AB='';
 tit1=strcat('0', AB ,'. Sample Data');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left')
@@ -123,11 +131,23 @@ ax=subplot('Position',[left(2), bottom, width, height]);
 % ax=subplot(s,t,2);
 x=reshape(C,n^2,1);
 y=reshape(D,n^2,1);
-ind1=reshape(RC|RD,n^2,1);
+RC=DistRanks(C);
+RD=DistRanks(D)';
+RC=(RC<=Xmax+1);
+RD=(RD<=Ymax+1);
+ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',map2);
-plot(x(ind1==1),y(ind1==1),'.','MarkerSize',5,'Color',gray);
-plot(x(ind1==0),y(ind1==0),'+','MarkerSize',2,'Color',black);
+plot(x(ind1==0),y(ind1==0),'.','MarkerSize',5,'Color',gray);
+plot(x(ind1==1),y(ind1==1),'+','MarkerSize',2,'Color',loca);
+
+x12=sub2ind([n,n], id(1),id(2));
+x23=sub2ind([n,n], id(2),id(3));
+text(x(x12)+hs,y(x12)+hy(1),'(1, 2)','fontsize',fontSize,'color',col)
+plot(x(x12),y(x12),'.','MarkerSize',mkSize/2,'Color',col);
+
+text(x(x23)+hs,y(x23)+hy(1),'(2, 3)','fontsize',fontSize,'color',col)
+plot(x(x23),y(x23),'.','MarkerSize',mkSize/2,'Color',col);
 hold off
 
 tname=CorrSimuTitle(type);
@@ -211,7 +231,7 @@ p=testN;
 
 hold on
 plot(xi,f,'.-','LineWidth',4,'Color',glob);
-plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
+% plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
 plot(xi2,f2,'.-','LineWidth',4,'Color',mgc);
 % legend('Mcorr','OMGC','SMGC','Location','East');
 % legend boxoff
@@ -219,7 +239,7 @@ set(gca,'FontSize',fontSize);
 x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
 x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
-plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
+% plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
 
 % x1 = tA(end);
@@ -228,21 +248,22 @@ y1=max(f)+2;
 y2 = max(f1)+2;
 y3 = 5;
 txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
-txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
+% txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
 txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
 set(c,'FontSize',fontSize);
-b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
-set(b,'FontSize',fontSize);
+% b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
+% set(b,'FontSize',fontSize);
 set(gca,'XTick',x3,'TickLength',[0 0],'XTickLabel',x3);
-if abs(x1-x3)>0.02 
+% if abs(x1-x3)>0.02 
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 set(a,'FontSize',fontSize);
+ if abs(x1-x3)>0.02 
 set(gca,'XTick',sort([x3+0.02,x1+0.02]),'TickLength',[0 0],'XTickLabel',sort([x3,x1]));
 end
-if abs(x2-x3)>0.02 && abs(x2-x1)>0.02
-set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
-end
+% if abs(x2-x3)>0.02 && abs(x2-x1)>0.02
+% set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+% end
 a = get(gca,'XTickLabel');
 set(gca,'XTickLabel',a,'FontSize',fontSize);
 ylim([0 y1+10]);
@@ -273,12 +294,12 @@ ph=pMLocal(kmin:n,kmin:n)';
 imagesc(log(ph));
 
 % draw boundary around optimal scale
-indP=optimalInd;
-[J,I]=ind2sub(size(pMLocal),indP);
-Ymin=min(I)-1;
-Ymax=max(I)-1;
-Xmin=min(J)-1;
-Xmax=max(J)-1;
+% indP=optimalInd;
+% [J,I]=ind2sub(size(pMLocal),indP);
+% Ymin=min(I)-1;
+% Ymax=max(I)-1;
+% Xmin=min(J)-1;
+% Xmax=max(J)-1;
 lw=3;
 plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
 plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
@@ -319,6 +340,8 @@ axis('square')
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
+h=suptitle(CorrSimuTitle(type));
+set(h,'FontSize',fontSize+10,'Units', 'normalized','Position', [0.01, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
 
 %
 pre2=strcat(rootDir,'Figures/');% The folder to save figures

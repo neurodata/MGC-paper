@@ -43,7 +43,7 @@ for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
     subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
+    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     %
     hold on
     if select==1
@@ -106,7 +106,7 @@ for j=1:total
     load(filename)
     numRange=dimRange;
     subplot(s,t,j)
-    titlechar=[CorrSimuTitle(j)];
+    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     hold on
     if select==1
         h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);

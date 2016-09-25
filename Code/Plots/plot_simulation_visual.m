@@ -40,7 +40,7 @@ set(groot,'defaultAxesColorOrder',map1);
 sz=12;
 for type=1:total
     subplot(s,t,type);
-    titlechar=CorrSimuTitle(type);
+    titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
     sz2=8;

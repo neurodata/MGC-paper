@@ -2,43 +2,43 @@ function titlechar=CorrSimuTitle(type)
 %%%Used to call the character names of each dependency in the simulation
 switch type
     case 1
-        titlechar='1. Linear';
+        titlechar='Linear';
     case 2
-        titlechar='2. Exponential';
+        titlechar='Exponential';
     case 3
-        titlechar='3. Cubic';
+        titlechar='Cubic';
     case 4
-        titlechar='4. Joint Normal';
+        titlechar='Joint Normal';
     case 5
-        titlechar='5. Step Function';
+        titlechar='Step Function';
     case 6
-        titlechar='6. Quadratic';
+        titlechar='Quadratic';
     case 7
-        titlechar='7. W Shape';
+        titlechar='W Shape';
     case 8
-        titlechar='8. Spiral';
+        titlechar='Spiral';
     case 9
-        titlechar='9. Bernoulli';
+        titlechar='Bernoulli';
     case 10
-        titlechar='10. Logarithmic';
+        titlechar='Logarithmic';
     case 11
-        titlechar='11. Fourth Root';
+        titlechar='Fourth Root';
     case 12
-        titlechar='12. Sine Period 4\pi';
+        titlechar='Sine Period 4\pi';
     case 13
-        titlechar='13. Sine Period 16\pi';
+        titlechar='Sine Period 16\pi';
     case 14
-        titlechar='14. Square';
+        titlechar='Square';
     case 15
-        titlechar='15. Two Parabolas';
+        titlechar='Two Parabolas';
     case 16
-        titlechar='16. Circle';
+        titlechar='Circle';
     case 17
-        titlechar='17. Ellipse';
+        titlechar='Ellipse';
     case 18
-        titlechar='18. Diamond';
+        titlechar='Diamond';
     case 19
-        titlechar='19. Multiplicative';
+        titlechar='Multiplicative';
     case 20
-        titlechar='20. Independent';
+        titlechar='Independent';
 end

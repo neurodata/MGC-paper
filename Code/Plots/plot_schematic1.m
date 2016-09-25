@@ -21,7 +21,9 @@ rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
-figure('units','normalized','position',[0 0 1 1])
+fh=figure(1);
+clf
+set(gcf,'units','normalized','position',[0 0 1 1])
 s=1;t=5;
 try
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
@@ -59,22 +61,8 @@ hspace=0.05;
 vspace=0.09;
 for i=1:6
     left(i)=0.01+(i-1)*(width+hspace);
-%     bottom(i)=0.06+(i-1)*(height+vspace);
 end
-% left(4:end)=left(4:end)+0.01;
-% height=0.2; %18; %21;
-% width=0.2;
 bottom=0.3;
-% % hspace=-0;
-% % vspace=0.1;
-% % bottom=0.06+(height+vspace);
-% for i=1:6
-%     left(i)=0.01+(i-1)*0.18;
-% end
-% left(4:end)=left(4:end)+0.01;
-% left(5)=left(5)+0.03;
-% left(6)=left(6)+0.09;
-% left(2:end)=left(2:end)+0.02;
 
 %%  Col 1
 % ax=subplot(s,t,1);
@@ -88,9 +76,9 @@ xlabel('Cloud Shape','FontSize',fontSize,...
 ylabel('Ground Wetness','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
 else
-xlabel('X','FontSize',fontSize,...
+xlabel('$X$','FontSize',fontSize,'Interpreter','latex',...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left')
-ylabel('Y','FontSize',fontSize, ...
+ylabel('$Y$','FontSize',fontSize,'Interpreter','latex', ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
 end
 
@@ -117,13 +105,15 @@ tname=tname(findex+1:end);
 xlim([min(x)-0.2, max(x)]);
 ylim([min(y)-0.2, max(y)]);
 
-title([{'Sample Data'}], 'Units', 'normalized', ...
+if type == 1, AB='A'; else AB='B'; end
+tit1=strcat('0', AB ,'. Sample Data');
+title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left')
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 axis('square')
 pos = get(ax,'position');
 
-%%  Col 2
+%%  Pairwise Distances
 ax=subplot('Position',[left(2), bottom, width, height]);
 % ax=subplot(s,t,2);
 x=reshape(C,n^2,1);
@@ -140,13 +130,13 @@ findex=strfind(tname,'.');
 tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
-xlabel('$$\bf{\|X_i-X_j\|_{F}}$$','FontSize',fontSize,...
+xlabel('$(X_i-X_j)^2$','FontSize',fontSize,...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
-ylabel('$$\bf{\|Y_i-Y_j\|_{F}}$$','FontSize',fontSize, ...
+ylabel('$(Y_i-Y_j)^2$','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
-% title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
-title([{'Distances'}], 'Units', 'normalized', ...
+tit1=strcat('1', AB ,'. Pairwise Distances');
+title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left')
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 %pos=[nan, nan, width, height];
@@ -155,7 +145,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%%%%%%%%%%%%%%
+%% Multiscale Correlation Map %%%%%%%%%%%%
 ax=subplot('Position',[left(3), bottom, width, height]);
 % ax=subplot(s,t,3);
 hold on
@@ -191,14 +181,16 @@ xlabel('# of X Neighbors','FontSize',fontSize,...
     'Units', 'normalized','Position', [-0.01, -0.18], 'HorizontalAlignment', 'left')
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.18 -0.02], 'HorizontalAlignment', 'left')
-title([{'Multiscale Correlation Map'}],'FontSize',fontSize, ...
-   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+
+tit1=strcat('2', AB ,'. Multiscale Correlation Map');
+title([{tit1}; {'& Test Statistic'}],'FontSize',fontSize, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 axis('square')
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%%%%%%%%%%%%%
+%% Null Distributions
 ax=subplot('Position',[left(4), bottom, width, height]);
 % ax=subplot(s,t,4);
 minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
@@ -249,14 +241,16 @@ end
 a = get(gca,'XTickLabel');
 set(gca,'XTickLabel',a,'FontSize',fontSize);
 ylim([0 y1+10]);
-% <<<<<<< HEAD
+
 xlim([minp,maxp+0.1]);
 xlabel('Test Statistic','FontSize',fontSize,...
     'Units', 'normalized','Position', [-0.01, -0.18], 'HorizontalAlignment', 'left')
 ylabel('Density','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.10, 0], 'HorizontalAlignment', 'left')
 set(gca,'YTick',[])
-title([{'Tests by Mcorr and MGC'}],'FontSize',fontSize, ...
+
+tit1=strcat('3', AB ,'. Null Distributions');
+title([{tit1}; {'& P-Values'}],'FontSize',fontSize, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
 axis('square')
 hold off
@@ -264,7 +258,7 @@ pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];
 set(ax,'position',pos2);
 
-%%%%%%%%%%%%%%
+%% Multiscale P-Value Map
 ax=subplot('Position',[left(5), bottom, width, height]);
 % ax=subplot(s,t,5);
 hold on
@@ -312,8 +306,10 @@ xlabel('# of X Neighbors','FontSize',fontSize,...
     'Units', 'normalized','Position', [-0.010, -0.18], 'HorizontalAlignment', 'left')
 ylabel('# of Y Neighbors','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.18 -0.02], 'HorizontalAlignment', 'left')
-title([{'Multiscale P-Value Map'}],'FontSize',fontSize, ...
-   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+
+tit1=strcat('4', AB ,'. Multiscale P-Value Map');
+title([{tit1}; {'& Optimal Scales'}],'FontSize',fontSize, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 axis('square')
 pos2 = get(ax,'position');
 pos2(3:4) = [pos(3:4)];

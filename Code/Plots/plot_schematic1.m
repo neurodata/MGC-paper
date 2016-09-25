@@ -86,7 +86,7 @@ if type>5
 [I,J]=ind2sub([n,n],find(C_MGC>0.1,1,'first'));
 J2=find(mcorrH(J,:)<0,1,'last');
 else
-    I=1;J=5;J2=20;
+    I=2;J=4;J2=n;
 end
 id=[I,J,J2,J];
 id2=[1,2,3,2];

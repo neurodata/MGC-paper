@@ -35,7 +35,7 @@ end
 
 fontSize=15;
 mkSize=20;
-fontSize2=18;
+fontSize2=25;
 
 %% plotting parameters
 
@@ -157,9 +157,9 @@ findex=strfind(tname,'.');
 tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
-xlabel('$\|x_i-x_j\|$','FontSize',fontSize2,...
+xlabel('$(x_i-x_j)^2$','FontSize',fontSize2,...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
-ylabel('$\|y_i-y_j\|$','FontSize',fontSize2, ...
+ylabel('$(y_i-y_j)^2$','FontSize',fontSize2, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
 tit1=strcat('1', AB ,'. Pairwise Distances');

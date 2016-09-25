@@ -28,7 +28,7 @@ for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
     subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
+    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     kmin=2;
     thres=0.8;
     % ind=[find(max(power2,[],1)>=thres,1) lim];
@@ -81,7 +81,7 @@ for j=1:total
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
     subplot(s,t,j)
-    titlechar=CorrSimuTitle(j);
+    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     kmin=2;thres=0.5;
     ind=find(max(powerMGCM,[],1)>=thres,1,'last');
     if isempty(ind)

@@ -21,9 +21,7 @@ rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
-fh=figure(1);
-clf
-set(gcf,'units','normalized','position',[0 0 1 1])
+figure('units','normalized','position',[0 0 1 1])
 s=1;t=5;
 try
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
@@ -35,8 +33,8 @@ end
 
 fontSize=15;
 mkSize=20;
-fontSize2=22;
-tfs=22;
+fontSize2=16;
+tfs=16;
 
 %% plotting parameters
 

@@ -123,7 +123,7 @@ if type == 1, AB='A'; else AB='B'; end
 AB='';
 tit1=strcat('0', AB ,'. Sample Data');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
-    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',fontSize);
+    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',fontSize2);
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize2); % Remove x axis tick
 axis('square')
 pos = get(ax,'position');
@@ -158,14 +158,14 @@ tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
 warning('off','all')
-xlabel('$\| x_i-x_j \|$','FontSize',fontSize2+8,...
+xlabel('$(x_i-x_j)^2$','FontSize',fontSize2+8,...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
-ylabel('$\| y_i-y_j \|$','FontSize',fontSize2+8, ...
+ylabel('$(y_i-y_j)^2$','FontSize',fontSize2+8, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
 tit1=strcat('1', AB ,'. Pairwise Distances');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
-    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',fontSize);
+    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',fontSize2);
 set(gca,'XTick',[],'YTick',[],'FontSize',fontSize2); % Remove x axis tick
 %pos=[nan, nan, width, height];
 axis('square')
@@ -211,7 +211,7 @@ ylabel('# of Y Neighbors','FontSize',fontSize2, ...
     'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left')
 
 tit1=strcat('2', AB ,'. Multiscale Correlation Map');
-title([{tit1}; {'& Test Statistic'}],'FontSize',fontSize, ...
+title([{tit1}; {'& Test Statistic'}],'FontSize',fontSize2, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 axis('square')
 pos2 = get(ax,'position');
@@ -282,7 +282,7 @@ ylabel('Density','FontSize',fontSize2, ...
 set(gca,'YTick',[])
 
 tit1=strcat('3', AB ,'. Null Distributions');
-title([{tit1}; {'& P-Values'}],'FontSize',fontSize, ...
+title([{tit1}; {'& P-Values'}],'FontSize',fontSize2, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
 axis('square')
 hold off
@@ -340,7 +340,7 @@ ylabel('# of Y Neighbors','FontSize',fontSize2, ...
     'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left')
 
 tit1=strcat('4', AB ,'. Multiscale P-Value Map');
-title([{tit1}; {'& Optimal Scales'}],'FontSize',fontSize, ...
+title([{tit1}; {'& Optimal Scales'}],'FontSize',fontSize2, ...
    'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 axis('square')
 pos2 = get(ax,'position');

@@ -33,8 +33,8 @@ end
 
 fontSize=15;
 mkSize=20;
-fontSize2=16;
-tfs=16;
+fontSize2=18;
+tfs=18;
 
 %% plotting parameters
 

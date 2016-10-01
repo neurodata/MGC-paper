@@ -157,9 +157,9 @@ tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
 warning('off','all')
-xlabel('$(x_i-x_j)^2$','FontSize',fontSize2+8,...
+xlabel('${Distance}_x(x_i,x_j)$','FontSize',fontSize2+8,...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
-ylabel('$(y_i-y_j)^2$','FontSize',fontSize2+8, ...
+ylabel('$Distance_y(y_i,y_j)$','FontSize',fontSize2+8, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
 tit1=strcat('1', AB ,'. Pairwise Distances');
@@ -350,7 +350,7 @@ set(h,'FontSize',fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0],
 
 %
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=1;
+donzo=0;
 if donzo==1
     F.fname=strcat(pre2, 'Fig',num2str(type));
 else

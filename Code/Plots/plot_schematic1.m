@@ -31,7 +31,7 @@ catch
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
 end
 
-fontSize=15;
+fontSize=18;
 mkSize=20;
 fontSize2=18;
 tfs=18;
@@ -80,14 +80,14 @@ hold all
 set(groot,'defaultAxesColorOrder',map2);
 plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
 if type==1 && noise==1
-xlabel('Cloud Shape','FontSize',fontSize2,...
-    'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left')
-ylabel('Ground Wetness','FontSize',fontSize2, ...
+xlabel('Cloud Shape','FontSize',fontSize,...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left')
+ylabel('Ground Wetness','FontSize',fontSize, ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
 else
-xlabel('$x$','FontSize',fontSize2+8,'Interpreter','latex',...
-    'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left')
-ylabel('$y$','FontSize',fontSize2+8,'Interpreter','latex', ...
+xlabel('$x$','FontSize',fontSize2+6,'Interpreter','latex',...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left')
+ylabel('$y$','FontSize',fontSize2+6,'Interpreter','latex', ...
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
 end
 
@@ -108,7 +108,7 @@ end
 hs=2/100*(max(x)-min(x));
 
 for ind=[1,2,3]; %length(id)
-    text(x(id(ind))+hs,y(id(ind))+hy(ind),num2str(ind),'fontsize',fontSize2,'color',col)
+    text(x(id(ind))+hs,y(id(ind))+hy(ind),num2str(ind),'fontsize',fontSize,'color',col)
     plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
 end
 
@@ -123,7 +123,7 @@ AB='';
 tit1=strcat('0', AB ,'. Sample Data');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',tfs);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize2); % Remove x axis tick
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 axis('square')
 pos = get(ax,'position');
 
@@ -144,10 +144,10 @@ plot(x(ind1==1),y(ind1==1),'+','MarkerSize',4,'Color',loca);
 
 x12=sub2ind([n,n], id(1),id(2));
 x23=sub2ind([n,n], id(2),id(3));
-text(x(x12)+hs,y(x12)+hy(1),'(1, 2)','fontsize',fontSize2,'color',col)
+text(x(x12)+hs,y(x12)+hy(1),'(1, 2)','fontsize',fontSize,'color',col)
 plot(x(x12),y(x12),'.','MarkerSize',mkSize/2,'Color',col);
 
-text(x(x23)+hs,y(x23)+hy(1),'(2, 3)','fontsize',fontSize2,'color',col)
+text(x(x23)+hs,y(x23)+hy(1),'(2, 3)','fontsize',fontSize,'color',col)
 plot(x(x23),y(x23),'.','MarkerSize',mkSize/2,'Color',col);
 hold off
 
@@ -157,15 +157,21 @@ tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
 warning('off','all')
+<<<<<<< HEAD
 xlabel('${Distance}_x(x_i,x_j)$','FontSize',fontSize2+8,...
     'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
 ylabel('$Distance_y(y_i,y_j)$','FontSize',fontSize2+8, ...
+=======
+xlabel('Distance$$_{x}(x_i,x_j)$$','FontSize',fontSize2+4,...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
+ylabel('Distance$$_{y}(y_i,y_j)$$','FontSize',fontSize2+4, ...
+>>>>>>> 8b4c1eadc4187cf8228c1a7239f9eb6d21a2e6f1
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
 tit1=strcat('1', AB ,'. Pairwise Distances');
 title([{tit1}; {' '}], 'Units', 'normalized', ...
     'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',tfs);
-set(gca,'XTick',[],'YTick',[],'FontSize',fontSize2); % Remove x axis tick
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 %pos=[nan, nan, width, height];
 axis('square')
 pos2 = get(ax,'position');
@@ -186,7 +192,7 @@ imagesc(ph);
 plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')  
 hold off
 
-set(gca,'FontSize',fontSize2)
+set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(cmap)
@@ -194,7 +200,7 @@ colormap(cmap)
 hm=ceil(prctile(ph(ph<1),99)*100)/100;
 caxis([0 hm])
 h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-set(h,'FontSize',fontSize2);
+set(h,'FontSize',fontSize);
 axpos = ax.Position;
 hpos=h.Position;
 hpos(3)=0.5*hpos(3);
@@ -203,11 +209,11 @@ h.Position=hpos;
 ax.Position = axpos;
 xlim([1 n-1]);
 ylim([1 n-1]);
-set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize2);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
 xlabel('X Scales','FontSize',fontSize2,...
-    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
 ylabel('Y Scales','FontSize',fontSize2, ...
-    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left')
+    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
 
 tit1=strcat('2', AB ,'. Multiscale Correlation');
 title([{tit1}; {'Map & Test Statistic'}],'FontSize',tfs, ...
@@ -237,7 +243,7 @@ plot(xi,f,'.-','LineWidth',4,'Color',glob);
 plot(xi2,f2,'.-','LineWidth',4,'Color',mgc);
 % legend('Mcorr','OMGC','SMGC','Location','East');
 % legend boxoff
-set(gca,'FontSize',fontSize2);
+set(gca,'FontSize',fontSize);
 x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
 x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
@@ -253,13 +259,13 @@ txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
 % txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
 txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
 c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
-set(c,'FontSize',fontSize2);
+set(c,'FontSize',fontSize);
 % b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
 % set(b,'FontSize',fontSize2);
 set(gca,'XTick',x3+0.1,'TickLength',[0 0],'XTickLabel',x3);
 % if abs(x1-x3)>0.02 
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
-set(a,'FontSize',fontSize2);
+set(a,'FontSize',fontSize);
  if abs(x1-x3)>0.02 
 set(gca,'XTick',sort([x3+0.05,x1+0.05]),'TickLength',[0 0],'XTickLabel',sort([x3,x1]));
 end
@@ -267,17 +273,17 @@ end
 % set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
 % end
 a = get(gca,'XTickLabel');
-set(gca,'XTickLabel',a,'FontSize',fontSize2);
+set(gca,'XTickLabel',a,'FontSize',fontSize);
 ylim([0 y1+10]);
 
-xlim([minp,min(maxp+0.05,1)]);
+xlim([minp,min(maxp+0.1,1)]);
 if type<5
-    xlim([minp,min(maxp+0.3,1)]);
+    xlim([minp,min(maxp+0.4,1)]);
 end
 xlabel('Test Statistic','FontSize',fontSize2,...
-    'Units', 'normalized','Position', [-0.01, -0.20], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.01, -0.20], 'HorizontalAlignment', 'left');
 ylabel('Density','FontSize',fontSize2, ...
-    'Units', 'normalized', 'Position', [-0.10, 0], 'HorizontalAlignment', 'left')
+    'Units', 'normalized', 'Position', [-0.10, 0], 'HorizontalAlignment', 'left');
 set(gca,'YTick',[])
 
 tit1=strcat('3', AB ,'. Null Distributions');
@@ -315,7 +321,7 @@ ylim([2,n]);
 %     imagesc(k,l,1);
 hold off
 
-set(gca,'FontSize',fontSize2)
+set(gca,'FontSize',fontSize)
 set(gca,'YDir','normal')
 cmap=map4;
 colormap(ax,flipud(cmap));
@@ -323,7 +329,7 @@ colormap(ax,flipud(cmap));
 % caxis([0 1]);
 cticks=[0.001, 0.01, 0.1, 0.5];
 h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','eastoutside');
-set(h,'FontSize',fontSize2);
+set(h,'FontSize',fontSize);
 axpos = ax.Position;
 hpos=h.Position;
 hpos(3)=0.5*hpos(3);
@@ -332,11 +338,11 @@ h.Position=hpos;
 ax.Position = axpos;
 xlim([1 n-1]);
 ylim([1 n-1]);
-set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize2);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
 xlabel('X Scales','FontSize',fontSize2,...
-    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
 ylabel('Y Scales','FontSize',fontSize2, ...
-    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left')
+    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
 
 tit1=strcat('4', AB ,'. Multiscale P-Value');
 title([{tit1}; {'Map & Optimal Scales'}],'FontSize',tfs, ...

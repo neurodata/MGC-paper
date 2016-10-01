@@ -157,15 +157,9 @@ tname=tname(findex+1:end);
 xlim([min(x), max(x)]);
 ylim([min(y), max(y)]);
 warning('off','all')
-<<<<<<< HEAD
-xlabel('${Distance}_x(x_i,x_j)$','FontSize',fontSize2+8,...
-    'Units', 'normalized','Position', [-0.01, -0.06], 'HorizontalAlignment', 'left','Interpreter','latex');
-ylabel('$Distance_y(y_i,y_j)$','FontSize',fontSize2+8, ...
-=======
 xlabel('Distance$$_{x}(x_i,x_j)$$','FontSize',fontSize2+4,...
     'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
 ylabel('Distance$$_{y}(y_i,y_j)$$','FontSize',fontSize2+4, ...
->>>>>>> 8b4c1eadc4187cf8228c1a7239f9eb6d21a2e6f1
     'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
 
 tit1=strcat('1', AB ,'. Pairwise Distances');

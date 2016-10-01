@@ -27,14 +27,14 @@ for i=type
             dim=1000;
         case {5,6,7,15,11,16,17,8}
             dim=20;
-        case {4,12,13,18}
+        case {4,12,13,19}
             dim=10;
-        case {14,19}
+        case {14,18}
             dim=40;
         case {10,9,20}
             dim=100;
     end
-    if i==4 ||i==12||i==13||i==19
+    if dim<20
         lim=10;
     else
         lim=20;

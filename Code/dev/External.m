@@ -158,7 +158,7 @@ thres=0.5;dim=2;rep1=100;rep2=200;noise=0;type=11:20;
 clear
 load('BrainCP')
 n=42; rep=1000;
-MGCPermutationTest(distC,distP,rep,2);
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(distC,distP,rep);
 % mean(p1(neighbor1))
 % mean(p2(neighbor2))
 
@@ -167,7 +167,7 @@ clear
 load('semipar')
 n=109;rep=1000;
 distCCI=squareform(pdist(cci));
-MGCPermutationTest(distMigrain(ind,ind),distCCI(ind,ind),rep,2);
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(distMigrain(ind,ind),distCCI(ind,ind),rep);
 %MGCPermutationTest(distM2g(ind,ind),distCCI(ind,ind),rep,2);
 %MGCPermutationTest(distM2g(ind,ind),distMigrain(ind,ind),rep,2);
 
@@ -185,9 +185,9 @@ end
 % y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];
-p1=MGCPermutationTest(LMLS,y,rep,2);
-p2=MGCPermutationTest(LMRS,y,rep,2);
-%MGCPermutationTest(LMLS,LMRS,rep,'BrainLMLxLMR');
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(LMLS,y,rep);
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(LMRS,y,rep);
+%MGCPermutationTest(LMLS,LMRS,rep,'BrainLMLxLMR')
 %%%ind trial
 rep1=200;rep2=200;powerL=zeros(7,1);powerR=zeros(7,1);
 for i=1:rep2;

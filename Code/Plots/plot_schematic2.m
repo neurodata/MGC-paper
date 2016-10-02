@@ -134,6 +134,8 @@ for type=1:total
     ylim(b);
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
+     set(gca,'xcolor',[1 1 1])
+      set(gca,'ycolor',[1 1 1])
     ylabel(CorrSimuTitle(type),'FontSize',14);%,...
     %'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
     hold off
@@ -159,7 +161,7 @@ for type=1:total
     set(gca,'XTick',[],'YTick',[-cc,cc]); % Remove x axis ticks
 %     set(gca,'box','off','ycolor','w','xcolor','w')
 end
-h=suptitle('Simulated Example for 20 Dependencies');
+h=suptitle('MGC for 20 Dependencies');
 set(h,'FontSize',24,'FontWeight','normal');
 
 F.fname=[strcat(pre2, 'SimVisual2')];

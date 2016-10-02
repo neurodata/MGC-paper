@@ -134,7 +134,7 @@ RC=DistRanks(C);
 RD=DistRanks(D)';
 RC=(RC<=k);
 RD=(RD<=l);
-R2=RC&RD&(C_MGC>=0);
+R2=RC&RD;%&(C_MGC>=0);
 
 regressionLine=1;
 if regressionLine==1

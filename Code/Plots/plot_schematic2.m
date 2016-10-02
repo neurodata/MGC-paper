@@ -40,11 +40,36 @@ cmap(1,:) = gr;
 map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
+height=0.17; %18; %21;
+width=0.17; %17;
+hspace=0.03;
+vspace=0.05;
+for i=1:5
+    left(i)=0+(i-1)*(width+hspace);
+end
+for i=1:4
+    bottom(i)=0.70-(i-1)*(width+vspace);
+end
+
+height2=0.06; %18; %21;
+width2=0.03; %17;
+hspace2=0.02;
+vspace2=0.05;
+for i=1:5
+    left2(i)=left(i)+width;
+end
+for i=1:4
+    bottom2(i)=bottom(i)+0.1;
+end
+% left(1)=0.025;
+% bottom=0.3;
+
 sz=12;
 for type=1:total
-    subplot(s,t,type);
+    %subplot(s,t,type);
+    ax=subplot('Position',[left(type-(ceil(type/5)-1)*5), bottom(ceil(type/5)), width, height]);
     %titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
-    [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0.1);
+    [x1, y1]=CorrSampleGenerator(type,n,dim,1, 0.2);
     %[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
     statCor=corr(x1,y1);
     C=squareform(pdist(x1));D=squareform(pdist(y1));
@@ -54,7 +79,7 @@ for type=1:total
     statCor=round(statCor*1000)/1000;
     statDcor=round(statDcor*1000)/1000;
     statMGC=round(statMGC*1000)/1000;
-    titlechar=strcat('\color[rgb]{.1 .1 .1}',num2str(statCor),', \color[rgb]{.5 .5 .5}',num2str(statDcor),', \color[rgb]{0 1 0}',num2str(statMGC));
+    %titlechar=strcat('\color[rgb]{.1 .1 .1}',num2str(statCor),', \color[rgb]{.5 .5 .5}',num2str(statDcor),', \color[rgb]{0 1 0}',num2str(statMGC));
     sz2=8;
     hold on
     plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);
@@ -109,11 +134,25 @@ for type=1:total
     ylim(b);
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
-    ylabel(CorrSimuTitle(type),'FontSize',14);%,...
+    %ylabel(CorrSimuTitle(type),'FontSize',14);%,...
     %'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
     hold off
-    title(titlechar,'FontSize',16,'Interpreter','tex');
+    title(CorrSimuTitle(type),'FontSize',16);%,'Interpreter','tex');
     axis('square');
+    
+    ax=subplot('Position',[left2(type-(ceil(type/5)-1)*5), bottom2(ceil(type/5)), width2, height2]);
+    hold on
+    bar(1,statCor,'FaceColor',pear);
+    bar(2,statDcor,'FaceColor',glob);
+    bar(3,statMGC,'FaceColor',loca);
+
+    hold off
+    stat=[statCor, statDcor, statMGC];
+%     bar(stat);
+    cc=max(max(stat),abs(min(stat)));
+    ylim([-cc,cc]);
+    xlim([0,4]);
+    set(gca,'XTick',[],'YTick',[-cc,cc]); % Remove x axis ticks
 %     set(gca,'box','off','ycolor','w','xcolor','w')
 end
 h=suptitle('Simulated Example for 20 Dependencies');

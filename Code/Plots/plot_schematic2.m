@@ -69,16 +69,16 @@ for type=1:total
     %subplot(s,t,type);
     ax=subplot('Position',[left(type-(ceil(type/5)-1)*5), bottom(ceil(type/5)), width, height]);
     %titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
-    [x1, y1]=CorrSampleGenerator(type,n,dim,1, 0.2);
+    [x1, y1]=CorrSampleGenerator(type,2*n,dim,1, 0.2);
     %[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
     statCor=corr(x1,y1);
     C=squareform(pdist(x1));D=squareform(pdist(y1));
     statMGC=MGCSampleStat(C,D,'mcorDouble');
     A=DistCentering(C,'mcorDouble');B=DistCentering(D,'mcorDouble');
     statDcor=sum(sum(A.*B))/sqrt(sum(sum(A.*A)*sum(sum(B.*B))));
-    statCor=round(statCor*1000)/1000;
-    statDcor=round(statDcor*1000)/1000;
-    statMGC=round(statMGC*1000)/1000;
+    statCor=round(statCor*100)/100;
+    statDcor=round(statDcor*100)/100;
+    statMGC=round(statMGC*100)/100;
     %titlechar=strcat('\color[rgb]{.1 .1 .1}',num2str(statCor),', \color[rgb]{.5 .5 .5}',num2str(statDcor),', \color[rgb]{0 1 0}',num2str(statMGC));
     sz2=8;
     hold on
@@ -134,10 +134,13 @@ for type=1:total
     ylim(b);
     set(gca,'XTick',[]); % Remove x axis ticks
     set(gca,'YTick',[]); % Remove y axis ticks
-    %ylabel(CorrSimuTitle(type),'FontSize',14);%,...
+    ylabel(CorrSimuTitle(type),'FontSize',14);%,...
     %'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
     hold off
-    title(CorrSimuTitle(type),'FontSize',16);%,'Interpreter','tex');
+    %title(CorrSimuTitle(type),'FontSize',16);%,'Interpreter','tex');
+    %titlechar=CorrSimuTitle(type);
+    titlechar=strcat('\color[rgb]{0 1 0}',num2str(statMGC));
+    title(titlechar,'FontSize',16,'Interpreter','tex');%,'Color',loca);
     axis('square');
     
     ax=subplot('Position',[left2(type-(ceil(type/5)-1)*5), bottom2(ceil(type/5)), width2, height2]);
@@ -149,9 +152,10 @@ for type=1:total
     hold off
     stat=[statCor, statDcor, statMGC];
 %     bar(stat);
-    cc=max(max(stat),abs(min(stat)));
+    cc=ceil(max(max(stat),abs(min(stat)))*10)/10;
     ylim([-cc,cc]);
     xlim([0,4]);
+     set(gca,'xcolor',[1 1 1])
     set(gca,'XTick',[],'YTick',[-cc,cc]); % Remove x axis ticks
 %     set(gca,'box','off','ycolor','w','xcolor','w')
 end

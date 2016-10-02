@@ -132,43 +132,57 @@ C2=reshape(C,n^2,1);
 D2=reshape(D,n^2,1);
 RC=DistRanks(C);
 RD=DistRanks(D)';
-RC=(RC<=Xmax+1);
-RD=(RD<=Ymax+1);
-R2=RC&RD;%&(C_MGC>=0);
+RC=(RC<=k);
+RD=(RD<=l);
+R2=RC&RD&(C_MGC>=0);
 
 regressionLine=1;
 if regressionLine==1
     group=zeros(n,1); % group info for piecewise linear regression
     yest=zeros(n,1); % estimated y by regression
     count=0;
+    %     for i=1:n
+    %         %if group(i)==0
+    %         tmp=find(R2(:,i)==1)';
+    %         tmp=[tmp i];
+    %         %end
+    %         tmp2=min(group(tmp));
+    %         if tmp2==0
+    %             count=count+1;
+    %             group(tmp)=count;
+    %         else
+    %             group(tmp)=tmp2;
+    %         end
+    %     end
+    %     for i=1:count
+    %         tmp=find(group==i);
+    %         %     if length(tmp)>1
+    %         tmp2=[ones(length(tmp),1) x(tmp)];
+    %         beta=tmp2 \ y(tmp);
+    %         yest(tmp)=tmp2*beta;
+    %         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
+    %         %     end
+    %     end
+    % plot(x,yest,'-','Color',loca,'linewidth',3);
     for i=1:n
         %if group(i)==0
         tmp=find(R2(:,i)==1)';
         tmp=[tmp i];
         %end
-        tmp2=min(group(tmp));
-        if tmp2==0
-            count=count+1;
-            group(tmp)=count;
-        else
-            group(tmp)=tmp2;
-        end
-    end
-    for i=1:count
-        tmp=find(group==i);
-        %     if length(tmp)>1
         tmp2=[ones(length(tmp),1) x(tmp)];
         beta=tmp2 \ y(tmp);
         yest(tmp)=tmp2*beta;
         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
-        %     end
     end
-    % plot(x,yest,'-','Color',loca,'linewidth',3);
 end
 
 %%  Pairwise Distances
 ax=subplot('Position',[left(2), bottom, width, height]);
 % ax=subplot(s,t,2);
+RC=DistRanks(C);
+RD=DistRanks(D)';
+RC=(RC<=Xmax+1);
+RD=(RD<=Ymax+1);
 ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',map2);

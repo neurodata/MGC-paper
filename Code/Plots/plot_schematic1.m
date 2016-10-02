@@ -127,35 +127,68 @@ set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
 axis('square')
 pos = get(ax,'position');
 
-%%  Pairwise Distances
-ax=subplot('Position',[left(2), bottom, width, height]);
-% ax=subplot(s,t,2);
-x=reshape(C,n^2,1);
-y=reshape(D,n^2,1);
+%%%%% Regression line trial
+C2=reshape(C,n^2,1);
+D2=reshape(D,n^2,1);
 RC=DistRanks(C);
 RD=DistRanks(D)';
 RC=(RC<=Xmax+1);
 RD=(RD<=Ymax+1);
+R2=RC&RD;%&(C_MGC>=0);
+
+regressionLine=1;
+if regressionLine==1
+    group=zeros(n,1); % group info for piecewise linear regression
+    yest=zeros(n,1); % estimated y by regression
+    count=0;
+    for i=1:n
+        %if group(i)==0
+        tmp=find(R2(:,i)==1)';
+        tmp=[tmp i];
+        %end
+        tmp2=min(group(tmp));
+        if tmp2==0
+            count=count+1;
+            group(tmp)=count;
+        else
+            group(tmp)=tmp2;
+        end
+    end
+    for i=1:count
+        tmp=find(group==i);
+        %     if length(tmp)>1
+        tmp2=[ones(length(tmp),1) x(tmp)];
+        beta=tmp2 \ y(tmp);
+        yest(tmp)=tmp2*beta;
+        plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
+        %     end
+    end
+    % plot(x,yest,'-','Color',loca,'linewidth',3);
+end
+
+%%  Pairwise Distances
+ax=subplot('Position',[left(2), bottom, width, height]);
+% ax=subplot(s,t,2);
 ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',map2);
-plot(x(ind1==0),y(ind1==0),'.','MarkerSize',6,'Color',gray);
-plot(x(ind1==1),y(ind1==1),'+','MarkerSize',4,'Color',loca);
+plot(C2(ind1==0),D2(ind1==0),'.','MarkerSize',6,'Color',gray);
+plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',loca);
 
 x12=sub2ind([n,n], id(1),id(2));
 x23=sub2ind([n,n], id(2),id(3));
-text(x(x12)+hs,y(x12)+hy(1),'(1, 2)','fontsize',fontSize,'color',col)
-plot(x(x12),y(x12),'.','MarkerSize',mkSize/2,'Color',col);
+text(C2(x12)+hs,D2(x12)+hy(1),'(1, 2)','fontsize',fontSize,'color',col)
+plot(C2(x12),D2(x12),'.','MarkerSize',mkSize/2,'Color',col);
 
-text(x(x23)+hs,y(x23)+hy(1),'(2, 3)','fontsize',fontSize,'color',col)
-plot(x(x23),y(x23),'.','MarkerSize',mkSize/2,'Color',col);
+text(C2(x23)+hs,D2(x23)+hy(1),'(2, 3)','fontsize',fontSize,'color',col)
+plot(C2(x23),D2(x23),'.','MarkerSize',mkSize/2,'Color',col);
 hold off
 
 tname=CorrSimuTitle(type);
 findex=strfind(tname,'.');
 tname=tname(findex+1:end);
-xlim([min(x), max(x)]);
-ylim([min(y), max(y)]);
+xlim([min(C2), max(C2)]);
+ylim([min(D2), max(D2)]);
 warning('off','all')
 xlabel('Distance$$_{x}(x_i,x_j)$$','FontSize',fontSize2+4,...
     'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');

@@ -174,6 +174,10 @@ if regressionLine==1
         yest(tmp)=tmp2*beta;
         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
     end
+    tmp2=[ones(length(x),1) x];
+    beta=tmp2 \ y;
+    yest=tmp2*beta;
+    plot(x,yest,':','Color','k','linewidth',3);
 end
 
 %%  Pairwise Distances

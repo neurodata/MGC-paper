@@ -7,15 +7,16 @@ MGCSampleStat <- function(A,B,option){
   # This function estimate the Oracle MGC (i.e., optimal local correlation)
   # from the local correlation map, which we call sample MGC statistic.
   #
-  # It finds a sufficiently large region in the correlation map, such that
-  # all correlations within the region are significantly large and
-  # monotonically changing. Then a relatively large correlation in the region
-  # is used as sample MGC. If no such region exists, use the global
-  # correlation instead.
+  # It finds the largest connected region in the correlation map, such that
+  # each correlation is significant, i.e., larger than certain threshold.
+  # To avoid correlation inflation by sample noise, it then computes Sample MGC as follows:
+  # for the largest correlation in the region, calcualte the two minimal correlations
+  # along adjacent row scales and adjacent column scales, then take the larger one as the Sample MGC.
+  # If the region area is too small, or the estimated Sample MGC is no larger than the global, use the global correlation instead.
   #
-  # Input: either a size m*n local correlation map, or two n*n distance matrices A and B.
+  # Input: either a size m*n local correlation map, or two n*n distance matrices A and B and the global corr option.
   # Output: the sample MGC statistic within [-1,1].
-  if (missing(B) || missing(option)){
+  if (missing(B) && missing(option)){
     localCorr=A; # if there is only one input, asume the localCorr is given as A
   } else {
     localCorr=MGCLocalCorr(A,B,option)$corr; # otherwise compute the localCorr from given distance matrices
@@ -30,20 +31,18 @@ MGCSampleStat <- function(A,B,option){
   if (is.na(eps) || eps<0.01){
     eps=0.01;
   }
-  eps=thres*eps; # threshold for significantly large correlation
+  eps=thres*eps; # estimate the threshold based on negative correlations
   
-  R=(localCorr>eps); # find a region with significantly large correlation
-  if (sum(R)>0){
-     R=ConnCompLabel(R==1);
-  }
+  R=(localCorr>eps); # find all correlations that are larger than the threshold
+  # find the largest connected component of all significant correlations
+ # if (sum(R)>0){
+  #   R=ConnCompLabel(R==1);
+  #}
   
-  thres=3/max(m,n,30); # threshold for sufficiently large region
+  thres=min(thres/min(m,n),0.1); # threshold to check whether the significant region is large enough
   statMGC=localCorr[m,n]; # take global correlation by default
 
-  if (mean(R)>=thres){
-    #R=Monotone(localCorr,R); # put monotonically changing restriction to reduce the region R
-  
-    #if (mean(R)>0){
+  if (mean(R)>=thres){ # proceed only when the region area is sufficiently large
       ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
@@ -62,46 +61,11 @@ MGCSampleStat <- function(A,B,option){
         
         tmp1=min(localCorr[upper:down,li]); # minimal correlation at given row and adjacent columns
         tmp2=min(localCorr[ki,left:right]); # minimal correlation at given column and adjacent rows
-        tmp=max(tmp1,tmp2); # take the max of the minimal correlations, which should be relatively large but does not inflate much over the true optimal statistic
+        tmp=max(tmp1,tmp2); # take the max of the two minimal correlations
         if (tmp>statMGC){
           statMGC=tmp; 
         }
       }
-    #}
   }
   return(statMGC);
-}
-
-Monotone <- function(localCorr,R){
-  # An auxiliary function that computes regions in R with monotonically increasing
-  # or decreasing correlations along the row or column
-  m=nrow(localCorr);
-  n=ncol(localCorr);
-  
-  PD1=matrix(0,m,n);
-  PD2=matrix(0,m,n);
-  for (i in (2:m)){
-    tt=localCorr[i,];
-    PD1[i,2:n]=diff(tt); # store the p-value changes within rows
-  }
-  for (i in (2:n)){
-    tt=localCorr[,i];
-    PD2[2:m,i]=diff(tt); # store the p-value changes within columns
-  }
-  
-  R2=list(matrix(0,m,n),matrix(0,m,n),matrix(0,m,n),matrix(0,m,n));
-  R2[[1]]=(PD1>=0)&R; # monotonically increasing along the row within R
-  R2[[2]]=(PD1<=0)&R; # monotonically decreasing along the row within R
-  R2[[3]]=(PD2>=0)&R; # monotonically increasing along the column within R
-  R2[[4]]=(PD2<=0)&R; # monotonically decreasing along the column within R
-  R=as.logical(matrix(0,m,n));
-  
-  for (i in (1:4)){
-    t=sum(R2[[i]]);
-    if (t>0){
-      t=ConnCompLabel(R2[[i]]); # connected component of each region 
-      R= (R | t); # combine all monotonically changing and significant regions
-    }
-    return(R)
-  }
 }

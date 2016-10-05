@@ -14,6 +14,7 @@ noise=0;
 if type==1
     noise=0.5;
 end
+dim=1;
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -24,11 +25,11 @@ addpath(genpath(strcat(rootDir,'Code/')));
 figure('units','normalized','position',[0 0 1 1])
 s=1;t=5;
 try
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 catch
     display('no file exist, running instead')
-    run_fig1Data(type,n,noise);
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
+    run_fig1Data(type,n,dim,noise);
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 end
 
 fontSize=18;

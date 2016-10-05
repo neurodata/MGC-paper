@@ -1,4 +1,4 @@
-function run_fig1Data(type,n,noise,rep)
+function run_fig1Data(type,n,dim,noise,rep)
 % generate data for figure 1
 %%% File path searching
 if nargin<1
@@ -8,9 +8,12 @@ if nargin<2
     n=50;
 end
 if nargin<3
-    noise=0;
+    dim=1;
 end
 if nargin<4
+    noise=0;
+end
+if nargin<5
     rep=1000;
 end
 fpath = mfilename('fullpath');
@@ -22,7 +25,7 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 %type=11;
 %n=50;
-dim=1;
+% dim=1;
 %noise=0;
 
 % optimal scale
@@ -129,4 +132,4 @@ B_MGC(RD)=0;
 %B_MGC(1:n+1:n^2)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat'),'tA','tN','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat'),'tA','tN','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD');

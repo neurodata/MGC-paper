@@ -17,6 +17,7 @@ end
 if nargin<4
     noise=0;
 end
+dim=1;
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -25,14 +26,14 @@ strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
 if newSim==1
-    run_fig1Data(type,n,noise);
+    run_fig1Data(type,n,dim,noise);
 end
 try
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 catch
     display('no file exist, running instead')
-    run_fig1Data(type,n,noise);
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'.mat')); % The folder to locate data
+    run_fig1Data(type,n,dim,noise);
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 end
 
 fontSize=18;

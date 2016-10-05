@@ -45,5 +45,7 @@ mantel=mantel(as.dist(C)~as.dist(P),nperm=1000);
 hhgr=hhg.test(C,P,nr.perm=1000);
 
 ### Permutation Test of local corr
+source("MGCSampleStat.R")
+test=MGCSampleStat(C,P)
 source("MGCPermutationTest.R")
 test=MGCPermutationTest(C,P,rep=1000,option='mcor')

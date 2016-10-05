@@ -1,171 +1,442 @@
-function []=plot_schematic2
-% Author: Cencheng Shen
-% CorrVisualPlots()
-% CorrVisualPlots(100,2)
-% Used to plot figure 0 in the files
+function []=plot_schematic2(type,dim)
 
-%%% File path searching
+% type=1;n=50;dim=1;noise=1;
+% CorrSimPlotsA(type,n,dim,noise,pre1);
+% Used to generate figure A in the files
+
+%% % File path searching
+if nargin<1
+    type=1;
+end
+if nargin<2
+    dim=1;
+end
+
+n=50;
+noise=0;
+if type==1
+    noise=0.5;
+end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
-pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
-% if nargin<1
-    n=100;
-% end
-% if nargin<2
-    dim=1;
-% end
-% if nargin<3
-    noise=1;
-% end
-
-total=20;
 figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-if dim>1
-    noise=0;
+s=1;t=5;
+try
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
+catch
+    display('no file exist, running instead')
+    run_fig1Data(type,n,dim,noise);
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 end
+
+fontSize=18;
+mkSize=20;
+fontSize2=18;
+tfs=18;
+
+%% plotting parameters
+
+cmap=zeros(2,3);
+gray = [0.5,0.5,0.5];
+black=[0,0,0];
+map2 = brewermap(128,'PiYG'); % brewmap
+map3 = map2(size(map2,1)/2+1:end,:);
+% map3 = brewermap(128,'Greens'); % brewmap
+map4 = brewermap(128,'GnBu'); % brewmap
+gr=map2(120,:);
+pu=map2(8,:);
 loca=[0,1,0];
 glob=[0.5,0.5,0.5];
-pear=[0.2,0.2,0.2];
-
-cmap=zeros(3,3);
-gr = [0.5,0.5,0.5];
-cmap(1,:) = gr;
+mgc='Cyan';
+mgc=loca;
+cmap(1,:) = pu;
+cmap(2,:) = gr;
 map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
-height=0.17; %18; %21;
-width=0.17; %17;
-hspace=0.03;
-vspace=0.05;
-for i=1:5
-    left(i)=0+(i-1)*(width+hspace);
+height=0.35; %18; %21;
+width=0.16; %17;
+hspace=0.04;
+vspace=0.09;
+for i=1:6
+    left(i)=0.01+(i-1)*(width+hspace);
 end
-for i=1:4
-    bottom(i)=0.70-(i-1)*(width+vspace);
+left(1)=0.025;
+bottom=0.3;
+
+% optimal scales
+indP=optimalInd;
+[J,I]=ind2sub(size(pMLocal),indP);
+Ymin=min(I)-1;
+Ymax=max(I)-1;
+Xmin=min(J)-1;
+Xmax=max(J)-1;
+%%  Col 1
+if dim>1
+[x,y]=canoncorr(x',y');
+x=x(:,1);y=y(:,1);
+end
+% ax=subplot(s,t,1);
+ax=subplot('Position',[left(1), bottom, width, height]);
+hold all
+set(groot,'defaultAxesColorOrder',map2);
+plot(x,y,'.','MarkerSize',mkSize,'Color',gray);
+if type==1 && noise==1
+xlabel('Cloud Shape','FontSize',fontSize,...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left')
+ylabel('Ground Wetness','FontSize',fontSize, ...
+    'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
+else
+xlabel('$x$','FontSize',fontSize2+6,'Interpreter','latex',...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left')
+ylabel('$y$','FontSize',fontSize2+6,'Interpreter','latex', ...
+    'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
 end
 
-height2=0.06; %18; %21;
-width2=0.03; %17;
-hspace2=0.02;
-vspace2=0.05;
-for i=1:5
-    left2(i)=left(i)+width;
+if type>5
+[I,J]=ind2sub([n,n],find(C_MGC>0.1,1,'first'));
+J2=find(mcorrH(J,:)<0,1,'last');
+else
+    I=2;J=4;J2=n;
 end
-for i=1:4
-    bottom2(i)=bottom(i)+0.1;
+id=[I,J,J2,J];
+id2=[1,2,3,2];
+col=[0 0 0];
+if abs(y(id(1))-y(id(2)))/(max(y)-min(y))<0.02
+hy=[+5,-5,0]/100*(max(y)-min(y));
+else
+    hy=zeros(3,1);
 end
-% left(1)=0.025;
-% bottom=0.3;
+hs=2/100*(max(x)-min(x));
 
-sz=12;
-for type=1:total
-    %subplot(s,t,type);
-    ax=subplot('Position',[left(type-(ceil(type/5)-1)*5), bottom(ceil(type/5)), width, height]);
-    %titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
-    [x1, y1]=CorrSampleGenerator(type,2*n,dim,1, 0.2);
-    %[x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-    statCor=corr(x1,y1);
-    C=squareform(pdist(x1));D=squareform(pdist(y1));
-    statMGC=MGCSampleStat(C,D,'mcorDouble');
-    A=DistCentering(C,'mcorDouble');B=DistCentering(D,'mcorDouble');
-    statDcor=sum(sum(A.*B))/sqrt(sum(sum(A.*A)*sum(sum(B.*B))));
-    statCor=round(abs(statCor)*100)/100;
-    statDcor=round(max(statDcor,0)*100)/100;
-    statMGC=round(max(statMGC,0)*100)/100;
-    %titlechar=strcat('\color[rgb]{.1 .1 .1}',num2str(statCor),', \color[rgb]{.5 .5 .5}',num2str(statDcor),', \color[rgb]{0 1 0}',num2str(statMGC));
-    sz2=8;
-    hold on
-    plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);
-    if type==9;
-        plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2*3);
+for ind=[1,2,3]; %length(id)
+    text(x(id(ind))+hs,y(id(ind))+hy(ind),num2str(ind),'fontsize',fontSize,'color',col)
+    plot(x(id(ind)),y(id(ind)),'.','MarkerSize',mkSize,'Color',col);
+end
+
+tname=CorrSimuTitle(type);
+findex=strfind(tname,'.');
+tname=tname(findex+1:end);
+% xlim([min(x)-0.2, max(x)]);
+% ylim([min(y)-0.2, max(y)]);
+
+if type == 1, AB='A'; else AB='B'; end
+AB='';
+tit1=strcat('0', AB ,'. Sample Data');
+title([{tit1}; {' '}], 'Units', 'normalized', ...
+    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',tfs);
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
+axis('square')
+pos = get(ax,'position');
+
+%%%%% Regression line trial
+C2=reshape(C,n^2,1);
+D2=reshape(D,n^2,1);
+RC=DistRanks(C);
+RD=DistRanks(D)';
+RC=(RC<=k);
+RD=(RD<=l);
+R2=RC&RD;%&(C_MGC>=0);
+
+regressionLine=1;
+if regressionLine==1
+    group=zeros(n,1); % group info for piecewise linear regression
+    yest=zeros(n,1); % estimated y by regression
+    count=0;
+    %     for i=1:n
+    %         %if group(i)==0
+    %         tmp=find(R2(:,i)==1)';
+    %         tmp=[tmp i];
+    %         %end
+    %         tmp2=min(group(tmp));
+    %         if tmp2==0
+    %             count=count+1;
+    %             group(tmp)=count;
+    %         else
+    %             group(tmp)=tmp2;
+    %         end
+    %     end
+    %     for i=1:count
+    %         tmp=find(group==i);
+    %         %     if length(tmp)>1
+    %         tmp2=[ones(length(tmp),1) x(tmp)];
+    %         beta=tmp2 \ y(tmp);
+    %         yest(tmp)=tmp2*beta;
+    %         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
+    %         %     end
+    %     end
+    % plot(x,yest,'-','Color',loca,'linewidth',3);
+    for i=1:n
+        %if group(i)==0
+        tmp=find(R2(:,i)==1)';
+        tmp=[tmp i];
+        %end
+        tmp2=[ones(length(tmp),1) x(tmp)];
+        beta=tmp2 \ y(tmp);
+        yest(tmp)=tmp2*beta;
+%         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
     end
-%     plot(x(:,1),y(:,1),'.','MarkerSize',sz);
-    % Specify the axis limit for each type
-    switch type
-        case 1
-            a=[-1,1];b=[-2.5,2.5];
-        case 2
-            a=[0,3];b=[-20,40];
-        case 3
-            a=[-1,1];b=[-250,250];
-        case 4
-            a=[-3,3];b=[-3,3];
-        case 5
-            a=[-1,1];b=[-2.5,2.5];
-        case 6
-            a=[-1,1];b=[-1,2];
-        case 7
-            a=[-1,1];b=[-1,2];
-        case 8
-            a=[-6,6];b=[-6,6];
-        case 9
-            a=[-0.1,1.1];b=[-2,2];
-        case 10
-            a=[-4,4];b=[-15,10];
-        case 11
-            a=[-1,1];b=[0,1.5];
-        case 12
-            a=[-1,1];b=[-2,2];
-        case 13
-            a=[-1,1];b=[-2,2];
-        case 14
-            a=[-2,2];b=[-2,2];
-        case 15
-            a=[-1,1];b=[-1.5,1.5];
-        case 16
-            a=[-1,1];b=[-1,1];
-        case 17
-            a=[-6,6];b=[-2,2];
-        case 18
-            a=[-2,2];b=[-2,2];
-        case 19
-            a=[-3,3];b=[-3,3];
-        case 20
-            a=[-3,3];b=[-3,3];
+    tmp2=[ones(length(x),1) x];
+    beta=tmp2 \ y;
+    yest=tmp2*beta;
+%     plot(x,yest,':','Color','k','linewidth',3);
+end
+
+%%  Pairwise Distances
+ax=subplot('Position',[left(2), bottom, width, height]);
+% ax=subplot(s,t,2);
+RC=DistRanks(C);
+RD=DistRanks(D)';
+RC=(RC<=Xmax+1);
+RD=(RD<=Ymax+1);
+ind1=reshape(RC&RD,n^2,1);
+hold on
+set(groot,'defaultAxesColorOrder',map2);
+plot(C2(ind1==0),D2(ind1==0),'.','MarkerSize',6,'Color',gray);
+plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',loca);
+
+x12=sub2ind([n,n], id(1),id(2));
+x23=sub2ind([n,n], id(2),id(3));
+text(C2(x12)+hs,D2(x12)+hy(1),'(1, 2)','fontsize',fontSize,'color',col)
+plot(C2(x12),D2(x12),'.','MarkerSize',mkSize/2,'Color',col);
+
+text(C2(x23)+hs,D2(x23)+hy(1),'(2, 3)','fontsize',fontSize,'color',col)
+plot(C2(x23),D2(x23),'.','MarkerSize',mkSize/2,'Color',col);
+hold off
+
+tname=CorrSimuTitle(type);
+findex=strfind(tname,'.');
+tname=tname(findex+1:end);
+xlim([min(C2), max(C2)]);
+ylim([min(D2), max(D2)]);
+warning('off','all')
+xlabel('Distance$$_{x}(x_i,x_j)$$','FontSize',fontSize2+4,...
+    'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
+ylabel('Distance$$_{y}(y_i,y_j)$$','FontSize',fontSize2+4, ...
+    'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left','Interpreter','latex');
+
+tit1=strcat('1', AB ,'. Pairwise Distances');
+title([{tit1}; {' '}], 'Units', 'normalized', ...
+    'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',tfs);
+set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
+%pos=[nan, nan, width, height];
+axis('square')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%% Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
+ax=subplot('Position',[left(3), bottom, width, height]);
+
+% ax=subplot(s,t,3);
+hold on
+if regressionLine==1
+    for i=1:n
+        %if group(i)==0
+        tmp=find(R2(:,i)==1)';
+        tmp=[tmp i];
+        %end
+        tmp2=[ones(length(tmp),1) x(tmp)];
+        beta=tmp2 \ y(tmp);
+        yest(tmp)=tmp2*beta;
+        plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
     end
-    xlim(a);
-    ylim(b);
-    set(gca,'XTick',[]); % Remove x axis ticks
-    set(gca,'YTick',[]); % Remove y axis ticks
-     set(gca,'xcolor',[1 1 1])
-      set(gca,'ycolor',[1 1 1])
-    ylabel(CorrSimuTitle(type),'FontSize',14);%,...
-    %'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left','Interpreter','latex');
-    hold off
-    %title(CorrSimuTitle(type),'FontSize',16);%,'Interpreter','tex');
-    %titlechar=CorrSimuTitle(type);
-    titlechar=strcat(CorrSimuTitle(type), ': \color[rgb]{0 1 0}',num2str(statMGC));
-    title(titlechar,'FontSize',16,'Interpreter','tex');%,'Color',loca);
-    axis('square');
+    tmp2=[ones(length(x),1) x];
+    beta=tmp2 \ y;
+    yest=tmp2*beta;
+    plot(x,yest,':','Color',glob,'linewidth',3);
+    set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
+    xlim([min(x)-0.2, max(x)]);
+ylim([min(y)-0.2, max(y)]);
+else
+    set(groot,'defaultAxesColorOrder',map1);
+    kmin=2;
+    ph=tA(kmin:n,kmin:n)';
+    %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
+    % ph(indPower)=2;
+    imagesc(ph);
+    [k,l]=find(tA==test);
+    plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')
     
-    ax=subplot('Position',[left2(type-(ceil(type/5)-1)*5), bottom2(ceil(type/5)), width2, height2]);
-    hold on
-    bar(1,statCor,'FaceColor',pear);
-    bar(2,statDcor,'FaceColor',glob);
-    bar(3,statMGC,'FaceColor',loca);
-
-    hold off
-    stat=[statCor, statDcor, statMGC];
-%     bar(stat);
-%     cc=ceil(max(max(stat),abs(min(stat)))*10)/10;
-%     ylim([-cc,cc]);
-     cc=ceil(max(stat)*10)/10;
-     ylim([0,cc]);
-    xlim([0,4]);
-     set(gca,'xcolor',[1 1 1])
-    set(gca,'XTick',[],'YTick',[0,cc]); % Remove x axis ticks
-%     set(gca,'box','off','ycolor','w','xcolor','w')
+    set(gca,'YDir','normal')
+    cmap=map4;
+    colormap(cmap)
+    % hm=ceil(max(max(ph))*100)/100;
+    hm=ceil(prctile(ph(ph<1),99)*100)/100;
+    caxis([0 hm])
+    h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
+    set(h,'FontSize',fontSize);
+    axpos = ax.Position;
+    hpos=h.Position;
+    hpos(3)=0.5*hpos(3);
+    hpos(1)=hpos(1)+0.015;
+    h.Position=hpos;
+    ax.Position = axpos;
+    xlim([1 n-1]);
+    ylim([1 n-1]);
+    set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
+    xlabel('X Scales','FontSize',fontSize2,...
+        'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
+    ylabel('Y Scales','FontSize',fontSize2, ...
+        'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
+    
+    tit1=strcat('2', AB ,'. Multiscale Correlation');
+    title([{tit1}; {'Map & Test Statistic'}],'FontSize',tfs, ...
+        'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 end
-h=suptitle('MGC for 20 Dependencies');
-set(h,'FontSize',24,'FontWeight','normal');
 
-F.fname=[strcat(pre2, 'SimVisual2')];
-F.wh=[8 5]*2;
+set(gca,'FontSize',fontSize)
+axis('square')
+hold off
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%% Null Distributions
+ax=subplot('Position',[left(4), bottom, width, height]);
+% ax=subplot(s,t,4);
+minp=min([min(tN(:,n,n)),min(tN(:,k,l)),tA(k,l),tN(n,n)]);
+minp=floor(minp*10)/10;
+maxp=max([max(tN(:,n,n)),max(tN(:,k,l)),tA(k,l),tN(n,n)]);
+maxp=ceil(maxp*10)/10;
+p=tN(:,k,l);
+[f1,xi1]=ksdensity(p,'support',[-1,1]);
+p=tN(:,n,n);
+[f,xi]=ksdensity(p,'support',[-1,1]);
+p=testN;
+[f2,xi2]=ksdensity(p,'support',[-1,1]);
+
+hold on
+plot(xi,f,'.-','LineWidth',4,'Color',glob);
+% plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
+plot(xi2,f2,'.-','LineWidth',4,'Color',mgc);
+% legend('Mcorr','OMGC','SMGC','Location','East');
+% legend boxoff
+set(gca,'FontSize',fontSize);
+x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
+x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
+plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
+% plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
+plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
+
+% x1 = tA(end);
+ind=find(xi>x1,1,'first');
+y1=max(f)+2;
+y2 = max(f1)+2;
+y3 = 5;
+txt1 = strcat('$$p(c) =', num2str(pMLocal(end)),'$$');
+% txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
+txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
+c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
+set(c,'FontSize',fontSize);
+% b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
+% set(b,'FontSize',fontSize2);
+set(gca,'XTick',x3+0.1,'TickLength',[0 0],'XTickLabel',x3);
+% if abs(x1-x3)>0.02 
+a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
+set(a,'FontSize',fontSize);
+ if abs(x1-x3)>0.02 
+set(gca,'XTick',sort([x3+0.05,x1+0.05]),'TickLength',[0 0],'XTickLabel',sort([x3,x1]));
+end
+% if abs(x2-x3)>0.02 && abs(x2-x1)>0.02
+% set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+% end
+a = get(gca,'XTickLabel');
+set(gca,'XTickLabel',a,'FontSize',fontSize);
+ylim([0 y1+10]);
+
+xlim([minp,min(maxp+0.1,1)]);
+if type<5
+    xlim([minp,min(maxp+0.4,1)]);
+end
+xlabel('Test Statistic','FontSize',fontSize2,...
+    'Units', 'normalized','Position', [-0.01, -0.20], 'HorizontalAlignment', 'left');
+ylabel('Density','FontSize',fontSize2, ...
+    'Units', 'normalized', 'Position', [-0.10, 0], 'HorizontalAlignment', 'left');
+set(gca,'YTick',[])
+
+tit1=strcat('3', AB ,'. Null Distributions');
+title([{tit1}; {'& P-Values'}],'FontSize',tfs, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left')
+axis('square')
+hold off
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+
+%% Multiscale P-Value Map
+ax=subplot('Position',[left(5), bottom, width, height]);
+% ax=subplot(s,t,5);
+hold on
+set(groot,'defaultAxesColorOrder',map1);
+kmin=2;
+ph=pMLocal(kmin:n,kmin:n)';
+imagesc(log(ph));
+
+% draw boundary around optimal scale
+% indP=optimalInd;
+% [J,I]=ind2sub(size(pMLocal),indP);
+% Ymin=min(I)-1;
+% Ymax=max(I)-1;
+% Xmin=min(J)-1;
+% Xmax=max(J)-1;
+lw=3;
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+xlim([2,n]);
+ylim([2,n]);
+%     imagesc(k,l,1);
+hold off
+
+set(gca,'FontSize',fontSize)
+set(gca,'YDir','normal')
+cmap=map4;
+colormap(ax,flipud(cmap));
+%ceil(max(max(ph))*10)/10
+% caxis([0 1]);
+cticks=[0.001, 0.01, 0.1, 0.5];
+h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','eastoutside');
+set(h,'FontSize',fontSize);
+axpos = ax.Position;
+hpos=h.Position;
+hpos(3)=0.5*hpos(3);
+hpos(1)=hpos(1)+0.023;
+h.Position=hpos;
+ax.Position = axpos;
+xlim([1 n-1]);
+ylim([1 n-1]);
+set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',fontSize);
+xlabel('X Scales','FontSize',fontSize2,...
+    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
+ylabel('Y Scales','FontSize',fontSize2, ...
+    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
+
+tit1=strcat('4', AB ,'. Multiscale P-Value');
+title([{tit1}; {'Map & Optimal Scales'}],'FontSize',tfs, ...
+   'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
+axis('square')
+pos2 = get(ax,'position');
+pos2(3:4) = [pos(3:4)];
+set(ax,'position',pos2);
+h=suptitle(CorrSimuTitle(type));
+set(h,'FontSize',fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
+
+%
+pre2=strcat(rootDir,'Figures/');% The folder to save figures
+donzo=0;
+if donzo==1
+    F.fname=strcat(pre2, 'Fig',num2str(type));
+else
+    F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+end
+F.wh=[10 3]*2;
+F.PaperPositionMode='auto';
+
 print_fig(gcf,F)

@@ -2,7 +2,7 @@ library(ecodist)
 library(SDMTools)
 source("MGCLocalCorr.R")
 
-MGCSampleStat <- function(A,B){
+MGCSampleStat <- function(A,B,option){
   # Author: Cencheng Shen
   # This function estimate the Oracle MGC (i.e., optimal local correlation)
   # from the local correlation map, which we call sample MGC statistic.
@@ -15,11 +15,12 @@ MGCSampleStat <- function(A,B){
   #
   # Input: either a size m*n local correlation map, or two n*n distance matrices A and B.
   # Output: the sample MGC statistic within [-1,1].
-  if (missing(B)){
+  if (missing(B) || missing(option)){
     localCorr=A; # if there is only one input, asume the localCorr is given as A
   } else {
-    localCorr=MGCLocalCorr(A,B)$corr; # otherwise compute the localCorr from given distance matrices
+    localCorr=MGCLocalCorr(A,B,option)$corr; # otherwise compute the localCorr from given distance matrices
   }
+  thres=3.5;
   m=nrow(localCorr);
   n=ncol(localCorr);
   negCorr=localCorr[2:m,2:n];
@@ -29,16 +30,20 @@ MGCSampleStat <- function(A,B){
   if (is.na(eps) || eps<0.01){
     eps=0.01;
   }
-  eps=3.5*eps; # threshold for significantly large correlation
+  eps=thres*eps; # threshold for significantly large correlation
   
   R=(localCorr>eps); # find a region with significantly large correlation
-  thres=min(2/min(m,n),0.05); # threshold for sufficiently large region
+  if (sum(R)>0){
+     R=ConnCompLabel(R==1);
+  }
+  
+  thres=3/max(m,n,30); # threshold for sufficiently large region
   statMGC=localCorr[m,n]; # take global correlation by default
 
   if (mean(R)>=thres){
-    R=Monotone(localCorr,R); # put monotonically changing restriction to reduce the region R
+    #R=Monotone(localCorr,R); # put monotonically changing restriction to reduce the region R
   
-    if (mean(R)>0){
+    #if (mean(R)>0){
       ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
@@ -62,7 +67,7 @@ MGCSampleStat <- function(A,B){
           statMGC=tmp; 
         }
       }
-    }
+    #}
   }
   return(statMGC);
 }

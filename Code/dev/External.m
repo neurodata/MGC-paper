@@ -1,9 +1,9 @@
-r1=300;rep=1000;
-CorrSimPermTest(1:10,1,60,r1,rep,1,0.05)
-CorrSimPermTest(11:20,1,60,r1,rep,1,0.05)
-r1=200;rep=1000;
-CorrSimPermTest(1:10,2,0.5,r1,rep,0,0.05)
-CorrSimPermTest(11:20,2,0.5,r1,rep,0,0.05)
+rep1=200;rep2=500;
+run_1d_sims(rep1,rep2,1:10)
+run_1d_sims(rep1,rep2,11:20)
+rep1=200;rep2=500;
+run_hd_sims(rep1,rep2,1:10)
+run_hd_sims(rep1,rep2,11:20)
 
 p=zeros(7,20);rep=500;
 for i=1:5
@@ -175,13 +175,13 @@ distCCI=squareform(pdist(cci));
 clear
 load('BrainHippoShape')
 n=114;rep=1000;alpha=0.05;
-% Label=Label+unifrnd(0,0.01,n,1);
+Label=Label+unifrnd(0,0.01,n,1);
 y=squareform(pdist(Label));
 % % y=(y>0)+1;
-y=y+1;
-for i=1:n
-    y(i,i)=0;
-end
+% y=y+1;
+% for i=1:n
+%     y(i,i)=0;
+% end
 % y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];

@@ -76,9 +76,9 @@ for type=1:total
     statMGC=MGCSampleStat(C,D,'mcorDouble');
     A=DistCentering(C,'mcorDouble');B=DistCentering(D,'mcorDouble');
     statDcor=sum(sum(A.*B))/sqrt(sum(sum(A.*A)*sum(sum(B.*B))));
-    statCor=round(statCor*100)/100;
-    statDcor=round(statDcor*100)/100;
-    statMGC=round(statMGC*100)/100;
+    statCor=round(abs(statCor)*100)/100;
+    statDcor=round(max(statDcor,0)*100)/100;
+    statMGC=round(max(statMGC,0)*100)/100;
     %titlechar=strcat('\color[rgb]{.1 .1 .1}',num2str(statCor),', \color[rgb]{.5 .5 .5}',num2str(statDcor),', \color[rgb]{0 1 0}',num2str(statMGC));
     sz2=8;
     hold on
@@ -141,7 +141,7 @@ for type=1:total
     hold off
     %title(CorrSimuTitle(type),'FontSize',16);%,'Interpreter','tex');
     %titlechar=CorrSimuTitle(type);
-    titlechar=strcat('\color[rgb]{0 1 0}',num2str(statMGC));
+    titlechar=strcat(CorrSimuTitle(type), ': \color[rgb]{0 1 0}',num2str(statMGC));
     title(titlechar,'FontSize',16,'Interpreter','tex');%,'Color',loca);
     axis('square');
     
@@ -154,11 +154,13 @@ for type=1:total
     hold off
     stat=[statCor, statDcor, statMGC];
 %     bar(stat);
-    cc=ceil(max(max(stat),abs(min(stat)))*10)/10;
-    ylim([-cc,cc]);
+%     cc=ceil(max(max(stat),abs(min(stat)))*10)/10;
+%     ylim([-cc,cc]);
+     cc=ceil(max(stat)*10)/10;
+     ylim([0,cc]);
     xlim([0,4]);
      set(gca,'xcolor',[1 1 1])
-    set(gca,'XTick',[],'YTick',[-cc,cc]); % Remove x axis ticks
+    set(gca,'XTick',[],'YTick',[0,cc]); % Remove x axis ticks
 %     set(gca,'box','off','ycolor','w','xcolor','w')
 end
 h=suptitle('MGC for 20 Dependencies');

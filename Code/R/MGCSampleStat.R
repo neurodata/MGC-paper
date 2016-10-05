@@ -35,10 +35,12 @@ MGCSampleStat <- function(A,B,option){
   
   R=(localCorr>eps); # find all correlations that are larger than the threshold
   # find the largest connected component of all significant correlations
- # if (sum(R)>0){
-  #   R=ConnCompLabel(R==1);
-  #}
-  
+  if (sum(R)>0){
+     R=ConnCompLabel(R==1);
+     tmp=tabulate(R);
+     tmp=which.max(tmp);
+     R=(R==tmp);
+  }
   thres=min(thres/min(m,n),0.1); # threshold to check whether the significant region is large enough
   statMGC=localCorr[m,n]; # take global correlation by default
 
@@ -66,6 +68,7 @@ MGCSampleStat <- function(A,B,option){
           statMGC=tmp; 
         }
       }
+      stat=max(localCorr[R]);
   }
   return(statMGC);
 }

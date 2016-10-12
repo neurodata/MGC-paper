@@ -1,4 +1,4 @@
-function []=plot_schematic1(type)
+function []=plot_schematic1(type,n)
 
 % type=1;n=50;dim=1;noise=1;
 % CorrSimPlotsA(type,n,dim,noise,pre1);
@@ -8,10 +8,11 @@ function []=plot_schematic1(type)
 if nargin<1
     type=1;
 end
-
-n=50;
+if nargin<2
+    n=50;
+end
 noise=0;
-if type==1
+if type<=5
     noise=0.5;
 end
 dim=1;
@@ -168,7 +169,6 @@ if regressionLine==1
     for i=1:n
         %if group(i)==0
         tmp=find(R2(:,i)==1)';
-        tmp=[tmp i];
         %end
         tmp2=[ones(length(tmp),1) x(tmp)];
         beta=tmp2 \ y(tmp);
@@ -334,7 +334,7 @@ set(gca,'XTick',x3+0.1,'TickLength',[0 0],'XTickLabel',x3);
 % if abs(x1-x3)>0.02 
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 set(a,'FontSize',fontSize);
- if abs(x1-x3)>0.02 
+ if abs(x1-x3)>0.2 
 set(gca,'XTick',sort([x3+0.05,x1+0.05]),'TickLength',[0 0],'XTickLabel',sort([x3,x1]));
 end
 % if abs(x2-x3)>0.02 && abs(x2-x1)>0.02
@@ -424,7 +424,7 @@ set(h,'FontSize',fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0],
 
 %
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=0;
+donzo=1;
 if donzo==1
     F.fname=strcat(pre2, 'Fig',num2str(type));
 else

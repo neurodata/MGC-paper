@@ -4,7 +4,7 @@ function [statMGC]=MGCSampleStat(A,B,option)
 % from the local correlation map, which we call sample MGC statistic.
 %
 % It finds the largest connected region in the correlation map, such that
-% each correlation is significant, i.e., larger than certain threshold.
+% each correlation is significant, i.e., larger than a certain threshold.
 % To avoid correlation inflation by sample noise, it then computes Sample MGC as follows:
 % for the largest correlation in the region, calculate the two minimal correlations
 % along adjacent row scales and adjacent column scales, then take the larger one as the Sample MGC.
@@ -17,13 +17,16 @@ if nargin<3
 else
     localCorr=MGCLocalCorr(A,B,option); % otherwise compute the localCorr from given distance matrices
 end
-thres=3.5;
 [m,n]=size(localCorr);
+
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
-eps=thres*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % estimate the threshold based on negative correlations
+thres1=3.5*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % threshold based on negative correlations
+thres2=min(2/min(m,n),0.05); % threshold based on sample size
 
-R=(localCorr>eps); % find all correlations that are larger than the threshold
+statMGC=localCorr(end); % take the global correlation by default
+
+R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the threshold
 % find the largest connected component of all significant correlations
 CC=bwconncomp(R,4);
 numPixels = cellfun(@numel,CC.PixelIdxList);
@@ -36,12 +39,8 @@ else
     R=0;
 end
 
-thres=min(thres/min(m,n),0.1); % threshold to check whether the significant region is large enough
-statMGC=localCorr(end); % take global correlation by default
-
-if mean(mean(R))>=thres % proceed only when the region area is sufficiently large
-    thres=max(localCorr(R==1));
-    [k,l]=find((localCorr>=thres)&(R==1)); % find the scale within R that has the maximum correlation
+if mean(mean(R))>=thres2 % proceed only when the region area is sufficiently large
+    [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find the scale within R that has the maximum correlation
     
     ln=ceil(0.1*m); % boundary for checking adjacent rows
     km=ceil(0.1*n); % boundary for checking adjacent columns

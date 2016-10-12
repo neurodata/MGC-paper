@@ -1,4 +1,4 @@
-rep1=200;rep2=500;
+rep1=200;rep2=1000;
 run_1d_sims(rep1,rep2,1:10)
 run_1d_sims(rep1,rep2,11:20)
 rep1=200;rep2=500;
@@ -185,7 +185,7 @@ y=squareform(pdist(Label));
 % y(y>0)=1;
 %estimate optimal scale separately
 option=[1,2,3,4];
-[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(LMLS,y,rep);
+% [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(LMLS,y,rep);
 [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(LMRS,y,rep);
 %MGCPermutationTest(LMLS,LMRS,rep,'BrainLMLxLMR')
 %%%ind trial

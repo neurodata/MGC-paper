@@ -12,7 +12,7 @@ if nargin<2
     dim=1;
 end
 
-n=50;
+n=100;
 noise=0;
 if type==1
     noise=0.5;
@@ -76,10 +76,30 @@ Ymin=min(I)-1;
 Ymax=max(I)-1;
 Xmin=min(J)-1;
 Xmax=max(J)-1;
+
+C2=reshape(C,n^2,1);
+D2=reshape(D,n^2,1);
+RC=DistRanks(C);
+RD=DistRanks(D)';
+RC=(RC<=k);
+RD=(RD<=l);
+R2=RC&RD;%&(C_MGC>=0);
 %%  Col 1
 if dim>1
-[x,y]=canoncorr(x',y');
-x=x(:,1);y=y(:,1);
+    xnew=zeros(n,1);ynew=zeros(n,1);
+    for i=1:n
+        %if group(i)==0
+        tmp=find(R2(:,i)==1)';
+%         tmp=[tmp];
+        %end
+        if length(tmp)>1
+            [~,~,~,xt,yt]=canoncorr(x(tmp,:),y(tmp,:));
+            tmp2=find(tmp==i);
+            xnew(tmp2)=xt(tmp2,1);ynew(i)=yt(tmp2,1);
+        end
+        %         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
+    end
+    x=xnew;y=ynew;
 end
 % ax=subplot(s,t,1);
 ax=subplot('Position',[left(1), bottom, width, height]);
@@ -135,13 +155,6 @@ axis('square')
 pos = get(ax,'position');
 
 %%%%% Regression line trial
-C2=reshape(C,n^2,1);
-D2=reshape(D,n^2,1);
-RC=DistRanks(C);
-RD=DistRanks(D)';
-RC=(RC<=k);
-RD=(RD<=l);
-R2=RC&RD;%&(C_MGC>=0);
 
 regressionLine=1;
 if regressionLine==1
@@ -174,7 +187,6 @@ if regressionLine==1
     for i=1:n
         %if group(i)==0
         tmp=find(R2(:,i)==1)';
-        tmp=[tmp i];
         %end
         tmp2=[ones(length(tmp),1) x(tmp)];
         beta=tmp2 \ y(tmp);
@@ -434,7 +446,7 @@ donzo=0;
 if donzo==1
     F.fname=strcat(pre2, 'Fig',num2str(type));
 else
-    F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)));
+    F.fname=strcat(pre2, 'Auxiliary/A2_type', num2str(type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
 end
 F.wh=[10 3]*2;
 F.PaperPositionMode='auto';

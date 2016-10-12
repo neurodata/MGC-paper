@@ -8,7 +8,7 @@ MGCSampleStat <- function(A,B,option){
   # from the local correlation map, which we call sample MGC statistic.
   #
   # It finds the largest connected region in the correlation map, such that
-  # each correlation is significant, i.e., larger than certain threshold.
+  # each correlation is significant, i.e., larger than a certain threshold.
   # To avoid correlation inflation by sample noise, it then computes Sample MGC as follows:
   # for the largest correlation in the region, calcualte the two minimal correlations
   # along adjacent row scales and adjacent column scales, then take the larger one as the Sample MGC.
@@ -21,19 +21,21 @@ MGCSampleStat <- function(A,B,option){
   } else {
     localCorr=MGCLocalCorr(A,B,option)$corr; # otherwise compute the localCorr from given distance matrices
   }
-  thres=3.5;
   m=nrow(localCorr);
   n=ncol(localCorr);
+
   negCorr=localCorr[2:m,2:n];
   negCorr=negCorr[negCorr<0]; # negative correlations
-  
-  eps=sqrt(sum(negCorr^2)/length(negCorr));
-  if (is.na(eps) || eps<0.01){
-    eps=0.01;
+  thres1=sqrt(sum(negCorr^2)/length(negCorr));  # threshold based on negative correlations
+  if (is.na(thres1) || thres1<0.01){
+    thres1=0.01;
   }
-  eps=thres*eps; # estimate the threshold based on negative correlations
-  
-  R=(localCorr>eps); # find all correlations that are larger than the threshold
+  thres1=thres1*3.5;
+  thres2=min(2/min(m,n),0.05); # threshold based on sample size
+
+  statMGC=localCorr[m,n]; # take the global correlation by default
+
+  R=(localCorr>max(thres1,thres2)); # find all correlations that are larger than the threshold
   # find the largest connected component of all significant correlations
   if (sum(R)>0){
      R=ConnCompLabel(R==1);
@@ -41,10 +43,8 @@ MGCSampleStat <- function(A,B,option){
      tmp=which.max(tmp);
      R=(R==tmp);
   }
-  thres=min(thres/min(m,n),0.1); # threshold to check whether the significant region is large enough
-  statMGC=localCorr[m,n]; # take global correlation by default
 
-  if (mean(R)>=thres){ # proceed only when the region area is sufficiently large
+  if (mean(R)>=thres2){ # proceed only when the region area is sufficiently large
       ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
@@ -68,7 +68,6 @@ MGCSampleStat <- function(A,B,option){
           statMGC=tmp; 
         }
       }
-      stat=max(localCorr[R]);
   }
   return(statMGC);
 }

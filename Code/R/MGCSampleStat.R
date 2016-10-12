@@ -35,7 +35,7 @@ MGCSampleStat <- function(A,B,option){
 
   statMGC=localCorr[m,n]; # take the global correlation by default
 
-  R=(localCorr>max(thres1,thres2)); # find all correlations that are larger than the threshold
+  R=(localCorr>max(thres1,thres2)); # find all correlations that are larger than the thresholds
   # find the largest connected component of all significant correlations
   if (sum(R)>0){
      R=ConnCompLabel(R==1);

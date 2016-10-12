@@ -26,7 +26,7 @@ thres2=min(2/min(m,n),0.05); % threshold based on sample size
 
 statMGC=localCorr(end); % take the global correlation by default
 
-R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the threshold
+R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the thresholds
 % find the largest connected component of all significant correlations
 CC=bwconncomp(R,4);
 numPixels = cellfun(@numel,CC.PixelIdxList);

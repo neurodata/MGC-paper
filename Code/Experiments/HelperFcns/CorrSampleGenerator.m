@@ -11,7 +11,7 @@ function [x, y]=CorrSampleGenerator(type,n,dim,dependent, noise)
 if nargin<4
     dependent=1; % by default generate dependent samples
 end
-if nargin<5
+if nargin<4
     noise=0; % default noise level
 end
 
@@ -111,7 +111,7 @@ switch type % In total 20 types of dependency + the type 0 outlier model
         x=rx.*x;
         y=ry.*sin(z(:,1)*pi);
         if type==8
-            y=y+cc*(dim-1)*noise*mvnrnd(zeros(n, 1),eye(1));
+            y=y+cc*(dim)*noise*mvnrnd(zeros(n, 1),eye(1));
         else
             x=x+cc*noise*rx.*mvnrnd(zeros(n, d),eye(d));
         end

@@ -1,4 +1,4 @@
-function []=plot_schematic2(type,dim)
+function [type,dim,noise,n]=plot_schematic2(type,dim,noise,n)
 
 % type=1;n=50;dim=1;noise=1;
 % CorrSimPlotsA(type,n,dim,noise,pre1);
@@ -11,9 +11,13 @@ end
 if nargin<2
     dim=1;
 end
+if nargin<3
+    noise=0;
+end
+if nargin<4
+    n=50;
+end
 
-n=100;
-noise=0;
 if type==1
     noise=0.5;
 end
@@ -440,7 +444,7 @@ set(ax,'position',pos2);
 h=suptitle(CorrSimuTitle(type));
 set(h,'FontSize',fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
 
-%
+%%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures
 donzo=0;
 if donzo==1

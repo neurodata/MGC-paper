@@ -1,4 +1,4 @@
-function plot_panel3(F,x,y,R2,test,tA)
+function plot_panel3(F,x,y,R2,test,tA,k,l)
 ax=subplot('Position',F.pos3);
 hold on
 
@@ -66,8 +66,12 @@ ylabel('Y Scales','FontSize',F.fontSize2, ...
     'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
 
 if F.tit
-    tit1=strcat('2', F.AB ,'. Multiscale Correlation');
-    title([{tit1}; {'Map & Test Statistic'}],'FontSize',F.tfs, ...
+%     tit1=strcat('2', F.AB ,'. Multiscale Correlation');
+%     title([{tit1}; {'Map & Test Statistic'}],'FontSize',F.tfs, ...
+%         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
+    tit1=strcat('2', F.AB ,'. Muliscale Correlation');
+    tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
+    title([{tit1};tit2],'FontSize',F.tfs, ...
         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 end
 

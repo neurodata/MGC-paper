@@ -127,7 +127,7 @@ plot_panel2(F,C,D)
 
 
 % 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-plot_panel3(F,x,y,R2,test,tA)   
+plot_panel3(F,x,y,R2,test,tA,k,l)   
 
 
 % 4. Null distribution & p-values

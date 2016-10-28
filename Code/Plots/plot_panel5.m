@@ -1,8 +1,8 @@
-function plot_panel5(F,pMLocal)
+function plot_panel5(F,pMLocal,pMGC)
 
-n=size(pMLocal,2);
+[m,n]=size(pMLocal);
 
-ax=subplot('Position',F.pos5);
+ax=subplot('Position',F.pos4);
 % ax=subplot(s,t,5);
 hold on
 set(groot,'defaultAxesColorOrder',F.map1);
@@ -25,7 +25,6 @@ plot([F.Xmin,F.Xmax],[F.Ymax,F.Ymax],'g','linewidth',lw)
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);
-hold off
 
 set(gca,'FontSize',F.fontSize)
 set(gca,'YDir','normal')
@@ -44,6 +43,24 @@ h.Position=hpos;
 ax.Position = axpos;
 xlim([1 n-1]);
 ylim([1 n-1]);
+
+% add MGC p-value
+txt1 = strcat('p(MGC) =', {' '},num2str(pMGC));
+if F.Xmax<m/2
+     a=text(F.Xmax+1,F.Ymax,txt1,'VerticalAlignment','top','HorizontalAlignment','left','Color','g');
+else
+     a=text(F.Xmax-1,F.Ymax,txt1,'VerticalAlignment','top','HorizontalAlignment','right','Color','g');
+end
+set(a,'FontSize',F.fontSize);
+
+% add global p-value
+txt1 = strcat('p(Dcorr) =', {' '}, num2str(pMLocal(m,n)));
+plot(m-1,n-1,'s','markerSize',5,'MarkerFaceColor',F.glob)  
+a=text(m-1,n,txt1,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
+set(a,'FontSize',F.fontSize);
+
+hold off
+
 set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 xlabel('X Scales','FontSize',F.fontSize2,...
     'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
@@ -51,7 +68,7 @@ ylabel('Y Scales','FontSize',F.fontSize2, ...
     'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
 
 if F.tit
-    tit1=strcat('4', F.AB ,'. Multiscale P-Value');
+    tit1=strcat('3', F.AB ,'. Multiscale P-Value');
     title([{tit1}; {'Map & Optimal Scales'}],'FontSize',F.tfs, ...
         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 end

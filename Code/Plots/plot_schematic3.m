@@ -102,24 +102,23 @@ F.hs=2/100*(max(x)-min(x));
 if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
-height=0.5;
+height=0.2;
 vspace=0.08;
 
-width=0.44;
+width=0.40;
 left1=0.04;
 left=width+left1;
-bottom=nan(1,5);
-bottom1=0.07;
-for i=1:5
+bottom=nan(1,4);
+bottom1=0.2;
+for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
-bottom
 
-F.pos =[left, bottom(5), width, height];
-F.pos2=[left, bottom(4), width, height];
-F.pos3=[left, bottom(3), width, height];
-F.pos4=[left, bottom(2), width, height];
-F.pos5=[left, bottom(1), width, height];
+F.pos =[left, bottom(4), width, height];
+F.pos2=[left, bottom(3), width, height];
+F.pos3=[left, bottom(2), width, height];
+F.pos4=[left, bottom(1), width, height];
+% F.pos5=[left, bottom(1), width, height];
 
 F.tit=0;
 
@@ -134,15 +133,15 @@ plot_panel2(F,C,D)
 
 
 % 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-plot_panel3(F,x,y,R2)   
+plot_panel3(F,x,y,R2,test,tA)   
 
 
 % 4. Null distribution & p-values
-plot_panel4(F,tN,tA,k,l,testN,mcorrH,A,B,test,pMLocal,pMGC)
+% plot_panel4(F,tN,tA,k,l,testN,mcorrH,A,B,test,pMLocal,pMGC)
 
 
 % 5. Multiscale P-Value Map
-plot_panel5(F,pMLocal) 
+plot_panel5(F,pMLocal,pMGC) 
 
 
 % title

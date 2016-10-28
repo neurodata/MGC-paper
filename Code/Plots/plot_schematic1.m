@@ -138,7 +138,7 @@ RC=(RC<=k);
 RD=(RD<=l);
 R2=RC&RD;%&(C_MGC>=0);
 
-regressionLine=1;
+regressionLine=0;
 if regressionLine==1
     group=zeros(n,1); % group info for piecewise linear regression
     yest=zeros(n,1); % estimated y by regression

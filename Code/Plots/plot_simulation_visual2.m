@@ -163,7 +163,7 @@ for type=1:total
     set(gca,'XTick',[],'YTick',[0,cc]); % Remove x axis ticks
 %     set(gca,'box','off','ycolor','w','xcolor','w')
 end
-h=suptitle('\color[rgb]{0 1 0} MGC, \color[rgb]{0.5 0.5 0.5} Dcorr, \color[rgb]{0 0 0} and Pearson''s Correlation for 20 Dependencies');
+h=suptitle('\color[rgb]{0 1 0} MGC, \color[rgb]{0.5 0.5 0.5} Mcorr, \color[rgb]{0 0 0} and Pearson''s Correlation for 20 Dependencies');
 set(h,'FontSize',24,'FontWeight','normal','Interpreter','tex');
 
 F.fname=[strcat(pre2, 'SimVisual2')];

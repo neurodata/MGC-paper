@@ -1,4 +1,4 @@
-function plot_panel3(F,x,y,R2)
+function plot_panel3(F,x,y,R2,test,tA)
 ax=subplot('Position',F.pos3);
 hold on
 
@@ -23,7 +23,15 @@ if regressionLine==1
     plot(x,yest,':','Color',F.glob,'linewidth',3);
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
     xlim([min(x)-0.2, max(x)]);
-    ylim([min(y)-0.2, max(y)]);
+    ylim([min(y)-0.2, max(y)+0.1]);
+    
+    % add MGC and Dcorr stat
+    txt1 = strcat('MGC =', {' '}, num2str(round(100*test)/100));
+    txt2 = strcat('Dcorr =',{' '}, num2str(round(100*tA(end))/100));
+    a=text(max(x),max(y)+0.1,txt1,'VerticalAlignment','top','HorizontalAlignment','right','Color','g');
+    b=text(max(x),max(yest)-0.1,txt2,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
+    set(a,'FontSize',F.fontSize);
+    set(b,'FontSize',F.fontSize);
 else
     set(groot,'defaultAxesColorOrder',map1);
     kmin=2;

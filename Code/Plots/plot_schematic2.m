@@ -47,14 +47,14 @@ end
 cmap=zeros(2,3);
 % map3 = map2(size(map2,1)/2+1:end,:);
 
-height=0.35; %18; %21;
-width=0.16; %17;
+height=0.4; %18; %21;
+width=0.2; %17;
 hspace=0.04;
-left=nan(1,6);
-for i=1:6
+left=nan(1,5);
+for i=1:4
     left(i)=0.01+(i-1)*(width+hspace);
 end
-left(1)=0.025;
+left(1)=0.05;
 bottom=0.3;
 
 % optimal scales
@@ -70,10 +70,10 @@ R2=RC&RD;%&(C_MGC>=0);
 
 %% Figure Structure
 
-F.fontSize=18;
+F.fontSize=20;
 F.mkSize=20;
-F.fontSize2=18;
-F.tfs=18;
+F.fontSize2=20;
+F.tfs=20;
 F.tit=1;
 
 F.Ymin=min(I)-1;
@@ -115,7 +115,7 @@ F.pos=[left(1), bottom, width, height];
 F.pos2=[left(2), bottom, width, height];
 F.pos3=[left(3), bottom, width, height];
 F.pos4=[left(4), bottom, width, height];
-F.pos5=[left(5), bottom, width, height];
+% F.pos5=[left(5), bottom, width, height];
 
 %% plot panels
 
@@ -127,19 +127,19 @@ plot_panel2(F,C,D)
 
 
 % 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-plot_panel3(F,x,y,R2)   
+plot_panel3(F,x,y,R2,test,tA)   
 
 
 % 4. Null distribution & p-values
-plot_panel4(F,tN,tA,k,l,testN,mcorrH,A,B,test,pMLocal,pMGC)
+% plot_panel4(F,tN,tA,k,l,testN,mcorrH,A,B,test,pMLocal,pMGC)
 
 
 % 5. Multiscale P-Value Map
-plot_panel5(F,pMLocal) 
+plot_panel5(F,pMLocal,pMGC) 
 
 %%
 h=suptitle(CorrSimuTitle(F.type));
-set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
+set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.05, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
 
 %%
 pre2=strcat(rootDir,'Figures/');% The folder to save figures

@@ -1,4 +1,4 @@
-function [statMGC]=MGCSampleStat(A,B,option)
+function [statMGC]=MGCSampleStat(A,B,option,thres)
 % Author: Cencheng Shen
 % This function estimate the Oracle MGC (i.e., optimal local correlation)
 % from the local correlation map, which we call sample MGC statistic.
@@ -12,21 +12,34 @@ function [statMGC]=MGCSampleStat(A,B,option)
 %
 % Input: either a size m*n local correlation map, or two n*n distance matrices A and B and the global corr option.
 % Output: the sample MGC statistic within [-1,1].
-if nargin<3
+if nargin==1
     localCorr=A; % if there is only one input, asume the localCorr is given as A
-else
+    thres=0.035;
+end
+if nargin==2
+    if size(B,1)>1;
+        thres=0.035;
+    else
+        localCorr=A; % if there is only one input, asume the localCorr is given as A
+        thres=B;
+    end
+end
+if nargin==3
     localCorr=MGCLocalCorr(A,B,option); % otherwise compute the localCorr from given distance matrices
+    thres=0.035;
 end
 [m,n]=size(localCorr);
 
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
-thres1=3.5*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % threshold based on negative correlations
-thres2=min(2/min(m,n),0.05); % threshold based on sample size
+thres1=3.5*norm(negCorr,'fro')/sqrt(length(negCorr));
+thres1=max(thres1,thres); % threshold based on negative correlations
+% thres2=min(2/min(m,n),0.05); % threshold based on sample size
+% thres1=max(thres1,thres2);
 
 statMGC=localCorr(end); % take the global correlation by default
 
-R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the thresholds
+R=(localCorr>thres1); % find all correlations that are larger than the thresholds
 % find the largest connected component of all significant correlations
 CC=bwconncomp(R,4);
 numPixels = cellfun(@numel,CC.PixelIdxList);

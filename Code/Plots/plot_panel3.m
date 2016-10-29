@@ -15,12 +15,12 @@ if regressionLine==1
         tmp2=[ones(length(tmp),1) x(tmp)];
         beta=tmp2 \ y(tmp);
         yest(tmp)=tmp2*beta;
-        plot(x(tmp),yest(tmp),'-','Color',F.loca,'linewidth',3);
+        plot(x(tmp),yest(tmp),'-','Color',F.loca,'linewidth',2);
     end
     tmp2=[ones(length(x),1) x];
     beta=tmp2 \ y;
     yest=tmp2*beta;
-    plot(x,yest,':','Color',F.glob,'linewidth',3);
+    plot(x,yest,':','Color',F.glob,'linewidth',2);
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
     xlim([min(x)-0.2, max(x)]);
     ylim([min(y)-0.2, max(y)+0.1]);
@@ -28,8 +28,8 @@ if regressionLine==1
     % add MGC and Dcorr stat
     txt1 = strcat('MGC =', {' '}, num2str(round(100*test)/100));
     txt2 = strcat('Dcorr =',{' '}, num2str(round(100*tA(end))/100));
-    a=text(max(x),max(y)+0.1,txt1,'VerticalAlignment','top','HorizontalAlignment','right','Color','g');
-    b=text(max(x),max(yest)-0.1,txt2,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
+    a=text(max(x),max(y)+0.2,txt1,'VerticalAlignment','top','HorizontalAlignment','right','Color','g');
+    b=text(max(x),max(yest)-0.2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
     set(a,'FontSize',F.fontSize);
     set(b,'FontSize',F.fontSize);
 else
@@ -60,10 +60,10 @@ else
     ylim([1 n-1]);
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 end
-xlabel('X Scales','FontSize',F.fontSize2,...
-    'Units', 'normalized','Position', [-0.010, -0.20], 'HorizontalAlignment', 'left');
-ylabel('Y Scales','FontSize',F.fontSize2, ...
-    'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
+xlabel('X Scales','FontSize',F.fontSize2+2,...
+    'Units', 'normalized','Position', [-0.010, -0.08], 'HorizontalAlignment', 'left');
+ylabel('Y Scales','FontSize',F.fontSize2+2, ...
+    'Units', 'normalized', 'Position', [-0.06 -0], 'HorizontalAlignment', 'left');
 
 if F.tit
 %     tit1=strcat('2', F.AB ,'. Multiscale Correlation');

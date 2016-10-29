@@ -47,7 +47,7 @@ end
 cmap=zeros(2,3);
 % map3 = map2(size(map2,1)/2+1:end,:);
 
-height=0.4; %18; %21;
+height=0.45; %18; %21;
 width=0.2; %17;
 hspace=0.04;
 left=nan(1,5);
@@ -74,7 +74,7 @@ F.fontSize=20;
 F.mkSize=20;
 F.fontSize2=20;
 F.tfs=20;
-F.tit=1;
+F.tit=0;
 
 F.Ymin=min(I)-1;
 F.Ymax=max(I)-1;

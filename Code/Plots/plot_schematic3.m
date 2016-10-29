@@ -30,10 +30,10 @@ rootDir=fpath(1:findex(end-2));
 strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 
-% h=figure(1);
-% clf
-% set(h,'units','normalized','position',[0 0 1 1])
-figure
+h=figure(1);
+clf
+set(h,'units','normalized','position',[0 0 1 1])
+% figure
 try
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 catch
@@ -62,10 +62,10 @@ R2=RC&RD;%&(C_MGC>=0);
 
 %% Figure Structure
 
-F.fontSize=18;
-F.mkSize=20;
-F.fontSize2=18;
-F.tfs=18;
+F.fontSize=12;
+F.mkSize=8;
+F.fontSize2=12;
+F.tfs=12;
 
 F.Ymin=min(I)-1;
 F.Ymax=max(I)-1;
@@ -102,14 +102,14 @@ F.hs=2/100*(max(x)-min(x));
 if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
-height=0.2;
-vspace=0.08;
+height=0.3;
+vspace=0.1;
 
-width=0.40;
-left1=0.04;
-left=width+left1;
+width=0.55;
+left=0.2;
+%left=width+left1;
 bottom=nan(1,4);
-bottom1=0.2;
+bottom1=0.1;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
@@ -133,7 +133,7 @@ plot_panel2(F,C,D)
 
 
 % 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-plot_panel3(F,x,y,R2,test,tA)   
+plot_panel3(F,x,y,R2,test,tA,k,l)   
 
 
 % 4. Null distribution & p-values
@@ -146,7 +146,7 @@ plot_panel5(F,pMLocal,pMGC)
 
 % title
 h=suptitle(CorrSimuTitle(F.type));
-set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.01, -0.60,0], 'HorizontalAlignment', 'left','rotation',90)
+set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.5, -0.05,0], 'HorizontalAlignment', 'center')
 
 
 %%
@@ -157,7 +157,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A3_type', num2str(F.type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
 end
-F.wh=[3 10];
+F.wh=[3.5 10];
 F.PaperPositionMode='auto';
 
 print_fig(gcf,F)

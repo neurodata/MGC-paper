@@ -1,9 +1,12 @@
-function plot_panel3(F,x,y,R2,test,tA,k,l)
+function plot_panel3(F,x,y,R2)
 ax=subplot('Position',F.pos3);
 hold on
 
 n=size(x,1);
-
+test=F.test;
+tA=F.tA;
+k=F.k;
+l=F.l;
 regressionLine=1; %% Regression line trial
 if regressionLine==1
     yest=nan(n,1);
@@ -69,7 +72,7 @@ if F.tit
 %     tit1=strcat('2', F.AB ,'. Multiscale Correlation');
 %     title([{tit1}; {'Map & Test Statistic'}],'FontSize',F.tfs, ...
 %         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
-    tit1=strcat('2', F.AB ,'. Muliscale Correlation');
+    tit1=strcat('2', F.AB ,'. Multiscale Correlation');
     tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
     title([{tit1};tit2],'FontSize',F.tfs, ...
         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')

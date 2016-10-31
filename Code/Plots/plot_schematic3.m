@@ -66,6 +66,8 @@ F.fontSize=12;
 F.mkSize=8;
 F.fontSize2=12;
 F.tfs=12;
+F.k=k;
+F.l=l;
 
 F.Ymin=min(I)-1;
 F.Ymax=max(I)-1;
@@ -80,6 +82,8 @@ F.gray = [0.5,0.5,0.5];
 F.glob=[0.5,0.5,0.5];
 F.map2 = brewermap(128,'PiYG'); % brewmap
 F.map4 = brewermap(128,'GnBu'); % brewmap
+F.test=test;
+F.tA=tA;
 
 gr=F.map2(120,:);
 pu=F.map2(8,:);
@@ -133,7 +137,7 @@ plot_panel2(F,C,D)
 
 
 % 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-plot_panel3(F,x,y,R2,test,tA,k,l)   
+plot_panel3(F,x,y,R2)   
 
 
 % 4. Null distribution & p-values

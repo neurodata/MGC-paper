@@ -27,14 +27,6 @@ if regressionLine==1
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
     xlim([min(x)-0.2, max(x)]);
     ylim([min(y)-0.2, max(y)+0.1]);
-    
-    % add MGC and Dcorr stat
-    txt1 = strcat('MGC =', {' '}, num2str(round(100*test)/100));
-    txt2 = strcat('Dcorr =',{' '}, num2str(round(100*tA(end))/100));
-    a=text(max(x),max(y)+0.2,txt1,'VerticalAlignment','top','HorizontalAlignment','right','Color','g');
-    b=text(max(x),max(yest)-0.2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
-    set(a,'FontSize',F.fontSize);
-    set(b,'FontSize',F.fontSize);
 else
     set(groot,'defaultAxesColorOrder',map1);
     kmin=2;
@@ -63,20 +55,23 @@ else
     ylim([1 n-1]);
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 end
-xlabel('X Scales','FontSize',F.fontSize2+2,...
-    'Units', 'normalized','Position', [-0.010, -0.08], 'HorizontalAlignment', 'left');
-ylabel('Y Scales','FontSize',F.fontSize2+2, ...
-    'Units', 'normalized', 'Position', [-0.06 -0], 'HorizontalAlignment', 'left');
+if F.type==1
+    xlabel('X Scales','FontSize',F.fontSize2+2,...
+        'Units', 'normalized','Position', [-0.010, -0.08], 'HorizontalAlignment', 'left');
+    ylabel('Y Scales','FontSize',F.fontSize2+2, ...
+        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left');
+end
 
-if F.tit
+% if F.tit
 %     tit1=strcat('2', F.AB ,'. Multiscale Correlation');
 %     title([{tit1}; {'Map & Test Statistic'}],'FontSize',F.tfs, ...
 %         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
-    tit1=strcat('2', F.AB ,'. Multiscale Correlation');
-    tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
-    title([{tit1};tit2],'FontSize',F.tfs, ...
-        'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
-end
+%     tit1=strcat('2', F.AB ,'. Multiscale Correlation');
+%     tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
+% end
+txt1 = strcat('\color[rgb]{0 1 0} MGC=', num2str(round(100*test)/100));
+txt2 = strcat('\color[rgb]{0.5 0.5 0.5} Dcorr=', num2str(round(100*tA(end))/100));
+title({txt1;txt2},'FontSize',F.tfs-2,'interpreter','tex');
 
 set(gca,'FontSize',F.fontSize)
 axis('square')

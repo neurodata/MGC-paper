@@ -14,12 +14,15 @@ if nargin<2
     dim=1;
 end
 if nargin<3
-    noise=0;
+    noise=0.3;
 end
 if nargin<4
-    n=50;
+    n=100;
 end
 
+% if F.type==1
+%     noise=0.5;
+% end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -31,13 +34,13 @@ h=figure(1);
 clf
 set(h,'units','normalized','position',[0 0 1 1])
 % figure
-% try
-%     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
-% catch
+try
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
+catch
     display('no file exist, running instead')
     run_fig1Data(F.type,n,dim,noise);
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
-% end
+end
 
 
 %% plotting parameters
@@ -81,6 +84,7 @@ F.map2 = brewermap(128,'PiYG'); % brewmap
 F.map4 = brewermap(128,'GnBu'); % brewmap
 F.test=test;
 F.tA=tA;
+F.type=type;
 
 gr=F.map2(120,:);
 pu=F.map2(8,:);
@@ -103,17 +107,18 @@ F.hs=2/100*(max(x)-min(x));
 if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
-height=0.3;
-vspace=0.1;
+height=0.34;
+vspace=0.16;
 
 width=0.55;
 left=0.2;
 %left=width+left1;
 bottom=nan(1,4);
-bottom1=0.1;
+bottom1=0.08;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
+% bottom(4)=bottom(4)-0.05;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -124,8 +129,12 @@ F.pos4=[left, bottom(1), width, height];
 F.tit=0;
 
 %% plot panels
-
-
+mxc=max(max(C));
+mxd=max(max(D));
+C=C/mxc;
+D=D/mxd;
+x=x/mxc;
+y=y/mxd;
 % 1: samle data
 plot_panel1(F,x,y,R2)      
 
@@ -146,7 +155,13 @@ plot_panel5(F,pMLocal,pMGC)
 
 
 % title
-h=suptitle(CorrSimuTitle(F.type));
+titletext=CorrSimuTitle(F.type);
+if type==1;
+    titletext=strcat('A.',{' '},titletext);
+else
+    titletext=strcat('B.',{' '},titletext);
+end
+h=suptitle(titletext);
 set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.5, -0.05,0], 'HorizontalAlignment', 'center')
 
 

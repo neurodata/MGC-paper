@@ -24,34 +24,38 @@ subplot('Position',F.pos);
 hold all
 set(groot,'defaultAxesColorOrder',F.map2);
 plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
-% if F.type==1 && noise==1
-%     xlabel('Cloud Shape','FontSize',F.fontSize,...
-%         'Units', 'normalized','Position', [-0.01, -0.2], 'HorizontalAlignment', 'left')
-%     ylabel('Ground Wetness','FontSize',fontSize, ...
-%         'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
-% else
-xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
-    'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
-ylabel('$y$','FontSize',F.fontSize2+5,'Interpreter','latex', ...
-    'Units', 'normalized', 'Position', [-0.06 0], 'HorizontalAlignment', 'left')
-% end
+if F.type==1
+    xlabel('Ground Wetness','FontSize',F.fontSize2,...
+        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
+    ylabel('Cloud Shape','FontSize',F.fontSize2, ...
+        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left')
+else
+    xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
+        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
+    ylabel('$y$','FontSize',F.fontSize2+5,'Interpreter','latex', ...
+        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left')
+end
 
-% if F.type>5
-%     [I,J]=ind2sub([n,n],find(C_MGC>0.1,1,'first'));
-%     J2=find(mcorrH(J,:)<0,1,'last');
-% else
-% end
-
-for ind=[1,2,3]; %length(F.id)
-    text(x(F.id(ind))+F.hs,y(F.id(ind))+F.hy(ind),num2str(ind),'fontsize',F.fontSize,'color',F.col)
+for ind=[1,2,3];
+    text(x(F.id(ind))+F.hs/3,y(F.id(ind))+F.hy(ind)/3,num2str(ind),'fontsize',F.fontSize,'color',F.col)
     plot(x(F.id(ind)),y(F.id(ind)),'.','MarkerSize',F.mkSize,'Color',F.col);
 end
 
-% tname=CorrSimuTitle(F.type);
-% findex=strfind(tname,'.');
-% tname=tname(findex+1:end);
-% xlim([min(x)-0.2, max(x)]);
-% ylim([min(y)-0.2, max(y)]);
+xll=max(x)-min(x);
+yll=max(y)-min(y);
+quiver(max(x)+0.25*xll, y(F.id(2)), 0, y(F.id(3))-y(F.id(2)),'LineWidth',1,'Color',F.col,'MaxHeadSize',0.5,'Autoscale','off');
+quiver(max(x)+0.25*xll, y(F.id(3)), 0, y(F.id(2))-y(F.id(3)),'LineWidth',1,'Color',F.col,'MaxHeadSize',0.5,'Autoscale','off');
+quiver(x(F.id(2)), max(y)+0.25*yll, x(F.id(3))-x(F.id(2)),0,'LineWidth',1,'Color',F.col,'MaxHeadSize',0.5,'Autoscale','off');
+quiver(x(F.id(3)), max(y)+0.25*yll, x(F.id(2))-x(F.id(3)),0,'LineWidth',1,'Color',F.col,'MaxHeadSize',0.5,'Autoscale','off');
+txt1 = strcat('$d_{x}(2, 3) =', {' '}, num2str(round(100*abs(x(F.id(3))-x(F.id(2))))/100),'$');
+a=text(x(F.id(2))/2+x(F.id(3))/2,max(y)+0.3*yll,txt1,'VerticalAlignment','bottom','HorizontalAlignment','center','Color',F.col,'Interpreter','latex');
+set(a,'FontSize',F.fontSize);
+txt1 = strcat('$d_{y}(2, 3) =', {' '}, num2str(round(100*abs(y(F.id(3))-y(F.id(2))))/100),'$');
+a=text(max(x)+0.3*xll,y(F.id(2))/2+y(F.id(3))/2,txt1,'VerticalAlignment','top','HorizontalAlignment','center','Color',F.col,'Interpreter','latex','rotation',90);
+set(a,'FontSize',F.fontSize);
+
+xlim([min(x)-0.3*xll, max(x)+0.3*xll]);
+ylim([min(y)-0.3*yll, max(y)+0.3*yll]);
 
 set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 axis('square')

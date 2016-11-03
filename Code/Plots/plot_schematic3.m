@@ -20,9 +20,6 @@ if nargin<4
     n=50;
 end
 
-if F.type==1
-    noise=0.5;
-end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
@@ -34,13 +31,13 @@ h=figure(1);
 clf
 set(h,'units','normalized','position',[0 0 1 1])
 % figure
-try
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
-catch
+% try
+%     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
+% catch
     display('no file exist, running instead')
     run_fig1Data(F.type,n,dim,noise);
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
-end
+% end
 
 
 %% plotting parameters

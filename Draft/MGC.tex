@@ -8,6 +8,16 @@
 \usepackage{authblk}
 \usepackage{helvet}
 \usepackage[colorlinks=true,pagebackref,linkcolor=magenta]{hyperref}
+\documentclass[11pt]{article}
+\usepackage{amsfonts,amsmath,amssymb,amsthm}
+\usepackage{graphicx,psfrag,epsf}
+\usepackage{enumerate}
+\usepackage{url} 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{authblk}
+\usepackage{helvet}
+\usepackage[colorlinks=true,pagebackref,linkcolor=magenta]{hyperref}
 \usepackage[sort&compress,comma,square,numbers]{natbib}
 \usepackage{fullpage,fancyhdr}
 \renewcommand{\familydefault}{\sfdefault}
@@ -16,6 +26,8 @@
 \usepackage{lineno}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[final,authormarkup=none]{changes}
+\usepackage{chngcntr}
+\usepackage{apptools}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \definecolor{green}{rgb}{0.1840,0.4362,0.1003} 
 
@@ -80,6 +92,8 @@
 \newtheorem{lem}{Lemma}
 %\newtheorem{appLem}{Lemma}
 %\setcounter{appLem}{0}
+\AtAppendix{\counterwithin{lem}{section}}
+\AtAppendix{\counterwithin{thm}{section}}
 \newcommand*\mean[1]{\bar{#1}}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -132,96 +146,62 @@ Identifying the existence of a relationship is a precursor to investigating the 
 One of the first statistical approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal paper prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
 
 
-Modern datasets, however, present particularly vexing challenges for dependence-testing that were not foreseen in Pearson's era.
+Modern datasets, however, present particularly vexing challenges for dependence-testing that were not addressed in Pearson's era.
 %
 First, the dependencies between different properties 
 of data can be highly \textbf{nonlinear}.
+% jovo: cite something about the rise of nonlinear science?
 % 
-Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics datasets, for example, often encompassing millions or even billions of dimensions. 
+Second, the dimensionality of the data might be extremely high (millions or billions for genomics and connectomics datasets), while the sample size often remains low (tens or hundreds).  This ``\textbf{large $p$ small $n$}'' further compounds the challenges associated with nonlinear relationships because higher dimensional problems require more data to obtain quality estimates.
+% jovo: cite something about p>n
+% 
+% Second, the \textbf{dimensionality} of individual samples is growing at exponential rates, with genomics and connectomics datasets, for example, often encompassing millions or even billions of dimensions. 
 %
-Third, the \textbf{sample sizes} are not increasing proportionally, meaning that we are often confronted with ultrahigh-dimensional datasets derived from relatively few samples.
+% Third, the \textbf{sample sizes} are not increasing proportionally, meaning that we are often confronted with ultrahigh-dimensional datasets derived from relatively few samples.
 % 
-Fourth, the data are often \textbf{structured}---sequences, images, networks, shapes, and text---creating problems for standard methods that were developed for unstructured feature sets.
+Third, the data are often \textbf{structured}---sequences, images, networks, shapes, and text---creating problems for standard methods that were developed for unstructured feature sets.
+% jovo: structured learning textbook cite?
 % 
-Fifth, because of the continuing data deluge,  \textbf{computationally efficient} methods are critical for generating results within acceptable time frames.
+Fourth, because of the continuing data deluge,  \textbf{computationally efficient} methods are critical for generating results within acceptable time frames.
+% jovo: 4th paradigm?
 %
 And finally, we not only want to know \textit{whether}  properties are dependent on each other, but also \textit{how} they are related.
-There is thus a  need for a method that satisfactorily address all of these challenges that is supported by compelling evidence for its theoretical efficacy and practical utility.
+There is thus a  need for a methodology that satisfactorily addresses all  these challenges, as demonstrated by compelling evidence for its theoretical efficacy and practical utility.
 
 
-To illustrate these challenges, consider the following simple example.
-Suppose we wish to determine whether there is a relationship between cloud shape and the wetness of the ground under those clouds.  We  record observations of cloud shape and ground wetness on 50 different days.
-  Let $x_i$ denote cloud shape on day $i$ and $y_i$ denote ground wetness on that same day. 
-If the relationship between cloud shape and ground wetness is approximately linear, the data might look like the top row in Figure \ref{f:newschem}. 
+To illustrate these challenge, consider the following simple example.
+Suppose we wish to determine whether there is a relationship between cloud shape and the wetness of the ground under those clouds.  We  record observations of cloud shape and ground wetness on $n$ different days (Figure \ref{f:newschem} row 0).
+Let $x_i$ denote cloud shape on day $i$ and $y_i$ denote ground wetness on that same day. 
+If the relationship between cloud shape and ground wetness is approximately linear, the data might look like Figure \ref{f:newschem}{\color{magenta}A0}. 
 On the other hand, if the relationship is a spiral, it might look like
-like those in the bottom row of Figure \ref{f:newschem}.
+like those in Figure \ref{f:newschem}{\color{magenta}B0}.
 % For either case, we illustrate our four-step approach to detect dependence and reveal its nature by Multiscale Generalized Correlation. (see Algorithm \ref{alg:mgc} in Appendix \ref{appen:algorithms} for pseudocode).
 
-
-All dependence tests that can detect arbitrary relationships compute the distances between all pairs of objects \emph{within} each property \cite{SzekelyRizzo2009,SzekelyRizzo2013b,HellerGorfine2013}. Thus, given $n=50$ observations, they compute $n \times n$ distances for property $x$, and another $n \times n$ distances for property $y$. 
 % Thre needs to be another sentence here.  Something like "If the shape of the cloud on day 7 is more like the shape of the cloud on day 43 than on any other day, we then focus our attention on the ground wetness on days 7 and 43.  Such a pair-wise comparison is very different fro standard comparisons in which the cloud density and ground wetness on day 7 are blah blah because I don't know how best to distinguish pairwise from stndard comparisons.  You do, though.     Pairwise comparisons have 
-Operating on comparisons between pairs of observations has a rich history in statistics and machine learning, including Mantel's dependence test \cite{Mantel1967} and  kernel methods \cite{scholkopf2002learning}.
-% , and certain manifold learning techniques \cite{
-% TorgersonBook, 
-% TenenbaumSilvaLangford2000, 
-% SaulRoweis2000, 
-% BelkinNiyogi2003,
-% DiffusionPNAS}.
-The popularity of pairwise comparisons rests on two properties. 
-First, comparisons can be easily defined on any kind of data, including structured objects like shapes and text.  This is in contrast to say, a t-test, which requires scalar numbers.  
-Second, pairwise comparisons have been shown to be sufficient statistics in a variety of contexts, including testing for equality of distributions \cite{Maa1996}, 
-% manifold learning \cite{RoweisSaul2003,MMS:NoisyDictionaryLearning}, 
-and dependence testing \cite{SzekelyRizzo2009,SzekelyRizzo2013b}. 
 % 
-However, existing tests struggle in
-% The second step is where other approaches, such as the celebrated ``distance correlation'' (\Dcorr) break down for 
-nonlinear or high-dimensional settings with low sample sizes \cite{SzekelyRizzo2009,HellerGorfine2013}. We conjecture this is because existing tests are effectively looking for global nonlinear structure; whereas local linear structure is both statistically and computationally easier to detect.
+Consider observation days 1, 2, and 3 (highlight in Figure \ref{f:newschem} row 0 by their color).  Comparing observations 1 and 2, both cloud shape and ground wetness are close to one another.  This is true  for both the linear  and the nonlinear (spiral) relationship.  However, comparing observations 2 and 3 is different.  When the relationship between shape and wetness is linear, if the distance between shapes across samples is large, then the distance between wetnesses also tends to be large.  This suggests that the correlation between distances can determine whether a relationship between shape and wetness exists.  
+% 
+On the other hand, for nonlinear relationships, there is no  guarantee that all of these correlations will be informative.  In particular, for the nonlinear relationship, although the distance between cloud shape is large between observations 2 and 3, the distance between ground wetness for those observations is small.  
+Thus, the correlation between shape distances and wetness distances is weak, misleadingly suggesting that there is no statistical dependency between shape and wetness, even though there is one.  
+This example illustrates that pairwise comparisons between different observations can be utilized for dependence testing, but certain pairwise comparisons can be misleading.
 
-To mitigate this challenge, we therefore look to a different sub-field of data science that has utilized the ``principle of locality''.  Under this principle, rather than using all the data to discover global structure, methods only use data samples that are ``close'' to one another to find local structure. This strategy  has reaped considerable benefits in a wide range of data science problems, including  classification and regression  \cite{Stone1977}, data compression \cite{DaubechiesWaveletBook},  recommender systems \cite{Sarwar2000}, and even testing \cite{David1966,Friedman1983,Schilling1986}.
-Moreover, it has become an invaluable tool in unfolding nonlinear geometry in many nonlinear dimensionality reduction (or manifold learning) algorithms (for example, \cite{
-TorgersonBook, 
-TenenbaumSilvaLangford2000, 
-SaulRoweis2000, 
-BelkinNiyogi2003,
-DiffusionPNAS,
-MMS:NoisyDictionaryLearning}). 
-However, all of these approaches have been plagued by having to choose the optimal scale.  More specifically, each approach must choose a threshold, such that all within that threshold are considered local, and all those outside that threshold are effectively ignored.  
-Without guidance, these tools rely on costly cross-validation techniques and other heuristics to choose the optimal scale.
+Many statistical and machine learning methods have utilized pairwise comparisons for a wide variety of tasks, ranging from hypothesis testing (e.g., \cite{David1966,Mantel1967,Friedman1983,Schilling1986,Maa1996,SzekelyRizzo2009,SzekelyRizzo2013b,HellerGorfine2013}) 
+to manifold learning (e.g., \cite{TorgersonBook, TenenbaumSilvaLangford2000, SaulRoweis2000, BelkinNiyogi2003,DiffusionPNAS, MMS:NoisyDictionaryLearning}); kernel machines are a sub-field of machine learning dedicated to using such comparisons for many tasks (e.g., \cite{scholkopf2002learning,GrettonEtAl2005,harchaoui2013kernel}).
+The first step of these approaches compute comparisons (either  similarities or dissimilarities) between all pairs of observations (Figure \ref{f:newschem} row 1, gray dots).  In the context of the dependence testing scenario described above, all such approaches  would  compute comparisons between pairs of cloud shape observations as well as comparisons between pairs of ground wetness observations. These methods differ in how they choose the comparison function, and what they do with the comparisons having computed them. 
+The popularity of these methods can be attributed to their wide-ranging applicability to structured data, 
+% jovo: cite structured learning
+ strong theoretical properties, 
+% jovo: cite some stuff
+and empirical performance.
+% jovo: cite some stuff.
+Nonetheless, they have been plagued with an inability to adaptively select the optimal comparisons in a fashion that is both computationally efficient and statistically consistent.  
 
-Our key insight is that we can determine the optimal scale using a statistically consistent and computational efficient manner.  
-
-
-
-% Our approach, 
-% \emph{Multiscale Generalized Correlation} (\Mgc), mitigates this challenge. 
-Specifically, rather than  computing the correlation between all pairs of distances at the second step, we compute the correlation between subsets of pairs of distances as follows.
-For each point, \Mgc~finds its nearest neighbor in $x$ and its nearest neighbor in $y$, and computes the distance only between those neighboring points, and then computes the correlation only among those local distances.  Then, \Mgc~iteratively increases the number of neighbors of $x$ to include, as well as those for $y$, for each computing  the linear correlation only between those local distances.   
-
-% \Dcorr~computes the correlation between all pairs of distances (see Appendix \ref{appen:dcorr} for details). 
-% When the relationship is nearly linear, samples that are close in $x$ are also close in $y$ (see points marked $1$ and $2$). 
-% However, when the relationship is nonlinear, there may be many points that are close in $y$ but not $x$  (see points marked $2$ and $3$).  
-% Thus, computing the linear correlation for all pairs of distances will include many distance pairs that decrease the distance correlation, making the two properties seemingly unrelated in the \Dcorr~test."
-
-Doing so for all possible ``scales'' (or neighborhood sizes) yields a \emph{multiscale correlation map}. 
-This approach is an explicit generalization of previous work which only consider a single scale---the global one---consisting of all pairs of observations. 
-Given this multiscale map, \Mgc~searches for the best test statistic, $c^*$, that is, the largest test statistic after smoothing to address sample noise (see Algorithm \ref{alg:sample_mgc} for details). 
 
 \begin{figure}
-\includegraphics[width=1.0\textwidth,trim={0cm 0cm 0cm 0cm},clip]{Figures/FigSimVisual2.pdf}
-\caption{candidate figure: This figure shows that \Mgc~is a superior correlation measure for dependence, as \Mgc~yields a correlation measure larger than $0$ for all types of dependencies while being $0$ under independence. In comparison, \Dcorr~can be very close to $0$ for many nonlinear dependencies, despite it is a consistent statistic for testing dependence; and pearson's correlation is a correlation measure for linear association rather than dependence, such that it also fails to capture many nonlinear dependencies. For each relationship, the \Mgc~statistic is shown above; and the accompanying chart bar compares \Mgc~(green), \Mcorr~(gray), and pearson's correlation in the absolute value (black), all of which lie in the range of $[0,1]$ with $0$ indicating no relationship. The detailed settings are in Supplementary~\ref{appen:function}, for which we set sample size $n=200$ and the noise level at $0.2$, randomly generate sample observations pairs, and calculate each correlation measure.}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=1.0\textwidth,trim={0cm 1.5cm 0cm 2.5cm},clip]{Figures/A2_type1_n50_noise5.pdf}
-\includegraphics[width=1.0\textwidth,trim={0cm 1.5cm 0cm 5cm},clip]{Figures/A2_type8_n50_noise0.pdf}
-\caption{Candidate figure}
-\end{figure}
-
-\begin{figure}
-% \includegraphics[width=1.0\textwidth]{Figures/flowchart}
-% trim={<left> <lower> <right> <upper>}
-\includegraphics[width=1.0\textwidth,trim={0cm 1.5cm 0cm 2.5cm},clip]{Figures/Fig1.pdf}
-\includegraphics[width=1.0\textwidth,trim={0cm 1.5cm 0cm 5cm},clip]{Figures/Fig8.pdf}
+\includegraphics[width=0.25\textwidth,trim={0cm 0cm 0cm 0cm},clip]
+{Figures/mgc-flow.pdf}
+\includegraphics[width=0.25\textwidth,trim={0.9cm 0cm 0cm 0cm},clip]{Figures/A3_type1_n100_noise3_dim1.pdf}
+\includegraphics[width=0.25\textwidth,trim={0.9cm 0cm 0cm 0cm},clip]{Figures/A3_type8_n100_noise3_dim1.pdf}
 \caption{Illustration of the four steps of Multiscale Generalized Correlation (\Mgc) in two different regions: linear (top) and nonlinear (spiral; bottom). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr, an existing state of the art dependence test, are shown for comparative purposes. 
 \textbf{(0)}  $50$ pairs of samples of $x$ and $y$ (see Appendix \ref{appen:function} for details). 
 Samples $1$, $2$, and $3$ are highlighted to indicate how \Mgc~is able to discover nonlinear relationships. 
@@ -239,10 +219,37 @@ For the linear case, many scales, including the global one, are optimal, implyin
 % 
 Thus, \Mgc~is able to detect dependence even in highly nonlinear settings with low sample sizes, and reveal the scales of dependence.}
 \label{f:newschem}
-\end{figure} 
+\end{figure}
 
-The third step is to compute the p-value via a permutation test, much like previously proposed dependence tests.  The p-value for \Dcorr, $p(c)$, and \Mgc, $p(\hat{c}^*)$, are both highly significant for the linear example. On the other hand, \Dcorr~fails to detect a relationship for the nonlinear setting, where \Mgc~still detects a highly significant relationship.
+To overcome this obstacle we have devised a method that we refer to as ``Multiscale Generalized Correlation'' (\Mgc).  
+\Mgc~generalizes essentially all previously proposed pairwise comparison based approaches.   
+Specifically, rather than computing the correlation between all pairs of distances, \Mgc~computes the correlation between subsets of pairs of distances, the local ones.
+The intuition of using only local pairs follows from knowing that essentially any function can be fit by a piecewise linear function---that is, a union of many linear functions connected to one another.  And from the above example, it was clear that linear relationships between pairs distances are informative, as long as the pairs are close to one another along both dimensions.
+The key is to be able to determine how many linear relationships are needed to fit the nonlinear function, or in other words, how local should we look (the scale).  
+\textbf{Our main insight is realizing that we can adaptively choose the optimal scale for any relationship---linear or nonlinear, high-dimensional or low-dimensional, structured or unstructured---in a computationally efficient and statistically consistent fashion, therefore guaranteeing improved statistical performance over existing methods.}  This optimal scale is  informative about the nature of the dependence structure, therefore providing further guidance for subsequent experimental or analytical steps.
 
+The second step of \Mgc, which differentiates from all previous approaches, is to compute the distance correlation for all possible scales, and choose the maximum as the test statistic. 
+This step proceeds in a recursive fashion.  For each point, \Mgc~finds its nearest neighbor in $x$ and its nearest neighbor in $y$. 
+In the above example, this means for each day, \Mgc~finds the day with the most similar cloud shape and the day with the most similar ground wetness.  
+Given this  set of local pairs, \Mgc~computes the distances only between these nearest neighbor pairs, and then computes the correlation only among the resulting distances.  
+\Mgc~iteratively increases the number of neighbors of $x$ to include, as well as those for $y$, for each computing  the linear correlation only between those local distances.   
+% 
+% \Dcorr~computes the correlation between all pairs of distances (see Appendix \ref{appen:dcorr} for details). 
+% When the relationship is nearly linear, samples that are close in $x$ are also close in $y$ (see points marked $1$ and $2$). 
+% However, when the relationship is nonlinear, there may be many points that are close in $y$ but not $x$  (see points marked $2$ and $3$).  
+% Thus, computing the linear correlation for all pairs of distances will include many distance pairs that decrease the distance correlation, making the two properties seemingly unrelated in the \Dcorr~test."
+ % 
+% Doing so for all possible ``scales'' (or neighborhood sizes) 
+% yields a \emph{multiscale correlation map}. Given this multiscale map, 
+Having computed the test statistic for all the scales, \Mgc~selects  the best test statistic, that is, the largest test statistic after smoothing to address  noise (see Algorithm \ref{alg:sample_mgc} for details). The green dots in Figure \ref{f:newschem}Ai and Bi show the pairwise distances for the chosen scales for $x$ and $y$.  The green lines in Figure \ref{f:newschem}Aii and Bii connect the corresponding neighbors, the titles provide the value of the test statistics. Clearly, for the linear case all the neighbors are used, so the test statistic for \Mgc~is the same as that for \Dcorr.  For the nonlinear case however, the set of comparisons is greatly reduced to only local pairs, resulting in the test statistic for \Mgc~being much larger than \Dcorr's test statistic.   
+
+
+
+The third step is to compute the p-value, as well as a \textbf{multiscale significance map} indicating which scales are maximally informative about the dependence relationship. 
+% 
+% via a permutation test, much like previously proposed dependence tests. 
+The p-value for \Dcorr, $p(c)$, and \Mgc, $p(\hat{c}^*)$, are both highly significant for the linear example. On the other hand, \Dcorr~fails to detect a relationship for the nonlinear setting, where \Mgc~still detects a highly significant relationship.
+ 
 The fourth step is to find the optimal scales.  This is only possible because \Mgc~computed a multiscale correlation map.  \Mgc~computes the p-value for all scales.  Then, \Mgc~finds the largest rectangle that contains only scales with significant p-values, that is, p-values no more than $p(\hat{c}^*)$. In the linear setting, many scales including the global yield highly significant p-values, implying a nearly linear relationship.  On the other hand, for the non-linear setting, only a set of small local scales yields significant p-values, implying a strongly nonlinear relationship.  
 
 Returning to the first step, we have lighted in green all the pairs that correspond to the optimal scales.  It should be clear that \Mgc~was able to find a linear needle in a nonlinear haystack of data.  This is in contrast to previous approaches.  Perhaps more importantly, rather than merely providing a valid and unbiased p-value, \Mgc~also provides a multiscale map that reveals the nature of the dependence between the two properties of interest, which offers guidance on the type of dependency and further predictive modeling. More mathematical details of \Mgc~are provided in section~\ref{appen:methods}. 
@@ -272,7 +279,7 @@ Supplementary Figure \ref{f:nDAll} shows the power as a function of dimensionali
 \begin{figure}
   \centering
   \includegraphics[width=1.0\textwidth,trim={1cm 0 3cm 0},clip]{Figures/FigHDPowerMGCM}
-  \caption{Power comparison of both Oracle and Sample \Mgc~to four benchmark dependence tests (denoted $\mathcal{A}$), for the $20$ different settings.  For each setting we compute the average power over a wide range of dimensions $\bar{\beta}$, and plot $\bar{\beta}(\mathcal{A}) - \bar{\beta}(\Mgc)$, for both both Oracle (black dots) and Sample \Mgc~(gray asterisks).  
+  \caption{Power comparison of both Oracle and Sample \Mgc~to four benchmark dependence tests (denoted $\mathcal{A}$), for the $20$ different settings.  For each setting we compute the average power over a wide range of dimensions $\bar{\beta}$, and plot $\bar{\beta}(\mathcal{A}) - \bar{\beta}(\Mgc)$, for both Oracle (black dots) and Sample \Mgc~(gray asterisks).  
   The large dots on the x-axis indicate the  power difference averaged over all 20 settings.
 \Mgc~nearly dominates existing benchmarks, exhibiting similar or better power for nearly all settings, with Sample \Mgc~being very close to  Oracle \Mgc. 
 }
@@ -379,7 +386,6 @@ Figure \ref{f:real}{\color{magenta}C} shows that even a global dependence test c
 %A primary goal of statistical analysis and modeling is to suggest the next experiment or analysis.  For all three of the above investigations, \Mgc~not only found dependence, but also indicated the scales of dependence.  
 %Thus, to further investigate these datasets---for example, to build a brain-based assay for any of these mental properties---we would start by breaking the data into multiple cohorts, whose sizes correspond to the optimal scales detected here.  Without \Mgc, there would be no dependence test-based justification for any subsequent step.
 \cs{moved above to beginning of real data section}
-\cs{add refer to appendix:method}
 
 \subsubsection*{Sample \Mgc~Does Not Inflate False Positive Rates} 
 
@@ -469,6 +475,8 @@ the Air Force Office of Scientific Research contract FA955014-1-0033. The author
 \appendix
 \setcounter{figure}{0}
 \renewcommand\thefigure{S\arabic{figure}}
+\renewcommand{\thesubsection}{\thesection.\Roman{subsection}}
+%\renewcommand{\thesubsubsection}{\thesubsection.\Roman{subsubsection}}
 
 \section{Global Methods for Testing Dependence}
 \label{appen:methods}
@@ -477,7 +485,7 @@ To better understand our multiscale generalized correlation, in this section we 
 \subsection{Testing Independence}
 To theoretically investigate the performance of any dependence tests requires formalizing the statistical hypotheses.
  
-Given pairs of observations $(\mb{x}_{i},\mb{y}_{i}) \in \Real^{D \times D_y}$ for $i=1,\ldots,n$, assume they are independently identically distributed as $(\mbx,\mby)$. If the two random variables \mbx~and \mby~are independent, the joint distribution equals the product of the marginals, i.e., $f_{xy}=f_x f_y$.  Therefore, the common statistical hypotheses for testing independence is as follows:
+Given pairs of observations $(\mb{x}_{i},\mb{y}_{i}) \in \Real^{D \times D_y}$ for $i=1,\ldots,n$, assume they are independently identically distributed as $(\mbx,\mby)$. If the two random variables \mbx~and \mby~are independent, the joint distribution equals the product of the marginals, i.e., $f_{xy}=f_x f_y$.  Therefore, the statistical hypotheses for testing independence is as follows:
 \begin{align*}
 & H_{0}: f_{xy}=f_{x}f_{y},\\
 & H_{A}: f_{xy} \neq f_{x}f_{y}.
@@ -579,7 +587,7 @@ If $mvar(X) \cdot mvar(Y) \leq 0$, the modified distance correlation is set to $
 
 It is shown in \cite{SzekelyRizzo2013a} that $\Mcorr(X,Y)$ is an unbiased estimator of the population distance correlation $\Dcorr(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it is always of zero mean under independence, enjoys the same theoretical consistency as \Dcorr, and may work better than \Dcorr~for high-dimensional dependencies.
 
-Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $A'$ and $B'$ in defining \Mcorr, which does not alter the theoretical advantages of the original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is still asymptotically equivalent for testing. Thus we use the single-centered \Mcorr~with zero diagonals for computational expediency and simplicity in the \Mgc~implementation.
+Similar to the alternative implementation of \Dcorr, we can also use singly centered distance matrices for $A'$ and $B'$ in defining \Mcorr, which does not alter the theoretical advantages of the original \Mcorr. We further set $A_{ii}=B_{ii}=0$ for all $i$, which simplifies the expression of \Mcorr~and is still asymptotically equivalent for testing (most recently, \cite{RizzoSzekely2016} also sets the diagonals to zero for the unbiased distance correlation). Thus we use the single-centered \Mcorr~with zero diagonals for computational expediency and simplicity in the \Mgc~implementation.
 
 \subsubsection{Heller, Heller, \& Gorfine (\Hhg)}
 \label{appen:hhg}
@@ -703,10 +711,10 @@ Among all local correlation, we dub the optimal local correlation as the multisc
 
 %By noting that the sufficient statistics for larger neighborhood sizes include those for the smaller sizes, one can simply keep track of the sufficient statistics while iteratively increasing neighborhood size, yielding  \emph{all} local correlations in $O(n^2 \log n)$, essentially the same running time complexity as  global correlation coefficients (Algorithms \ref{alg:all_scales}). Specifically, \Mantel, \Dcorr, and \Mcorr~require $O(n^2)$ time, and \Hhg, another state-of-the-art approach,  requires $O(n^2 \log n)$ time \cite{HellerGorfine2013}.  Upon computing the test statistics for all scales, \Mgc~yields ``multiscale maps'', which it then uses to estimate the optimal scale.\footnote{These maps are  related to, but quite distinct from, maps of wavelet coefficients commonly used in geometric counterparts of harmonic analysis \cite{Allard2012,MMS:NoisyDictionaryLearning}.}
 
-Given the distribution, the sample size, and the type $1$ error level, we always define the optimal local correlations (i.e., Oracle \Mgc) as the local correlations that maximize power (the probability of correctly rejecting a false null hypothesis, denote as $\beta$). Mathematically, the optimal scales and Oracle \Mgc~are
+Given the distribution, the sample size, and the type $1$ error level, we always define the optimal local correlation (i.e., Oracle \Mgc) as the local correlations that maximize power (the probability of correctly rejecting a false null hypothesis, denote as $\beta$). Mathematically, the optimal scales and Oracle \Mgc~are
 \begin{align*}
-(k^{*},l^{*}) &=\argmax_{(k,l)}\{\beta(\G_{kl})\}, \\
-\G^{*} &=\max\{\G_{k^{*}l^{*}}\} 
+\Omega &=\{(k^{*},l^{*})\} =\argmax_{(k,l)}\{\beta(\G_{kl})\}, \\
+\G^{*} &=\max\{\G_{kl},(k,l) \in \Omega\} 
 \end{align*}
 The optimal scales always exist,  are distribution dependent, and are often non-unique. Among all local correlations, it suffices to exclude $\G^{1l}$ and $\G^{k1}$: since $\G^{1l}=\G^{k1}=\G^{11}$, they do not include any neighbor other than each observation itself, merely count the diagonal terms in the distance matrices, and will not be selected as optimal after all. Among all optimal scales, it is equivalent to use any local correlation as the \Mgc~statistic, so we simply take the largest correlation among all optimal scales. 
 
@@ -804,7 +812,7 @@ The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\r
 
 Taken together, the three theorems above lead to the main theorem~\ref{t:dominate} in the main paper.
 
-\section{Simulation Functions}
+\section{Simulation Dependence Functions}
 \label{appen:function}
 
 This section provides the $20$ different dependency functions used in the simulations.  We used essentially the exact same settings as previous publications to ensure a fair comparison \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add white noise, and a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes. We also included a few additional settings.
@@ -927,6 +935,11 @@ The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional setti
 \section{Supplementary Figures}
 \label{appen:figs}
 
+\begin{figure}
+\includegraphics[width=1.0\textwidth,trim={0cm 0cm 0cm 0cm},clip]{Figures/FigSimVisual2.pdf}
+\caption{This figure shows that \Mgc~is a superior correlation measure for dependence, as \Mgc~yields a correlation measure larger than $0$ for all types of dependencies while being $0$ under independence. In comparison, \Dcorr~can be very close to $0$ for many nonlinear dependencies, despite it is a consistent statistic for testing dependence; and pearson's correlation is a correlation measure for linear association rather than dependence, such that it also fails to capture many nonlinear dependencies. For each relationship, the \Mgc~statistic is shown above; and the accompanying chart bar compares \Mgc~(green), \Mcorr~(gray), and pearson's correlation in the absolute value (black), all of which lie in the range of $[0,1]$ with $0$ indicating no relationship. The detailed settings are in Supplementary~\ref{appen:function}, for which we set sample size $n=200$ and the noise level at $0.2$, randomly generate sample observations pairs, and calculate each correlation measure.}
+\end{figure}
+
 \begin{figure}[htbp]
 \vspace{-50pt}
 \includegraphics[width=1.0\textwidth,trim={0 0 2cm 0},clip]{Figures/FigA}
@@ -976,16 +989,16 @@ The global methods fail to detect significant dependence since they consider all
 \label{f:schematic}
 \end{figure}
 
-\begin{figure}[htbp]
+% \begin{figure}[htbp]
 % \includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPower}
-\caption{Power of Oracle \Mgc, Sample \Mgc, \Mcorr, and \Hhg~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Supplementary \ref{appen:algorithms} for details).  
-Each panel shows the testing power at significance level $\alpha=0.05$
-% \jv{should we include `# of' or just leave it off? technically, isn't everything "# of"?}
-versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Supplementary \ref{appen:function} for details). 
-Excluding the independent  setting (\#20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state-of-the-art method, for almost all settings and all dimensions. 
-}
-\label{f:nD}
-\end{figure}
+% \caption{Power of Oracle \Mgc, Sample \Mgc, \Mcorr, and \Hhg~for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} in Supplementary \ref{appen:algorithms} for details).  
+% Each panel shows the testing power at significance level $\alpha=0.05$
+% % \jv{should we include `# of' or just leave it off? technically, isn't everything "# of"?}
+% versus the dimensionality of $\mb{x}$'s, for $n=100$ samples (the dimensionality of $y$ increases for some settings, see Supplementary \ref{appen:function} for details). 
+% Excluding the independent  setting (\#20), for which all methods yield power $0.05$, as they should, \Mgc~empirically achieves similar or better power than both \Mcorr~\cite{SzekelyRizzo2013a}, its global counterpart, and \Hhg~\cite{HellerGorfine2013}, another state-of-the-art method, for almost all settings and all dimensions. 
+% }
+% \label{f:nD}
+% \end{figure}
 
 
 \begin{figure}[htbp]
@@ -997,7 +1010,7 @@ Excluding the independent  setting (\#20), for which all methods yield power $0.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPowerAll}
-\caption{Power of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} for details). It includes eight different tests: \Mcorr, \Dcorr, and \Mantel~(gray solid, dashed, and dashdot lines, respectively), their corresponding Oracle \Mgc~counterparts, \Mgcm, \Mgcd, \Mgcp~(green with same line styles), Sample \Mgc~by \Mcorr~(cyan solid), and \Hhg~(gray dotted line). 
+\caption{Power of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} for details). It includes eight different tests: \Mcorr, \Dcorr, and \Mantel~(gray solid, dashed, and dashdot lines, respectively), their corresponding Oracle \Mgc~counterparts, \Mgcm, \Mgcd, \Mgcp~(green with same line styles), Sample \Mgc~applied to \Mcorr~(cyan solid), and \Hhg~(gray dotted line). 
 Each panel shows the testing power at significance level $\alpha=0.05$ versus the dimensionality of $\mb{x}$'s, for $n=100$ samples. 
 Excluding the independent setting (\#20), for which all methods yield power $0.05$, as they should, Oracle \Mgc~empirically achieves similar or better power than the respective global counterpart. In particular, Sample \Mgc~is very close to Oracle \Mgcm, and overall dominates existing approaches for almost all settings and all dimensions, including \Hhg~\cite{HellerGorfine2013}, another state-of-the-art method. Note that \Mgc~is always plotted ``on top'' of the global variants if there is overlap, therefore, some of the global variants are not always visible from the display.}
 \label{f:nDAll}
@@ -1034,7 +1047,7 @@ Again, Oracle \Mgc~empirically achieves similar or better power than the previou
 In this section, we elaborate on the algorithms for computing all local correlations, Oracle and Sample \Mgc, the optimal scale estimation, as well as the testing power and p-value computations.
 
 Six algorithms are presented in Supplementary~\ref{appen:algorithms}: 
-Algorithm~\ref{alg:mgc} shows how \Mgc~can be applied to any two pairs of sample observations, to yield the correlation measure, the permutation p-value, the multiscale maps, and the optimal scales.
+Algorithm~\ref{alg:mgc} shows how \Mgc~can be applied to any two pairs of sample observations, to yield Sample \Mgc~and its p-value via the permutation test, as well as the multiscale maps and the optimal scales.
 Algorithm~\ref{alg:sample_mgc} is the actual Sample \Mgc~algorithm. It finds the optimal correlation by thresholding and smoothing on the multiscale correlation map, which is an estimation of the Oracle \Mgc~.
 Algorithm~\ref{alg:power} computes the testing power of all local statistics when the underlying joint distribution is known, which yields the multiscale power map. Then the optimal scales of Oracle \Mgc~can be accurately calculated by maximizing the power map.
 Algorithm~\ref{alg:pval} computes the p-values of all local correlation by the random permutation test, which yields the multiscale p-value map. The p-value and the optimal scale estimation of Sample \Mgc~follow in this algorithm as well. 
@@ -1073,19 +1086,18 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \State Find $\hat{\G}^*=\textsc{MGCTestStatistic}(C)$ 
 \Comment{estimated optimal test statistic}
 % 
-\Statex{\textbf{(3)} Null Distribution \& P-Values}
+\Statex{\textbf{(3)} Calculate Multiscale P-Value Map; P-value and Optimal Scales for Sample \Mgc}
 \For{$j:=1,\ldots,r$}
 \State Let $\pi=\textsc{RandPerm}(n)$. \Comment{generate a random permutation of size $n$}
 \State Repeat \textbf{(2)} using $A$ and $B(\pi,\pi)$ to obtain the null distribution, $C_{0}[j]$ and ${\hat{\G}_{0}}^{*}[j]$.
 \EndFor
-\State $p(\hat{\G}^*)= \frac{1}{r}\sum_{j=1}^r \mb{I}(\hat{\G}^* < \hat{\G}^{*}_{0}[j])$.
-\Comment{compute p-value of Sample MGC}
 % 
-\Statex{\textbf{(4)} Multiscale P-Value Map and Optimal Scales}
 \For{$k,l := 1,\ldots, n$}
 \State $p(\G^{kl}) = \frac{1}{r}\sum_{j=1}^r \mb{I}(\G^{kl} < \G^{kl}_{0}[j])$ 
 \Comment{compute p-value for all scales}
 \EndFor
+\State $p(\hat{\G}^*)= \frac{1}{r}\sum_{j=1}^r \mb{I}(\hat{\G}^* < \hat{\G}^{*}_{0}[j])$.
+\Comment{compute p-value of Sample MGC}
 \State Construct the binary map:    $\mathcal{E}^{kl} = 1 $ iff $  p(\G^{kl}) < p(\hat{\G}^*)$. \Comment{find estimated optimal scales}
 \State $\mathcal{S}=$ the set of elements in the largest axis aligned rectangle in $\mathcal{E}$ containing only $1$'s.
 \EndFunction
@@ -1101,7 +1113,7 @@ All algorithms are implemented in Matlab and R with the algorithm shown below. F
 \Ensure The Sample \Mgc~statistic $\hat{\G}^{*} \in \Real$.
 \Function{MGCTestStatistic}{$\{\G^{kl}\}$}
 \State $\tau_{1} \rto \sum_{\G^{kl}<0} (\G^{kl})^2 / \sum_{\G^{kl}<0} 1$ \Comment{variance of all negative local correlations away from $0$}
-\State $\tau_{1} \rto \max\{0.01,\sqrt{\epsilon}\} \times 3.5$ \Comment{threshold based on negative correlations}
+\State $\tau_{1} \rto \max\{0.01,\sqrt{\tau_1}\} \times 3.5$ \Comment{threshold based on negative correlations}
 \State $\tau_{2} \rto \min\{2/n,0.05\}$ \Comment{threshold based on sample size}
 \State $R_{kl} \rto \mb{I}(\G^{kl}>\max\{\tau_{1},\tau_{2}\})$ \Comment{find all correlations that are larger than the thresholds}
 \State $R = \textsc{Connected}(R)$ \Comment{largest connected component of all significant correlations}

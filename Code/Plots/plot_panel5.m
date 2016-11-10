@@ -34,7 +34,7 @@ colormap(ax,flipud(cmap));
 %ceil(max(max(ph))*10)/10
 cticks=[0.001, 0.01, 0.1, 0.5];
 caxis(log([0.001 0.2]));
-if F.type==1
+if F.type==8
     h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','eastoutside');
     set(h,'FontSize',F.fontSize);
 %     axpos = ax.Position;
@@ -80,9 +80,9 @@ hold off
 
 if F.type==1
     xlabel('X Scales','FontSize',F.fontSize2+2,...
-        'Units', 'normalized','Position', [-0.010, -0.16], 'HorizontalAlignment', 'left');
+        'Units', 'normalized','Position', [0.5, -0.16], 'HorizontalAlignment', 'center');
     ylabel('Y Scales','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position', [-0.22 -0.02], 'HorizontalAlignment', 'left');
+        'Units', 'normalized', 'Position', [-0.22 0.5], 'HorizontalAlignment', 'center');
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick

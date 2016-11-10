@@ -57,9 +57,9 @@ else
 end
 if F.type==1
     xlabel('X Scales','FontSize',F.fontSize2+2,...
-        'Units', 'normalized','Position', [-0.010, -0.08], 'HorizontalAlignment', 'left');
+        'Units', 'normalized','Position', [0.5, -0.08], 'HorizontalAlignment', 'center');
     ylabel('Y Scales','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left');
+        'Units', 'normalized', 'Position',  [-0.22 0.5], 'HorizontalAlignment', 'center');
 end
 
 % if F.tit
@@ -69,8 +69,8 @@ end
 %     tit1=strcat('2', F.AB ,'. Multiscale Correlation');
 %     tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
 % end
-txt1 = strcat('\color[rgb]{0 1 0} MGC=', num2str(round(100*test)/100));
-txt2 = strcat('\color[rgb]{0.5 0.5 0.5} Dcorr=', num2str(round(100*tA(end))/100));
+txt1 = strcat('\color[rgb]{0 1 0} c(MGC)=', num2str(round(100*test)/100));
+txt2 = strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr)=', num2str(round(100*tA(end))/100));
 title({txt1;txt2},'FontSize',F.tfs-2,'interpreter','tex');
 
 set(gca,'FontSize',F.fontSize)

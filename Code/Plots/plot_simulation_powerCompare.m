@@ -19,7 +19,7 @@ total=20;
 if nargin<1
     select=1;
 end
-fontSize=16;
+fontSize=20;
 %% Set colors
 gr = [0.5,0.5,0.5];
 bl=[0,0,0];
@@ -62,7 +62,7 @@ else
     end
 end
 %
-str={'A. MGC vs Mantel';'B. MGC vs Dcorr';'C. MGC vs Mcorr';'D. MGC vs HHG'};
+str={'A. MGC - Mantel';'B. MGC - Dcorr';'C. MGC - Mcorr';'D. MGC - HHG'};
 %lw=3;
 %ss=[1,3,2,5,4,6,7,13,19,16,17,10,9,14,8,11,12,15,18,20];
 for j=1:length(str)
@@ -71,25 +71,26 @@ for j=1:length(str)
     pv1=AUC(j,:);
     %pv1=pv1(ss);
     ord1=0.05*(1:total);
-    plot(pv1,ord1,'*','MarkerSize',8,'Color',gr);
+%     plot(pv2,ord1,'*','MarkerSize',8,'Color',gr);
     
     pv2=AUC(j+4,:);
     %pv2=pv2(ss);
     plot(pv2,ord1,'.','MarkerSize',15,'Color',bl);
-    if j==1
-        h=legend('Oracle','Sample');
-        set(h,'FontSize',fontSize, 'Units', 'normalized','Position',[0.06,0.75,0,0]);
-        legend boxoff
-    end
-    plot(pv1,ord1,'.','MarkerSize',15,'Color',gr);
+        plot(pv2,ord1,'*','MarkerSize',8,'Color',bl);
+%     if j==1
+%         h=legend('Oracle','Sample');
+%         set(h,'FontSize',fontSize, 'Units', 'normalized','Position',[0.06,0.75,0,0]);
+%         legend boxoff
+%     end
+%     plot(pv1,ord1,'.','MarkerSize',15,'Color',gr);
     
     plot(zeros(21,1),0:0.05:1,'--','Color',gr,'LineWidth',2)
     mm1=mean(pv1);
     mm2=mean(pv2);
     pos=0;
-    plot(mm1,pos,'.','MarkerSize',30,'Color',gr);
-    plot(mm1,pos,'*','MarkerSize',12,'Color',gr);
-    plot(mm2,pos,'.','MarkerSize',30,'Color',bl);
+%     plot(mm1,pos,'.','MarkerSize',30,'Color',gr);
+    plot(mm2,pos,'*','MarkerSize',13,'Color',bl);
+    plot(mm2,pos,'.','MarkerSize',24,'Color',bl);
     
 %     a=text(mm1,pos+0.02,num2str(round(mm1*100)/100),'VerticalAlignment','bottom','HorizontalAlignment','left','Color',gr,'Interpreter','latex');
 %     set(a,'FontSize',fontSize);
@@ -110,9 +111,9 @@ for j=1:length(str)
         
     if j==1
         xlabel('Power Difference','FontSize',fontSize,...
-            'Units', 'normalized','Position', [0.36, -0.15]);%, 'HorizontalAlignment', 'left')
+            'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
         ylabel('Simulation Type','FontSize',fontSize, ...
-            'Units', 'normalized','Position', [-0.15 0.33])%, 'HorizontalAlignment', 'left')
+            'Units', 'normalized','Position', [-0.18 0.38])%, 'HorizontalAlignment', 'left')
         %set(gca,'XTickLabel',[0,1],'XTick',[0,1],'FontSize',fontSize);
     else
         set(gca,'YTick',[]); % Remove y axis ticks
@@ -120,7 +121,7 @@ for j=1:length(str)
     end
     %set(gca,'YTick',[]); % Remove y axis ticks
     title(str(j,:),'FontSize',fontSize, ...
-        'Units', 'normalized','Position', [0.35 1.05])%, 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     hold off
 end
 

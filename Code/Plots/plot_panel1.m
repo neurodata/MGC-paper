@@ -26,14 +26,14 @@ set(groot,'defaultAxesColorOrder',F.map2);
 plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
 if F.type==1
     xlabel('Ground Wetness','FontSize',F.fontSize2,...
-        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [0.5, -0.08], 'HorizontalAlignment', 'center')
     ylabel('Cloud Shape','FontSize',F.fontSize2, ...
-        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left')
+        'Units', 'normalized', 'Position',  [-0.22 0.5], 'HorizontalAlignment', 'center')
 else
     xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
-        'Units', 'normalized','Position', [-0.01, -0.08], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', [0.5, -0.08], 'HorizontalAlignment', 'center')
     ylabel('$y$','FontSize',F.fontSize2+5,'Interpreter','latex', ...
-        'Units', 'normalized', 'Position',  [-0.22 -0.02], 'HorizontalAlignment', 'left')
+        'Units', 'normalized', 'Position',  [-0.02 0.5], 'HorizontalAlignment', 'center')
 end
 
 for ind=[1,2,3];

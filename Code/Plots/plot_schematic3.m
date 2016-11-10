@@ -108,17 +108,17 @@ if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
 height=0.34;
-vspace=0.16;
+vspace=0.15;
 
 width=0.55;
 left=0.2;
 %left=width+left1;
 bottom=nan(1,4);
-bottom1=0.08;
+bottom1=0.15;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
-% bottom(4)=bottom(4)-0.05;
+bottom(4)=bottom(4)-0.07;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -162,7 +162,7 @@ else
     titletext=strcat('B.',{' '},titletext);
 end
 h=suptitle(titletext);
-set(h,'FontSize',F.fontSize2+10,'Units', 'normalized','Position', [0.5, -0.05,0], 'HorizontalAlignment', 'center')
+set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.06,0], 'HorizontalAlignment', 'center')
 
 
 %%

@@ -19,7 +19,6 @@ end
 if nargin==2
     if size(B,1)>1;
         thres=0.035;
-        localCorr=MGCLocalCorr(A,B); 
     else
         localCorr=A; % if there is only one input, asume the localCorr is given as A
         thres=B;
@@ -35,8 +34,8 @@ negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
 thres1=3.5*norm(negCorr,'fro')/sqrt(length(negCorr));
 thres1=max(thres1,thres); % threshold based on negative correlations
-thres2=min(1/min(m,n),0.05); % threshold based on sample size
-thres1=max(thres1,thres2);
+% thres2=min(2/min(m,n),0.05); % threshold based on sample size
+% thres1=max(thres1,thres2);
 
 statMGC=localCorr(end); % take the global correlation by default
 

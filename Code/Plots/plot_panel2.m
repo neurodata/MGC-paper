@@ -44,7 +44,7 @@ if F.type==1
     xlabel('$$d_{x}(x_i,x_j)$$','FontSize',F.fontSize2+2,...
         'Units', 'normalized','Position', [0.5, -0.16], 'HorizontalAlignment', 'center','Interpreter','latex');
     ylabel('$$d_{y}(y_i,y_j)$$','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position', [-0.22 0.5], 'HorizontalAlignment', 'center','Interpreter','latex');
+        'Units', 'normalized', 'Position', [-0.28 0.5], 'HorizontalAlignment', 'center','Interpreter','latex');
     set(gca,'XTick',[0,1],'YTick',[0,1],'FontSize',F.fontSize); % Remove x axis tick
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick

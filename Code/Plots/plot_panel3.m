@@ -56,10 +56,10 @@ else
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 end
 if F.type==1
-    xlabel('X Scales','FontSize',F.fontSize2+2,...
+    xlabel('# X Neighbors','FontSize',F.fontSize2+2,...
         'Units', 'normalized','Position', [0.5, -0.08], 'HorizontalAlignment', 'center');
-    ylabel('Y Scales','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position',  [-0.22 0.5], 'HorizontalAlignment', 'center');
+    ylabel('# Y Neighbors','FontSize',F.fontSize2+2, ...
+        'Units', 'normalized', 'Position',  [-0.28 0.5], 'HorizontalAlignment', 'center');
 end
 
 % if F.tit

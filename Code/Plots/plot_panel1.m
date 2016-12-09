@@ -38,7 +38,7 @@ end
 
 for ind=[1,2,3];
     text(x(F.id(ind))+F.hs/3,y(F.id(ind))+F.hy(ind)/3,num2str(ind),'fontsize',F.fontSize,'color',F.col)
-    plot(x(F.id(ind)),y(F.id(ind)),'.','MarkerSize',F.mkSize,'Color',F.col);
+    plot(x(F.id(ind)),y(F.id(ind)),'.','MarkerSize',F.mkSize+3,'Color',F.col);
 end
 
 xll=max(x)-min(x);

@@ -93,11 +93,15 @@ cmap(2,:) = gr;
 F.map1=cmap;
 set(groot,'defaultAxesColorOrder',F.map1);
 
-I=2;J=4;J2=n;
+if type~=8
+    I=2;J=4;J2=n;
+else
+    I=20;J=21;J2=n-10;
+end
 F.id=[I,J,J2,J];
 F.id2=[1,2,3,2];
 
-if abs(y(F.id(1))-y(F.id(2)))/(max(y)-min(y))<0.02
+if abs(y(F.id(1))-y(F.id(2)))/(max(y)-min(y))<0.1
     F.hy=[+5,-5,0]/100*(max(y)-min(y));
 else
     F.hy=zeros(3,1);

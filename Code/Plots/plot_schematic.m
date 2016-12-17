@@ -108,11 +108,11 @@ else
 end
 F.hs=2/100*(max(x)-min(x));
 
-% if type == 1, F.AB='A'; else F.AB='B'; end
+if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
 height=0.34;
-vspace=0.16;
+vspace=0.15;
 
 width=0.55;
 left=0.2;
@@ -122,7 +122,7 @@ bottom1=0.15;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
-bottom(4)=bottom(4)-0.05;
+bottom(4)=bottom(4)-0.07;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -161,9 +161,9 @@ plot_panel5(F,pMLocal,pMGC)
 % title
 titletext=CorrSimuTitle(F.type);
 if type==1;
-    titletext=strcat(titletext);
+    titletext=strcat('A.',{' '},titletext);
 else
-    titletext=strcat(titletext);
+    titletext=strcat('B.',{' '},titletext);
 end
 h=suptitle(titletext);
 set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.06,0], 'HorizontalAlignment', 'center')

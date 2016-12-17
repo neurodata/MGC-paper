@@ -12,7 +12,7 @@ if nargin<2
     type=8;
 end
 if nargin<3
-    n=100;
+    n=50;
 end
 if nargin<4
     noise=0;

@@ -15,7 +15,7 @@ RD=(RD<=F.Ymax+1);
 ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',F.map2);
-plot(C2(ind1==0),D2(ind1==0),'o','MarkerSize',4,'Color',F.gray);
+plot(C2(ind1==0),D2(ind1==0),'.','MarkerSize',6,'Color',F.gray);
 plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',F.loca);
 % tmpX=C2(ind1==0);
 % tmpY=D2(ind1==0);
@@ -30,10 +30,10 @@ plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',F.loca);
 x12=sub2ind([n,n], F.id(1),F.id(2));
 x23=sub2ind([n,n], F.id(2),F.id(3));
 text(C2(x12)+0.02,D2(x12),'(1, 2)','fontsize',F.fontSize,'color',F.col)
-plot(C2(x12),D2(x12),'o','MarkerSize',4,'Color',F.col);
+plot(C2(x12),D2(x12),'.','MarkerSize',F.mkSize,'Color',F.col);
 
 text(C2(x23)+0.02,D2(x23),'(2, 3)','fontsize',F.fontSize,'color',F.col)
-plot(C2(x23),D2(x23),'o','MarkerSize',4,'Color',F.col);
+plot(C2(x23),D2(x23),'.','MarkerSize',F.mkSize,'Color',F.col);
 hold off
 alpha(0.1)
 
@@ -42,7 +42,7 @@ ylim([0,1]);
 warning('off','all')
 if F.type==1
     xlabel('$$d_{x}(x_i,x_j)$$','FontSize',F.fontSize2+2,...
-        'Units', 'normalized','Position', [0.5, -0.02], 'HorizontalAlignment', 'center','Interpreter','latex');
+        'Units', 'normalized','Position', [0.5, -0.16], 'HorizontalAlignment', 'center','Interpreter','latex');
     ylabel('$$d_{y}(y_i,y_j)$$','FontSize',F.fontSize2+2, ...
         'Units', 'normalized', 'Position', [-0.28 0.5], 'HorizontalAlignment', 'center','Interpreter','latex');
     set(gca,'XTick',[0,1],'YTick',[0,1],'FontSize',F.fontSize); % Remove x axis tick

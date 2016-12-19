@@ -128,7 +128,59 @@ F.tit=0;
 
 %%  Col 1
 F.pos =[left(1), bottom(2)+width/2+0.01, width, height];
-plot_panel1(F,x,y,R2)   
+% plot_panel1(F,x,y,R2)   
+
+siz=size(x);
+dim=siz(2);
+n=siz(1);
+if dim>1
+    xnew=zeros(n,1);ynew=zeros(n,1);
+    for i=1:n
+        %if group(i)==0
+        tmp=find(R2(:,i)==1)';
+        %         tmp=[tmp];
+        %end
+        if length(tmp)>1
+            [~,~,~,xt,yt]=canoncorr(x(tmp,:),y(tmp,:));
+            tmp2=find(tmp==i);
+            xnew(tmp2)=xt(tmp2,1);ynew(i)=yt(tmp2,1);
+        end
+        %         plot(x(tmp),yest(tmp),'-','Color',loca,'linewidth',3);
+    end
+    x=xnew;y=ynew;
+end
+% ax=subplot(s,t,1);
+subplot('Position',F.pos);
+hold all
+set(groot,'defaultAxesColorOrder',F.map2);
+plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
+if F.type==1
+    xlabel('Ground Wetness','FontSize',F.fontSize2,...
+        'Units', 'normalized','Position', [0, -0.02], 'HorizontalAlignment', 'left')
+    ylabel('Cloud Shape','FontSize',F.fontSize2, ...
+        'Units', 'normalized', 'Position',  [-0.28 0.5], 'HorizontalAlignment', 'center')
+else
+    xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
+        'Units', 'normalized','Position', [0.5, -0.02], 'HorizontalAlignment', 'center')
+    ylabel('$y$','FontSize',F.fontSize2+5,'Interpreter','latex', ...
+        'Units', 'normalized', 'Position',  [-0.02 0.5], 'HorizontalAlignment', 'center')
+end
+
+for ind=[1,2,3];
+    text(x(F.id(ind))+F.hs/3,y(F.id(ind))+F.hy(ind)/3,num2str(ind),'fontsize',F.fontSize,'color',F.col)
+    plot(x(F.id(ind)),y(F.id(ind)),'.','MarkerSize',F.mkSize+3,'Color',F.col);
+end
+
+tname=CorrSimuTitle(type);
+title(['0. ', tname], 'Units', 'normalized', ...
+    'Position', [0 1.1], 'HorizontalAlignment', 'center')
+set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
+axis('square')
+
+% set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
+% % pos=[nan, nan, width, height];
+% axis('square')
+
 % % ax=subplot(s,t,t+1);
 % ax=subplot('Position',[left(1), bottom(2)+width/2+0.01, width, height]);
 % cla,
@@ -167,13 +219,6 @@ plot_panel1(F,x,y,R2)
 % tname=tname(findex+1:end);
 % xlim([min(x)-0.2, max(x)]);
 % ylim([min(y)-0.2, max(y)]);
-% 
-% % title(['0. ', [tname], ' (X,Y)'], 'Units', 'normalized', ...
-% title([{'0. Sample Data'}], 'Units', 'normalized', ...
-%     'Position', [0 1.1], 'HorizontalAlignment', 'left')
-% set(gca,'XTick',[],'YTick',[],'FontSize',fontSize); % Remove x axis tick
-% pos=[nan, nan, width, height];
-% axis('square')
 
 
 % make table

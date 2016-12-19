@@ -21,12 +21,20 @@ I=4;
 else
     I=21;
 end
+%%% Here I subsample one point
 C3=reshape(C(I,:),n,1);
 D3=reshape(D(I,:),n,1);
 ind2=reshape(RC(I,:)&RD(:,I)',n,1);
 
 plot(C3,D3,'.','MarkerSize',6,'Color',F.gray);
 plot(C3(ind2==1),D3(ind2==1),'o','MarkerSize',4,'Color',F.loca);
+% This plots all points
+% plot(C2,D2,'.','MarkerSize',6,'Color',F.gray);
+% plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
+
+
+
+%%% useless codes
 % tmpX=C2(ind1==0);
 % tmpY=D2(ind1==0);
 % t= 0:pi/10:2*pi;

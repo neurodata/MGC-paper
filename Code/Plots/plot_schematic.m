@@ -20,9 +20,6 @@ if nargin<4
     n=100;
 end
 
-% if F.type==1
-%     noise=0.5;
-% end
 fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');

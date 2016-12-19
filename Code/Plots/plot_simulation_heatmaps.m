@@ -17,6 +17,7 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 total=20;
 map2 = brewermap(128,'GnBu'); % brewmap
+powerThres=0.1;
 % set(groot,'defaultAxesColorOrder',map1);
 
 figNumber='1DHeat';
@@ -46,10 +47,35 @@ for j=1:total
     if isempty(tt)==false && tt~=1;
         ph(:,tt:end)=repmat(ph(:,tt-1),1,numRange(ind)-tt);
     end
+    hold on
     imagesc(ph);
     set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
+    
+    if j<total
+    phmax=max(max(ph));
+    [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
+    optimalInd=find(optimalInd==1);
+    [I,J]=ind2sub(size(ph),optimalInd);
+    Ymin=min(I);
+    Ymax=max(I);
+    Xmin=min(J);
+    Xmax=max(J);  
+
+    lw=3;
+    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
+    op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
+    [k,l]=ind2sub(size(ph),op2);
+    plot(k,l,'gs','markerSize',5,'MarkerFaceColor','g')
+    end
+    hold off
+    xlim([1,nn-1]);
+    ylim([1,nn-1]);
     set(gca,'FontSize',14);
     set(gca,'XTick',[1,round(nn/2)-1,nn-1],'XTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
     set(gca,'YTick',[1,round(nn/2)-1,nn-1],'YTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
@@ -96,10 +122,35 @@ for j=1:total
     if isempty(tt)==false && tt~=1;
         ph(:,tt:end)=repmat(ph(:,tt-1),1,n-tt);
     end
+    hold on
     imagesc(ph);
     set(gca,'YDir','normal')
     colormap(map2)
     caxis([0 thres])
+    
+    if j<total
+    phmax=max(max(ph));
+    [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
+    optimalInd=find(optimalInd==1);
+    [I,J]=ind2sub(size(ph),optimalInd);
+    Ymin=min(I);
+    Ymax=max(I);
+    Xmin=min(J);
+    Xmax=max(J);  
+
+    lw=3;
+    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
+    ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
+    op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
+    [k,l]=ind2sub(size(ph),op2);
+    plot(k,l,'gs','markerSize',5,'MarkerFaceColor','g')
+    end
+    hold off
+    xlim([1,n-1]);
+    ylim([1,n-1]);
     set(gca,'XTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n]); % Remove x axis ticks
     set(gca,'YTick',[1,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
     if j~=1

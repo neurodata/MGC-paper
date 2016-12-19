@@ -70,8 +70,7 @@ end
 %     tit2=strcat('at (k*, l*) =',{' '},' (',num2str(k),',',{' '},num2str(l), ')');
 % end
 txt1 = strcat('\color[rgb]{0 1 0} c(MGC)=', num2str(round(100*test)/100));
-txt2 = strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr)=', num2str(round(100*tA(end))/100));
-title({txt1;txt2},'FontSize',F.tfs-2,'interpreter','tex');
+title({txt1},'FontSize',F.tfs,'interpreter','tex');
 
 set(gca,'FontSize',F.fontSize)
 axis('square')

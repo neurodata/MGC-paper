@@ -95,7 +95,7 @@ end
 % end
 txt1 = strcat('\color[rgb]{0 1 0}p(MGC)=',num2str(pMGC));
 txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr)=', num2str(pMLocal(m,n)));
-title({txt1,txt2},'FontSize',F.tfs-2,'interpreter','tex');
+title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
 
 axis('square')
 pos2 = get(ax,'position');

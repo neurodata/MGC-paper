@@ -67,12 +67,14 @@ if F.type==1
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 end
+txt2 = strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr)=', num2str(round(100*F.tA(end))/100));
+title({txt2},'FontSize',F.tfs,'interpreter','tex');
 
-if F.tit
-    tit1=strcat('1', F.AB ,'. Pairwise Distances');
-    title([{tit1}; {' '}], 'Units', 'normalized', ...
-        'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
-end
+% if F.tit
+%     tit1=strcat('1', F.AB ,'. Pairwise Distances');
+%     title([{tit1}; {' '}], 'Units', 'normalized', ...
+%         'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
+% end
 % set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 set(gca,'FontSize',F.fontSize); % Remove x axis tick
 axis('square')

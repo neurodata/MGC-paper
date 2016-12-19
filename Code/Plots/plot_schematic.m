@@ -93,7 +93,7 @@ set(groot,'defaultAxesColorOrder',F.map1);
 if type~=8
     I=2;J=4;J2=n;
 else
-    I=20;J=21;J2=n-10;
+    I=20;J=21;J2=n-5;
 end
 F.id=[I,J,J2,J];
 F.id2=[1,2,3,2];
@@ -119,7 +119,8 @@ bottom1=0.15;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
-bottom(4)=bottom(4)-0.05;
+bottom(4)=bottom(4)-0.1;
+bottom(3)=bottom(3)-0.05;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -163,7 +164,7 @@ else
     titletext=strcat(titletext);
 end
 h=suptitle(titletext);
-set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.06,0], 'HorizontalAlignment', 'center')
+set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0], 'HorizontalAlignment', 'center')
 
 
 %%

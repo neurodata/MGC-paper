@@ -192,17 +192,17 @@ This example illustrates that pairwise comparisons between different modalities 
 \begin{figure}
 \begin{tikzpicture}%[>=stealth,node distance=4.5cm,auto]
 \node(bot)[draw=none] at (0,0) {};
-\node (X1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=bot, yshift=1.2cm,label=west:(3),label=south: ] {\small Compute the p-value via permutation test, and determine the optimal scales (those with small p-values)};
-\node (DG1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=X1,yshift=3.33cm,label=west:(2)] {\small Find max local correlation between $d_x$ and $d_y$, i.e., only including $(k,l)$ smallest values for each sample.};
-\node (D1) [draw=none,node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=DG1,yshift=3.34cm,label=west:(1)]  {\small Compute the distances between all pairs of $x_i$, $d_x(x_i,x_{i'})$,  and all pairs of $y_i$, $d_y(y_i,y_{i'})$.};
-\node (in1) [draw=none, node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=D1,yshift=2.7cm,label=west:(0)] {\small Obtain $n$ samples of cloud shape on day $i$ ($x_i$) and grass wetness on day $i$ ($y_i$).};
+\node (X1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=bot, yshift=1.19cm,label=west:(3),label=south: ] {\small Compute the p-value via permutation test, and determine the optimal scales (those with small p-values)};
+\node (DG1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=X1,yshift=3.47cm,label=west:(2)] {\small Find max local correlation between $d_x$ and $d_y$, i.e., only including $(k,l)$ smallest values for each sample.};
+\node (D1) [draw=none,node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=DG1,yshift=3.01cm,label=west:(1)]  {\small Compute the distances between all pairs of $x_i$, $d_x(x_i,x_{i'})$,  and all pairs of $y_i$, $d_y(y_i,y_{i'})$.};
+\node (in1) [draw=none, node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=D1,yshift=3.01cm,label=west:(0)] {\small Obtain $n$ samples of cloud shape on day $i$ ($x_i$) and grass wetness on day $i$ ($y_i$).};
 \draw [arrow] (in1) -- (D1);
 \draw [arrow] (D1) -- (DG1);
 \draw [arrow] (DG1) -- (X1);
 \end{tikzpicture}
 \qquad
-\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={0.83cm 1.9cm 1.85cm 1.28cm},clip]{Figures/Fig1.pdf}
-\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={1.95cm 1.9cm 0.73cm 1.28cm},clip]{Figures/Fig8.pdf}
+\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={0.83cm 1.90cm 1.85cm 1.59cm},clip]{Figures/Fig1.pdf}
+\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={1.95cm 1.90cm 0.73cm 1.59cm},clip]{Figures/Fig8.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc) in two different regimes: linear (center) and nonlinear (spiral; right). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr, an existing state of the art dependence test, are shown for comparative purposes. 
 \textbf{(0)}  $150$ pairs of samples of cloud shape ($x_i$) and grass wetness ($y_i$) (see Appendix \ref{appen:function} for details). 
 Samples $1$, $2$, and $3$ are highlighted (in black) to indicate how \Mgc~is able to discover nonlinear relationships. 
@@ -1121,28 +1121,28 @@ The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional setti
 
 \begin{figure}[htbp]
 \vspace{-50pt}
-\includegraphics[width=1.0\textwidth,trim={0 0 2cm 0},clip]{Figures/FigA}
+\includegraphics[width=1.0\textwidth,trim={0 0 0.75cm 0},clip]{Figures/FigA}
 \setlength{\tabcolsep}{10pt} % Default value: 6pt
 \begin{tabular}{r r r r}
 \multicolumn{1}{l}{{\small \textbf{6. Table}}} & & & \\
-$\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-1.75  & \hspace{3.5em} \color{magenta}-2.66  &  \hspace{3.0em} \color{magenta}-2.66  \\ 
- $\delta_y$(1,2) & \color{magenta}-2.00 & \color{magenta}-2.27 & \color{magenta}-2.27  \\ 
- $\delta_x \times \delta_y$ & \color{green}3.51 & \color{green}6.05 & \color{green}6.05  \\ 
+$\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-2.03  & \hspace{3.5em} \color{magenta}-1.93  &  \hspace{3.0em} \color{magenta}-1.93  \\ 
+ $\delta_y$(1,2) & \color{magenta}-2.30 & \color{magenta}-2.30 & \color{magenta}-2.30  \\ 
+ $\delta_x \times \delta_y$ & \color{green}4.67 & \color{green}4.44 & \color{green}4.44  \\ 
  
 \hline
 
- $\delta_x$(2,3) & \color{green}4.48 & \color{green}3.45 & 0.00  \\ 
- $\delta_y$(2,3) &  \color{magenta}-0.86 & \color{magenta}-0.26 & 0.00  \\ 
- $\delta_x \times \delta_y$ & \color{magenta}-3.87 & \color{magenta}-0.88 & 0.00  \\ 
+ $\delta_x$(2,3) & \color{green}2.53 & \color{green}2.59 & 0.00  \\ 
+ $\delta_y$(2,3) &  \color{magenta}-1.36 & \color{magenta}-2.03 & 0.00  \\ 
+ $\delta_x \times \delta_y$ & \color{magenta}-3.43 & \color{magenta}-5.26 & 0.00  \\ 
 
 \hline
- $\sum{\delta_x \times \delta_y}$ & \color{magenta}-147.18   & \color{green}7.06 & \color{green}159.72  \\ 
- test statistic &  \color{magenta}-0.02  & 0.00 & \color{green}0.24  \\  
+ $\sum{\delta_x \times \delta_y}$ & \color{magenta}-502.61   & \color{green}92.95 & \color{green}301.33  \\ 
+ test statistic &  \color{magenta}-0.02  & 0.00 & \color{green}0.10  \\  
 \end{tabular}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node[xshift=-5.2cm,yshift=-0.6cm] at (current page.east){%
-    \includegraphics[width=0.35\textwidth,trim={1.5cm 0 1.8cm 0},clip]{Figures/FigB}};
+\node[xshift=-5.2cm,yshift=-0.2cm] at (current page.east){%
+    \includegraphics[width=0.35\textwidth,trim={1.5cm 0cm 1.8cm 0},clip]{Figures/FigB}};
   %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
    %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
   %};

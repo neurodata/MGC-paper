@@ -15,8 +15,18 @@ RD=(RD<=F.Ymax+1);
 ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',F.map2);
-plot(C2(ind1==0),D2(ind1==0),'o','MarkerSize',4,'Color',F.gray);
-plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',F.loca);
+
+if F.type==1
+I=4;
+else
+    I=21;
+end
+C3=reshape(C(I,:),n,1);
+D3=reshape(D(I,:),n,1);
+ind2=reshape(RC(I,:)&RD(:,I)',n,1);
+
+plot(C3,D3,'.','MarkerSize',6,'Color',F.gray);
+plot(C3(ind2==1),D3(ind2==1),'o','MarkerSize',4,'Color',F.loca);
 % tmpX=C2(ind1==0);
 % tmpY=D2(ind1==0);
 % t= 0:pi/10:2*pi;
@@ -30,15 +40,15 @@ plot(C2(ind1==1),D2(ind1==1),'+','MarkerSize',4,'Color',F.loca);
 x12=sub2ind([n,n], F.id(1),F.id(2));
 x23=sub2ind([n,n], F.id(2),F.id(3));
 text(C2(x12)+0.02,D2(x12),'(1, 2)','fontsize',F.fontSize,'color',F.col)
-plot(C2(x12),D2(x12),'o','MarkerSize',4,'Color',F.col);
+plot(C2(x12),D2(x12),'.','MarkerSize',8,'Color',F.col);
 
 text(C2(x23)+0.02,D2(x23),'(2, 3)','fontsize',F.fontSize,'color',F.col)
-plot(C2(x23),D2(x23),'o','MarkerSize',4,'Color',F.col);
+plot(C2(x23),D2(x23),'.','MarkerSize',8,'Color',F.col);
 hold off
 alpha(0.1)
 
-xlim([0,1]);
-ylim([0,1]);
+xlim([min(min(C)),1]);
+ylim([min(min(D)),1]);
 warning('off','all')
 if F.type==1
     xlabel('$$d_{x}(x_i,x_j)$$','FontSize',F.fontSize2+2,...

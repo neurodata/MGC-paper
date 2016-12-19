@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 %\input{preamble.tex}
-%test test
+%it is automatically synced with github now, under the MGC/Draft folder
 \usepackage{amsfonts,amsmath,amssymb,amsthm}
 \usepackage{graphicx,psfrag,epsf}
 \usepackage{enumerate}
@@ -201,8 +201,8 @@ This example illustrates that pairwise comparisons between different modalities 
 \draw [arrow] (DG1) -- (X1);
 \end{tikzpicture}
 \qquad
-\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={0.83cm 2cm 1.85cm 1.28cm},clip]{Figures/Fig1.pdf}
-\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={1.95cm 2cm 0.73cm 1.28cm},clip]{Figures/Fig8.pdf}
+\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={0.83cm 1.9cm 1.85cm 1.28cm},clip]{Figures/Fig1.pdf}
+\includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={1.95cm 1.9cm 0.73cm 1.28cm},clip]{Figures/Fig8.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc) in two different regimes: linear (center) and nonlinear (spiral; right). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr, an existing state of the art dependence test, are shown for comparative purposes. 
 \textbf{(0)}  $150$ pairs of samples of cloud shape ($x_i$) and grass wetness ($y_i$) (see Appendix \ref{appen:function} for details). 
 Samples $1$, $2$, and $3$ are highlighted (in black) to indicate how \Mgc~is able to discover nonlinear relationships. 
@@ -292,7 +292,7 @@ For real data that power is unavailable (because the true distribution is unavai
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
-For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure.}
+For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure. The green dot shows the optimal scale with highest power, and the green box shows the largest rectangle of scales whose power is nearly optimal (different from the optimal power by no more than 0.1).}
 \label{f:powermaps}
 \end{figure}
 
@@ -439,7 +439,7 @@ the XDATA program of DARPA administered through Air Force Research Laboratory co
 %
 the Office of Naval Research contract N00014-12-1-0601,
 %
-the Air Force Office of Scientific Research contract FA955014-1-0033. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr. Ruth Heller for insightful suggestions regarding Sample \Mgc.
+the Air Force Office of Scientific Research contract FA955014-1-0033. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr. Ruth Heller and Dr. Yakir Reshef for insightful suggestions regarding Sample \Mgc.
 
 \clearpage
 \appendix

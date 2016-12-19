@@ -32,11 +32,11 @@ clf
 set(h,'units','normalized','position',[0 0 1 1])
 % figure
 try
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
+     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'noise',num2str(noise),'.mat')); % The folder to locate data
 catch
     display('no file exist, running instead')
     run_fig1Data(F.type,n,dim,noise);
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(F.type),'n',num2str(n),'dim',num2str(dim),'noise',num2str(noise),'.mat')); % The folder to locate data
 end
 
 

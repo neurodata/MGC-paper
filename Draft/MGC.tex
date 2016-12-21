@@ -24,8 +24,9 @@
 
 \usepackage{tikz}
 \usepackage{graphicx}
-\usetikzlibrary{calc,shapes.geometric, arrows,positioning}
+\usetikzlibrary{calc,shapes, arrows,positioning}
 \tikzstyle{node} = [rectangle, rounded corners, minimum width=1cm, minimum height=1cm]
+\tikzstyle{node2}=[rectangle split,rectangle split parts=2,rounded corners]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 \pagestyle{fancy}
@@ -178,10 +179,10 @@ like those in Figure \ref{f:newschem} (row 0, right column).
 (While it may be difficult to conceive of the relationship between cloud density and grass wetness to be spiral, spiral relationships are prevalent in nature and mathematics, and canonical in evaluations of manifold learning techniques \cite{Lee07a}, thereby motivating its use here.)
 % @jovo: start with cloud density, then later explain how cloud shape.
 
-Now consider observations  1, 2, and 3 (highlighted in black Figure \ref{f:newschem}, row 0).  Comparing observations 1 and 2, both cloud shape and grass wetness are close to one another for both the linear  and the  spiral relationships. 
+Now consider observations  1, 2, and 3 (highlighted in black Figure \ref{f:newschem}, row 0).  Comparing observations 1 and 2, both cloud density and grass wetness are close to one another for both the linear  and the  spiral relationships. 
 % @jovo: consider introducing the character of distances of shapes here.
 However,  observations 2 and 3 are different.  When the relationship between shape and wetness is linear, if the distance between shapes  is large, then the distance between wetnesses also tends to be large.  This suggests that the correlation between distances can determine whether a linear relationship between shape and wetness exists.  
-For the nonlinear relationship, however, although the distance between cloud shape is large between observations 2 and 3, the distance between grass wetness for those observations is small. 
+For the nonlinear relationship, however, although the distance between cloud density is large between observations 2 and 3, the distance between grass wetness for those observations is small. 
 More generally, for nonlinear dependence functions, just because distances within one modality are large does not imply that distances within the other modality are also large. 
 Thus, the global correlation between shape distances and wetness distances is weak, misleadingly suggesting that there is no statistical dependency between shape and wetness, even though there is one at more local scales.  
 These examples illustrate that pairwise comparisons between different modalities can be effectively utilized for dependence testing.
@@ -192,12 +193,12 @@ The key to successfully determining the presence and nature of a relationship is
 
 
 \begin{figure}
-\begin{tikzpicture}%[>=stealth,node distance=4.5cm,auto]
+\begin{tikzpicture}
 \node(bot)[draw=none] at (0,0) {};
-\node (X1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=bot, yshift=1.19cm,label=west:(3),label=south: ] {\small Compute the p-value via permutation test, and determine the informative scales (those with small p-values)};
+\node (X1) [draw=none,node2, rectangle split part fill={black!25,green},text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=bot, yshift=1.19cm,label=west:(3),label=south: ] {\small Compute the p-value via permutation test. \nodepart{second} Then determine the informative scales (those with small p-values).};
 \node (DG1) [draw=none,node, fill=green,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm, above of=X1,yshift=3.47cm,label=west:(2)] {\small Find max local correlation between $d_x$ and $d_y$, i.e., only including $(k,l)$ smallest values for each sample.};
 \node (D1) [draw=none,node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=DG1,yshift=3.01cm,label=west:(1)]  {\small Compute the distances between all pairs of $x_i$, $d_x(x_i,x_{i'})$,  and all pairs of $y_i$, $d_y(y_i,y_{i'})$.};
-\node (in1) [draw=none, node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=D1,yshift=3.01cm,label=west:(0)] {\small Obtain $n$ samples of cloud shape on day $i$ ($x_i$) and grass wetness on day $i$ ($y_i$).};
+\node (in1) [draw=none, node, fill=black!25,text width=3.5cm,minimum width=3.5cm,minimum height=2.65cm,above of=D1,yshift=3.01cm,label=west:(0)] {\small Obtain $n$ samples of cloud density on day $i$ ($x_i$) and grass wetness on day $i$ ($y_i$).};
 \draw [arrow] (in1) -- (D1);
 \draw [arrow] (D1) -- (DG1);
 \draw [arrow] (DG1) -- (X1);
@@ -206,13 +207,14 @@ The key to successfully determining the presence and nature of a relationship is
 \includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={0.83cm 1.88cm 1.85cm 1.59cm},clip]{Figures/Fig1.pdf}
 \includegraphics[width=0.32\textwidth,height=0.75\textheight,trim={1.95cm 1.88cm 0.73cm 1.59cm},clip]{Figures/Fig8.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc) in two different settings: linear (center) and nonlinear (spiral; right; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr, a state of the art dependence test, are shown for comparative purposes. 
-\textbf{(0)}  $150$ pairs of samples of cloud shape ($x_i$) and grass wetness ($y_i$). For ease of presentation, cloud shape is depicted in one-dimension.
+\textbf{(0)}  $150$ pairs of samples of cloud density ($x_i$) and grass wetness ($y_i$). For ease of presentation, cloud density is depicted in one-dimension.
 Samples $1$, $2$, and $3$ (black) indicate how \Mgc~is able to discover nonlinear relationships. 
 % 
-\textbf{(1)} Distances are linearly correlated in the linear setting, whereas they are not in the spiral setting.  Distances that \Mgc~uses for its test statistic (green circles) are a subset of all distances (gray dots). Titles state $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value.
+\textbf{(1)} Distances are linearly correlated in the linear setting, whereas they are not in the spiral setting.  Global correlation uses all distances (gray dots) to compute its test statistic. Title states $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value.
 % 
-\textbf{(2)} Green lines depict the best fit line for each points' neighbors within the informative scales selected by maximizing the local correlation, 
-dashed gray line denotes the global linear fit to the data.  \Mgc's locality reconstructs the shape of the relationship. Titles state the value of the test statistic,  $\GG(\Mgc)$.
+\textbf{(2)} \Mgc~selects a subset of all distances to compute the test statistic. Distances that \Mgc~uses to optimize the local correlation (green circles) is a subset of all distances (gray dots). Title states the optimal local correlation $\GG(\Mgc)$.
+%Green lines depict the best fit line for each points' neighbors within the informative scales selected by maximizing the local correlation, 
+% dashed gray line denotes the global linear fit to the data.  \Mgc's locality reconstructs the shape of the relationship. Titles state the value of the test statistic,  $\GG(\Mgc)$.
 % 
 \textbf{(3)} %The null distributions are computed via a permutation test. 
 The heatmap shows p-values for all scales via the permutation test, the scale with optimal test statistic (green dot), the informative scales (green boxes), and the global scale (gray dot). \Mgc~detects significant dependence in both the linear and nonlinear settings, whereas \Dcorr~only detects dependence in the linear setting.% for this small sample size. 
@@ -233,7 +235,7 @@ The first step of \Mgc~is the computation of distances (Figure~\ref{f:newschem},
 % @jovo: clarify that all the magic is no in there. "The choice of distance function is important".  something about distance. beta test description of distance
 The second step is the computation of the maximum ``local generalized correlation'', that is, the correlation only incorporating local distances.
 The implementation of this step proceeds in a recursive fashion.  For each observation $i$, \Mgc~finds the observation nearest to $x_i$ in the $x$ dimension(s), and the observation nearest to $y_i$ in the $y$ dimension(s).
-In the above example, this means for each observation, \Mgc~finds the observation with the most similar cloud shape and the observation with the most similar grass wetness.  
+In the above example, this means for each observation, \Mgc~finds the observation with the most similar cloud density and the observation with the most similar grass wetness.  
 % @jovo: if these two are the same point, "they count".  
 \Mgc~then discards all distances that are not between nearest neighbors, and computes the correlation between the remaining distances.
 Then \Mgc~iteratively increases the number of neighbors $k$ of $x_i$ to include, and the number of neighbors $l$ of $y_i$ to include.  
@@ -295,13 +297,14 @@ For nearly linear dependencies (1-5), the best neighborhood choice always includ
 Furthermore, similar dependencies have similar local correlation structure, and thus, similar informative scales. For example, (10) and (11), though very different functions analytically, are qualitatively similar, and yield very similar multiscale power maps.
 Similarly,  (12) and (13) are trigonometric functions, and they share a narrow range of significant local correlations.
 Both circle (16) and ellipse (17), as well as square (14) and diamond (18), are closely related functions, and have similar multiscale power maps. 
-For real data that power is unavailable (because the true distribution is unavailable), \Mgc~provides a multiscale p-value map (see Algorithm~\ref{alg:pval}) that is a noisy version of the power map, as well as the multiscale correlation map (see Algorithms~\ref{alg:1scale} and~\ref{alg:all_scales}).
+
+For real data that power is unavailable (because the true distribution is unavailable), \Mgc~provides a multiscale p-value map (see Algorithm~\ref{alg:pval}) that is a noisy version of the power map, as well as the multiscale correlation map (see Algorithms~\ref{alg:1scale} and~\ref{alg:all_scales}), based on which the optimal scales are estimated. The green dot and rectangle in each panel of Figure~\ref{f:powermaps} correspond to the estimated test statistic and optimal scales by \Mgc~on one pair of sample data without knowing the underlying distribution. The estimations are often very close to true optimal choices based on the actual power maps when knowing the model.
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
 For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure. 
-% The green dot shows the optimal scale with highest power, and the green box shows the largest rectangle of scales whose power is nearly optimal (different from the optimal power by no more than 0.1).
+For each panel, the green dot and rectangle show the estimated test statistic and the estimated optimal scales via \Mgc~on one pair of sample data without knowing the underlying distribution, which are often close to optimal choices of the power map.
 }
 \label{f:powermaps}
 \end{figure}
@@ -1202,7 +1205,7 @@ Again, Oracle \Mgc~empirically achieves similar or better power than the previou
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/Fig1DHeat}
-\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. For the (nearly) linear settings, the global scales achieve optimal power.  However, for the other nonlinear dependence settings, local scales always outperform the global scale.}
+\caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. It has similar behavior and interpretation as the high-dimensional power maps in Figure~\ref{f:powermaps}.}
 \label{f:powermaps1}
 \end{figure}
 

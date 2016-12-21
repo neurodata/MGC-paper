@@ -17,15 +17,15 @@ imagesc(log(ph));
 % Ymax=max(I)-1;
 % Xmin=min(J)-1;
 % Xmax=max(J)-1;
-lw=2;
+lw=1.5;
 plot([F.Xmin,F.Xmin],[F.Ymin,F.Ymax],'g','linewidth',lw)
 plot([F.Xmax,F.Xmax],[F.Ymin,F.Ymax],'g','linewidth',lw)
 plot([F.Xmin,F.Xmax],[F.Ymin,F.Ymin],'g','linewidth',lw)
 plot([F.Xmin,F.Xmax],[F.Ymax,F.Ymax],'g','linewidth',lw)
-plot(F.k,F.l,'gs','markerSize',3,'MarkerFaceColor','g')
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);
+
 
 set(gca,'FontSize',F.fontSize)
 set(gca,'YDir','normal')
@@ -37,44 +37,14 @@ caxis(log([0.001 0.2]));
 if F.type==8
     h=colorbar('Ticks',log(cticks),'TickLabels',cticks);%,'location','eastoutside');
     set(h,'FontSize',F.fontSize);
-%     axpos = ax.Position;
-%     hpos=h.Position;
-%     % hpos(3)=0.5*hpos(3);
-%     hpos(4)=0.5*hpos(4);
-%     hpos(2)=hpos(2)-0.025;
-%     % hpos(1)=hpos(1)+0.023;
-%     h.Position=hpos;
-%     ax.Position = axpos;
     set(h,'Box','off');
 end
-xlim([1 n-1]);
-ylim([1 n-1]);
+xlim([1 n]);
+ylim([1 n]);
 
-% % add MGC p-value
-% txt1 = strcat('p(MGC) =', {' '},num2str(pMGC));
-% if F.k<m/2
-%     ph='left';
-%     poh=1;
-% else
-%     ph='right';
-%     poh=-1;
-% end
-% if F.l<n/2
-%     pv='bottom';
-%     pov=1;
-% else
-%     pv='top';
-%     pov=-1;
-% end
-%
-% a=text(F.k+poh,F.l+pov,txt1,'VerticalAlignment',pv,'HorizontalAlignment',ph,'Color','g');
-% set(a,'FontSize',F.fontSize);
-%
-% % add global p-value
-% txt1 = strcat('p(Dcorr) =', {' '}, num2str(pMLocal(m,n)));
-plot(m-1,n-1,'s','markerSize',3,'MarkerFaceColor',F.glob,'Color',F.glob)
-% a=text(m-1,n,txt1,'VerticalAlignment','bottom','HorizontalAlignment','right','Color',F.glob);
-% set(a,'FontSize',F.fontSize);
+% plot scale points
+plot(m,n,'.','markerSize',15,'MarkerFaceColor',F.glob,'Color',F.glob)
+plot(F.k,F.l,'g','marker','o','markerSize',6,'linewidth',1)
 
 hold off
 
@@ -93,8 +63,8 @@ end
 %     title([{tit1}; {'Map & Optimal Scales'}],'FontSize',F.tfs, ...
 %         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 % end
-txt1 = strcat('\color[rgb]{0 1 0}p(MGC)=',num2str(pMGC));
-txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr)=', num2str(pMLocal(m,n)));
+txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC));
+txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
 title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
 
 axis('square')

@@ -141,23 +141,15 @@ y=y/mxd;
 plot_panel1(F,x,y,R2)      
 
 % 2: Pairwise Distances
-F.onlyone=true;
+F.sub=2;
 plot_panel2(F,C,D)      
 
+% 3: only local pairwise distances
 F.pos2=F.pos3;
-F.onlyone=false;
-F.title=strcat('\color[rgb]{0 1 0} c(MGC)=', num2str(round(100*test)/100));
+F.sub=3;
 plot_panel2(F,C,D);
 
-% 3. Multiscale Correlation Map or Best Fit Line %%%%%%%%%%%%
-% plot_panel3(F,x,y,R2)   
-
-
-% 4. Null distribution & p-values
-% plot_panel4(F,tN,tA,k,l,testN,mcorrH,A,B,test,pMLocal,pMGC)
-
-
-% 5. Multiscale P-Value Map
+% 4. Multiscale P-Value Map
 plot_panel5(F,pMLocal,pMGC) 
 
 

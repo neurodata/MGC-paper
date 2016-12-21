@@ -25,6 +25,8 @@ figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
 nn=60;
+lw=1.5;
+
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
@@ -63,7 +65,6 @@ for j=1:total
     Xmin=min(J);
     Xmax=max(J);  
 
-    lw=3;
     plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
@@ -71,7 +72,7 @@ for j=1:total
     ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
     op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
     [k,l]=ind2sub(size(ph),op2);
-    plot(k,l,'gs','markerSize',5,'MarkerFaceColor','g')
+    plot(k,l,'go','markerSize',8)
     end
     hold off
     xlim([1,nn-1]);
@@ -138,7 +139,6 @@ for j=1:total
     Xmin=min(J);
     Xmax=max(J);  
 
-    lw=3;
     plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
     plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
@@ -146,7 +146,7 @@ for j=1:total
     ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
     op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
     [k,l]=ind2sub(size(ph),op2);
-    plot(k,l,'gs','markerSize',5,'MarkerFaceColor','g')
+    plot(k,l,'go','markerSize',8)
     end
     hold off
     xlim([1,n-1]);

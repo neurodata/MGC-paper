@@ -10,34 +10,20 @@ ax=subplot('Position',F.pos2);
 % ax=subplot(s,t,2);
 RC=DistRanks(C);
 RD=DistRanks(D)';
-RC=(RC<=F.Xmax+1);
-RD=(RD<=F.Ymax+1);
+% RC=(RC<=F.Xmax+1);
+% RD=(RD<=F.Ymax+1);
+
+RC=(RC<=F.k);
+RD=(RD<=F.l);
+
 ind1=reshape(RC&RD,n^2,1);
 hold on
 set(groot,'defaultAxesColorOrder',F.map2);
 
-if F.type==1
-    I=4;
-else
-    I=21;
-end
 
-% if ~isfield(F,'onlyone'), F.onlyone=0;  end
-% if F.onlyone %%% Here I subsample one point
-%     C3=reshape(C(I,:),n,1);
-%     D3=reshape(D(I,:),n,1);
-%     ind2=reshape(RC(I,:)&RD(:,I)',n,1);
-%     
-%     plot(C3,D3,'.','MarkerSize',6,'Color',F.gray);
-%     plot(C3(ind2==1),D3(ind2==1),'o','MarkerSize',4,'Color',F.loca);
-% else % This plots all points
-%     plot(C2,D2,'.','MarkerSize',6,'Color',F.gray);
-%     plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
-% end
 
-if ~isfield(F,'onlyone'), F.onlyone=0;  end
 plot(C2,D2,'.','MarkerSize',6,'Color',F.gray);
-if ~F.onlyone %%% Here I subsample one point
+if F.sub==3
     plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
 end
 
@@ -66,16 +52,15 @@ else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 end
 
-if ~isfield(F,'title'), F.title=strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr)=', num2str(round(100*F.tA(end))/100)); end
-txt2 = F.title;
-title({txt2},'FontSize',F.tfs,'interpreter','tex');
+if F.sub==2
+    title(strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr) = ', num2str(round(100*F.tA(end))/100)),'FontSize',F.tfs);
+else
+    txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
+    txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
+    title({txt1,txt2},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+end
 
-% if F.tit
-%     tit1=strcat('1', F.AB ,'. Pairwise Distances');
-%     title([{tit1}; {' '}], 'Units', 'normalized', ...
-%         'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
-% end
-% set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
+
 set(gca,'FontSize',F.fontSize); % Remove x axis tick
 axis('square')
 pos2 = get(ax,'position');

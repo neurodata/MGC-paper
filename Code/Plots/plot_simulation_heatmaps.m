@@ -19,7 +19,7 @@ pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 total=20;
-repP=200;
+repP=100;
 map2 = brewermap(128,'GnBu'); % brewmap
 
 figure('units','normalized','position',[0 0 1 1])
@@ -59,10 +59,13 @@ if strcmp(figNumber,'1DHeat')
         
         if j<total
             %             phmax=max(max(ph));
-            pMGC=1;
-            while pMGC>0.05
+            testRepeat=1;
+            while testRepeat==1;
                 [x,y]=CorrSampleGenerator(j,nn,1,1,1);
                 [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(squareform(pdist(x)),squareform(pdist(y)),repP,'mcor');
+                if pMGC<0.05 && ((sum(optimalInd==n^2)==0 && j>5) || (sum(optimalInd==n^2)==1 && j<=5))
+                    testRepeat=0;
+                end
             end
             
             %     [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
@@ -138,10 +141,13 @@ else
         
         if j<total
             %phmax=max(max(ph));
-            pMGC=1;
-            while pMGC>0.05
+            testRepeat=1;
+            while testRepeat==1;
                 [x,y]=CorrSampleGenerator(j,n,dimRange(ind),1,0);
                 [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(squareform(pdist(x)),squareform(pdist(y)),repP,'mcor');
+                if pMGC<0.05 && ((sum(optimalInd==n^2)==0 && j>5) || (sum(optimalInd==n^2)==1 && j<=5))
+                    testRepeat=0;
+                end
             end
             
             %     [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);

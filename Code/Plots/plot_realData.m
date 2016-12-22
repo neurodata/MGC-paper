@@ -86,7 +86,7 @@ for i=1:3
     Xmax=max(J);
     %
     if Xmin==Xmax && Ymin==Ymax
-         plot(Xmin,Ymin,'gs','markerSize',5,'MarkerFaceColor','g')  
+         plot(Xmin,Ymin,'g','marker','o','markerSize',5)
     else
         plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
         plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)

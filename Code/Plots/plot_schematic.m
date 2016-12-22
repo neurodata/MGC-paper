@@ -120,7 +120,9 @@ for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
 bottom(4)=bottom(4)-0.1;
-bottom(3)=bottom(3)-0.05;
+bottom(3)=bottom(3)-0.03;
+bottom(2)=bottom(2)-0.02;
+bottom1=0.1;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];

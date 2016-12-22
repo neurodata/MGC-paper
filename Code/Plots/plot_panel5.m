@@ -39,12 +39,12 @@ if F.type==8
     set(h,'FontSize',F.fontSize);
     set(h,'Box','off');
 end
-xlim([1 n]);
-ylim([1 n]);
+xlim([1 n-1]);
+ylim([1 n-1]);
 
 % plot scale points
-plot(m,n,'.','markerSize',15,'MarkerFaceColor',F.glob,'Color',F.glob)
-plot(F.k,F.l,'g','marker','o','markerSize',6,'linewidth',1)
+plot(m-1,n-1,'.','markerSize',15,'MarkerFaceColor',F.glob,'Color',F.glob)
+plot(F.k-1,F.l-1,'g','marker','o','markerSize',6,'linewidth',1)
 
 hold off
 

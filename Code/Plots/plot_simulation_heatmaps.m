@@ -21,77 +21,14 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 total=20;
 repP=200;
 map2 = brewermap(128,'GnBu'); % brewmap
-%powerThres=0.1;
-% set(groot,'defaultAxesColorOrder',map1);
 
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
-<<<<<<< HEAD
-nn=60;
 lw=1.5;
-
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
-    kmin=2;
-    thres=0.8;
-    % ind=[find(max(power2,[],1)>=thres,1) lim];
-    % lim=min(ind);
-    ind=find(numRange==nn);
-    if isempty(ind)
-        ind=1;
-    end
-    ph=powerMLocal(kmin:numRange(ind),kmin:numRange(ind),ind)';
-    tt=find(sum(ph,2)==0,1,'first');
-    if isempty(tt)==false && tt~=1;
-        ph(tt:end,:)=repmat(ph(tt-1,:),numRange(ind)-tt,1);
-    end
-    tt=find(sum(ph,1)==0,1,'first');
-    if isempty(tt)==false && tt~=1;
-        ph(:,tt:end)=repmat(ph(:,tt-1),1,numRange(ind)-tt);
-    end
-    hold on
-    imagesc(ph);
-    set(gca,'YDir','normal')
-    colormap(map2)
-    caxis([0 thres])
-    
-    if j<total
-    phmax=max(max(ph));
-    [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
-    optimalInd=find(optimalInd==1);
-    [I,J]=ind2sub(size(ph),optimalInd);
-    Ymin=min(I);
-    Ymax=max(I);
-    Xmin=min(J);
-    Xmax=max(J);  
-
-    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-    ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
-    op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
-    [k,l]=ind2sub(size(ph),op2);
-    plot(k,l,'go','markerSize',8)
-    end
-    hold off
-    xlim([1,nn-1]);
-    ylim([1,nn-1]);
-    set(gca,'FontSize',14);
-    set(gca,'XTick',[1,round(nn/2)-1,nn-1],'XTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
-    set(gca,'YTick',[1,round(nn/2)-1,nn-1],'YTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
-    title(titlechar,'FontSize',14, ...
-        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
-    if j~=1
-        set(gca,'XTick',[]); % Remove x axis ticks
-        set(gca,'YTick',[]); % Remove y axis ticks
-=======
 if strcmp(figNumber,'1DHeat')
     nn=60;
+    
     for j=1:total
         filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
         load(filename)
@@ -121,7 +58,7 @@ if strcmp(figNumber,'1DHeat')
         caxis([0 thres])
         
         if j<total
-            phmax=max(max(ph));
+            %             phmax=max(max(ph));
             pMGC=1;
             while pMGC>0.05
                 [x,y]=CorrSampleGenerator(j,nn,1,1,1);
@@ -136,7 +73,6 @@ if strcmp(figNumber,'1DHeat')
             Xmin=min(J)-1;
             Xmax=max(J)-1;
             
-            lw=3;
             plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
             plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
             plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
@@ -145,10 +81,12 @@ if strcmp(figNumber,'1DHeat')
             statMGC=statMGC+10;
             op2=find(localCorr==statMGC);
             if isempty(op2)
-                op2=find(localCorr>=statMGC,1,'last');
+                k=Xmax+1;
+                l=Ymax+1;
+            else
+                [k,l]=ind2sub(size(localCorr),op2);
             end
-            [k,l]=ind2sub(size(localCorr),op2);
-            plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')
+            plot(k-1,l-1,'go','markerSize',5)
         end
         hold off
         xlim([1,nn-1]);
@@ -166,6 +104,10 @@ if strcmp(figNumber,'1DHeat')
     end
     xlabel('# X Neighbors','position',[-200 -12],'FontSize',24);
     ylabel('# Y Neighbors','position',[-500 180],'FontSize',24);
+    
+    %colorbar
+    h=colorbar('Ticks',[0,thres/2,thres]);
+    set(h,'FontSize',14);
     h=suptitle(strcat('One-Dimensional Multiscale Power Maps'));
 else
     figNumber='HDHeat';
@@ -195,7 +137,7 @@ else
         caxis([0 thres])
         
         if j<total
-            phmax=max(max(ph));
+            %phmax=max(max(ph));
             pMGC=1;
             while pMGC>0.05
                 [x,y]=CorrSampleGenerator(j,n,dimRange(ind),1,0);
@@ -210,7 +152,6 @@ else
             Xmin=min(J)-1;
             Xmax=max(J)-1;
             
-            lw=3;
             plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
             plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
             plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
@@ -219,10 +160,12 @@ else
             statMGC=statMGC+10;
             op2=find(localCorr==statMGC);
             if isempty(op2)
-                op2=find(localCorr>=statMGC,1,'last');
+                k=Xmax+1;
+                l=Ymax+1;
+            else
+                [k,l]=ind2sub(size(localCorr),op2);
             end
-            [k,l]=ind2sub(size(localCorr),op2);
-            plot(k-1,l-1,'gs','markerSize',5,'MarkerFaceColor','g')
+            plot(k-1,l-1,'go','markerSize',5)
         end
         hold off
         xlim([1,n-1]);
@@ -236,88 +179,16 @@ else
         set(gca,'FontSize',14);
         title(titlechar,'FontSize',14);
         axis('square');
->>>>>>> 84889cbecd276abc64880d32f93b5d9b1341eab4
     end
     xlabel('# X Neighbors','position',[-340 -20],'FontSize',24);
     ylabel('# Y Neighbors','position',[-840 300],'FontSize',24);
+    
+    h=colorbar('Ticks',[0,thres/2,thres]);
+    set(h,'FontSize',14);
     h=suptitle(strcat('High-Dimensional Multiscale Power Maps'));
 end
 set(h,'FontSize',24,'FontWeight','normal');
-<<<<<<< HEAD
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[8 5]*2;
 print_fig(gcf,F)
-
-figNumber='HDHeat';
-figure('units','normalized','position',[0 0 1 1])
-s=4;
-t=5;
-for j=1:total
-    filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
-    load(filename)
-    subplot(s,t,j)
-    titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
-    kmin=2;thres=0.5;
-    ind=find(max(powerMGCM,[],1)>=thres,1,'last');
-    if isempty(ind)
-        ind=1;
-    end
-    ph=powerMLocal(kmin:n,kmin:n,ind)';
-    tt=find(sum(ph,2)==0,1,'first');
-    if isempty(tt)==false && tt~=1;
-        ph(tt:end,:)=repmat(ph(tt-1,:),n-tt,1);
-    end
-    tt=find(sum(ph,1)==0,1,'first');
-    if isempty(tt)==false && tt~=1;
-        ph(:,tt:end)=repmat(ph(:,tt-1),1,n-tt);
-    end
-    hold on
-    imagesc(ph);
-    set(gca,'YDir','normal')
-    colormap(map2)
-    caxis([0 thres])
-    
-    if j<total
-    phmax=max(max(ph));
-    [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
-    optimalInd=find(optimalInd==1);
-    [I,J]=ind2sub(size(ph),optimalInd);
-    Ymin=min(I);
-    Ymax=max(I);
-    Xmin=min(J);
-    Xmax=max(J);  
-
-    plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
-    plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-    ph(Xmin:Xmax,Ymin:Ymax)=ph(Xmin:Xmax,Ymin:Ymax)+1;
-    op2=find(ph==max(max(ph(Xmin:Xmax,Ymin:Ymax))));
-    [k,l]=ind2sub(size(ph),op2);
-    plot(k,l,'go','markerSize',8)
-    end
-    hold off
-    xlim([1,n-1]);
-    ylim([1,n-1]);
-    set(gca,'XTick',[1,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n]); % Remove x axis ticks
-    set(gca,'YTick',[1,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
-    if j~=1
-        set(gca,'XTick',[]); % Remove x axis ticks
-        set(gca,'YTick',[]); % Remove y axis ticks
-    end
-    set(gca,'FontSize',14);
-    title(titlechar,'FontSize',14);
-    axis('square');
-end
-xlabel('# X Neighbors','position',[-290 -20],'FontSize',24);
-ylabel('# Y Neighbors','position',[-720 260],'FontSize',24);
-=======
-colorbar
->>>>>>> 84889cbecd276abc64880d32f93b5d9b1341eab4
-h=colorbar('Ticks',[0,thres/2,thres]);
-set(h,'FontSize',14);
-%
-F.fname=strcat(pre2, figNumber);
-F.wh=[8 5]*2;
-print_fig(gcf,F);

@@ -5,13 +5,13 @@
 % Define Fonts
 %==============
 \RequirePackage{titlesec}
-\RequirePackage{fontspec}
-\RequirePackage[font={normalsize},{singlelinecheck=false}]{caption}
-\setmainfont[
- BoldFont={[Gentona-Medium.ttf]}
- ]{[Gentona-Light.ttf]}
-\setsansfont{[Quadon_W00_Bold.ttf]}
-\newfontfamily\headingfont[]{[Quadon_W00_Bold.ttf]}
+%\RequirePackage{fontspec}
+%\RequirePackage[font={normalsize},{singlelinecheck=false}]{caption}
+%\setmainfont[
+% BoldFont={[Gentona-Medium.ttf]}
+% ]{[Gentona-Light.ttf]}
+% \setsansfont{[Quadon_W00_Bold.ttf]}
+%\newfontfamily\headingfont[]{[Quadon_W00_Bold.ttf]}
 
 % Define Colours
 %================
@@ -21,22 +21,22 @@
 
 % Define Headings
 %=================
-\titleformat*{\section}{\Large\bfseries\sffamily\color{MSBlue}}
-\titleformat*{\subsection}{\large\bfseries\sffamily\color{MSBlue}}
-\titleformat*{\subsubsection}{\bfseries\sffamily\color{MSBlue}}
-\titleformat*{\paragraph}{\bfseries\sffamily\color{slate}}
+%\titleformat*{\section}{\Large\headingfont\color{MSBlue}}
+%\titleformat*{\subsection}{\large\headingfont\color{MSBlue}}
+%\titleformat*{\subsubsection}{\headingfont\color{MSBlue}}
+%\titleformat*{\paragraph}{\headingfont\color{slate}}
 
 % Reformat Title and Abstract
 %=============================
-\renewcommand\abstractname{\sffamily\color{slate}Abstract}
-\makeatletter
-\renewcommand\@maketitle{%
-\vspace{-25pt}
-\begin{center}
-{\LARGE\headingfont\color{MSBlue}\@title \par }
-\end{center}
-\par
-}
+%\renewcommand\abstractname{\headingfont\color{slate}Abstract}
+%\makeatletter
+%\renewcommand\@maketitle{%
+%\vspace{-25pt}
+%\begin{center}
+%{\LARGE\headingfont\color{MSBlue}\@title \par }
+%\end{center}
+%\par
+%}
 
 % Define Boxes for Figures
 %==========================
@@ -45,10 +45,6 @@
   {\begin{tcolorbox}[colframe=#1,colback=white]}
   {\end{tcolorbox}}
   
-\newenvironment{figurez}[1][h!]
-	{\begin{figure}\centering\begin{cframed}}
-    {\end{cframed}\end{figure}}
-
 % \makeatletter
 % \let\oldfigure\figure
 % \def\figure{\@ifnextchar[\figure@i \figure@ii}
@@ -84,7 +80,7 @@
   }
 }
 
-% Make Endnotes
-%===============
+%% Make Endnotes
+%%===============
 \RequirePackage{endnotes}
 \let\footnote\endnote

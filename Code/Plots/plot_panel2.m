@@ -57,7 +57,7 @@ if F.sub==2
 else
     txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
     txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
-    title({txt1,txt2},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+    title({txt2,txt1},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
 end
 
 

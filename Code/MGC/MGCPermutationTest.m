@@ -54,8 +54,8 @@ if sampleIndicator~=1 % other than mcorr, we do not implemented sample MGC yet, 
     pMGC=pLocalCorr(end);
     statMGC=localCorr(end);
 end
-% if p-value equals 0, enlarge it to 1/rep, since the identity permutation is always
-% one such permutation.
+% if reported p-value equals 0, the actual p-value is in fact <1/n. The reported
+% p-value is thus changed to 1/n from 0.
 if min(min(pLocalCorr(2:end,2:end)))==0
     pLocalCorr=pLocalCorr+1/rep;
 end

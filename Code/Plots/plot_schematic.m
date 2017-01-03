@@ -176,5 +176,6 @@ else
 end
 F.wh=[3.5 10];
 F.PaperPositionMode='auto';
+F.svg=0;
 
 print_fig(gcf,F)

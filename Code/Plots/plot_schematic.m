@@ -131,6 +131,16 @@ F.pos4=[left, bottom(1), width, height];
 % F.pos5=[left, bottom(1), width, height];
 
 F.tit=0;
+pre2=strcat(rootDir,'Figures/');% The folder to save figures
+donzo=1;
+if donzo==1
+    F.fname=strcat(pre2, 'Fig',num2str(F.type));
+else
+    F.fname=strcat(pre2, 'Auxiliary/A3_type', num2str(F.type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
+end
+F.wh=[3.5 10];
+F.PaperPositionMode='auto';
+F.subprint=true;
 
 %% plot panels
 mxc=max(max(C));
@@ -167,15 +177,5 @@ set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0]
 
 
 %%
-pre2=strcat(rootDir,'Figures/');% The folder to save figures
-donzo=1;
-if donzo==1
-    F.fname=strcat(pre2, 'Fig',num2str(F.type));
-else
-    F.fname=strcat(pre2, 'Auxiliary/A3_type', num2str(F.type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
-end
-F.wh=[3.5 10];
-F.PaperPositionMode='auto';
-F.svg=0;
 
 print_fig(gcf,F)

@@ -20,7 +20,7 @@ if dim>1
     x=xnew;y=ynew;
 end
 % ax=subplot(s,t,1);
-subplot('Position',F.pos);
+h=subplot('Position',F.pos);
 hold all
 set(groot,'defaultAxesColorOrder',F.map2);
 plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
@@ -64,4 +64,12 @@ if F.tit
     tit1=strcat('0', F.AB ,'. Sample Data');
     title([{tit1}; {' '}], 'Units', 'normalized', ...
         'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
+end
+
+
+if ~isfield(F,'subprint'), F.subprint=false; end
+if F.subprint, 
+    F.fname=[F.fname, 'a'];
+    F.svg=true;
+    print_fig(gcf,F)
 end

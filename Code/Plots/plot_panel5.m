@@ -2,7 +2,11 @@ function plot_panel5(F,pMLocal,pMGC)
 
 [m,n]=size(pMLocal);
 
-ax=subplot('Position',F.pos4);
+if ~isfield(F,'subplot')
+    ax=subplot('Position',F.pos4);
+else
+    ax=figure;
+end
 % ax=subplot(s,t,5);
 hold on
 set(groot,'defaultAxesColorOrder',F.map1);
@@ -50,7 +54,7 @@ hold off
 
 if F.type==1
     xlabel('# X Neighbors','FontSize',F.fontSize2+2,...
-        'Units', 'normalized','Position', [0, -0.2], 'HorizontalAlignment', 'left');
+        'Units', 'normalized','Position', [0, -0.1], 'HorizontalAlignment', 'left');
     ylabel('# Y Neighbors','FontSize',F.fontSize2+2, ...
         'Units', 'normalized', 'Position', [-0.28 0.5], 'HorizontalAlignment', 'center');
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
@@ -74,13 +78,12 @@ set(ax,'position',pos2);
 
 if ~isfield(F,'subprint'), F.subprint=false; end
 if F.subprint==true, 
-    F.fname=[F.fname, 'a'];
-    F.svg=true;
+   % F.svg=true;
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');
     rootDir=fpath(1:findex(end-2));
     pre2=strcat(rootDir,'Figures/');% The folder to save figures
-    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel4');
-    print_fig(gcf,F)
+    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel',num2str(F.sub));
+    print_fig(ax,F);
 end

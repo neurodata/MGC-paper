@@ -6,7 +6,11 @@ n=siz(1);
 C2=reshape(C,n^2,1);
 D2=reshape(D,n^2,1);
 
-ax=subplot('Position',F.pos2);
+if ~isfield(F,'subplot')
+    ax=subplot('Position',F.pos2);
+else
+    ax=figure;
+end
 % ax=subplot(s,t,2);
 RC=DistRanks(C);
 RD=DistRanks(D)';
@@ -69,13 +73,12 @@ set(ax,'position',pos2);
 
 if ~isfield(F,'subprint'), F.subprint=false; end
 if F.subprint==true, 
-    F.fname=[F.fname, 'a'];
-    F.svg=true;
+ %   F.svg=true;
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');
     rootDir=fpath(1:findex(end-2));
     pre2=strcat(rootDir,'Figures/');% The folder to save figures
-    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel2');
-    print_fig(gcf,F)
+    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel',num2str(F.sub));
+    print_fig(ax,F);
 end

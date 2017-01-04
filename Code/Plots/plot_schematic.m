@@ -150,6 +150,12 @@ D=D/mxd;
 x=x/mxc;
 y=y/mxd;
 % 1: samle data
+F.sub=1;
+F.subplot=true;
+if F.subplot==true;
+    F.svg=true;
+    F.wh=[4 3];
+end
 plot_panel1(F,x,y,R2)      
 
 % 2: Pairwise Distances
@@ -162,10 +168,12 @@ F.sub=3;
 plot_panel2(F,C,D);
 
 % 4. Multiscale P-Value Map
+F.sub=4;
 plot_panel5(F,pMLocal,pMGC) 
 
 
 % title
+if F.subplot~=true;
 titletext=CorrSimuTitle(F.type);
 if type==1;
     titletext=strcat(titletext);
@@ -179,3 +187,4 @@ set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0]
 %%
 
 print_fig(gcf,F)
+end

@@ -20,8 +20,12 @@ if dim>1
     x=xnew;y=ynew;
 end
 % ax=subplot(s,t,1);
-h=subplot('Position',F.pos);
-hold all
+if ~isfield(F,'subplot')
+    ax=subplot('Position',F.pos);
+else
+    ax=figure;
+end
+hold on
 set(groot,'defaultAxesColorOrder',F.map2);
 plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
 if F.type==1
@@ -59,6 +63,7 @@ ylim([min(y)-0.3*yll, max(y)+0.3*yll]);
 
 set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 axis('square')
+hold off
 
 if F.tit
     tit1=strcat('0', F.AB ,'. Sample Data');
@@ -69,13 +74,12 @@ end
 
 if ~isfield(F,'subprint'), F.subprint=false; end
 if F.subprint==true, 
-    F.fname=[F.fname, 'a'];
-    F.svg=true;
+ %   F.svg=true;
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');
     rootDir=fpath(1:findex(end-2));
     pre2=strcat(rootDir,'Figures/');% The folder to save figures
-    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel1');
-    print_fig(gcf,F)
+    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel',num2str(F.sub));
+    print_fig(ax,F);
 end

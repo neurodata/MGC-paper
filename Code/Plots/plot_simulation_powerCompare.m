@@ -106,7 +106,7 @@ for j=1:length(str)
     %set(gca,'XTickLabel',[0],'XTick',[0],'FontSize',fontSize);
     labels={-1,[],[],[],0,[],[],[],1};
     set(gca,'XTickLabel',labels,'XTick',-1:0.25:1,'FontSize',fontSize);
-    yt=[0,5,10,15,20];
+    yt=[1,5,10,15,20];
     set(gca,'YTickLabel',yt,'YTick',0.05*yt,'FontSize',fontSize);
         
     if j==1

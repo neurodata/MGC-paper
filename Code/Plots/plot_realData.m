@@ -47,7 +47,6 @@ ylabs={ '# Personality Neighbors'; ...
 tits={'A';'B';'C'};
 
 
-
 %% loop maps
 figure(1), clf, hold all
 filename=strcat(pre1,fnames{2});

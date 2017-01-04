@@ -68,8 +68,14 @@ end
 
 
 if ~isfield(F,'subprint'), F.subprint=false; end
-if F.subprint, 
+if F.subprint==true, 
     F.fname=[F.fname, 'a'];
     F.svg=true;
+    fpath = mfilename('fullpath');
+    fpath=strrep(fpath,'\','/');
+    findex=strfind(fpath,'/');
+    rootDir=fpath(1:findex(end-2));
+    pre2=strcat(rootDir,'Figures/');% The folder to save figures
+    F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel1');
     print_fig(gcf,F)
 end

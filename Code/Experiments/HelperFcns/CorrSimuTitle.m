@@ -38,7 +38,7 @@ switch type
     case 18
         titlechar='Diamond';
     case 19
-        titlechar='Multiplicative Noise';
+        titlechar='Multiplicative';
     case 20
         titlechar='Multimodal Independence';
 end

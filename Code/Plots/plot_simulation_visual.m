@@ -43,6 +43,10 @@ for type=1:total
     titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
+    if type==19
+        x1=mvnrnd(zeros(10*n, dim),eye(dim));
+        y1=zeros(10*n,dim);
+    end
     sz2=8;
     hold on
     plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2);

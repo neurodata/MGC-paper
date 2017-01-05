@@ -1098,7 +1098,7 @@ for $d=1,\ldots,D$.
 \end{align*}
 \item Ellipse $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $r=5$.
 \item Diamond $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Same as (8) Square except $\theta=-\frac{\pi}{4}$.
-\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, 
+\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, c I_{D})$, 
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
 \mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},
@@ -1114,11 +1114,12 @@ for $d=1,\ldots,D$.
 For each distribution, $\mb{x}$ and $\mb{y}$ are dependent except  (20); for some settings (8,14,16-18) they are conditionally independent upon conditioning on the respective auxiliary variables, while for others they are
  ``directly'' dependent. 
 % Given $(\mb{x}_{i},\mb{y}_{i})$ pairs for $i=1,\ldots,n$, set $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_y \times n}$, where $D_y$ is the dimensionality of \mby. 
-A visualization of each dependency with $D=D_y=1$ and $c=0$ is shown in Figure~\ref{f:dependencies}.
+A visualization of each dependency with $D=D_y=1$ is shown in Figure~\ref{f:dependencies}.
 
 
-For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing.  For types  $4,10,14,18,19,20$, we let $D_y=D$; otherwise, we let $D_y=1$. 
+For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing (except type 19, which always has $c=1$ to make it a meaningful multiplicative noise setting).  For types  $4,10,14,18,19,20$, we let $D_y=D$; otherwise, we let $D_y=1$. 
 The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional settings more difficult (otherwise, additional dimensions only add more signal).
+For the 1-dimensional simulations, we always set $D=D_y=1$, $c=1$ and $n=100$.
 
 \clearpage
 

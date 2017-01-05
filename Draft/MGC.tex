@@ -188,20 +188,23 @@ like those in Figure \ref{f:newschem}{\color{magenta}B}.
 \end{figure}
 \begin{figure}
 \ContinuedFloat
-\caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc) in two different settings: linear (center) and nonlinear (spiral; right; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state of the art dependence test, are shown for comparative purposes. 
-\textbf{(0)}  Sample $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
+\caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
+We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state of the art dependence test that \Mgc~extends, are shown for comparative purposes. 
+% 
 Samples $1$, $2$, and $3$ (black) indicate how \Mgc~is able to discover nonlinear relationships. 
 % 
-\textbf{(1)} Distances are linearly correlated in the linear setting, whereas they are, in general, not in the spiral setting.  \Dcorr~uses all distances (gray dots) to compute its test statistic, $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value.
+The three steps of \Mgc~are:
 % 
-\textbf{(2)} \Mgc~selects a subset of all distances to compute the test statistic (green circles), specifically, only considering the distances within the scales the maximize the local generalized correlation. Title states the maximal local correlation $\GG(\Mgc)$, and the scales that achieve it.
+\textbf{(i)} Compute all distance pairs. Distances are linearly correlated in the linear setting, whereas they are, in general, not in the spiral setting.  \Dcorr~uses all distances (gray dots) to compute its test statistic, $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value.
 % 
-\textbf{(3)}
-The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximal test statistic after smoothing (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant p-values, green box), and the global scale (gray dot). 
+\textbf{(ii)} Find the maximum local correlation between $x$ distances and $y$ distances.  The scale with maximum local correlation is the global scale for the linear setting, where it is a very local scale for the spiral setting (panel titles state the maximal local correlation $\GG(\Mgc)$, and the scales that achieve it, green circles show the distances included in that scale).
+% 
+\textbf{(iii)} Compute the p-value and estimate the optimal scales.
+The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximal local correlation (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant p-values, green box), and the global scale (gray dot; 
 % \Mgc~detects significant dependence in both the linear and nonlinear settings, whereas \Dcorr~only detects dependence in the linear setting.% for this small sample size. 
-Titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$.
+titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$).
 % 
-\Mgc~is able to detect and reveal the scales of dependence in both linear and highly nonlinear settings, even  with low sample sizes.}
+Unlike \Dcorr, \Mgc~is able to detect and reveal the scales of dependence in both linear and highly nonlinear settings, even with low sample sizes.}
 \end{figure}
 
 

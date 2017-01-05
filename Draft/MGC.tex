@@ -182,7 +182,7 @@ like those in Figure \ref{f:newschem}{\color{magenta}B}.
 % @jovo: start with cloud density, then later explain how cloud shape.
 
 \begin{figure}
-\includegraphics[width=1.0\textwidth]{Figures/Fig1All.png}
+\includegraphics[height=1.0\textheight]{Figures/Fig1Allb.pdf}
 \caption{}
 \label{f:newschem}
 \end{figure}
@@ -1004,7 +1004,7 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \section{Simulation Dependence Functions}
 \label{appen:function}
 
-This section provides the $20$ different dependency functions used in the simulations.  We used essentially the exact same settings as previous publications to ensure a fair comparison \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add white noise, and a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes. A few additional settings are also included
+This section provides the $20$ different dependency functions used in the simulations.  We used essentially the exact same settings as previous publications to ensure a fair comparison \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add white noise, and a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes. A few additional settings are also included.
 
 For each sample $\mb{x} \in \Real^{D}$, we denote $\mb{x}_{[d]}, d=1,\ldots,D$ as the $d^{th}$ dimension of the vector \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{D}$ is a decaying vector with $w_{[d]}=1/d$ for each $d$, such that $w\T \mb{x}$ is a 
 % one-dimensional 
@@ -1098,10 +1098,10 @@ for $d=1,\ldots,D$.
 \end{align*}
 \item Ellipse $(\mb{x},\mb{y}) \in \Real^{D} \times \Real$: Same as above except $r=5$.
 \item Diamond $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Same as (8) Square except $\theta=-\frac{\pi}{4}$.
-\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, c I_{D})$, 
+\item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, 
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
-\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},
+\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]}+0.25 c\epsilon,
 \end{align*}
 for $d=1,\ldots,D$.
 \item Multimodal Independence $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{N}(0,I_{D})$, $v \sim \mc{N}(0,I_{D})$, $u' \sim \mc{B}(0.5)^{D}$, $v' \sim \mc{B}(0.5)^{D}$. Then
@@ -1117,7 +1117,7 @@ For each distribution, $\mb{x}$ and $\mb{y}$ are dependent except  (20); for som
 A visualization of each dependency with $D=D_y=1$ is shown in Figure~\ref{f:dependencies}.
 
 
-For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing (except type 19, which always has $c=1$ to make it a meaningful multiplicative noise setting).  For types  $4,10,14,18,19,20$, we let $D_y=D$; otherwise, we let $D_y=1$. 
+For the increasing dimension simulation in the main paper, we always set $c=0$ and $n=100$, with $D$ increasing.  For types  $4,10,14,18,19,20$, we let $D_y=D$; otherwise, we let $D_y=1$. 
 The decaying vector $w$ is utilized for $D>1$ to make the high-dimensional settings more difficult (otherwise, additional dimensions only add more signal).
 For the 1-dimensional simulations, we always set $D=D_y=1$, $c=1$ and $n=100$.
 

@@ -56,7 +56,7 @@ if F.type==1
     xlabel('# X Neighbors','FontSize',F.fontSize2+2,...
         'Units', 'normalized','Position', [0, -0.1], 'HorizontalAlignment', 'left');
     ylabel('# Y Neighbors','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position', [-0.28 0.5], 'HorizontalAlignment', 'center');
+        'Units', 'normalized', 'Position', [-0.11 0.5], 'HorizontalAlignment', 'center');
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
@@ -67,14 +67,16 @@ end
 %     title([{tit1}; {'Map & Optimal Scales'}],'FontSize',F.tfs, ...
 %         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 % end
-txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC));
-txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
-title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
+% txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC));
+% txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
+% title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
+txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC),{', '}, '\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
+title(txt1,'FontSize',F.tfs,'interpreter','tex');
 
 axis('square')
-pos2 = get(ax,'position');
-pos2(3:4) = F.pos(3:4);
-set(ax,'position',pos2);
+% pos2 = get(ax,'position');
+% pos2(3:4) = F.pos(3:4);
+% set(ax,'position',pos2);
 
 if ~isfield(F,'subprint'), F.subprint=false; end
 if F.subprint==true, 

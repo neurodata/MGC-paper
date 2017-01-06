@@ -154,7 +154,7 @@ F.sub=1;
 F.subplot=true;
 if F.subplot==true;
     F.svg=true;
-    F.wh=[4 3];
+    F.wh=[3.68 4];
 end
 plot_panel1(F,x,y,R2)      
 
@@ -174,17 +174,10 @@ plot_panel5(F,pMLocal,pMGC)
 
 % title
 if F.subplot~=true;
-titletext=CorrSimuTitle(F.type);
-if type==1;
+    titletext=CorrSimuTitle(F.type);
     titletext=strcat(titletext);
-else
-    titletext=strcat(titletext);
-end
-h=suptitle(titletext);
-set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0], 'HorizontalAlignment', 'center')
-
-
-%%
-
-print_fig(gcf,F)
+    h=suptitle(titletext);
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0], 'HorizontalAlignment', 'center')
+    %%
+    print_fig(gcf,F)
 end

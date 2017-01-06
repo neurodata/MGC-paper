@@ -43,14 +43,14 @@ plot(C2(x23),D2(x23),'.','MarkerSize',8,'Color',F.col);
 hold off
 alpha(0.1)
 
-xlim([min(min(C)),1]);
-ylim([min(min(D)),1]);
+xlim([min(min(C)),1.05]);
+ylim([min(min(D)),1.05]);
 warning('off','all')
 if F.type==1
     xlabel('$$d_{x}(x_i,x_j)$$','FontSize',F.fontSize2+2,...
         'Units', 'normalized','Position', [0.5, -0.02], 'HorizontalAlignment', 'center','Interpreter','latex');
     ylabel('$$d_{y}(y_i,y_j)$$','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position', [-0.28 0.5], 'HorizontalAlignment', 'center','Interpreter','latex');
+        'Units', 'normalized', 'Position', [-0.09 0.5], 'HorizontalAlignment', 'center','Interpreter','latex');
     set(gca,'XTick',[0,1],'YTick',[0,1],'FontSize',F.fontSize); % Remove x axis tick
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
@@ -59,17 +59,19 @@ end
 if F.sub==2
     title(strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr) = ', num2str(round(100*F.tA(end))/100)),'FontSize',F.tfs);
 else
-    txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
-    txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
-    title({txt2,txt1},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+%     txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
+%     txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
+%     title({txt2,txt1},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+    txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')',{', '},'c(MGC) = ', num2str(round(100*F.test)/100));
+    title(txt1,'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
 end
 
 
 set(gca,'FontSize',F.fontSize); % Remove x axis tick
 axis('square')
-pos2 = get(ax,'position');
-pos2(3:4) = F.pos(3:4);
-set(ax,'position',pos2);
+% pos2 = get(ax,'position');
+% pos2(3:4) = F.pos(3:4);
+% set(ax,'position',pos2);
 
 if ~isfield(F,'subprint'), F.subprint=false; end
 if F.subprint==true, 

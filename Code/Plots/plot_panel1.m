@@ -32,7 +32,7 @@ if F.type==1
     xlabel('Ground Wetness','FontSize',F.fontSize2,...
         'Units', 'normalized','Position', [0, -0.02], 'HorizontalAlignment', 'left')
     ylabel('Cloud Density','FontSize',F.fontSize2, ...
-        'Units', 'normalized', 'Position',  [-0.28 0.5], 'HorizontalAlignment', 'center')
+        'Units', 'normalized', 'Position',  [-0.10 0.5], 'HorizontalAlignment', 'center')
 else
     xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
         'Units', 'normalized','Position', [0.5, -0.02], 'HorizontalAlignment', 'center')
@@ -65,16 +65,24 @@ set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 axis('square')
 hold off
 
-if F.tit
-    tit1=strcat('0', F.AB ,'. Sample Data');
-    title([{tit1}; {' '}], 'Units', 'normalized', ...
-        'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
-end
+% if F.tit
+%     tit1=strcat('0', F.AB ,'. Sample Data');
+%     title([{tit1}; {' '}], 'Units', 'normalized', ...
+%         'Position', [0 1.1], 'HorizontalAlignment', 'left','FontSize',F.tfs);
+% end
 
 
 if ~isfield(F,'subprint'), F.subprint=false; end
-if F.subprint==true, 
- %   F.svg=true;
+if F.subprint==true,
+    titletext=CorrSimuTitle(F.type);
+    if F.type==1;
+        titletext=strcat('A.',{' '}, titletext);
+    else
+        titletext=strcat('B.',{' '}, titletext);
+    end
+    h=title(titletext);
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized' ,'HorizontalAlignment', 'center', 'Units', 'normalized','Position', [0.5 1.1])
+    %   F.svg=true;
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');

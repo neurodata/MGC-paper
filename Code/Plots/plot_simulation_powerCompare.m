@@ -130,7 +130,6 @@ if select~=1
 else
     figNumber='HDPowerMGCM';
 end
-F.png=1;
 F.fname=strcat(pre2,figNumber);
 F.wh=[8 2]*2;
 print_fig(gcf,F)

@@ -40,5 +40,5 @@ switch type
     case 19
         titlechar='Multiplicative';
     case 20
-        titlechar='Multimodal Independence';
+        titlechar='Independence';
 end

@@ -41,7 +41,9 @@ sz=12;
 for type=1:total
     subplot(s,t,type);
     titlechar=strcat(num2str(type),'.',{' '},CorrSimuTitle(type));
+    if type<19
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
+    end
     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
     sz2=8;
     hold on
@@ -49,7 +51,9 @@ for type=1:total
     if type==9;
         plot(x1(:,1),y1(:,1),'k.','MarkerSize',sz2*3);
     end
+    if type<19
     plot(x(:,1),y(:,1),'.','MarkerSize',sz);
+    end
     % Specify the axis limit for each type
     switch type
         case 1

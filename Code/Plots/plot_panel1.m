@@ -21,6 +21,9 @@ if dim>1
 end
 % ax=subplot(s,t,1);
 if ~isfield(F,'subplot')
+    F.subplot=false;
+end
+if F.subplot==true
     ax=subplot('Position',F.pos);
 else
     ax=figure;
@@ -29,10 +32,17 @@ hold on
 set(groot,'defaultAxesColorOrder',F.map2);
 plot(x,y,'.','MarkerSize',F.mkSize,'Color',F.gray);
 if F.type==1
+    if F.subplot==false
+        xpos=[0, -0.02];
+        ypos=[-0.10 0.5];
+    else
+        xpos=[0, -0.02];
+        ypos=[-0.25 0.5];
+    end
     xlabel('Ground Wetness','FontSize',F.fontSize2,...
-        'Units', 'normalized','Position', [0, -0.02], 'HorizontalAlignment', 'left')
+        'Units', 'normalized','Position', xpos, 'HorizontalAlignment', 'left')
     ylabel('Cloud Density','FontSize',F.fontSize2, ...
-        'Units', 'normalized', 'Position',  [-0.10 0.5], 'HorizontalAlignment', 'center')
+        'Units', 'normalized', 'Position',  ypos, 'HorizontalAlignment', 'center')
 else
     xlabel('$x$','FontSize',F.fontSize2+5,'Interpreter','latex',...
         'Units', 'normalized','Position', [0.5, -0.02], 'HorizontalAlignment', 'center')
@@ -72,8 +82,7 @@ hold off
 % end
 
 
-if ~isfield(F,'subprint'), F.subprint=false; end
-if F.subprint==true,
+if F.subplot==false, 
     titletext=CorrSimuTitle(F.type);
     if F.type==1;
         titletext=strcat('A.',{' '}, titletext);
@@ -82,7 +91,6 @@ if F.subprint==true,
     end
     h=title(titletext);
     set(h,'FontSize',F.fontSize2+4,'Units', 'normalized' ,'HorizontalAlignment', 'center', 'Units', 'normalized','Position', [0.5 1.1])
-    %   F.svg=true;
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');

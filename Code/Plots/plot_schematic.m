@@ -58,11 +58,18 @@ RD=(RD<=l);
 R2=RC&RD;%&(C_MGC>=0);
 
 %% Figure Structure
-
-F.fontSize=12;
-F.mkSize=8;
-F.fontSize2=12;
-F.tfs=12;
+F.subplot=true;
+if F.subplot==false
+    F.fontSize=16;
+    F.mkSize=12;
+    F.fontSize2=16;
+    F.tfs=16;
+else
+    F.fontSize=8;
+    F.mkSize=4;
+    F.fontSize2=8;
+    F.tfs=8;
+end
 F.k=k;
 F.l=l;
 
@@ -108,21 +115,21 @@ F.hs=2/100*(max(x)-min(x));
 % if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';
 
-height=0.34;
-vspace=0.16;
+height=0.35;
+vspace=0.15;
 
-width=0.55;
+width=0.48;
 left=0.2;
 %left=width+left1;
 bottom=nan(1,4);
-bottom1=0.15;
+bottom1=0.1;
 for i=1:4
     bottom(i)=bottom1+(i-1)*(height+vspace);
 end
-bottom(4)=bottom(4)-0.1;
-bottom(3)=bottom(3)-0.03;
-bottom(2)=bottom(2)-0.02;
-bottom1=0.1;
+bottom(4)=bottom(4)+0.15;
+bottom(3)=bottom(3)+0.15;
+bottom(2)=bottom(2)+0.08;
+% bottom(1)=0.05;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -138,9 +145,8 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A3_type', num2str(F.type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
 end
-F.wh=[3.5 10];
+F.wh=[4 20];
 F.PaperPositionMode='auto';
-F.subprint=true;
 
 %% plot panels
 mxc=max(max(C));
@@ -151,9 +157,9 @@ x=x/mxc;
 y=y/mxd;
 % 1: samle data
 F.sub=1;
-F.subplot=true;
-if F.subplot==true;
-    F.svg=true;
+F.svg=1;
+F.pdf=0;
+if F.subplot==false;
     F.wh=[3.68 4];
 end
 plot_panel1(F,x,y,R2)      
@@ -173,11 +179,16 @@ plot_panel5(F,pMLocal,pMGC)
 
 
 % title
-if F.subplot~=true;
+if F.subplot==true;
     titletext=CorrSimuTitle(F.type);
-    titletext=strcat(titletext);
+    if F.type==1;
+        titletext=strcat('A.',{' '}, titletext);
+    else
+        titletext=strcat('B.',{' '}, titletext);
+    end
     h=suptitle(titletext);
-    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.48, -0.07,0], 'HorizontalAlignment', 'center')
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.45, -0.07,0], 'HorizontalAlignment', 'center')
     %%
+    F.svg=1;
     print_fig(gcf,F)
 end

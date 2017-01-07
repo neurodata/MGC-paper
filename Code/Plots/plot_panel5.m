@@ -3,6 +3,9 @@ function plot_panel5(F,pMLocal,pMGC)
 [m,n]=size(pMLocal);
 
 if ~isfield(F,'subplot')
+    F.subplot=false;
+end
+if F.subplot==true
     ax=subplot('Position',F.pos4);
 else
     ax=figure;
@@ -47,16 +50,23 @@ xlim([1 n-1]);
 ylim([1 n-1]);
 
 % plot scale points
-plot(m-1,n-1,'.','markerSize',15,'MarkerFaceColor',F.glob,'Color',F.glob)
-plot(F.k-1,F.l-1,'g','marker','o','markerSize',6,'linewidth',1)
+plot(m-1,n-1,'.','markerSize',3*F.mkSize,'MarkerFaceColor',F.glob,'Color',F.glob)
+plot(F.k-1,F.l-1,'g','marker','o','markerSize',F.mkSize,'linewidth',1)
 
 hold off
 
 if F.type==1
+    if F.subplot==false
+        xpos=[0, -0.16];
+        ypos=[-0.11 0.5];
+    else
+        xpos=[0, -0.16];
+        ypos=[-0.25 0.5];
+    end
     xlabel('# X Neighbors','FontSize',F.fontSize2+2,...
-        'Units', 'normalized','Position', [0, -0.1], 'HorizontalAlignment', 'left');
+        'Units', 'normalized','Position', xpos, 'HorizontalAlignment', 'left');
     ylabel('# Y Neighbors','FontSize',F.fontSize2+2, ...
-        'Units', 'normalized', 'Position', [-0.11 0.5], 'HorizontalAlignment', 'center');
+        'Units', 'normalized', 'Position', ypos, 'HorizontalAlignment', 'center');
     set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',F.fontSize);
 else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
@@ -67,20 +77,25 @@ end
 %     title([{tit1}; {'Map & Optimal Scales'}],'FontSize',F.tfs, ...
 %         'Units', 'normalized', 'Position', [0 1.1], 'HorizontalAlignment', 'left','color','g')
 % end
-% txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC));
-% txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
-% title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
-txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC),{', '}, '\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
-title(txt1,'FontSize',F.tfs,'interpreter','tex');
+txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC));
+txt2 = strcat('\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
+title({txt1,txt2},'FontSize',F.tfs,'interpreter','tex');
+% txt1 = strcat('\color[rgb]{0 1 0}p(MGC) = ',num2str(pMGC),{', '}, '\color[rgb]{0.5 0.5 0.5}p(Dcorr) = ', num2str(pMLocal(m,n)));
+% title(txt1,'FontSize',F.tfs,'interpreter','tex');
 
 axis('square')
-% pos2 = get(ax,'position');
-% pos2(3:4) = F.pos(3:4);
-% set(ax,'position',pos2);
+% if F.type==8
+% axpos = ax.Position;
+% cpos = h.Position;
+% cpos(3) = 0.5*cpos(3);
+% h.Position = cpos;
+% ax.Position = axpos;
+% end
+pos2 = get(ax,'position');
+pos2(3:4) = F.pos(3:4);
+set(ax,'position',pos2);
 
-if ~isfield(F,'subprint'), F.subprint=false; end
-if F.subprint==true, 
-   % F.svg=true;
+if F.subplot==false
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
     findex=strfind(fpath,'/');

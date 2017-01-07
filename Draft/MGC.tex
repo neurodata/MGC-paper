@@ -1034,7 +1034,7 @@ For all of the below equations, $(\mb{x},\mb{y}) \overset{iid}{\sim} f_{xy} = f_
 \mb{x} &\sim \mc{U}(-1,1)^{D}, \\
 \mb{y} &=128(w\T \mb{x}-\tfrac{1}{3})^3+48(w\T \mb{x}-\tfrac{1}{3})^2-12(w\T \mb{x}-\tfrac{1}{3})+80c\epsilon.
 \end{align*}
-\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}& (1+0.5c) I_{D} \end{bmatrix}$. Then let $\epsilon \sim \mc{N}(0, I_{D})$,
+\item Joint normal $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $\rho=1/2D$, $I_{D}$ be the identity matrix of size $D \times D$, $J_{D}$ be the matrix of ones of size $D \times D$, and $\Sigma = \begin{bmatrix} I_{D}&\rho J_{D}\\ \rho J_{D}& (1+0.5c) I_{D} \end{bmatrix}$. Then
 \begin{align*}
 (\mb{x}, \mb{y}) &\sim \mc{N}(0, \Sigma). 
 \end{align*}
@@ -1104,7 +1104,7 @@ for $d=1,\ldots,D$.
 \item Multiplicative Noise $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: $u \sim \mc{N}(0, I_{D})$, 
 \begin{align*}
 \mb{x} &\sim \mc{N}(0, I_{D}),\\
-\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]}+0.25 c\epsilon,
+\mb{y}_{[d]}&=u_{[d]}\mb{x}_{[d]},
 \end{align*}
 for $d=1,\ldots,D$.
 \item Multimodal Independence $(\mb{x},\mb{y}) \in \Real^{D} \times \Real^{D}$: Let $u \sim \mc{N}(0,I_{D})$, $v \sim \mc{N}(0,I_{D})$, $u' \sim \mc{B}(0.5)^{D}$, $v' \sim \mc{B}(0.5)^{D}$. Then
@@ -1131,7 +1131,7 @@ For the 1-dimensional simulations, we always set $D=D_y=1$, $c=1$ and $n=100$.
 
 \begin{figure}[htbp]
 \includegraphics[trim={5cm 1.5cm 4cm 0.5cm},clip, width=1.0\textwidth]{Figures/FigSimVisual}
-\caption{Visualization of the $20$ dependencies at $D=D_{y}=1$. For each, $n=100$ points are sampled with noise ($c=1$) to show the actual sample data used for 1-dimensional settings (gray dots). For comparison purposes, $n=1000$ points are sampled without noise ($c=0$) to highlight each underlying dependency (black dots).
+\caption{Visualization of the $20$ dependencies at $D=D_{y}=1$. For each, $n=100$ points are sampled with noise ($c=1$) to show the actual sample data used for 1-dimensional settings (gray dots). For comparison purposes, $n=1000$ points are sampled without noise ($c=0$) to highlight each underlying dependency (black dots). Note that only black points are plotted for type 19 and 20, as they do not have the noise parameter $c$.
 }
 \label{f:dependencies}
 \end{figure}

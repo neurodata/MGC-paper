@@ -20,12 +20,12 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 total=20;
 repP=100;
-map2 = brewermap(128,'GnBu'); % brewmap
+map2 = brewermap(128,'BuPu'); % brewmap
 
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
-lw=1.5;
+lw=1;
 if strcmp(figNumber,'1DHeat')
     nn=60;
     
@@ -171,7 +171,7 @@ else
             else
                 [k,l]=ind2sub(size(localCorr),op2);
             end
-            plot(k-1,l-1,'go','markerSize',5)
+            plot(k-1,l-1,'go','markerSize',5,'linewidth',8)
         end
         hold off
         xlim([1,n-1]);

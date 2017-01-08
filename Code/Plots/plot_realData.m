@@ -28,7 +28,7 @@ cmap(3,:) = gr;
 cmap(4,:) = gr;
 % cmap(3,:) = cy;
 map1=cmap;
-map2 = brewermap(128,'GnBu'); % brewmap
+map2 = brewermap(128,'BuPu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
 
 
@@ -54,7 +54,7 @@ load(filename);
 cmap2=flipud(map2);
 fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
-lw=1.5;
+lw=1;
 
 for i=1:3
     filename=strcat(pre1,fnames{i});
@@ -96,7 +96,7 @@ for i=1:3
     tmp(J,I)=1;
     tmp(testMLocal<testMGC)=0;
     [k,l]=ind2sub([m,n],find(tmp==1,1,'last'));
-    plot(k,l,'go','markerSize',5);
+    plot(k,l,'go','markerSize',5,'linewidth',4);
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
     %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks

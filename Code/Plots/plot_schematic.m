@@ -94,7 +94,8 @@ gr=F.map2(120,:);
 pu=F.map2(8,:);
 cmap(1,:) = pu;
 cmap(2,:) = gr;
-F.map1=cmap;
+% F.map1=cmap;
+F.map1= brewermap(128,'BuPu'); % brewmap
 set(groot,'defaultAxesColorOrder',F.map1);
 
 if type~=8
@@ -157,8 +158,8 @@ x=x/mxc;
 y=y/mxd;
 % 1: samle data
 F.sub=1;
-F.svg=1;
-F.pdf=0;
+F.svg=0;
+F.pdf=1;
 if F.subplot==false;
     F.wh=[3.68 4];
 end
@@ -189,6 +190,5 @@ if F.subplot==true;
     h=suptitle(titletext);
     set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.45, -0.07,0], 'HorizontalAlignment', 'center')
     %%
-    F.svg=1;
     print_fig(gcf,F)
 end

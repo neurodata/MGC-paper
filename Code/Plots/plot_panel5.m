@@ -36,7 +36,7 @@ ylim([2,n]);
 
 set(gca,'FontSize',F.fontSize)
 set(gca,'YDir','normal')
-cmap=F.map4;
+cmap=F.map1;
 colormap(ax,flipud(cmap));
 %ceil(max(max(ph))*10)/10
 cticks=[0.001, 0.01, 0.1, 0.5];

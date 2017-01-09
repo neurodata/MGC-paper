@@ -337,8 +337,8 @@ ph=tA(kmin:n,kmin:n)';
 %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
-plot(n,n,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
-plot(k,l,'go','markerSize',8,'linewidth',3)
+plot(n,n,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
+plot(k,l,'go','markerSize',10,'linewidth',5)
 hold off
 
 set(gca,'FontSize',fontSize)
@@ -435,8 +435,8 @@ set(gca,'XTick',[],'YTick',[])
 % plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
 % plot(k,l,'s','color',glob,'markerSize',5,'MarkerFaceColor',glob)
 % plot(k,l,'s','color',loca,'markerSize',5,'MarkerFaceColor',loca)
-plot(n,n,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
-plot(k,l,'go','markerSize',8,'linewidth',3)
+plot(n,n,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
+plot(k,l,'go','markerSize',10,'linewidth',5)
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);
@@ -449,7 +449,7 @@ Ymax=max(I);
 Xmin=min(J);
 Xmax=max(J);
 
-lw=1.5
+lw=1.5;
 plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
 plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
 plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)

@@ -54,7 +54,7 @@ load(filename);
 cmap2=flipud(map2);
 fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
-lw=1;
+lw=1.5;
 
 for i=1:3
     filename=strcat(pre1,fnames{i});
@@ -85,7 +85,7 @@ for i=1:3
     Xmax=max(J);
     %
     if Xmin==Xmax && Ymin==Ymax
-         plot(Xmin,Ymin,'g','marker','o','markerSize',5,'linewidth',2);
+         plot(Xmin,Ymin,'go','markerSize',6,'linewidth',3);
     else
         plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
         plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
@@ -96,7 +96,7 @@ for i=1:3
     tmp(J,I)=1;
     tmp(testMLocal<testMGC)=0;
     [k,l]=ind2sub([m,n],find(tmp==1,1,'last'));
-    plot(k,l,'go','markerSize',5,'linewidth',1.5);
+    plot(k,l,'go','markerSize',6,'linewidth',3);
     %plot(m-1,n-1,'.','markerSize',15,'MarkerFaceColor',glob,'Color',glob)
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end

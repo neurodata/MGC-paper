@@ -21,6 +21,7 @@
 \usepackage{apptools}
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \definecolor{green}{rgb}{0,1,0}
+\usepackage[outercaption]{sidecap}    
 
 \usepackage{tikz}
 \usepackage{graphicx}
@@ -163,13 +164,15 @@ The initial step of these approaches is the computation of \emph{comparisons} (e
 These methods differ in how they choose the comparison function(s) and what they do with the comparisons after computing them. 
 The popularity of these methods can be attributed to their strong theoretical properties \cite{SilvaTenenbaum2002,Allard2012}, wide-ranging applicability to structured data \cite{scholkopf2002learning}, relative computational efficiency, and empirical performance \cite{lu2014scale}.
 % 
-In the 1970s and 1980s nearest neighbor style approaches were popularized \cite{Stone1977}, 
-Previously proposed local tests discard all but the $k$ nearest neighbors, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both measurement types \cite{Friedman1983,Schilling1986}. This requires specifying $k$ in advance, and ignores the magnitudes of the correlation, meaning that when $k$ is large the resulting test statistic is  uninformative. 
-% 
-Nonetheless, for dependence testing, these approaches empirically tend to work well either for high-dimensional linear data (such as the celebrated ``distance covariance'' test,  \Dcorr~\cite{SzekelyRizzo2013a}), or low-dimensional nonlinear data (such as Heller, Heller and Gorfine's test, \Hhg~\cite{heller2016consistent}), but not high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era. 
-% @jovo: no mention of "how they are related"
 
-We surmised that the reason no method dominated the other existing tools across nonlinearities and dimensionalities was because none of the existing approaches are sufficiently \emph{adaptive} to the data.  Specifically, they each rely on an \emph{a priori} selection of an algorithmic parameter, such as the kernel  \cite{scholkopf2002learning}, intrinsic dimension \cite{RoweisSaul2003}, and/or local scale \cite{Allard2012}. Indeed, the fragility of manifold learning more generally to manual choice of parameter has been the Achiles Heel of many such methods.
+Dependence tests have developed specifically to address the above issues.  Hoeffding and Renyi proposed non-parametric tests to address nonlinear relationships \cite{Hoeffding1948,Renyi1959}.  In the 1970s and 1980s nearest neighbor style approaches were popularized \cite{Stone1977}, including for dependence testing purposes \cite{Friedman1983,Schilling1986}.  These tests discard all but the $k$ nearest neighbors for both properties, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both measurement types. This requires specifying $k$ in advance, and ignores the magnitudes of the correlation, meaning that when $k$ is large the resulting test statistic is  uninformative. 
+% 
+More recently, these ``local'' tests were discarded for global approaches.  The Distance correlation test (\Dcorr) was proven to work asymptotically for arbitrary nonlinearities \cite{SzekelyRizzo2009}, for large dimensions \cite{SzekelyRizzo2013a}, and structured data \cite{Lyons2013}.
+Around the same time, Heller, Heller and Gorfine proposed a test (\Hhg), that shared similar properties.  Empirically however, \Dcorr~performs well in high-dimensional linear data, whereas \Hhg~performs well in low-dimensional nonlinear data,
+but no test performs particularly well in high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era.
+% Nonetheless, for dependence testing, these approaches empirically tend to work well either for high-dimensional linear data (such as the celebrated ``distance covariance'' test,  \Dcorr~\cite{SzekelyRizzo2013a}), or low-dimensional nonlinear data (such as Heller, Heller and Gorfine's test, \Hhg~\cite{heller2016consistent}), but not high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era. 
+
+We surmised that the reason no method dominated the other existing tools across nonlinearities and dimensionalities was because none of the existing approaches are sufficiently \emph{adaptive} to the data.  Specifically, they each rely on an \emph{a priori} selection of an algorithmic parameter, such as the kernel  \cite{scholkopf2002learning}, intrinsic dimension \cite{RoweisSaul2003}, and/or local scale \cite{Friedman1983,Schilling1986,Allard2012}. Indeed, the fragility of manifold learning more generally to manual choice of parameter has been the Achiles Heel of many such methods.
 
 % @jovo: supplemental table?
 
@@ -183,13 +186,9 @@ like those in Figure \ref{f:newschem}{\color{magenta}B}.
 (Although the relationship between clouds and grass is unlikely to be spiral, spiral relationships are prevalent in nature and mathematics and are canonical in evaluations of manifold learning techniques \cite{Lee07a}, thereby motivating its use here.)
 % @jovo: start with cloud density, then later explain how cloud shape.
 
-\begin{figure}
-\includegraphics[height=1.0\textheight]{Figures/Fig1Allb.pdf}
-\caption{}
-\label{f:newschem}
-\end{figure}
-\begin{figure}
-\ContinuedFloat
+\begin{SCfigure}
+%  trim={<left> <lower> <right> <upper>}
+\includegraphics[height=1.0\textheight,trim={0cm 2cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
 We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state of the art dependence test that \Mgc~extends, are shown for comparative purposes. 
 % 
@@ -207,7 +206,9 @@ The heatmap shows p-values for all scales (computed via a permutation test), the
 titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$).
 % 
 Unlike \Dcorr, \Mgc~is able to detect and reveal the scales of dependence in both linear and highly nonlinear settings, even with low sample sizes.}
-\end{figure}
+\label{f:newschem}
+\end{SCfigure}
+
 
 
 Now consider observations  1, 2, and 3 (highlighted in black).  Under the linear relationship, when a pair of observations are close to one another in cloud density, they  also tend to be close to one another in grass shape (for example, observations 1 and 2).  
@@ -231,22 +232,23 @@ It is this union of three disparate disciplines spanning data science that enabl
 
 The first step of \Mgc~is the same as essentially all other nonparametric dependency tests:
 compute the distances between all pairs of cloud densities and the corresponding distances between all pairs of grass wetnesses (Figure \ref{f:newschem}{\color{magenta}Ai} and {\color{magenta}Bi}).
-The \Dcorr~test statistic for example \cite{SzekelyRizzo2009}, a global test, is the correlation of all corresponding pairwise distances.
-
-% @jovo fix this
-\Mgc~generalizes the above two approaches by searching for the  maximum ``local generalized correlation''.
+Unlike \Dcorr, which is a global test, and Friedman's test, which specifies a local scale and then merely counts the number of joint neighbors,  
+\Mgc~searches for the  maximum ``local generalized correlation''.
 A local generalized correlation is the correlation only including the $k$ smallest distances for each $x_i$, and the $l$ smallest distances for each  $y_i$.  \Mgc~computes these local generalized correlations for all possible values of $k$ and $l$, incrementally increasing the number of neighbors for each $x_i$, and separately increasing the number of neighbors for each $y_i$.
 The \Mgc~\emph{test statistic} is the local generalized correlation with the best scale, that is, the $(k,l)$ pair whose generalized correlation is largest after smoothing (\Mgc~smooths to address noisy samples). 
-The green circles in Figure \ref{f:newschem}{\color{magenta}Aii} and {\color{magenta}Bii} show the set of distances that \Mgc~selected for these particular simulations.
+The green circles in Figure \ref{f:newschem}{\color{magenta}Aii} and {\color{magenta}Bii} show the set of distances amongst the $(k,l)$ nearest neighbors that \Mgc~selected for these particular simulations.
 For the linear case, all the neighbors are used, so  \Mgc's test statistic is the same as \Dcorr's (which uses all neighbors).  For the nonlinear case, however, the set of comparisons is limited to only local pairs, resulting in \Mgc~yielding a larger test statistic  than \Dcorr's (titles show the maximal test statistics and its' local scale).   
 
 The third and final step is to compute the p-value, estimate the optimal scales, and report the entire \emph{multiscale significance map} (Figure \ref{f:newschem}{\color{magenta}Aiii} and {\color{magenta}Biii}). 
 The p-value is available via a permutation test.  For each iteration, permute the labels of either the $x_i$'s or the $y_i$'s, and compute the maximal local correlation and its scales.  This procedure avoids the multiple hypothesis testing problem entirely ensuring that \Mgc~is a valid and unbiased test.  Nonetheless, it also computes ``local p-values'', that is, the p-value for each $(k,l)$ scale.  The multiscale significance map is the set of all of these p-values.   
-The estimated optimal scales are all scales within the largest rectangle with local p-values no larger than the p-value of  \Mgc. For the linear example, many scales including the global one (\Dcorr's) yield highly significant p-values, implying a nearly linear relationship.
+The estimated optimal scales (green boxes) are all the scales that are maximally informative for the given dataset.
+For the linear example, many scales including the global one (\Dcorr's) yield highly significant p-values, implying a nearly linear relationship.
 On the other hand, for the nonlinear setting, only a set of small local scales yields significant p-values, implying a strong nonlinear relationship that \Dcorr~does not detect but \Mgc~reveals.
 
 
-Running \Mgc~merely requires inputting $n$ samples of two measured properties.  By virtue of operating on distances, it can handle structured data (such as time-series, shapes, or graphs).  Operating on distances also mitigates the ``large p, small n'' problem because the dimensionality p does not explicitly play a role once the distances are calculated.  
+Running \Mgc~merely requires inputting $n$ samples of two measured properties.  
+Moreover, \Mgc~is the only dependence test that reveals the nature of the observed dependence, therefore providing additional insight that can inform subsequent analysis steps.
+% By virtue of operating on distances, it can handle structured data (such as time-series, shapes, or graphs).  Operating on distances also mitigates the ``large p, small n'' problem because the dimensionality p does not explicitly play a role once the distances are calculated.  
 % \Mgc's adaptive nature enables it to perform well in both linear and nonlinear relationships, for both low and high dimensional data,  unlike previous methods. 
 Our open source implementation\footnote{In both MATLAB and R from our website, \website.} requires essentially the same run time as conventional methods, situating it to be useful in a wide variety of contexts. 
 The following sections document \Mgc's empirical, computational, and theoretical properties. Mathematical details of prior global methods are provided in Appendix \ref{appen:global}, details for \Mgc~are provided in Appendix \ref{appen:mgc}, and \Mgc~pseudocode is provided in Appendix~\ref{appen:algorithms}.
@@ -410,6 +412,7 @@ In contrast, many standard parametric methods for fMRI analysis, such as general
 \subsection*{Discussion}
 \label{conclu}
 
+% @jovo: perhaps remove the below paragraph
 We propose multiscale generalized correlation (\Mgc) to discover the presence and scales of dependence across disparate types of data.
 We proved that Oracle \Mgc~dominates global approaches in finite samples.  This proof shows that \Mgc~performs as well as global approaches in certain settings (the linear ones), and better than global approaches in other settings (nonlinear ones). 
 We further empirically demonstrate via simulations that \Mgc~outperforms global methods regardless of the dimension, sample size, or nonlinearity.  Moreover, \Mgc~provides a map indicating which scales contain the dependence structure. 
@@ -423,7 +426,7 @@ Second, Reshef et al. \cite{Reshef2011} and Heller et al. \cite{heller2016consis
 
 
 There are a number of additional potential extensions of this work. First, theoretical guidance for choosing the optimal scale for finite samples in the absence of training data is desirable. 
-In this work, we proved that there exist optimal local scales that improve upon the global scale, and demonstrated that Sample \Mgc~yields tests with power very close to the optimal power, often better than \Hhg~and \Mcorr, and with significant p-values and accurate optimal scale estimation in the real data examples. More theory connecting Oracle \Mgc~and  Sample \Mgc~will yield further insight.
+In this work, we proved that there exist optimal local scales that improve upon the global scale, and demonstrated that Sample \Mgc~yields tests with power very close to the optimal power,  and with significant p-values and useful scale estimation in the real data examples. More theory connecting Oracle \Mgc~and  Sample \Mgc~will yield further insight.
 
 Second, \Mgc~requires a pair of metrics (or distances), one for each data type. In this work we selected such metrics using domain knowledge, and mitigated the potential inopportune choice of metric via locality tuning.  If the optimal metric could be reasonably selected for a given dataset, this would possibly obviate the need for locality, and further improve power. Szekely et al. investigated different norms and exponents to ascertain the impact of different metrics, but was unable to determine optimality.
 Metric learning \cite{xing2003distance} explicitly addresses learning metrics for different exploitation tasks, so perhaps could inform solution to dependence testing.

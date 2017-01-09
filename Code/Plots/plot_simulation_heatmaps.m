@@ -62,7 +62,7 @@ if strcmp(figNumber,'1DHeat')
             plot([Xmax(j),Xmax(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
             plot([Xmin(j),Xmax(j)],[Ymin(j),Ymin(j)],'g','linewidth',lw)
             plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
-            plot(K(j)-1,L(j)-1,'go','markerSize',5,'linewidth',3)
+            plot(K(j)-1,L(j)-1,'go','markerSize',8,'linewidth',4)
         end
         hold off
         xlim([1,nn-1]);
@@ -118,7 +118,7 @@ else
             plot([Xmax(j),Xmax(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
             plot([Xmin(j),Xmax(j)],[Ymin(j),Ymin(j)],'g','linewidth',lw)
             plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
-            plot(K(j)-1,L(j)-1,'go','markerSize',5,'linewidth',3)
+            plot(K(j)-1,L(j)-1,'go','markerSize',8,'linewidth',4)
         end
         hold off
         xlim([1,n-1]);

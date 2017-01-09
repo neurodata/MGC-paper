@@ -62,7 +62,7 @@ else
     end
 end
 %
-str={'A. MGC - Mantel';'B. MGC - Dcorr';'C. MGC - Mcorr';'D. MGC - HHG'};
+str={'Mantel';'Dcorr';'Mcorr';'HHG'};
 %lw=3;
 %ss=[1,3,2,5,4,6,7,13,19,16,17,10,9,14,8,11,12,15,18,20];
 for j=1:length(str)
@@ -120,7 +120,32 @@ for j=1:length(str)
         %set(gca,'XTick',[]); % Remove y axis ticks
     end
     %set(gca,'YTick',[]); % Remove y axis ticks
-    title(str(j,:),'FontSize',fontSize, ...
+    
+%     switch j
+%         case 1
+%             tit=strcat('A. MGC - ',{' '}, str(j,:));
+%         case 2
+%             tit=strcat('B. MGC - ',{' '}, str(j,:));
+%         case 3
+%             tit=strcat('C. MGC - ',{' '}, str(j,:));
+%         case 4
+%             tit=strcat('D. MGC - ',{' '}, str(j,:));
+%     end
+    switch j
+        case 1
+            tit=strcat('A.');
+        case 2
+            tit=strcat('B.');
+        case 3
+            tit=strcat('C.');
+        case 4
+            tit=strcat('D.');
+    end
+
+    txt1=strcat(tit,' Power(MGC)');
+    txt2=strcat({'     '},'- Power(',str(j,:),')');
+    txt2=txt2{1};
+    title({txt1,txt2},'FontSize',fontSize, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     hold off
 end
@@ -131,5 +156,5 @@ else
     figNumber='HDPowerMGCM';
 end
 F.fname=strcat(pre2,figNumber);
-F.wh=[8 2]*2;
+F.wh=[8 2.2]*2;
 print_fig(gcf,F)

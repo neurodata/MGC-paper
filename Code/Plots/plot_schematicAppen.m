@@ -44,7 +44,7 @@ gray = [0.5,0.5,0.5];
 map2 = brewermap(128,'PiYG'); % brewmap
 map3 = map2(size(map2,1)/2+1:end,:);
 % map3 = brewermap(128,'Greens'); % brewmap
-map4 = brewermap(128,'GnBu'); % brewmap
+map4 = brewermap(128,'BuPu'); % brewmap
 s=3;t=5;
 gr=map2(120,:);
 pu=map2(8,:);
@@ -337,7 +337,8 @@ ph=tA(kmin:n,kmin:n)';
 %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
-plot(k,l,'gs','markerSize',5,'MarkerFaceColor','g')
+plot(n,n,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
+plot(k,l,'go','markerSize',8,'linewidth',3)
 hold off
 
 set(gca,'FontSize',fontSize)
@@ -432,8 +433,10 @@ set(gca,'XTick',[],'YTick',[])
 % ylim([1 n-1]);
 % plot([n-2:n-2],[n-2:n-1],'-m','linewidth',2)
 % plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
-plot(k,l,'s','color',glob,'markerSize',5,'MarkerFaceColor',glob)
-plot(k,l,'s','color',loca,'markerSize',5,'MarkerFaceColor',loca)
+% plot(k,l,'s','color',glob,'markerSize',5,'MarkerFaceColor',glob)
+% plot(k,l,'s','color',loca,'markerSize',5,'MarkerFaceColor',loca)
+plot(n,n,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
+plot(k,l,'go','markerSize',8,'linewidth',3)
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);
@@ -446,10 +449,11 @@ Ymax=max(I);
 Xmin=min(J);
 Xmax=max(J);
 
-plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',3)
-plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',3)
-plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',3)
-plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',3)
+lw=1.5
+plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
+plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
 xlim([2,n]);
 ylim([2,n]);
 %     imagesc(k,l,1);

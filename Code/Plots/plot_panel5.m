@@ -24,7 +24,7 @@ imagesc(log(ph));
 % Ymax=max(I)-1;
 % Xmin=min(J)-1;
 % Xmax=max(J)-1;
-lw=1.5;
+lw=1.2;
 plot([F.Xmin,F.Xmin],[F.Ymin,F.Ymax],'g','linewidth',lw)
 plot([F.Xmax,F.Xmax],[F.Ymin,F.Ymax],'g','linewidth',lw)
 plot([F.Xmin,F.Xmax],[F.Ymin,F.Ymin],'g','linewidth',lw)
@@ -51,7 +51,7 @@ ylim([1 n-1]);
 
 % plot scale points
 plot(m-1,n-1,'.','markerSize',3*F.mkSize,'MarkerFaceColor',F.glob,'Color',F.glob)
-plot(F.k-1,F.l-1,'g','marker','o','markerSize',F.mkSize,'linewidth',1)
+plot(F.k-1,F.l-1,'g','marker','o','markerSize',F.mkSize,'linewidth',2)
 
 hold off
 

@@ -28,7 +28,7 @@ t=5;
 lw=1;
 if strcmp(figNumber,'1DHeat')
     nn=60;
-    
+    load(strcat(pre1,'CorrIndTest1DHeat.mat'));
     for j=1:total
         filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
         load(filename)
@@ -58,38 +58,11 @@ if strcmp(figNumber,'1DHeat')
         caxis([0 thres])
         
         if j<total
-            %             phmax=max(max(ph));
-            testRepeat=1;
-            while testRepeat==1;
-                [x,y]=CorrSampleGenerator(j,nn,1,1,1);
-                [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(squareform(pdist(x)),squareform(pdist(y)),repP,'mcor');
-                if pMGC<0.05 && ((sum(optimalInd==n^2)==0 && j>5) || (sum(optimalInd==n^2)==1 && j<=5))
-                    testRepeat=0;
-                end
-            end
-            
-            %     [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
-            %     optimalInd=find(optimalInd==1);
-            [J,I]=ind2sub(size(localCorr),optimalInd);
-            Ymin=min(I)-1;
-            Ymax=max(I)-1;
-            Xmin=min(J)-1;
-            Xmax=max(J)-1;
-            
-            plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
-            plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
-            plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
-            plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-            localCorr(Xmin:Xmax,Ymin:Ymax)=localCorr(Xmin:Xmax,Ymin:Ymax)+10;
-            statMGC=statMGC+10;
-            op2=find(localCorr==statMGC);
-            if isempty(op2)
-                k=Xmax+1;
-                l=Ymax+1;
-            else
-                [k,l]=ind2sub(size(localCorr),op2);
-            end
-            plot(k-1,l-1,'go','markerSize',5)
+           plot([Xmin(j),Xmin(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
+            plot([Xmax(j),Xmax(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
+            plot([Xmin(j),Xmax(j)],[Ymin(j),Ymin(j)],'g','linewidth',lw)
+            plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
+            plot(K(j)-1,L(j)-1,'go','markerSize',5,'linewidth',3)
         end
         hold off
         xlim([1,nn-1]);
@@ -105,8 +78,8 @@ if strcmp(figNumber,'1DHeat')
         end
         axis('square')
     end
-    xlabel('# X Neighbors','position',[-200 -12],'FontSize',24);
-    ylabel('# Y Neighbors','position',[-500 180],'FontSize',24);
+    xlabel('# X Neighbors','position',[-170 -12],'FontSize',24);
+    ylabel('# Y Neighbors','position',[-423 165],'FontSize',24);
     
     %colorbar
     h=colorbar('Ticks',[0,thres/2,thres]);
@@ -114,6 +87,7 @@ if strcmp(figNumber,'1DHeat')
     h=suptitle(strcat('One-Dimensional Multiscale Power Maps'));
 else
     figNumber='HDHeat';
+    load(strcat(pre1,'CorrIndTestHDHeat.mat'));
     for j=1:total
         filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
         load(filename)
@@ -140,38 +114,11 @@ else
         caxis([0 thres])
         
         if j<total
-            %phmax=max(max(ph));
-            testRepeat=1;
-            while testRepeat==1;
-                [x,y]=CorrSampleGenerator(j,n,dimRange(ind),1,0);
-                [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(squareform(pdist(x)),squareform(pdist(y)),repP,'mcor');
-                if pMGC<0.05 && ((sum(optimalInd==n^2)==0 && j>5) || (sum(optimalInd==n^2)==1 && j<=5))
-                    testRepeat=0;
-                end
-            end
-            
-            %     [~,~,~,optimalInd]=FindLargestRectangles((ph>=phmax-powerThres), [0 0 1]);
-            %     optimalInd=find(optimalInd==1);
-            [J,I]=ind2sub(size(localCorr),optimalInd);
-            Ymin=min(I)-1;
-            Ymax=max(I)-1;
-            Xmin=min(J)-1;
-            Xmax=max(J)-1;
-            
-            plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
-            plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
-            plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
-            plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-            localCorr(Xmin:Xmax,Ymin:Ymax)=localCorr(Xmin:Xmax,Ymin:Ymax)+10;
-            statMGC=statMGC+10;
-            op2=find(localCorr==statMGC);
-            if isempty(op2)
-                k=Xmax+1;
-                l=Ymax+1;
-            else
-                [k,l]=ind2sub(size(localCorr),op2);
-            end
-            plot(k-1,l-1,'go','markerSize',5,'linewidth',8)
+            plot([Xmin(j),Xmin(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
+            plot([Xmax(j),Xmax(j)],[Ymin(j),Ymax(j)],'g','linewidth',lw)
+            plot([Xmin(j),Xmax(j)],[Ymin(j),Ymin(j)],'g','linewidth',lw)
+            plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
+            plot(K(j)-1,L(j)-1,'go','markerSize',5,'linewidth',3)
         end
         hold off
         xlim([1,n-1]);
@@ -186,14 +133,14 @@ else
         title(titlechar,'FontSize',14);
         axis('square');
     end
-    xlabel('# X Neighbors','position',[-340 -20],'FontSize',24);
-    ylabel('# Y Neighbors','position',[-840 300],'FontSize',24);
+    xlabel('# X Neighbors','position',[-290 -20],'FontSize',24);
+    ylabel('# Y Neighbors','position',[-715 277],'FontSize',24);
     
     h=colorbar('Ticks',[0,thres/2,thres]);
     set(h,'FontSize',14);
     h=suptitle(strcat('High-Dimensional Multiscale Power Maps'));
 end
-set(h,'FontSize',24,'FontWeight','normal');
+set(h,'FontSize',26,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);
 F.wh=[8 5]*2;

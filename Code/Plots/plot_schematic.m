@@ -66,7 +66,7 @@ if F.subplot==false
     F.tfs=16;
 else
     F.fontSize=8;
-    F.mkSize=4;
+    F.mkSize=6;
     F.fontSize2=8;
     F.tfs=8;
 end
@@ -85,7 +85,7 @@ F.col=[0 0 0];
 F.gray = [0.5,0.5,0.5];
 F.glob=[0.5,0.5,0.5];
 F.map2 = brewermap(128,'PiYG'); % brewmap
-F.map4 = brewermap(128,'GnBu'); % brewmap
+F.map4 = brewermap(128,'BuPu'); % brewmap
 F.test=test;
 F.tA=tA;
 F.type=type;
@@ -158,7 +158,7 @@ x=x/mxc;
 y=y/mxd;
 % 1: samle data
 F.sub=1;
-F.svg=0;
+F.svg=1;
 F.pdf=1;
 if F.subplot==false;
     F.wh=[3.68 4];

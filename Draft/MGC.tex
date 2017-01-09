@@ -121,17 +121,13 @@
 \begin{abstract}
 % \vspace{-5pt}
 Discovering whether certain properties are associated with other properties is fundamental to quantitative investigation. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the nature of the relationship. 
-% By definition, if two properties are related, a given observation's nearest neighbors in one property (e.g., the clouds with the most similar density) will also often be its nearest neighbors in the other property (e.g., the grass observations with the most similar wetness), for a suitable number of neighbors. 
-% However, the ability to identify the existence of a relationship strongly depends on the choice of scale (number of neighbors to include).
-% % @jovo: add ", because...." 
-% Alas, judiciously estimating the informative scales in a statistically consistent and computationally efficient fashion has remained elusive in data science for a wide range of tasks.  This limitation has resulted in empirical limitations, specifically, different approaches excel in different settings, with no one approach dominating over all relationships, regardless of the nonlinearity, dimensionality, or structure, for any sample size. 
-% Previous approaches require specifying a scale a priori, and have therefore struggled to appropriately adapt to a given dataset, specifically when the data are complex and high-dimensional, the relationship is nonlinear, and the sample size is small. 
 Existing approaches excel in different settings, with no one approach dominating over all relationships, regardless of the nonlinearity, dimensionality, or structure, for any sample size.
-% Previous approaches have struggled to reliably identify relationships when the properties are complex and high-dimensional and the relationship is nonlinear. 
-% @bm: not sure which of the above is better
+% @jovo: "excel in different settings" is semantically weird.
 We juxtapose three previously discordant methods in data science---hypothesis testing, manifold learning, and harmonic analysis---to obtain an approach we call Multiscale Generalized Correlation (\Mgc). 
-% Our key insight was a how to design a procedure, \Mgc, that can estimate the optimal scales yielding a statistically consistent and computationally efficient test. \Mgc~is therefore able to (i) statistically dominates global methods---we prove that it is always as good as global methods in linear settings, and can be better in nonlinear settings---and, (ii) uniquely provide insight into the nature of dependencies it detects. 
-We used \Mgc~to detect the presence and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity). We additionally illustrate that \Mgc~does not suffer from the false positive inflation problem that has plagued conventional parametric approaches. Our open source implementation of \Mgc~is easy to use and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
+Our key insight is that we can restrict the analysis to jointly local observations---that is, observations that are local in both properties---yielding an approach that statistically dominates previous approaches while maintaining computational efficiency.
+We used \Mgc~to detect the presence and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity). We additionally illustrate that \Mgc~does not suffer from the false positive inflation problem that has plagued conventional parametric approaches. 
+% @jovo probably can shorten the above sentence?
+Our open source implementation of \Mgc~is easy to use and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
 \end{abstract}
 
 
@@ -166,7 +162,13 @@ to manifold learning (e.g., \cite{TorgersonBook, TenenbaumSilvaLangford2000, Sau
 The initial step of these approaches is the computation of \emph{comparisons} (either  similarities or dissimilarities) between all pairs of observations.
 These methods differ in how they choose the comparison function(s) and what they do with the comparisons after computing them. 
 The popularity of these methods can be attributed to their strong theoretical properties \cite{SilvaTenenbaum2002,Allard2012}, wide-ranging applicability to structured data \cite{scholkopf2002learning}, relative computational efficiency, and empirical performance \cite{lu2014scale}.
+% 
+In the 1970s and 1980s nearest neighbor style approaches were popularized \cite{Stone1977}, 
+Previously proposed local tests discard all but the $k$ nearest neighbors, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both measurement types \cite{Friedman1983,Schilling1986}. This requires specifying $k$ in advance, and ignores the magnitudes of the correlation, meaning that when $k$ is large the resulting test statistic is  uninformative. 
+% 
 Nonetheless, for dependence testing, these approaches empirically tend to work well either for high-dimensional linear data (such as the celebrated ``distance covariance'' test,  \Dcorr~\cite{SzekelyRizzo2013a}), or low-dimensional nonlinear data (such as Heller, Heller and Gorfine's test, \Hhg~\cite{heller2016consistent}), but not high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era. 
+% @jovo: no mention of "how they are related"
+
 We surmised that the reason no method dominated the other existing tools across nonlinearities and dimensionalities was because none of the existing approaches are sufficiently \emph{adaptive} to the data.  Specifically, they each rely on an \emph{a priori} selection of an algorithmic parameter, such as the kernel  \cite{scholkopf2002learning}, intrinsic dimension \cite{RoweisSaul2003}, and/or local scale \cite{Allard2012}. Indeed, the fragility of manifold learning more generally to manual choice of parameter has been the Achiles Heel of many such methods.
 
 % @jovo: supplemental table?
@@ -218,11 +220,11 @@ Thus, the global correlation between density distances and wetness distances is 
 One could restrict the distances to consider only to the nearest neighbors of each point, but how many nearest neighbors should one use?  Too few and much of the data are ignored; too many and nonlinear relationships could be overlooked. 
 % % @jovo: consider introducing the character of distances of shapes here.
   
-The key, therefore, to successfully determining the presence and nature of a relationship is to estimate the optimal number of neighbors.
+The key, therefore, to successfully determining the presence and nature of a relationship is to adaptively estimate the number of neighbors that are particularly informative.
 This is especially important in high-dimensional data, where simple visualizations do not reveal the relationships to the unaided human eye.
 Our  dependence test---called ``Multiscale Generalized Correlation'' (\Mgc)---extends essentially all previously proposed pairwise comparison based approaches to enable estimation of the  optimal scales.   
-\Mgc~explicitly addresses the fundamental trade-off suggested above: as more neighbors are included (as the scale increases), the effective sample size increases; however, more neighbors also means larger distances, so that the neighbors are less linearly related.
-\textbf{Our main insight is that we can adaptively choose the optimal scale for any relationship---linear or nonlinear, low-dimensional or high-dimensional, unstructured or structured---in a computationally efficient and statistically consistent fashion, therefore guaranteeing improved statistical performance over existing global methods for any finite sample size.}
+\Mgc~explicitly addresses the fundamental trade-off suggested above: as more neighbors are included (as the scale increases), the effective sample size increases; however, more neighbors also means the neighbors are less likely to be linearly related, potentially decreasing power.
+\textbf{Our main insight is that we can adaptively estimate informative scales for any relationship---linear or nonlinear, low-dimensional or high-dimensional, unstructured or structured---in a computationally efficient and statistically consistent fashion, therefore guaranteeing improved statistical performance over existing global methods for any finite sample size.}
 Moreover, these scales are informative about the nature of the dependence structure, therefore providing further guidance for subsequent experimental or analytical steps. \Mgc~is thus a hypothesis-testing methodology that builds on recent developments in manifold learning (operating on pairwise comparisons) by combining them with complementary developments in harmonic (multiscale) analysis. 
 It is this union of three disparate disciplines spanning data science that enables improved theoretical and empirical performances. 
 
@@ -230,8 +232,8 @@ It is this union of three disparate disciplines spanning data science that enabl
 The first step of \Mgc~is the same as essentially all other nonparametric dependency tests:
 compute the distances between all pairs of cloud densities and the corresponding distances between all pairs of grass wetnesses (Figure \ref{f:newschem}{\color{magenta}Ai} and {\color{magenta}Bi}).
 The \Dcorr~test statistic for example \cite{SzekelyRizzo2009}, a global test, is the correlation of all corresponding pairwise distances.
-Previously proposed local tests discard all but the $k$ nearest neighbors, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both measurement types \cite{Friedman1983,Schilling1986}. This requires specifying $k$ in advance, and ignores the magnitudes of the correlation, meaning that when $k$ is large the resulting test statistic is  uninformative. 
 
+% @jovo fix this
 \Mgc~generalizes the above two approaches by searching for the  maximum ``local generalized correlation''.
 A local generalized correlation is the correlation only including the $k$ smallest distances for each $x_i$, and the $l$ smallest distances for each  $y_i$.  \Mgc~computes these local generalized correlations for all possible values of $k$ and $l$, incrementally increasing the number of neighbors for each $x_i$, and separately increasing the number of neighbors for each $y_i$.
 The \Mgc~\emph{test statistic} is the local generalized correlation with the best scale, that is, the $(k,l)$ pair whose generalized correlation is largest after smoothing (\Mgc~smooths to address noisy samples). 

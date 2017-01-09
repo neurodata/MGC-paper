@@ -85,7 +85,7 @@ for i=1:3
     Xmax=max(J);
     %
     if Xmin==Xmax && Ymin==Ymax
-         plot(Xmin,Ymin,'g','marker','o','markerSize',5)
+         plot(Xmin,Ymin,'g','marker','o','markerSize',5,'linewidth',2);
     else
         plot([Xmin,Xmin],[Ymin,Ymax],'g','linewidth',lw)
         plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
@@ -96,7 +96,8 @@ for i=1:3
     tmp(J,I)=1;
     tmp(testMLocal<testMGC)=0;
     [k,l]=ind2sub([m,n],find(tmp==1,1,'last'));
-    plot(k,l,'go','markerSize',5,'linewidth',4);
+    plot(k,l,'go','markerSize',5,'linewidth',1.5);
+    %plot(m-1,n-1,'.','markerSize',15,'MarkerFaceColor',glob,'Color',glob)
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
     %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks

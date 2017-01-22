@@ -1,4 +1,4 @@
-function [corr,varX,varY, weight] = MGCLocalCorr(X,Y,option, ind)
+function [corr,varX,varY] = MGCLocalCorr(X,Y,option)
 % Author: Cencheng Shen
 % The main function that calculates all local correlation coefficients.
 %
@@ -7,15 +7,8 @@ function [corr,varX,varY, weight] = MGCLocalCorr(X,Y,option, ind)
 % an option that specifies which global correlation to use, including 'mcor','dcor','mantel'.
 %
 % The outputs are all local correlations and all local variances.
-%
-% Alternatively, specifying ind by a matrix single index will return a
-% weight matrix that shows the contribution of each distance entries to
-% the eventual local distance correlation at the given index.
 if nargin < 3
     option='mcor'; % use mcorr by default
-end
-if nargin < 4
-    ind=[];
 end
 n=size(X,1);
 disRank=[DistRanks(X) DistRanks(Y)]; % sort distances within columns
@@ -26,13 +19,7 @@ B=DistCentering(Y,option);
 
 RX=disRank(1:n,1:n); % the column ranks for X
 RY=disRank(1:n,n+1:2*n); % the column ranks for Y
-if length(ind)~=1
-    [corr,varX,varY]=LocalCorrelations(A,B',RX,RY'); % compute all local corr / var statistics
-    weight=[];
-else
-    corr=[]; varX=[]; varY=[];
-    weight=LocalWeights(A,B',RX,RY', ind); % compute distance entry contributions at a given scale
-end
+[corr,varX,varY]=LocalCorrelations(A,B',RX,RY'); % compute all local corr / var statistics
 
 function [corrXY,varX,varY]=LocalCorrelations(A,B,RX,RY)
 % An auxiliary function that computes all local correlations simultaneously in O(n^2)
@@ -85,20 +72,6 @@ for l=1:nY
         corrXY(:,l)=0;
     end
 end
-
-function weight=LocalWeights(A,B,RX,RY,ind)
-% An auxiliary function that computes the contributions of each distance entries to
-% the local distance correlation at a given scale.
-nX=max(max(RX));nY=max(max(RY));
-if ind>nX*nY || ind<1
-    ind=nX*nY; % default to global scale when the specified index is out of range
-end
-[k,l]=ind2sub([nX,nY],ind);
-RX=(RX>k);
-RY=(RY>l);
-A(RX)=0;
-B(RY)=0;
-weight=(A-mean(mean(A))).*(B-mean(mean(B)));
 
 % function [corrXY,varX,varY]=GlobalCorrelation(A,B)
 % corrXY=sum(sum(A.*B));

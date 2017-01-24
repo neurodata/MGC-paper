@@ -149,14 +149,6 @@ First, the dependencies between different properties
 of data can be highly {nonlinear}.
 % 
 Second, the dimensionality of the data might be extremely high (millions or billions for genomics and connectomics datasets, for example), while the sample size often remains low (tens or hundreds).  This ``{large p, small n}'' problem compounds the challenges associated with nonlinear relationships because higher dimensional problems require more data to obtain accurate estimates \cite{johnstone2009statistical}.
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:10:50.329Z:
-% 
-% > large p, small n
-% @jovo: I added a comma here
-% - @sd
-% 
-% ^.
-% @sd: ok
 Third, the data are often {structured}---sequences, images, networks, shapes, and text---creating problems for standard methods that were developed for unstructured feature sets such as real numbers \cite{bakir2007predicting}.
 % @jovo: via distances? density doesn't address this.  maybe touch on cloud shape.
 Fourth, because of the accelerating data deluge,  {computationally efficient} methods are critical for generating results within acceptable time frames \cite{hey2009fourth}.
@@ -165,18 +157,7 @@ Modern tests therefore should perform well for any linear or nonlinear relations
 And finally, investigators not only want to know {whether}  properties are dependent on each other, but also {how they are related.}
 
 
-Many statistical and machine learning approaches have been developed over the last 120 years to combat the above issues in a wide variety of  settings. Specifically, pairwise comparison-based approaches have been developed for various applications,  ranging from hypothesis testing (e.g., \cite{David1966,Mantel1967,Friedman1983,Schilling1986,Maa1996,SzekelyRizzo2009,SzekelyRizzo2013b,HellerGorfine2013,Dumcke2014}) 
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:12:18.177Z:
-% 
-% > have been utilized  for various purposes
-% @jovo: I feel like we don't need this part of the sentence, since in the previous sentence we already say "in a wide variety of settings".
-% I suggest:
-% "... in a wide variety of settings. Specifically, this includes pairwise comparison-based approaches, ranging from..."
-% What do you think?
-% -@sd
-% 
-% ^.
-% @sd: made a related change, i think an improvement. #jovo
+Many statistical and machine learning approaches have been developed over the last 120 years to combat the above issues. Specifically, pairwise comparison-based approaches have been developed for  a wide variety of tasks,  ranging from hypothesis testing (e.g., \cite{David1966,Mantel1967,Friedman1983,Schilling1986,Maa1996,SzekelyRizzo2009,SzekelyRizzo2013b,HellerGorfine2013,Dumcke2014}) 
 to manifold learning (e.g., \cite{TorgersonBook, TenenbaumSilvaLangford2000, SaulRoweis2000, BelkinNiyogi2003,DiffusionPNAS, MMS:NoisyDictionaryLearning}); kernel machines are a sub-field of machine learning dedicated to using such comparisons (e.g., \cite{scholkopf2002learning,GrettonEtAl2005,harchaoui2013kernel}).
 % @jovo: not crystal clear what is a "comparison function"
 The initial step of these approaches is the computation of \emph{comparisons} (either  similarities or dissimilarities) between all pairs of observations.
@@ -185,45 +166,8 @@ The popularity of these methods can be attributed to their strong theoretical pr
 % 
 
 While the above issues have been addressed individually in dependence testing, no test has simultaneously addressed them all.    Hoeffding and Renyi proposed non-parametric tests to address univariate but nonlinear relationships \cite{Hoeffding1948,Renyi1959}.  In the 1970s and 1980s nearest neighbor style approaches were popularized \cite{Stone1977}, including for dependence testing purposes \cite{Friedman1983,Schilling1986}.  These tests discard all but the $k$ nearest neighbors for both properties, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both properties. This requires specifying $k$ in advance, and ignores the magnitude of the correlation by only counting whether pairs are jointly neighbors.  Such local methods are therefore sensitive to choice of $k$, and are uninformative  when $k$ is large (because nearly all pairs are neighbors), resulting in poor empirical properties.
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:50:19.447Z:
-% 
-% > This requires specifying $k$ in advance, and ignores the magnitude of the correlation, meaning that when $k$ is large the resulting test statistic is  uninformative. 
-% @jovo: I changed "magnitudes" to "magnitude"
-% However this sentence confuses me a bit, so it might benefit from some clarification for someone like me. :) I understand that nearest neighbor methods do require k to be specified in advance, and when k is too large then the method becomes rather useless. But how exactly does the method ignore the magnitude of the correlation? Also, does it only ignore the magnitude of the correlation for large k? Or any k?
-% -@sd
-% 
-% ^.
-% @sd: clarified? #jovo
-% 
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:29:11.764Z:
-% 
-% > measurement types
-% @jovo: I'm a little confused by what we mean here. Is this just another term for the two properties that are being compared?
-% -@sd
-% 
-% ^.
-% @sd: clarified #jovo
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:16:03.623Z:
-% 
-% > Dependence tests have developed specifically to address the above issues. 
-% @jovo: It feels awkward to reference "the above issues" when the issues are not in the paragraph immediately preceding it. Also, it sounds too similar to the first sentence of the previous paragraph ("Many statistical and machine learning approaches have been developed over the last 120 years to combat the above issues...")
-% Before I suggest what to put here instead of this sentence, I think I need some clarification on what we mean by dependence tests. Is this on the same level as the pairwise comparison-based approaches mentioned in the previous paragraph? That is, are we essentially saying the following:
-% 1. Many approaches have been developed to combat the issues
-% 2. One type is the pairwise comparison-based approach
-% 3. Another type is the dependence test
-% -@sd
-% 
-% ^.
-% 
-% @sd: clarified? #jovo
-More recently, these ``local'' tests were discarded in favor of global approaches.  The Distance correlation test (\Dcorr) was proven to work asymptotically for arbitrary nonlinearities \cite{SzekelyRizzo2009}, for large dimensions \cite{SzekelyRizzo2013a}, and structured data \cite{Lyons2013}.
-% * <stefaniejacinto@gmail.com> 2017-01-13T01:57:16.649Z:
-% 
-% > discarded in favor of global approaches
-% @jovo: Edited for clarity (previously read "discarded for global approaches")
-% -@sd
-% 
-% ^.
+% @sd: is the above clear now?
+For these reasons, more recently, these ``local'' tests were discarded in favor of global approaches.  The Distance correlation test (\Dcorr) was proven to work asymptotically for arbitrary nonlinearities \cite{SzekelyRizzo2009}, for large dimensions \cite{SzekelyRizzo2013a}, and structured data \cite{Lyons2013}.
 Around the same time, Heller, Heller, and Gorfine proposed a test (\Hhg), that shared similar properties.  Empirically, \Dcorr~performs well in high-dimensional linear data, whereas \Hhg~performs well in low-dimensional nonlinear data,
 but neither performs particularly well in high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in our current big data era.
 % Nonetheless, for dependence testing, these approaches empirically tend to work well either for high-dimensional linear data (such as the celebrated ``distance covariance'' test,  \Dcorr~\cite{SzekelyRizzo2013a}), or low-dimensional nonlinear data (such as Heller, Heller and Gorfine's test, \Hhg~\cite{heller2016consistent}), but not high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era. 
@@ -238,55 +182,24 @@ imagine investigating whether there is a relationship between cloud density and 
 Let $x_i$ denote cloud density for observation $i$ and $y_i$ denote grass wetness on that same observation. 
 If the relationship between cloud density and grass wetness is approximately linear, the data might look like Figure \ref{f:newschem}{\color{magenta}A}. 
 On the other hand, if the relationship is nonlinear---such as a  spiral---it might look like those in Figure \ref{f:newschem}{\color{magenta}B}.
-% * <stefaniejacinto@gmail.com> 2017-01-13T02:13:48.378Z:
-% 
-% > like
-% @jovo: Deleted typo (extra "like")
-% -@sd
-% 
-% ^.
-% @sd: ok #jovo
 Although the relationship between clouds and grass is unlikely to be spiral, spiral relationships are prevalent in nature and mathematics, and are canonical in evaluations of manifold learning techniques \cite{Lee07a}, thereby motivating its use here.
-% * <stefaniejacinto@gmail.com> 2017-01-13T02:16:01.052Z:
-% 
-% > mathematics,
-% @jovo: Added comma for flow
-% -@sd
-% 
-% ^.
-% @sd: ok #jovo
 
 \begin{SCfigure}
 %  trim={<left> <lower> <right> <upper>}
 \includegraphics[height=1.0\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
-% * <stefaniejacinto@gmail.com> 2017-01-14T03:21:54.799Z:
-% 
-% > Illustration
-% @jovo: Is it possible to make the flow of Figure 1 clearer? I'm not sure what the down arrows are supposed to mean. The label for section (i) should refer to the two graphs above it, but the down arrow implies otherwise. Also, the label for section (ii) seems to be sandwiched between the graphs for two methods of getting the local correlation (i.e. Dcorr vs MGC methods).
-% -@sd
-% 
-% ^.
-% @sd: clarified? #jovo
+% @sd: if fig 1 clearer now?
 We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state-of-the-art dependence test that \Mgc~extends, are shown for comparative purposes. 
 % 
 Samples $1$, $2$, and $3$ (black) indicate how \Mgc~is able to discover nonlinear relationships. 
 % 
 The three steps of \Mgc~are:
 % 
-\textbf{(i)} Compute all distance pairs. Distances are linearly correlated in the linear setting, whereas they are, in general, not in the spiral setting.  \Dcorr~uses all distances (gray dots) to compute its test statistic, $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value.
+\textbf{(i)} Compute all distance pairs. Distances are linearly correlated in the linear setting, whereas they are, in general, not in the spiral setting.  \Dcorr~uses all distances (gray dots) to compute its test statistic, $\GG(\Dcorr)$, which \Dcorr~uses to compute its p-value (arrows show $x$ distances and $y$ distances between points 2 and 3).
 % 
-\textbf{(ii)} Find the maximum local correlation between $x$ distances and $y$ distances.  The scale with maximum local correlation is the global scale for the linear setting, where it is a very local scale for the spiral setting (panel titles state the maximal local correlation $\GG(\Mgc)$, and the scales that achieve it, green circles show the distances included in that scale).
-% * <stefaniejacinto@gmail.com> 2017-01-21T00:39:37.288Z:
-% 
-% > maximal
-% @jovo: Is there a particular reason for switching between "maximum" earlier in the paragraph and "maximal" here? Might be better to just be consistent?
-% -@sd
-% 
-% ^.
-% 
+\textbf{(ii)} Find the maximum local correlation between $x$ distances and $y$ distances.  The scale with maximum local correlation is the global scale for the linear setting, where it is a very local scale for the spiral setting (panel titles state the maximum local correlation $\GG(\Mgc)$, and the scales that achieve it, green circles show the distances included in that scale).
 \textbf{(iii)} Compute the p-value and estimate the optimal scales.
-The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximal local correlation (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant p-values, green box), and the global scale (gray dot; 
+The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximum local correlation (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant p-values, green box), and the global scale (gray dot; 
 % \Mgc~detects significant dependence in both the linear and nonlinear settings, whereas \Dcorr~only detects dependence in the linear setting.% for this small sample size. 
 titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$).
 % 
@@ -297,77 +210,22 @@ Unlike \Dcorr, \Mgc~is able to detect and reveal the scales of dependence in bot
 
 
 Now consider observations  1, 2, and 3 (highlighted in black).  Under the linear relationship, when a pair of observations are close to one another in cloud density, they  also tend to be close to one another in grass wetness (for example, observations 1 and 2).
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:15:56.758Z:
-% 
-% > grass wetness
-% @jovo: I assume you meant grass wetness (this previously said "grass shape").
-% -@sd
-% 
-% ^.
-% @sd: ok #jovo
 Similarly, %@jovofix
 when a pair of observations are far from one another in cloud density, they also tend to be far from one another in grass wetness (for example, observations 2 and 3).  
 This suggests that global correlation between distances---the correlation between all $x$ distances and the corresponding $y$ distances for each pair of observations---can determine whether these two properties are related.  
-% This suggests that global correlation between distances---meaning computing the correlation between all pairs of distances, both small and large---can determine whether these two properties are related.  
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:32:17.626Z:
-% 
-% > pairs of distances
-% @jovo: Maybe we could clarify this is a bit more. This part starts off talking about "pairs of observations", and when "distances" is mentioned, in my mind this naturally leads to the idea that the distance being referred to is the distance between the pairs of observations mentioned earlier. But then when we start to mention "pairs of distances", it's not super clear to me which pairs we're talking about. (This is made clear in Figure 1, but perhaps we could find a way to introduce the concept of pairs of distances more smoothly?)
-% -@sd
-% 
-% ^.
-% @sd: changed sentence.  clarified? #jovo
+% @sd: is the above clear now?
 Moreover, it suggests that the more of these distances we use, the more information we will obtain, yielding a more powerful test.
 % 
-On the other hand, consider the nonlinear (spiral) relationship.  Here again, when a pair of observations are close to one another in cloud density, they also tend to be close to one another in grass wetness (see points 1 and 2 again).  However, in this nonlinear relationship,  a large distance between cloud shapes does not necessarily imply that the distance between corresponding grass wetnesses also tends to be large (see points 2 and 3).
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:45:10.120Z:
-% 
-% > Here again, when a pair of observations are close to one another in cloud shape, they also tend to be close to one another in grass wetness (see points 1 and 2 again).  However, in this nonlinear relationship,  a large distance between cloud shapes
-% @jovo: Is cloud density the same as cloud shape? This is a little confusing since earlier, we only compared cloud density to grass wetness. Now we're comparing cloud shape to grass wetness. If we really intend to use a different variable for Figure 1B, we should mention it above in line 87 or 88.
-% -@sd
-% 
-% ^.
-% @sd: was typo, meant density, not shape
+On the other hand, consider the nonlinear (spiral) relationship.  Here again, when a pair of observations are close to one another in cloud density, they also tend to be close to one another in grass wetness (see points 1 and 2 again).  However, in this nonlinear relationship,  a large distance between cloud densities does not necessarily imply that the distance between corresponding grass wetnesses also tends to be large (see points 2 and 3).
 Thus, the global correlation between density distances and wetness distances is weak, misleadingly suggesting that there is little or no statistical dependency between density and wetness, even though there is one at more local scales.
 One could restrict the distances to consider only the nearest neighbors of each point, but how many nearest neighbors should one use?  Use too few and much of the data are ignored; use too many and nonlinear relationships could be overlooked. 
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:50:52.290Z:
-% 
-% > Use too few and much of the data are ignored; use too many and 
-% @jovo: Edited for clarity
-% -@sd
-% 
-% ^.
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:49:14.009Z:
-% 
-% > only the
-% @jovo: Removed "to"
-% -@sd
-% 
-% ^.
-% @sd: ok #jovo
 % % @jovo: consider introducing the character of distances of shapes here.
   
 The key, therefore, to successfully determining the presence and nature of a relationship is to adaptively estimate the number of neighbors that are particularly informative.
 This is especially important in high-dimensional data, where simple visualizations do not reveal the relationships to the unaided human eye.
 Our  dependence test---called ``Multiscale Generalized Correlation'' (\Mgc)---extends essentially all previously proposed pairwise comparison-based approaches to enable estimation of the  optimal scales.   
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:52:42.009Z:
-% 
-% > comparison-based
-% @jovo: Added hyphen here
-% -@sd
-% 
-% ^.
-% @sd: ok #jovo
-\Mgc~explicitly addresses the fundamental trade-off suggested above: as more neighbors are included (that is, as the scale increases), the effective sample size increases; however, 
- more neighbors also means that in nonlinear relationships, the neighbors are less likely to be linearly related, potentially decreasing power.
-% * <stefaniejacinto@gmail.com> 2017-01-14T02:58:32.617Z:
-% 
-% > more neighbors also means the neighbors are less likely to be linearly related, potentially decreasing power.
-% @jovo: Does more neighbors increase the chance of the relationships being nonlinear vs linear? I feel if we mentioned nonlinear relationships here, it would link more tightly with what was said in the previous paragraph, i.e. "use too many and nonlinear relationships could be overlooked".
-% -@sd
-% 
-% ^.
-% @sd: added caveat of nonlinear relationships.  clarified? #jovo
+\Mgc~explicitly addresses the fundamental trade-off suggested above: as more neighbors are included (that is, as the scale increases), the effective sample size increases; however, more neighbors also means that in nonlinear relationships, the neighbors are less likely to be linearly related, potentially decreasing power.
+% @sd: is the above clear now?
 {Our main insight is that we can adaptively estimate informative scales for any relationship---linear or nonlinear, low-dimensional or high-dimensional, unstructured or structured---in a computationally efficient and statistically consistent fashion, therefore guaranteeing improved statistical performance over existing global methods for any finite sample size.}
 Moreover, these scales are informative about the nature of the dependence structure, therefore providing further guidance for subsequent experimental or analytical steps. \Mgc~is thus a hypothesis-testing methodology that builds on recent developments in manifold learning (operating on pairwise comparisons) by combining them with complementary developments in harmonic (multiscale) analysis. 
 It is this union of three disparate disciplines spanning data science that enables improved theoretical and empirical performances. 
@@ -382,7 +240,7 @@ The green circles in Figure \ref{f:newschem}{\color{magenta}Aii} and {\color{mag
 For the linear case, all the neighbors are used, so  \Mgc's test statistic is the same as \Dcorr's (which uses all neighbors).  For the nonlinear case, however, the set of comparisons is limited to only local pairs, resulting in \Mgc~yielding a larger test statistic  than \Dcorr's (titles show the maximal test statistics and its local scale).   
 
 The third and final step is to compute the p-value, estimate the optimal scales, and report the  \emph{multiscale significance map} (Figure \ref{f:newschem}{\color{magenta}Aiii} and {\color{magenta}Biii}). 
-The p-value is available via a permutation test.  For each iteration, permute the labels of either the $x_i$'s or the $y_i$'s, and compute the maximal local correlation and its scales.  This procedure avoids the multiple hypothesis testing problem entirely, ensuring that \Mgc~is a valid and unbiased test (see Appendix \ref{appen:algorithms} for details).  It also computes ``local significance values''  for each $(k,l)$ scale.  The multiscale significance map is the set of all of these significances.   
+The p-value is available via a permutation test.  For each iteration, permute the labels of either the $x_i$'s or the $y_i$'s, and compute the maximum local correlation and its scales.  This procedure avoids the multiple hypothesis testing problem entirely, ensuring that \Mgc~is a valid and unbiased test (see Appendix \ref{appen:algorithms} for details).  It also computes ``local significance values''  for each $(k,l)$ scale.  The multiscale significance map is the set of all of these significances.   
 The estimated optimal scales (green boxes) are all the scales that are maximally significant for the given dataset.
 For the linear example, many scales including the global one (\Dcorr's) yield low significance values, implying a nearly linear relationship.
 On the other hand, for the nonlinear setting, only a set of small local scales yields low significant values, implying a strong nonlinear relationship that is undetected by \Dcorr~but revealed by \Mgc~.
@@ -495,13 +353,6 @@ This dataset consists of $n=42$ subjects, each with  $197$ time-steps of resting
 For the brain activity modality, we derived the following comparison function. For each scan, (i) 
 run the Configurable Pipeline for the Analysis of Connectomes (C-PAC) pipeline \cite{CPAC2015} to process the raw brain images yielding a parcellation into $197$ regions of interest, 
 (ii) run a spectral analysis on each region, (iii) bandpass and normalize it to sum to one, and (iv) calculate the Kullback-Leibler divergence across regions to obtain a similarity matrix comparing all regions.  Then, use the normalized Hellinger distance to compute distances between each subject. 
-% * <stefaniejacinto@gmail.com> 2017-01-21T23:15:33.699Z:
-% 
-% > obtain a similarity matrix comparing all regions
-% @jovo: Deleted "across" (this was previously "...matrix across comparing all regions")
-% -@sd
-% 
-% ^.
 For the five-factor personality modality, we  used the Euclidean distance.
 % 
 Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values ($\approx 0.01$), whereas the global scale fails to detect this significant dependence. In fact, all previously proposed global dependence tests under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) fail to detect dependence at a significance level of $0.05$ (see Table \ref{t:real}), and only \Mgc~provides insight into the scales of dependence.
@@ -545,14 +396,7 @@ The next experiment investigates whether brain structural networks are independe
 For the raw brain imaging data, we derived the following comparison function.  For each scan, (i) process diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}, (ii) 
 compute the distance between brain networks using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions for simplicity and aligning the embeddings via a Procrustes analysis.  Then, compute the Euclidean distance between subjects. We used Euclidean distance to compare CCI values. 
 % 
-Figure \ref{f:real}{\color{magenta}C} shows that even global dependence tests can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting with high-dimensional structured data samples of low sample size, \Mgc~can reveal a strongly linear dependence (lacking a strong nonlinear dependence) without having to resort to structured regression techniques.
-% * <stefaniejacinto@gmail.com> 2017-01-21T23:40:10.491Z:
-% 
-% > with high-dimensional structured data samples of low sample size
-% @jovo: Edited for clarity (was previously "with high-dimensional and structured data samples and low-sample size")
-% -@sd
-% 
-% ^.
+Figure \ref{f:real}{\color{magenta}C} shows that even global dependence tests can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting,  a small number of high-dimensional structured data samples, \Mgc~can reveal a strongly linear dependence (lacking a strong nonlinear dependence) without having to resort to structured regression techniques.
 
 
 \subsubsection*{\Mgc~Does Not Inflate False Positive Rates} 
@@ -563,14 +407,7 @@ Then an independent stimulus is generated by sampling from a standard normal dis
 For each brain region, \Mgc~attempts to address the following question: Is activity of that  brain region independent of the time-varying stimuli? We pool brain activity over all of the samples from the population.
 Any region that is detected as significant is a false positive by definition.  By testing each brain region separately, \Mgc~provides a distribution of false positive rates.  If \Mgc~is valid, that distribution should be centered around the significance level, which is set at $0.05$ for this experiment.
 
-The use of \Mgc~requires a distance matrix for brain region activity, and another for the stimulus. For the brain region activity, we used C-PAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time series data containing $200$ regions of interest for $200$ time-steps.
-% * <stefaniejacinto@gmail.com> 2017-01-21T23:44:31.742Z:
-% 
-% > The use of \Mgc~requires a distance matrix
-% @jovo: I think this sounds better than "Conducting MGC requires..."
-% -@sd
-% 
-% ^.
+\Mgc~requires a distance matrix for brain region activity, and another for the stimulus. For the brain region activity, we used C-PAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time series data containing $200$ regions of interest for $200$ time-steps.
 For each region, the Euclidean distance pairs between time steps are computed, i.e., $\|\mb{x}_{\cdot i}-\mb{x}_{\cdot j}\|_2$,  where $\mb{x}_{\cdot i}$ denotes the population vector of activity of the region at time-step $i$ for all subjects.
 For the one-dimensional stimulus, we similarly compute the Euclidean distance between the stimulus values at each pair of time-steps: $\|\mb{y}_i - \mb{y}_j\|_2$.
 Note that the distance matrices at different brain regions are distinct, but the stimulus is the same for all brain regions during the same experiment.
@@ -645,38 +482,61 @@ the Air Force Office of Scientific Research contract FA955014-1-0033. The author
 
 \section{Global Methods for Testing Dependence}
 \label{appen:global}
-To better understand the multiscale generalized correlation, in this section we first formally state the testing scenario, followed by introducing the notion of the generalized correlation coefficient and reviewing four existing dependence tests: the \Mantel~test, distance correlation (\Dcorr), modified distance correlation (\Mcorr), and \Hhg. They are arguable the most popular and well-known statistical tests for dependence, and serve as the benchmarks in this paper. Note that the first three are conventional correlation measures, which can be used for building up local correlations and thus  \Mgc.
+To better understand the multiscale generalized correlation, in this section we first formally state the testing scenario, followed by introducing the notion of the generalized correlation coefficient and reviewing four existing dependence tests: the \Mantel~test, distance correlation (\Dcorr), modified distance correlation (\Mcorr), and \Hhg. They are arguably the most popular and well-known statistical tests for dependence, and serve as the benchmarks in this paper. Note that the first three are conventional correlation measures, which can be used for building up local correlations and thus  \Mgc.
 
 \subsection{Testing Independence}
 
-To theoretically investigate the performance of any dependence test requires formalizing the statistical hypotheses.
+A theoretical investigation of the performance of any dependence test requires formalizing the statistical hypotheses.
  Given pairs of observations $(\mb{x}_{i},\mb{y}_{i}) \in \Real^{D \times D_y}$ for $i=1,\ldots,n$, assume they are independently identically distributed as $(\mbx,\mby) \iid f_{xy}$. If the two random variables \mbx~and \mby~are independent, the joint distribution equals the product of the marginals, i.e., $f_{xy}=f_x f_y$.  The statistical hypotheses for testing independence is as follows:
 \begin{align*}
 & H_{0}: f_{xy}=f_{x}f_{y},\\
 & H_{A}: f_{xy} \neq f_{x}f_{y}.
 \end{align*}
-Given a test statistic, the testing power equals the probability of rejecting the independence hypothesis when the null hypothesis is false. A test statistic is consistent if and only if the testing power increases to $1$ as sample size increases to infinity. We would like a test to be consistent against most (if not all) dependencies, e.g., \Dcorr, \Mcorr, and \Hhg~are consistent against all dependencies with finite second moments. % which is almost as good as universal consistent in practice because real data are always bounded.
+Given a test statistic, the testing power equals the probability of rejecting the independence hypothesis (i.e. the null hypothesis) when it is false. A test statistic is consistent if and only if the testing power increases to $1$ as sample size increases to infinity. We would like a test to be consistent against most (if not all) dependencies, e.g., \Dcorr, \Mcorr, and \Hhg~are consistent against all dependencies with finite second moments. % which is almost as good as universal consistent in practice because real data are always bounded.
+% * <stefaniejacinto@gmail.com> 2017-01-24T00:52:14.101Z:
+% 
+% > rejecting the independence hypothesis (i.e. the null hypothesis) when it is false
+% @jovo: Edited for clarity
+% -@sd
+% 
+% ^.
 
-Note that $D$ is the dimension for $\mb{x}$'s, $D_y$ is the dimensionality for $\mb{y}$'s. For \Mgc~and all benchmark methods, there is no restriction on the dimensions, i.e., the dimensions can be arbitrarily large, and $D$ is not required to equal $D_y$. The ability to handle data of arbitrary dimension is crucial for modern big data, and it is important to recognize tests that excel for high-dimensional data. There also exist some special methods that only operate on 1-dimensional data, such as \cite{Reshef2011,heller2016consistent,Huo2016}, which are not yet generalize-able to multidimensional data and thus not considered in this paper.
+Note that $D$ is the dimension for $\mb{x}$'s, $D_y$ is the dimensionality for $\mb{y}$'s. For \Mgc~and all benchmark methods, there is no restriction on the dimensions, i.e., the dimensions can be arbitrarily large, and $D$ is not required to equal $D_y$. The ability to handle data of arbitrary dimension is crucial for modern big data, and it is important to recognize tests that excel for high-dimensional data. There also exist some special methods that only operate on 1-dimensional data, such as \cite{Reshef2011,heller2016consistent,Huo2016}, which are not yet generalizable to multidimensional data and thus not considered in this paper.
+% * <stefaniejacinto@gmail.com> 2017-01-24T00:55:59.726Z:
+% 
+% > generalizable
+% @jovo: I know Overleaf is marking this as a misspelling but I think it's ok to say "generalizable" instead of "generalize-able"... it's an accepted word
+% -@sd
+% 
+% ^.
 
 \subsection{Generalized Correlation}
-Instead of relying on the the sample observations directly, most state-of-art dependence tests operate on pairwise comparisons, either similarities (such as kernels) or dissimilarities (such as distances). 
-Given pairs of observations $(\mb{x}_{i},\mb{y}_{i}) \in \Real^{D \times D_y}$ for $i=1,\ldots,n$, let $\delta_x$ be the distance function for $\mb{x}$'s and $\delta_y$ for $\mb{y}$'s, one can compute two $n \times n$ distance matrices $\tilde{A}=\{\tilde{a}_{ij}\}$ and $\tilde{B}=\{\tilde{b}_{ij}\}$, where $\tilde{a}_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$ and $\tilde{b}_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$. A common example of the distance function is the Euclidean metric (or $L^{2}$ norm), which serves as the starting point for all methods in this manuscript.
+Instead of relying on the sample observations directly, most state-of-the-art dependence tests operate on pairwise comparisons, either similarities (such as kernels) or dissimilarities (such as distances). 
+Given pairs of observations $(\mb{x}_{i},\mb{y}_{i}) \in \Real^{D \times D_y}$ for $i=1,\ldots,n$, let $\delta_x$ be the distance function for $\mb{x}$'s and $\delta_y$ for $\mb{y}$'s. One can then compute two $n \times n$ distance matrices $\tilde{A}=\{\tilde{a}_{ij}\}$ and $\tilde{B}=\{\tilde{b}_{ij}\}$, where $\tilde{a}_{ij}=\delta_x(\mb{x}_i,\mb{x}_j)$ and $\tilde{b}_{ij}=\delta_y(\mb{y}_i,\mb{y}_j)$. A common example of the distance function is the Euclidean metric (or $L^{2}$ norm), which serves as the starting point for all methods in this manuscript.
 
 Assuming two zero-mean matrices $A$ and $B$ are transformations of $\tilde{A}$ and $\tilde{B}$ (e.g., $A$ and $B$ can be the centered distance matrices),
 then a ``generalized correlation coefficient''  \cite{Spearman1904,KendallBook} is written as:
 \begin{equation}
 \label{generalCoef}
-\GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}},
+\GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}}, [SUGGEST:]
+% * <stefaniejacinto@gmail.com> 2017-01-24T01:24:02.037Z:
+% 
+% > [SUGGEST:]
+% > \GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}}
+% @jovo: I think it would be clearer if we used a double sigma notation here instead of i,j=1
+% -@sd
+% 
+% ^.
+\GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}},
 \end{equation}
 where $z$ is proportional to the standard deviations of $A$ and $B$, that is $z=n^2\sigma_a \sigma_b$, and $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_y \times n}$ denote the matrices of sample observations.
 
 In words, $\GG$ is the global correlation across \emph{pairwise comparison matrices} $A$ and $B$, rather than the individual data samples. By defining $A$ and $B$ based on different transformations of 
-the distance matrices, the \Mantel~coefficient, \Dcorr, and \Mcorr~can all be written in the form of the generalized correlation coefficient. Note that traditional correlations such as the Pearson's correlation and the rank correlation can also be written by a generalized correlation coefficient, where $A$ and $B$ are derived from sample observations rather than distances; and the \Hhg~test  cannot easily be cast into this framework even though it is operating on distances.
+the distance matrices, the \Mantel~coefficient, \Dcorr, and \Mcorr~can all be written in the form of the generalized correlation coefficient. Note that traditional correlations such as the Pearson's correlation and the rank correlation can also be written by a generalized correlation coefficient, where $A$ and $B$ are derived from sample observations rather than distances. However, the \Hhg~test  cannot easily be cast into this framework even though it is operating on distances.
 
-A generalized correlation always ranges in $[-1,1]$, has expectation $0$ under independence, implies a stronger dependency when the correlation is further away from $0$, and can serve as the global correlation in implementing \Mgc. 
+A generalized correlation always has the range $[-1,1]$, has expectation $0$ under independence, implies a stronger dependency when the correlation is further away from $0$, and can serve as the global correlation in implementing \Mgc. 
 
-To carry out the hypothesis testing on sample data by a given test statistic, e.g., a generalized correlation, the permutation test is the usual choice \cite{GoodPermutationBook}, because a p-value can be computed by comparing the correlation of the sample data to the correlation of the permuted sample data. The independence hypothesis is rejected if the p-value is lower than a pre-set type $1$ error level, say $0.05$. Then the testing power of the generalized correlation equals the probability of correct rejection.
+To carry out the hypothesis testing on sample data using a given test statistic, e.g., a generalized correlation, the permutation test is the usual choice \cite{GoodPermutationBook}, because a p-value can be computed by comparing the correlation of the sample data to the correlation of the permuted sample data. The independence hypothesis is rejected if the p-value is lower than a pre-set type $1$ error level, say $0.05$. Then the testing power of the generalized correlation equals the probability of correct rejection.
 
 \subsubsection{The \Mantel~Coefficient}
 \label{appen:mantel}
@@ -689,11 +549,11 @@ and the \Mantel~test is carried out by the permutation test.
 
 
 Unlike distance correlation and \Hhg, so far the \Mantel~test has no consistency proof against all dependent alternatives, 
-but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectiveness. Figure~\ref{f:nDAll} and ~\ref{f:1DAll} indeed show that global \Mantel~is sub-optimal relative to much more recently proposed tests, and appears to be inconsistent for many dependencies. 
+but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectiveness. Figures~\ref{f:nDAll} and ~\ref{f:1DAll} indeed show that global \Mantel~is sub-optimal relative to much more recently proposed tests, and appears to be inconsistent for many dependencies. 
 
 \subsubsection{Distance Correlation (\Dcorr)}
 \label{appen:dcorr}
-Given two distance matrices $\tilde{A}$ and $\tilde{B}$, let $A=H\tilde{A}H$, $B=H\tilde{B}H$, where $H=I_{n}-\frac{J_{n}}{n}$ (the double centering matrix), $I_n$ is the $n \times n$ identity matrix (ones on the diagonal, zeros elsewhere), and $J_n$ is the $n \times n$ matrix of all ones. Then the sample distance correlation follows by inserting the above $A$ and $B$ into Equation~\ref{generalCoef}. For distance correlation, the numerator of Equation~\ref{generalCoef} is named distance covariance, while $\sigma_a$ and $\sigma_b$ in the denominator are named the distance variances. %is defined by doubly centering the distance matrices:
+Given two distance matrices $\tilde{A}$ and $\tilde{B}$, let $A=H\tilde{A}H$, $B=H\tilde{B}H$, where $H=I_{n}-\frac{J_{n}}{n}$ (the double centering matrix), $I_n$ is the $n \times n$ identity matrix (ones on the diagonal, zeros elsewhere), and $J_n$ is the $n \times n$ matrix of all ones. Then the sample distance correlation follows by inserting the above $A$ and $B$ into Equation~\ref{generalCoef}. For distance correlation, the numerator of Equation~\ref{generalCoef} is named the distance covariance, while $\sigma_a$ and $\sigma_b$ in the denominator are named the distance variances. %is defined by doubly centering the distance matrices:
 %\begin{equation*}
 %\label{dcovEqu}
 %dcov(X,Y)=\frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij}.
@@ -708,7 +568,7 @@ Given two distance matrices $\tilde{A}$ and $\tilde{B}$, let $A=H\tilde{A}H$, $B
 %\end{equation*}
 
 It is shown in \cite{SzekelyRizzoBakirov2007} that as $n \rightarrow \infty$, the sample distance correlation satisfies $\GG(X,Y) \rightarrow \Dcorr(\mb{x},\mb{y}) \geq 0$, where $\Dcorr(\mb{x},\mb{y})$ denotes the population distance correlation between the underlying random variables $\mb{x}$ and $\mb{y}$. 
-The population distance correlation is defined via the characteristic functions of $X$ and $Y$, in a way that it equals zero if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is consistent against all dependencies with finite second moments. The distance covariance, distance variance, and distance correlation are always non-negative; and the consistency result holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. %Note that the \Dcorr~here equals the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
+The population distance correlation is defined via the characteristic functions of $X$ and $Y$, in a way that it equals zero if and only if $\mb{x}$ and $\mb{y}$ are independent. Thus the sample distance correlation is consistent against all dependencies with finite second moments. The distance covariance, distance variance, and distance correlation are always non-negative; the consistency result holds for a family of metrics not limited to the Euclidean distance \cite{Lyons2013}. %Note that the \Dcorr~here equals the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
 Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is equivalent to singly center one distance matrix by row and the other distance matrix by column, as shown in the next lemma.
 
@@ -716,7 +576,7 @@ Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\til
 \label{lem1}
 The distance covariance is the same under single centering (i.e., $A=H\tilde{A}$ and $B=\tilde{B}H$) and double centering (i.e., $A=H\tilde{A}H$ and $B=H\tilde{B}H$), where $\tilde{A}$ and $\tilde{B}$ are the Euclidean distance matrices of $X$ and $Y$, and $H$ is the centering matrix. 
 
-Moreover, the p-value (via the permutation test) of global \Dcorr~is the same under single centering and double centering, so is the testing power.
+Moreover, the p-value (via the permutation test) of global \Dcorr~is the same under single centering and double centering, and so is the testing power.
 \end{lem}
 \begin{proof}
 Let $dcov(X,Y)$ denote the numerator of Equation~\ref{generalCoef}, and $\cdot\T$ denote the matrix transpose. Then $dcov(X,Y)$ can be re-written by matrix traces as follows
@@ -849,7 +709,7 @@ As to the rank preservation, the column ranks of the Euclidean distance matrix $
 
 \paragraph{Computational Complexity}
 
-Assume $D$ is the maximal feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are done, computing one local correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, and it seems that \Mgc~is just another theoretical tool with formidable computational burden. However, given the distance and ranking information, it turns out the multiscale correlation map can be efficiently constructed in $O(n^2)$ by re-using adjacent smaller local correlations to procedurally build all local correlations (see Algorithm \ref{alg:all_scales}), which has essentially the same running time complexity as the global correlations. Therefore, when including the distance computation and ranking overheads, overall MGC runs in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~test, while the global correlations like \Dcorr~and \Mcorr~run in $O(n^2D)$.
+Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are done, computing one local correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, and it seems that \Mgc~is just another theoretical tool with formidable computational burden. However, given the distance and ranking information, it turns out the multiscale correlation map can be efficiently constructed in $O(n^2)$ by re-using adjacent smaller local correlations to procedurally build all local correlations (see Algorithm \ref{alg:all_scales}), which has essentially the same running time complexity as the global correlations. Therefore, when including the distance computation and ranking overheads, overall MGC runs in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~test, while the global correlations like \Dcorr~and \Mcorr~run in $O(n^2D)$.
 
 \subsection{Oracle and Sample \Mgc}
 \label{appen:mgc2}
@@ -989,7 +849,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 
 \clearpage 
 \begin{algorithm}
-\caption{Multiscale Generalized Correlation (\Mgc). Assuming the maximal feature dimension of $x_i$ and $y_i$ is $D$, the whole \Mgc~algorithm runs in $O(n^2 \times \max(r\log{n}, D))$.}
+\caption{Multiscale Generalized Correlation (\Mgc). Assuming the maximum feature dimension of $x_i$ and $y_i$ is $D$, the whole \Mgc~algorithm runs in $O(n^2 \times \max(r\log{n}, D))$.}
 \label{alg:mgc}
 \begin{algorithmic}%[1]
 \Require $n$ samples of $(x_i,y_i)$ pairs, an integer $r$ for the number of random permutations.

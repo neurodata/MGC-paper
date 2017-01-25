@@ -21,6 +21,7 @@ map3 = brewermap(128,'PiYG'); % brewmap
 lgr=map3(100,:);
 dgr=map3(128,:);
 gr=lgr;
+glob= [0.5,0.5,0.5];
 % cy = [0,1,1];
 cmap(1,:) = gr;
 cmap(2,:) = gr;
@@ -97,7 +98,7 @@ for i=1:3
     tmp(testMLocal<testMGC)=0;
     [k,l]=ind2sub([m,n],find(tmp==1,1,'last'));
     plot(k,l,'go','markerSize',6,'linewidth',3);
-    %plot(m-1,n-1,'.','markerSize',15,'MarkerFaceColor',glob,'Color',glob)
+    plot(m,n,'.','markerSize',18,'MarkerFaceColor',glob,'Color',glob)
     xticks=[5,round(m/2)-1,m-1];
     if i==1,  xticks(1)=3; end
     %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks

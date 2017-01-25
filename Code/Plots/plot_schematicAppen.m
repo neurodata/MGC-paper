@@ -379,6 +379,7 @@ ph=powerMLocal(kmin:n,kmin:n)';
 indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
+plot(n-1,n-1,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
 hold off
 
 set(gca,'FontSize',fontSize)

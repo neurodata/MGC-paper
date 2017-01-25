@@ -21,6 +21,7 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 total=20;
 repP=100;
 map2 = brewermap(128,'BuPu'); % brewmap
+glob= [0.5,0.5,0.5];
 
 figure('units','normalized','position',[0 0 1 1])
 s=4;
@@ -64,6 +65,7 @@ if strcmp(figNumber,'1DHeat')
             plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
             plot(K(j)-1,L(j)-1,'go','markerSize',8,'linewidth',4)
         end
+        plot(nn-1,nn-1,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
         hold off
         xlim([1,nn-1]);
         ylim([1,nn-1]);
@@ -120,6 +122,7 @@ else
             plot([Xmin(j),Xmax(j)],[Ymax(j),Ymax(j)],'g','linewidth',lw)
             plot(K(j)-1,L(j)-1,'go','markerSize',8,'linewidth',4)
         end
+        plot(n-1,n-1,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
         hold off
         xlim([1,n-1]);
         ylim([1,n-1]);

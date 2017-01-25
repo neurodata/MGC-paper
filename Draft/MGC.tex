@@ -121,11 +121,13 @@
 \vspace{-15pt}
 \begin{abstract}
 % \vspace{-5pt}
-Discovering whether certain properties are associated with other properties is fundamental to quantitative investigation. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the nature of the relationship. 
+Discovering whether certain properties are related to other properties is fundamental to quantitative investigation. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the nature of the relationship. 
 Existing approaches excel in different settings, with no one approach dominating over all relationships, regardless of the nonlinearity, dimensionality, or structure, for any sample size.
-% @jovo: "excel in different settings" is semantically weird.
 We juxtapose three previously discordant methods in data science---hypothesis testing, manifold learning, and harmonic analysis---to obtain an approach we call Multiscale Generalized Correlation (\Mgc). 
+% @jovo: maybe not "insight".  
+% Our key insight is that we can adaptively adjust the locality of our analysis
 Our key insight is that we can restrict the analysis to jointly local observations---that is, observations that are nearest neighbors for the two properties being compared---yielding an approach that statistically dominates previous approaches while maintaining computational efficiency.
+% @jovo: yielding....is a different sentence.
 We used \Mgc~to detect the presence and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity). We additionally illustrate that \Mgc~does not suffer from the false positive inflation problem that has plagued conventional parametric approaches. 
 % @jovo probably can shorten the above sentence?
 Our open source implementation of \Mgc~is easy to use and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
@@ -140,7 +142,7 @@ Our open source implementation of \Mgc~is easy to use and applicable to previous
 
 
 Identifying the existence of a relationship is the initial, critical step in the investigation of any properties within a dataset. Only if there is a statistically significant relationship does it make sense to determine whether the relationship has predictive power or whether it reflects causality.
-One of the first approaches to determine whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal paper prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
+One of the first approaches for determining whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal paper prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
 
 
 Modern datasets, however, present  challenges for dependence-testing that were not addressed in Pearson's era.
@@ -160,7 +162,10 @@ And finally, investigators not only want to know {whether}  properties are depen
 Many statistical and machine learning approaches have been developed over the last 120 years to combat the above issues. Specifically, pairwise comparison-based approaches have been developed for  a wide variety of tasks,  ranging from hypothesis testing (e.g., \cite{David1966,Mantel1967,Friedman1983,Schilling1986,Maa1996,SzekelyRizzo2009,SzekelyRizzo2013b,HellerGorfine2013,Dumcke2014}) 
 to manifold learning (e.g., \cite{TorgersonBook, TenenbaumSilvaLangford2000, SaulRoweis2000, BelkinNiyogi2003,DiffusionPNAS, MMS:NoisyDictionaryLearning}); kernel machines are a sub-field of machine learning dedicated to using such comparisons (e.g., \cite{scholkopf2002learning,GrettonEtAl2005,harchaoui2013kernel}).
 % @jovo: not crystal clear what is a "comparison function"
-The initial step of these approaches is the computation of \emph{comparisons} (either  similarities or dissimilarities) between all pairs of observations.
+The initial step of these approaches is the computation of \emph{comparisons} (either  similarities or dissimilarities) between all pairs of observations; typically, based on Euclidean distances (or the sum of squared errors).
+% 
+% @jovo: maybe seomthing about  "including our motivating problems of brain activity, shape, and networks."
+% @bm: clear? 
 These methods differ in how they choose the comparison function(s) and what they do with the comparisons after computing them. 
 The popularity of these methods can be attributed to their strong theoretical properties \cite{SilvaTenenbaum2002,Allard2012}, wide-ranging applicability to structured data \cite{scholkopf2002learning}, relative computational efficiency, and empirical performance \cite{lu2014scale}.
 % 
@@ -170,13 +175,13 @@ While the above issues have been addressed individually in dependence testing, n
 For these reasons, more recently, these ``local'' tests were discarded in favor of global approaches.  The Distance correlation test (\Dcorr) was proven to work asymptotically for arbitrary nonlinearities \cite{SzekelyRizzo2009}, for large dimensions \cite{SzekelyRizzo2013a}, and structured data \cite{Lyons2013}.
 Around the same time, Heller, Heller, and Gorfine proposed a test (\Hhg), that shared similar properties.  Empirically, \Dcorr~performs well in high-dimensional linear data, whereas \Hhg~performs well in low-dimensional nonlinear data,
 but neither performs particularly well in high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in our current big data era.
-% Nonetheless, for dependence testing, these approaches empirically tend to work well either for high-dimensional linear data (such as the celebrated ``distance covariance'' test,  \Dcorr~\cite{SzekelyRizzo2013a}), or low-dimensional nonlinear data (such as Heller, Heller and Gorfine's test, \Hhg~\cite{heller2016consistent}), but not high-dimensional nonlinear data, which characterizes a large fraction of real data challenges in this big data era. 
 
 We surmised that the reason no method dominated the other existing tools across nonlinearities and dimensionalities was because none of the existing approaches are sufficiently \emph{adaptive} to the data \cite{zhang2012adaptive}.  Specifically, they each rely on an \emph{a priori} selection of an algorithmic parameter, such as the kernel  \cite{scholkopf2002learning}, intrinsic dimension \cite{RoweisSaul2003}, and/or local scale \cite{Friedman1983,Schilling1986,Allard2012}. Indeed, the fragility of manifold learning to the manual choice of parameters has been their Achilles' Heel.
 
 % @jovo: supplemental table?
 
 
+% @jovo: explain two different kinds of relationships.  then make concrete metaphor, and spiral.
 To illustrate the importance of adapting to different kinds of relationships, 
 imagine investigating whether there is a relationship between cloud density and grass wetness. The data consist of $n$ observations of both cloud density and grass wetness under those clouds (Figure \ref{f:newschem}).
 Let $x_i$ denote cloud density for observation $i$ and $y_i$ denote grass wetness on that same observation. 
@@ -189,7 +194,8 @@ Although the relationship between clouds and grass is unlikely to be spiral, spi
 \includegraphics[height=1.0\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
 % @sd: if fig 1 clearer now?
-We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). Insights into the data available only from running \Mgc~are highlighted in green.  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state-of-the-art dependence test that \Mgc~extends, are shown for comparative purposes. 
+We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). 
+{\color{green}Insights into the data available only from running \Mgc~are highlighted in green.}  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state-of-the-art dependence test that \Mgc~extends, are shown for comparative purposes. 
 % 
 Samples $1$, $2$, and $3$ (black) indicate how \Mgc~is able to discover nonlinear relationships. 
 % 
@@ -199,10 +205,9 @@ The three steps of \Mgc~are:
 % 
 \textbf{(ii)} Find the maximum local correlation between $x$ distances and $y$ distances.  The scale with maximum local correlation is the global scale for the linear setting, where it is a very local scale for the spiral setting (panel titles state the maximum local correlation $\GG(\Mgc)$, and the scales that achieve it, green circles show the distances included in that scale).
 \textbf{(iii)} Compute the p-value and estimate the optimal scales.
-The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximum local correlation (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant p-values, green box), and the global scale (gray dot; 
-% \Mgc~detects significant dependence in both the linear and nonlinear settings, whereas \Dcorr~only detects dependence in the linear setting.% for this small sample size. 
+The heatmap shows p-values for all scales (computed via a permutation test), the scale with maximum local correlation (green dot), the estimated set of optimal scales  (those in the largest rectangle with significant local p-values, green box), and the global scale (gray dot; 
 titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$).
-% 
+% @jovo: maybe fix that up a bit
 Unlike \Dcorr, \Mgc~is able to detect and reveal the scales of dependence in both linear and highly nonlinear settings, even with low sample sizes.}
 \label{f:newschem}
 \end{SCfigure}
@@ -255,13 +260,22 @@ On the other hand, for the nonlinear setting, only a set of small local scales y
 
 Running \Mgc~merely requires inputting $n$ samples of two measured properties.  
 Moreover, \Mgc~is the only dependence test that reveals the nature of the observed dependence, therefore providing additional insight that can inform subsequent analysis steps.
-% By virtue of operating on distances, it can handle structured data (such as time-series, shapes, or graphs).  Operating on distances also mitigates the ``large p, small n'' problem because the dimensionality p does not explicitly play a role once the distances are calculated.  
-% \Mgc's adaptive nature enables it to perform well in both linear and nonlinear relationships, for both low and high dimensional data,  unlike previous methods. 
 Our open source implementation\footnote{In both MATLAB and R from our website, \website.} requires essentially the same run time as conventional methods, situating it to be useful in a wide variety of contexts. 
 The following sections document \Mgc's empirical, computational, and theoretical properties. Mathematical details of prior global methods are provided in Appendix \ref{appen:global}, details for \Mgc~are provided in Appendix \ref{appen:mgc}, and \Mgc~pseudocode is provided in Appendix~\ref{appen:algorithms}.
 
 % @jovo: make sure MGC fills the gap in the below.
 
+\begin{figure}[h!]
+  \centering
+%  trim={<left> <lower> <right> <upper>}
+  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 1.0cm},clip]{Figures/FigHDPowerMGCM}
+  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
+Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
+the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
+\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
+}
+\label{f:nDSummary}
+\end{figure}
 
 \subsection*{Finite Sample Simulation Experiments}
 
@@ -273,31 +287,31 @@ Function details are in Appendix~\ref{appen:function}, with additional supportin
 
 Each approach is evaluated as a function of increasing the dimensionality of $x$.  Power---the probability of rejecting the null when it is  false---is the standard metric for evaluating test performance of finite samples (see Algorithm~\ref{alg:power} for power computation and Algorithm~\ref{alg:sample_mgc} for \Mgc~test statistic computation).  
 For each setting, the power of each test is computed for a large range of different dimensions of $x$,  effectively decreasing the signal-to-noise ratio.  
-The average power across dimensions for each algorithm provides a scalar score per setting.  %Although \Mgc~generalizes essentially any global correlation approach, by default we extend \Mcorr~due to its impressive empirical performance in high-dimensional data.  
-Figure~\ref{f:nDSummary} shows the difference between \Mgc's average power and the benchmarks' for each setting.  
+The average power across dimensions for each algorithm provides a scalar score per setting. Figure~\ref{f:nDSummary} shows the difference between \Mgc's average power and the benchmarks' for each setting.  
 \Mgc~achieves a higher power in essentially all 20 settings when compared to all other approaches.  
 Supplementary Figure \ref{f:nDAll} shows the power as a function of dimensionality, rather than the average, which indicates that  \Mgc~almost always achieves higher power than the alternative tests for all dimensions, not just the average dimension.  
- Supplementary Figures \ref{f:1DAll} and \ref{f:1DSummary} show similar results,  but keeping the dimensionality of $x$ fixed while increasing sample size. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.% in particular, generalizing both \Mantel~and \Dcorr, with qualitatively similar results.
+ Supplementary Figures \ref{f:1DAll} and \ref{f:1DSummary} show similar results,  but keeping the dimensionality of $x$ fixed while increasing sample size. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
 
 
 
-\begin{figure}
-  \centering
-  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0},clip]{Figures/FigHDPowerMGCM}
-  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
-%   The ``score'', $\bar{\beta}$, for an algorithm and setting is 
-Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
-the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
-\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
-}
-\label{f:nDSummary}
-\end{figure}
+
 
 
 \subsection*{Discovery of Dependency Across Scales}
 \label{main3}
 
-Not only does \Mgc~provide excellent power, but it also reveals the optimal scales of dependence. 
+\begin{figure}[h!]
+\includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/FigHDHeat}
+\caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
+For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure. 
+For each panel, the green dot and rectangle show the estimated test statistic and the estimated optimal scales via \Mgc~on one pair of sample data without knowing the underlying distribution, which are often close to the optimal power via the power map.
+% @jovo: green circle and rectangle, maybe do more explicitly.
+}
+\label{f:powermaps}
+\end{figure}
+
+
+Not only does \Mgc~provide excellent power, but it also reveals the optimal scales of dependence, which characterize the nature of the dependence structure. 
 A \emph{multiscale power map} is a heatmap that shows, for a given simulation, the power as a function of the $x$ and $y$ scales.  
 Figure~\ref{f:powermaps} provides the multiscale power maps for all 20 different high-dimensional scenarios, illustrating how the power of local correlations changes with  neighborhood size.
 For nearly linear dependencies (1-5), the best neighborhood choice always includes the largest scale, i.e., the global one. For all strongly nonlinear dependencies (6-19),  \Mgc~chooses smaller scales for $x$ or $y$. Thus, a global optimal scale implies a nearly linear dependency, otherwise the dependency is strongly nonlinear.
@@ -309,16 +323,7 @@ Power map generation requires knowledge of the true distribution of the data, wh
 From real data, \Mgc~computes a multiscale correlation map, from which it computes the maximum local generalized correlation.  These maps are noisy because they utilize noisy samples, rather than the true distribution, to obtain their values.  Nonetheless, they are useful because the provide the maximum local generalized correlation and estimated optimal scales.  The green dots in Figure \ref{f:powermaps} indicate the scale of maximum local generalized correlation for a single trial, and the green boxes indicate the estimated optimal scales from that trial.  In every case the estimated optimal scales are either very close to or exactly the same as the true optimal scales, indicating the \Mgc~can correctly estimate the optimal scales.  
 
 
-% For real data that power is unavailable (because the true distribution is unavailable), \Mgc~provides a multiscale p-value map (see Algorithm~\ref{alg:pval}). The p-value map.  that is a noisy version of the power map, as well as the multiscale correlation map (see Algorithms~\ref{alg:1scale} and~\ref{alg:all_scales}), which the other maps leverage for their computations. The green dot and rectangle in each panel of Figure~\ref{f:powermaps} correspond to the estimated test statistic and informative scales by \Mgc~on one pair of sample data without knowing the underlying distribution. The estimations are often very close to true optimal choices based on the actual power maps when knowing the model.
 
-\begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.5cm 0.5cm},clip]{Figures/FigHDHeat}
-\caption{Multiscale Power Maps reveal the influence of neighborhood size on \Mgc~testing power.
-For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map, and the global scale is optimal only for nearly linear dependencies, highlighting that \Mgc~not only detects the mere existence of dependency, but also reveals its  structure. 
-For each panel, the green dot and rectangle show the estimated test statistic and the estimated optimal scales via \Mgc~on one pair of sample data without knowing the underlying distribution, which are often close to the optimal power via the power map.
-}
-\label{f:powermaps}
-\end{figure}
 
 
 \subsection*{\Mgc~Theoretically Dominates its Global Counterparts}
@@ -330,7 +335,6 @@ In either case,  \Mgc~can generalize any distance-based dependence test by restr
 \begin{thm} \label{t:dominate}
 Oracle \Mgc~statistically dominates its global counterparts. Thus, no matter which 
 dependence function, dimensionality, and sample size, 
-% global correlation is generalized, 
 Oracle \Mgc~achieves equal or higher power than its global counterparts for any global correlation.  More precisely, in \emph{linear} settings Oracle \Mgc~achieves the same power as the global test, and in various nonlinear settings, Oracle \Mgc~achieves {higher} power than the global test. Moreover, Algorithm \ref{alg:all_scales} achieves this dominance with merely an additional multiplicative computational cost of $\log n$, rather than an additional $n^2$ that would result from a na\"ive implementation.
 \end{thm}
 
@@ -339,33 +343,13 @@ The above result follows immediately from Theorems \ref{t:thm1}, \ref{t:linear},
 \subsection*{Real Data Experiments}
 \label{numer3}
 
-\Mgc~can be applied to real data scenarios with complex structures, provided appropriate distance measures are available. We apply \Mgc~to three different scenarios: (i) brain activity versus personality, (ii) brain shape versus disease, and (iii) brain networks versus creativity.  These three brain properties span the most popular \emph{in vivo} whole brain techniques and representations of the brain: functional, structural, and diffusion magnetic resonance imaging, while the different mental properties span cognition and health.  
+\Mgc~can be applied to real data scenarios with complex structures, provided appropriate distance measures are available. We apply \Mgc~to three different scenarios: (i) brain activity versus personality, (ii) brain shape versus disease, and (iii) brain networks versus creativity.  
+% These three brain properties span the most popular \emph{in vivo} whole brain techniques and representations of the brain: functional, structural, and diffusion magnetic resonance imaging, while the different mental properties span cognition and health.  
 % @jovo: maybe address the distance thing here.
 For each comparison, we chose appropriate distances for both kinds of data, and ran \Mgc~to obtain both a p-value and a multiscale significance map, akin to the multiscale power maps shown above, but for real data for which power is unavailable. \Mgc~reveals a statistically significant relationship for all three, and is the only approach that also provides insight into the nature of the relationship. 
 This deeper insight provides guidance for the subsequent analysis tasks, including predictions and causal analysis. As a final test for \Mgc, synthetic data for which no relationship exists are generated, and \Mgc~does not yield spurious relationships, in contrast to popular parametric methods \cite{EklundKnutsson2012,Eklund2015}. 
 
-
-\subsubsection*{Brain Activity vs. Personality} 
-
-This experiment investigates whether there is any dependency between brain activity and personality.
-Adelstein et al. \cite{AdelsteinEtAl2011} were able to detect dependence between certain regions and dimensions of personality, but lacked the tools to test for dependence of the whole brain activity against all five dimensions of personality. 
-This dataset consists of $n=42$ subjects, each with  $197$ time-steps of resting-state functional MRI activity, as well as the subject's five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. 
-For the brain activity modality, we derived the following comparison function. For each scan, (i) 
-run the Configurable Pipeline for the Analysis of Connectomes (C-PAC) pipeline \cite{CPAC2015} to process the raw brain images yielding a parcellation into $197$ regions of interest, 
-(ii) run a spectral analysis on each region, (iii) bandpass and normalize it to sum to one, and (iv) calculate the Kullback-Leibler divergence across regions to obtain a similarity matrix comparing all regions.  Then, use the normalized Hellinger distance to compute distances between each subject. 
-For the five-factor personality modality, we  used the Euclidean distance.
-% 
-Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values ($\approx 0.01$), whereas the global scale fails to detect this significant dependence. In fact, all previously proposed global dependence tests under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) fail to detect dependence at a significance level of $0.05$ (see Table \ref{t:real}), and only \Mgc~provides insight into the scales of dependence.
-
-\subsubsection*{Brain Shape vs. Disease} 
-
-
-The next experiment investigates whether brain shape and disease status are dependent on one another.  Previous investigations have linked major depressive disorder to the hippocampus shape \cite{ParkEtAl2008,PosenerEtAl2003}, though global tests were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level.
-This brain shape versus disease dataset consists of $n=114$ subjects. Each subject has a structural MRI scan as well as a discrete variable indicating whether the subject is non-affected $(0)$, high-risk $(1)$, or clinically depressed $(2)$.  From the MRI data, previous work extracted both the left and right hippocampi. For the brain shape modality, comparison matrices using a nonlinear landmark matching approach were generated \cite{ParkEtAl2008,BegEtAl2005}. For the disorder variable, we added white noise bounded by $0.01$ to each label, then formed the Euclidean distance (the noise is used to break ties amongst the discrete values and make sure only the diagonal entries of the distance matrix are zero).
-% 
-Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas none of the global methods detect a significant dependence  (see Table \ref{t:real}). 
-
-\begin{figure}[htbp]
+\begin{figure}[h!]
 \includegraphics[width=1.0\textwidth,trim={0 0 1.5cm 0},clip]{Figures/FigReal}
 \caption{In real data, \Mgc~discovers the dependence and the optimal scales between various brain and mental properties when they exist, and does not detect dependence when it does not exist.  The left three panels show multiscale p-value maps and their corresponding estimated optimal scales for three different experiments: \textbf{(A)}  brain activity vs. five-factor personality model, \textbf{(B)}  brain shape vs depressive disease, and \textbf{(C)} brain networks vs. creativity. Sample size is $42$, $114$, and $109$, respectively, though the ordinate of these panels only goes as high as the largest possible neighborhood size due to repeated entries.  
 For all three, \Mgc~yields a significant p-value and reveals the optimal scales of dependence (green rectangles).
@@ -373,7 +357,7 @@ For all three, \Mgc~yields a significant p-value and reveals the optimal scales 
 \label{f:real}
 \end{figure}
 
-\begin{table*}[htbp]
+\begin{table*}[h!]
 \centering
 \caption{The p-values for real data testing. \Mgc~is the only method that \emph{always} uncovers the existence of significant relationships and the only method that \emph{ever} discovers the underlying optimal scales. Bold indicates lowest p-value per dataset.}
 \label{t:real}%
@@ -390,20 +374,48 @@ Network vs Creativity & $\textbf{0.011}$  & ${0.012}$ & $\textbf{0.011}$ & $\tex
 \end{tabular}
 \end{table*}
 
+
+% @jovo: in each section, mention the nature of the functions.  and, mention it in the previous experimental sections as well.
+\subsubsection*{Brain Activity vs. Personality} 
+
+This experiment investigates whether there is any dependency between resting brain activity and personality.
+Adelstein et al. \cite{AdelsteinEtAl2011} were able to detect dependence between the activity of certain brain regions and dimensions of personality, but lacked the tools to test for dependence of whole brain activity against all five dimensions of personality. 
+% @jovo: there are nobody believers of 5 dimensions of personality.  bring NEO in earlier.  prob the same for creativity.
+This dataset consists of $42$ subjects, each with  $197$ time-steps of resting-state functional MRI activity, as well as the subject's five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. 
+For the brain activity modality, we constructed a connectome based distance (see Appendix \ref{appen:real} for details).
+% @jovo: update
+For the five-factor personality modality, we  used the Euclidean distance.
+% 
+Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values ($\approx 0.01$), whereas the global scale fails to detect this significant dependence. In fact, all previously proposed global dependence tests under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) fail to detect dependence at a significance level of $0.05$ (see Table \ref{t:real}), and only \Mgc~provides insight into the scales of dependence.
+
+\subsubsection*{Brain Shape vs. Disease} 
+
+% @jovo: disease --> depression
+The next experiment investigates whether there is any dependency between brain shape and disease status.  Previous investigations have linked major depressive disorder to  hippocampus shape \cite{ParkEtAl2008,PosenerEtAl2003}, though global tests were unable to detect a statistically significant dependence structure at the $\alpha=0.05$ level.
+This brain shape versus disease dataset consists of $114$ subjects. Each subject has a structural MRI scan as well as a discrete variable indicating whether the subject is non-affected $(0)$, high-risk $(1)$, or clinically depressed $(2)$.  From the MRI data, previous work extracted both the left and right hippocampi. For the brain shape modality, comparison matrices using a nonlinear landmark matching approach were generated \cite{ParkEtAl2008,BegEtAl2005}. For the disorder variable, we added white noise bounded by $0.01$ to each label, then formed the Euclidean distance (the noise is used to break ties amongst the discrete values and make sure only the diagonal entries of the distance matrix are zero).
+% 
+Figure \ref{f:real}{\color{magenta}B} provides the p-value map for testing on the right hemisphere using \Mgc. Again, many local scales yield significant p-values, whereas none of the global methods detect a significant dependence  (see Table \ref{t:real}). 
+
+
+
 \subsubsection*{Brain Network vs. Creativity}
 
-The next experiment investigates whether brain structural networks are independent of creativity.  Neural correlates of creativity have previously been investigated, though largely using structural MRI and cortical thickness \cite{Jung2009}.  Previously published results demonstrated graph similarity between subjects with similar creativity \cite{Koutra15a}. Those data include  $n=109$ subjects, each with diffusion weighted MRI (dMRI) data as well as the subject's ``creativity composite index'' (CCI).  
-For the raw brain imaging data, we derived the following comparison function.  For each scan, (i) process diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}, (ii) 
-compute the distance between brain networks using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions for simplicity and aligning the embeddings via a Procrustes analysis.  Then, compute the Euclidean distance between subjects. We used Euclidean distance to compare CCI values. 
-% 
-Figure \ref{f:real}{\color{magenta}C} shows that even global dependence tests can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting,  a small number of high-dimensional structured data samples, \Mgc~can reveal a strongly linear dependence (lacking a strong nonlinear dependence) without having to resort to structured regression techniques.
+The next experiment investigates whether there is any dependency between brain structural networks and creativity.  Neural correlates of creativity have previously been investigated, though largely using structural MRI and cortical thickness \cite{Jung2009}.  Previously published results explored the relationship between graphs and  creativity \cite{Koutra15a}. Those results used   $109$ subjects, each with diffusion weighted MRI data as well as the subject's ``creativity composite index'' (CCI).  
+For the raw brain imaging data, we derived the following comparison function.  
+% @jovo: put details below in methods, just simple thingy here.
+For each scan we  estimated brain networks from diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}.  Then, we compute the distance between the graphs using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions for simplicity and aligning the embeddings via a Procrustes analysis.
+% (i) process diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}, (ii) 
+compute the distance between brain networks using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions for simplicity and aligning the embeddings via a Procrustes analysis.  %Then, compute the Euclidean distance between subjects. 
+We used Euclidean distance to compare CCI values. 
+% we are surprised here that global scale does better than local scales. did we reveal the nature of?
+Figure \ref{f:real}{\color{magenta}C} shows, in this case,  that even global dependence tests can ascertain whether the whole brain network is independent of the subject's creativity.  \Mgc~demonstrates that the signal in this case is largely captured by a global relationship, suggesting that there is relatively little to gain by pursuing nonlinear regression techniques. In this setting,  a small number of high-dimensional structured data samples, \Mgc~can reveal a strongly linear dependence (lacking a strong nonlinear dependence) without having to resort to structured regression techniques.
 
 
 \subsubsection*{\Mgc~Does Not Inflate False Positive Rates} 
 
-
-In the final experiment, \Mgc~is applied to test independence between brain voxel activities and a non-existent stimulus, similar to a pair of studies led by Eklund  \cite{EklundKnutsson2012,Eklund2015}. We considered $25$ resting state fMRI data sets from the $1$,$000$ functional connectomes project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of $1$,$583$ subjects.
-Then an independent stimulus is generated by sampling from a standard normal distribution at each time step. The brain activity data and the stimuli are independent by construction.
+% @jovo: maybe start this paragraph with multiple comparisons, there are lots of false positives.  we want to ensure that our thing doesn't do that, so we compared to noise. boom.
+In the final experiment, \Mgc~was applied to test whether there is any dependency between brain voxel activities and random numbers, similar to a pair of studies led by Eklund  \cite{EklundKnutsson2012,Eklund2015}. We considered $25$ resting state fMRI data sets from the $1$,$000$ Functional Connectomes Project (\url{http://fcon_1000.projects.nitrc.org/}), consisting of a total of $1$,$583$ subjects.
+Then independent random numbers are generated by sampling from a standard normal distribution at each time step. The brain activity data and the random numbers are independent by construction.
 For each brain region, \Mgc~attempts to address the following question: Is activity of that  brain region independent of the time-varying stimuli? We pool brain activity over all of the samples from the population.
 Any region that is detected as significant is a false positive by definition.  By testing each brain region separately, \Mgc~provides a distribution of false positive rates.  If \Mgc~is valid, that distribution should be centered around the significance level, which is set at $0.05$ for this experiment.
 
@@ -1039,6 +1051,53 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \end{algorithm}
 
 \clearpage
+
+
+\begin{algorithm}
+\caption{% 
+constructed the following comparison function. For each scan, 
+(i)  run the Configurable Pipeline for the Analysis of Connectomes (C-PAC) pipeline \cite{CPAC2015} to process the raw brain images yielding a parcellation into $197$ regions of interest, 
+(ii) run a spectral analysis on each region, (iii) bandpass and normalize it to sum to one, and (iv) calculate the Kullback-Leibler divergence across regions to obtain a similarity matrix comparing all regions.  Then, use the normalized Hellinger distance to compute distances between each subject. 
+.} 
+\label{alg:real}
+\begin{algorithmic}[1]
+\Require A pair of distance matrices $(A, B) \in \Real^{n \times n} \times \Real^{n \times n}$.
+\Ensure The multiscale correlation map $\{\GG^{kl}\} \in [-1,1]^{n \times n}$ for $k,l=1,\ldots,n$.
+\Function{MGCLocalCorr}{$A$, $B$}
+\State Initialize $C$ as a zero matrix of size $n \times n$; $V^{A}$, $V^{B}$, $E^{A}$, $E^{B}$ as zero vectors of size $n$.
+\Linefor{$Z:=A,B$}{$R^{Z}=\textsc{Sort}(Z)$}
+\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(Z)$}
+
+\For{$i,j:=1,\ldots,n$} \Comment{iterate through all local scales to calculate each term} 
+\State $k \rto R^{A}_{ij}$
+\State $l \rto R^{B}_{ij}$
+\State $\GG^{kl} \rto \GG^{kl}+A_{ij}B_{ij}$
+\State $V^{A}_{k} \rto V^{A}_{k}+A_{ij}^2$
+\State $V^{B}_{l} \rto V^{B}_{l}+B_{ij}^2$
+\State $E^{A}_{k} \rto E^{A}_{k}+A_{ij}$
+\State $E^{B}_{l} \rto E^{B}_{l}+B_{ij}$
+\EndFor
+
+\For{$k:=1,\ldots,n-1$} \Comment{iterate through each scale again and add up adjacent terms} 
+\State $\GG^{1, k+1} \rto \GG^{1, k}+\GG^{1, k+1}$
+\State $\GG^{k+1,1} \rto \GG^{k+1,1}+\GG^{k+1,1}$
+\Linefor{$Z:=A,B$}{$V^{Z}_{k+1} \rto V^{Z}_{k}+V^{Z}_{k+1}$}
+\Linefor{$Z:=A,B$}{$E^{Z}_{k+1} \rto E^{Z}_{k}+E^{Z}_{k+1}$}
+\EndFor
+
+\For{$k,l:=1,\ldots,n-1$} 
+\State $\GG^{k+1,l+1} \rto \GG^{k+1,l}+\GG^{k,l+1}+\GG^{k+1,l+1}-\GG^{k,l}$
+\EndFor
+
+\For{$k,l:=1,\ldots,n$} 
+\State $\GG^{kl} \rto \left(\GG^{kl}-E^{A}_{k}E^{B}_{l}/n^2\right)/\sqrt{\left(V^{A}_{k}-{E^{A}_{k}}^2/n^2\right) \left(V^{B}_{l}-{E^{B}_{l}}^2/n^2\right)}$
+\EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+
 
 \section{Simulation Dependence Functions}
 \label{appen:function}

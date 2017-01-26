@@ -18,6 +18,10 @@ else
     localCorr=MGCLocalCorr(A,B,option); % otherwise compute the localCorr from given distance matrices
 end
 [m,n]=size(localCorr);
+if m==1 || n==1;
+    statMGC=localCorr(end);
+    return;
+end
 
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations

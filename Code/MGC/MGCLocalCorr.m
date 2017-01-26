@@ -10,26 +10,19 @@ function [corr,varX,varY] = MGCLocalCorr(X,Y,option)
 if nargin < 3
     option='mcor'; % use mcorr by default
 end
-n=size(X,1);
-disRank=[DistRanks(X) DistRanks(Y)]; % sort distances within columns
 
-% depending on the choice of the global correlation, properly center the distance matrices
-A=DistCentering(X,option);
-B=DistCentering(Y,option);
-
-RX=disRank(1:n,1:n); % the column ranks for X
-RY=disRank(1:n,n+1:2*n); % the column ranks for Y
-[corr,varX,varY]=LocalCorrelations(A,B',RX,RY'); % compute all local corr / var statistics
+[A,B,RX,RY]=MGCDistTransform(X,Y,option);
+[corr,varX,varY]=LocalCorrelations(A,B,RX,RY); % compute all local corr / var statistics
 
 function [corrXY,varX,varY]=LocalCorrelations(A,B,RX,RY)
 % An auxiliary function that computes all local correlations simultaneously in O(n^2)
-n=size(A,1);nX=max(max(RX));nY=max(max(RY));
+[n,m]=size(A);nX=max(max(RX));nY=max(max(RY));
 corrXY=zeros(nX,nY); varX=zeros(1,nX); varY=zeros(1,nY);
 EX=zeros(1,nX);EY=zeros(1,nY);
 
 % summing up the entrywise product of A and B based on the ranks, which
 % yields the local family of covariance and variances
-for j=1:n
+for j=1:m
     for i=1:n
         a=A(i,j);b=B(i,j);k=RX(i,j);l=RY(i,j);
         corrXY(k,l)=corrXY(k,l)+a*b;

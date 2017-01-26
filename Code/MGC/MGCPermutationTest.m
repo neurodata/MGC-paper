@@ -36,7 +36,7 @@ if sampleIndicator==1
     statMGC=MGCSampleStat(localCorr); % sample MGC for the observed data
 end
 pLocalCorr=zeros(size(localCorr));pMGC=0;
-n2=size(B,2);
+n2=size(B,1);
 
 % calculate the local correlations under permutation, to yield the p-values of all observed local correlations
 for r=1:rep

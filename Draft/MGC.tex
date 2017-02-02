@@ -1,102 +1,6 @@
 \documentclass[11pt]{article}
-%\input{preamble.tex}
-\usepackage{amsfonts,amsmath,amssymb,amsthm}
-\usepackage{graphicx,psfrag,epsf}
-\usepackage{enumerate}
-\usepackage{url} 
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{authblk}
-\usepackage{helvet}
-\usepackage[colorlinks=true,pagebackref,linkcolor=magenta]{hyperref}
-\usepackage[sort&compress,comma,square,numbers]{natbib}
-\usepackage{fullpage,fancyhdr}
-\renewcommand{\familydefault}{\sfdefault}
-\usepackage{color} 
-\usepackage{paralist}
-\usepackage{lineno}
-\usepackage[font=small,labelfont=bf]{caption}
-\usepackage[final,authormarkup=none]{changes}
-\usepackage{chngcntr}	
-\usepackage{apptools}
-\newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\definecolor{green}{rgb}{0,1,0}
-\usepackage[outercaption]{sidecap}    
-
-\usepackage{tikz}
-\usepackage{graphicx}
-\usetikzlibrary{calc,shapes, arrows,positioning}
-\tikzstyle{node} = [rectangle, rounded corners, minimum width=1cm, minimum height=1cm]
-\tikzstyle{node2}=[rectangle split,rectangle split parts=2,rounded corners]
-\tikzstyle{arrow} = [thick,->,>=stealth]
-
-\pagestyle{fancy}
-\textwidth=6.5in
-\headwidth=6.5in
-\textheight=9.0in
-\headheight=0.0pt
-\topmargin=0.0in
-\headsep=0.0in
-\renewcommand{\headrulewidth}{0pt}
-
-\setlength{\parindent}{0em}
-\setlength{\parskip}{0.7em}
-
-\providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
-\providecommand{\mt}[1]{\widetilde{#1}}
-\providecommand{\mb}[1]{\boldsymbol{#1}}
-\providecommand{\mc}[1]{\mathcal{#1}}
-\newcommand{\Real}{\mathbb{R}}
-\newcommand{\GG}{c}
-\newcommand{\K}{\mathcal{K}}
-\newcommand{\LL}{\mathcal{L}}
-\newcommand{\Migraine}{\sct{Migraine}}
-\newcommand{\mtg}{\sct{m2g}}
-\newcommand{\T}{^{\ensuremath{\mathsf{T}}}}           % transpose
-\newcommand{\Linefor}[2]{%
-    \State \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} \algorithmicend\ \algorithmicfor%
-}
-\newcommand{\Lineif}[2]{%
-    \State \algorithmicif\ {#1}\ \algorithmicdo\ {#2} \algorithmicend\ \algorithmicif%
-}
-
-\normalem
-\newcommand{\Mgc}{\sct{Mgc}}
-\newcommand{\Mgcp}{\sct{Mgc$_P$}}
-\newcommand{\Mgcd}{\sct{Mgc$_D$}}
-\newcommand{\Mgcm}{\sct{Mgc$_M$}}
-\newcommand{\Hhg}{\sct{Hhg}}
-\newcommand{\Dcorr}{\sct{Dcorr}}
-\newcommand{\Mcorr}{\sct{Mcorr}}
-\newcommand{\Mantel}{\sct{Mantel}}
-
-\newcommand{\website}{\url{https://github.com/neurodata/MGC/}}
-
-\newcommand{\mbx}{\ensuremath{\mb{x}}}
-\newcommand{\mby}{\ensuremath{\mb{y}}}
-\newcommand{\rto}{\leftarrow}
-\newcommand{\argmax}{\operatornamewithlimits{argmax}}
-\newcommand{\argmin}{\operatornamewithlimits{argmin}}
-\newcommand{\iid}{\overset{iid}{\sim}}
-
-\newtheorem{thm}{Theorem}
-%\newtheorem{appThm}{Theorem}
-%\setcounter{appThm}{0}
-\newtheorem{lem}{Lemma}
-%\newtheorem{appLem}{Lemma}
-%\setcounter{appLem}{0}
-\AtAppendix{\counterwithin{lem}{section}}
-\AtAppendix{\counterwithin{thm}{section}}
-\newcommand*\mean[1]{\bar{#1}}
-
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
-
-\pagenumbering{arabic}
-\linenumbers
-
-\usepackage{neurodata}
-
+\input{preamble.tex}
+\input{preamble_mgc.tex}
 \begin{document}
 
 \def\spacingset#1{\renewcommand{\baselinestretch}%
@@ -187,7 +91,8 @@ Let $x_i$ denote cloud density for observation $i$ and $y_i$ denote grass wetnes
 
 \begin{SCfigure}
 %  trim={<left> <lower> <right> <upper>}
-\includegraphics[height=0.9\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
+%\includegraphics[height=0.9\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
+\includegraphics[height=0.9\textheight]{Figures/Fig1Allb.pdf}
 \caption{Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
 We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear (spiral; see Appendix \ref{appen:function} for simulation details). 
 Insights into the data available only from running \Mgc~are highlighted in {\color{green}green.}  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state-of-the-art dependence test that \Mgc~extends, are shown for comparative purposes. 
@@ -577,6 +482,11 @@ Let $dcov(X,Y)$ denote the numerator of Equation~\ref{generalCoef}, and $\cdot\T
 % Please confirm.
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:30:04.500Z:
+% 
+% you are right about the H, it is correct now
+% -cshen
+% 
 % ^.
 \begin{align*}
 dcov(X,Y) &= \sum_{i,j=1}^{n}a_{ij}b_{ij} \\
@@ -628,6 +538,12 @@ Given the Euclidean distance matrices $\tilde{A}=\{\tilde{a}_{ij}\}$ and $\tilde
 % @jovo: The I's are indicator functions, right? I think I'm more used to seeing a bold 1 instead of an I. Maybe this is a style preference though?
 % -@sd
 % 
+% ^ 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:32:58.568Z:
+%
+% yes they are indicator functions. Feel free to change it to a better style.
+% -cshen
+%
 % ^.
 \begin{align*}
 H_{11}(i,j) &= \sum_{q=1,q\neq i,j}^{n}\mb{I}(\tilde{a}_{iq} \leq \tilde{a}_{ij})\mb{I}(\tilde{b}_{iq} \leq \tilde{b}_{ij}) \\
@@ -728,7 +644,7 @@ As for the rank preservation, the column ranks of the Euclidean distance matrix 
 
 \paragraph{Computational Complexity}
 
-Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are done, computing one local generalized correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local generalized correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, and it seems that \Mgc~is just another theoretical tool with a formidable computational burden. However, given the distance and ranking information, it turns out the multiscale correlation map can be efficiently constructed in $O(n^2)$ by re-using adjacent smaller local generalized correlations to procedurally build all local generalized correlations (see Algorithm \ref{alg:all_scales}), which has essentially the same running time complexity as the global correlations. Therefore, when including the distance computation and ranking overheads, overall MGC runs in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~test, while the global correlations like \Dcorr~and \Mcorr~run in $O(n^2D)$.
+Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are done, computing one local generalized correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local generalized correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, and it seems that \Mgc~is just another theoretical tool with a formidable computational burden. However, given the distance and ranking information, it turns out the multiscale correlation map can be efficiently constructed in $O(n^2)$ by re-using adjacent smaller local generalized correlations to procedurally build all local generalized correlations (see Algorithm \ref{alg:all_scales}), which has essentially the same running time complexity as the global correlations. Therefore, when including the distance computation and ranking overheads, the MGC statistic is computed in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~statistic, while the global correlations like \Dcorr~and \Mcorr~run in $O(n^2D)$.
 
 \subsection{Oracle and Sample \Mgc}
 \label{appen:mgc2}
@@ -766,13 +682,18 @@ Sample \Mgc~algorithm can be thought of as taking the largest correlation after 
 
 
 
-Note that a general sample estimation technique can be designed for \Mgcd~and \Mgcp~as well: instead of estimating an optimal correlation by smoothing the local generalized correlation map, one may instead estimate the optimal p-value by smoothing the p-value map (e.g., by significant p-values expand along adjacency scales), then treat the estimated optimal p-value as a test statistic and run the permutation test again to compute the true p-value. The general estimation technique is immune to the bias of local generalized correlations, and is suggested by Heller et al. (2016) \cite{heller2016consistent}. However, it requires more random permutations, is much slower, and does not offer any more theoretical or numerical advantages in testing. Thus in this paper we stick to the current Sample \Mgc~method for \Mcorr~only.
+Note that a general sample estimation technique can be designed for \Mgcd~and \Mgcp~as well: instead of estimating an optimal correlation by smoothing the local generalized correlation map, one may instead estimate the optimal p-value by smoothing the p-value map (e.g., choose the smallest p-value that spans sufficiently many adjacency scales), then treat the estimated optimal p-value as a test statistic and run the permutation test again to compute the true p-value. The general estimation technique is immune to the bias of local generalized correlations, and is suggested by Heller et al. (2016) \cite{heller2016consistent}. However, it requires more random permutations, is much slower, and does not offer any more theoretical or numerical advantages in testing. Thus in this paper we stick to the current Sample \Mgc~method for \Mcorr~only.
 % * <stefaniejacinto@gmail.com> 2017-01-26T07:26:06.897Z:
 % 
 % > (e.g., by significant p-values expand along adjacency scales)
 % @jovo: I'm having trouble understanding this though I admit I'm not familiar with smoothing maps. Can we rewrite this so it's clearer?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:37:01.573Z:
+%
+% I slight rephrased the sentence. What we mean is that choose the smallest p-value such that it is smaller than all adjacent scale p-values. The same holds for smoothing the correlation, but in a reverse way: find the largest correlation that is smaller than correlations on adjacent scales.
+% -cshen
+%
 % ^.
 
 
@@ -828,6 +749,11 @@ Therefore the number of ``significant'' permutations for $\GG^{kl}$ at least equ
 % @jovo: Can it be equal to the p-value of c?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:37:42.324Z:
+%
+% can be equal.
+% -cshen
+%
 % ^.
 \end{proof}
 
@@ -892,6 +818,13 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 % @jovo: This is different from what is declared in line 664 (Computational Complexity, part B.I) which doesn't have the r.  Should we make them consistent?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:40:13.780Z:
+%
+% Computing the MGC stat itself does not need the r, thus line 664.
+% The algorithm here is multiplied by r, because we try to further derive the p-value by r MC runs.
+% To clarify, in 664 I say the running time is for MGC statistic (rather than MGC algorithm here).
+% -cshen
+%
 % ^.
 \label{alg:mgc}
 \begin{algorithmic}%[1]
@@ -983,6 +916,11 @@ This algorithm can be similarly adapted to training data, for which the alternat
 % @jovo: I had a bit more difficulty following this section because of the use of a lot more variables (the Greek letters) that weren't defined in the input section, compared to Algorithm C2 where most of the variables were explicitly defined in Input. Do you think this might benefit from having more detail in the Input section?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:45:29.117Z:
+%
+% I guess this is mostly because the definition of \tau in the algorithm, plus a bunch of additional variables in the for loops? The \tau's can be user-specified parameters, which we can put to input if necessary. But The other variables are auxiliary within the function.
+% -cshen
+%
 % ^.
 \Ensure The Sample \Mgc~statistic $\hat{\GG}^{*} \in \Real$, and the corresponding local scale $s=(k,l) \in \mathbb{N} \times \mathbb{N}$.
 \Function{MGCSampleStatistic}{$\{\GG^{kl}\}$}
@@ -1100,6 +1038,11 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 % @jovo: Should this be c^{k, 1}  instead of c^{k+1, 1} ?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:29:05.743Z:
+%
+% it is right above. We can change it to c^{k,1} though, if we let k range from 2 to n instead. 
+% -cshen
+%
 % ^.
 \Linefor{$Z:=A,B$}{$V^{Z}_{k+1} \rto V^{Z}_{k}+V^{Z}_{k+1}$}
 \Linefor{$Z:=A,B$}{$E^{Z}_{k+1} \rto E^{Z}_{k}+E^{Z}_{k+1}$}
@@ -1228,6 +1171,11 @@ where $\mb{I}$ is the indicator function, that is $\mb{I}(z)$ is unity whenever 
 % @jovo: What's the difference between this N(0, I D) and N(0,1)^D in functions 12 and 14?
 % -@sd
 % 
+% ^ <cshen6@jhu.edu> 2017-01-31T13:47:03.864Z:
+%
+% actually no difference :)
+% -cshen
+%
 % ^.
 \begin{align*}
 \mb{x} &\sim \mc{B}(0.5)^{D}+0.5\epsilon_{1},\\
@@ -1363,13 +1311,15 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-2.03  & \hspace{3.5em} \color
 \end{tabular}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node[xshift=-5.2cm,yshift=-0.2cm] at (current page.east){%
+\node[xshift=-5cm,yshift=-5cm] at (current page.east){%
     \includegraphics[width=0.35\textwidth,trim={1.5cm 0cm 1.8cm 0},clip]{Figures/FigB}};
   %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
    %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
   %};
 \end{tikzpicture}
-\caption{
+\end{figure}
+\clearpage
+\captionof{figure}{
 Schematic  and table demonstrating the ability of Multiscale Generalized Correlation (\Mgc) to detect dependence in nonlinear settings. 
 \textbf{0.} 100 pairs of observations $(x_i,y_i)$ are nonlinearly (spirally) dependent on one another.
 % 
@@ -1395,7 +1345,7 @@ The global methods fail to detect significant dependence since they consider all
 % ^.
 }
 \label{f:schematic}
-\end{figure}
+
 
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPowerAll}

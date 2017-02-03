@@ -156,7 +156,7 @@ The following sections document \Mgc's empirical, computational, and theoretical
 \begin{figure}[h!]
   \centering
 %  trim={<left> <lower> <right> <upper>}
-  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 1.0cm},clip]{Figures/FigHDPowerMGCM}
+  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/FigHDPowerMGCM}
   \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
 Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
 the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
@@ -1348,7 +1348,7 @@ The global methods fail to detect significant dependence since they consider all
 
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/FigHDPowerAll}
+\includegraphics[width=1.0\textwidth,trim={0 0.5cm 3.2cm 0},clip]{Figures/FigHDPowerAll}
 \caption{Power of different methods for $20$ different dependence settings, estimated by Monte Carlo independence tests (see Algorithm \ref{alg:power} for details). It includes eight different tests: \Mcorr, \Dcorr, and \Mantel~(gray solid, dashed, and dashdot lines, respectively), their corresponding Oracle \Mgc~counterparts, \Mgcm, \Mgcd, \Mgcp~(green with same line styles), Sample \Mgc~applied to \Mcorr~(cyan solid), and \Hhg~(gray dotted line). 
 Each panel shows the testing power at significance level $\alpha=0.05$ versus the dimensionality of $\mb{x}$'s, for $n=100$ samples. 
 Excluding the independent setting (\#20), for which all methods yield power $0.05$, as they should, Oracle \Mgc~empirically achieves similar or better power than the respective global counterpart. In particular, Sample \Mgc~is very close to Oracle \Mgcm, and overall dominates existing approaches for almost all settings and all dimensions, including \Hhg~\cite{HellerGorfine2013}, another state-of-the-art method. Note that \Mgc~is always plotted ``on top'' of the global variants if there is overlap, therefore, some of the global variants are not always visible from the display.}
@@ -1356,7 +1356,7 @@ Excluding the independent setting (\#20), for which all methods yield power $0.0
 \end{figure}
 
 \begin{figure}[htbp]
-\includegraphics[width=1.0\textwidth,trim={0 0.5cm 4cm 0},clip]{Figures/Fig1DPowerAll}
+\includegraphics[width=1.0\textwidth,trim={0 0.5cm 3.2cm 0},clip]{Figures/Fig1DPowerAll}
 \caption{
 The same power plots as in Figure~\ref{f:nDAll}, except the $20$ dependence settings are one-dimensional with noise, and the x-axis is increasing sample size.
 Each panel shows the testing power on the abscissa at significance level $\alpha=0.05$, and sample size on the ordinate.

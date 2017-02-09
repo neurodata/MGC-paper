@@ -412,25 +412,16 @@ Assuming two zero-mean matrices $A$ and $B$ are transformations of $\tilde{A}$ a
 then a ``generalized correlation coefficient''  \cite{Spearman1904,KendallBook} is written as:
 \begin{equation}
 \label{generalCoef}
-\GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i,j=1}^n a_{ij} b_{ij}}, [SUGGEST:]
-% * <stefaniejacinto@gmail.com> 2017-01-24T01:24:02.037Z:
-% 
-% > [SUGGEST:]
-% > \GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}}
-% @jovo: I think it would be clearer if we used a double sigma notation here instead of i,j=1
-% -@sd
-% 
-% ^.
 \GG(X,Y)= \tfrac{1}{z} {\textstyle \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ij}},
 \end{equation}
 where $z$ is proportional to the standard deviations of $A$ and $B$, that is $z=n^2\sigma_a \sigma_b$, and $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_y \times n}$ denote the matrices of sample observations.
 
 In words, $\GG$ is the global correlation across \emph{pairwise comparison matrices} $A$ and $B$, rather than the individual data samples. By defining $A$ and $B$ based on different transformations of 
-the distance matrices, the \Mantel~coefficient, \Dcorr, and \Mcorr~can all be written in the form of the generalized correlation coefficient. Note that traditional correlations such as the Pearson's correlation and the rank correlation can also be written by a generalized correlation coefficient, where $A$ and $B$ are derived from sample observations rather than distances. However, the \Hhg~test  cannot easily be cast into this framework even though it is operating on distances.
+the distance matrices, the \Mantel~coefficient, \Dcorr, and \Mcorr~can all be written in the form of the generalized correlation coefficient. Note that traditional correlations such as the Pearson's correlation and the rank correlation can also be written by a generalized correlation coefficient, where $A$ and $B$ are derived from sample observations rather than distances. The only exception is the \Hhg~test, which cannot be easily be cast into this framework due to its usage of rank information.
 
 A generalized correlation always has the range $[-1,1]$, has expectation $0$ under independence, implies a stronger dependency when the correlation is further away from $0$, and can serve as the global correlation in implementing \Mgc. 
 
-To carry out the hypothesis testing on sample data using a given test statistic, e.g., a generalized correlation, the permutation test is the usual choice \cite{GoodPermutationBook}, because a p-value can be computed by comparing the correlation of the sample data to the correlation of the permuted sample data. The independence hypothesis is rejected if the p-value is lower than a pre-set type $1$ error level, say $0.05$. Then the testing power of the generalized correlation equals the probability of correct rejection.
+To carry out the hypothesis testing on sample data via a nonparametric test statistic, e.g., a generalized correlation, the permutation test is often the best choice \cite{GoodPermutationBook}, because a p-value can be computed by comparing the correlation of the sample data to the correlation of the permuted sample data. The independence hypothesis is rejected if the p-value is lower than a pre-set type $1$ error level, say $0.05$. Then the power of the test statistic equals the probability of correct rejection.
 
 \subsubsection{The \Mantel~Coefficient}
 \label{appen:mantel}
@@ -1061,7 +1052,7 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 
 \clearpage
 
-
+%cs: are we adding the following pseudo code for the real data or not? if so, we need to mention it in main paper real data section and also in the appendix algorithm.
 \begin{algorithm}
 \caption{% 
 constructed the following comparison function. For each scan, 

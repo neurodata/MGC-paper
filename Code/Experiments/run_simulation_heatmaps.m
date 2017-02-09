@@ -16,7 +16,6 @@ fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
-strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 
@@ -84,7 +83,6 @@ else
             %phmax=max(max(ph));
             testRepeat=1;
             while testRepeat==1;
-                j
                 [x,y]=CorrSampleGenerator(j,n,dimRange(ind),1,0);
                 [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(squareform(pdist(x)),squareform(pdist(y)),repP,'mcor');
                 if pMGC<max(0.05,2/repP) && ((sum(optimalInd==n^2)==0 && j>5) || (sum(optimalInd==n^2)==1 && j<=5))

@@ -9,7 +9,6 @@ fpath = mfilename('fullpath');
 fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
-strcat(rootDir,'Code/');
 addpath(genpath(strcat(rootDir,'Code/')));
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 

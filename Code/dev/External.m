@@ -168,8 +168,8 @@ load('semipar')
 n=109;rep=1000;
 distCCI=squareform(pdist(cci));
 [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(distMigrain(ind,ind),distCCI(ind,ind),rep);
-%MGCPermutationTest(distM2g(ind,ind),distCCI(ind,ind),rep,2);
-%MGCPermutationTest(distM2g(ind,ind),distMigrain(ind,ind),rep,2);
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(distM2g(ind,ind),distCCI(ind,ind),rep);
+[pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(distM2g(ind,ind),distMigrain(ind,ind),rep);
 
 %%%
 clear

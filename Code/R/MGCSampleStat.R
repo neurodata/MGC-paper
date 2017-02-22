@@ -31,7 +31,7 @@ MGCSampleStat <- function(A,B,option){
     thres1=0.01;
   }
   thres1=thres1*3.5;
-  thres2=min(2/min(m,n),0.05); # threshold based on sample size
+  thres2=2/max(min(m,n),50); # threshold based on sample size
 
   statMGC=localCorr[m,n]; # take the global correlation by default
 

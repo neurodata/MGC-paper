@@ -26,7 +26,7 @@ end
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
 thres1=3.5*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % threshold based on negative correlations
-thres2=min(2/min(m,n),0.05); % threshold based on sample size
+thres2=2/max(min(m,n),50); % threshold based on sample size
 
 statMGC=localCorr(end); % take the global correlation by default
 

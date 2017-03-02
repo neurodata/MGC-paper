@@ -61,7 +61,7 @@ if mean(mean(R))>=thres2 % proceed only when the region area is sufficiently lar
         tmp1=min(localCorr(upper:down,li)); % minimal correlation at given row and adjacent columns
         tmp2=min(localCorr(ki,left:right)); % minimal correlation at given column and adjacent rows
         tmp=max(tmp1,tmp2); % take the max of the two minimal correlations
-        if tmp>statMGC
+        if tmp >= statMGC
             statMGC=tmp;
         end
     end

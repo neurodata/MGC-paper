@@ -15,7 +15,7 @@
 \usepackage[colorlinks=true,pagebackref,linkcolor=magenta]{hyperref}
 \usepackage[sort&compress,comma,square,numbers]{natbib}
 \usepackage{pict2e}
-\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[nottoc]{tocbibind} %\usepackage[nottoc,numbib]{tocbibind}
 \usepackage{paralist}
 \usepackage{multicol}
 \usepackage{lettrine}
@@ -25,6 +25,7 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{neurodata}
+\usepackage{lineno}
 % \usepackage{trackchanges}
 % \usepackage{mcode}
 
@@ -168,9 +169,9 @@
 %%%%%%%%%% SECTIONS & STUFF %%%%%%%%%%%%%
 
 
-\renewcommand{\thesection}{\Roman{section}}   % set the section counter to Alpha
-\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}   % set the subsection counter to alpha
-\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}(\arabic{subsubsection})}   % set the subsection counter to alpha
+\renewcommand{\thesection}{\Roman{section}}   
+\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}  
+\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}.\arabic{subsubsection}} 
 % 
 % 
 \makeatletter
@@ -234,6 +235,7 @@
 \newcommand{\hht}{h_{\thetn}}
 
 \newcommand{\Real}{\mathbb{R}}
+\newcommand{\Ind}{\mathbb{I}}
 
 \newcommand{\wconv}{\overset{i.p.}{\rightarrow}}
 \newcommand{\sconv}{\overset{i.p.}{\rightarrow}}

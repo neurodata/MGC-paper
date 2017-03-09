@@ -19,7 +19,6 @@
 \affil[4]{Department of Mathematics, JHU}
 \affil[5]{Department of Biomedical Engineering and Institute for Computational Medicine, JHU}
 \affil[6]{Institute for Data-Intensive Engineering \& Science, JHU}
-% \affil[7]{Institute for Computational Medicine, Johns Hopkins University}
 \maketitle 
 \thispagestyle{empty}
 \date{}
@@ -29,12 +28,15 @@
 % \vspace{-5pt}
 Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the nature of the relationship. 
 Existing approaches excel in different settings, with no one approach dominating for all relationships and sample sizes, including structured high-dimensional data and nonlinear relationships.
-We juxtapose three previously discordant methods in data science---hypothesis testing, manifold learning, and harmonic analysis---to obtain an approach we call Multiscale Generalized Correlation (\Mgc). 
+We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (\Mgc). 
 Our key insight is that we can adaptively restrict the analysis to the most informative ``jointly local'' observations---that is, observations that are nearest neighbors for both the properties being compared. 
-\Mgc~statistically dominates previous approaches while maintaining computational efficiency.
+We prove that \Mgc~statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency.
 We used \Mgc~to detect the presence and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity), while avoiding  the false positive inflation problem that has plagued conventional parametric approaches. 
 Our open source implementation of \Mgc~is easy to use, parameter free, and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
 \end{abstract}
+
+% 150 word abstract
+% Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data is related to another. We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (MGC). Our key insight is that we can adaptively restrict the analysis to the most informative “jointly local” observations - that is, observations that are nearest neighbors for both properties being compared. We prove that MGC statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency. We used MGC to detect the presence of and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity). Our open source implementation is easy to use, parameter free, and applicable to science, government, finance, and other disciplines. 
 
 
 \noindent%
@@ -58,7 +60,6 @@ Third, the data are often {structured}---sequences, images, networks, shapes, an
 Fourth, because of the accelerating data deluge,  {computationally efficient} methods are critical for generating results within acceptable time frames \cite{hey2009fourth}.
 Modern tests therefore should perform well for any linear or nonlinear relationships, low-dimensional or high-dimensional data, with or without structure, with theoretical guarantees using computationally efficient algorithms, and good empirical performance with low sample size.
 And finally, investigators not only want to know {whether}  properties are dependent on each other, but also {how they are related.}
-% @bm: what do you think of the below sentence?
 These five issues are particularly problematic for our motivating problems: understanding the relationship between brain properties (such as activity, shape, and connectivity) and mental properties (such as personality, disease status, and creativity).
 
 
@@ -69,7 +70,6 @@ The initial step of these approaches is the computation of \emph{comparisons} (e
 These methods differ in how they choose the comparison function(s) and what they do with the comparisons after computing them. 
 The popularity of these methods can be attributed to their strong theoretical properties \cite{SilvaTenenbaum2002,Allard2012}, wide-ranging applicability to structured data \cite{scholkopf2002learning}, relative computational efficiency, and empirical performance \cite{lu2014scale}. 
 
-% @bm: below is good?
 While the above approaches have successfully addressed some of the five aforementioned challenges,  no approach has successfully addressed them all.    Hoeffding and Renyi proposed non-parametric tests to address nonlinear but univariate relationships \cite{Hoeffding1948,Renyi1959}.  In the 1970s and 1980s nearest neighbor style approaches were popularized \cite{Stone1977}, including for dependence testing purposes \cite{Friedman1983,Schilling1986}.  These tests discard all but the $k$ nearest neighbors for both properties, and then simply compute the fraction of pairs that are ``jointly neighbors'', that is, pairs that are neighbors in both properties. This requires specifying $k$ in advance, and ignores the magnitude of the correlation by only counting whether pairs are jointly neighbors.  Such local methods are therefore sensitive to choice of $k$, and are uninformative  when $k$ is large (because nearly all pairs are neighbors), resulting in poor empirical properties.
 For these reasons, global approaches have prevailed over ``local'' tests in practice.  The more recent Distance Correlation test (\Dcorr) is asymptotically consistent (meaning will reject when the null is false for large enough sample size) for arbitrary nonlinearities \cite{SzekelyRizzo2009}, for large dimensions \cite{SzekelyRizzo2013a}, and structured data \cite{Lyons2013}.
 Around the same time, Heller, Heller, and Gorfine proposed a test (\Hhg), that shared similar properties \cite{HellerGorfine2013}.  Empirically, \Dcorr~performs well in high-dimensional linear data, whereas \Hhg~performs well in low-dimensional nonlinear data,
@@ -118,7 +118,6 @@ This suggests that global correlation between distances---the correlation betwee
 On the other hand, consider the nonlinear (spiral) relationship.  Here again, when a pair of observations are close to one another in cloud density, they also tend to be close to one another in grass wetness (see points 1 and 2 again).  However, in this nonlinear relationship,  a large distance between cloud densities does not necessarily imply that the distance between corresponding grass wetnesses also tends to be large (see points 2 and 3).
 Thus, the global correlation between cloud density distances and grass wetness distances is weak, misleadingly suggesting that there is little or no statistical dependency between density and wetness, even though there is one at more local scales.
 One could restrict the distances to only consider  the nearest neighbors of each point, but how many nearest neighbors should one use?  Use too few and much of the data are ignored; use too many and nonlinear relationships could be overlooked. 
-% @jovo: consider introducing the character of distances of shapes here.
   
 The key, therefore, to successfully determining the presence and nature of a relationship is to adaptively estimate the number of neighbors that are particularly informative.
 This is especially important in high-dimensional data, where simple visualizations do not reveal the relationships to the unaided human eye.
@@ -146,7 +145,7 @@ Running \Mgc~merely requires inputting $n$ samples of two measured properties.
 Our open source implementation\footnotemark\footnotetext{In both MATLAB and R from our website, \website.} requires essentially the same running  time complexity as conventional methods, situating it to be useful in a wide variety of contexts. 
 The following sections document \Mgc's empirical, computational, and theoretical properties. Mathematical details of prior global methods are provided in Appendix \ref{appen:global}, details for \Mgc~are provided in Appendix \ref{appen:mgc}, and \Mgc~pseudocodes are provided in Appendix~\ref{appen:algorithms}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
   \centering
 %  trim={<left> <lower> <right> <upper>}
   \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/FigHDPowerMGCM}
@@ -175,13 +174,10 @@ Supplementary Figure \ref{f:nDAll} shows the power as a function of dimensionali
 
 
 
-
-
-
 \subsection*{\Mgc~Reveals the Nature of Dependence}
 \label{main3}
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \includegraphics[width=1.0\textwidth,trim={3cm 0.5cm 2.3cm 0.5cm},clip]{Figures/FigHDHeat}
 \caption{Multiscale Power Maps allow \Mgc~to determine the nature of the dependence function.
 For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map characterizing the nature of dependence. 
@@ -222,13 +218,13 @@ Oracle \Mgc~achieves equal or higher power than its global counterparts for any 
 The above result follows immediately from Theorems \ref{t:thm1}, \ref{t:linear}, and \ref{t:non}, which are described in Appendix \ref{appen:theory}. In short, the dominance theorem follows from demonstrating that \Mgc~achieves higher power for even a simple quadratic function, suggesting that \Mgc~dominates for higher order polynomial dependence functions (and therefore potentially many nonlinear functions).
 Empirically, Sample \Mgc~performs very closely to Oracle \Mgc~in most simulated settings (see Supplementary Figure \ref{f:nDAll} and \ref{f:1DAll}), suggesting that Sample \Mgc~may also dominate global methods with high probability.
 
-\subsection*{Real Data Experiments}
+\subsection*{\Mgc~Discovers Relationships in Real Data Examples}
 \label{numer3}
 
 \Mgc~can be applied to real data scenarios with complex structures, provided appropriate distance measures are available. We apply \Mgc~to three different scenarios: (i) brain activity versus personality, (ii) brain shape versus depression, and (iii) brain networks versus creativity.  For each comparison, we chose appropriate distances for both kinds of data (see Appendix \ref{appen:real} for details), and ran \Mgc~to obtain both a p-value and a multiscale significance map, akin to the multiscale power maps shown above. 
 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
 \includegraphics[width=1.0\textwidth,trim={0 0 1.5cm 0},clip]{Figures/FigReal}
 \caption{In real data, \Mgc~discovers the dependence and the optimal scales between various brain and mental properties when they exist, and does not detect dependence when it does not exist.  The left three panels show multiscale significance maps and their corresponding estimated optimal scales for three different experiments: \textbf{(A)}  brain activity vs. five-factor personality model, \textbf{(B)}  brain shape vs depressive disease, and \textbf{(C)} brain networks vs. creativity. Sample size is $42$, $114$, and $109$, respectively, though the ordinate of these panels only goes as high as the largest possible neighborhood size due to repeated entries.  
 For all three, \Mgc~yields a significant p-value and reveals the optimal scales of dependence (green rectangles).
@@ -236,7 +232,7 @@ For all three, \Mgc~yields a significant p-value and reveals the optimal scales 
 \label{f:real}
 \end{figure}
 
-\begin{table*}[h!]
+\begin{table*}[!ht]
 \centering
 \caption{The p-values for real data testing. \Mgc~is the only method that \emph{always} uncovers the existence of significant relationships and the only method that \emph{ever} discovers the underlying optimal scales. Bold indicates lowest p-value per dataset.}
 \label{t:real}%
@@ -298,35 +294,27 @@ In contrast, many standard parametric methods for fMRI analysis, such as general
 \label{conclu}
 
 We propose multiscale generalized correlation (\Mgc) to discover the presence and nature of dependence across disparate types of data.
-We proved that Oracle \Mgc~dominates global approaches in finite samples.  This proof shows that \Mgc~performs as well as global approaches in linear settings, better than global approaches in strongly nonlinear settings, and is never worse. 
-We further empirically demonstrate via simulations that \Mgc~nearly always outperforms global methods regardless of the dimension, sample size, or nonlinearity.  Moreover, \Mgc~provides a map indicating which scales are maximally informative about the dependence structure. 
-In real data experiments, \Mgc~revealed dependence where global methods fail, as well as the nature of those dependencies, and did not falsely detect signals when there were none.
-% 
-The performance of \Mgc~suggests a number of  potential extensions of this work would be worth investigating. 
+We proved that Oracle \Mgc~dominates global approaches in finite samples.  This proof shows that \Mgc~performs as well as global approaches in linear settings, better than global approaches in strongly nonlinear settings, and is never worse. We further empirically demonstrate via simulations that \Mgc~nearly always outperforms global methods regardless of the dimension, sample size, or nonlinearity.  Moreover, \Mgc~provides a map indicating which scales are maximally informative about the dependence structure. 
+In real data experiments, \Mgc~revealed dependence where global methods fail, as well as the nature of those dependencies, and did not falsely detect signals when there were none. 
 
-% @jovo: maybe paragraph about applications. in particular, when we expect it to make a big difference.  this wrench can turn nuts that are this size.
+\Mgc~also addresses a particularly vexing statistical problem that arises from the fact that methods for two subsequent statistical tasks are dissociated from one another: methods for determining whether two properties are related, and methods for determining how they are related.
+The reason this dissociation creates a problem is that the statistical assumptions underlying the ``how related'' methods become compromised in the process of determining ``whether related'': this is the so-called ``post-selection inference'' problem \cite{berk2013valid}.
+The most straightforward way to address this issue is to collect new data, which is costly and time-consuming. Therefore, researchers typically ignore this fact and make statistically invalid claims.
+\Mgc~begins to get around this dilemma by carefully constructing its permutation test to estimate the scale in the process of determining a p-value, rather than after.
+To our knowledge, \Mgc~is the first dependence test to take a step towards valid post selection inference.    
 
-While we already proved the first finite sample theorems for dependence testing, demonstrating that Sample \Mgc~is consistent, there are several clear follow-up theorems that would further advance this work.  First, we could provide theoretical guidance for choosing the optimal scale in finite samples, which could possibly further improve performance.  Second, because the multiscale dependence maps provide insight into the nature of dependence, we could theoretically determine a mapping from these maps to the set of all nonlinear functions to provide a formal characterization of the nature of the dependency. Third,  \Mgc~requires computational space and time quadratic in the number of samples, which can be prohibitively costly for very large data.  Recent advances in related work suggest that we could reduce computational time to be linear \cite{Huo2016}, although with some weakening of the theoretical guarantees \cite{zhang2017large}. Alternately, semi-external memory implementations would allow running \Mgc~on any data as long as the interpoint comparsion matrix fits on disk. Another approach would be to derive an approximation to the asymptotical null distribution for \Mgc.  The fact that others have done so for kernel-based independence tests   \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}, which are equivalent to  ``energy statistics'' (such as \Dcorr~and \Mcorr) \cite{SejdinovicEtAl2013, RamdasEtAl2015}, suggests that we could do so as well.
-% @cs: is the above right/reasonable?
-
-% First, theoretical guidance for choosing the optimal scale for finite samples in the absence of training data is desirable. In this work, we proved that there exist optimal local scales that improve upon the global scale, and demonstrated that Sample \Mgc~yields tests with power very close to the optimal power,  and with significant p-values and useful scale estimation in the real data examples. More theory connecting Oracle \Mgc~and  Sample \Mgc~will yield further insight.
+That \Mgc~provides an estimate of the informative scales suggests several next theoretical steps to extend this work. 
+First, we could provide theoretical guidance for choosing the optimal scale in \emph{finite} samples, which could possibly further improve performance.  Second, because the multiscale significance maps provide insight into the nature of dependence, we could theoretically determine a mapping from these maps to the set of all nonlinear functions to provide a formal characterization of the nature of the dependency. 
 
 
-% Second,  all of the tests described in this manuscript require computational space and time essentially quadratic in sample size, which is a problem that must be overcome to analyze very large datasets. Huo and Szekely  recently developed efficient algorithms that are linear in sample size for one-dimensional data \cite{Huo2016}.  Although it is not clear how to extend the Huo and Szekely approach to multidimensional data, a subsampling strategy seems viable. In fact, ongoing work suggests the multiscale power maps are accurate even when subsampling the data-points significantly, suggesting that subsampling samples or pairwise comparisons could yield an approximate linear time algorithm without sacrificing much testing power.  One could also implement \Mgc~using a semi-external memory and multicore architecture computing model \cite{Zheng2016},  which could enable use of solid state disk space in a streaming fashion to both speed up computations for big data and enable storing interpoint pairwise comparison matrices larger than main memory.
+As a separate next theoretical step, we could reduce the computational space and time required by \Mgc.  \Mgc~currently requires space and time quadratic in the number of samples, which can be prohibitively costly for very large data.  Recent advances in related work suggest that we could reduce computational time to close to linear  \cite{Huo2016}, although with some weakening of the theoretical guarantees \cite{zhang2017large}. Alternately, semi-external memory implementations would allow running \Mgc~on any data as long as the interpoint comparison matrix fits on disk rather than main memory \cite{Zheng2015,Zheng2016,Zheng2016c,Zheng2016b}. Another approach would be to derive an approximation to the asymptotic null distribution for \Mgc, obviating the need for the permutation test, but at the cost of potential finite-sample  bias.  The fact that others have done so for kernel-based independence tests   \cite{GrettonEtAl2005, GrettonGyorfi2010, GrettonEtAl2012}, which are equivalent to  ``energy statistics'' (such as \Dcorr~and \Mcorr) \cite{SejdinovicEtAl2013, RamdasEtAl2015}, suggests that we could do so as well.
+
 
 There are a number of  connections between \Mgc~and other other statistical procedures that we have not yet fully explored. First,  \Mgc~can be thought of as a regularized or sparsified variant of generalized correlation coefficients.  Regularization is central to high-dimensional and ill-posed problems, where dimensionality is larger than sample size. The connection made here between regularization and dependence testing opens the door towards considering other regularization techniques for correlation-based dependence testing, including \Hhg~and the approach described in Reshef et al. \cite{Reshef2011}. Second, \Mgc~can be thought of informally as  learning a metric.  We could therefore capitalize on the sub-specialty within machine learning and statistics called metric learning \cite{xing2003distance}.  In particular, deep learning  can be thought of as metric learning \cite{giryes2015deep}, and generative adversarial networks \cite{goodfellow2014generative} are implicitly testing for equality which is closely related to dependence.  While \Mgc~searches over a two-dimensional parameter space to optimize the metric, deep learning searches over a much larger parameter space, sometimes including millions of dimensions.  Probably neither is optimal, and somewhere between the two would be useful in many tasks.  Third, energy statistics provides state of the art approaches to other problems,  including goodness-of-fit  \cite{Szekely2005}, analysis of variance  \cite{Rizzo2010}, conditional dependence  \cite{Szekely2014,Wang2015},   and feature selection \cite{LiZhongZhu2012,Zhong2015}, so  \Mgc~can be adapted for them as well.
-In fact, \Mgc~can also implement a two-sample (or generally the $K$-sample) test \cite{Szekely2004, heller2016consistent}; so further comparisons of \Mgc~to standard methods for two-sample testing will be interesting. Finally, although energy statistics have not yet been used for classification, regression, or dimensionality reduction, \Mgc~opens the door to these applications by providing guidance as to how to proceed.  
-% 
-% 
-% Testing independence between graphs and node attributes \cite{Fosdick2015} is another immediate potential application. 
-% 
-% Finally, the use of the \Mgc~intuition for dimensionality reduction, classification, and regression seems promising. 
-% @jovoism "seems promising", "is desirable", "seems viable".  be more actionable, less subjective. "it has not escaped our notice", "perhaps"
-Specifically, it is well known in the machine learning literature that the choice of kernel, metric, or scale often has an undesirably strong effect on the performance of different machine learning algorithms \cite{levina2004maximum}. \Mgc~provides a mechanism to estimate scale that is both theoretically justified and computationally efficient, by optimizing a metric for a task the previous lacked a notion of optimization.  Nonlinear dimensionality reduction procedures, such as  isomap \cite{TenenbaumSilvaLangford2000} and local linear embedding \cite{SaulRoweis2000} for example, must also choose a scale, but have no valid criteria for doing so.  \Mgc~could therefore be used to provide insight into dimensionality reduction as well.
+In fact, \Mgc~can also implement a two-sample (or generally the $K$-sample) test \cite{Szekely2004, heller2016consistent}; so further comparisons of \Mgc~to standard methods for two-sample testing will be interesting. Finally, although energy statistics have not yet been used for classification, regression, or dimensionality reduction, \Mgc~opens the door to these applications by providing guidance as to how to proceed. 
+Specifically, it is well known in the machine learning literature that the choice of kernel, metric, or scale often has an undesirably strong effect on the performance of different machine learning algorithms \cite{levina2004maximum}. \Mgc~provides a mechanism to estimate scale that is both theoretically justified and computationally efficient, by optimizing a metric for a task the previous lacked a notion of optimization.  Nonlinear dimensionality reduction procedures, such as  Isomap \cite{TenenbaumSilvaLangford2000} and local linear embedding \cite{SaulRoweis2000} for example, must also choose a scale, but have no valid criteria for doing so.  \Mgc~could therefore be used to provide insight into dimensionality reduction as well.
 
-% for a special data science task: independence testing.  It does so by defining a score that can be efficiently optimized for the task at hand without introducing multiple hypotheses.  Isomap \cite{TenenbaumSilvaLangford2000} and local linear embedding \cite{SaulRoweis2000} are two commonly used manifold learning techniques that depend on a choice of scale.  Perhaps the ideas here can inform the choice of scale when applying these and other machine learning techniques. 
  
-% @jovo: blue color paragraph comes at the end. 
 
 Finally, \Mgc~is easy to use: it merely requires pairs of samples to run, and all the code is available in both R and MATLAB from \url{https://neurodata.io/tools/MGC/}, as well as the code to fully reproduce all the figures in this manuscript.  That \Mgc~is open source and reproducible, coupled with its empirical and theoretical dominance, situates \Mgc~to be useful in a wide range of applications.  We showed its value in three diverse applications spanning neuroscience which motivated this work. Other applications, extending beyond science even, to include finance, pharmaceuticals, commerce, and security, face similar questions of dependence, and could equally benefit from the methodology proposed here.   
 
@@ -351,7 +339,7 @@ the XDATA program of DARPA administered through Air Force Research Laboratory co
 %
 the Office of Naval Research contract N00014-12-1-0601,
 %
-the Air Force Office of Scientific Research contract FA955014-1-0033. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr. Ruth Heller and Dr. Yakir Reshef for insightful suggestions.
+the Air Force Office of Scientific Research contract FA9550-14-1-0033. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr.~Ruth Heller, Dr.~Bert Vogelstein,  and Dr.~Yakir Reshef for insightful suggestions.
 
 
 \clearpage
@@ -394,8 +382,8 @@ In words, $\GG$ is the global sample correlation across \emph{pairwise compariso
 A generalized correlation always has the range $[-1,1]$, has expectation $0$ under independence, and implies a stronger dependency when the correlation is further away from $0$. 
 
 A generalized correlation coefficient therefore must make two choices. First, how to obtain the matrices $A$ and $B$.  Traditional correlations such as the Pearson's correlation and the rank correlation can be written as generalized correlation coefficients, where $A$ and $B$ are derived from sample observations rather than distances. For the methods analyzed here, $A$ and $B$ are always distance matrices, thus the choice simplifies to  which metrics to use for $\delta_x$ and $\delta_y$.  The selection may be chosen on the basis of domain knowledge, or use a default such as Euclidean distance.  The \Mantel~coefficient, \Dcorr, and \Mcorr~all choose Euclidean distance in their original publication and typical uses.
-The next choice is how to transform the resulting distance matrices, $\tilde{A}$ and $\tilde{B}$.  % By defining $A$ and $B$ based on different transformations of the distance matrices, 
-The \Mantel~coefficient, \Dcorr, and \Mcorr~differ merely by different choices of how to transform $\tilde{A}$ and $\tilde{B}$.  %Formally, let $A=t(\tilde{A})$, and $a=t(\tilde{a}_{ij}$, and similarly for $B$ and $b_{ij}$.  Then, \Mantel, \Dcorr, and \Mcorr~merely differ by different choices for $t$. 
+The next choice is how to transform the resulting distance matrices, $\tilde{A}$ and $\tilde{B}$.  
+The \Mantel~coefficient, \Dcorr, and \Mcorr~differ merely by different choices of how to transform $\tilde{A}$ and $\tilde{B}$.  
 
 To carry out the hypothesis testing on sample data via a nonparametric test statistic, e.g., a generalized correlation, a permutation test is often an effective choice \cite{GoodPermutationBook}, because a p-value can be computed by comparing the correlation of the sample data to the correlation of the permuted sample data. The independence hypothesis is rejected if the p-value is lower than a pre-determined type $1$ error level, say $0.05$. Then the power of the test statistic equals the probability of a correct rejection at a specific type $1$ error level.
 
@@ -415,13 +403,6 @@ The \Mantel~test defines
 \right.
 \]
 and similarly for $b_{ij}$. 
-% $A=\tilde{A}-\bar{a}$ and $B=\tilde{B}-\bar{b}$; and then sets the diagonals of $A$ and $B$ to zeros, i.e., $a_{ii}=b_{ii}=0$ for all $i$.
-% The \Mantel~coefficient \cite{Mantel1967} follows by inserting $A$ and $B$ into Equation~\ref{generalCoef};
-%\begin{equation*}
-%\Mantel(X,Y)=\frac{\sum_{i \neq j}^{n}a_{ij}b_{ij}}{\sqrt{\sum_{i \neq j}^{n}a_{ij}^2 \sum_{i \neq j}^{n}b_{ij}^2}}.
-%\end{equation*}
-% the \Mantel~test is carried out by the permutation test.
-% 
 Unlike \Dcorr, \Mcorr, and \Hhg, the \Mantel~test does not yet have a consistency proof against all dependent alternatives, 
 but it has been a very popular method in biology and ecology, possibly due to its simplicity and effectiveness. Figures~\ref{f:nDAll} and ~\ref{f:1DAll} indeed show that global \Mantel~is sub-optimal relative to much more recently proposed tests, and appears to be inconsistent for many dependencies. 
 
@@ -438,21 +419,7 @@ Define the row and column means of $\tilde{A}$ by $\bar{a}_{\cdot j}=\frac{1}{n}
 \right.
 \]
 and similarly for $b_{ij}$. 
-% Then the sample distance correlation follows by inserting the above $A$ and $B$ into Equation~\ref{generalCoef}. 
-For distance correlation, the numerator of Equation~\ref{generalCoef} is named the distance covariance (\Dcov), while $\sigma_a$ and $\sigma_b$ in the denominator are named the distance variances. %is defined by doubly centering the distance matrices:
-%\begin{equation*}
-%\label{dcovEqu}
-%dcov(X,Y)=\frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}b_{ij}.
-%\end{equation*}.
-%The sample distance variance is defined as
-%\begin{align*}
-%dvar(X) &=\frac{1}{n^2}\sum_{i,j=1}^{n}a_{ij}^{2},\quad dvar(Y) =\frac{1}{n^2}\sum_{i,j=1}^{n}b_{ij}^{2},
-%\end{align*}
-%and the sample distance correlation equals
-%\begin{equation*}
-%\Dcorr(X,Y)=\frac{dcov(X,Y)}{\sqrt{dvar(X) \cdot dvar(Y)}}.
-%\end{equation*}
-
+For distance correlation, the numerator of Equation~\ref{generalCoef} is named the distance covariance (\Dcov), while $\sigma_a$ and $\sigma_b$ in the denominator are named the distance variances. 
 
 Let $c(\mb{x},\mb{y})$ be the population distance correlation, that is, the distance correlation between the underlying random variables $\mb{x}$ and $\mb{y}$. Szekely et al. (2007)  define the population distance correlation  via the characteristic functions of $f_{\mb{x}}$ and $f_{\mb{y}}$, and show that the population distance correlation equals zero if and only if $\mb{x}$ and $\mb{y}$ are independent, whenever they have finite second moment and finite dimensionality.
 They also show that  as $n \rightarrow \infty$, the sample distance correlation converges to the population distance correlation, that is, $\GG(X,Y) \rightarrow c(\mb{x},\mb{y})$. Thus the sample distance correlation is consistent against all dependencies with finite moment and dimension. 
@@ -498,12 +465,11 @@ Szekely and  Rizzo \cite{SzekelyRizzo2013a, SzekelyRizzo2014, RizzoSzekely2016} 
 \right.
 \]
 and similarly define $B$. 
-% Then \Mcorr~follows by using the above $A$ and $B$ in Equation~\ref{generalCoef}.
 
 Szekely and Rizzo (2013) \cite{SzekelyRizzo2013a} show that 
 \Mcorr~is an unbiased estimator of the population distance correlation $c(\mb{x},\mb{y})$ for all $D, D_y, n$; and \Mcorr~is approximately normal even if $D,D_y \rightarrow \infty$. Thus it always has zero mean under independence, enjoys the same theoretical consistency as \Dcorr, and may work better than \Dcorr~for high-dimensional dependencies and finite samples. Note that the \Mcorr~here is slightly different from the \Mcorr~in \cite{SzekelyRizzo2013a} because we define the diagonals of $A$ and $B$ differently, but it is equivalent asymptotically and has almost the same testing performance in finite samples.
 
-Similar to the alternative formulation of \Dcorr, singly centered distance matrices can also be used in $A'$ and $B'$ when defining \Mcorr, without altering the theoretical advantages of the original \Mcorr. %~with almost the same power. 
+Similar to the alternative formulation of \Dcorr, singly centered distance matrices can also be used in $A'$ and $B'$ when defining \Mcorr, without altering the theoretical advantages of the original \Mcorr.  
 Therefore, for computational expediency and simplicity, the single-centered \Mcorr~with zero diagonals are used in the \Mgc~implementation.
 
 \subsubsection{Heller, Heller, \& Gorfine (\Hhg)}
@@ -611,7 +577,7 @@ so that $\GG^{kl}(X,Y)=\GG^{lk}(Y,X)$ under single centering.
 
 Therefore each local generalized correlation $\GG^{kl}$ is always symmetric for \Mantel, \Dcorr~and \Mcorr,~also using single centering.
 
-As for the rank preservation, the column ranks of the Euclidean distance matrix $\tilde{A}$ are the same as the column ranks of $A=H \tilde{A}$, because $H \tilde{A}$ centers each entry of $\tilde{A}$ by column means, while double centering $H \tilde{A} H$ does not always preserve the original column ranks. Similarly, the row ranks of $\tilde{B}$ are preserved in $B=\tilde{B}H$ but not in $H \tilde{B} H$. %Note that the ranks are also preserved in \Mantel.
+As for the rank preservation, the column ranks of the Euclidean distance matrix $\tilde{A}$ are the same as the column ranks of $A=H \tilde{A}$, because $H \tilde{A}$ centers each entry of $\tilde{A}$ by column means, while double centering $H \tilde{A} H$ does not always preserve the original column ranks. Similarly, the row ranks of $\tilde{B}$ are preserved in $B=\tilde{B}H$ but not in $H \tilde{B} H$. 
 \end{proof}
 
 
@@ -651,7 +617,6 @@ Because neither  Oracle \Mgc~nor Sample \Mgc~compares multiple statistics, neith
 \subsection{Computational Complexity}
 
 Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are complete, computing one local generalized correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local generalized correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, meaning possibly $O(n^4)$ which would be computationally prohibitive. However, given the distance and ranking information, we devised an algorithm that computes the multiscale correlation map in $O(n^2)$ by re-using adjacent smaller local generalized correlations (see Algorithm \ref{alg:all_scales}). 
-% This algorithm has essentially the same running time complexity as the global correlations. 
 Therefore, when including the distance computation and ranking overheads, the MGC statistic is computed in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~statistic, and the same running time up to a factor of $\log n$ as  global correlations like \Dcorr~and \Mcorr, which require  $O(n^2D)$ time.
 
 
@@ -667,14 +632,11 @@ Note that a general sample estimation technique can be designed for \Mgc~for \Dc
 \subsection{Theorems and Proofs for \Mgc}
 \label{appen:theory}
 
-%Let $\G_t$ denote a global generalized correlation coefficient based test statistic. For example, $t$ might indicate \Mantel, \Dcorr, or \Mcorr. And let $\beta_n(\G_t^*)$ denote the power of the corresponding Oracle \Mgc~for $n$ samples; we drop the subscript when considering asymptotic power.
 Without loss of generality, all theorems in this section are conditioned on a chosen global test yielding test statistic $\GG$.
 Recall from the work of Szekely et al. that \Dcorr~and \Mcorr~are both consistent tests, whenever $f_{xy}$ has finite dimension and bounded variance. We further denote the set of distributions satisfying consistency for the given test by $\mc{F}$.
-% Then the consistency of \Mgc~is proved as follows:
 \begin{thm}
 \label{t:thm1}
 $\beta_n(\GG^*) \rightarrow 1$ as $n \to \infty$ whenever $\beta_n(c) \rightarrow 1$.
-% for all $f_{xy}$ in $\mc{F}$.
 In words, Oracle \Mgc~is consistent against all dependent alternatives for which its global counterpart is consistent. 
 \end{thm}
 \begin{proof}
@@ -683,8 +645,6 @@ Since $\beta_n(c^*)=\underset{kl}{\max}\{\beta_n(\GG^{kl})\}$, for any $f_{xy}$ 
 \beta_n(\GG^*) \geq \beta_n(\GG)
 \end{equation*}
 at any type $1$ error level $\alpha$. So $\beta_n(c^*) \rightarrow 1$ if $\beta_n(\GG) \rightarrow 1$.
-% 
-% Therefore $\beta_n(c^*) \rightarrow 1$ for all $f_{xy}$ in $\mc{F}$. 
 In particular, \Mgc~using either \Dcorr~or \Mcorr~are consistent with all alternatives satisfying certain regularity conditions, because \Dcorr~and \Mcorr~are consistent by \cite{SzekelyRizzoBakirov2007, SzekelyRizzo2013a}. 
 \end{proof}
 
@@ -742,8 +702,6 @@ Note that we can always consider sample points in $[-1,1]$ for $X$, increase $n$
 However, the computation of all possible permuted test statistics becomes more time-consuming as $n$ increases. The same conclusion also holds for the \Mgc~variants of \Dcorr~and \Mantel~using the same example.
 \end{proof}
 
-
-% The proof of Theorem~\ref{t:linear} is straightforward.  The proof of Theorem~\ref{t:non} is a constructive one, where a quadratic function is constructed and sampled a finite number of times, followed by computing the exact p-value for both \Mgc~and \Dcorr~and proving that \Mgc~has higher power in this setting. This shows that \Mgc~can outperform its global counterpart even for the most modestly nonlinear functions.  
 Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. 
 
 Taken together, the three theorems above lead to Theorem~\ref{t:dominate} in the main paper.
@@ -758,10 +716,8 @@ Taken together, the three theorems above lead to Theorem~\ref{t:dominate} in the
 Six algorithms are presented in order:
 \begin{enumerate}
 \item Algorithm~\ref{alg:mgc} describes Sample \Mgc~in its entirety (which calls most of the other algorithms as functions). 
-% and outputs (i) the Sample \Mgc~test statistic, (ii)  its scale, (iii) the p-value via the permutation test, (iv) the multiscale significance maps, and (v) the estimated optimal scales.
 \item Algorithm~\ref{alg:power} computes the testing powers for both Sample and Oracle \Mgc~assuming a known model, and also outputs  the multiscale power map, i.e., the power for each local generalized correlation.
 \item Algorithm~\ref{alg:sample_mgc} computes the Sample \Mgc~test statistic, which equals the estimated optimal local generalized correlation.
-% by smoothing the multiscale correlation map (i.e., the largest correlation that spans sufficiently many adjacent scales), thereby estimating Oracle \Mgc.
 \item Algorithm~\ref{alg:pval} computes the p-value of Sample \Mgc~by the permutation test, and also outputs (i) the estimated the optimal scales via the p-value and (ii) the multiscale significance map. 
 \item Algorithm~\ref{alg:1scale} computes the local generalized correlation coefficient at a given scale $(kl)$, for a given choice of the global correlation coefficient.
 \item Algorithm~\ref{alg:all_scales} efficiently computes all local generalized correlations, in nearly the same running time complexity as computing one local generalized correlation. 
@@ -789,11 +745,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 \State Let $A=\{ a_{ij}\}$ and $B=\{ b_{ij}\}$.
 % 
 \Statex{\textbf{(2)} Calculate Multiscale Correlation Map \& Sample \Mgc~Test Statistic}
-% \For{$k,l:=1,\ldots,n$} 
 \State  $\mathcal{C}=\textsc{MGCAllLocal}(A,B)$  \Comment{local  correlation for all scales using Algorithm \ref{alg:all_scales}}
-% $ = \frac{1}{z_{kl}} \sum_{ij} a^k_{ij} b^l_{ij}$
-% \EndFor
-% \State Let $C=\{ \G^{kl}\}$.
 \State  $\hat{\GG}^*=\textsc{MGCSampleStat}(\mathcal{C})$ 
 \Comment{estimate optimal statistic using Algorithm \ref{alg:sample_mgc}}
 \Statex{\textbf{(3)} Calculate the p-value $p(\hat{\GG}^*)$ and the set of estimated optimal scales $\widehat{\mathcal{KL}}^{*}$ from Sample \Mgc, as well as the multiscale significance map $\mathcal{P}$}
@@ -806,7 +758,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 \clearpage
 
 \begin{algorithm}
-\caption{Power computation of \Mgc~given a known distribution. This algorithm computes the power for both Sample and Oracle \Mgc, as well as the multiscale power map (i.e., testing powers of all local generalized correlations). By repeatedly sampling from the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all local generalized correlations under the null and the alternative hypotheses are computed by Algorithm~\ref{alg:all_scales}. The power of Sample \Mgc~follows by computing the test statistic under the null and the alternative using Algorithm~\ref{alg:sample_mgc}; Oracle \Mgc~directly maximizes the power map, obtainable by computing the testing power at each local generalized correlation. The running time is $O(rn^2 \log n)$. In the simulations we use $r=10$,$000$ MC replicates. %to estimate the optimal scale, and another $r=10$,$000$ MC replicates to estimate the power. 
+\caption{Power computation of \Mgc~given a known distribution. This algorithm computes the power for both Sample and Oracle \Mgc, as well as the multiscale power map (i.e., testing powers of all local generalized correlations). By repeatedly sampling from the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all local generalized correlations under the null and the alternative hypotheses are computed by Algorithm~\ref{alg:all_scales}. The power of Sample \Mgc~follows by computing the test statistic under the null and the alternative using Algorithm~\ref{alg:sample_mgc}; Oracle \Mgc~directly maximizes the power map, obtainable by computing the testing power at each local generalized correlation. The running time is $O(rn^2 \log n)$. In the simulations we use $r=10$,$000$ MC replicates. 
 This algorithm can be similarly adapted to training data, for which the alternative statistic can be computed from the training data while the null statistic can be computed by permutation. Note that power computation for other benchmarks follows from the same algorithm, by plugging in the respective test statistic in the first loop without the optimal scale computation. }
 \label{alg:power}
 \begin{algorithmic}[1]
@@ -814,7 +766,6 @@ This algorithm can be similarly adapted to training data, for which the alternat
 \Ensure The power of Sample \Mgc~$\beta(\hat{\GG}^{*})$, the power of Oracle \Mgc~$\beta(\GG^{*})$, the Oracle power map $\{\beta_{kl}\} \in [0,1]^{n \times n}$, and the set of true optimal scales $\mathcal{KL}^{*}$.
 \Function{MGCPower}{$f_{xy}$, $n$, $r$, $\alpha$}
 \For{$t:=1,\ldots,r$}
-% \Linefor{$i:=[n]$}{$(x^{1}_{i},x^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$, $x^{0}_{i} 
 \For{$i:=[n]$}
 \State $x^{0}_{i} \stackrel{iid}{\sim} f_{x}$, $x^{0}_{i} \stackrel{iid}{\sim} f_{y}$  \Comment{sample from null}
 \State	$(x^{1}_{i},x^{1}_{i}) \stackrel{iid}{\sim} f_{xy}$, \Comment{sample from alternative}
@@ -850,7 +801,6 @@ This algorithm can be similarly adapted to training data, for which the alternat
 \Ensure The Sample \Mgc~statistic $\hat{\GG}^{*} \in \Real$, and the corresponding local scale $(\hat{k},\hat{l}) \in \mathbb{N} \times \mathbb{N}$.
 \Function{MGCSampleStat}{$\mathcal{C}$}
 \State $\tau = \textsc{Thresholding}(\mathcal{C})$ \Comment{find a threshold to determine large local correlations}
-%\State $\mathcal{R}  \rto \mathbb{I}_{n \times n}(\mathcal{C}>\tau))$ 
 \Linefor{$k,l := 1,\ldots, n$}{$r_{kl} \rto \mathbb{I} (c_{kl} > \tau )$} \Comment{identify all scales with large correlation}
 \State $\mathcal{R} \rto \{r_{kl} : k,l = 1,\ldots, n\}$ \Comment{binary map encoding  scales with large correlation}
 \State $\mathcal{R}  = \textsc{Connected}(\mathcal{R} )$ \Comment{largest connected component of the binary matrix}
@@ -891,8 +841,6 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \Require A pair of distance matrices $(A, B) \in \Real^{n \times n} \times \Real^{n \times n}$, the number of permutations $r$, the local generalized correlation map $\mathcal{C}$ and sample \Mgc~statistic $\hat{\GG}^*$ for the observed data.
 \Ensure The p-value $p \in [0,1]$ for Sample \Mgc, the set of estimated optimal scale $\widehat{\mathcal{KL}}^{*}$, and the p-value matrix $\mathcal{P} \in [0,1]^{n \times n}$ of all local generalized correlations.
 \Function{MGCSampleTest}{$A$, $B$, $r$, $\mathcal{C}$, $\hat{\GG}^*$}
-%\State $\{\G^{kl}\}=\textsc{LocalCorr}(A, B)$ \Comment{calculate the observed local generalized correlations}
-%\State $\hat{\G}^{*}=\textsc{SampleMGC}(\{\G^{kl}\})$ \Comment{Sample \Mgc~statistic}
 \For{$t:=1,\ldots,r$}
 \State $\pi=\textsc{RandPerm}(n)$ \Comment{generate a random permutation of size $n$} 
 \State $\mathcal{C}_{0}[t]=\textsc{MGCAllLocal}(A, B(\pi,\pi))$ \Comment{calculate the permuted local correlations}
@@ -918,7 +866,6 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \Require A pair of distance matrices $(A, B) \in \Real^{n \times n} \times \Real^{n \times n}$, and a  local scale $(kl) \in \mathbb{N} \times \mathbb{N}$.
 \Ensure The local generalized correlation coefficient $\GG^{kl} \in [-1,1]$.
 \Function{LocalGenCorr}{$A$, $B$, $k$, $l$}
-% \State  $\GG^{kl}$, $\tilde{\GG}^{kl}$, $v^{A}$, $v^{B}$, $e^{A}$, $e^{B} \leftarrow 0$.
 \Linefor{$Z:=A,B$}{$\mathcal{E}^{Z}=\textsc{Sort}(Z)$} \Comment{sort distances}
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(Z)$}  \Comment{center distance matrices}
 \State $\tilde{\GG}^{kl} \rto tr((A \circ \mathcal{E}^{A})\T \times (B \circ (\mathcal{E}^{B})\T))$ \Comment{un-normalized local distance covariance}
@@ -975,18 +922,12 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \clearpage
 
 
-
-
-
-
 \section{Simulation Dependence Functions}
 \label{appen:function}
 
 This section provides the $20$ different dependency functions used in the simulations.  We used essentially the exact same settings as previous publications to ensure a fair comparison \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, SimonTibshirani2012, GorfineHellerHeller2012}.  We only made changes to add white noise and a weight vector for higher dimensions, thereby making them more difficult, to better compare all methods throughout different dimensions and sample sizes. A few additional settings are also included.
 
-For each sample $\mb{x} \in \Real^{D}$, we denote $\mb{x}_{[d]}, d=1,\ldots,D$ as the $d^{th}$ dimension of the vector \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{D}$ is a decaying vector with $w_{[d]}=1/d$ for each $d$, such that $w\T \mb{x}$ is a 
-% one-dimensional 
-weighted summation of all dimensions of \mbx. %, which equals \mb{x}~if $D=1$.
+For each sample $\mb{x} \in \Real^{D}$, we denote $\mb{x}_{[d]}, d=1,\ldots,D$ as the $d^{th}$ dimension of the vector \mbx. For the purpose of high-dimensional simulations, $w \in \Real^{D}$ is a decaying vector with $w_{[d]}=1/d$ for each $d$, such that $w\T \mb{x}$ is a weighted summation of all dimensions of \mbx. 
 Furthermore, $\mc{U}(a,b)$ denotes the uniform distribution on the interval $(a,b)$, $\mc{B}(p)$ denotes the Bernoulli distribution with probability $p$, $\mc{N}(\mu,{\Sigma})$ denotes the normal distribution with mean ${\mu}$ and covariance ${\Sigma}$, 
 $u$ and $v$ represent realizations from some auxiliary random variables, $\kappa$ is a scalar constant to control the noise level (which equals $1$ for one-dimensional simulations and $0$ otherwise), and $\epsilon$ is sampled from an independent standard normal distribution unless mentioned otherwise.
 
@@ -1091,7 +1032,6 @@ for $d=1,\ldots,D$.
 
 For each distribution, $\mb{x}$ and $\mb{y}$ are dependent except  (20); for some settings (8,14,16-18) they are  independent upon conditioning on the respective auxiliary variables, while for others they are
  ``directly'' dependent. 
-% Given $(\mb{x}_{i},\mb{y}_{i})$ pairs for $i=1,\ldots,n$, set $X=\{\mb{x}_{1},\cdots, \mb{x}_{n}\} \in \Real^{D \times n}$ and $Y=\{\mb{y}_{1},\cdots, \mb{y}_{n}\} \in \Real^{D_y \times n}$, where $D_y$ is the dimensionality of \mby. 
 A visualization of each dependency with $D=D_y=1$ is shown in Figure~\ref{f:dependencies}.
 
 
@@ -1179,7 +1119,6 @@ Excluding the independent setting (\#20), for which all methods yield power $0.0
 \includegraphics[width=1.0\textwidth,trim={0 0.5cm 3.2cm 0},clip]{Figures/Fig1DPowerAll}
 \caption{
 The same power plots as in Figure~\ref{f:nDAll}, except the $20$ dependence settings are one-dimensional with noise, and the x-axis shows sample size increasing from $5$ to $100$. 
-% Each panel shows the testing power on the abscissa at significance level $\alpha=0.05$, and sample size on the ordinate.
 Again, Oracle \Mgc~empirically achieves similar or better power than the previous state-of-the-art approaches for all sample sizes on almost all problems, with Sample \Mgc~being very close to Oracle \Mgc~and overall superior to other benchmarks for essentially all dependency structures and sample sizes.}
 \label{f:1DAll}
 \end{figure}
@@ -1207,9 +1146,7 @@ Again, Oracle \Mgc~empirically achieves similar or better power than the previou
 
 \subsection{Brain Activity vs. Personality}
 
-For the five-factor personality modality, we  used the Euclidean distance.
-% For the brain activity modality, we constructed a connectome-based distance. 
-For the brain activity modality,
+For the five-factor personality modality, we  used the Euclidean distance. For the brain activity modality,
 we derived the following comparison function. For each scan, (i) run Configurable Pipeline for the
  Analysis of Connectomes pipeline \cite{CPAC2015} to process the raw brain images yielding a parcellation into
 197 regions of interest, 
@@ -1227,9 +1164,7 @@ then formed the Euclidean distance (the noise is used to break ties amongst the 
 
 
 For the raw brain imaging data, we derived the following comparison function.  For each scan we estimated brain networks from diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}.
-We compute the distance between the graphs using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions and aligning the embeddings via a Procrustes analysis.
-% and then computed distance using a graph-based distance. 
-We used Euclidean distance to compare CCI values. 
+We compute the distance between the graphs using the semi-parametric graph test statistic \cite{Sussman2013,ShenVogelsteinPriebe2016,Tang2016}, embedding each graph into two dimensions and aligning the embeddings via a Procrustes analysis. We used Euclidean distance to compare CCI values. 
 
 
 
@@ -1237,7 +1172,6 @@ We used Euclidean distance to compare CCI values.
 
 \subsection{Brain Activity vs. Noise}
 
-% \Mgc~requires a distance matrix for brain region activity, and another for the stimulus. 
 For the brain region activity, we used C-PAC to estimate regional time-series, in particular, using the sequence of pre-processing decisions determined to optimize discriminability \cite{Wang2016}.  The output for each scan is the resting state fMRI time series data containing $197$ regions of interest for $200$ time-steps.
 For each region, the Euclidean distance pairs between time steps are computed, i.e., $\|\mb{x}_{\cdot i}-\mb{x}_{\cdot j}\|_2$,  where $\mb{x}_{\cdot i}$ denotes the population vector of activity of the region at time-step $i$ for all subjects.
 For the one-dimensional stimulus, we similarly compute the Euclidean distance between the stimulus values at each pair of time-steps: $\|\mb{y}_i - \mb{y}_j\|_2$.

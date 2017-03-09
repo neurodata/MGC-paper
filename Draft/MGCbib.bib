@@ -25,6 +25,17 @@
   publisher={IEEE}
 }
 
+@article{berk2013valid,
+  title={Valid post-selection inference},
+  author={Berk, Richard and Brown, Lawrence and Buja, Andreas and Zhang, Kai and Zhao, Linda and others},
+  journal={The Annals of Statistics},
+  volume={41},
+  number={2},
+  pages={802--837},
+  year={2013},
+  publisher={Institute of Mathematical Statistics}
+}
+
 @book{bakir2007predicting,
   title={Predicting structured data},
   author={Bakir, G{\"o}khan and Hofmann, Thomas and Scholkopf, Bernhard},
@@ -167,7 +178,7 @@ year = {2015}
 	Journal = {in preparation},
 	Title = {Optimal Design for Discovery Science via Maximizing Discriminability:
 Applications in Neuroimaging},
-        Year = {2016},
+        Year = {2017},
 }
 @book{Costa1992,
 abstract = {Costa, P. T., Jr., {\&} McCrae, R. R. (1992). NEO PI-R professional manual. Odessa, FL: Psychological Assessment Resources, Inc.},
@@ -1035,7 +1046,21 @@ pages = {1047-1056},
 	Date-Modified = {2014-07-22 14:06:50 +0000},
 	Journal = {Technometrics},
 	Title = {Fast Computing for Distance Covariance},
-	Year = {2015}}
+    Volume={58},
+    Number={4},
+	Year = {2016},
+    Pages = {435-447}
+    }
+    
+    @article{Huo2017,
+	Author = {C. Huang and X. Huo},
+	Date-Added = {2014-07-22 13:44:56 +0000},
+	Date-Modified = {2014-07-22 14:06:50 +0000},
+	Journal = {arXiv},
+	Title = {A STATISTICALLY AND NUMERICALLY EFFICIENT
+INDEPENDENCE TEST BASED ON RANDOM PROJECTIONS AND
+DISTANCE COVARIANCE},
+	Year = {2017}}
 	
 @article{BakirovRizzoSzekely2006,
 	Author = {N. Bakirov and M. Rizzo and G. Szekely},
@@ -1232,7 +1257,7 @@ volume = {85},
 year = {2015}
 }
 
-@article{Zheng2016,
+@article{Zheng2016b,
 abstract = {Owing to random memory access patterns, sparse matrix multiplication is traditionally performed in memory and scales to large matrices using the distributed memory of multiple nodes. In contrast, we scale sparse matrix multiplication by utilizing commodity SSDs. We implement sparse matrix dense matrix multiplication (SpMM) in a semi-external memory (SEM) fashion, i.e., we keep the sparse matrix on SSDs and dense matrices in memory. Our SEM SpMM can incorporate many in-memory optimizations for large power- law graphs with near-random vertex connection. Coupled with many I/O optimizations, our SEM SpMM achieves performance comparable to our in-memory implementation on a large parallel machine and outperforms the implementations in Trilinos and Intel MKL. Our experiments show that the SEM SpMM achieves almost 100{\%} performance of the in-memory implementation on graphs when the dense matrix has more than four columns; it achieves at least 65{\%} performance of the in-memory implementation for all of our graphs when the dense matrix has only one column. We apply our SpMM to three important data analysis applications and show that our SSD-based implementations can significantly outperform state of the art of these applications and scale to billion-node graphs.},
 archivePrefix = {arXiv},
 arxivId = {1602.02864},
@@ -1245,6 +1270,33 @@ url = {http://arxiv.org/abs/1602.02864},
 year = {2016},
 journal = {arXiv}
 }
+@article{Zheng2016c,
+    author={Zheng, Da AND Burns, Randal AND Vogelstein, Joshua T. AND
+        Priebe, Carey E. AND Szalay, Alexander S.},
+    title={\href{http://arxiv.org/abs/1602.01421}{An SSD-based
+        eigensolver for spectral analysis on billion-node graphs}},
+    year={2016},
+    journal={arXiv:1602.01421}
+}
+@article{Zheng2016,
+    author={Zheng, Da and Mhembere, Disa and Vogelstein, Joshua T. and Priebe, Carey E. and Burns, Randal},
+    title={\href{http://arxiv.org/abs/1604.06414v1}{FlashMatrix: Parallel, Scalable Data Analysis with Generalized Matrix Operations using Commodity SSDs}},
+    year={2016},
+    archivePrefix = {arXiv},
+    arxivId = {1604.06414},
+    journal = {arXiv},
+    volume = {1604.06414},
+    url={http://arxiv.org/abs/1604.06414v1},
+    abstract={FlashMatrix is a matrix-oriented programming framework for general data analysis with high-level functional programming interface. It scales matrix operations beyond memory capacity by utilizing solid-state drives (SSDs) in non-uniform memory architecture (NUMA). It provides a small number of generalized matrix operations (GenOps) and reimplements a large number of matrix operations in the R framework with GenOps. As such, it executes R code in parallel and out of core automatically. FlashMatrix uses vectorized user-defined functions (VUDF) to reduce the overhead of function calls and fuses matrix operations to reduce data movement between CPU and SSDs. We implement multiple machine learning algorithms in R to benchmark the performance of FlashMatrix. On a large parallel machine, out-of-core execution of these R implementations in FlashMatrix has performance comparable to in-memory execution on a billion-scale dataset while significantly outperforming the in-memory implementations of Spark MLlib.}
+    }
+    
+@inproceedings{Zheng2015,
+author = {Zheng, Da and Mhembere, Disa and Burns, Randal and Vogelstein, Joshua T and Priebe, Carey E and Szalay, Alexander S},
+booktitle = {USENIX Conference on File and Storage Technologies},
+title = {\href{https://usenix.org/system/files/conference/fast15/fast15-paper-zheng.pdf}{FlashGraph: Processing Billion-Node Graphs on an Array of Commodity SSDs}},
+year = {2015}
+}
+
 
 @article{Szekely2004,
 abstract = {We propose a new nonparametric test for equality of two or more multivariate distributions based on Euclidean distance between sample elements. Several consistent tests for comparing multivariate distributions can be developed from the underlying theoretical results. The test procedure for the multisample problem is developed and applied for testing the composite hypothesis of equal distributions, when distributions are unspecified. The proposed test is universally consistent against all fixed alternatives (not necessarily continuous) with finite second moments. The test is implemented by conditioning on the pooled sample to obtain an approximate permutation test, which is distribution free. Our Monte Carlo power study suggests that the new test may be much more sensitive than tests based on nearest neighbors against several classes of alternatives, and performs particularly well in high dimension. Computational complexity of our test procedure is independent of dimension and number of populations sampled. The test is applied in a high dimensional problem, testing microarray data from cancer samples.},

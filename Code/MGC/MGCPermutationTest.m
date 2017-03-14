@@ -12,10 +12,10 @@ function  [pMGC,statMGC,pLocalCorr,localCorr,optimalInd]=MGCPermutationTest(A,B,
 % The outputs are:
 % the sample MGC p-value, sample MGC test statistic,
 % all local p-values, all local correlations, and the estimated optimal scales.
+% Note the optimal scales are output as matrix single indices.
 %
-% Note that the sample MGC p-value / test statistic / optimal scales are
-% not calculated unless the global correlation is 'specified as mcor', and
-% the optimal scales are output as matrix single indices.
+% Note that one should avoid report positive discovery via the minimal of
+% all local p-values, as that will have multiple testing problem.
 
 if nargin<3
     rep=1000; % use 1000 random permutations by default

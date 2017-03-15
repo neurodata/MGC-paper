@@ -15,8 +15,7 @@ else
     ax=figure;
 end
 % ax=subplot(s,t,2);
-RC=DistRanks(C);
-RD=DistRanks(D)';
+[~,~,RC,RD]=MGCDistTransform(C,D,'mcor');
 % RC=(RC<=F.Xmax+1);
 % RD=(RD<=F.Ymax+1);
 

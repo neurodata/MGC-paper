@@ -49,9 +49,10 @@ cmap=zeros(2,3);
 indP=optimalInd;
 [J,I]=ind2sub(size(pMLocal),indP);
 
+[~,~,RC,RD]=MGCDistTransform(C,D,'mcor');
 
-RC=DistRanks(C);
-RD=DistRanks(D)';
+% RC=DistRanks(C);
+% RD=DistRanks(D)';
 RC=(RC<=k);
 RD=(RD<=l);
 R2=RC&RD;%&(C_MGC>=0);
@@ -157,8 +158,8 @@ x=x/mxc;
 y=y/mxd;
 % 1: samle data
 F.sub=1;
-F.svg=1;
-F.pdf=1;
+% F.svg=1;
+% F.pdf=1;
 if F.subplot==false;
     F.wh=[3.68 4];
 end

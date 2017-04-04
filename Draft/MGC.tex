@@ -146,15 +146,20 @@ Our open source implementation\footnotemark\footnotetext{In both MATLAB and R fr
 The following sections document \Mgc's empirical, computational, and theoretical properties. Mathematical details of prior global methods are provided in Appendix \ref{appen:global}, details for \Mgc~are provided in Appendix \ref{appen:mgc}, and \Mgc~pseudocodes are provided in Appendix~\ref{appen:algorithms}.
 
 \begin{figure}[!ht]
-  \centering
-%  trim={<left> <lower> <right> <upper>}
-  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/FigHDPowerMGCM}
-  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
-Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
-the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
-\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
+\centering
+\subfigure{
+\includegraphics[width=0.48\textwidth]{Figures/FigHDPowerSummary}
 }
-\label{f:nDSummary}
+\subfigure{
+\includegraphics[width=0.48\textwidth]{Figures/Fig1DPowerSummary}
+}
+  \caption{Relative Power of  \Mgc~to four benchmark dependence tests, for the $20$ different settings under high-dimensional and 1-dimensional settings.  
+Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis is the simulation type, and y-axis shows the relative power of existing competitors to \Mgc~, $\bar{\beta}_s(\mathcal{A}) / \bar{\beta}_s(\Mgc)$. The percentages indicate that \Mgc~is significantly more powerful in testing dependency on average, and throughout nearly all settings.
+%Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
+%the large dot on the x-axis indicates the power differences averaged over all 20 settings.
+%\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
+}
+\label{f:Summary}
 \end{figure}
 
 \subsection*{\Mgc~Nearly Dominates Finite Sample Simulation Experiments}
@@ -167,7 +172,7 @@ Function details are in Appendix~\ref{appen:function}, with additional supportin
 
 Power---the probability of rejecting the null when it is  false---is the standard metric for evaluating test performance of finite samples (see Algorithm~\ref{alg:power} for power computation and Algorithm~\ref{alg:sample_mgc} for \Mgc~test statistic computation).  
 For each setting, the power of each test is computed for a large range of different dimensions of $x$,  effectively decreasing the signal-to-noise ratio.  
-The average power across dimensions for each algorithm provides a scalar score per setting. Figure~\ref{f:nDSummary} shows the difference between \Mgc's average power and the benchmarks' for each setting.  
+The average power across dimensions for each algorithm provides a scalar score per setting. Figure~\ref{f:Summary} shows the \Mgc's average power relative to the benchmarks' for each setting.  
 \Mgc~achieves a higher power in essentially all 20 settings when compared to all other approaches.  
 Supplementary Figure \ref{f:nDAll} shows the power as a function of dimensionality, rather than the average, which indicates that  \Mgc~almost always achieves higher power than the alternative tests for all dimensions, not just the average dimension.  
  Supplementary Figures \ref{f:1DAll} and \ref{f:1DSummary} show similar results,  but keeping the dimensionality of $x$ fixed while increasing sample size. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
@@ -1113,6 +1118,18 @@ The global methods fail to detect significant dependence since they consider all
 Each panel shows the testing power at significance level $\alpha=0.05$ versus the dimensionality of $\mb{x}$'s, for $n=100$ samples. 
 Excluding the independent setting (\#20), for which all methods yield power $0.05$, as they should, Oracle \Mgc~empirically achieves similar or better power than its respective global counterpart. Moreover, Sample \Mgc~is very close to Oracle \Mgcm, and overall dominates existing approaches for almost all settings and all dimensions, including \Hhg~\cite{HellerGorfine2013}, another state-of-the-art method. Note that \Mgc~is always plotted ``on top'' of the global variants if there is overlap, therefore, some of the global variants are not always visible from the display.}
 \label{f:nDAll}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+%  trim={<left> <lower> <right> <upper>}
+  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/FigHDPowerMGCM}
+  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
+Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
+the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
+\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
+}
+\label{f:nDSummary}
 \end{figure}
 
 \begin{figure}[htbp]

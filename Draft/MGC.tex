@@ -148,29 +148,15 @@ The following sections document \Mgc's empirical, computational, and theoretical
 \begin{figure}[!ht]
 \centering
 \subfigure{
-\includegraphics[width=0.48\textwidth]{Figures/FigHDPowerSummary}
+\includegraphics[width=0.48\textwidth]{Figures/Fig1DPowerSummarySize}
 }
-\subfigure{
-\includegraphics[width=0.48\textwidth]{Figures/Fig1DPowerSummary}
-}
-  \caption{Relative Power of  \Mgc~to four benchmark dependence tests, for the $20$ different settings under high-dimensional and 1-dimensional settings.  
-Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis is the simulation type, and y-axis shows the relative power of existing competitors to \Mgc~, $\bar{\beta}_s(\mathcal{A}) / \bar{\beta}_s(\Mgc)$. The percentages indicate that \Mgc~is significantly more powerful in testing dependency on average, and throughout nearly all settings.
-}
-\label{f:Summary}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
 \subfigure{
 \includegraphics[width=0.48\textwidth]{Figures/FigHDPowerSummarySize}
 }
-\subfigure{
-\includegraphics[width=0.48\textwidth]{Figures/Fig1DPowerSummarySize}
+  \caption{Sample size of different methods to achieve a power of $0.85$ at type 1 error level $0.05$, for the $20$ different settings under 1-dimensional and high-dimensional settings. 
+The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better. For panel (A), the dimension is fixed at $1$ for each setting, and the minimal size to achieve the required testing power is estimated. For panel (B), the dimension is chosen as the highest possible according to Supplementary Figure~\ref{f:nDAll} for each type. We bound the sample size to $1000$ in visualization and averaging. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing due to its saving in required sample size, e.g., for the second best method \Hhg~, on average it requires at least twice the sample size of \Mgc~to achieve a power of $0.85$.
 }
-  \caption{Sample Size of different methods to achieve a power of $0.85$ at type 1 error level $0.05$, for the $20$ different settings under high-dimensional and 1-dimensional settings.  
-The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better. The results indicate that \Mgc~is more appealing for finite-sample dependency testing, as data collection can be expensive in many frontiers. 
-}
-\label{f:Summary2}
+\label{f:Summary}
 \end{figure}
 
 \subsection*{\Mgc~Nearly Dominates Finite Sample Simulation Experiments}
@@ -183,12 +169,11 @@ Function details are in Appendix~\ref{appen:function}, with additional supportin
 
 Power---the probability of rejecting the null when it is  false---is the standard metric for evaluating test performance of finite samples (see Algorithm~\ref{alg:power} for power computation and Algorithm~\ref{alg:sample_mgc} for \Mgc~test statistic computation).  
 For each setting, the power of each test is computed for a large range of different dimensions of $x$,  effectively decreasing the signal-to-noise ratio.  
-The average power across dimensions for each algorithm provides a scalar score per setting. Figure~\ref{f:Summary} shows the \Mgc's average power relative to the benchmarks' for each setting.  
-\Mgc~achieves a higher power in essentially all 20 settings when compared to all other approaches.  
-Supplementary Figure \ref{f:nDAll} shows the power as a function of dimensionality, rather than the average, which indicates that  \Mgc~almost always achieves higher power than the alternative tests for all dimensions, not just the average dimension.  
- Supplementary Figures \ref{f:1DAll} and \ref{f:1DSummary} show similar results,  but keeping the dimensionality of $x$ fixed while increasing sample size. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
+The average power across dimensions for each algorithm provides a scalar score per setting, while in practice it is often more important to know the required sample size to achieve a good testing power due to expensive data collections. 
 
-
+Figure~\ref{f:Summary} shows the required sample size of \Mgc~and other benchmarks to achieve a testing power of $0.85$ at type $1$ error level $0.05$ for various 1-dimensional and high-dimensional settings. It shows a significant improvement of \Mgc~over existing approaches, as \Mgc~requires much less sample observations to achieve the same testing power. 
+  
+Supplementary Figure \ref{f:nDAll} shows the testing power with respect to increasing dimensions at a fixed sample size, and Figure \ref{f:1DAll} shows the testing power with respect to increasing sample size at dimension one. \Mgc~achieves a higher power in essentially all settings when compared to all other approaches. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
 
 \subsection*{\Mgc~Reveals the Nature of Dependence}
 \label{main3}
@@ -1131,18 +1116,6 @@ Excluding the independent setting (\#20), for which all methods yield power $0.0
 \label{f:nDAll}
 \end{figure}
 
-\begin{figure}[!ht]
-  \centering
-%  trim={<left> <lower> <right> <upper>}
-  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/FigHDPowerMGCM}
-  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings.  
-Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis shows the difference between the power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
-the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
-\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. 
-}
-\label{f:nDSummary}
-\end{figure}
-
 \begin{figure}[htbp]
 \includegraphics[width=1.0\textwidth,trim={0 0.5cm 3.2cm 0},clip]{Figures/Fig1DPowerAll}
 \caption{
@@ -1153,10 +1126,28 @@ Again, Oracle \Mgc~empirically achieves similar or better power than the previou
 
 \begin{figure}
   \centering
-  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0},clip]{Figures/Fig1DPowerMGCM}
-  \caption{The same summary figure as Figure~\ref{f:nDSummary}, but based on the testing power of the $20$ one-dimensional simulation settings in Figure~\ref{f:1DAll}, averaged over sample size. 
-  \Mgc~exhibis higher power than the benchmark algorithms for nearly all settings, with mean power slightly over \Hhg~for most settings, and  significant advantages over \Mantel, \Dcorr, \Mcorr~for most nonlinear dependencies (settings $6$-$19$).}
+  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0cm},clip]{Figures/Fig1DPowerMGCM}
+
+  \includegraphics[width=1.0\textwidth,trim={3.5cm 0 3.5cm 0},clip]{Figures/FigHDPowerMGCM}
+  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings in 1-dimensional and high-dimensional scenarios. Let $\bar{\beta}_s(\mathcal{A})$ denote the average power for a given problem setting $s$ and algorithm $\mc{A}$ in Figure~\ref{f:nDAll} and ~\ref{f:1DAll}, which averages over the sample size in case of the 1-dimensional scenario and averages over the dimensional choice in case of the high-dimensional scenario. The x-axis shows the difference between the average power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
+the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
+\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. }
 \label{f:1DSummary}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\subfigure{
+\includegraphics[width=0.48\textwidth]{Figures/Fig1DPowerSummary}
+}
+\subfigure{
+\includegraphics[width=0.48\textwidth]{Figures/FigHDPowerSummary}
+}
+  \caption{Relative Power of  \Mgc~to four benchmark dependence tests, for the $20$ different settings under high-dimensional and 1-dimensional settings.  
+Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis is the simulation type, and y-axis shows the relative power of existing competitors to \Mgc~, $\bar{\beta}_s(\mathcal{A}) / \bar{\beta}_s(\Mgc)$. The percentages indicate that \Mgc~is significantly more powerful in testing dependency throughout the settings.
+}
+\label{f:Summary2}
 \end{figure}
 
 

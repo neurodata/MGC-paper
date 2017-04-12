@@ -99,8 +99,13 @@ for select=0:1
         if j==1
             xlabel('Power Difference','FontSize',fontSize,...
                 'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
-            ylabel('Simulation Type','FontSize',fontSize, ...
-                'Units', 'normalized','Position', [-0.18 0.38])%, 'HorizontalAlignment', 'left')
+            if select==0
+                 ylabel('Simulation Type in 1D','FontSize',fontSize, ...
+                'Units', 'normalized','Position', [-0.18 0.5])%, 'HorizontalAlignment', 'left')
+            else
+                ylabel('Simulation Type in HD','FontSize',fontSize, ...
+                'Units', 'normalized','Position', [-0.18 0.5])%, 'HorizontalAlignment', 'left')
+            end
             %set(gca,'XTickLabel',[0,1],'XTick',[0,1],'FontSize',fontSize);
         else
             set(gca,'YTick',[]); % Remove y axis ticks
@@ -118,6 +123,7 @@ for select=0:1
         %         case 4
         %             tit=strcat('D. MGC - ',{' '}, str(j,:));
         %     end
+        if select==0
         switch j
             case 1
                 tit=strcat('A.');
@@ -134,6 +140,7 @@ for select=0:1
         txt2=txt2{1};
         title({txt1,txt2},'FontSize',fontSize, ...
             'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
+        end
         hold off
     end
     
@@ -143,6 +150,7 @@ for select=0:1
         figNumber='HDPowerMGCM';
     end
     F.fname=strcat(pre2,figNumber);
+    F.pdf=1;
     F.wh=[8 2.2]*2;
     print_fig(gcf,F)
 end

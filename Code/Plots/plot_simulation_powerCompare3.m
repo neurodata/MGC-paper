@@ -74,6 +74,8 @@ for select=0:1
 %         adj(1)=0.05*mi;
 %         adj(2)=0.05*mi;
         adj(2)=0.05*mi;
+    else
+        adj(2)=0.01*mi;
     end
 % %     %text(nn,AUC(1,nn)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
 %     text(total,log10(min(AUC(3,total)+adj(3),mi)),txt3,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mcorr);
@@ -108,10 +110,10 @@ for select=0:1
     axis('square');
     if select~=1
         figNumber='1DPowerSummarySize';
-        title('One-Dimensional Settings','FontSize',fontSize+3);
+        title('A. One-Dimensional Settings','FontSize',fontSize+7);
     else
         figNumber='HDPowerSummarySize';
-        title('High-Dimensional Settings','FontSize',fontSize+3);
+        title('B. High-Dimensional Settings','FontSize',fontSize+7);
     end
     F.fname=strcat(pre2,figNumber);
     F.wh=[4 3]*2;

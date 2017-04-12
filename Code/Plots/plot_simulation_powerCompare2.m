@@ -53,7 +53,7 @@ for select=0:1
         AUC(1:5,j)=AUC(1:5,j)./AUC(5,j);
     end
     AUC(1:5,total+1)=floor(mean(AUC(1:5,1:total-1),2)*100)/100;
-    AUC=bsxfun(@min,AUC,mi);
+    AUC=bsxfun(@min,AUC,mi-0.05);
     %
     x=1:total;
     hold on
@@ -100,10 +100,10 @@ for select=0:1
     axis('square');
     if select~=1
         figNumber='1DPowerSummary';
-        title('One-Dimensional Settings','FontSize',fontSize+3);
+        title('A. One-Dimensional Settings','FontSize',fontSize+7);
     else
         figNumber='HDPowerSummary';
-        title('High-Dimensional Settings','FontSize',fontSize+3);
+        title('B. High-Dimensional Settings','FontSize',fontSize+7);
     end
     F.fname=strcat(pre2,figNumber);
     F.wh=[4 3]*2;

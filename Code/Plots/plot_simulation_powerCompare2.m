@@ -28,6 +28,7 @@ MGC='cyan';
 ls{3}='-';
 ls{2}='--';
 ls{1}=':';
+mi=1.25;
 %ls{4}='-';
 
 % %load data
@@ -46,13 +47,13 @@ for select=0:1
         AUC(2,j+cons)=mean(powerD);
         AUC(3,j+cons)=mean(powerM);
         AUC(4,j+cons)=mean(powerHHG);
-        AUC(5,j+cons)=mean(powerMGCM);
+        AUC(5,j+cons)=mean(powerMGC);
     end
     for j=1:total
         AUC(1:5,j)=AUC(1:5,j)./AUC(5,j);
     end
     AUC(1:5,total+1)=floor(mean(AUC(1:5,1:total-1),2)*100)/100;
-    
+    AUC=bsxfun(@min,AUC,mi);
     %
     x=1:total;
     hold on
@@ -60,20 +61,20 @@ for select=0:1
     for i=1:total
         text(x(i),AUC(1,i),'A','VerticalAlignment','middle','HorizontalAlignment','left','Color',mantel,'FontSize',fontSize-3);
         text(x(i),AUC(2,i),'D','VerticalAlignment','middle','HorizontalAlignment','left','Color',dcorr,'FontSize',fontSize-3);
-        text(x(i),AUC(3,i),'M','VerticalAlignment','middle','HorizontalAlignment','left','Color',mcorr,'FontSize',fontSize-3);
+        text(x(i),AUC(3,i),'C','VerticalAlignment','middle','HorizontalAlignment','left','Color',mcorr,'FontSize',fontSize-3);
         text(x(i),AUC(4,i),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
     end
-    text(total+1,AUC(5,total+1)+0.05,'Average','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
+    text(total+1,AUC(5,total+1)+0.15,'Average','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
     
     txt1=strcat('mAntel:',{' '},num2str(AUC(1,21)*100),'%');
     txt2=strcat('Dcorr:',{' '},num2str(AUC(2,21)*100),'%');
-    txt3=strcat('Mcorr:',{' '},num2str(AUC(3,21)*100),'%');
+    txt3=strcat('mCorr:',{' '},num2str(AUC(3,21)*100),'%');
     txt4=strcat('Hhg:',{' '},num2str(AUC(4,21)*100),'%');
     txt5=strcat('MGC:',{' '},num2str(AUC(5,21)*100),'%');
     adj=zeros(5,1);
     if select==0
         adj(1)=-0.05;
-        adj(2)=0.03;
+        adj(2)=0.05;
     end
     text(total+1,AUC(1,total+1)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
     text(total+1,AUC(2,total+1)+adj(2),txt2,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',dcorr);
@@ -87,10 +88,10 @@ for select=0:1
 
     hold off
     xlim([0,total+1]);
-    ylim([-0.05,1.25]);
+    ylim([-0.05,mi]);
     set(gca,'FontSize',fontSize);
     set(gca,'XTick',[1,5,10,15,20],'FontSize',fontSize);
-    set(gca,'YTick',0:0.25:1.25,'YTickLabel',0:25:125,'FontSize',fontSize);
+    set(gca,'YTick',0:0.25:mi,'YTickLabel',0:25:125,'FontSize',fontSize);
     
     xlabel('Simulation Type','FontSize',fontSize+5)%,...
     % 'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
@@ -101,10 +102,10 @@ for select=0:1
         title('One-Dimensional Settings','FontSize',fontSize+3);
     else
         figNumber='HDPowerSummary';
-        title('High-Dimensional Settings','FontSize',fontSize+3);
+        title('Ten-Dimensional Settings','FontSize',fontSize+3);
     end
     F.fname=strcat(pre2,figNumber);
-    F.wh=[3.8 3]*2;
+    F.wh=[4 3]*2;
     F.pdf=1;
     print_fig(gcf,F)
 end

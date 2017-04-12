@@ -7,7 +7,7 @@ B=DistCentering(Y,option);
 RX=DistRanks(X); % the column ranks for X
 RY=DistRanks(Y); % the column ranks for Y
 
-if strcmp(option,'mcor')
+if strcmp(option,'mcor') || strcmp(option,'dcor')
     B=B';
     RY=RY';
 end

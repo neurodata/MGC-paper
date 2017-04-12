@@ -75,6 +75,7 @@ for select=0:1
     if select==0
         adj(1)=-0.05;
         adj(2)=0.05;
+        adj(4)=-0.01;
     end
     text(total+1,AUC(1,total+1)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
     text(total+1,AUC(2,total+1)+adj(2),txt2,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',dcorr);
@@ -102,7 +103,7 @@ for select=0:1
         title('One-Dimensional Settings','FontSize',fontSize+3);
     else
         figNumber='HDPowerSummary';
-        title('Ten-Dimensional Settings','FontSize',fontSize+3);
+        title('High-Dimensional Settings','FontSize',fontSize+3);
     end
     F.fname=strcat(pre2,figNumber);
     F.wh=[4 3]*2;

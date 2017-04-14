@@ -64,7 +64,11 @@ for select=0:1
     end
     text(total,mi*(1.05),'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
     
+    if select==1
+        txt1=strcat('mAntel:',{' >'},num2str(AUC(5,total)),'');
+    else
     txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
+    end
     txt2=strcat('Dcorr:',{' '},num2str(AUC(4,total)),'');
     txt3=strcat('mCorr:',{' '},num2str(AUC(3,total)),'');
     txt4=strcat('Hhg:',{' '},num2str(AUC(6,total)),'');
@@ -119,7 +123,7 @@ for select=0:1
         title('B. High-Dimensional Settings','FontSize',fontSize+7);
     end
     F.fname=strcat(pre2,figNumber);
-    F.wh=[4 3]*2;
+    F.wh=[4.2 3]*2;
     F.pdf=1;
     print_fig(gcf,F)
 end

@@ -7,7 +7,7 @@
 
 \def\spacingset#1{\renewcommand{\baselinestretch}%
 {#1}\small\normalsize} \spacingset{1}
-\title{\vspace{-2em}\bf Discovering \new{the Nature of} Relationships Across Disparate Data Modalities}
+\title{\vspace{-2em}\bf Discovering \new{the  Geometry of} Relationships Across Disparate Data Modalities}
 
 \author[1,2]{Cencheng Shen} %\thanks{cshen6@jhu.edu}}
 \author[1,3]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
@@ -27,15 +27,18 @@
 \begin{abstract}
 % \vspace{-5pt}
 Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the nature of the relationship. 
-Existing approaches excel in different settings, with no one approach dominating for all relationships and sample sizes, including structured high-dimensional data and nonlinear relationships.
+\new{Existing approaches can provide a consistent p-value, but cannot provide insight into the geometry underlying the structure of the relationship. }
+% Existing approaches excel in different settings, with no one approach dominating for all relationships and sample sizes, including structured high-dimensional data and nonlinear relationships.
 We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (\Mgc). 
 Our key insight is that we can adaptively restrict the analysis to the most informative ``jointly local'' observations---that is, observations that are nearest neighbors for both the properties being compared. 
-We prove that \Mgc~statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency.
-We used \Mgc~to detect the presence and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity), while avoiding  the false positive inflation problem that has plagued conventional parametric approaches. 
+\new{We prove that for a fixed sample size,  \Mgc~achieves an equal or higher power than existing methods for all possible dependence structures, while maintaining computational efficiency.}
+% We prove that \Mgc~statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency.
+\new{Moreover, we demonstrate that \Mgc~also reveals the latent structure underlying the relationship without requiring any additional samples or analyses.}
+We used \Mgc~to detect the presence and reveal the \new{geometry} of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity), while avoiding  the false positive inflation problem that has plagued conventional parametric approaches. 
 Our open source implementation of \Mgc~is easy to use, parameter free, and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
 \end{abstract}
 
-% 150 word abstract
+% OLD!!! 150 word abstract
 % Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data is related to another. We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (MGC). Our key insight is that we can adaptively restrict the analysis to the most informative “jointly local” observations - that is, observations that are nearest neighbors for both properties being compared. We prove that MGC statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency. We used MGC to detect the presence of and reveal the nature of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity). Our open source implementation is easy to use, parameter free, and applicable to science, government, finance, and other disciplines. 
 
 
@@ -48,8 +51,9 @@ Our open source implementation of \Mgc~is easy to use, parameter free, and appli
 
 Identifying the existence of a relationship is the initial, critical step in the investigation of any properties within a dataset. Only if there is a statistically significant relationship does it make sense to determine whether the relationship has predictive power or whether it reflects causality.
 One of the first approaches for determining whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal paper prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
+% new mention of the nature of relationship here?
 
-
+% below paragraph should be broken into 2 perhaps, one about power, the other about geometry
 Modern datasets, however, present  challenges for dependence-testing that were not addressed in Pearson's era.
 %
 First, the dependencies between different properties 
@@ -154,7 +158,11 @@ The following sections document \Mgc's empirical, computational, and theoretical
 \includegraphics[width=0.48\textwidth,trim={1.5cm 0 0cm 0cm},clip]{Figures/FigHDPowerSummarySize}
 }
   \caption{Sample size of different methods to achieve a power of $0.85$ at type 1 error level $0.05$, for the $20$ different settings under 1-dimensional and high-dimensional settings. 
-The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better. For panel (A), the dimension is fixed at $1$ for each setting, and the minimal size to achieve the required testing power is estimated. For panel (B), the dimension is chosen as the highest possible according to Supplementary Figure~\ref{f:nDAll} for each type. We bound the sample size to $1000$ in visualization, with the median sample size for each method reported in the last column. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing, e.g., for the second best method \Hhg, on the median it requires at least twice the sample size of \Mgc~to achieve a power of $0.85$.
+The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better. For panel (A), the dimension is fixed at $1$ for each setting, and the minimal size to achieve the required testing power is estimated. For panel (B), the dimension is chosen as the highest possible according to Supplementary Figure~\ref{f:nDAll} for each type. 
+% @cs: i have no idea what "highest possible according to blah....means??
+% @cs: median for mantel is >1000
+% @cs: i think power is typically reported as 85\%, rather than 0.85.  see, for example, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3826013/.  if you think otherwise in science stuff, send me an example? otherwise, let's change the unit everywhere?
+We bound the sample size to $1000$ in visualization, with the median sample size for each method reported in the last column. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing, e.g., for the second best method \Hhg, on the median it requires at least twice the sample size of \Mgc~to achieve a power of $0.85$.
 }
 \label{f:Summary}
 \end{figure}

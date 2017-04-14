@@ -47,12 +47,12 @@ for select=0:1
         AUC(2,j+cons)=mean(powerD);
         AUC(3,j+cons)=mean(powerM);
         AUC(4,j+cons)=mean(powerHHG);
-        AUC(5,j+cons)=mean(powerMGC);
+        AUC(5,j+cons)=mean(powerMGCM);
     end
     for j=1:total
         AUC(1:5,j)=AUC(1:5,j)./AUC(5,j);
     end
-    AUC(1:5,total+1)=floor(mean(AUC(1:5,1:total-1),2)*100)/100;
+    AUC(1:5,total+1)=floor(median(AUC(1:5,1:total-1),2)*100)/100;
     AUC=bsxfun(@min,AUC,mi-0.05);
     %
     x=1:total;
@@ -64,7 +64,7 @@ for select=0:1
         text(x(i),AUC(3,i),'C','VerticalAlignment','middle','HorizontalAlignment','left','Color',mcorr,'FontSize',fontSize-3);
         text(x(i),AUC(4,i),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
     end
-    text(total+1,AUC(5,total+1)+0.15,'Average','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
+    text(total+1,AUC(5,total+1)+0.1,'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
     
     txt1=strcat('mAntel:',{' '},num2str(AUC(1,21)*100),'%');
     txt2=strcat('Dcorr:',{' '},num2str(AUC(2,21)*100),'%');
@@ -72,11 +72,11 @@ for select=0:1
     txt4=strcat('Hhg:',{' '},num2str(AUC(4,21)*100),'%');
     txt5=strcat('MGC:',{' '},num2str(AUC(5,21)*100),'%');
     adj=zeros(5,1);
-    if select==0
-        adj(1)=-0.05;
-        adj(2)=0.05;
-        adj(4)=-0.01;
-    end
+%     if select==0
+        %adj(1)=-0.05;
+        adj(3)=0.05;
+%         adj(4)=-0.01;
+%     end
     text(total+1,AUC(1,total+1)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
     text(total+1,AUC(2,total+1)+adj(2),txt2,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',dcorr);
     text(total+1,AUC(3,total+1)+adj(3),txt3,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mcorr);

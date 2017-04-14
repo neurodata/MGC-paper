@@ -47,7 +47,7 @@ for select=0:1
     end
     load(filename);
     AUC=SampleSize;
-    AUC(:,total)=floor(mean(AUC(:,1:total-1),2));
+    AUC(:,total)=floor(median(AUC(:,1:total-1),2));
     if opt==1
         AUC=AUC./repmat(AUC(ind,:),6,1);
         AUC=floor(AUC*10)/10;
@@ -62,7 +62,7 @@ for select=0:1
         text(x(i),min(AUC(6,i),mi),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
         text(x(i),min(AUC(ind,i),mi),'M','VerticalAlignment','middle','HorizontalAlignment','left','Color',MGC,'FontSize',fontSize-3);
     end
-    text(total,mi*(1.05),'Average','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
+    text(total,mi*(1.05),'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
     
     txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
     txt2=strcat('Dcorr:',{' '},num2str(AUC(4,total)),'');
@@ -73,7 +73,10 @@ for select=0:1
     if select==0
 %         adj(1)=0.05*mi;
 %         adj(2)=0.05*mi;
-        adj(2)=0.05*mi;
+        adj(3)=0.04*mi;
+        adj(2)=0.09*mi;
+        adj(4)=0;
+        adj(5)=-0.04*mi;
     else
         adj(2)=0.01*mi;
     end

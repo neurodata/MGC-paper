@@ -10,7 +10,7 @@ end
 if ~isfield(F,'png'), F.png=1; end
 if ~isfield(F,'svg'), F.svg=0; end
 if ~isfield(F,'fig'), F.fig=0; end
-if ~isfield(F,'pdf'), F.pdf=0; end % default only plot pdf
+if ~isfield(F,'pdf'), F.pdf=1; end % default only plot pdf
 if ~isfield(F,'PaperSize'), F.PaperSize=[2 2]; end
 if ~isfield(F,'PaperPosition'), F.PaperPosition=[0 0 F.PaperSize]; end
 if ~isfield(F,'fname'), F.fname='temp_fig'; end

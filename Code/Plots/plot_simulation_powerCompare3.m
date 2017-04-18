@@ -124,7 +124,6 @@ for select=0:1
     end
     F.fname=strcat(pre2,figNumber);
     F.wh=[4.2 3]*2;
-    F.pdf=1;
     print_fig(gcf,F)
 end
 

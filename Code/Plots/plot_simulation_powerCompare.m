@@ -150,7 +150,6 @@ for select=0:1
         figNumber='HDPowerMGCM';
     end
     F.fname=strcat(pre2,figNumber);
-    F.pdf=1;
     F.wh=[8 2.2]*2;
     print_fig(gcf,F)
 end

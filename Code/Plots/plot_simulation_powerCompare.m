@@ -15,141 +15,97 @@ pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 total=20;
-fontSize=20;
+fontSize=18;
 %% Set colors
-gr = [0.5,0.5,0.5];
-bl=[0,0,0];
+% loca=[0,1,0];
+% glob= [0.5,0.5,0.5];
+HHG   = [0.5,0.5,0.5];
+mcorr='magenta';
+mantel='red';
+dcorr='blue';
+MGC='cyan';
 
-s=1;t=4;
 ls{3}='-';
 ls{2}='--';
 ls{1}=':';
+mi=1.25;
 %ls{4}='-';
 
-AUC=zeros(8,total);
 % %load data
 cons=0;
 for select=0:1
+    AUC=zeros(5,total+1);
     figure('units','normalized','position',[0 0 1 1])
-    for j=1:total
+    for j=1:20
         if select==0
             filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
         else
             filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
         end
         load(filename)
-        AUC(1,j+cons)=mean(powerMGCM)-mean(powerP);
-        AUC(2,j+cons)=mean(powerMGCM)-mean(powerD);
-        AUC(3,j+cons)=mean(powerMGCM)-mean(powerM);
-        AUC(4,j+cons)=mean(powerMGCM)-mean(powerHHG);
-        AUC(5,j+cons)=mean(powerMGC)-mean(powerP);
-        AUC(6,j+cons)=mean(powerMGC)-mean(powerD);
-        AUC(7,j+cons)=mean(powerMGC)-mean(powerM);
-        AUC(8,j+cons)=mean(powerMGC)-mean(powerHHG);
+        AUC(1,j+cons)=mean(powerP);
+        AUC(2,j+cons)=mean(powerD);
+        AUC(3,j+cons)=mean(powerM);
+        AUC(4,j+cons)=mean(powerHHG);
+        AUC(5,j+cons)=mean(powerMGCM);
     end
-    
+    for j=1:total
+        AUC(1:5,j)=AUC(1:5,j)./AUC(5,j);
+    end
+    AUC(1:5,total+1)=floor(median(AUC(1:5,1:total-1),2)*100)/100;
+    AUC=bsxfun(@min,AUC,mi-0.05);
     %
-    str={'Mantel';'Dcorr';'Mcorr';'HHG'};
-    %lw=3;
-    %ss=[1,3,2,5,4,6,7,13,19,16,17,10,9,14,8,11,12,15,18,20];
-    for j=1:length(str)
-        subplot(s,t,j);
-        hold on
-        pv1=AUC(j,:);
-        %pv1=pv1(ss);
-        ord1=0.05*(1:total);
-        %     plot(pv2,ord1,'*','MarkerSize',8,'Color',gr);
-        
-        pv2=AUC(j+4,:);
-        %pv2=pv2(ss);
-        plot(pv2,ord1,'.','MarkerSize',20,'Color',bl);
-        %plot(pv2,ord1,'*','MarkerSize',8,'Color',bl);
-        %     if j==1
-        %         h=legend('Oracle','Sample');
-        %         set(h,'FontSize',fontSize, 'Units', 'normalized','Position',[0.06,0.75,0,0]);
-        %         legend boxoff
-        %     end
-        %     plot(pv1,ord1,'.','MarkerSize',15,'Color',gr);
-        
-        plot(zeros(21,1),0:0.05:1,'--','Color',gr,'LineWidth',2)
-        mm1=mean(pv1);
-        mm2=mean(pv2);
-        pos=0;
-        %     plot(mm1,pos,'.','MarkerSize',30,'Color',gr);
-        %plot(mm2,pos,'*','MarkerSize',13,'Color',bl);
-        plot(mm2,pos,'.','MarkerSize',30,'Color',bl);
-        
-        %     a=text(mm1,pos+0.02,num2str(round(mm1*100)/100),'VerticalAlignment','bottom','HorizontalAlignment','left','Color',gr,'Interpreter','latex');
-        %     set(a,'FontSize',fontSize);
-        %     b=text(mm2,pos-0.03,num2str(round(mm2*100)/100),'VerticalAlignment','top','HorizontalAlignment','left','Color',bl,'Interpreter','latex');
-        %     set(b,'FontSize',fontSize);
-        
-        axis('square');
-        hold off
-        xlim([-1,1]);
-        ylim([0,1]);
-        set(gca,'FontSize',fontSize);
-        set(gca,'XTick',[]); % Remove y axis ticks
-        %set(gca,'XTickLabel',[0],'XTick',[0],'FontSize',fontSize);
-        labels={-1,[],[],[],0,[],[],[],1};
-        set(gca,'XTickLabel',labels,'XTick',-1:0.25:1,'FontSize',fontSize);
-        yt=[1,5,10,15,20];
-        set(gca,'YTickLabel',yt,'YTick',0.05*yt,'FontSize',fontSize);
-        
-        if j==1
-            xlabel('Power Difference','FontSize',fontSize,...
-                'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
-            if select==0
-                 ylabel('Simulation Type in 1D','FontSize',fontSize, ...
-                'Units', 'normalized','Position', [-0.18 0.5])%, 'HorizontalAlignment', 'left')
-            else
-                ylabel('Simulation Type in HD','FontSize',fontSize, ...
-                'Units', 'normalized','Position', [-0.18 0.5])%, 'HorizontalAlignment', 'left')
-            end
-            %set(gca,'XTickLabel',[0,1],'XTick',[0,1],'FontSize',fontSize);
-        else
-            set(gca,'YTick',[]); % Remove y axis ticks
-            %set(gca,'XTick',[]); % Remove y axis ticks
-        end
-        %set(gca,'YTick',[]); % Remove y axis ticks
-        
-        %     switch j
-        %         case 1
-        %             tit=strcat('A. MGC - ',{' '}, str(j,:));
-        %         case 2
-        %             tit=strcat('B. MGC - ',{' '}, str(j,:));
-        %         case 3
-        %             tit=strcat('C. MGC - ',{' '}, str(j,:));
-        %         case 4
-        %             tit=strcat('D. MGC - ',{' '}, str(j,:));
-        %     end
-        if select==0
-        switch j
-            case 1
-                tit=strcat('A.');
-            case 2
-                tit=strcat('B.');
-            case 3
-                tit=strcat('C.');
-            case 4
-                tit=strcat('D.');
-        end
-        
-        txt1=strcat(tit,' Power(MGC)');
-        txt2=strcat({'     '},'- Power(',str(j,:),')');
-        txt2=txt2{1};
-        title({txt1,txt2},'FontSize',fontSize, ...
-            'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
-        end
-        hold off
+    x=1:total;
+    hold on
+    plot(x(1:total),AUC(5,1:total),'-.','MarkerSize',10,'LineWidth',3,'Color',MGC);
+    for i=1:total
+        text(x(i),AUC(1,i),'A','VerticalAlignment','middle','HorizontalAlignment','left','Color',mantel,'FontSize',fontSize-3);
+        text(x(i),AUC(2,i),'D','VerticalAlignment','middle','HorizontalAlignment','left','Color',dcorr,'FontSize',fontSize-3);
+        text(x(i),AUC(3,i),'C','VerticalAlignment','middle','HorizontalAlignment','left','Color',mcorr,'FontSize',fontSize-3);
+        text(x(i),AUC(4,i),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
     end
+    text(total+1,AUC(5,total+1)+0.1,'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
     
+    txt1=strcat('mAntel:',{' '},num2str(AUC(1,21)*100),'%');
+    txt2=strcat('Dcorr:',{' '},num2str(AUC(2,21)*100),'%');
+    txt3=strcat('mCorr:',{' '},num2str(AUC(3,21)*100),'%');
+    txt4=strcat('Hhg:',{' '},num2str(AUC(4,21)*100),'%');
+    txt5=strcat('MGC:',{' '},num2str(AUC(5,21)*100),'%');
+    adj=zeros(5,1);
+%     if select==0
+        %adj(1)=-0.05;
+        adj(3)=0.05;
+%         adj(4)=-0.01;
+%     end
+    text(total+1,AUC(1,total+1)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
+    text(total+1,AUC(2,total+1)+adj(2),txt2,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',dcorr);
+    text(total+1,AUC(3,total+1)+adj(3),txt3,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mcorr);
+    text(total+1,AUC(4,total+1)+adj(4),txt4,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',HHG);
+    text(total+1,AUC(5,total+1)+adj(5),txt5,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',MGC);
+%     h1=plot(x,AUC(1,:),'s','MarkerSize',10,'Color','red');
+%     h2=plot(x,AUC(2,:),'o','MarkerSize',10,'Color','black');
+%     h3=plot(x,AUC(3,:),'.','MarkerSize',20,'Color','magenta');
+%     h4=plot(x,AUC(4,:),'*','MarkerSize',10,'Color',HHG);
+
+    hold off
+    xlim([0,total+1]);
+    ylim([-0.05,mi]);
+    set(gca,'FontSize',fontSize);
+    set(gca,'XTick',[1,5,10,15,20],'FontSize',fontSize);
+    set(gca,'YTick',0:0.25:mi,'YTickLabel',0:25:125,'FontSize',fontSize);
+    
+    xlabel('Simulation Type','FontSize',fontSize+5)%,...
+    % 'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
+    ylabel('Relative Power (%)','FontSize',fontSize+5)%, ...
+    axis('square');
     if select~=1
-        figNumber='1DPowerMGCM';
+        figNumber='1DPowerSummary';
+        title('A. One-Dimensional Settings','FontSize',fontSize+7);
     else
-        figNumber='HDPowerMGCM';
+        figNumber='HDPowerSummary';
+        title('B. High-Dimensional Settings','FontSize',fontSize+7);
     end
     F.fname=strcat(pre2,figNumber);
-    F.wh=[8 2.2]*2;
+    F.wh=[4 3]*2;
     print_fig(gcf,F)
 end

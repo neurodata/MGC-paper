@@ -66,8 +66,13 @@ if min(min(pLocalCorr(2:end,2:end)))>pMGC
 end
 
 % estimate the optimal scales
-[~,~,~,optimalInd]=FindLargestRectangles((pLocalCorr<=pMGC), [0 0 1],[2,2]);
-optimalInd=find(optimalInd==1);
-if (pLocalCorr(end)<=pMGC && isempty(find(optimalInd==m*n, 1)))
+warning('off','all');
+% [~,~,~,optimalInd]=FindLargestRectangles((pLocalCorr<=pMGC)&(localCorr>=statMGC), [0 0 1],[2,2]);
+% optimalInd=find(optimalInd==1);
+% if (isempty(optimalInd) || optimalInd==m*n)
+    [~,~,~,optimalInd]=FindLargestRectangles((pLocalCorr<=pMGC), [0 0 1],[2,2]);
+    optimalInd=find(optimalInd==1);
+    if (isempty(optimalInd))
     optimalInd=m*n; % if the global scale is not selected in the largest rectangle while being optimal, we take the global scale instead.
-end
+    end
+% end

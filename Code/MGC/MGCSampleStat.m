@@ -12,9 +12,12 @@ function [statMGC]=MGCSampleStat(A,B,option)
 %
 % Input: either a size m*n local correlation map, or two n*n distance matrices A and B and the global corr option.
 % Output: the sample MGC statistic within [-1,1].
-if nargin<3
+if nargin<2
     localCorr=A; % if there is only one input, asume the localCorr is given as A
 else
+    if nargin<3
+        option='mcor';
+    end
     localCorr=MGCLocalCorr(A,B,option); % otherwise compute the localCorr from given distance matrices
 end
 [m,n]=size(localCorr);

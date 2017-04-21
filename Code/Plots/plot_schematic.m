@@ -182,13 +182,13 @@ plot_panel5(F,pMLocal,pMGC)
 % title
 if F.subplot==true;
     titletext=CorrSimuTitle(F.type);
-    if F.type==1;
-        titletext=strcat('A.',{' '}, titletext);
-    else
-        titletext=strcat('B.',{' '}, titletext);
-    end
+%     if F.type==1;
+        titletext=strcat(titletext);
+%     else
+%         titletext=strcat(titletext);
+%     end
     h=suptitle(titletext);
-    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.45, -0.07,0], 'HorizontalAlignment', 'center')
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.44, -0.07,0], 'HorizontalAlignment', 'center')
     %%
     print_fig(gcf,F)
 end

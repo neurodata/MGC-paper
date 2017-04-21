@@ -27,13 +27,11 @@
 \begin{abstract}
 % \vspace{-5pt}
 Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the geometry of the relationship. 
-\new{While existing approaches can test for whether two properties are related, but require unacceptably large sample sizes, and do not provide insight into the geometry underlying the structure of the relationship. }
-% Existing approaches excel in different settings, with no one approach dominating for all relationships and sample sizes, including structured high-dimensional data and nonlinear relationships.
+\new{While existing approaches can test for whether two properties are related, they may require unacceptably large sample sizes, and do not provide insight into the geometry underlying the structure of the relationship. }
+% @cs: you were right!
 We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (\Mgc). 
 Our key insight is that we can adaptively restrict the analysis to the most informative ``jointly local'' observations---that is, observations that are nearest neighbors for both the properties being compared. 
-\new{We prove that for a fixed sample size,  \Mgc~achieves an equal or higher power than existing methods for all possible dependence structures, while maintaining computational efficiency.}
-% We prove that \Mgc~statistically dominates previous approaches, even for finite samples, while maintaining computational efficiency.
-\new{Moreover, we demonstrate that \Mgc~also reveals the latent structure underlying the relationship while requiring only half or fewer samples than competing approaches.}
+\new{We prove that to achieve a given false positive and false negative rate, \Mgc~requires equal or far fewer samples than existing methods for all possible dependence structures and dimensions, while maintaining computational efficiency. Moreover, \Mgc~uniquely reveals the latent geometry underlying the relationship.}
 We used \Mgc~to detect the presence and reveal the \new{geometry} of the relationships between brain properties (including activity, shape, and connectivity) and mental properties (including personality, health, and creativity), while avoiding  the false positive inflation problem that has plagued conventional parametric approaches. 
 Our open source implementation of \Mgc~is easy to use, parameter free, and applicable to previously vexing questions confronting science, government, finance, and other disciplines. 
 \end{abstract}
@@ -49,7 +47,9 @@ Our open source implementation of \Mgc~is easy to use, parameter free, and appli
 \setcounter{tocdepth}{2}
 
 
-Identifying the existence of a relationship is the initial, critical step in the investigation of any properties within a dataset. Only if there is a statistically significant relationship does it make sense to determine whether the relationship has predictive power or whether it reflects causality.
+Identifying the existence of a relationship is the initial, critical step in the investigation of any properties within a dataset. Only if there is a statistically significant relationship does it make sense to further investigate; \new{such questions arise in high-content high-throughput screens, causal analyses, and predictive tasks.}
+% @Jovo: perhaps put more content into HCHTS
+% determine whether the relationship has predictive power or whether it reflects causality.
 One of the first approaches for determining whether two properties are related to---or statistically dependent on---one another is Pearson's Product-Moment Correlation (published in 1895 \cite{Pearson1895}). This seminal paper prompted the development of  entirely new ways of thinking about and quantifying relationships (see \cite{Reimherr2013,JosseHolmes2013} for  recent reviews and discussion).
 Modern datasets, however, present  challenges for dependence-testing that were not addressed in Pearson's era.
 First, we now desire methods that can correctly detect dependence between any kind of data and relationship, including high-dimensional data (such as genomics), structured data (such as networks), and nonlinear relationships (such as spirals), even with very small sample sizes as is common in science.  Second, we desire methods that provide deeper insight into the geometry of the underlying relationship, rather than merely its existence.    
@@ -88,6 +88,7 @@ Although the relationship between clouds and grass is unlikely to be spiral, spi
 %  (1) explain the MGC process
 %  (2) illustrate how/why it outperforms global methods
 %  (3) demonstrate that it also reveals the geometry underlying the dependence
+% @jovo: update fig to use new one from lucidchart
 Illustration of the three steps of Multiscale Generalized Correlation (\Mgc)  using  $100$ pairs of cloud density ($x_i$) and grass wetness ($y_i$). 
 We present two different settings: \textbf{(A)} linear  and \textbf{(B)} nonlinear spiral  (see Appendix \ref{appen:function} for simulation details). 
 Insights into the data available only from running \Mgc~are highlighted in {\color{green}green.}  Results using \Dcorr~\cite{SzekelyRizzo2009}, a state-of-the-art dependence test that \Mgc~extends, are shown for comparative purposes. 
@@ -128,7 +129,6 @@ It is this union of three disparate disciplines spanning data science that enabl
 
 
 % In either case, the data consist of $n$ observations of both cloud density and grass wetness under those clouds.Let $x_i$ denote cloud density for observation $i$ and $y_i$ denote grass wetness on that same observation. 
-% @jovo: not sure about the above sentence.  do we ever use $x_i$ or $y_i$ again in the main text?
 
 
 The first step of \Mgc~is the same as essentially all other nonparametric dependency tests:
@@ -171,12 +171,13 @@ The following sections document \Mgc's empirical, computational, and theoretical
 \subfigure{
 \includegraphics[width=0.48\textwidth,trim={1.5cm 0 0cm 0cm},clip]{Figures/FigHDPowerSummarySize}
 }
-  \caption{Sample size of different methods to achieve a power of $0.85$ at type 1 error level $0.05$, for the $20$ different settings under 1-dimensional and high-dimensional settings. 
-The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better. For panel (A), the dimension is fixed at $1$ for each setting, and the minimal size to achieve the required testing power is estimated. For panel (B), the dimension is chosen to be large enough that as the highest possible according to Supplementary Figure~\ref{f:nDAll} for each type. 
-% @cs: i have no idea what "highest possible according to blah....means??
-% @cs: median for mantel is >1000
-% @cs: i think power is typically reported as 85\%, rather than 0.85.  see, for example, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3826013/.  if you think otherwise in science stuff, send me an example? otherwise, let's change the unit everywhere?
-We bound the sample size to $1000$ in visualization, with the median sample size for each method reported in the last column. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing, e.g., for the second best method \Hhg, on the median it requires at least twice the sample size of \Mgc~to achieve a power of $0.85$.
+  \caption{
+ \new{Sample size of different methods to achieve a power of $85\%$ at type 1 error level $0.05$, for the $20$ different settings under 1-dimensional (A) and high-dimensional (B) settings. 
+The x-axis is the simulation type, and y-axis shows the minimal sample size of each method to achieve the required testing power, the smaller the better.
+% For panel (A), the dimension is fixed at $1$ for each setting, and the minimal size to achieve the required testing power is estimated. 
+For panel (B), the dimension for each setting is chosen on the basis of the experiments in Supplementary Figure~\ref{f:nDAll}. 
+% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3826013/. 
+We bound the sample size to $1000$ in visualization, with the median sample size for each method reported in the far right column. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing, e.g., for the second best method \Hhg, on the median it requires greater than twice the sample size of \Mgc~to achieve the same power.}
 }
 \label{f:Summary}
 \end{figure}
@@ -184,24 +185,45 @@ We bound the sample size to $1000$ in visualization, with the median sample size
 \subsection*{\new{\Mgc~Requires Substantially Fewer Samples to Achieve the Same Power Across Essentially All Dependencies and Dimensions}}
 % Nearly Dominates Finite Sample Simulation Experiments}
 
-When does \Mgc~outperform other approaches, and when does it not?
-To answer this question, \Mgc~is compared with four previously proposed state-of-the-art tests: (i) \Mantel, which is widely used in biology and ecology despite a lack of theoretical support \cite{Mantel1967}, (ii) \Dcorr, as discussed above, (iii) \Mcorr, a version of \Dcorr~designed to be unbiased in high-dimensional data \cite{SzekelyRizzo2013a}, and (iv) \Hhg, a powerful test designed for low-dimensional nonlinear settings \cite{HellerGorfine2013}. 
-We consider $20$ different noisy dependence settings, largely taken from the existing literature, including  nearly linear (1-5), strongly nonlinear (6-19), and independent (20) settings \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013, SzekelyRizzo2013a}.  
+\new{
+When does \Mgc~outperform other approaches, and when does it not? 
+To address this question, we formally pose the following hypothesis test (see Appendix \ref{appen:global} for details):
+\begin{align*}
+H_0:& x \text{ and } y \text{ are independent} \\
+H_A:& x \text{ and } y \text{ are \emph{not} independent}.
+\end{align*}
+Any method for testing for independence can make two kinds of errors: it can falsely identify a dependence when none exists ($\alpha$, type I error), or it can falsely fail to identify a dependence when one exists ($\beta$, type II error). 
+% It is standard to require that any test has a type I error less than $0.05$.  
+% Therefore, t
+To evaluate different tests, we compute the sample size required to achieve a power of $85\%$ (power is $1-\beta$) at $\alpha=0.05$.  
+One test is better than another if it requires fewer samples to achieve the same power for a fixed type I error. }
+
+
+We compare \Mgc~with four  state-of-the-art tests: (i) \Mantel, which is widely used in biology and ecology despite a lack of theoretical support \cite{Mantel1967}, (ii) \Dcorr, as discussed above, (iii) \Mcorr, a version of \Dcorr~designed to be unbiased in high-dimensional data \cite{SzekelyRizzo2013a}, and (iv) \Hhg, a powerful test designed for low-dimensional nonlinear settings \cite{HellerGorfine2013}. 
+We consider $20$ different noisy dependence settings, most taken from the existing literature (some newly introduced here), including  nearly linear (1-5), strongly nonlinear (6-19), and independent (20) settings \cite{SzekelyRizzoBakirov2007, SimonTibshirani2012, GorfineHellerHeller2012, HellerGorfine2013, SzekelyRizzo2013a}.  
 Function details are in Appendix~\ref{appen:function}, with additional supporting figures in Appendix~\ref{appen:figs} (the visualization of both noise-free (black) and noisy (gray) samples is in Supplementary Figure~\ref{f:dependencies}).  
 
 
-Power---the probability of rejecting the null when it is  false---is the standard metric for evaluating test performance of finite samples (see Algorithm~\ref{alg:power} for power computation and Algorithm~\ref{alg:sample_mgc} for \Mgc~test statistic computation).  
-For each setting, the power of each test is computed for a large range of different dimensions of $x$,  effectively decreasing the signal-to-noise ratio.  
-The average power across dimensions for each algorithm provides a scalar score per setting, while in practice it is often more important to know the required sample size to achieve a good testing power due to expensive data collections. 
-% @jovo: above needs some fixing
 
-Figure~\ref{f:Summary} shows the required sample size of \Mgc~and other benchmarks to achieve a testing power of $0.85$ at type $1$ error level $0.05$ for various 1-dimensional and high-dimensional settings. It shows a significant improvement of \Mgc~over existing approaches, as \Mgc~requires less sample observations to achieve the same testing power throughout nearly all simulations with a wide margin on the median size.
-% @jovo: above needs some fixing
+\new{For each setting, we compute sample size required to achieve $85\%$ power for both a one-dimensional setting, and a high-dimensional setting. The high-dimensional settings are more difficult because each dimension has less and less signal, so there are many noisy dimensions. 
+Figure~\ref{f:Summary} demonstrates that for essentially all settings, in both low and high dimensions, \Mgc~requires far fewer samples to achieve high power.  The far right of each panel indicates the median sample size required over all $20$ settings.  For the one-dimensional cases, the best competitor still requires a median of $33\%$ more samples than \Mgc.  For the high-dimensional cases, the best competitor requires a median of nearly $250\%$ more samples.  For an experimentalist, the implications of this result is that using \Mgc~can substantially reduce the number of samples to identify a dependence. 
+Supplementary Figures \ref{f:nDAll} and \ref{f:1DAll} further explore the relationship between power, sample size, and dimensionality for the different tests, including several additional variants of \Mgc.  
+In nearly every setting \emph{and dimensionality}, \Mgc~requires substantially fewer samples than competing methods to achieve the same or higher power. 
+%@jovo: I commented out above, as this repeats with what is already described in this paragraph?
+% @cshen: the point of the above was also for all dimensions.  i emphasized that point to clarify
+Stated another way, at a fixed sample size of $100$, other methods only achieve between $15\%$ and $81\%$ average power as \Mgc~in the 1-dimensional settings, and between $26\%$ and $58\%$ power in the high-dimensional settings (see Supplementary Figure \ref{f:Summary2} for details).}
+
+
+
+
+% shows the required sample size of \Mgc~and other benchmarks to achieve a testing power of $85\%$ at type $1$ error level $0.05$ for various 1-dimensional and high-dimensional settings. 
+% It shows a significant improvement of \Mgc~over existing approaches, as \Mgc~requires less sample observations to achieve the same testing power throughout nearly all simulations with a wide margin on the median size.
+
   
-Supplementary Figure \ref{f:nDAll} shows the testing power with respect to increasing dimensions at a fixed sample size, and Figure \ref{f:1DAll} shows the testing power with respect to increasing sample size at dimension one. \Mgc~achieves a higher power in essentially all settings when compared to all other approaches. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
-% @cs: mention E5 and result (for fix sample size, MGC tends to achieve approximately double the power of other methods in high dimensions)
+% Supplementary Figure \ref{f:nDAll} shows the testing power with respect to increasing dimensions at a fixed sample size, and Figure \ref{f:1DAll} shows the testing power with respect to increasing sample size at dimension one. \Mgc~achieves a higher power in essentially all settings when compared to all other approaches. These supplementary figures also show the performance of different variants of \Mgc~with qualitatively similar results.
 
-\subsection*{\Mgc~Reveals the \new{Geometry} of Dependence}
+
+\subsection*{\Mgc~\new{Characterizes the Geometry} of Dependence}
 \label{main3}
 
 \begin{figure}[!ht]
@@ -210,19 +232,20 @@ Supplementary Figure \ref{f:nDAll} shows the testing power with respect to incre
 For each of the 20 panels, the abscissa and ordinate denote the number of neighbors for $X$ and  $Y$, respectively, and the color denotes the power at that scale. For each simulation, the sample size is $100$,  and the dimension is determined by the largest dimension for \Mgc~to have power exceeding $0.5$ at significance level $0.05$. Each simulation yields a different multiscale power map characterizing the geometry of dependence. 
 For example, the global scale is optimal only for nearly linear dependencies (top row). 
 For each panel, the green dot and rectangle show the scale with maximum test statistic,  and the estimated optimal scales, estimated from a single trial. Note that the estimated optimal scales tend to be near the most powerful scales.
-% @jovo: maybe change title to: The Geometry of High-Dimensional Dependence, or somethign like that?
 }
 \label{f:powermaps}
 \end{figure}
 
 
-Not only does \Mgc~provide excellent power, but it also reveals the optimal scales of dependence, which characterize the geometry of the dependence structure. 
+Not only does \Mgc~substantially reduce the number of samples required to achieve a powerful test, but it also  characterizes the geometry of the dependence structure. 
 A \emph{multiscale power map} is a heatmap that shows, for a given simulation, the power as a function of the $x$ and $y$ scales.  
 Figure~\ref{f:powermaps} provides the multiscale power maps for all 20 different high-dimensional scenarios, illustrating how the power of local generalized correlations changes with  neighborhood size.
-For nearly linear dependencies (1-5), the best neighborhood choice always includes the largest scale, i.e., the global one. For all strongly nonlinear dependencies (6-19),  \Mgc~chooses smaller scales for $x$ or $y$. Thus, a global optimal scale implies a nearly linear dependency, otherwise the dependency is strongly nonlinear.
-Furthermore, similar dependencies have similar local generalized correlation structures, and thus, similar multiscale power maps. For example, logarithmic (10) and fourth root (11), though very different functions analytically, are qualitatively similar, and yield very similar power maps.
+For nearly linear dependencies (1-5), the best neighborhood choice always includes the largest scale, i.e., the global one. 
+\new{Moreover, the multiscale power maps for the nearly linear cases are all qualitatively similar.  This suggests that the signature of a linear relationship is a multiscale power map whose power is increasing as we increase both scales.}
+For all strongly nonlinear dependencies (6-19),  \Mgc~chooses smaller scales for $x$ or $y$. Thus, a global optimal scale implies a nearly linear dependency, otherwise the dependency is strongly nonlinear.
+Furthermore, similar dependencies have similar local generalized correlation structures, and thus, similar multiscale power maps. For example, logarithmic (10) and fourth root (11), though very different functions analytically, are \new{geometrically} similar, and yield very similar power maps.
 Similarly,  (12) and (13) are trigonometric functions, and they share a narrow range of significant local generalized correlations.
-Both circle (16) and ellipse (17), as well as square (14) and diamond (18), are closely related functions, and have similar  power maps. 
+Both circle (16) and ellipse (17), as well as square (14) and diamond (18), are closely related \new{geometrically}, and have similar  power maps. 
 
 Power map generation requires knowledge of the true distribution of the data, which is unavailable for real data.
 For real data, \Mgc~computes a multiscale correlation map (akin to a multiscale power map), from which it computes the maximum local generalized correlation.  These maps are noisy because they utilize noisy samples, rather than the true distribution, to obtain their values.  Nonetheless, they are useful because they provide the maximum local generalized correlation and estimated optimal scales.  The green dots in Figure \ref{f:powermaps} indicate the scale of maximum local generalized correlation for a single trial, and the green boxes indicate the estimated optimal scales from that trial.  In every case the estimated optimal scales are either very close to or exactly the same as the true optimal scales, indicating that \Mgc~can often correctly estimate the true optimal scales in practice.
@@ -231,20 +254,26 @@ For real data, \Mgc~computes a multiscale correlation map (akin to a multiscale 
 
 
 
-\subsection*{\Mgc~Theoretically Dominates its Global Counterparts}
+\subsection*{\Mgc~Theoretically Dominates its Global Counterparts \new{by Always Achieving a Given Power with Fewer (or the same number of) Samples}}
 \label{s:theory}
 
 ``Oracle \Mgc'' is a version of \Mgc~that uses the true distribution of the data to accurately select the optimal local generalized correlation, rather than estimating it from the data (see Appendix~\ref{appen:mgc2} for details). More specifically, Oracle \Mgc~selects the scale that maximizes power, whereas ``Sample'' \Mgc~selects the scale that maximizes the smoothed test statistic (as described above). 
 In either case,  \Mgc~can generalize any distance-based dependence test by restricting it to only consider local distances.  Any global test that \Mgc~generalizes is called \Mgc's ``global counterpart''.  The main theoretical result we obtain is as follows:
 % 
 \begin{thm} \label{t:dominate}
-Oracle \Mgc~statistically dominates its global counterparts. Thus, no matter which 
-dependence function, dimensionality, and sample size, 
-Oracle \Mgc~achieves equal or higher power than its global counterparts for any global correlation.  More precisely, in \emph{linear} settings Oracle \Mgc~achieves the same power as the global test, and in various nonlinear settings, Oracle \Mgc~achieves {higher} power than the global test. Moreover, Algorithm \ref{alg:all_scales} achieves this dominance with merely an additional multiplicative computational cost of $\log n$, rather than an additional $n^2$ that would result from a na\"ive implementation.
+Oracle \Mgc~statistically dominates its global counterparts. 
+% Thus, no matter which dependence function, dimensionality, and sample size, Oracle \Mgc~achieves equal or higher power than its global counterparts for any global correlation.
+\new{Thus, no matter which dependence function, dimensionality, and type I error level, Oracle \Mgc~requires fewer (or an equal number of) samples to achieve a given power, compared to its global counterparts.}
+% 
+% More precisely, in \emph{linear} settings Oracle \Mgc~achieves the same power as the global test, and in various nonlinear settings, Oracle \Mgc~achieves {higher} power than the global test. 
+\new{More precisely, in \emph{linear} settings Oracle \Mgc~requires the same number of samples to achieve power of the global test, and in various nonlinear settings, Oracle \Mgc~requires far fewer samples to achieve the power of the global test. }
+% 
+Moreover, Algorithm \ref{alg:all_scales} achieves this dominance with merely an additional multiplicative computational cost of $\log n$, rather than an additional $n^2$ that would result from a na\"ive implementation.
 \end{thm}
 
 The above result follows immediately from Theorems \ref{t:thm1}, \ref{t:linear}, and \ref{t:non}, which are described in Appendix \ref{appen:theory}. In short, the dominance theorem follows from demonstrating that \Mgc~achieves higher power for even a simple quadratic function, suggesting that \Mgc~dominates for higher order polynomial dependence functions (and therefore potentially many nonlinear functions).
-Empirically, Sample \Mgc~performs very closely to Oracle \Mgc~in most simulated settings (see Supplementary Figure \ref{f:nDAll} and \ref{f:1DAll}), suggesting that Sample \Mgc~may also dominate global methods with high probability.
+Empirically, Sample \Mgc~performs very closely to Oracle \Mgc~in most simulated settings (see Supplementary Figure \ref{f:nDAll} and \ref{f:1DAll}), suggesting that Sample \Mgc~may also dominate global methods with high probability. 
+\new{Finally, though \Mgc~is minimally more computationally expensive than global methods, the cost of collecting $2.5 \times$ more data typically \emph{far} outweighs the cost of waiting a few more minutes for the results.}
 
 \subsection*{\Mgc~Discovers \new{the Geometry of} Relationships in Real Data Examples}
 \label{numer3}
@@ -252,11 +281,12 @@ Empirically, Sample \Mgc~performs very closely to Oracle \Mgc~in most simulated 
 
 
 \begin{figure}[!ht]
-\includegraphics[width=1.0\textwidth,trim={0 0 1.5cm 0},clip]{Figures/FigReal}
+m\includegraphics[width=1.0\textwidth,trim={0 0 1.5cm 0},clip]{Figures/FigReal}
 \caption{In real data, \Mgc~discovers the dependence and the optimal scales between various brain and mental properties when they exist, and does not detect dependence when it does not exist.  The left three panels show multiscale significance maps and their corresponding estimated optimal scales for three different experiments: \textbf{(A)}  brain activity vs. five-factor personality model, \textbf{(B)}  brain shape vs depressive disease, and \textbf{(C)} brain networks vs. creativity. Sample size is $42$, $114$, and $109$, respectively, though the ordinate of these panels only goes as high as the largest possible neighborhood size due to repeated entries.  
 For all three, \Mgc~yields a significant p-value and reveals the optimal scales of dependence (green rectangles).
 \textbf{(D)} Density estimate for the false positive rates of  \Mgc~on the brain activity versus  independent noise experiments, dots indicate the false positive rate of each experiment. The mean $\pm$ standard deviation is $0.0538 \pm 0.0394$ respectively, demonstrating that \Mgc~is a valid test and does not inflate the false positives for these real data.}
 % @jovo: maybe change title to: MGC Discovers the Geometry of the Relationships between Brain and Mental Properties
+% @cs: let's wait until we finish the other data experiments
 \label{f:real}
 \end{figure}
 
@@ -1153,16 +1183,16 @@ Again, Oracle \Mgc~empirically achieves similar or better power than the previou
 \label{f:1DAll}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=1.0\textwidth,trim={3.0cm 0 3.5cm 0cm},clip]{Figures/Fig1DPowerMGCM}
+% \begin{figure}
+%   \centering
+%  \includegraphics[width=1.0\textwidth,trim={3.0cm 0 3.5cm 0cm},clip]{Figures/Fig1DPowerMGCM}
 
-  \includegraphics[width=1.0\textwidth,trim={3.0cm 0 3.5cm 0},clip]{Figures/FigHDPowerMGCM}
-  \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings in 1-dimensional and high-dimensional scenarios. Let $\bar{\beta}_s(\mathcal{A})$ denote the average power for a given problem setting $s$ and algorithm $\mc{A}$ in Figure~\ref{f:nDAll} and ~\ref{f:1DAll}, which averages over the sample size in case of the 1-dimensional scenario and averages over the dimensional choice in case of the high-dimensional scenario. The x-axis shows the difference between the average power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that \Mgc~achieves higher average power over the benchmark for a given setting;
-the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
-\Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. }
-\label{f:1DSummary}
-\end{figure}
+%   \includegraphics[width=1.0\textwidth,trim={3.0cm 0 3.5cm 0},clip]{Figures/FigHDPowerMGCM}
+%   \caption{Power comparison of  \Mgc~to four benchmark dependence tests, for the $20$ different settings under high-dimensional and 1-dimensional settings. Let $\bar{\beta}_s(\mathcal{A})$ denote the average power for a given problem setting $s$ and algorithm $\mc{A}$ in Figure~\ref{f:nDAll} and ~\ref{f:1DAll}, which averages over the sample size in case of the 1-dimensional scenario and averages over the dimensional choice in case of the high-dimensional scenario. The x-axis shows the difference between the average power of \Mgc~and its competitors,  $\bar{\beta}_s(\Mgc)-\bar{\beta}_s(\mathcal{A})$. Power difference $>0$ indicates that %\Mgc~achieves higher average power over the benchmark for a given setting;
+% the large dot on the x-axis indicates the  power differences averaged over all 20 settings.
+% \Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings. }
+% \label{f:1DSummary}
+% \end{figure}
 
 
 \begin{figure}[!ht]
@@ -1174,7 +1204,7 @@ the large dot on the x-axis indicates the  power differences averaged over all 2
 \includegraphics[width=0.48\textwidth,trim={1.5cm 0 0cm 0cm},clip]{Figures/FigHDPowerSummary}
 }
   \caption{Relative Power of  \Mgc~to four benchmark dependence tests, for the $20$ different settings under high-dimensional and 1-dimensional settings.  
-Let $\bar{\beta}_s(\mathcal{A})$ denote the average power over a wide range of dimensions for a given problem setting $s$ and algorithm $\mc{A}$. The x-axis is the simulation type, and y-axis shows the relative power of existing competitors to \Mgc, $\bar{\beta}_s(\mathcal{A}) / \bar{\beta}_s(\Mgc)$. The last column shows the median relative power throughout all simulation types (excluding the independent relationship of type $20$). The percentages indicate that \Mgc~is significantly more powerful in testing dependency throughout the settings.
+Let $\bar{\beta}_s(\mathcal{A})$ denote the average power for a given problem setting $s$ and algorithm $\mc{A}$ in Figure~\ref{f:nDAll} and ~\ref{f:1DAll}, which averages over the sample size in case of the 1-dimensional scenario and averages over the dimensional choice in case of the high-dimensional scenario. The x-axis is the simulation type, and y-axis shows the relative power of existing competitors to \Mgc~via $\bar{\beta}_s(\mathcal{A}) / \bar{\beta}_s(\Mgc)$. The last column shows the median relative power throughout all simulation types (excluding the independent relationship of type $20$). The percentages indicate that \Mgc~nearly dominates all benchmarks, exhibiting similar or better power for nearly all settings.
 }
 \label{f:Summary2}
 \end{figure}

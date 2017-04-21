@@ -143,7 +143,7 @@ ylabel('# Y Neighbors','position',[-715 277],'FontSize',24);
 
 h=colorbar('Ticks',[0,thres/2,thres]);
 set(h,'FontSize',14);
-h=suptitle(strcat('High-Dimensional Multiscale Power Maps'));
+h=suptitle(strcat('MGC Characterizes the Geometry of Dependence via the Multiscale Power Maps'));
 set(h,'FontSize',26,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);

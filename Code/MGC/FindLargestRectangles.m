@@ -76,7 +76,7 @@ for c = 1 : nC               % each column is processed independently
         hight = max(hight+1,s);
         width2hight(width) = hight;
         Crit = p(1)*hight + p(2)*width + p(3)*width*hight;
-        if (Crit>MaxCrit),   % check if it produces larger Criteria
+        if (Crit>MaxCrit)   % check if it produces larger Criteria
           MaxCrit = Crit;    % if it does than save the results
           W(r,c)  = width;
           H(r,c)  = hight;

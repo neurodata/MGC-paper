@@ -13,7 +13,7 @@ pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrIndSize','Dim',num2str(dim));
 
 if nargin < 1
-    rep=1000; % number of MC replicates for MGC scale estimation
+    rep=200; % number of MC replicates for MGC scale estimation
 end
 if nargin < 2
     dim=1;
@@ -35,6 +35,10 @@ SampleSize=zeros(6,max(type)+1);
 for i=type
     for option=0:5
         SampleSize(option+1,i)=CorrIndTestSize(i,nMax,dim,thres,rep,noise,alpha,option);
+        if option==0 && SampleSize(1,i)==1000
+            SampleSize(2:end,i)=1000;
+            break;
+        end
     end
     save(filename,'SampleSize','nMax','dim','thres','rep','noise','alpha','type');
 end

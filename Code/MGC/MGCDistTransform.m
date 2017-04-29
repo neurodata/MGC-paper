@@ -1,5 +1,8 @@
 function [A,B,RX,RY]=MGCDistTransform(X,Y,option)
 
+if nargin<3
+    option='mcor';
+end
 % depending on the choice of the global correlation, properly center the distance matrices
 A=DistCentering(X,option);
 B=DistCentering(Y,option);

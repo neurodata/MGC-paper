@@ -1,4 +1,4 @@
-function [pMGC,pD,pM,pP, pHHG]=CorrPermDistTest(C,D,rep,titlechar,option)
+function [pMGC,pD,pM,pP, pHHG,testMGC,testD,testM,testHHG]=CorrPermDistTest(C,D,rep,titlechar,option)
 % Author: Cencheng Shen
 % Permutation Tests for identifying dependency.
 % The output are the p-values of MGC by dcorr/mcorr/Mantel, and global dcorr/mcorr/Mantel/HHG.
@@ -31,7 +31,7 @@ end
 if option(4)==4
     [pHHG,testHHG]=HHGPermutationTest(C,D,rep);
 end
-pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);
+pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);testD=testDLocal(end);testM=testMLocal(end);
 
 %%% File path searching
 fpath = mfilename('fullpath');

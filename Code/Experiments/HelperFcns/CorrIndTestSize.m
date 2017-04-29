@@ -17,7 +17,7 @@ if nargin<4
     thres=0.85;
 end
 if nargin<5 || rep<=0
-    rep=1000;
+    rep=200;
 end
 if nargin<6
     noise=1; % Default noise level

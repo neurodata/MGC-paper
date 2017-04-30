@@ -28,7 +28,6 @@
 % \vspace{-5pt}
 Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult and important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related does it make sense to further investigate the geometry of the relationship. 
 \new{While existing approaches can test for whether two properties are related, they may require unacceptably large sample sizes, and do not provide insight into the geometry underlying the structure of the relationship. }
-% @cs: you were right!
 We juxtapose hypothesis testing, manifold learning, and harmonic analysis, to obtain Multiscale Generalized Correlation (\Mgc). 
 Our key insight is that we can adaptively restrict the analysis to the most informative ``jointly local'' observations---that is, observations that are nearest neighbors for both the properties being compared. 
 \new{We prove that to achieve a given false positive and false negative rate, \Mgc~requires equal or far fewer samples than existing methods for all possible dependence structures and dimensions, while maintaining computational efficiency. Moreover, \Mgc~uniquely reveals the latent geometry underlying the relationship.}
@@ -82,7 +81,7 @@ Although the relationship between clouds and grass is unlikely to be spiral, spi
 \begin{SCfigure}
 %  trim={<left> <lower> <right> <upper>}
 %\includegraphics[height=0.9\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
-\includegraphics[width=0.54\linewidth]{Figures/Fig1Allb.pdf}
+\includegraphics[width=0.52\linewidth]{Figures/Fig1All}
 \caption{
 % the point of this figure is 3-fold?
 %  (1) explain the MGC process
@@ -102,7 +101,7 @@ The three steps of \Mgc~are:
 \textbf{(ii)} Compute all local generalized correlations between $x$ distances and $y$ distances.  The scale with maximum local generalized correlation (after smoothing) is the global scale for the linear setting, whereas the maximum is a very local scale for the spiral setting (panel titles state the maximum local generalized correlation $\GG(\Mgc)$, and the scales that achieve it; green circles show the distances included in that scale).
 \textbf{(iii)} 
 Determine whether the relationship is significantly dependent, and characterize the geometry of the relationship.  
-The heatmap shows the local  significance values for all scales (computed via a permutation test). The green circle indicates the scale with maximum local generalized correlation (from step (ii));  the estimated optimal scales are all scales within the green rectangle, which is the largest rectangle whose elements all have small local significance values. The global scale (gray dot) is always in the top right corner, regardless of the data. 
+The heatmap shows the local  significance values for all scales (computed via a permutation test). The green circle indicates the scale with maximum local generalized correlation (from step (ii));  the estimated optimal scales are all scales within the green rectangle, which is the largest rectangle whose elements all have large local statistics with small significance values. The global scale (gray dot) is always in the top right corner, regardless of the data. 
 Titles state the p-values,  $p(\Mgc)$~and $p(\Dcorr)$).
 Unlike \Dcorr, \Mgc~is able to detect dependence and characterize its geometry in both linear and highly nonlinear settings, even with low sample sizes.}
 \label{f:newschem}
@@ -209,8 +208,6 @@ Function details are in Appendix~\ref{appen:function}, with additional supportin
 Figure~\ref{f:Summary} demonstrates that for essentially all settings, in both low and high dimensions, \Mgc~requires far fewer samples to achieve high power.  The far right of each panel indicates the median sample size required over all $20$ settings.  For the one-dimensional cases, the best competitor still requires a median of $33\%$ more samples than \Mgc.  For the high-dimensional cases, the best competitor requires a median of nearly $250\%$ more samples.  For an experimentalist, the implications of this result is that using \Mgc~can substantially reduce the number of samples to identify a dependence. 
 Supplementary Figures \ref{f:nDAll} and \ref{f:1DAll} further explore the relationship between power, sample size, and dimensionality for the different tests, including several additional variants of \Mgc.  
 In nearly every setting \emph{and dimensionality}, \Mgc~requires substantially fewer samples than competing methods to achieve the same or higher power. 
-%@jovo: I commented out above, as this repeats with what is already described in this paragraph?
-% @cshen: the point of the above was also for all dimensions.  i emphasized that point to clarify
 Stated another way, at a fixed sample size of $100$, other methods only achieve between $15\%$ and $81\%$ average power as \Mgc~in the 1-dimensional settings, and between $26\%$ and $58\%$ power in the high-dimensional settings (see Supplementary Figure \ref{f:Summary2} for details).}
 
 
@@ -268,12 +265,17 @@ Oracle \Mgc~statistically dominates its global counterparts.
 % More precisely, in \emph{linear} settings Oracle \Mgc~achieves the same power as the global test, and in various nonlinear settings, Oracle \Mgc~achieves {higher} power than the global test. 
 \new{More precisely, in \emph{linear} settings Oracle \Mgc~requires the same number of samples to achieve power of the global test, and in various nonlinear settings, Oracle \Mgc~requires far fewer samples to achieve the power of the global test. }
 % 
-Moreover, Algorithm \ref{alg:all_scales} achieves this dominance with merely an additional multiplicative computational cost of $\log n$, rather than an additional $n^2$ that would result from a na\"ive implementation.
 \end{thm}
 
 The above result follows immediately from Theorems \ref{t:thm1}, \ref{t:linear}, and \ref{t:non}, which are described in Appendix \ref{appen:theory}. In short, the dominance theorem follows from demonstrating that \Mgc~achieves higher power for even a simple quadratic function, suggesting that \Mgc~dominates for higher order polynomial dependence functions (and therefore potentially many nonlinear functions).
 Empirically, Sample \Mgc~performs very closely to Oracle \Mgc~in most simulated settings (see Supplementary Figure \ref{f:nDAll} and \ref{f:1DAll}), suggesting that Sample \Mgc~may also dominate global methods with high probability. 
-\new{Finally, though \Mgc~is minimally more computationally expensive than global methods, the cost of collecting $2.5 \times$ more data typically \emph{far} outweighs the cost of waiting a few more minutes for the results.}
+
+
+\new{Finally, though a na\"ive implementation of \Mgc~requires $\mc{O}(n^4)$ operations, we have devised a serial implementation that requires only $\mc{O}(n^2 \log n)$.  And, assuming access to parallel computation, for example on a modern multi-core architecture, common even in mobile phones now, \Mgc~requires only $\mc{O}(n^2 \log n / T)$ operations, where $T$ is the number of parallel threads (see Algorithm \ref{alg:all_scales} for details).  Since, $T$ is often larger than $\log n$, in practice, \Mgc~is actually $\mc{O}(n^2)$, and a constant factor slower than \Dcorr.  For example, when $n=5000$, \Dcorr~requires 0.5 seconds, whereas \Mgc~requires 5 seconds. Obviously, the cost and time to obtain $2.5 \times$ more data far exceeds a few seconds.  } 
+
+
+% Moreover, Algorithm \ref{alg:all_scales} achieves this dominance with merely an additional multiplicative computational cost of $\log n$, rather than an additional $n^2$ that would result from a na\"ive implementation.
+% \new{Finally, though \Mgc~is minimally more computationally expensive than global methods, the cost of collecting $2.5 \times$ more data typically \emph{far} outweighs the cost of waiting a few more minutes for the results.}
 
 \subsection*{\Mgc~Discovers \new{the Geometry of} Relationships in Real Data Examples}
 \label{numer3}
@@ -387,19 +389,23 @@ Finally, \Mgc~is easy to use: it merely requires pairs of samples to run, and al
 
 \section*{Acknowledgment}
 % \addcontentsline{toc}{section}{Acknowledgment}
-This work was partially supported by the
+This work was partially supported by
 %
-National Security Science and Engineering Faculty Fellowship (NSSEFF),
+the National Science Foundation Division of Mathematical Sciences award DMS-1712947,
 %
-the Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT COE),  the
+the National Security Science and Engineering Faculty Fellowship (NSSEFF),
 %
-Defense Advanced Research Projects Agency's (DARPA) SIMPLEX program through SPAWAR contract N66001-15-C-4041,
+the Johns Hopkins University Human Language Technology Center of Excellence (JHU HLT COE),  
+%
+the Defense Advanced Research Projects Agency's (DARPA) SIMPLEX program through SPAWAR contract N66001-15-C-4041,
 %
 the XDATA program of DARPA administered through Air Force Research Laboratory contract FA8750-12-2-0303,
 %
 the Office of Naval Research contract N00014-12-1-0601,
 %
-the Air Force Office of Scientific Research contract FA9550-14-1-0033. The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr.~Ruth Heller, Dr.~Bert Vogelstein,  and Dr.~Yakir Reshef for insightful suggestions.
+the Air Force Office of Scientific Research contract FA9550-14-1-0033. 
+%
+The authors thank Dr. Brett Mensh of Optimize Science for acting as our intellectual consigliere, and Dr.~Ruth Heller, Dr.~Bert Vogelstein,  and Dr.~Yakir Reshef for insightful suggestions.
 
 
 \clearpage
@@ -670,19 +676,21 @@ where $S(\cdot)$ is the smoothing function that requires $\widehat{(kl)}$ to be 
 
 Sample \Mgc~uses a permutation test to obtain the multiscale significance map and the p-value. 
 % 
-Once all local significance values are computed, the optimal scales are estimated by the tightest bounding box in the significance map that is no larger than the p-value of Sample \Mgc~(see Algorithm \ref{alg:pval} for details), which serves as an estimation of all potential optimal scales. This is useful because the estimated Sample \Mgc~statistic is only from one local scale, but the multiscale power maps in Figure~\ref{f:powermaps}  shows many scales are close to optimal.
+Once all local significance values are computed, the optimal scales are estimated by the tightest bounding box in the local scales that is no larger than the p-value of Sample \Mgc~and no smaller than the statistic of Sample \Mgc~(see Algorithm \ref{alg:pval} for details), which serves as an estimation of all potential optimal scales. This is useful because the estimated Sample \Mgc~statistic is only from one local scale, but the multiscale power maps in Figure~\ref{f:powermaps}  shows many scales are close to optimal.
 
 Because neither  Oracle \Mgc~nor Sample \Mgc~compares multiple statistics, neither suffers from the multiple hypothesis testing problem \cite{Benjamini1995}, and the resulting test is always valid. All simulations and real data experiments in the main paper use Sample \Mgc,  while Oracle \Mgc~is used for comparison in simulations and theory. Figure \ref{f:schematic} provides a further illustration of the relationship between \Mantel, \Mcorr, local generalized correlation, and both Oracle and Sample \Mgc.
 
 \subsection{Computational Complexity}
 
-Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $O(n^2 D)$, and the ranking process takes $O(n^2 \log n)$. Once the distance and ranking are complete, computing one local generalized correlation requires $O(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local generalized correlations requires at least $O(n^2 \max\{n^2, D\})$ by going through all possible scales, meaning possibly $O(n^4)$ which would be computationally prohibitive. However, given the distance and ranking information, we devised an algorithm that computes the multiscale correlation map in $O(n^2)$ by re-using adjacent smaller local generalized correlations (see Algorithm \ref{alg:all_scales}). 
-Therefore, when including the distance computation and ranking overheads, the MGC statistic is computed in $O(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~statistic, and the same running time up to a factor of $\log n$ as  global correlations like \Dcorr~and \Mcorr, which require  $O(n^2D)$ time.
+Assume $D$ is the maximum feature dimension of the two modalities, then distance computation takes $\mc{O}(n^2 D)$, and the ranking process takes $\mc{O}(n^2 \log n)$. Once the distance and ranking are complete, computing one local generalized correlation requires $\mc{O}(n^2)$ (see Algorithm \ref{alg:1scale}). Thus a naive approach to compute all local generalized correlations requires at least $\mc{O}(n^2 \max\{n^2, D\})$ by going through all possible scales, meaning possibly $\mc{O}(n^4)$ which would be computationally prohibitive. However, given the distance and ranking information, we devised an algorithm that computes the multiscale correlation map in $\mc{O}(n^2)$ by re-using adjacent smaller local generalized correlations (see Algorithm \ref{alg:all_scales}). 
+Therefore, when including the distance computation and ranking overheads, the MGC statistic is computed in $\mc{O}(n^2 \max\{\log n,D\})$), which has the same running time as the \Hhg~statistic, and the same running time up to a factor of $\log n$ as  global correlations like \Dcorr~and \Mcorr, which require  $\mc{O}(n^2D)$ time.
+
+By utilizing a multi-core architecture, \Mgc~can be computed in $\mc{O}(n^2 \max\{\log n,D\}/T)$ instead. As $T=\log(n)$ is often a small number, e.g., $T$ is no more than $30$ at $1$ billion samples, \Mgc~can be effectively computed in $\mc{O}(n^2 D)$ and thus the same complexity as \Dcorr.
 
 
 \subsection{Sample \Mgc~for Biased Correlations}
 
-Sample \Mgc~algorithm can be thought of as taking the largest correlation after smoothing, where the smoothing step identifies adjacent significant correlations in the multiscale correlation map. This algorithm is tailored for \Mgc~for \Mcorr, because \Dcorr~and its local generalized correlations are biased (i.e., the expectations may not be $0$ under independence). The impact of the bias of \Dcorr is that significant correlations cannot be easily determined by the the magnitude of each local statistic. Therefore, the unbiasedness of \Mcorr~is extremely useful for easily comparing its local generalized correlations and screening out insignificant local generalized correlations very close to $0$, which in turns allows a fast and valid Sample \Mgc~statistic to be designed for \Mcorr. 
+Sample \Mgc~algorithm can be thought of as taking the largest correlation after smoothing, where the smoothing step identifies adjacent significant correlations in the multiscale correlation map. This algorithm is tailored for \Mgc~for \Mcorr, because \Dcorr~and its local generalized correlations are biased (i.e., the expectations may not be $0$ under independence). The impact of the bias of \Dcorr~is that significant correlations cannot be easily determined by the the magnitude of each local statistic. Therefore, the unbiasedness of \Mcorr~is extremely useful for easily comparing its local generalized correlations and screening out insignificant local generalized correlations very close to $0$, which in turns allows a fast and valid Sample \Mgc~statistic to be designed for \Mcorr. 
 
 
 
@@ -778,7 +786,7 @@ Six algorithms are presented in order:
 \item Algorithm~\ref{alg:mgc} describes Sample \Mgc~in its entirety (which calls most of the other algorithms as functions). 
 \item Algorithm~\ref{alg:power} computes the testing powers for both Sample and Oracle \Mgc~assuming a known model, and also outputs  the multiscale power map, i.e., the power for each local generalized correlation.
 \item Algorithm~\ref{alg:sample_mgc} computes the Sample \Mgc~test statistic, which equals the estimated optimal local generalized correlation.
-\item Algorithm~\ref{alg:pval} computes the p-value of Sample \Mgc~by the permutation test, and also outputs (i) the estimated the optimal scales via the p-value and (ii) the multiscale significance map. 
+\item Algorithm~\ref{alg:pval} computes the p-value of Sample \Mgc~by the permutation test, and also outputs (i) the estimated optimal scales and (ii) the multiscale significance map. 
 \item Algorithm~\ref{alg:1scale} computes the local generalized correlation coefficient at a given scale $(k,l)$, for a given choice of the global correlation coefficient.
 \item Algorithm~\ref{alg:all_scales} efficiently computes all local generalized correlations, in nearly the same running time complexity as computing one local generalized correlation. 
 \end{enumerate}
@@ -787,7 +795,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 
 \clearpage 
 \begin{algorithm}
-\caption{Multiscale Generalized Correlation (\Mgc);  requires  $O(n^2 \times \max(r\log{n}, D))$ time, where $r$ is the number of permutations.}
+\caption{Multiscale Generalized Correlation (\Mgc);  requires  $\mc{O}(n^2 \times \max(r\log{n}, D)/T)$ time, where $r$ is the number of permutations and $T$ is the number of cores available for parallelization.}
 \label{alg:mgc}
 \begin{algorithmic}%[1]
 \Require $n$ samples of $(x_i,y_i)$ pairs, an integer $r$ for the number of random permutations.
@@ -795,7 +803,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 (iii) the p-value $p(\hat{\GG}^*)$, 
 (iv) the multiscale correlation $\mathcal{C}$ and significance $\mathcal{P}$ maps, and (v) the estimated optimal scales $\widehat{\mathcal{KL}}^{*}$.
 \Function{MGC}{$(x_i,y_i)$, for $i \in [n]$}
-\Statex{\textbf{(1)} Calculate all pairwise distances}
+\Statex{\textbf{(1)} Calculate all pairwise distances:}
 \For{$i,j:=1,\ldots,n$}
 \State  $a_{ij} = \delta_x(x_i,x_j)$ 
 \Comment{$\delta_x$ is the distance between pairs of $x$ samples}
@@ -804,11 +812,11 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 \EndFor
 \State Let $A=\{ a_{ij}\}$ and $B=\{ b_{ij}\}$.
 % 
-\Statex{\textbf{(2)} Calculate Multiscale Correlation Map \& Sample \Mgc~Test Statistic}
+\Statex{\textbf{(2)} Calculate Multiscale Correlation Map \& Sample \Mgc~Test Statistic:}
 \State  $\mathcal{C}=\textsc{MGCAllLocal}(A,B)$  \Comment{local  correlation for all scales using Algorithm \ref{alg:all_scales}}
 \State  $\hat{\GG}^*=\textsc{MGCSampleStat}(\mathcal{C})$ 
 \Comment{estimate optimal statistic using Algorithm \ref{alg:sample_mgc}}
-\Statex{\textbf{(3)} Calculate the p-value $p(\hat{\GG}^*)$ and the set of estimated optimal scales $\widehat{\mathcal{KL}}^{*}$ from Sample \Mgc, as well as the multiscale significance map $\mathcal{P}$}
+\Statex{\textbf{(3)} Calculate the p-value $p(\hat{\GG}^*)$ and the set of estimated optimal scales $\widehat{\mathcal{KL}}^{*}$ from Sample \Mgc, as well as the multiscale significance map $\mathcal{P}$:}
 \State $[p(\hat{\GG}^*),\widehat{\mathcal{KL}}^{*},\mathcal{P}]=\textsc{MGCSampleTest}(A,B,r,\mathcal{C},\hat{\GG}^*)$ 
 \Comment{use Algorithm~\ref{alg:pval}}
 \EndFunction
@@ -818,7 +826,7 @@ For ease of presentation, we assume there are no repeating observations of \mbx~
 \clearpage
 
 \begin{algorithm}
-\caption{Power computation of \Mgc~given a known distribution. This algorithm computes the power for both Sample and Oracle \Mgc, as well as the multiscale power map (i.e., testing powers of all local generalized correlations). By repeatedly sampling from the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all local generalized correlations under the null and the alternative hypotheses are computed by Algorithm~\ref{alg:all_scales}. The power of Sample \Mgc~follows by computing the test statistic under the null and the alternative using Algorithm~\ref{alg:sample_mgc}; Oracle \Mgc~directly maximizes the power map, obtainable by computing the testing power at each local generalized correlation. The running time is $O(rn^2 \log n)$. In the simulations we use $r=10$,$000$ MC replicates. 
+\caption{Power computation of \Mgc~given a known distribution. This algorithm computes the power for both Sample and Oracle \Mgc, as well as the multiscale power map (i.e., testing powers of all local generalized correlations). By repeatedly sampling from the joint distribution $f_{xy}$, sample data of size $n$ under the null and the alternative are generated for $r$ Monte-Carlo replicates. Then all local generalized correlations under the null and the alternative hypotheses are computed by Algorithm~\ref{alg:all_scales}. The power of Sample \Mgc~follows by computing the test statistic under the null and the alternative using Algorithm~\ref{alg:sample_mgc}; Oracle \Mgc~directly maximizes the power map, obtainable by computing the testing power at each local generalized correlation. The running time is $\mc{O}(rn^2 \log n/T)$. In the simulations we use $r=10$,$000$ MC replicates. 
 This algorithm can be similarly adapted to training data, for which the alternative statistic can be computed from the training data while the null statistic can be computed by permutation. Note that power computation for other benchmarks follows from the same algorithm, by plugging in the respective test statistic in the first loop without the optimal scale computation. }
 \label{alg:power}
 \begin{algorithmic}[1]
@@ -854,7 +862,7 @@ This algorithm can be similarly adapted to training data, for which the alternat
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Sample \Mgc~test statistic. This algorithm computes the maximum local test statistic, after smoothing, and reports the $(k,l)$ pair that achieves it.  In words, it: (i) finds the largest connected region in the correlation map, such that each correlation is significant, i.e., larger than a certain threshold to avoid correlation inflation by sample noise, (ii) for the largest correlation in the region, calculate the  minimal correlation along adjacent rows and adjacent columns, (iii)  take the largest one as the Sample MGC statistic. If the region area is too small, or the estimated Sample MGC statistic is no larger than the global correlation, use the global correlation instead. The running time is $O(n^2)$.}
+\caption{Sample \Mgc~test statistic. This algorithm computes the maximum local test statistic, after smoothing, and reports the $(k,l)$ pair that achieves it.  In words, it: (i) finds the largest connected region in the correlation map, such that each correlation is significant, i.e., larger than a certain threshold to avoid correlation inflation by sample noise, (ii) for the largest correlation in the region, calculate the  minimal correlation along adjacent rows and adjacent columns, (iii)  take the largest one as the Sample MGC statistic. If the region area is too small, or the estimated Sample MGC statistic is no larger than the global correlation, use the global correlation instead. The running time is $\mc{O}(n^2)$.}
 \label{alg:sample_mgc}
 \begin{algorithmic}[1]
 \Require All local statistics $\mathcal{C} \in \Real^{n \times n}$.
@@ -894,7 +902,7 @@ This algorithm can be similarly adapted to training data, for which the alternat
 
 \begin{algorithm}
 \caption{Sample \Mgc~Test. 
-This algorithm uses the random permutation test with $r$ random permutations, resulting in the p-value, the estimated optimal scales, and the multiscale significance map, requiring $O(rn^2 \log n)$. Specifically, it computes the p-values by comparing the multiscale correlation map and the sample \Mgc~statistic of the observed data, to those of each permuted resample.  Then, the optimal scales are estimated by taking the largest rectangle with local p-values no larger than the p-value of Sample \Mgc.  In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other global generalized correlation coefficient follows from the same algorithm by replacing Sample \Mgc~with the respective test statistic.
+This algorithm uses the random permutation test with $r$ random permutations, resulting in the p-value, the estimated optimal scales, and the multiscale significance map, requiring $\mc{O}(rn^2 \log n/T)$. Specifically, it computes the p-values by comparing the multiscale correlation map and the sample \Mgc~statistic of the observed data, to those of each permuted resample.  Then, the optimal scales are estimated by taking the largest rectangle with local statistics no smaller than Sample \Mgc~and local p-values no larger than the p-value of Sample \Mgc.  In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other global generalized correlation coefficient follows from the same algorithm by replacing Sample \Mgc~with the respective test statistic.
 }
 \label{alg:pval}
 \begin{algorithmic}[1]
@@ -910,7 +918,7 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \Linefor{$k,l:=1,\ldots,n$}{$p_{kl} \rto \sum_{t=1}^{r}(\GG^{kl} \leq \GG^{kl}_{0}[t])/r$}  $\mathcal{P} \rto \{ p_{kl} \}$
  \Comment{the significance map}
 \State $p(\hat{\GG}^*) \rto \frac{1}{t}\sum_{t=1}^{r}\mb{I}(\hat{\GG}^{*} \leq \hat{\GG}^{*}_{0}[t])$  \Comment{compute p-value of Sample \Mgc}
-\State Construct the binary map:    $\mathcal{E}^{kl} = 1 $ iff $  p_{kl} < p(\hat{\GG}^*)$. \Comment{estimate the optimal scales}
+\State Construct the binary map:    $\mathcal{E}^{kl} = 1 $ iff $  c^{kl} \geq \hat{\GG}^{*} \mbox{ and } p_{kl} \leq p(\hat{\GG}^*)$. 
 \State $\widehat{\mathcal{KL}}^{*} \rto $ the set of elements in the largest axis-aligned rectangle in $\mathcal{E}$ containing only $1$'s.
 
 \EndFunction
@@ -920,13 +928,13 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \clearpage
 
 \begin{algorithm}
-\caption{Compute local test statistic at a given scale. This algorithm runs in $O(n^2)$ once the rank information is provided, which is suitable for \Mgc~computation if an optimal scale is already estimated. But it would take $O(n^4)$ if used to compute all local generalized correlations. Note that for the default \Mgc~implementation uses single centering, the centering function centers $A$ by column and $B$ by row, and the sorting function sorts $A$ within column and $B$ within row.}
+\caption{Compute local test statistic at a given scale. This algorithm runs in $\mc{O}(n^2)$ once the rank information is provided, which is suitable for \Mgc~computation if an optimal scale is already estimated. But it would take $\mc{O}(n^4)$ if used to compute all local generalized correlations. Note that for the default \Mgc~implementation uses single centering, the centering function centers $A$ by column and $B$ by row, and the sorting function sorts $A$ within column and $B$ within row. Note that by utilizing $T=\log(n)$ cores, the sorting function can be easily parallelized to take $\mc{O}(n^2 \log(n)/T)=\mc{O}(n^2)$.}
 \label{alg:1scale}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(A, B) \in \Real^{n \times n} \times \Real^{n \times n}$, and a  local scale $(kl) \in \mathbb{N} \times \mathbb{N}$.
 \Ensure The local generalized correlation coefficient $\GG^{kl} \in [-1,1]$.
 \Function{LocalGenCorr}{$A$, $B$, $k$, $l$}
-\Linefor{$Z:=A,B$}{$\mathcal{E}^{Z}=\textsc{Sort}(Z)$} \Comment{sort distances}
+\Linefor{$Z:=A,B$}{$\mathcal{E}^{Z}=\textsc{Sort}(Z)$} \Comment{parallelized sorting} 
 \Linefor{$Z:=A,B$}{$Z=\textsc{Center}(Z)$}  \Comment{center distance matrices}
 \State $\tilde{\GG}^{kl} \rto tr((A \circ \mathcal{E}^{A})\T \times (B \circ (\mathcal{E}^{B})\T))$ \Comment{un-normalized local distance covariance}
 \State $v^{A} \rto tr((A \circ \mathcal{E}^{A})\T \times (A \circ (\mathcal{E}^{A})\T))$ \Comment{local distance variances}
@@ -942,14 +950,15 @@ This algorithm uses the random permutation test with $r$ random permutations, re
 \clearpage
 
 \begin{algorithm}
-\caption{Compute the multiscale correlation map (i.e., all local generalized correlations) in $O(n^2 \log n)$. Once the distances are sorted, this algorithm runs in $O(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\GG^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(A_{\cdot j},i)$ and $l\leq R(B_{\cdot j},i)$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j:=1,\ldots,n$, and add the product simultaneously to all $\GG^{kl}$ whose scales are no more than $(R(A_{\cdot j},i),R(B_{\cdot j},i))$. To achieve the above, we iterate through each product, add it to $\GG^{kl}$ at $(kl)=(R(A_{\cdot j},i),R(B_{\cdot j},i))$ only (so only one local scale is accessed for each operation); then add up adjacent $\GG^{kl}$ for $k,l=1,\ldots,n$. The same applies to all local covariances, variances, and expectations.} 
+\caption{Compute the multiscale correlation map (i.e., all local generalized correlations) in $\mc{O}(n^2 \log n / T)$. Once the distances are sorted, the remaining algorithm runs in $\mc{O}(n^2)$. An important observation is that each product $a_{ij}b_{ij}$ is included in $\GG^{kl}$ if and only if $(k,l)$ satisfies $k\leq R(A_{\cdot j},i)$ and $l\leq R(B_{\cdot j},i)$, so it suffices to iterate through $a_{ij}b_{ij}$ for $i,j:=1,\ldots,n$, and add the product simultaneously to all $\GG^{kl}$ whose scales are no more than $(R(A_{\cdot j},i),R(B_{\cdot j},i))$. To achieve the above, we iterate through each product, add it to $\GG^{kl}$ at $(kl)=(R(A_{\cdot j},i),R(B_{\cdot j},i))$ only (so only one local scale is accessed for each operation); then add up adjacent $\GG^{kl}$ for $k,l=1,\ldots,n$. The same applies to all local covariances, variances, and expectations. 
+} 
 \label{alg:all_scales}
 \begin{algorithmic}[1]
 \Require A pair of distance matrices $(A, B) \in \Real^{n \times n} \times \Real^{n \times n}$.
 \Ensure The multiscale correlation map $\mathcal{C} \in [-1,1]^{n \times n}$ for $k,l=1,\ldots,n$.
 \Function{MGCAllLocal}{$A$, $B$}
-\Linefor{$Z:=A,B$}{$\mathcal{E}^{Z}=\textsc{Sort}(Z)$}
-\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(Z)$}
+\Linefor{$Z:=A,B$}{$\mathcal{E}^{Z}=\textsc{Sort}(Z)$} 
+\Linefor{$Z:=A,B$}{$Z=\textsc{Center}(Z)$} 
 
 \For{$i,j:=1,\ldots,n$} \Comment{iterate through all local scales to calculate each term} 
 \State $k \rto \mathcal{E}^{Z}_{ij}$
@@ -1156,7 +1165,7 @@ and their element-wise products $\tilde{C}=\tilde{A} \circ \tilde{B}$ (bottom), 
 \textbf{2.} Single centering --- subtract the row-sums from $\tilde{A}$ and column-sums from $\tilde{B}$ to eliminate bias due to individual samples --- yields $A=\{a_{ij}\}$ and $B=\{b_{ij}\}$; the normalized sum of their  element-wise product  $C$ is equivalent to the  \Mcorr~statistic \cite{SzekelyRizzo2013a}.
 % 
 \textbf{3.} Given a local scale, for example, $k=l=4$ here, yields $A^{k}$, $B^{l}$, and $C^{kl}$.  All these test statistics are normalized sums of the element-wise products. The fact that \Mgc~yields a $C^{kl}$ matrix that is all positive (green), whereas the others yield $C$ matrices with both positive and negative values (purple), suggest that \Mgc~will correctly report a large test statistic here, resulting in a small p-value.
-\textbf{4.} Compute the test statistic (top), power (middle), and p-value (bottom) for all local scales, resulting in multiscale maps that reveal the scales of dependency. Green dots show the scale of estimated test statistic by Sample \Mgc, and the green box shows the estimated optimal scales via the significance map.
+\textbf{4.} Compute the test statistic (top), power (middle), and p-value (bottom) for all local scales, resulting in multiscale maps that reveal the scales of dependency. Green dots show the scale of estimated test statistic by Sample \Mgc, and the green box shows the estimated optimal scales.
 \textbf{5.} Report the corresponding observed test statistics and p-values, and discover the optimal scales (green rectangle in  significance map) using Sample \Mgc.  
 Whereas \Mcorr, the global test, has very low power (gray dot in  significance map)
 and therefore yields a small statistic and a non-significant p-value ($0.257$),  there are many local scales that achieve nearly perfect power, so both Oracle (green line) and Sample (cyan line) \Mgc~($\GG^{*}$ and $\hat{\GG}^{*}$) obtain large test statistics and highly significant p-values ($\approx 0.001$) and reveal the scales of dependency. 

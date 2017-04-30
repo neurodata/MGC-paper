@@ -188,7 +188,7 @@ if F.subplot==true;
 %         titletext=strcat(titletext);
 %     end
     h=suptitle(titletext);
-    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.44, -0.07,0], 'HorizontalAlignment', 'center')
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.44, -0.09,0], 'HorizontalAlignment', 'center')
     %%
     print_fig(gcf,F)
 end

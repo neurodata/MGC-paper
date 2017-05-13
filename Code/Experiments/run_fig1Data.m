@@ -101,16 +101,17 @@ l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 
 % Mcorr
-RC=DistRanks(C);
-RD=DistRanks(D)';
+[A,B,RC,RD]=MGCDistTransform(x,y);
+% RC=DistRanks(C);
+% RD=DistRanks(D)';
 
 H=eye(n)-(1/n)*ones(n,n);
-A=H*C-C/n;
-B=D*H-D/n;
-for j=1:n
-    A(j,j)=0;
-    B(j,j)=0;
-end
+% A=H*C-C/n;
+% B=D*H-D/n;
+% for j=1:n
+%     A(j,j)=0;
+%     B(j,j)=0;
+% end
 mcorrH=A.*B;
 
 % Mantel
@@ -127,4 +128,4 @@ A_MGC(RC)=0;
 B_MGC(RD)=0;
 C_MGC=(A_MGC-mean(mean(A_MGC))).*(B_MGC-mean(mean(B_MGC)));
 
-save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'noise',num2str(noise),'.mat'),'tA','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD');
+save(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat'),'tA','test','testN','type','n','dim','noise','rep','powerMLocal','neighbor','pMLocal','pMGC','optimalInd','k','l','C','D','x','y','A','B','mantelH','mcorrH','A_MGC','B_MGC','C_MGC','RC','RD');

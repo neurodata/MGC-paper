@@ -28,9 +28,9 @@ CorrPermDistTest(C,D,rep,'Proteomics1vs2');
 
 
 load('BrainHippoShape.mat')
-[A,B,RX,RY]=MGCDistTransform(LMRS,LMLS);
-k=60;
-LMRS(RX>k)=0;
+% [A,B,RX,RY]=MGCDistTransform(LMRS,LMLS);
+% k=60;
+% LMRS(RX>k)=0;
 per1=(Label==1);
 per2=(Label==2);
 per3=(Label==3);
@@ -72,30 +72,30 @@ pv=t1;
 [f,xi]=ksdensity(pv);
 hold on
 h1=plot(xi,f,'b.-','LineWidth',2);
-pv=sort(pv,'ascend');
-ord=0.002*ones(length(pv),1);
-for i=2:length(pv)
-    if pv(i)-pv(i-1)<0.1
-        ord(i)=ord(i-1)+0.0001;
-    else
-        ord(i)=0.002;
-    end
-end
-plot(pv,ord,'b.','MarkerSize',2);
+% pv=sort(pv,'ascend');
+% ord=0.002*ones(length(pv),1);
+% for i=2:length(pv)
+%     if pv(i)-pv(i-1)<0.1
+%         ord(i)=ord(i-1)+0.0001;
+%     else
+%         ord(i)=0.002;
+%     end
+% end
+% plot(pv,ord,'b.','MarkerSize',2);
 
 pv=t2;
 [f,xi]=ksdensity(pv);
 h2=plot(xi,f,'r.-','LineWidth',2);
-pv=sort(pv,'ascend');
-ord=0.001*ones(length(pv),1);
-for i=2:length(pv)
-    if pv(i)-pv(i-1)<0.1
-        ord(i)=ord(i-1)+0.0001;
-    else
-        ord(i)=0.001;
-    end
-end
-plot(pv,ord,'r.','MarkerSize',2);
+% pv=sort(pv,'ascend');
+% ord=0.001*ones(length(pv),1);
+% for i=2:length(pv)
+%     if pv(i)-pv(i-1)<0.1
+%         ord(i)=ord(i-1)+0.0001;
+%     else
+%         ord(i)=0.001;
+%     end
+% end
+% plot(pv,ord,'r.','MarkerSize',2);
 
 title('Within-Class vs Between-Class Distances of Class 2')
 set(gca,'YTick',[0,0.002,0.004],'YTickLabel',[0,0.002,0.004],'fontSize',12)
@@ -115,10 +115,28 @@ x2=unifrnd(3,4,n2,1);
 y2=x2;
 X=squareform(pdist([x;x2]));
 Y=squareform(pdist([y;y2]));
-[A,B,RX,RY]=MGCDistTransform(X,Y);
+[A,B,RX,RY]=MGCDistTransform(X,Y,'mgc');
 C=A.*B;
-CJ=sum(C,1)';
-CI=sum(C,2);
+A=A.*A;
+B=B.*B;
+CJ=sum(C,1)'./sqrt(sum(A,1)'.*sum(B,2));
+CI=sum(C,2)./sqrt(sum(A,1)'.*sum(B,2));
 hold on
 plot(x,y,'k.');
 plot(x2,y2,'r.');
+
+n1=10;
+x=unifrnd(-1,1,n1,1);
+y=x;
+X=squareform(pdist(x));
+Y=squareform(pdist(y));
+[A,B,RX,RY]=MGCDistTransform(X,Y,'mgc');
+C=A.*B;
+[corr,varX,varY]=MGCLocalCorr(X,Y,'mgc');
+max(max(corr))-corr(end,end);
+cov=corr.*sqrt(varX'*varY);
+max(max(cov))-cov(end,end)
+% A=A.*A;
+% B=B.*B;
+% CJ=sum(C,1)'./sqrt(sum(A,1)'.*sum(B,2));
+% CI=sum(C,2)./sqrt(sum(A,1)'.*sum(B,2));

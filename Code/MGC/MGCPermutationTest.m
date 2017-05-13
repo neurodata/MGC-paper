@@ -25,7 +25,7 @@ if nargin<4
 end
 
 sampleIndicator=0;
-if strcmp(option,'mcor')
+if strncmp(option,'mcor',4) || strncmp(option,'mgc',3)
     sampleIndicator=1; % only compute sample MGC for mcorr
 end
 

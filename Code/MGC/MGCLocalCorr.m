@@ -52,7 +52,7 @@ end
 corrXY=(corrXY-EX'*EY/n^2);
 varX=varX-EX.^2/n^2;
 varY=varY-EY.^2/n^2;
-corrXY=(corrXY)./real(sqrt(varX'*varY));
+corrXY=corrXY./real(sqrt(varX'*varY));
 
 % set any local correlation to 0 if any corresponding local variance is no larger than 0
 for k=1:nX

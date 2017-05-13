@@ -49,6 +49,9 @@ cmap=zeros(2,3);
 indP=optimalInd;
 [J,I]=ind2sub(size(pMLocal),indP);
 
+C=squareform(pdist(x));
+D=squareform(pdist(y));
+
 [~,~,RC,RD]=MGCDistTransform(C,D,'mcor');
 
 % RC=DistRanks(C);

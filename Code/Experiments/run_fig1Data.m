@@ -101,7 +101,7 @@ l=ceil(neighbor/n);
 k=neighbor-n*(l-1);
 
 % Mcorr
-[A,B,RC,RD]=MGCDistTransform(x,y);
+[A,B,RC,RD]=MGCDistTransform(C,D);
 % RC=DistRanks(C);
 % RD=DistRanks(D)';
 

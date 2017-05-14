@@ -17,7 +17,7 @@ if nargin<3
     noise=0.3;
 end
 if nargin<4
-    n=100;
+    n=50;
 end
 
 fpath = mfilename('fullpath');

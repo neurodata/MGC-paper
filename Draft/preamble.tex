@@ -29,6 +29,9 @@
 % \usepackage{trackchanges}
 % \usepackage{mcode}
 
+
+%%%%%%%%%%%%% PAGE SETTING STUFF %%%%%%%%%%%%%%%%
+
 \renewcommand{\familydefault}{\sfdefault}
 \definecolor{MyGray}{rgb}{0.7,0.7,0.7}
 
@@ -49,6 +52,33 @@
 
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.5em}
+
+
+
+%%%%%%%%%% SECTIONS & STUFF %%%%%%%%%%%%%
+
+
+\renewcommand{\thesection}{\Roman{section}}   
+\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}  
+\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}.\arabic{subsubsection}} 
+% 
+% 
+\makeatletter
+% \def\subsize{\@setsize\subsize{8pt}\xipt\@xipt}
+ \def\section{\@startsection {section}{1}{\z@}{5pt}{9pt}{\Large\bf\db}}
+ \def\subsection{\@startsection {subsection}{2}{\z@}{10pt}{4pt}{\large\bf\db}}
+ \def\subsubsection{\@startsection {subsubsection}{2}{\z@}{10pt}{4pt}{\bf\db}}
+% \def\subs{\@startsection {subsubsection}{2}{0pt}{5pt}{0pt}{ \subsize\bf\db}}
+\def\paragraph{\@startsection {paragraph}{2}{\z@}{10pt}{4pt}{\bf\db}}
+% \def\subparagraph{\@startsection 
+
+
+\newcommand{\para}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{0pt}\bf\db{#1}}}}
+\newcommand{\subpara}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{4pt} \bf \emph{#1}}}}
+\newcommand{\subsubpara}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{4pt} \emph{#1}}}}
+
+\setlength{\parindent}{0pt}
+
 
 %%%%% COLOR STUFF %%%%%%%%%%
 \newcommand{\db}[1]{{\color{dark_blue}{#1}}}
@@ -166,30 +196,6 @@
 \floatname{algorithm}{Pseudocode}
 
 
-
-%%%%%%%%%% SECTIONS & STUFF %%%%%%%%%%%%%
-
-
-\renewcommand{\thesection}{\Roman{section}}   
-\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}  
-\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}.\arabic{subsubsection}} 
-% 
-% 
-\makeatletter
-% \def\subsize{\@setsize\subsize{8pt}\xipt\@xipt}
- \def\section{\@startsection {section}{1}{\z@}{5pt}{9pt}{\Large\bf\db}}
- \def\subsection{\@startsection {subsection}{2}{\z@}{10pt}{4pt}{\large\bf\db}}
- \def\subsubsection{\@startsection {subsubsection}{2}{\z@}{10pt}{4pt}{\bf\db}}
-% \def\subs{\@startsection {subsubsection}{2}{0pt}{5pt}{0pt}{ \subsize\bf\db}}
-\def\paragraph{\@startsection {paragraph}{2}{\z@}{10pt}{4pt}{\bf\db}}
-% \def\subparagraph{\@startsection 
-
-
-\newcommand{\para}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{0pt}\bf\db{#1}}}}
-\newcommand{\subpara}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{4pt} \bf \emph{#1}}}}
-\newcommand{\subsubpara}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{4pt} \emph{#1}}}}
-
-\setlength{\parindent}{0pt}
 
 
 

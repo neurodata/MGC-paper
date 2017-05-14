@@ -55,12 +55,13 @@ neighbor=maxNeighbors(powerMLocal,0,tN,tA);
 
 % Generate data
 [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
-if noise~=0
-    [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
-end
+% if noise~=0
+%     [x1, y1]=CorrSampleGenerator(type,10*n,dim,1, 0); % Plot 10*n points without noise to highlight the underlying dependency
+% end
 % Get distance matrix
-[x,ind]=sort(x,'ascend');
-y=y(ind);
+[~,ind]=sort(x(:,1),'ascend');
+x=x(ind,:);
+y=y(ind,:);
 C=squareform(pdist(x));
 D=squareform(pdist(y));
 

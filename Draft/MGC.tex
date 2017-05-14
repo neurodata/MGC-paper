@@ -12,13 +12,14 @@
 \author[1,2]{Cencheng Shen} %\thanks{cshen6@jhu.edu}}
 \author[1,3]{Carey E. Priebe}% \thanks{cep@jhu.edu}}
 \author[3,4,6]{Mauro Maggioni}%\thanks{mauro.maggioni@jhu.edu}}
-\author[1,5,6]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
+\author[1,5,6,7]{Joshua T. Vogelstein\thanks{jovo@jhu.edu}}
 \affil[1]{Center for Imaging Science, Johns Hopkins University (JHU)}
 \affil[2]{Department of Statistics, Temple University}
 \affil[3]{Department of Applied Mathematics and Statistics, JHU}
 \affil[4]{Department of Mathematics, JHU}
 \affil[5]{Department of Biomedical Engineering and Institute for Computational Medicine, JHU}
 \affil[6]{Institute for Data-Intensive Engineering \& Science, JHU}
+\affil[7]{Center for the Developing Brain, Child Mind Institute, New York}
 \maketitle 
 \thispagestyle{empty}
 \date{}
@@ -81,7 +82,7 @@ Although the relationship between clouds and grass is unlikely to be spiral, spi
 \begin{SCfigure}
 %  trim={<left> <lower> <right> <upper>}
 %\includegraphics[height=0.9\textheight,trim={0cm 1.8cm 0 2cm},clip]{Figures/Fig1Allb.pdf}
-\includegraphics[width=0.52\linewidth]{Figures/Fig1All}
+\includegraphics[width=0.5\linewidth]{Figures/Fig1All}
 \caption{
 % the point of this figure is 3-fold?
 %  (1) explain the MGC process
@@ -314,9 +315,8 @@ Network vs Creativity & $\textbf{0.011}$  & ${0.012}$ & $\textbf{0.011}$ & $\tex
 
 \subsubsection*{Brain Activity vs. Personality} 
 
-The first experiment investigates whether there is any dependency between resting brain activity and personality.
-This dataset consists of $42$ subjects, each with  $197$ time-steps of resting-state functional magnetic resonance activity (rs-fMRI) activity, as well as the subject's five-factor personality trait as quantified by  the NEO Personality Inventory-Revised  \cite{Costa1992}. 
-Adelstein et al. \cite{AdelsteinEtAl2011} were able to detect dependence between the activity of certain brain regions and dimensions of personality, but lacked the tools to test for dependence of whole brain activity against all five dimensions of personality. 
+The first experiment investigates whether there is any dependency between resting brain activity and personality. Human personality has been intensively studied for many decades; the most widely used and studied approach is to use the NEO Personality Inventory-Revised the characterized personality along five dimensions \cite{Costa1992}.
+This dataset consists of $42$ subjects, each with  $197$ time-steps of resting-state functional magnetic resonance activity (rs-fMRI) activity, as well as the subject's five-dimensional ``personality''. Adelstein et al. \cite{AdelsteinEtAl2011} were able to detect dependence between the activity of certain brain regions and dimensions of personality, but lacked the tools to test for dependence of whole brain activity against all five dimensions of personality. 
 % 
 Figure \ref{f:real}{\color{magenta}A}  shows that many local scales yield significant p-values ($\approx 0.01$), whereas the global scale fails to detect this significant dependence. In fact, all previously proposed global dependence tests under consideration (\Mantel, \Dcorr, \Mcorr, or \Hhg) fail to detect dependence at a significance level of $0.05$ (see Table \ref{t:real}), and only \Mgc~provides insight into the scales of dependence.
 
@@ -390,6 +390,7 @@ Finally, \Mgc~is easy to use: it merely requires pairs of samples to run, and al
 \section*{Acknowledgment}
 % \addcontentsline{toc}{section}{Acknowledgment}
 This work was partially supported by
+the Child Mind Institute Endeavor Scientist Program,
 %
 the National Science Foundation Division of Mathematical Sciences award DMS-1712947,
 %
@@ -492,7 +493,7 @@ They also show that  as $n \rightarrow \infty$, the sample distance correlation 
 Of note, the distance covariance, distance variance, and distance correlation are always non-negative.  Moreover,  the consistency result holds for a much larger family of metrics, those of strong negative type  \cite{Lyons2013}. 
 Note that the \Dcorr~here equals the square of distance correlation in \cite{SzekelyRizzoBakirov2007}, but for ease of presentation the square naming is dropped here.
 
-In matrix notation, define the double centering matrix $H=I_{n}-\frac{J_{n}}{n}$, where $I_n$ is the $n \times n$ identity matrix (ones on the diagonal, zeros elsewhere), and $J_n$ is the $n \times n$ matrix of all ones. Then, we can write  $A=H\tilde{A}H$ and $B=H\tilde{B}H$.
+In matrix notation, define the centering matrix $H=I_{n}-\frac{J_{n}}{n}$, where $I_n$ is the $n \times n$ identity matrix (ones on the diagonal, zeros elsewhere), and $J_n$ is the $n \times n$ matrix of all ones. Then, we can write  $A=H\tilde{A}H$ and $B=H\tilde{B}H$.
 % 
 Alternatively, calculating the distance covariance by $A=H\tilde{A}$ and $B=\tilde{B}H$ gives the same statistic for distance covariance, i.e., instead of using doubly centered distance matrices, it is equivalent to singly center one distance matrix by row and the other distance matrix by column, as shown in the next lemma.
 
@@ -676,7 +677,7 @@ where $S(\cdot)$ is the smoothing function that requires $\widehat{(kl)}$ to be 
 
 Sample \Mgc~uses a permutation test to obtain the multiscale significance map and the p-value. 
 % 
-Once all local significance values are computed, the optimal scales are estimated by the tightest bounding box in the local scales that is no larger than the p-value of Sample \Mgc~and no smaller than the statistic of Sample \Mgc~(see Algorithm \ref{alg:pval} for details), which serves as an estimation of all potential optimal scales. This is useful because the estimated Sample \Mgc~statistic is only from one local scale, but the multiscale power maps in Figure~\ref{f:powermaps}  shows many scales are close to optimal.
+Once all local significance values are computed, the optimal scales are estimated by the tightest bounding box in the local scales with significance p-values no larger than the p-value and local statistics no smaller than the test statistic (see Algorithm \ref{alg:pval} for details), which serves as an estimation of all potential optimal scales. This is useful because the estimated Sample \Mgc~statistic is only from one local scale, but the multiscale power maps in Figure~\ref{f:powermaps}  shows many scales are close to optimal.
 
 Because neither  Oracle \Mgc~nor Sample \Mgc~compares multiple statistics, neither suffers from the multiple hypothesis testing problem \cite{Benjamini1995}, and the resulting test is always valid. All simulations and real data experiments in the main paper use Sample \Mgc,  while Oracle \Mgc~is used for comparison in simulations and theory. Figure \ref{f:schematic} provides a further illustration of the relationship between \Mantel, \Mcorr, local generalized correlation, and both Oracle and Sample \Mgc.
 
@@ -773,6 +774,9 @@ However, the computation of all possible permuted test statistics becomes more t
 Because any function can be approximated by a polynomial expansion \cite{RudinBook}, the proof of Theorem~\ref{t:non} suggests that \Mgc~is able to outperform its corresponding global correlation on a wide variety of nonlinear functions, which is indeed the case throughout the numerical simulations. 
 
 Taken together, the three theorems above lead to Theorem~\ref{t:dominate} in the main paper.
+
+%@jovo: affine invariance added below
+On an additional note, \Mgc~is invariant to translation, scaling, and rotation. Although it is not affine invariant, it can be easily made so via the same strategy used for affine invariant \Dcorr~as defined in \cite{SzekelyRizzoBakirov2007, Dueck2014}. In terms of testing performance, there is little advantage for using a affine-invariant \Mgc, thus not considered here.
 
 
 \clearpage
@@ -902,7 +906,7 @@ This algorithm can be similarly adapted to training data, for which the alternat
 
 \begin{algorithm}
 \caption{Sample \Mgc~Test. 
-This algorithm uses the random permutation test with $r$ random permutations, resulting in the p-value, the estimated optimal scales, and the multiscale significance map, requiring $\mc{O}(rn^2 \log n/T)$. Specifically, it computes the p-values by comparing the multiscale correlation map and the sample \Mgc~statistic of the observed data, to those of each permuted resample.  Then, the optimal scales are estimated by taking the largest rectangle with local statistics no smaller than Sample \Mgc~and local p-values no larger than the p-value of Sample \Mgc.  In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other global generalized correlation coefficient follows from the same algorithm by replacing Sample \Mgc~with the respective test statistic.
+This algorithm uses the random permutation test with $r$ random permutations, resulting in the p-value, the estimated optimal scales, and the multiscale significance map, requiring $\mc{O}(rn^2 \log n/T)$. Specifically, it computes the p-values by comparing the multiscale correlation map and the sample \Mgc~statistic of the observed data, to those of each permuted resample.  Then, the optimal scales are estimated by taking the largest rectangle with local statistics no smaller than Sample \Mgc~and local significance values no larger than the p-value.  In the real data experiment we always set $r=10$,$000$. Note that the p-value computation for any other global generalized correlation coefficient follows from the same algorithm by replacing Sample \Mgc~with the respective test statistic.
 }
 \label{alg:pval}
 \begin{algorithmic}[1]
@@ -1224,6 +1228,13 @@ Let $\bar{\beta}_s(\mathcal{A})$ denote the average power for a given problem se
 \caption{Multiscale Power Maps indicating the influence of neighborhood size on \Mgc~testing power, for the one-dimensional simulations in Figure~\ref{f:1DAll}. For each simulation,  the sample size is $n=60$, and the significance level is $\alpha=0.05$. It has similar behavior and interpretation as the high-dimensional power maps in Figure~\ref{f:powermaps}.}
 \label{f:powermaps1}
 \end{figure}
+
+\begin{figure}[htbp]
+\includegraphics[width=1.0\textwidth,trim={0cm 8cm 0cm 8cm},clip]{Figures/FigReal2A}
+\caption{An illustration of the distances used in Figure~\ref{f:real}(B). By comparing the empirical density of within-class distances and between-class distances, there is a clear pattern of nonlinear relationship because the within-class distances tend to take large values more likely than between-class distances. This phenomenon holds for class $2$ and class $3$ but not class $1$, indicating significant within-group variability for high-risk and depressed people but not healthy people.}
+\label{f:real2A}
+\end{figure}
+%@jovo: cs added above figure.
 
 \clearpage
 \section{Real Data Processing}

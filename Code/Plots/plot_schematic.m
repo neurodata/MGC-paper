@@ -104,17 +104,17 @@ set(groot,'defaultAxesColorOrder',F.map1);
 if type~=8
     I=2;J=4;J2=n;
 else
-    I=20;J=21;J2=n-5;
+    I=20;J=22;J2=n-5;
 end
 F.id=[I,J,J2,J];
 F.id2=[1,2,3,2];
 
-if abs(y(F.id(1))-y(F.id(2)))/(max(y)-min(y))<0.1
-    F.hy=[+5,-5,0]/100*(max(y)-min(y));
+if abs(y(F.id(1),1)-y(F.id(2),1))/(max(y(:,1))-min(y(:,1)))<0.1
+    F.hy=[+5,-5,0]/100*(max(y(:,1))-min(y(:,1)));
 else
     F.hy=zeros(3,1);
 end
-F.hs=2/100*(max(x)-min(x));
+F.hs=2/100*(max(x(:,1))-min(x(:,1)));
 
 % if type == 1, F.AB='A'; else F.AB='B'; end
 F.AB='';

@@ -93,7 +93,7 @@ pMLocal(1,:)=1;pMLocal(:,1)=1;
 
 % find optimal scale
 warning('off','all');
-[~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC), [0 0 1],[2,2]);
+[~,~,~,optimalInd]=FindLargestRectangles((pMLocal<=pMGC)&(test>=tA), [0 0 1],[2,2]);
 optimalInd=find(optimalInd==1);
 if (pMLocal(end)<=pMGC && isempty(find(optimalInd==n*n, 1)))
     optimalInd=n*n;

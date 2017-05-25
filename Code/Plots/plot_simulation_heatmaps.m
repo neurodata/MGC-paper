@@ -68,8 +68,7 @@ for j=1:total
     set(gca,'FontSize',14);
     set(gca,'XTick',[1,round(nn/2)-1,nn-1],'XTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
     set(gca,'YTick',[1,round(nn/2)-1,nn-1],'YTickLabel',[2,round(nn/2),nn]); % Remove x axis ticks
-    title(titlechar,'FontSize',14, ...
-        'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
+    title(titlechar,'FontSize',14);
     if j~=1
         set(gca,'XTick',[]); % Remove x axis ticks
         set(gca,'YTick',[]); % Remove y axis ticks
@@ -143,7 +142,7 @@ ylabel('# Y Neighbors','position',[-715 277],'FontSize',24);
 
 h=colorbar('Ticks',[0,thres/2,thres]);
 set(h,'FontSize',14);
-h=suptitle(strcat('MGC Characterizes the Geometry of Dependence via the Multiscale Power Maps'));
+h=suptitle(strcat('MGC''s Multiscale Power Maps Characterizes the Geometry of Dependence'));
 set(h,'FontSize',26,'FontWeight','normal');
 %
 F.fname=strcat(pre2, figNumber);

@@ -132,8 +132,8 @@ for i=1:4
 end
 bottom(4)=bottom(4)+0.15;
 bottom(3)=bottom(3)+0.15;
-bottom(2)=bottom(2)+0.08;
-% bottom(1)=0.05;
+bottom(2)=bottom(2)+0.05;
+bottom(1)=0.08;
 
 F.pos =[left, bottom(4), width, height];
 F.pos2=[left, bottom(3), width, height];
@@ -149,7 +149,7 @@ if donzo==1
 else
     F.fname=strcat(pre2, 'Auxiliary/A3_type', num2str(F.type),'_n', num2str(n), '_noise', num2str(round(noise*10)),'_dim',num2str(dim));
 end
-F.wh=[4 20];
+F.wh=[2 9];
 F.PaperPositionMode='auto';
 
 %% plot panels
@@ -175,7 +175,7 @@ plot_panel2(F,C,D)
 % 3: only local pairwise distances
 F.pos2=F.pos3;
 F.sub=3;
-plot_panel2(F,C,D);
+plot_panel3(F,C,D);
 
 % 4. Multiscale P-Value Map
 F.sub=4;
@@ -191,7 +191,7 @@ if F.subplot==true;
 %         titletext=strcat(titletext);
 %     end
     h=suptitle(titletext);
-    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.44, -0.09,0], 'HorizontalAlignment', 'center')
+    set(h,'FontSize',F.fontSize2+4,'Units', 'normalized','Position', [0.44, -0.08,0], 'HorizontalAlignment', 'center')
     %%
     print_fig(gcf,F)
 end

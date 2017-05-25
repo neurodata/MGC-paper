@@ -1,12 +1,18 @@
 load proteomics.mat
 
-per=(LabelIndAll==1 | LabelIndAll==2);
+% per=(LabelIndAll==1 | LabelIndAll==2);
+% Ovarian vs Normal
+per=(LabelIndAll==1 | LabelIndAll==4);
 D=LabelIndAll(per);
 D=squareform(pdist(D));
 D(D>0)=1;
-rep=1000;
+rep=5000;
 m=318;
 
+% C=squareform(pdist(A(:,per)'));
+% CorrPermDistTest(C,D,rep*10,'ProteomicsOvavsNormal');
+
+% Screening Ovariance vs Normal
 pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
 for i=1:m
     i
@@ -14,16 +20,116 @@ for i=1:m
     [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
 end
 
-testMGC(:,2)=pMGC;
-testMGC(:,3)=testM;
-testMGC(:,4)=pM;
-testMGC(:,6)=pD;
-testMGC(:,8)=pHHG;
-testMGC(:,5)=testD;
-testMGC(:,7)=testHHG;
+testMGC(:,6)=pMGC;
+testMGC(:,7)=pP;
+testMGC(:,8)=pD;
+testMGC(:,9)=pM;
+testMGC(:,10)=pHHG;
+testMGC(:,2)=testD;
+testMGC(:,3)=testD;
+testMGC(:,4)=testM;
+testMGC(:,5)=testHHG;
+save('ScreeningOvavsNormal');
 
-C=squareform(pdist(A(:,per)'));
-CorrPermDistTest(C,D,rep,'Proteomics1vs2');
+
+clear
+load proteomics.mat
+% Pancreatic vs Normal
+per=(LabelIndAll==1 | LabelIndAll==2);
+D=LabelIndAll(per);
+D=squareform(pdist(D));
+D(D>0)=1;
+rep=5000;
+m=318;
+
+% C=squareform(pdist(A(:,per)'));
+% CorrPermDistTest(C,D,rep*10,'ProteomicsPancvsNormal');
+ind=181;
+C=squareform(pdist(A(ind,per)'));
+CorrPermDistTest(C,D,rep*2,'ProteomicsPancvsNormalNeuroganin');
+
+% Screening Panc vs Normal
+pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
+for i=1:m
+    i
+    C=squareform(pdist(A(i,per)'));   
+    [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
+end
+
+testMGC(:,6)=pMGC;
+testMGC(:,7)=pP;
+testMGC(:,8)=pD;
+testMGC(:,9)=pM;
+testMGC(:,10)=pHHG;
+testMGC(:,2)=testD;
+testMGC(:,3)=testD;
+testMGC(:,4)=testM;
+testMGC(:,5)=testHHG;
+save('ScreeningPancvsNormal');
+
+
+clear
+load proteomics.mat
+% Panc vs All
+per=(LabelIndAll~=2) & (LabelIndAll<5);
+LabelIndAll(per)=1;
+per=(LabelIndAll<5);
+D=LabelIndAll(per);
+D=squareform(pdist(D));
+rep=5000;
+m=318;
+
+% C=squareform(pdist(A(:,per)'));
+% CorrPermDistTest(C,D,rep*10,'ProteomicsPancvsAll');
+ind=181;
+C=squareform(pdist(A(ind,per)'));
+CorrPermDistTest(C,D,rep*2,'ProteomicsPancvsAllNeuroganin');
+
+% Screening Panc vs All
+pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
+for i=1:m
+    i
+    C=squareform(pdist(A(i,per)'));   
+    [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
+end
+
+testMGC(:,6)=pMGC;
+testMGC(:,7)=pP;
+testMGC(:,8)=pD;
+testMGC(:,9)=pM;
+testMGC(:,10)=pHHG;
+testMGC(:,2)=testD;
+testMGC(:,3)=testD;
+testMGC(:,4)=testM;
+testMGC(:,5)=testHHG;
+save('ScreeningPancvsAll');
+
+
+thres=0.05;
+min=1/rep;
+seq=318:-1:1;
+thres=thres./seq;
+thres(thres<min)=min;
+num=zeros(5,1);
+for i=1:5
+    tmp=testMGC(:,5+i);
+    [tmp,ind]=sort(tmp,'ascend');
+    num(i)=find(tmp-thres>0,1,'first')-1;
+    ind=ind(1:num(i));
+    num(i)=length(ind);
+    
+%     tmp=testMGC2(:,5+i);
+%     [tmp,ind2]=sort(tmp,'ascend');
+%     tmpNum=find(tmp-thres>0,1,'first')-1;
+%     ind2=ind2(1:tmpNum);
+%     ind2=intersect(ind,ind2);
+%     num(i)=length(ind2);
+end
+
+
+
+
+
 
 
 

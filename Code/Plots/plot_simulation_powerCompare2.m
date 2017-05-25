@@ -23,7 +23,7 @@ HHG   = [0.5,0.5,0.5];
 mcorr='magenta';
 mantel='red';
 dcorr='blue';
-MGC='cyan';
+MGC=[0,1,0];
 
 ls{3}='-';
 ls{2}='--';
@@ -62,7 +62,7 @@ for select=0:1
         text(x(i),min(AUC(6,i),mi),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
         text(x(i),min(AUC(ind,i),mi),'M','VerticalAlignment','middle','HorizontalAlignment','left','Color',MGC,'FontSize',fontSize-3);
     end
-    text(total,mi*(1.05),'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
+    text(total,-0.01*mi,'Median','VerticalAlignment','top','HorizontalAlignment','left','FontSize',fontSize);
     
     if select==1
         txt1=strcat('mAntel:',{' >'},num2str(AUC(5,total)),'');
@@ -109,10 +109,12 @@ for select=0:1
     
     xlabel('Simulation Type','FontSize',fontSize+5)%,...
     % 'Units', 'normalized','Position', [0.4, -0.18]);%, 'HorizontalAlignment', 'left')
+    if select==0
     if opt==1
-        ylabel(strcat('Relative Size to Achieve Power',{' '},num2str(thres)),'FontSize',fontSize+5)%, ...
+        ylabel(strcat('Relative Size to Achieve Power',{' '},num2str(thres*100),'%'),'FontSize',fontSize+5)%, ...
     else
-        ylabel(strcat('Sample Size to Achieve Power',{' '},num2str(thres)),'FontSize',fontSize+5)%, ...
+        ylabel(strcat('Sample Size to Achieve Power',{' '},num2str(thres*100),'%'),'FontSize',fontSize+5)%, ...
+    end
     end
     axis('square');
     if select~=1

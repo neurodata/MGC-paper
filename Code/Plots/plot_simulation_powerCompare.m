@@ -23,7 +23,7 @@ HHG   = [0.5,0.5,0.5];
 mcorr='magenta';
 mantel='red';
 dcorr='blue';
-MGC='cyan';
+MGC=[0,1,0];
 
 ls{3}='-';
 ls{2}='--';
@@ -64,7 +64,7 @@ for select=0:1
         text(x(i),AUC(3,i),'C','VerticalAlignment','middle','HorizontalAlignment','left','Color',mcorr,'FontSize',fontSize-3);
         text(x(i),AUC(4,i),'H','VerticalAlignment','middle','HorizontalAlignment','left','Color',HHG,'FontSize',fontSize-3);
     end
-    text(total+1,AUC(5,total+1)+0.1,'Median','VerticalAlignment','bottom','HorizontalAlignment','left','FontSize',fontSize);
+    text(total+1,-0.07,'Median','VerticalAlignment','top','HorizontalAlignment','left','FontSize',fontSize);
     
     txt1=strcat('mAntel:',{' '},num2str(AUC(1,21)*100),'%');
     txt2=strcat('Dcorr:',{' '},num2str(AUC(2,21)*100),'%');

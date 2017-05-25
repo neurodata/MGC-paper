@@ -29,9 +29,9 @@ set(groot,'defaultAxesColorOrder',F.map2);
 
 
 plot(C2,D2,'.','MarkerSize',6,'Color',F.gray);
-if F.sub==3
+% if F.sub==3
     plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
-end
+% end
 
 
 
@@ -65,16 +65,17 @@ else
     set(gca,'XTick',[],'YTick',[],'FontSize',F.fontSize); % Remove x axis tick
 end
 
-if F.sub==2
-    title(strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr) = ', num2str(round(100*F.tA(end))/100)),'FontSize',F.tfs);
-else
-    txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
-    txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
-    title({txt2,txt1},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
-%     txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')',{', '},'c(MGC) = ', num2str(round(100*F.test)/100));
-%     title(txt1,'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
-end
-
+% if F.sub==2
+%     title(strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr) = ', num2str(round(100*F.tA(end))/100)),'FontSize',F.tfs);
+% else
+%     txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')');
+%     txt2 = strcat('c(MGC) = ', num2str(round(100*F.test)/100));
+%     title({txt2,txt1},'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+% %     txt1 = strcat('(k,l) = (', num2str(F.k),',',num2str(F.l) , ')',{', '},'c(MGC) = ', num2str(round(100*F.test)/100));
+% %     title(txt1,'FontSize',F.tfs,'Color','g'); %,'interpreter','latex');
+% end
+txt3 = strcat('\color[rgb]{0.5 0.5 0.5} c(Dcorr) = ', num2str(round(100*F.tA(end))/100));
+    title({txt3},'FontSize',F.tfs); %,'interpreter','latex');
 
 set(gca,'FontSize',F.fontSize); % Remove x axis tick
 axis('square')

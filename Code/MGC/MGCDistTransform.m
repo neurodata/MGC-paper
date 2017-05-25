@@ -11,7 +11,7 @@ end
 [A,RX]=DistCentering(X,option);
 [B,RY]=DistCentering(Y,option);
 
-if strcmp(option,'dcor')==false && strcmp(option,'dcorDouble')==false
+if strcmp(option,'mcorDouble')==false && strcmp(option,'dcorDouble')==false
     B=B';
     RY=RY';
 end

@@ -30,10 +30,13 @@ negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
 thres1=3.5*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % threshold based on negative correlations
 thres2=2/max(min(m,n),50); % threshold based on sample size
+tau=0.1;
 
 statMGC=localCorr(end); % take the global correlation by default
 
-R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the thresholds
+%R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the thresholds
+localCorr(localCorr<=max(thres1,thres2))=0;
+R=(localCorr>0);
 % find the largest connected component of all significant correlations
 CC=bwconncomp(R,4);
 numPixels = cellfun(@numel,CC.PixelIdxList);
@@ -49,8 +52,8 @@ end
 if mean(mean(R))>=thres2 % proceed only when the region area is sufficiently large
     [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find the scale within R that has the maximum correlation
     
-    ln=ceil(0.1*m); % boundary for checking adjacent rows
-    km=ceil(0.1*n); % boundary for checking adjacent columns
+    ln=ceil(tau*m); % boundary for checking adjacent rows
+    km=ceil(tau*n); % boundary for checking adjacent columns
     for i=1:length(k)
         ki=k(i);
         li=l(i);

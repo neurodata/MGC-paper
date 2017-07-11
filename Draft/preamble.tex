@@ -1,13 +1,14 @@
 \usepackage{fullpage,subfigure,fancyhdr}
+\usepackage[T1]{fontenc}
 \usepackage{color}
-\usepackage{textcomp}
 \usepackage{verbatim}
 \usepackage{times}
 \usepackage{amsfonts,amsmath,amssymb,amsthm}
 \usepackage{textcomp}
 \usepackage{url}
 \usepackage{mdwlist}
-\usepackage{wrapfig,caption,subfigure,sidecap}
+\usepackage{wrapfig,subfigure,sidecap}
+\usepackage[font=small,labelfont=bf]{caption}
 \usepackage{xspace}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -26,7 +27,8 @@
 \usepackage{graphicx}
 \usepackage{neurodata}
 \usepackage{lineno}
-% \usepackage{trackchanges}
+\usepackage[final]{changes}
+%\usepackage{todonotes}
 % \usepackage{mcode}
 
 
@@ -40,11 +42,11 @@
 % \numberwithin{algorithm}{section}
 
 % \pagestyle{fancy}
-% \oddsidemargin=-0.5in 
+% \oddsidemargin=-0.5in
 % \evensidemargin=-0.5in
-\textwidth=6.5in 
+\textwidth=6.5in
 \headwidth=6.5in
-\textheight=9.0in 
+\textheight=9.0in
 \headheight=0.0pt
 \topmargin=0.0in
 \headsep=0.0in
@@ -53,24 +55,26 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.5em}
 
+\newfontfamily\headingfont[]{[Quadon_W00_Bold.ttf]}
 
 
 %%%%%%%%%% SECTIONS & STUFF %%%%%%%%%%%%%
 
+\RequirePackage{titlesec}
 
-\renewcommand{\thesection}{\Roman{section}}   
-\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}  
-\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}.\arabic{subsubsection}} 
-% 
-% 
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Roman{section}.\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\Roman{section}.\Alph{subsection}.\arabic{subsubsection}}
+%
+%
 \makeatletter
 % \def\subsize{\@setsize\subsize{8pt}\xipt\@xipt}
- \def\section{\@startsection {section}{1}{\z@}{5pt}{9pt}{\Large\bf\db}}
- \def\subsection{\@startsection {subsection}{2}{\z@}{10pt}{4pt}{\large\bf\db}}
- \def\subsubsection{\@startsection {subsubsection}{2}{\z@}{10pt}{4pt}{\bf\db}}
-% \def\subs{\@startsection {subsubsection}{2}{0pt}{5pt}{0pt}{ \subsize\bf\db}}
+ \def\section{\@startsection {section}{1}{\z@}{12pt}{12pt}{\Large\headingfont\db}}
+ \def\subsection{\@startsection {subsection}{2}{\z@}{11pt}{11pt}{\large\headingfont\db}}
+ \def\subsubsection{\@startsection {subsubsection}{2}{\z@}{10pt}{4pt}{\headingfont\db}}
+ %\def\subs{\@startsection {subsubsection}{2}{0pt}{5pt}{0pt}{ \subsize\bf\db}}
 \def\paragraph{\@startsection {paragraph}{2}{\z@}{10pt}{4pt}{\bf\db}}
-% \def\subparagraph{\@startsection 
+% \def\subparagraph{\@startsection
 
 
 \newcommand{\para}[1]{\vspace{3pt}\noindent{{\fontsize{10pt}{0pt}\bf\db{#1}}}}
@@ -84,7 +88,7 @@
 \newcommand{\db}[1]{{\color{dark_blue}{#1}}}
 \newcommand{\bb}[1]{{\textbf{\db{#1}}}}
 \newcommand{\cb}[1]{\centering{{\textbf{\db{#1}}}}}
-\newcommand{\new}[1]{{\color{red}{#1}}}
+\newcommand{\new}[1]{{\color{black}{#1}}}
 
 \definecolor{MyPlum}{rgb}{0.3,0,0.3}
 \definecolor{MyOrange}{rgb}{1,0.5,0}
@@ -123,7 +127,7 @@
 \newcommand{\transpose}[1]{{#1}^{\ensuremath{\mathsf{T}}}}           % transpose
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
-\newcommand{\T}{^{\ensuremath{\mathsf{T}}}}           % transpose
+\newcommand{\TT}{^{\ensuremath{\mathsf{T}}}}           % transpose
 \newcommand{\from}{{\ensuremath{\colon}}}           % :
 \newcommand{\trace}[1]{{\ensuremath{\operatorname{tr}\!\left(#1\right)}}}           % :
 
@@ -303,24 +307,24 @@
 
 \newcommand{\Aa}{\mathbb{A}}
 \newcommand{\BB}{\mathbb{B}}
-\newcommand{\CC}{\mathbb{C}}         
-\newcommand{\DD}{\mathbb{D}}         
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\DD}{\mathbb{D}}
 \newcommand{\EE}{\mathbb{E}}           % expected value
-\newcommand{\FF}{\mathbb{F}}         
+\newcommand{\FF}{\mathbb{F}}
 \newcommand{\GG}{c}
-\newcommand{\HH}{\mathbb{H}}         
+\newcommand{\HH}{\mathbb{H}}
 \newcommand{\II}{\mathbb{I}}           % indicator function
 \newcommand{\LL}{\mathbb{L}}
 \newcommand{\MM}{\mathbb{M}}
 \newcommand{\NN}{\mathbb{N}}
-\newcommand{\PP}{\mathbb{P}}         
-\newcommand{\QQ}{\mathbb{Q}}           
-\newcommand{\SSS}{\mathbb{S}}           
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\SSS}{\mathbb{S}}
 \newcommand{\VV}{\mathbb{V}}
-\newcommand{\WW}{\mathbb{W}}         
-\newcommand{\XX}{\mathbb{X}}         
+\newcommand{\WW}{\mathbb{W}}
+\newcommand{\XX}{\mathbb{X}}
 \newcommand{\YY}{\mathbb{Y}}
-\newcommand{\ZZ}{\mathbb{Z}}         
+\newcommand{\ZZ}{\mathbb{Z}}
 
 
 
@@ -356,7 +360,7 @@
 \DeclareMathOperator{\Q}{\mathbf{Q}}
 \DeclareMathOperator{\R}{R} %\mathbf{P}}
 \DeclareMathOperator{\Y}{\mathbf{Y}}
-\DeclareMathOperator{\B}{\mathbf{B}}
+%\DeclareMathOperator{\BB}{\mathbf{B}}
 \DeclareMathOperator{\Hmat}{\mathbf{H}}
 \DeclareMathOperator{\Gmat}{\mathbf{G}}
 \DeclareMathOperator{\X}{\mathbf{X}}
@@ -443,10 +447,9 @@
 
 %%%%%%%%%%% ALGORITHM NAMES %%%%%%%%%%%%%
 
-
 %\providecommand{\sct}[1]{{\sc \texttt{#1}}}
 
-\providecommand{\sct}[1]{{\normalfont\textsc{#1}}}
+\providecommand{\sct}[1]{{\sc \texttt{#1}}}
 
 \newcommand{\Idt}{\sct{Idt}}
 \newcommand{\Svd}{\sct{Svd}}
@@ -462,5 +465,12 @@
 \newcommand{\Faq}{\sct{Faq}}
 \newcommand{\qr}{\sct{qr}}
 
-
-
+\newcommand{\Mgc}{\sct{Mgc}}
+\newcommand{\Mgcp}{\Mgc$_P$}
+\newcommand{\Mgcd}{\Mgc$_D$}
+\newcommand{\Mgcm}{\Mgc$_M$}
+\newcommand{\Hhg}{\sct{Hhg}}
+\newcommand{\Dcorr}{\sct{Dcorr}}
+\newcommand{\Dcov}{\sct{Dcov}}
+\newcommand{\Mcorr}{\sct{Mcorr}}
+\newcommand{\Mantel}{\sct{Mantel}}

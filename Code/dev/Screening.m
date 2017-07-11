@@ -1,248 +1,83 @@
-load proteomics.mat
-
-% per=(LabelIndAll==1 | LabelIndAll==2);
-% Ovarian vs Normal
-per=(LabelIndAll==1 | LabelIndAll==4);
-D=LabelIndAll(per);
-D=squareform(pdist(D));
-D(D>0)=1;
-rep=5000;
-m=318;
-
-% C=squareform(pdist(A(:,per)'));
-% CorrPermDistTest(C,D,rep*10,'ProteomicsOvavsNormal');
-
-% Screening Ovariance vs Normal
-pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
-for i=1:m
-    i
-    C=squareform(pdist(A(i,per)'));   
-    [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
+function [dv,dc,dcr]=Screening(opt,rep,p,q)
+% [dv,dc,dcr]=Screening(1,10,1,10)
+% [dv,dc,dcr]=Screening(2,10,1,10)
+if nargin<1
+    opt=1;
 end
-
-testMGC(:,6)=pMGC;
-testMGC(:,7)=pP;
-testMGC(:,8)=pD;
-testMGC(:,9)=pM;
-testMGC(:,10)=pHHG;
-testMGC(:,2)=testD;
-testMGC(:,3)=testD;
-testMGC(:,4)=testM;
-testMGC(:,5)=testHHG;
-save('ScreeningOvavsNormal');
-
-
-clear
-load proteomics.mat
-% Pancreatic vs Normal
-per=(LabelIndAll==1 | LabelIndAll==2);
-D=LabelIndAll(per);
-D=squareform(pdist(D));
-D(D>0)=1;
-rep=5000;
-m=318;
-
-% C=squareform(pdist(A(:,per)'));
-% CorrPermDistTest(C,D,rep*10,'ProteomicsPancvsNormal');
-ind=181;
-C=squareform(pdist(A(ind,per)'));
-CorrPermDistTest(C,D,rep*2,'ProteomicsPancvsNormalNeuroganin');
-
-% Screening Panc vs Normal
-pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
-for i=1:m
-    i
-    C=squareform(pdist(A(i,per)'));   
-    [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
+if nargin<2
+    rep=10;
 end
-
-testMGC(:,6)=pMGC;
-testMGC(:,7)=pP;
-testMGC(:,8)=pD;
-testMGC(:,9)=pM;
-testMGC(:,10)=pHHG;
-testMGC(:,2)=testD;
-testMGC(:,3)=testD;
-testMGC(:,4)=testM;
-testMGC(:,5)=testHHG;
-save('ScreeningPancvsNormal');
-
-
-clear
-load proteomics.mat
-% Panc vs All
-per=(LabelIndAll~=2) & (LabelIndAll<5);
-LabelIndAll(per)=1;
-per=(LabelIndAll<5);
-D=LabelIndAll(per);
-D=squareform(pdist(D));
-rep=5000;
-m=318;
-
-% C=squareform(pdist(A(:,per)'));
-% CorrPermDistTest(C,D,rep*10,'ProteomicsPancvsAll');
-ind=181;
-C=squareform(pdist(A(ind,per)'));
-CorrPermDistTest(C,D,rep*2,'ProteomicsPancvsAllNeuroganin');
-
-% Screening Panc vs All
-pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
-for i=1:m
-    i
-    C=squareform(pdist(A(i,per)'));   
-    [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
+if nargin<3
+    p=1;
 end
-
-testMGC(:,6)=pMGC;
-testMGC(:,7)=pP;
-testMGC(:,8)=pD;
-testMGC(:,9)=pM;
-testMGC(:,10)=pHHG;
-testMGC(:,2)=testD;
-testMGC(:,3)=testD;
-testMGC(:,4)=testM;
-testMGC(:,5)=testHHG;
-save('ScreeningPancvsAll');
-
-
-thres=0.05;
-min=1/rep;
-seq=318:-1:1;
-thres=thres./seq;
-thres(thres<min)=min;
-num=zeros(5,1);
-for i=1:5
-    tmp=testMGC(:,5+i);
-    [tmp,ind]=sort(tmp,'ascend');
-    num(i)=find(tmp-thres>0,1,'first')-1;
-    ind=ind(1:num(i));
-    num(i)=length(ind);
-    
-%     tmp=testMGC2(:,5+i);
-%     [tmp,ind2]=sort(tmp,'ascend');
-%     tmpNum=find(tmp-thres>0,1,'first')-1;
-%     ind2=ind2(1:tmpNum);
-%     ind2=intersect(ind,ind2);
-%     num(i)=length(ind2);
+if nargin<4
+    q=10;
 end
+dc=zeros(q+1,1);
+dv=zeros(q+1,1);
+dcr=zeros(q+1,1);
 
-
-
-
-
-
-
-
-load('BrainHippoShape.mat')
-% [A,B,RX,RY]=MGCDistTransform(LMRS,LMLS);
-% k=60;
-% LMRS(RX>k)=0;
-per1=(Label==1);
-per2=(Label==2);
-per3=(Label==3);
-t1=LMRS(per1,per1);
-t2=LMRS(per1,per2);
-t3=LMRS(per1,per3);
-t1=t1(t1>0);t2=t2(t2>0);t3=t3(t3>0);
-t2=[t2;t3];
-% a1=t1;a2=t2;a3=t3;
-t1=LMRS(per2,per2);
-t2=LMRS(per2,per1);
-t3=LMRS(per2,per3);
-t1=t1(t1>0);t2=t2(t2>0);t3=t3(t3>0);
-t2=[t2;t3];
-% a1=[a1;t1];a2=[a2;t2];a3=[a3;t3];
-t1=LMRS(per3,per3);
-t2=LMRS(per3,per2);
-t3=LMRS(per3,per1);
-t1=t1(t1>0);t2=t2(t2>0);t3=t3(t3>0);
-t2=[t2;t3];
-% a1=[a1;t1];a2=[a2;t2];a3=[a3;t3];
-
-thres=500;
-mean(t1>thres)
-mean(t2>thres)
-% mean(a3>thres)
-% a1=[a1',a2']';
-% hold on
-% [f,xi]=ksdensity(t1);
-% plot(xi,f,'r')
-% [f,xi]=ksdensity(t2);
-% plot(xi,f,'b')
-% legend('class1 vs class 2','class2 vs class 3', 'class3 vs class1')
-% [~,b,c]=kstest2(a1,a2)
-% [~,b,c]=kstest2(a1,a3)
-% [~,b,c]=kstest2(a2,a3)
-
-pv=t1;
-[f,xi]=ksdensity(pv);
-hold on
-h1=plot(xi,f,'b.-','LineWidth',2);
-% pv=sort(pv,'ascend');
-% ord=0.002*ones(length(pv),1);
-% for i=2:length(pv)
-%     if pv(i)-pv(i-1)<0.1
-%         ord(i)=ord(i-1)+0.0001;
-%     else
-%         ord(i)=0.002;
-%     end
-% end
-% plot(pv,ord,'b.','MarkerSize',2);
-
-pv=t2;
-[f,xi]=ksdensity(pv);
-h2=plot(xi,f,'r.-','LineWidth',2);
-% pv=sort(pv,'ascend');
-% ord=0.001*ones(length(pv),1);
-% for i=2:length(pv)
-%     if pv(i)-pv(i-1)<0.1
-%         ord(i)=ord(i-1)+0.0001;
-%     else
-%         ord(i)=0.001;
-%     end
-% end
-% plot(pv,ord,'r.','MarkerSize',2);
-
-title('Within-Class vs Between-Class Distances of Class 2')
-set(gca,'YTick',[0,0.002,0.004],'YTickLabel',[0,0.002,0.004],'fontSize',12)
-% set(gca,'YTick',[-0.004,-0.002,0,0.002,0.004],'YTickLabel',[0.004,0.002,0,0.002,0.004],'fontSize',12)
-legend([h1,h2],'Within-Class Distances','Between-Class Distances')
-% <<<<<<< HEAD
-% xlim([0,0.15]);
-% ylim([-1 max(f)+1]);
-
-
-
-n1=10;
-x=unifrnd(-1,1,n1,1);
+n=100;
+x=unifrnd(0,10,n,p);
 y=x;
-n2=2;
-x2=unifrnd(3,4,n2,1);
-y2=x2;
-X=squareform(pdist([x;x2]));
-Y=squareform(pdist([y;y2]));
-[A,B,RX,RY]=MGCDistTransform(X,Y,'mgc');
-C=A.*B;
-A=A.*A;
-B=B.*B;
-CJ=sum(C,1)'./sqrt(sum(A,1)'.*sum(B,2));
-CI=sum(C,2)./sqrt(sum(A,1)'.*sum(B,2));
+D=squareform(pdist(y));
+for q1=0:q
+    %q=1;
+        
+    for r=1:rep
+        if opt==2
+            x2=unifrnd(0,1,n,q1*100);
+            %x2=normrnd(0,0.2,n,q1);
+            %C=squareform(pdist(x+q/q*x2));
+            % if q>0
+            xN=[x';x2']';
+%             for j=1:size(xN,2);
+%                 tmp=xN(:,j);
+%                 xN(:,j)=tmp/norm(tmp);
+%             end
+            C=squareform(pdist(xN));
+        else
+            x2=unifrnd(0,0.1,n,p);
+            %x2=normrnd(0,0.1,n,p);
+            xN=x+q1/q*x2;
+%             for j=1:size(xN,2);
+%                 tmp=xN(:,j);
+%                 xN(:,j)=tmp/norm(tmp);
+%             end
+            C=squareform(pdist(xN));
+        end
+        % else
+        %     C=squareform(pdist(x));
+        % end
+        option1='dcorDouble';
+        option2='mcor';
+        
+        [C,D,RX,RY]=MGCDistTransform(C,D,option2);
+        
+        dcov=sum(sum(C.*D))/n^2;
+        dvar1=(sum(sum(C.*C'))/n^2)^0.5;
+        dvar2=(sum(sum(D.*D'))/n^2)^0.5;
+        dcorr=dcov/dvar1/dvar2;
+        dv(q1+1)=dv(q1+1)+dvar1/rep;
+        dc(q1+1)=dc(q1+1)+dcov/rep;
+        dcr(q1+1)=dcr(q1+1)+dcorr/rep;
+    end
+end
+x=0:q;
+lw=3;
+figure
 hold on
-plot(x,y,'k.');
-plot(x2,y2,'r.');
-
-n1=10;
-x=unifrnd(-1,1,n1,1);
-y=x;
-X=squareform(pdist(x));
-Y=squareform(pdist(y));
-[A,B,RX,RY]=MGCDistTransform(X,Y,'mgc');
-C=A.*B;
-[corr,varX,varY]=MGCLocalCorr(X,Y,'mgc');
-max(max(corr))-corr(end,end);
-cov=corr.*sqrt(varX'*varY);
-max(max(cov))-cov(end,end)
-% A=A.*A;
-% B=B.*B;
-% CJ=sum(C,1)'./sqrt(sum(A,1)'.*sum(B,2));
-% CI=sum(C,2)./sqrt(sum(A,1)'.*sum(B,2));
+plot(x,dc,'r+-','linewidth',lw);
+plot(x,dcr,'m.-','linewidth',lw);
+plot(x,dv,'k--','linewidth',lw);
+hold off
+set(gca,'yscale','log','fontSize',15)
+if opt==2
+xlabel('Number of Redundant Ambient Dimension');
+set(gca,'XTick',[0,q/2,q]);
+else
+    xlabel('Amount of Noise');
+    set(gca,'XTick',[0,q/2,q],'XTickLabel',[0,0.5,1]);
+end
+ylabel('Magnitude (Log Scale)');
+legend('Distance Covariance','Distance Correlation','Distance Variance','location','southwest');

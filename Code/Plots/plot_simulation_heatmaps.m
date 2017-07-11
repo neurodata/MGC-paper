@@ -80,6 +80,10 @@ ylabel('# Y Neighbors','position',[-423 165],'FontSize',24);
 
 %colorbar
 h=colorbar('Ticks',[0,thres/2,thres]);
+pos2=get(gca,'pos');
+pos=get(h,'pos');
+set(h,'position',[pos(1)+0.05 pos(2)-0.015 pos(3)+0.003 pos(4)+0.02]);
+set(gca,'position',[pos2(1) pos2(2) pos2(3) pos2(4)]);
 set(h,'FontSize',14);
 h=suptitle(strcat('One-Dimensional Multiscale Power Maps'));
 set(h,'FontSize',26,'FontWeight','normal');
@@ -141,6 +145,12 @@ xlabel('# X Neighbors','position',[-290 -20],'FontSize',24);
 ylabel('# Y Neighbors','position',[-715 277],'FontSize',24);
 
 h=colorbar('Ticks',[0,thres/2,thres]);
+pos2=get(gca,'pos');
+pos=get(h,'pos');
+set(h,'position',[pos(1)+0.05 pos(2)-0.015 pos(3)+0.003 pos(4)+0.02]);
+set(gca,'position',[pos2(1) pos2(2) pos2(3) pos2(4)]);
+% axis('square');
+
 set(h,'FontSize',14);
 h=suptitle(strcat('MGC''s Multiscale Power Maps Characterizes the Geometry of Dependence'));
 set(h,'FontSize',26,'FontWeight','normal');

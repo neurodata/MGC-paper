@@ -56,14 +56,14 @@ if sampleIndicator~=1 % other than mcorr, we do not implemented sample MGC yet, 
 end
 % if reported p-value equals 0, the actual p-value is in fact <1/n. The reported
 % p-value is thus changed to 1/n from 0.
-if min(min(pLocalCorr(2:end,2:end)))==0
-    pLocalCorr=pLocalCorr+1/rep;
-end
-pLocalCorr(pLocalCorr>1)=1;
-pLocalCorr(1,:)=1;pLocalCorr(:,1)=1;
-if min(min(pLocalCorr(2:end,2:end)))>pMGC
-    pMGC=min(min(pLocalCorr(2:end,2:end)));
-end
+% if min(min(pLocalCorr(2:end,2:end)))==0
+%     pLocalCorr=pLocalCorr+1/rep;
+% end
+% pLocalCorr(pLocalCorr>1)=1;
+% pLocalCorr(1,:)=1;pLocalCorr(:,1)=1;
+% if min(min(pLocalCorr(2:end,2:end)))>pMGC
+%     pMGC=min(min(pLocalCorr(2:end,2:end)));
+% end
 
 % estimate the optimal scales
 warning('off','all');

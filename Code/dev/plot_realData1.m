@@ -1,4 +1,4 @@
-function []=plot_realData2
+function []=plot_realData1
 % Used to plot the heatmap of real data used in tex. Run like
 % CorrRealPlots()
 
@@ -32,25 +32,19 @@ map2 = brewermap(128,'BuPu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
 
 
-fnames={'CorrPermDistTestTypeBrainCxP.mat'; 
-    'CorrPermDistTestTypeBrainLMRxY.mat'; 
-    'CorrPermDistTestTypeMigrainxCCI.mat';
-    'CorrPermDistTestTypeProtecomicsFull.mat';
-    'CorrPermDistTestTypeProtecomicsPartial.mat'};
-xlabs={ '# Activity Neighbors';
-        '# Shape Neighbors';
-        '# Graph Neighbors';
-        '# Data Neighbors';
-        '# Class Neighbors';};
-ylabs={ '# Personality Neighbors'; 
-        '# Disease Neighbors';
-        '# Creativity Neighbors';
-        '# Data Neighbors';
-        '# Class Neighbors';};
+fnames={'CorrPermDistTestTypeBrainCxP.mat'; ...
+    'CorrPermDistTestTypeBrainLMRxY.mat'; ...
+    'CorrPermDistTestTypeMigrainxCCI.mat'};
+xlabs={ '# Activity Neighbors'; ...
+        '# Shape Neighbors';...
+        '# Graph Neighbors'};
+ylabs={ '# Personality Neighbors'; ...
+        '# Disease Neighbors';...
+        '# Creativity Neighbors'};
 % tits= {'A. Brain Activity vs. Personality'; ...
 %     'B. Brain Shape vs. Disorder';...
 %     'C. Brain Graph vs. Creativity'};
-tits={'A';'B';'C';'D';'E'};
+tits={'A';'B';'C'};
 
 
 %% loop maps
@@ -62,12 +56,12 @@ fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
 lw=1.5;
 
-for i=1:5
+for i=1:3
     filename=strcat(pre1,fnames{i});
     load(filename);
     [m,n]=size(pMLocal);
     
-    subplot(2,3,i)
+    subplot(1,4,i)
     hold on
     imagesc(log(pMLocal'));
     set(gca,'YDir','normal')
@@ -116,12 +110,6 @@ for i=1:5
         h=colorbar('Ticks',log(cticks),'TickLabels',cticks,'location','westoutside','FontSize',fs);
         title(h,'p-value')
     end
-    if i==4
-        set(gca,'XTick',[2,3,4,5]); % Remove x axis ticks
-    end
-    if i==5
-        set(gca,'XTick',[2,3]); % Remove x axis ticks
-    end
 end
 
 % plot last figure
@@ -133,7 +121,7 @@ load(strcat(pre1,'CorrBrainNoiseSummary.mat'));
 % map1=cmap;
 set(groot,'defaultAxesColorOrder',map1);
 
-subplot(2,3,6)
+subplot(1,4,4)
 %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
 pv=p(:,1);
 [f,xi]=ksdensity(pv);
@@ -164,7 +152,7 @@ ylabel('Density','FontSize',fs+1, ...
     'Units', 'normalized','Position', [-0.05 0], 'HorizontalAlignment', 'left')
 % title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
 %     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
-title('F','FontSize',fs+2, ...
+title('D','FontSize',fs+2, ...
     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
 
 % F.fname=strcat(pre2, 'CORR');
@@ -176,5 +164,5 @@ h=suptitle(strcat('Brain vs Mental Properties'));% for 1-Dimensional Simulations
 set(h,'FontSize',15,'FontWeight','normal');
         
 F.fname=pre2; %strcat(pre2, num2str(i));
-F.wh=[7 4.2];
+F.wh=[8.2 2.2];
 print_fig(gcf,F)

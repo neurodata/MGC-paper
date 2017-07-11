@@ -23,7 +23,7 @@ if option(1)==1
     [~,~,pDLocal,testDLocal,~]=MGCPermutationTest(C,D,rep,'dcor');
 end
 if option(2)==2
-    [pMGC,testMGC,pMLocal,testMLocal,optimalInd]=MGCPermutationTest(C,D,rep,'mcor');
+    [pMGC,testMGC,pMLocal,testMLocal,optimalInd]=MGCPermutationTest(C,D,rep,'mgc');
 end
 if option(3)==3
     [~,~,pPLocal,testPLocal,~]=MGCPermutationTest(C,D,rep,'mantel');
@@ -65,6 +65,6 @@ for r=1:rep
     tmp=HHG(C,DN);
     pHHG=pHHG+(tmp>=testHHG)/rep;
 end
-if (sum(pHHG<1/rep)>0)
-    pHHG=pHHG+1/rep;
-end
+% if (sum(pHHG<1/rep)>0)
+%     pHHG=pHHG+1/rep;
+% end

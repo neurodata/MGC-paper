@@ -26,8 +26,10 @@ for j=1:m
     for i=1:n
         a=A(i,j);b=B(i,j);k=RX(i,j);l=RY(i,j);
         corrXY(k,l)=corrXY(k,l)+a*b;
-        varX(k)=varX(k)+a^2;
-        varY(l)=varY(l)+b^2;
+        varX(k)=varX(k)+a*a;
+        varY(l)=varY(l)+b*b;
+%         varX(k)=varX(k)+a*A(j,i);%new
+%         varY(l)=varY(l)+b*B(j,i);%new
         EX(k)=EX(k)+a;
         EY(l)=EY(l)+b;
     end
@@ -50,8 +52,8 @@ end
 
 % normalize the covariance by the variances yields the local correlation
 corrXY=(corrXY-EX'*EY/n^2);
-varX=varX-EX.^2/n^2;
-varY=varY-EY.^2/n^2;
+varX=varX-EX.^2/n^2; %%%new
+varY=varY-EY.^2/n^2; %%%new
 corrXY=corrXY./real(sqrt(varX'*varY));
 
 % set any local correlation to 0 if any corresponding local variance is no larger than 0
@@ -65,6 +67,7 @@ for l=1:nY
         corrXY(:,l)=0;
     end
 end
+% corrXY(corrXY>1)=1;
 
 % function [corrXY,varX,varY]=GlobalCorrelation(A,B)
 % corrXY=sum(sum(A.*B));

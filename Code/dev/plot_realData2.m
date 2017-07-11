@@ -1,4 +1,4 @@
-function []=plot_realData2(opt)
+function []=plot_realData2
 % Used to plot the heatmap of real data used in tex. Run like
 % CorrRealPlots()
 
@@ -9,10 +9,7 @@ findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
 addpath(genpath(strcat(rootDir,'Code/')));
 pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
-if nargin<1
-    opt=1;
-end
-pre2=strcat(rootDir,'Figures/FigReal',num2str(opt));% The folder to save figures
+pre2=strcat(rootDir,'Figures/FigReal');% The folder to save figures
 
 %% figure stuff
 
@@ -35,22 +32,25 @@ map2 = brewermap(128,'BuPu'); % brewmap
 set(groot,'defaultAxesColorOrder',map1);
 
 
-fnames={'CorrPermDistTestTypeBrainCxP.mat'; ...
-    'CorrPermDistTestTypeBrainLMRxY.mat'; ...
-    'CorrPermDistTestTypeMigrainxCCI.mat'};
-fnames2={'BrainCP.mat'; ...
-    'BrainHippoShape.mat'; ...
-    'Semipar.mat'};
-xlabs={ '# Activity Neighbors'; ...
-        '# Shape Neighbors';...
-        '# Graph Neighbors'};
-ylabs={ '# Personality Neighbors'; ...
-        '# Disease Neighbors';...
-        '# Creativity Neighbors'};
+fnames={'CorrPermDistTestTypeBrainCxP.mat'; 
+    'CorrPermDistTestTypeBrainLMRxY.mat'; 
+    'CorrPermDistTestTypeMigrainxCCI.mat';
+    'CorrPermDistTestTypeProtecomicsFull.mat';
+    'CorrPermDistTestTypeProtecomicsPartial.mat'};
+xlabs={ '# Activity Neighbors';
+        '# Shape Neighbors';
+        '# Graph Neighbors';
+        '# Data Neighbors';
+        '# Class Neighbors';};
+ylabs={ '# Personality Neighbors'; 
+        '# Disease Neighbors';
+        '# Creativity Neighbors';
+        '# Data Neighbors';
+        '# Class Neighbors';};
 % tits= {'A. Brain Activity vs. Personality'; ...
 %     'B. Brain Shape vs. Disorder';...
 %     'C. Brain Graph vs. Creativity'};
-tits={'P-Value Map';'Correlation Map';'Distance Scatter Plot'};
+tits={'A';'B';'C';'D';'E'};
 
 
 %% loop maps
@@ -62,24 +62,23 @@ fs=9;
 cticks=[0.001, 0.01, 0.1, 0.5];
 lw=1.5;
 
-% for i=1:3
-    i=opt;
+for i=1:5
     filename=strcat(pre1,fnames{i});
     load(filename);
     [m,n]=size(pMLocal);
     
-    subplot(1,3,1)
+    subplot(2,3,i)
     hold on
     imagesc(log(pMLocal'));
     set(gca,'YDir','normal')
     colormap(cmap2)
-    set(gca,'FontSize',fs);
+    set(gca,'FontSize',fs-1);
     %     if i==3
-    xlabel(xlabs{i},'FontSize',fs, ...
+    xlabel(xlabs{i},'FontSize',fs+1, ...
        'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
-    ylabel(ylabs{i},'FontSize',fs, ...
-        'Units', 'normalized','Position', [-0.18 0], 'HorizontalAlignment', 'left')
-    title(tits{1},'FontSize',fs, ...
+    ylabel(ylabs{i},'FontSize',fs+1, ...
+        'Units', 'normalized','Position', [-0.16 0], 'HorizontalAlignment', 'left')
+    title(tits{i},'FontSize',fs+1, ...
         'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
     
     
@@ -106,175 +105,76 @@ lw=1.5;
     plot(k,l,'go','markerSize',6,'linewidth',3);
     plot(m,n,'.','markerSize',18,'MarkerFaceColor',glob,'Color',glob)
     xticks=[5,round(m/2)-1,m-1];
-%     if i==1,  xticks(1)=3; end
+    if i==1,  xticks(1)=3; end
     %  set(gca,'XTick',xticks,'XTickLabel',[2,round(m/2),m]); % Remove x axis ticks
 %    set(gca,'YTick',[3,round(n/2)-1,n-1],'YTickLabel',[2,round(n/2),n]); % Remove x axis ticks
     xlim([2,m]);
     ylim([2,n]);
     axis('square');
     hold off
-%     if i==1
-%         h=colorbar('Ticks',log(cticks),'TickLabels',cticks,'location','westoutside','FontSize',fs);
-%         title(h,'p-value')
-%     end
-% end
-
-ax=subplot(1,3,2);
-% ax=subplot('Position',[left(5), bottom(3), width, height]);
-hold on
-cmap2=flipud(cmap2);
-set(groot,'defaultAxesColorOrder',cmap2);
-% colormap(cmap2)
-kmin=2;
-ph=testMLocal';
-%indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
-% ph(indPower)=2;
-imagesc(ph);
-plot(k,l,'go','markerSize',6,'linewidth',3)
-plot(size(ph,2),size(ph,1),'.','markerSize',18,'MarkerFaceColor',glob,'Color',glob)
-hold off
-% set(gca,'FontSize',fs)
-% set(gca,'YDir','normal')
-% cmap=map1;
-colormap(ax,cmap2)
-% hm=ceil(max(max(ph))*100)/100;
-% hm=ceil(prctile(ph(ph<1),99)*100)/100;
-% caxis([0 hm])
-% h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-% set(h,'FontSize',fontSize);
-xlim([1 size(ph,2)]);
-ylim([1 size(ph,1)]);
-% set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
-% set(gca,'XTick',[],'YTick',[])
-% pos = get(ax,'position');
-axis('square');
-%     xlabel(xlabs{i},'FontSize',fs, ...
-%        'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
-%     ylabel(ylabs{i},'FontSize',fs, ...
-%         'Units', 'normalized','Position', [-0.16 0], 'HorizontalAlignment', 'left')
-    title(tits{2},'FontSize',fs, ...
-        'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
-    
-ax=subplot(1,3,3);
-load(strcat(rootDir,'Data/Preprocessed/',fnames2{i}))
-switch i
-    case 1
-        C=distC;
-        D=distP;     
-    case 2
-        C=LMRS;
-        D=squareform(pdist((Label+unifrnd(0,0.01,n,1))));
-    case 3
-        C=distMigrain(ind,ind);
-        D=squareform(pdist(cci));
-        D=D(ind,ind);
+    if i==1
+        h=colorbar('Ticks',log(cticks),'TickLabels',cticks,'location','westoutside','FontSize',fs);
+        title(h,'p-value')
+    end
+    if i==4
+        set(gca,'XTick',[2,3,4,5]); % Remove x axis ticks
+    end
+    if i==5
+        set(gca,'XTick',[2,3]); % Remove x axis ticks
+    end
 end
-C=C/max(max(C));
-D=D/max(max(D));
-% [~,per]=sort(C(:,1),'ascend');
-% C=C(per,per);
-% % D=squareform(pdist(y));
-% D=D(per,per);
-% H=eye(n)-ones(n,n)/n;
-% % dcov=(H*C*H).*(H*D*H);
-% for i=1:n
-%     dcov(i,i)=0;
-% end
-% imagesc(dcov);
-% set(gca,'YDir','normal')
-plot(reshape(C,size(C,1)^2,1),reshape(D,size(D,1)^2,1),'k.','MarkerSize',3);
-xlim([0,1]);
-        ylim([0,1]);
-        set(gca,'XTick',[0,1],'YTick',[0,1]);
-        %     xlabel(xlabs{i},'FontSize',fs, ...
-%        'Units', 'normalized','Position', [-0.01, -0.14], 'HorizontalAlignment', 'left')
-%     ylabel(ylabs{i},'FontSize',fs, ...
-%         'Units', 'normalized','Position', [-0.16 0], 'HorizontalAlignment', 'left')
-    title(tits{3},'FontSize',fs, ...
-        'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
-%         
-% 
-% n=42;
-% % ax=subplot('Position',[left(5), bottom(3), width, height]);
-% hold on
-% cmap2=flipud(cmap2);
-% set(groot,'defaultAxesColorOrder',cmap2);
-% % colormap(cmap2)
-% kmin=2;
-% ph=testMLocal(kmin:n,kmin:n)';
-% %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
-% % ph(indPower)=2;
-% imagesc(ph);
-% plot(size(ph,1)-1,size(ph,2)-1,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
-% plot(k,l,'go','markerSize',10,'linewidth',5)
-% hold off
-% fontSize=13;
-% set(gca,'FontSize',fontSize)
-% set(gca,'YDir','normal')
-% % cmap=map1;
-% colormap(ax,cmap2)
-% % hm=ceil(max(max(ph))*100)/100;
-% % hm=ceil(prctile(ph(ph<1),99)*100)/100;
-% % caxis([0 hm])
-% % h=colorbar('Ticks',[0,hm/2,hm]);%,'location','westoutside');
-% % set(h,'FontSize',fontSize);
-% xlim([1 size(ph,1)]);
-% ylim([1 size(ph,2)]);
-% set(gca,'XTick',[2.5,round(n/2)-1,n-1],'YTick',[2.5,round(n/2)-1,n-1],'XTickLabel',[2,round(n/2),n],'YTickLabel',[2,round(n/2),n],'FontSize',16);
-% set(gca,'XTick',[],'YTick',[])
-% pos = get(ax,'position');
-axis('square');
-% % plot last figure
-% load(strcat(pre1,'CorrBrainNoiseSummary.mat'));
-% % cmap=zeros(3,3);
-% % ma = [1,0,1];
-% % cmap(1,:) = ma;
-% % cmap(2,:) = ma;
-% % map1=cmap;
-% set(groot,'defaultAxesColorOrder',map1);
-% 
-% subplot(1,4,4)
-% %scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
-% pv=p(:,1);
-% [f,xi]=ksdensity(pv);
-% hold on
-% plot(xi,f,'.-','LineWidth',lw);
-% pv=sort(pv,'ascend');
-% ord=0.01*ones(length(pv),1);
-% for i=2:length(pv);
-%     if pv(i)-pv(i-1)<0.001
-%         ord(i)=ord(i-1)+0.4;
-%     end
-% end
-% plot(pv,ord,'.','MarkerSize',8);
-% % <<<<<<< HEAD
-% xlim([0,0.15]);
-% ylim([-1 max(f)+1]);
-% % =======
-% % xlim([-0.05,0.15]);
-% % ylim([-1 15]);
-% % >>>>>>> 7132b2753b089edc2ca608140c119b901e31b17a
-% set(gca,'FontSize',fs-2);
-% set(gca,'YTick',[]); % Remove y axis ticks
-% axis('square');
-% hold off
-% xlabel('False Positive Rate','FontSize',fs+1,...
-%     'Units', 'normalized','Position', [-0.03, -0.12], 'HorizontalAlignment', 'left')
-% ylabel('Density','FontSize',fs+1, ...
-%     'Units', 'normalized','Position', [-0.05 0], 'HorizontalAlignment', 'left')
-% % title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
-% %     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
-% title('D','FontSize',fs+2, ...
-%     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
 
-% % F.fname=strcat(pre2, 'CORR');
-% % F.wh=[3 2.5]*2;
-% % print_fig(gcf,F)
-% %colorbar()
+% plot last figure
+load(strcat(pre1,'CorrBrainNoiseSummary.mat'));
+% cmap=zeros(3,3);
+% ma = [1,0,1];
+% cmap(1,:) = ma;
+% cmap(2,:) = ma;
+% map1=cmap;
+set(groot,'defaultAxesColorOrder',map1);
+
+subplot(2,3,6)
+%scatter(x,p(:,2), 500,'k.','jitter','on', 'jitterAmount', 0.3);
+pv=p(:,1);
+[f,xi]=ksdensity(pv);
+hold on
+plot(xi,f,'.-','LineWidth',lw);
+pv=sort(pv,'ascend');
+ord=0.01*ones(length(pv),1);
+for i=2:length(pv);
+    if pv(i)-pv(i-1)<0.001
+        ord(i)=ord(i-1)+0.4;
+    end
+end
+plot(pv,ord,'.','MarkerSize',8);
+% <<<<<<< HEAD
+xlim([0,0.15]);
+ylim([-1 max(f)+1]);
+% =======
+% xlim([-0.05,0.15]);
+% ylim([-1 15]);
+% >>>>>>> 7132b2753b089edc2ca608140c119b901e31b17a
+set(gca,'FontSize',fs-2);
+set(gca,'YTick',[]); % Remove y axis ticks
+axis('square');
+hold off
+xlabel('False Positive Rate','FontSize',fs+1,...
+    'Units', 'normalized','Position', [-0.03, -0.12], 'HorizontalAlignment', 'left')
+ylabel('Density','FontSize',fs+1, ...
+    'Units', 'normalized','Position', [-0.05 0], 'HorizontalAlignment', 'left')
+% title('D. Brain Activity vs. Fake Movie','FontSize',fs+2, ...
+%     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
+title('F','FontSize',fs+2, ...
+    'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
+
+% F.fname=strcat(pre2, 'CORR');
+% F.wh=[3 2.5]*2;
+% print_fig(gcf,F)
+%colorbar()
 
 h=suptitle(strcat('Brain vs Mental Properties'));% for 1-Dimensional Simulations'));
 set(h,'FontSize',15,'FontWeight','normal');
         
 F.fname=pre2; %strcat(pre2, num2str(i));
-F.wh=[6.2 2.2];
+F.wh=[7 4.2];
 print_fig(gcf,F)

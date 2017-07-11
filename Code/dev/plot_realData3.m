@@ -94,8 +94,9 @@ l=neighbor-n*(k-1);
 k=k(tind);
 l=l(tind);
 
-RC=DistRanks(C);
-RD=DistRanks(D)';
+[~,~,RC,RD]=MGCDistTransform(C,D);
+% RC=DistRanks(C);
+% RD=DistRanks(D)';
 RC=(RC>l);
 RD=(RD>k);
 A_MGC=A;
@@ -303,8 +304,8 @@ ylim([1,n-1]);
 ax=subplot(s,t,4);
 hold all
 plot(reshape(C,size(C,1)^2,1),reshape(D,size(D,1)^2,1),'k.','MarkerSize',3);
-xlim([0,1]);
-ylim([0,1]);
+xlim([-0.1,1.1]);
+ylim([-0.1,1.1]);
 set(gca,'XTick',[0,1],'YTick',[0,1]);
 title('Distance Scatter Plot','FontSize',fontSize, ...
     'Units', 'normalized','Position', [0 1.01], 'HorizontalAlignment', 'left')
@@ -326,7 +327,7 @@ ph=testMLocal';
 %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
-plot(l,k,'go','markerSize',6,'linewidth',3)
+plot(k,l,'go','markerSize',6,'linewidth',3)
 plot(size(ph,2),size(ph,1),'.','markerSize',18,'MarkerFaceColor',glob,'Color',glob)
 hold off
 % colormap(ax,cmap2)

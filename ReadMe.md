@@ -1,6 +1,13 @@
 # Multiscale Generalized Correlation
 
-## This repo has:
+- [repo contents](#repo-contents)
+- [installation guide](#installation-guide)
+- [reproduction instructions](#reproduction-instructions)
+
+For pseudocode for all algorithms, see Appendix of draft in `Draft`.
+
+
+## Repo Contents:
 
 - **Code**: folder containing MATLAB & R code to reproduce all results in the manuscript
 - **Draft**: Discovering Relationships and their Structures Across Disparate Data Modalities, 
@@ -43,4 +50,6 @@ The running time on a standard i7 desktop takes around 1 day for 1D and HD simul
 
 All codes are in MGC/Code/R, and do `run_realData` to give an example of MGC running on real data.
 Typical running time: 1 minute on a standard i7 desktop
+
+
 

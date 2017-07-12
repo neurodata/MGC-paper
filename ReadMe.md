@@ -18,7 +18,8 @@ Either MATLAB or R, we have tested in MATLAB vXXX & R vXXX on OSX vXXX & ????
 
 ### Demo
 
-1. To load demo data, type `load demo.mat`, which loads X and Y into the workspace
+1. Navigate to folder `XXX`.
+1. To load demo data, type `load demo.mat`, which loads X and Y into the workspace. Note that X is a n-by-d matrix and Y is a n-by-q matrix.
 2. To run on data, in MATLAB, type `[a,b,c] = MGC(X,Y)`
 3. The output will be a set of figures and the p-value, test statistic, optimal scales, XXX.
 

@@ -12,6 +12,10 @@ submitted.
 
 ## Installation guide:
 
+### Dependencies
+
+Either MATLAB or R, we have tested in MATLAB vXXX & R vXXX on OSX vXXX & ????
+
 ### MATLAB
 
 Add all folders and subfolders of MGC to the path. 
@@ -28,6 +32,3 @@ The running time on a standard i7 desktop takes around 1 day for 1D and HD simul
 All codes are in MGC/Code/R, and do `run_realData` to give an example of MGC running on real data.
 Typical running time: 1 minute on a standard i7 desktop
 
-### Dependencies
-
-Either MATLAB or R, we have tested in MATLAB vXXX & R vXXX on OSX vXXX & ????

@@ -2,12 +2,12 @@
 
 ## This repo has:
 
-- Code: folder containing MATLAB & R code to reproduce all results in the manuscript
-- Draft: Discovering Relationships and their Structures Across Disparate Data Modalities, 
+- **Code**: folder containing MATLAB & R code to reproduce all results in the manuscript
+- **Draft**: Discovering Relationships and their Structures Across Disparate Data Modalities, 
 Cencheng Shen, Carey E. Priebe, Mauro Maggioni, Qing Wang, Joshua T. Vogelstein, 
 submitted.
-- Figures: all figures from the plotting code used in the draft
-- Data: contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
+- **Figures**: all figures from the plotting code used in the draft
+- **Data**: contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
 
 
 ## Installation guide:
@@ -27,3 +27,7 @@ The running time on a standard i7 desktop takes around 1 day for 1D and HD simul
 
 All codes are in MGC/Code/R, and do `run_realData` to give an example of MGC running on real data.
 Typical running time: 1 minute on a standard i7 desktop
+
+### Dependencies
+
+Either MATLAB or R, we have tested in MATLAB vXXX & R vXXX on OSX vXXX & ????

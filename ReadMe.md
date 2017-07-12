@@ -9,8 +9,8 @@ For pseudocode for all algorithms, see Appendix of draft in `Draft`.
 
 ## Repo Contents:
 
-- **Code**: folder containing MATLAB & R code to reproduce all results in the manuscript
-- **Draft**: Discovering Relationships and their Structures Across Disparate Data Modalities, 
+- [**Code**](https://github.com/neurodata-papers/MGC/tree/master/Code): folder containing MATLAB & R code to reproduce all results in the manuscript
+- [**Draft**](https://github.com/neurodata-papers/MGC/tree/master/Draft): Discovering Relationships and their Structures Across Disparate Data Modalities, 
 Cencheng Shen, Carey E. Priebe, Mauro Maggioni, Qing Wang, Joshua T. Vogelstein, 
 submitted.
 - **Figures**: all figures from the plotting code used in the draft

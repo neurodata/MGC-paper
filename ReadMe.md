@@ -27,7 +27,7 @@ The local PC is equipped with i7 6850k and 64gb memory.
 ## MATLAB
 
 ### Installation
-Add all folders and subfolders of this repo to the path.
+Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo` with the path to your local copy of the repo.
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.

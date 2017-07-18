@@ -52,10 +52,18 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 ## R
 
-Set the working path to '/Code/R', and type
-- install.packages('HHG')
-- install.packages('ecodist')
-- install.packages('energy')
-- source('run_realData.R')
-- test=run_realData()
-to give the demo of MGC running on real data and output the results. The first three lines are package installation if they haven't been installed already, and the last line runs within 1 minute. Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.
+### installation
+
+```
+install.packages('HHG')
+install.packages('ecodist')
+install.packages('energy')
+setwd("<path-to-repo>/MGC/Code/R")
+source('run_realData.R')
+```
+
+Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo.
+
+### Demo
+
+Once installed, type `test=run_realData()` which takes < 1 minute to run.  Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.

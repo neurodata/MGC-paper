@@ -17,13 +17,17 @@ submitted.
 - [**Data**](https://github.com/neurodata-papers/MGC/tree/master/Data):  contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
 
 
-## Installation guide:
+## Quick Start:
 
 ### Dependencies
 
 Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra. 
 The local PC is equipped with i7 6850k and 64gb memory. 
 
+
+### Installation
+
+Add all folders and subfolders of MGC to the path.
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
@@ -34,7 +38,7 @@ The local PC is equipped with i7 6850k and 64gb memory.
 
 ### MATLAB
 
-Add all folders and subfolders of MGC to the path. To reproduce all figures in the draft from pre-generated results, type
+To reproduce all figures in the draft from pre-generated results, type
 - `plot_all;` 
 
 To re-generate results from scratch, type

@@ -79,4 +79,11 @@ Note that `<path-to-repo>` must be replaced with the path to your local copy of 
 
 ### Demo
 
-Once installed, type `test=run_realData()` which takes < 1 minute to run.  Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.
+Once installed, type `test=run_realData()` which takes < 1 minute to run.  The output is the variable test that includes:
+- `localCorr` matrix
+- `optimalInd` vector
+- `pLocalCorr` matrix
+- `pMGC` p-value
+- `statMGC` test statistic.
+
+Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.

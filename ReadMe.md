@@ -63,7 +63,7 @@ source('run_realData.R')
 test=run_realData()
 ```
 
-Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo.
+Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo. Also on iOS machine, we occasionally encountered an error msg that fails to install the lgfortran package within ecodist; if that is the case, please try to either update R and RStudio to the most recent version, or run the codes on windows.
 
 ### Demo
 

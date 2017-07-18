@@ -50,7 +50,10 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 ## R
 
-Set the working path to '/Code/R', and type `test=run_realData`  to give the demo of MGC running on real data and output the results. It runs in 1 minute.
+Set the working path to '/Code/R', and type 
+-`source('run_realData.R')`
+-`test=run_realData()`  
+to give the demo of MGC running on real data and output the results. It runs in 1 minute.
 
 
 

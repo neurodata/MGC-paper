@@ -1,10 +1,6 @@
 # load the Brain vs Personality data and do a trial run
 
 run_realData <- function(){
-  library(ecodist)
-  library(energy)
-  library(HHG)
-  
 #load("../../Data/Preprocessed/BrainHippoShape.RData")
 ### Compute all local corr
 #source("MGCLocalCorr.R")
@@ -31,7 +27,7 @@ run_realData <- function(){
 #test=MGCPermutationTest(C,P,rep=1000,option='mcor')
 
 load("../../Data/Preprocessed/BrainCPData.RData")
-source("MGCLocalCorr.R")
+#source("MGCLocalCorr.R")
 
 #library(ecodist)
 library(energy) #dcorr package
@@ -44,7 +40,7 @@ C=distC;P=distP;ind=723;
 #lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
 #dcorr=dcor(as.dist(C),as.dist(P));
 mdcorr=dcor.ttest(C,P,distance=TRUE); #unbiased dcorr test
-mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
+#mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
 hhgr=hhg.test(C,P,nr.perm=1000); # hhg test
 
 ### Permutation Test of local corr

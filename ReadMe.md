@@ -1,8 +1,9 @@
 # Multiscale Generalized Correlation
 
 - [repo contents](#repo-contents)
-- [installation guide](#installation-guide)
-- [reproduction instructions](#reproduction-instructions)
+- [dependencies](#dependencies)
+- [matlab](#matlab)
+- [R](#R)
 
 For pseudocode for all algorithms, see Appendix of draft in `Draft`.
 
@@ -17,24 +18,22 @@ submitted.
 - [**Data**](https://github.com/neurodata-papers/MGC/tree/master/Data):  contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
 
 
-## Quick Start:
-
-### Dependencies
+## Dependencies
 
 Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra. 
 The local PC is equipped with i7 6850k and 64gb memory. 
 
-### MATLAB
-#### Installation
+## MATLAB
+### Installation
 
 Add all folders and subfolders of MGC to the path.
 
-#### Test on Real Data
+### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
 2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
 3. see `Code/Experimentes/run_demo.m` for example that outputs many things including a p-value (pMGC) of < 0.05; it takes < 10 seconds to run.
 
-#### Reproduction Instruction
+### Reproduction Instruction
 
 
 To reproduce all figures in the draft from pre-generated results, type
@@ -49,7 +48,7 @@ which re-runs the 1-dimensional simulations, high-dimensional simulations, and r
 Note that the default number of replicates in each experiment is set at 100, which is much smaller than the number used in the draft. This can be increased by the function argument at the cost of linearly increasing the running time.
 
 
-### R
+## R
 
 Set the working path to '/Code/R', and type `test=run_realData`  to give the demo of MGC running on real data and output the results. It runs in 1 minute.
 

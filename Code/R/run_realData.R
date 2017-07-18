@@ -29,7 +29,7 @@ run_realData <- function(){
 load("../../Data/Preprocessed/BrainCPData.RData")
 #source("MGCLocalCorr.R")
 
-#library(ecodist)
+library(ecodist)
 library(energy) #dcorr package
 library(HHG) #hhg package
 
@@ -40,7 +40,7 @@ C=distC;P=distP;ind=723;
 #lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
 #dcorr=dcor(as.dist(C),as.dist(P));
 mdcorr=dcor.ttest(C,P,distance=TRUE); #unbiased dcorr test
-#mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
+mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
 hhgr=hhg.test(C,P,nr.perm=1000); # hhg test
 
 ### Permutation Test of local corr

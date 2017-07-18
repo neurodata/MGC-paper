@@ -11,8 +11,8 @@ For pseudocode for all algorithms, see Appendix of draft in `Draft`.
 ## Repo Contents:
 
 - [**Code**](https://github.com/neurodata-papers/MGC/tree/master/Code): folder containing MATLAB & R code to reproduce all results in the manuscript
-- [**Draft**](https://github.com/neurodata-papers/MGC/tree/master/Draft): Discovering Relationships and their Structures Across Disparate Data Modalities, 
-Cencheng Shen, Carey E. Priebe, Mauro Maggioni, Qing Wang, Joshua T. Vogelstein, 
+- [**Draft**](https://github.com/neurodata-papers/MGC/tree/master/Draft): Discovering Relationships and their Structures Across Disparate Data Modalities,
+Cencheng Shen, Carey E. Priebe, Mauro Maggioni, Qing Wang, Joshua T. Vogelstein,
 submitted.
 - [**Figures**](https://github.com/neurodata-papers/MGC/tree/master/Figures):  all figures from the plotting code used in the draft
 - [**Data**](https://github.com/neurodata-papers/MGC/tree/master/Data):  contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
@@ -20,22 +20,21 @@ submitted.
 
 ## Dependencies
 
-Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra. 
-The local PC is equipped with i7 6850k and 64gb memory. 
+Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra.
+The local PC is equipped with i7 6850k and 64gb memory.
 
 
 ## MATLAB
 
 ### Installation
-Add all folders and subfolders of MGC to the path.
+Add all folders and subfolders of this repo to the path.
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
 2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
 
 ### Demo
-Type 
-- run_demo 
+Type  `run_demo`
 for a simulation example that outputs many things including visualization of the dependency, a p-value (pMGC) of < 0.05, the test statistic, and highlighted optimal scales in the multiscale significance map; it takes < 10 seconds to run.
 
 ### Reproduction Instruction
@@ -54,13 +53,10 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 ## R
 
-Set the working path to '/Code/R', and type 
+Set the working path to '/Code/R', and type
 - install.packages('HHG')
 - install.packages('ecodist')
 - install.packages('energy')
 - source('run_realData.R')
 - test=run_realData()
 to give the demo of MGC running on real data and output the results. The first three lines are package installation if they haven't been installed already, and the last line runs within 1 minute. Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.
-
-
-

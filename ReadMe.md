@@ -18,13 +18,14 @@ submitted.
 - [**Data**](https://github.com/neurodata-papers/MGC/tree/master/Data):  contains the processed raw data to reproduce all results in the draft, and existing results to readily generate the figures.
 
 
-## Dependencies
 
-Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra.
-The local PC is equipped with i7 6850k and 64gb memory.
 
 
 ## MATLAB
+
+### Dependencies
+
+We have tested in MATLAB R2017a on Windows 10 (on PC with i7 6850k and 64 GB memory) and  OSX Sierra (on MacBook Pro with 3.3 GHz Intel Core i7 and 16 GB RAM).
 
 ### Installation
 Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo` with the path to your local copy of the repo.
@@ -52,12 +53,21 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 ## R
 
+### Dependencies
+
+
+We have tested in R v3.4.1 on Windows 10 (on PC with i7 6850k and 64 GB memory) and  OSX Sierra (on MacBook Pro with 3.3 GHz Intel Core i7 and 16 GB RAM).
+
+On OSX, gfortan must also be installed, follow instructions from https://gcc.gnu.org/wiki/GFortranBinariesMacOS to do so.
+
+
 ### installation
 
 ```
 install.packages('ecodist')
 install.packages('HHG')
 install.packages('energy')
+install.packages('SDMTools')
 setwd("<path-to-repo>/MGC/Code/R")
 source('run_realData.R')
 test=run_realData()

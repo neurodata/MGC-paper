@@ -32,7 +32,7 @@ Add all folders and subfolders of MGC to the path.
 #### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
 2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
-3. see `Code/Experimentes/run_demo.m` for example that takes < 1 second to run.
+3. see `Code/Experimentes/run_demo.m` for example that outputs many things including a p-value (pMGC) of < 0.05; it takes < 10 seconds to run.
 
 #### Reproduction Instruction
 

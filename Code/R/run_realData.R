@@ -8,7 +8,7 @@ run_realData <- function(){
 #ldcorr=MGCLocalCorr(C,P,option='dcor')$corr;
 #lmdcorr=MGCLocalCorr(C,P,option='mcor')$corr;
 #lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
-### Global corr from the original authors. 
+### Global corr from the original authors.
 ### Their p-values in permutation test should be very similar to our local corr at largest scale,
 ### but the actual statistic can be slightly different.
 # global dcorr

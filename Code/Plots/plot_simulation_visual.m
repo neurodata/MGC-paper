@@ -24,6 +24,8 @@ s=4;
 t=5;
 if dim>1
     noise=0;
+else
+    noise=1;
 end
 
 cmap=zeros(3,3);
@@ -107,7 +109,7 @@ switch opt
 end
 set(h,'FontSize',24,'FontWeight','normal');
 
-F.fname=[strcat(pre2, 'SimVisual',num2str(opt))];
+F.fname=[strcat(pre2, 'SimVisual')];
 F.wh=[8 5]*2;
 print_fig(gcf,F)
 

@@ -2,7 +2,7 @@
 \input{preamble.tex}
 \input{preamble_mgc.tex}
 
-\linenumbers
+% \linenumbers
 
 \begin{document}
 
@@ -31,7 +31,10 @@
 \vspace{-15pt}
 \begin{abstract}
 % \vspace{-5pt}
-Determining whether certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult yet ever more important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related are further investigations into the geometry of the relationship warranted. While existing approaches can test whether two properties are related, they may require unfeasibly large sample sizes in real data scenarios, and do not provide insight into the geometry underlying the structure of the relationship. We juxtapose hypothesis testing, manifold learning, and harmonic analysis to obtain Multiscale Generalized Correlation (\Mgc). Our key insight is that one can \emph{adaptively} restrict the analysis to the  ``jointly local'' observations---that is, one can estimate the scale with the most informative neighbors for determining the existence and geometry of a relationship. We prove that to achieve a given true positive rate, \Mgc~typically requires far fewer samples than existing methods for all investigated dependence structures and dimensionalities, while maintaining computational efficiency. Moreover, \Mgc~uniquely provides a simple and elegant characterization of the potentially complex latent geometry underlying the relationship. We used \Mgc~to detect the presence and reveal the geometry of the relationships between mental and brain properties, to perform a proteomics screening, and to develop an imaging biomarker for disease, while avoiding the false positive inflation problems that have plagued conventional parametric approaches. Our open source implementation of \Mgc~is easy to use, parameter-free, and applicable to previously vexing statistical questions that are ubiquitous in science, government, finance, and other disciplines.
+Determining how certain properties are related to other properties is fundamental to scientific discovery. As data collection rates accelerate, it is becoming increasingly difficult yet ever more important to determine whether one property of data (e.g., cloud density) is related to another (e.g., grass wetness). Only if two properties are related are further investigations into the geometry of the relationship warranted. While existing approaches can test whether two properties are related, they may require unfeasibly large sample sizes in real data scenarios, and do not
+address how they are related.
+% provide insight into the geometry underlying the structure of the relationship. 
+We juxtapose hypothesis testing, manifold learning, and harmonic analysis to obtain Multiscale Generalized Correlation (\Mgc). Our key insight is that one can \emph{adaptively} restrict the analysis to the  ``jointly local'' observations---that is, one can estimate the scale with the most informative neighbors for determining the existence and geometry of a relationship. We prove that to achieve a given true positive rate, \Mgc~typically requires far fewer samples than existing methods for all investigated dependence structures and dimensionalities, while maintaining computational efficiency. Moreover, \Mgc~uniquely provides a simple and elegant characterization of the potentially complex latent geometry underlying the relationship. We used \Mgc~to detect the presence and reveal the geometry of the relationships between mental and brain properties, to perform a proteomics screening, and to develop an imaging biomarker for disease, while avoiding the false positive inflation problems that have plagued conventional parametric approaches. Our open source implementation of \Mgc~is easy to use, parameter-free, and applicable to previously vexing statistical questions that are ubiquitous in science, government, finance, and other disciplines.
 \end{abstract}
 
 \noindent%
@@ -1201,7 +1204,7 @@ Then, use the normalized Hellinger distance to compute distances between each su
 This experiment investigates whether there is any dependency between brain structural networks and creativity. Creativity has  been extensively studied in  psychology; the ``creativity composite index'' (CCI) is an index similar to an ``intelligence quotient'' but for creativity rather than intelligence \cite{Jung2009}.
 %
 This dataset consists of $109$ subjects, each with diffusion weighted MRI data as well as the subject's CCI.
-Neural correlates of CII have previously been investigated, though largely using structural MRI and cortical thickness \cite{Jung2009}.  Previously published results explored the relationship between graphs and  CCI \cite{Koutra15a}, but did not provide a valid test.
+Neural correlates of CCI have previously been investigated, though largely using structural MRI and cortical thickness \cite{Jung2009}.  Previously published results explored the relationship between graphs and  CCI \cite{Koutra15a}, but did not provide a valid test.
 %
 We used Euclidean distance to compare CCI values.
 For the raw brain imaging data, we derived the following comparison function.  For each scan we estimated brain networks from diffusion and structural MRI data via  \Migraine, a pipeline for estimating brain networks from diffusion data \cite{GrayRoncal2013}.

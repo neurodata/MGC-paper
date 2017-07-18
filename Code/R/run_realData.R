@@ -1,5 +1,7 @@
 # load the data
-load("BrainHippoShape.RData")
+
+run_realData <- function(){
+load("../../Data/Preprocessed/BrainHippoShape.RData")
 ### Compute all local corr
 library(ecodist)
 library(energy)
@@ -29,7 +31,7 @@ test=MGCPermutationTest(C,P,rep=1000,option='mcor')
 
 
 
-load("BrainCPData.RData")
+load("../../Data/Preprocessed/BrainCPData.RData")
 source("MGCLocalCorr.R")
 library(ecodist)
 library(energy)
@@ -49,3 +51,4 @@ source("MGCSampleStat.R")
 test=MGCSampleStat(C,P)
 source("MGCPermutationTest.R")
 test=MGCPermutationTest(C,P,rep=1000,option='mcor')
+}

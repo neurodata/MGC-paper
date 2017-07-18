@@ -25,11 +25,11 @@ rootDir=fpath(1:findex(end-2));
 addpath(genpath(strcat(rootDir,'Code/')));
 
 try
-     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'noise',num2str(noise),'.mat')); % The folder to locate data
+     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 catch
     display('no file exist, running instead')
     run_fig1Data(type,n,dim,noise);
-    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'noise',num2str(noise),'.mat')); % The folder to locate data
+    load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 end
 
 fontSize=18;

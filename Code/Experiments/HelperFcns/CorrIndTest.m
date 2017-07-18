@@ -193,19 +193,19 @@ for i=1:lim
     powerHHG(i)=calculatePower(dCorHHGN,dCorHHGA,alpha,rep);
     powerHSIC(i)=calculatePower(dCorHSICN,dCorHSICA,alpha,rep);
     powerMGC(i)=calculatePower(dCorMGCN,dCorMGCA,alpha,rep);
-    figure
-    hold on
-    [f,x]=ksdensity(reshape(dCorMN(nn,nn,:),1,rep));
-    plot(x,f,'r+')
-    [f,x]=ksdensity(reshape(dCorMA(nn,nn,:),1,rep));
-    plot(x,f,'r.')
-    [f,x]=ksdensity(dCorMGCN);
-    plot(x,f,'g-')
-    [f,x]=ksdensity(dCorMGCA);
-    plot(x,f,'g-')
-    s=strcat(num2str(powerMGC(i)),',',num2str(powerM(nn,nn,i)),',',num2str(max(max(powerM(:,:,i)))));
-    title(s);
-    hold off
+%     figure
+%     hold on
+%     [f,x]=ksdensity(reshape(dCorMN(nn,nn,:),1,rep));
+%     plot(x,f,'r+')
+%     [f,x]=ksdensity(reshape(dCorMA(nn,nn,:),1,rep));
+%     plot(x,f,'r.')
+%     [f,x]=ksdensity(dCorMGCN);
+%     plot(x,f,'g-')
+%     [f,x]=ksdensity(dCorMGCA);
+%     plot(x,f,'g-')
+%     s=strcat(num2str(powerMGC(i)),',',num2str(powerM(nn,nn,i)),',',num2str(max(max(powerM(:,:,i)))));
+%     title(s);
+%     hold off
 end
 
 function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)

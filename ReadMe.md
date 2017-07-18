@@ -56,10 +56,10 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 ```
 install.packages('HHG')
-install.packages('ecodist')
 install.packages('energy')
 setwd("<path-to-repo>/MGC/Code/R")
 source('run_realData.R')
+test=run_realData()
 ```
 
 Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo.

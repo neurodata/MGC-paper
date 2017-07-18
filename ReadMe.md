@@ -23,27 +23,31 @@ submitted.
 Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra. 
 The local PC is equipped with i7 6850k and 64gb memory. 
 
-## MATLAB
-### Installation
 
+## MATLAB
+
+### Installation
 Add all folders and subfolders of MGC to the path.
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
 2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
-3. see `Code/Experimentes/run_demo.m` for example that outputs many things including a p-value (pMGC) of < 0.05; it takes < 10 seconds to run.
+
+### Demo
+Type 
+- run_demo 
+for a simulation example that outputs many things including visualization of the dependency, a p-value (pMGC) of < 0.05, the test statistic, and highlighted optimal scales in the multiscale significance map; it takes < 10 seconds to run.
 
 ### Reproduction Instruction
 
-
 To reproduce all figures in the draft from pre-generated results, type
-- `plot_all;` 
+- plot_all;
 
 To re-generate results from scratch, type
-- `run_1d_sims;`
-- `run_hd_sims;`
-- `run_realData;` 
-which re-runs the 1-dimensional simulations, high-dimensional simulations, and real data experiments used in the draft. The running time is 20, 60, 20 minutes for each line above on the local PC.
+- run_1d_sims;
+- run_hd_sims;
+- run_realData;
+which re-runs the 1-dimensional simulations, high-dimensional simulations, and real data experiments used in the draft. The results are saved to Data/Results/ in .mat format and will replace the pre-generated ones. The running time is 20, 60, 20 minutes for each line above on the local PC.
 
 Note that the default number of replicates in each experiment is set at 100, which is much smaller than the number used in the draft. This can be increased by the function argument at the cost of linearly increasing the running time.
 
@@ -51,9 +55,12 @@ Note that the default number of replicates in each experiment is set at 100, whi
 ## R
 
 Set the working path to '/Code/R', and type 
--`source('run_realData.R')`
--`test=run_realData()`  
-to give the demo of MGC running on real data and output the results. It runs in 1 minute.
+- install.packages('HHG')
+- install.packages('ecodist')
+- install.packages('energy')
+- source('run_realData.R')
+- test=run_realData()
+to give the demo of MGC running on real data and output the results. The first three lines are package installation if they haven't been installed already, and the last line runs within 1 minute. Note that despite of the same implementation, the R version is slightly slower than Matlab for running on the same data, due to the fact that Matlab is slightly more efficient in handling matrix computation.
 
 
 

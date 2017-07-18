@@ -39,14 +39,13 @@ for a simulation example that outputs many things including visualization of the
 
 ### Reproduction Instruction
 
-To reproduce all figures in the draft from pre-generated results, type
-- plot_all;
+To reproduce the results in the manuscript, do any of the following:
 
-To re-generate results from scratch, type
-- run_1d_sims;
-- run_hd_sims;
-- run_realData;
-which re-runs the 1-dimensional simulations, high-dimensional simulations, and real data experiments used in the draft. The results are saved to Data/Results/ in .mat format and will replace the pre-generated ones. The running time is 20, 60, 20 minutes for each line above on the local PC.
+- `plot_all` reproduce all figures in the draft from pre-generated results
+- `run_1d_sims` runs the 1-dimensional simulations (~20 min)
+- `run_hd_sims` runs high-dimensional simulations (~60 min)
+- `run_realData` runs real data experiments (~20 min)
+
 
 Note that the default number of replicates in each experiment is set at 100, which is much smaller than the number used in the draft. This can be increased by the function argument at the cost of linearly increasing the running time.
 

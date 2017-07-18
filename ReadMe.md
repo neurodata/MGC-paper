@@ -69,8 +69,8 @@ install.packages('HHG')
 install.packages('energy')
 install.packages('SDMTools')
 setwd("<path-to-repo>/MGC/Code/R")
+source('MGCPermutationTest.R')
 source('run_realData.R')
-test=run_realData()
 ```
 
 Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo.

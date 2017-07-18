@@ -30,18 +30,18 @@ load("../../Data/Preprocessed/BrainCPData.RData")
 #source("MGCLocalCorr.R")
 
 library(ecodist)
-library(energy) #dcorr package
-library(HHG) #hhg package
+#library(energy) #dcorr package
+#library(HHG) #hhg package
 
-C=distC;P=distP;ind=723;
+C=distC;P=distP;#ind=723;
 #ldcorr=MGCLocalCorr(C,P,option='dcor')$corr;
 #lmdcorr=MGCLocalCorr(C,P,option='mcor')$corr;
 #weight=MGCLocalCorr(C,P,option='mcor',ind);
 #lmantel=MGCLocalCorr(C,P,option='mantel')$corr;
 #dcorr=dcor(as.dist(C),as.dist(P));
-mdcorr=dcor.ttest(C,P,distance=TRUE); #unbiased dcorr test
-mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
-hhgr=hhg.test(C,P,nr.perm=1000); # hhg test
+#mdcorr=dcor.ttest(C,P,distance=TRUE); #unbiased dcorr test
+#mantel=mantel(as.dist(C)~as.dist(P),nperm=1000); #mantel test
+#hhgr=hhg.test(C,P,nr.perm=1000); # hhg test
 
 ### Permutation Test of local corr
 #source("MGCSampleStat.R")

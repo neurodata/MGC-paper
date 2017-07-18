@@ -8,7 +8,7 @@ n=100;
 
 
 %% run mgc
-rep=10;
+rep=1000;
 option='mcor';
 
 A=squareform(pdist(x));

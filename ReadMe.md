@@ -58,7 +58,7 @@ Note that the default number of replicates in each experiment is set at 100, whi
 
 We have tested in R v3.4.1 on Windows 10 (on PC with i7 6850k and 64 GB memory) and  OSX Sierra (on MacBook Pro with 3.3 GHz Intel Core i7 and 16 GB RAM).
 
-On OSX, gfortan must also be installed, follow instructions from https://gcc.gnu.org/wiki/GFortranBinariesMacOS to do so.
+On OSX, gfortan must also be installed, to do so, follow instructions from https://gcc.gnu.org/wiki/GFortranBinariesMacOS.
 
 
 ### installation
@@ -73,7 +73,9 @@ source('run_realData.R')
 test=run_realData()
 ```
 
-Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo. Also on iOS machine, we occasionally encountered an error msg that fails to install the lgfortran package within ecodist; if that is the case, please try to either update R and RStudio to the most recent version, or run the codes on windows.
+Note that `<path-to-repo>` must be replaced with the path to your local copy of the repo.
+
+
 
 ### Demo
 

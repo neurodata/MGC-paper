@@ -39,7 +39,7 @@ for a simulation example that outputs many things including visualization of the
 
 ### Reproduction Instruction
 
-To reproduce the results in the manuscript, do any of the following:
+To reproduce the results in the manuscript, once installed, type any of the following:
 
 - `plot_all` reproduce all figures in the draft from pre-generated results
 - `run_1d_sims` runs the 1-dimensional simulations (~20 min)

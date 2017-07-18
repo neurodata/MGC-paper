@@ -21,13 +21,14 @@ submitted.
 
 ### Dependencies
 
-Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10. The local PC is equipped with i7 6850k and 64gb memory. 
+Either MATLAB or R, we have tested in MATLAB R2017a & R-3.4.1 on Windows 10 and MATLAB R2016b on Mac OSX Sierra. 
+The local PC is equipped with i7 6850k and 64gb memory. 
 
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
 2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
-
+3. see `Code/Experimentes/run_demo.m` for example that takes < 1 second to run.
 
 ## Reproduction Instruction
 

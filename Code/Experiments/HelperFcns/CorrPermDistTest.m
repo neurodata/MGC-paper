@@ -31,7 +31,7 @@ end
 if option(4)==4
     [pHHG,testHHG]=HHGPermutationTest(C,D,rep);
 end
-pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);testD=testDLocal(end);testM=testMLocal(end);
+pD=pDLocal(end);pM=pMLocal(end);pP=pPLocal(end);testD=testDLocal(end);testM=testMLocal(end);testP=testPLocal(end);
 
 %%% File path searching
 fpath = mfilename('fullpath');
@@ -42,7 +42,7 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrPermDistTestType',titlechar);
-save(filename,'titlechar','rep','option','pDLocal','pMLocal','pPLocal','pHHG','pMGC','pD','pM','pP','optimalInd','testMGC','testDLocal','testMLocal','testMLocal','testHHG');
+save(filename,'titlechar','rep','option','pDLocal','pMLocal','pPLocal','pHHG','pMGC','pD','pM','pP','optimalInd','testMGC','testDLocal','testMLocal','testPLocal','testHHG');
 
 function  [pHHG, testHHG]=HHGPermutationTest(C,D,rep)
 % Author: Cencheng Shen

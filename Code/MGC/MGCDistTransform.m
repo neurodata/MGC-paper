@@ -15,6 +15,9 @@ if strcmp(option,'mcorDouble')==false && strcmp(option,'dcorDouble')==false
     B=B';
     RY=RY';
 end
+% if strcmp(option,'mgc2')==true
+%     B=Y;
+% end
 
 function [A,RX]=DistCentering(X,option)
 % An auxiliary function that properly centers the distance matrix X,
@@ -51,6 +54,9 @@ switch option
     case 'mcorDouble' % original double centering of mcor
         EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
         EX=EX+X/n;
+%     case 'mgc2' % original double centering of mcor
+%         EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
+%         EX=EX+X/n;
 end
 A=X-EX;
 

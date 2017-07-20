@@ -26,16 +26,27 @@ if m==1 || n==1;
     return;
 end
 
+% approximate a threshold for significant local stat
+% first based on distribution approximation
+mn=max(m,n);
+prtl=0.95;
+thres=sqrt(mn*(mn-3)/2-1);
+tmp=icdf('normal',prtl,0,1);
+thres=tmp/thres;
+%%% thres=mn*(mn-3)/4-1/2;
+%%% thres=icdf('beta',prtl,thres,thres)*2-1;
+% next based on nonparamtric estimation via negative stats
 negCorr=localCorr(2:end,2:end);
 negCorr=negCorr(negCorr<0); % negative correlations
-thres1=3.5*max(norm(negCorr,'fro')/sqrt(length(negCorr)),0.01); % threshold based on negative correlations
-thres2=2/max(min(m,n),50); % threshold based on sample size
-tau=0.1;
+% take the max
+thres=max(3.5*norm(negCorr,'fro')/sqrt(length(negCorr)),thres); % threshold based on negative correlations
 
+% threshold for significant region area
+thres2=2/max(min(m,n),50); % threshold based on sample size
 statMGC=localCorr(end); % take the global correlation by default
 
 %R=(localCorr>max(thres1,thres2)); % find all correlations that are larger than the thresholds
-localCorr(localCorr<=max(thres1,thres2))=0;
+localCorr(localCorr<=max(thres,thres2))=0;
 R=(localCorr>0);
 % find the largest connected component of all significant correlations
 CC=bwconncomp(R,4);
@@ -49,6 +60,7 @@ else
     R=0;
 end
 
+tau=0.1;
 if mean(mean(R))>=thres2 % proceed only when the region area is sufficiently large
     [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find the scale within R that has the maximum correlation
     

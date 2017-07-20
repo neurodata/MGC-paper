@@ -42,7 +42,7 @@ powerHSIC=zeros(1,lim);powerHHG=zeros(1,lim);
 neighborhoods=ones(3,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
-%[~,~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
+[~,~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
 
 % Run the independence test again for the testing powers
 [powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG,powerHSIC]=IndependenceTest(type,numRange,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG

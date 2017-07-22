@@ -46,9 +46,9 @@ MGCSampleStat <- function(A,B,option){
     # for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
     thres=localCorr[2:m,2:n];
     thres=thres[thres<0]; # negative correlations
-    thres=3*sqrt(sum(thres^2)/length(thres));  # threshold based on negative correlations
-    if (is.na(thres)||thres<0.01){
-      thres=0.03;
+    thres=3.5*sqrt(sum(thres^2)/length(thres));  # threshold based on negative correlations
+    if (is.na(thres)||thres<0.035){
+      thres=0.035;
     }
   }
   

@@ -43,7 +43,7 @@ else
     % for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
     thres=localCorr(2:end,2:end);
     thres=thres(thres<0); % negative correlations
-    thres=3*max(norm(thres,'fro')/sqrt(length(thres)),0.01);
+    thres=3.5*max(norm(thres,'fro')/sqrt(length(thres)),0.01);
 end
 
 % find all correlations that are larger than the threshold

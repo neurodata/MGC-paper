@@ -1,7 +1,6 @@
-source("DistRanks.R")
-source("DistCentering.R")
+source("MGCDistTransform.R")
 
-MGCLocalCorr <- function(X,Y,option, ind){
+MGCLocalCorr <- function(X,Y,option){
   # Author: Cencheng Shen
   # The main function that calculates all local correlation coefficients.
   #
@@ -10,30 +9,12 @@ MGCLocalCorr <- function(X,Y,option, ind){
   # an option that specifies which global correlation to use, including 'mcor','dcor','mantel'.
   #
   # The outputs are all local correlations and all local variances.
-  #
-  # Alternatively, specifying ind by a matrix single index will return a
-  # weight matrix that shows the contribution of each distance entries to
-  # the eventual local distance correlation at the given index.
   if (missing(option)){
     option='mcor'; # use mcorr by default
   }
-  if (missing(ind)){
-    ind=numeric(0);
-  }
-  n=nrow(X);
-  disRank=cbind(DistRanks(X), DistRanks(Y)); # sort distances within columns
-  
-  # depending on the choice of the global correlation, properly center the distance matrices
-  A=DistCentering(X,option);
-  B=DistCentering(Y,option);
-  
-  RX=disRank[,1:n]; # the ranks for X
-  RY=disRank[,(n+1):(2*n)]; # the ranks for Y
-  if (length(ind)!=1){
-    result=LocalCorrelations(A,t(B),RX,t(RY)); # compute all local corr / var statistics
-  } else {
-    result=LocalWeights(A,t(B),RX,t(RY),ind); # compute distance entry contributions at a given scale
-  }
+ 
+  tmp=MGCDistTransform(X,Y,option);
+  result=LocalCorrelations(tmp$A,tmp$B,tmp$RX,tmp$RY); # compute all local corr / var statistics
   return(result);
 }
 
@@ -98,19 +79,19 @@ LocalCorrelations <- function(A,B,RX,RY){
   return(result);
 }
 
-LocalWeights <- function(A,B,RX,RY,ind){
+#LocalWeights <- function(A,B,RX,RY,ind){
   # An auxiliary function that computes the contributions of each distance entries to
   # the local distance correlation at a given scale.
-  nX=max(RX);nY=max(RY);
-  if (ind>nX*nY || ind<1){
-    ind=nX*nY; # default to global scale when the specified index is out of range
-  }
-  k = ((ind-1) %% nX) + 1
-  l = floor((ind-1) / nX) + 1
-  RX=(RX>k);
-  RY=(RY>l);
-  A[RX]=0;
-  B[RY]=0;
-  weight=(A-mean(A))*(B-mean(B));
-  return(weight);
-}
+ # nX=max(RX);nY=max(RY);
+  #if (ind>nX*nY || ind<1){
+   # ind=nX*nY; # default to global scale when the specified index is out of range
+  #}
+  #k = ((ind-1) %% nX) + 1
+  #l = floor((ind-1) / nX) + 1
+  #RX=(RX>k);
+  #RY=(RY>l);
+  #A[RX]=0;
+  #B[RY]=0;
+  #weight=(A-mean(A))*(B-mean(B));
+  #return(weight);
+#}

@@ -19,23 +19,40 @@ MGCSampleStat <- function(A,B,option){
   if (missing(B) && missing(option)){
     localCorr=A; # if there is only one input, asume the localCorr is given as A
   } else {
+    if (missing(option)){
+      option='mcor';
+    }
     localCorr=MGCLocalCorr(A,B,option)$corr; # otherwise compute the localCorr from given distance matrices
   }
   m=nrow(localCorr);
   n=ncol(localCorr);
-
-  negCorr=localCorr[2:m,2:n];
-  negCorr=negCorr[negCorr<0]; # negative correlations
-  thres1=sqrt(sum(negCorr^2)/length(negCorr));  # threshold based on negative correlations
-  if (is.na(thres1) || thres1<0.01){
-    thres1=0.01;
-  }
-  thres1=thres1*3.5;
-  thres2=2/max(min(m,n),50); # threshold based on sample size
-
   statMGC=localCorr[m,n]; # take the global correlation by default
-
-  R=(localCorr>max(thres1,thres2)); # find all correlations that are larger than the thresholds
+  if (m==1||n==1){
+     return(statMGC);
+  }
+  prt=0.975;
+  tau=0.1;
+  
+  # approximate a threshold for significant local dcorr
+  mn=max(min(c(m,n,80)),20);
+  # The degree mn equals sample size, but is otherwise bounded by [20,80]: less than 20 is too small for the
+  # approximation to be accurate, while larger than 80 caused the threshold to be too small
+  if (mn>20){
+    # for sufficient sample size, estimate based on normal distribution approximation from Szekely2013
+    thres=sqrt((mn*(mn-3)/2)-1);
+    thres=qnorm(prt)/thres;
+  }
+  else{
+    # for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
+    thres=localCorr[2:m,2:n];
+    thres=thres[thres<0]; # negative correlations
+    thres=3*sqrt(sum(thres^2)/length(thres));  # threshold based on negative correlations
+    if (is.na(thres)||thres<0.01){
+      thres=0.03;
+    }
+  }
+  
+  R=(localCorr>thres); # find all correlations that are larger than the thresholds
   # find the largest connected component of all significant correlations
   if (sum(R)>0){
      R=ConnCompLabel(R==1);
@@ -44,13 +61,13 @@ MGCSampleStat <- function(A,B,option){
      R=(R==tmp);
   }
 
-  if (mean(R)>=thres2){ # proceed only when the region area is sufficiently large
+  if (mean(R)>=1/mn){ # proceed only when the region area is sufficiently large
       ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
 
-      ln=ceiling(0.1*m); # boundary for checking adjacent rows
-      km=ceiling(0.1*n); # boundary for checking adjacent columns
+      ln=ceiling(tau*m); # boundary for checking adjacent rows
+      km=ceiling(tau*n); # boundary for checking adjacent columns
       for (i in (1:length(k))){
         ki=k[i];
         li=l[i];
@@ -64,7 +81,7 @@ MGCSampleStat <- function(A,B,option){
         tmp1=min(localCorr[upper:down,li]); # minimal correlation at given row and adjacent columns
         tmp2=min(localCorr[ki,left:right]); # minimal correlation at given column and adjacent rows
         tmp=max(tmp1,tmp2); # take the max of the two minimal correlations
-        if (tmp>statMGC){
+        if (tmp>=statMGC){
           statMGC=tmp; 
         }
       }

@@ -66,8 +66,8 @@ MGCSampleStat <- function(A,B,option){
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
 
-      ln=ceiling(tau*m); # boundary for checking adjacent rows
-      km=ceiling(tau*n); # boundary for checking adjacent columns
+      ln=ceiling(tau*n); # boundary for checking adjacent rows
+      km=ceiling(tau*m); # boundary for checking adjacent columns
       for (i in (1:length(k))){
         ki=k[i];
         li=l[i];

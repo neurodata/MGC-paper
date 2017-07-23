@@ -65,8 +65,8 @@ end
 if mean(mean(R))>=1/mn % proceed only when the significant region is sufficiently large
     [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
     
-    ln=ceil(tau*m); % number of adjacent rows to check
-    km=ceil(tau*n); % number of adjacent columns to check
+    ln=ceil(tau*n); % number of adjacent rows to check
+    km=ceil(tau*m); % number of adjacent columns to check
     for i=1:length(k)
         ki=k(i);
         li=l(i);
@@ -87,3 +87,15 @@ if mean(mean(R))>=1/mn % proceed only when the significant region is sufficientl
         end
     end
 end
+
+% function localCorr=smoothing(localCorr,tau)
+% 
+% [m,n]=size(localCorr);
+% l2=localCorr;
+% ln=ceil(tau*m); % number of adjacent rows to check
+% for i=1:m
+%     for j=1:n;
+%         left=max(2,li-ln);
+%         right=min(n,li+ln);
+%     end
+% end

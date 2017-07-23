@@ -62,7 +62,7 @@ if select==4 || select==7
     % Screening Ovariance vs Normal
     pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
     for i=1:m
-        i
+        %i
         C=squareform(pdist(A(i,per)'));
         [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
     end
@@ -89,13 +89,14 @@ if select==5 || select==7
     
     C=squareform(pdist(A(:,per)'));
     CorrPermDistTest(C,D,rep,'ProteomicsPancvsNormal');
-    % ind=181;%296 for hhg
-    % C=squareform(pdist(A(ind,per)'));
-    % CorrPermDistTest(C,D,rep*2,'ProteomicsPancvsNormalNeuroganin');
+    ind=181;%296 for hhg
+    C=squareform(pdist(A(ind,per)'));
+    CorrPermDistTest(C,D,rep,'ProteomicsPancvsNormalNeuroganin');
     
     % Screening Panc vs Normal
     pMGC=zeros(m,1);pD=zeros(m,1);pM=zeros(m,1);pP=zeros(m,1);pHHG=zeros(m,1);testMGC=zeros(m,1);testD=zeros(m,1);testM=zeros(m,1);testHHG=zeros(m,1);
     for i=1:m
+        %i
         C=squareform(pdist(A(i,per)'));
         [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
     end
@@ -123,9 +124,9 @@ if select==6 || select==7
     D=squareform(pdist(D));
     m=318;
     
-    % C=squareform(pdist(A(:,per)'));
-    % CorrPermDistTest(C,D,rep*2,'ProteomicsOvarvsAll');
-    %ind=181;
+    C=squareform(pdist(A(:,per)'));
+    CorrPermDistTest(C,D,rep,'ProteomicsPancvsAll');
+    ind=181;
     % C=A(:,per)';
     % for i=1:318
     % C(:,i)=C(:,i)/norm(C(:,i));

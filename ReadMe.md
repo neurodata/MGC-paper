@@ -28,7 +28,7 @@ submitted.
 We have tested in MATLAB R2017a on Windows 10 (on PC with i7 6850k and 64 GB memory) and  OSX Sierra (on MacBook Pro with 3.3 GHz Intel Core i7 and 16 GB RAM).
 
 ### Installation
-Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo` with the path to your local copy of the repo.
+Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo>` with the path to your local copy of the repo.
 
 ### Test on Real Data
 1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
@@ -68,7 +68,7 @@ install.packages('ecodist')
 install.packages('HHG')
 install.packages('energy')
 install.packages('SDMTools')
-setwd("<path-to-repo>/MGC/Code/R")
+setwd("<path-to-repo>/Code/R")
 source('MGCPermutationTest.R')
 source('run_realData.R')
 ```

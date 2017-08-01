@@ -1,8 +1,7 @@
 # Multiscale Generalized Correlation
 
-- [repo contents](#repo-contents)
-- [dependencies](#dependencies)
-- [matlab](#matlab)
+- [Repo Contents](#repo-contents)
+- [MATLAB](#matlab)
 - [R](#R)
 
 For pseudocode for all algorithms, see Appendix of draft in `Draft`.

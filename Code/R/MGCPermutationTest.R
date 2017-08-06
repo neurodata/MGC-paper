@@ -32,7 +32,7 @@ MGCPermutationTest <-function(A,B,rep,option){
     sampleIndicator=1; # only compute sample MGC for mcorr
   } 
   # calculate all local correlations between the two data sets
-  localCorr=MGCLocalCorr(A,B,option)$corr;
+  localCorr=MGCLocalCorr(A,B,option);
   if (sampleIndicator==1){
     statMGC=MGCSampleStat(localCorr) # sample MGC for the observed data
   } 
@@ -47,7 +47,7 @@ MGCPermutationTest <-function(A,B,rep,option){
     # use random permutations on the second data set
     per=sample(n2);
     BN=B[per,per];
-    tmp=MGCLocalCorr(A,BN,option)$corr;
+    tmp=MGCLocalCorr(A,BN,option);
     pLocalCorr=pLocalCorr+(tmp>=localCorr)*1/rep;
     if (sampleIndicator==1){
       tmp2=MGCSampleStat(tmp) # sample MGC for permuted data

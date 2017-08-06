@@ -39,6 +39,10 @@ DistCentering<-function(X,option){
   if (option=='mgc'){ 
     EX=t(matrix(rep(colMeans(X)*n/(n-1),n), ncol = n));
   }
+  if (option=='rank'){ # single centering of mcor
+    X=RX;
+    EX=t(matrix(rep(colMeans(X)*n/(n-1),n), ncol = n));
+  }
   if (option=='mantel'){
     EX=sum(X)/n/(n-1);
   }

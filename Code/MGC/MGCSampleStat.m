@@ -1,6 +1,6 @@
 function [statMGC]=MGCSampleStat(A,B,option)
 % Author: Cencheng Shen
-% This function finds the sample MGC statistic by smoothing on the maximal local correlation, 
+% This function finds the sample MGC statistic by smoothing on the maximal local correlation,
 % which is an estimate of the Oracle MGC (i.e., optimal local correlation
 % in terms of testing power).
 %
@@ -22,29 +22,38 @@ else
     localCorr=MGCLocalCorr(A,B,option); % otherwise compute the localCorr from given distance matrices
 end
 [m,n]=size(localCorr);
+mn=min([m,n]);
+% mn=max(min([m,n,80]),20);
 statMGC=localCorr(end); % take the global correlation by default for sample mgc
 if m==1 || n==1
     return;
 end
-prt=0.975;% percentile to consider as significant
-tau=0.1; % percentage of adjacent scales to smooth with
-  
+
+%0.9999,0.01,1 is the best so far
+prt=1-0.01/mn;% percentile to consider as significant
+tau=0.01; % percentage of adjacent scales to smooth with
+mn=max(mn,20);
+
+R=Thresholding(localCorr,m,n,mn,prt);
+statMGC=Smoothing(localCorr,m,n,mn,R,tau);
 % approximate a threshold for significant local dcorr
-mn=max(min([m,n,80]),20); 
+% mn=max(min([m,n,80]),20);
 % The degree mn equals sample size, but is otherwise bounded by [20,80]: less than 20 is too small for the
 % approximation to be accurate, while larger than 80 caused the threshold to be too small
-if mn>20
-    % for sufficient sample size, estimate based on normal distribution approximation from Szekely2013
-    thres=sqrt(mn*(mn-3)/2-1);
-    thres=icdf('normal',prt,0,1)/thres;
-    %%% thres=mn*(mn-3)/4-1/2;
-    %%% thres=icdf('beta',prtl,thres,thres)*2-1;
-else
-    % for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
-    thres=localCorr(2:end,2:end);
-    thres=thres(thres<0); % negative correlations
-    thres=3.5*max(norm(thres,'fro')/sqrt(length(thres)),0.01);
-end
+
+function R=Thresholding(localCorr,m,n,mn,prt)
+% if mn>20
+% for sufficient sample size, estimate based on normal distribution approximation from Szekely2013
+thres=sqrt(mn*(mn-3)/2-1);
+thres=icdf('normal',prt,0,1)/thres;
+%%% thres=mn*(mn-3)/4-1/2;
+%%% thres=icdf('beta',prtl,thres,thres)*2-1;
+% else
+%     %for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
+%     thres=localCorr(2:end,2:end);
+%     thres=thres(thres<0); % negative correlations
+%     thres=8*max(norm(thres,'fro')/sqrt(length(thres)),0.005);
+% end
 
 % find all correlations that are larger than the threshold
 %localCorr(localCorr<=thres)=0; % localCorr(localCorr<=max(thres,thres2))=0;
@@ -62,40 +71,39 @@ else
 end
 
 % Smooth maximal local correlation in the significant region for sample mgc
-if mean(mean(R))>=1/mn % proceed only when the significant region is sufficiently large
-    [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
-    
-    ln=ceil(tau*n); % number of adjacent rows to check
-    km=ceil(tau*m); % number of adjacent columns to check
-    for i=1:length(k)
-        ki=k(i);
-        li=l(i);
+% if mean(mean(R))>=1/mn % proceed only when the significant region is sufficiently large
+% %     statMGC=max(localCorr(R==1));
+%
+% end
+
+function statMGC=Smoothing(localCorr,m,n,mn,R,tau)
+statMGC=localCorr(end);
+if mean(mean(R))>=2/mn
+    if (R(m,n)==1)
+        return;
+    else
+        [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
         
-        % boundary of rows and columns for smoothing
-        left=max(2,li-ln);
-        right=min(n,li+ln);
-        upper=max(2,ki-km);
-        down=min(m,ki+km);
-        
-        tmp1=min(localCorr(upper:down,li)); % take minimal correlation at given row and along adjacent columns
-        tmp2=min(localCorr(ki,left:right)); % take minimal correlation at given column and along adjacent rows
-        tmp=max(tmp1,tmp2); % take the max of the two minimal correlations for sample mgc
-        
-        % use the smoothed maximal local correlation for mgc statistic, only when it is larger than global dcorr
-        if tmp >= statMGC 
-            statMGC=tmp;
+        ln=ceil(tau*n); % number of adjacent rows to check
+        km=ceil(tau*m); % number of adjacent columns to check
+        for i=1:length(k)
+            ki=k(i);
+            li=l(i);
+            
+            % boundary of rows and columns for smoothing
+            left=max(2,li-ln);
+            right=min(n,li+ln);
+            upper=max(2,ki-km);
+            down=min(m,ki+km);
+            
+            tmp1=min(localCorr(upper:down,li)); % take minimal correlation at given row and along adjacent columns
+            tmp2=min(localCorr(ki,left:right)); % take minimal correlation at given column and along adjacent rows
+            tmp=max(tmp1,tmp2); % take the max of the two minimal correlations for sample mgc
+            
+            % use the smoothed maximal local correlation for mgc statistic, only when it is larger than global dcorr
+            if tmp >= statMGC
+                statMGC=tmp;
+            end
         end
     end
 end
-
-% function localCorr=smoothing(localCorr,tau)
-% 
-% [m,n]=size(localCorr);
-% l2=localCorr;
-% ln=ceil(tau*m); % number of adjacent rows to check
-% for i=1:m
-%     for j=1:n;
-%         left=max(2,li-ln);
-%         right=min(n,li+ln);
-%     end
-% end

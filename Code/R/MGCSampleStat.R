@@ -22,50 +22,62 @@ MGCSampleStat <- function(A,B,option){
     if (missing(option)){
       option='mcor';
     }
-    localCorr=MGCLocalCorr(A,B,option)$corr; # otherwise compute the localCorr from given distance matrices
+    localCorr=MGCLocalCorr(A,B,option); # otherwise compute the localCorr from given distance matrices
   }
   m=nrow(localCorr);
   n=ncol(localCorr);
+  mn=min(m,n);
   statMGC=localCorr[m,n]; # take the global correlation by default
   if (m==1||n==1){
-     return(statMGC);
+    return(statMGC);
   }
-  prt=0.975;
-  tau=0.1;
+  prt=1-0.01/mn;
+  tau=0.01;
+  mn=max(mn,20);
   
   # approximate a threshold for significant local dcorr
-  mn=max(min(c(m,n,80)),20);
   # The degree mn equals sample size, but is otherwise bounded by [20,80]: less than 20 is too small for the
   # approximation to be accurate, while larger than 80 caused the threshold to be too small
-  if (mn>20){
-    # for sufficient sample size, estimate based on normal distribution approximation from Szekely2013
-    thres=sqrt((mn*(mn-3)/2)-1);
-    thres=qnorm(prt)/thres;
-  }
-  else{
-    # for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
-    thres=localCorr[2:m,2:n];
-    thres=thres[thres<0]; # negative correlations
-    thres=3.5*sqrt(sum(thres^2)/length(thres));  # threshold based on negative correlations
-    if (is.na(thres)||thres<0.035){
-      thres=0.035;
-    }
-  }
+  R=Thresholding(localCorr,m,n,mn,prt);
+  statMGC=Smoothing(localCorr,m,n,mn,R,tau);
+  return(statMGC);
+}
+
+Thresholding <- function(localCorr,m,n,mn,prt){
+  # for sufficient sample size, estimate based on normal distribution approximation from Szekely2013
+  thres=sqrt((mn*(mn-3)/2)-1);
+  thres=qnorm(prt)/thres;
+  
+  # for insufficient sample size, estimate based on nonparamtric estimation via negative statistics
+  # thres=localCorr[2:m,2:n];
+  # thres=thres[thres<0]; # negative correlations
+  # thres=3.5*sqrt(sum(thres^2)/length(thres));  # threshold based on negative correlations
+  # if (is.na(thres)||thres<0.035){
+  # thres=0.035;
+  # }
   
   R=(localCorr>thres); # find all correlations that are larger than the thresholds
   # find the largest connected component of all significant correlations
   if (sum(R)>0){
-     R=ConnCompLabel(R==1);
-     tmp=tabulate(R);
-     tmp=which.max(tmp);
-     R=(R==tmp);
+    R=ConnCompLabel(R==1);
+    tmp=tabulate(R);
+    tmp=which.max(tmp);
+    R=(R==tmp);
   }
+  return(R);
+}
 
-  if (mean(R)>=1/mn){ # proceed only when the region area is sufficiently large
+Smoothing <- function(localCorr,m,n,mn,R,tau){
+  statMGC=localCorr[m,n];
+  if (mean(R)>=2/mn){ # proceed only when the region area is sufficiently large
+    if (R[m,n]==1){
+      return(statMGC);
+    }
+    else{
       ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
-
+      
       ln=ceiling(tau*n); # boundary for checking adjacent rows
       km=ceiling(tau*m); # boundary for checking adjacent columns
       for (i in (1:length(k))){
@@ -85,6 +97,7 @@ MGCSampleStat <- function(A,B,option){
           statMGC=tmp; 
         }
       }
+    }
   }
   return(statMGC);
 }

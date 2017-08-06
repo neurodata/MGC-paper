@@ -2,8 +2,6 @@
 \input{preamble.tex}
 \input{preamble_mgc.tex}
 
-% \linenumbers
-
 \begin{document}
 
 \def\spacingset#1{\renewcommand{\baselinestretch}%
@@ -272,11 +270,11 @@ The above theory and simulated experiments motivated us to test \Mgc~on five dif
 \hline
 Testing Pairs / Methods & Sample \Mgc & \Mantel & \Dcorr & \Mcorr & \Hhg \\
 \hline
-Activity vs Personality & $\textbf{0.033}$  & $0.988$ & $0.647$ & $0.446$ & $0.056$ \\
+Activity vs Personality & $\textbf{0.049}$  & $0.990$ & $0.663$ & $0.447$ & $0.056$ \\
 \hline
-Network vs Creativity & $\textbf{0.011}$  & ${0.012}$ & $\textbf{0.011}$ & $\textbf{0.011}$ & ${0.033}$ \\
+Network vs Creativity & $\textbf{0.013}$  & ${0.010}$ & $\textbf{0.010}$ & $\textbf{0.013}$ & ${0.029}$ \\
 \hline
-Shape vs Disease & $\textbf{0.019}$  & $0.079$ & $0.108$ & $0.106$ & $0.179$ \\
+Shape vs Disease & $\textbf{0.029}$  & $0.080$ & $0.108$ & $0.112$ & $0.161$ \\
 \hline
 \end{tabular}
 \end{table*}
@@ -648,7 +646,8 @@ Sample \Mgc~uses a permutation test to obtain the multiscale significance map an
 %
 Once all local significance values are computed, the optimal scales are estimated by the tightest bounding box in the local scales with significance p-values no larger than the p-value and local statistics no smaller than the test statistic (see Algorithm \ref{alg:pval} for details), which serves as an estimation of all potential optimal scales. This is useful because the Sample \Mgc~statistic is computed from one local scale, but the multiscale power maps in Figure~\ref{f:powermaps}  shows many scales are close to optimal.
 
-Neither Oracle \Mgc~nor Sample \Mgc~ suffers from the multiple hypothesis testing problem \cite{Benjamini1995}, and the resulting test is always valid, i.e., the false positive rate is never inflated. All simulations and real data experiments in the main paper use Sample \Mgc,  while Oracle \Mgc~is used for comparison in simulations and theory. Figure \ref{f:schematic} provides a further illustration of the relationship between \Mantel, \Mcorr, local generalized correlation, and both Oracle and Sample \Mgc.
+Neither Oracle \Mgc~nor Sample \Mgc~ suffers from the multiple hypothesis testing problem \cite{Benjamini1995}, and the resulting test is always valid, i.e.,
+when null equals the alternative, the test statistic distributes the same under the permutation test such that the p-value is uniformly distributed in $[0,1]$, which means that the false positive rate is never inflated. All simulations and real data experiments in the main paper use Sample \Mgc, while Oracle \Mgc~is used for comparison in simulations and theory. Figure \ref{f:schematic} provides a further illustration of the relationship between \Mantel, \Mcorr, local generalized correlation, and both Oracle and Sample \Mgc.
 
 \subsection{Computational Complexity}
 
@@ -661,7 +660,7 @@ By utilizing a multi-core architecture, \Mgc~can be computed in $\mc{O}(n^2 \max
 
 Sample \Mgc~algorithm can be thought of as taking the largest correlation after smoothing, where the smoothing step identifies adjacent correlations in the multiscale correlation map that are significantly larger than $0$. This algorithm is tailored for \Mgc~for \Mcorr, because \Dcorr~and its local generalized correlations are biased (i.e., the expectations may not be $0$ under independence). The impact of the bias of \Dcorr~is that significant correlations cannot be easily determined by the the magnitude of each local statistic. Therefore, the unbiasedness of \Mcorr~is extremely useful for easily comparing its local generalized correlations and screening out insignificant local generalized correlations very close to $0$, which in turns allows a fast and valid Sample \Mgc~statistic to be designed for \Mcorr.
 
-A general estimation technique can be designed for Sample \Mgc~of \Dcorr~and \Mantel~as well: instead of estimating an optimal correlation by smoothing the local generalized correlation map, one may instead estimate the optimal p-value by smoothing the significance map (e.g., choose the smallest significance value that spans sufficiently many adjacency scales), then treat the estimated optimal p-value as a test statistic and run the permutation test again to compute the true p-value. This general estimation technique is immune to the bias of local generalized correlations, and was suggested by Heller et al. (2016) \cite{heller2016consistent}. However, it requires more random permutations, is therefore much slower, and does not offer any more theoretical or numerical advantages in testing. Thus in this paper we stick to the current Sample \Mgc~method for \Mcorr~only.
+A general estimation technique can be designed for Sample \Mgc~of \Dcorr~and \Mantel~as well: instead of estimating an optimal correlation by smoothing the local generalized correlation map, one may instead estimate the optimal p-value by smoothing the significance map (e.g., choose the smallest significance value that spans sufficiently many adjacency scales), then treat the estimated optimal p-value as a test statistic and run the permutation test again to compute the true p-value. This general estimation technique is immune to the bias of local generalized correlations, and can be designed without additional running time as suggested by Heller et al. (2016) \cite{heller2016consistent}. However, taking the p-value as the test statistic often can be less desirable and interpret-able than a correlation measure, thus in this paper we stick to the Sample \Mgc~method for \Mcorr~only.
 
 \subsection{Theorems and Proofs for \Mgc}
 \label{appen:theory}

@@ -32,7 +32,7 @@ MGCSampleStat <- function(A,B,option){
     return(statMGC);
   }
   prt=1-0.01/mn;
-  tau=0.01;
+  tau=1;
   mn=max(mn,20);
   
   # approximate a threshold for significant local dcorr
@@ -78,8 +78,8 @@ Smoothing <- function(localCorr,m,n,mn,R,tau){
       k = ((ind-1) %% m) + 1
       l = floor((ind-1) / m) + 1
       
-      ln=ceiling(tau*n); # boundary for checking adjacent rows
-      km=ceiling(tau*m); # boundary for checking adjacent columns
+      ln=ceiling(tau); # boundary for checking adjacent rows
+      km=ceiling(tau); # boundary for checking adjacent columns
       for (i in (1:length(k))){
         ki=k[i];
         li=l[i];

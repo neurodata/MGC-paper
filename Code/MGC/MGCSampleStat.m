@@ -31,7 +31,7 @@ end
 
 %0.9999,0.01,1 is the best so far
 prt=1-0.01/mn;% percentile to consider as significant
-tau=0.01; % percentage of adjacent scales to smooth with
+tau=1; % percentage of adjacent scales to smooth with
 mn=max(mn,20);
 
 R=Thresholding(localCorr,m,n,mn,prt);
@@ -84,8 +84,8 @@ if mean(mean(R))>=2/mn
     else
         [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
         
-        ln=ceil(tau*n); % number of adjacent rows to check
-        km=ceil(tau*m); % number of adjacent columns to check
+        ln=ceil(tau); % number of adjacent rows to check
+        km=ceil(tau); % number of adjacent columns to check
         for i=1:length(k)
             ki=k(i);
             li=l(i);

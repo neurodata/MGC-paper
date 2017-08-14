@@ -78,7 +78,7 @@ end
 
 function statMGC=Smoothing(localCorr,m,n,mn,R,tau)
 statMGC=localCorr(end);
-if mean(mean(R))>=2/mn
+if mean(mean(R(2:m,2:n)))>=2/mn
     if (R(m,n)==1)
         return;
     else

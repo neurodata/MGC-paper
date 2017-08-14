@@ -69,7 +69,7 @@ Thresholding <- function(localCorr,m,n,mn,prt){
 
 Smoothing <- function(localCorr,m,n,mn,R,tau){
   statMGC=localCorr[m,n];
-  if (mean(R)>=2/mn){ # proceed only when the region area is sufficiently large
+  if (mean(R[2:m,2:n])>=2/mn){ # proceed only when the region area is sufficiently large
     if (R[m,n]==1){
       return(statMGC);
     }

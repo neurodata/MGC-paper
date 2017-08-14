@@ -78,32 +78,31 @@ end
 
 function statMGC=Smoothing(localCorr,m,n,mn,R,tau)
 statMGC=localCorr(end);
+if (norm(R,'fro')==0 | R(m,n)==1)
+    return;
+end
 if mean(mean(R(2:m,2:n)))>=2/mn
-    if (R(m,n)==1)
-        return;
-    else
-        [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
+    [k,l]=find((localCorr>=max(localCorr(R==1)))&(R==1)); % find all scales within R that maximize the local correlation
+    
+    ln=ceil(tau); % number of adjacent rows to check
+    km=ceil(tau); % number of adjacent columns to check
+    for i=1:length(k)
+        ki=k(i);
+        li=l(i);
         
-        ln=ceil(tau); % number of adjacent rows to check
-        km=ceil(tau); % number of adjacent columns to check
-        for i=1:length(k)
-            ki=k(i);
-            li=l(i);
-            
-            % boundary of rows and columns for smoothing
-            left=max(2,li-ln);
-            right=min(n,li+ln);
-            upper=max(2,ki-km);
-            down=min(m,ki+km);
-            
-            tmp1=min(localCorr(upper:down,li)); % take minimal correlation at given row and along adjacent columns
-            tmp2=min(localCorr(ki,left:right)); % take minimal correlation at given column and along adjacent rows
-            tmp=max(tmp1,tmp2); % take the max of the two minimal correlations for sample mgc
-            
-            % use the smoothed maximal local correlation for mgc statistic, only when it is larger than global dcorr
-            if tmp >= statMGC
-                statMGC=tmp;
-            end
+        % boundary of rows and columns for smoothing
+        left=max(2,li-ln);
+        right=min(n,li+ln);
+        upper=max(2,ki-km);
+        down=min(m,ki+km);
+        
+        tmp1=min(localCorr(upper:down,li)); % take minimal correlation at given row and along adjacent columns
+        tmp2=min(localCorr(ki,left:right)); % take minimal correlation at given column and along adjacent rows
+        tmp=max(tmp1,tmp2); % take the max of the two minimal correlations for sample mgc
+        
+        % use the smoothed maximal local correlation for mgc statistic, only when it is larger than global dcorr
+        if tmp >= statMGC
+            statMGC=tmp;
         end
     end
 end

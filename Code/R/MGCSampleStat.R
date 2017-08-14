@@ -63,39 +63,39 @@ Thresholding <- function(localCorr,m,n,mn,prt){
     tmp=tabulate(R);
     tmp=which.max(tmp);
     R=(R==tmp);
+  } else {
+    R=0;
   }
-  return(R);
+  return(as.matrix(R));
 }
 
 Smoothing <- function(localCorr,m,n,mn,R,tau){
   statMGC=localCorr[m,n];
+  if (norm(R,"F")==0||R[m,n]==1){
+    return(statMGC);
+  }
   if (mean(R[2:m,2:n])>=2/mn){ # proceed only when the region area is sufficiently large
-    if (R[m,n]==1){
-      return(statMGC);
-    }
-    else{
-      ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
-      k = ((ind-1) %% m) + 1
-      l = floor((ind-1) / m) + 1
+    ind=which((localCorr>=max(localCorr[R]))&(R==1)); # find the scale within R that has the maximum correlation
+    k = ((ind-1) %% m) + 1
+    l = floor((ind-1) / m) + 1
+    
+    ln=ceiling(tau); # boundary for checking adjacent rows
+    km=ceiling(tau); # boundary for checking adjacent columns
+    for (i in (1:length(k))){
+      ki=k[i];
+      li=l[i];
       
-      ln=ceiling(tau); # boundary for checking adjacent rows
-      km=ceiling(tau); # boundary for checking adjacent columns
-      for (i in (1:length(k))){
-        ki=k[i];
-        li=l[i];
-        
-        # ensure the adjacent rows does not exceed the local correlation size, same for columns
-        left=max(2,li-ln); 
-        right=min(n,li+ln);
-        upper=max(2,ki-km);
-        down=min(m,ki+km);
-        
-        tmp1=min(localCorr[upper:down,li]); # minimal correlation at given row and adjacent columns
-        tmp2=min(localCorr[ki,left:right]); # minimal correlation at given column and adjacent rows
-        tmp=max(tmp1,tmp2); # take the max of the two minimal correlations
-        if (tmp>=statMGC){
-          statMGC=tmp; 
-        }
+      # ensure the adjacent rows does not exceed the local correlation size, same for columns
+      left=max(2,li-ln); 
+      right=min(n,li+ln);
+      upper=max(2,ki-km);
+      down=min(m,ki+km);
+      
+      tmp1=min(localCorr[upper:down,li]); # minimal correlation at given row and adjacent columns
+      tmp2=min(localCorr[ki,left:right]); # minimal correlation at given column and adjacent rows
+      tmp=max(tmp1,tmp2); # take the max of the two minimal correlations
+      if (tmp>=statMGC){
+        statMGC=tmp; 
       }
     }
   }

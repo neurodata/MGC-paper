@@ -33,7 +33,7 @@ MGCSampleStat <- function(A,B,option){
   }
   prt=1-0.01/mn;
   tau=1;
-  mn=max(mn,20);
+  mn=max(mn,30);
   
   # approximate a threshold for significant local dcorr
   # The degree mn equals sample size, but is otherwise bounded by [20,80]: less than 20 is too small for the

@@ -32,7 +32,7 @@ end
 %0.9999,0.01,1 is the best so far
 prt=1-0.01/mn;% percentile to consider as significant
 tau=1; % percentage of adjacent scales to smooth with
-mn=max(mn,20);
+mn=max(mn,30);
 
 R=Thresholding(localCorr,m,n,mn,prt);
 statMGC=Smoothing(localCorr,m,n,mn,R,tau);

@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet"> -->
-
-    <!-- bootstrap icons -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- font awesome icons -->
     <link rel="stylesheet" href="css/font-awesome-4.6.3/css/font-awesome.min.css">
-
-    <!-- google web fonts -->
-    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
-
-    <!-- bower:css -->
-    <!-- <link rel="stylesheet" href="/content/themes/jhu_id/bower_components/normalize-css/normalize.css"> -->
     <link rel="stylesheet" href="fonts/gentona/gentona.css">
     <link rel="stylesheet" href="fonts/titling-gothic/titling-gothic.css">
     <link rel="stylesheet" href="fonts/quadon/quadon.css">
     <link rel="stylesheet" href="fonts/arnhem/arnhem.css">
-    <!-- endbower -->
+
 
     <title>MGC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -68,6 +57,12 @@
         /*text-shadow: 2px 2px gray; /*#ff0000;*/*/
       }
 
+      hi {
+        position: absolute;
+        left: 100px;
+        top: 50px;
+      }
+
       .remark-slide-content h1 { font-size: 3em; }
       .remark-slide-content h2 { font-size: 2em; }
       .remark-slide-content h3 { font-size: 1.6em; }
@@ -110,7 +105,6 @@
       .cbar a{
        color: #bdbcbc;
       }
-
       .btn {
         background: #424242;
         height: 2em;
@@ -270,6 +264,19 @@
         font-size: 0.9em;
         padding-top: 0.6em;
       }
+      table {
+          border-collapse: collapse;
+          width: 100%;
+      }
+      th, td {
+          text-align: left;
+          padding: 8px;
+      }
+      tr:nth-child(even){background-color: #4a484c}
+      th {
+          background-color: #6cace4;
+          color: white;
+      }
 
   }
     </style>
@@ -283,7 +290,7 @@ class: center, middle
 
 name:opening
 
-## Discovering Relationships Across Disparate Data Modalities
+### Discovering Relationships and their Structures Across Disparate Data Modalities
 
 Cencheng Shen, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo@jhu.edu)
 
@@ -303,38 +310,27 @@ these slides: <http://docs.neurodata.io/MGC>
 
 
 ---
-class: center, middle
+<!-- class: center, middle -->
+class:
 
-### One often desires to test for independence
+#### One often desires to test for independence
 
-<table align="center" style="margin: 0px auto;">
-  <tr>
-    <th>x</th>
-    <th>y</th>
-  </tr>
-  <tr>
-    <td>clouds</td>
-    <td>grass wetness</td>
-  </tr>
-  <tr>
-    <td>brain activity</td>
-    <td>personality</td>
-  </tr>
-  <tr>
-    <td>brain shape</td>
-    <td>disorder</td>
-  </tr>
-  <tr>
-    <td>brain connectivity</td>
-    <td>creativity</td>
-  </tr>
-</table>
+
+| x | y |
+| :--- | :--- |
+| clouds | grass wetness |
+| brain connectivity | creativity |
+| brain shape | health |
+| gene expression | cancer |
+
 
 
 ---
-class: center, middle
+class: center
 
-Generalized Correlation Coefficient
+### Generalized Correlation Coefficient
+
+<br>
 
 <!-- $$a_{ij} = \sigma(x_i,x_j)$$
 
@@ -355,7 +351,7 @@ permutation test to obtain p-value
 
 
 ---
-class:  middle
+class: top, left
 
 
 ### Challenges
@@ -382,7 +378,7 @@ class: center, middle
 
 
 ---
-class: center, middle
+class: top, center
 
 ### Multiscale Generalized Correlation (MGC)
 
@@ -402,18 +398,25 @@ class: center, middle
 
 ### 20 Different Functions (1D version)
 
-<img src="https://github.com/neurodata/MGC/raw/master/Figures/FigSimVisual.png" alt="Drawing" style="width: 900px;"/>
+
+<img src="images/FigSimVisual.png"  alt="local"  style="width: 800px;"/>
+
 
 
 ---
-class: center, middle
+class: center
 
-### Oracle & Sample MGC Outperform Benchmarks
+### Oracle MGC Outperform Benchmarks
 
 
-.center[
+
+<img src="images/Fig1DPowerSummarySize.png"  alt="local"  style="height: 300px;"/>
+<img src="images/FigHDPowerSummarySize.png"  alt="local"  style="height: 300px;"/>
+
+
+<!-- .center[
 <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPowerMGCM.png" alt="Drawing" style="width: 900px;"/>
-]
+] -->
 
 
 ---
@@ -421,12 +424,14 @@ class: center, middle
 
 ### MGC Reveals Scales of Dependence
 
-.center[
+<img src="images/FigHDHeat.png"  alt="local"  style="width: 100%;"/>
+
+<!-- .center[
 <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png"  style="width: 900px;"/>
-]
+] -->
 
 ---
-class: center
+class: top, left
 
 
 ### Computational Complexity
@@ -434,9 +439,11 @@ class: center
 
 <br><br><br><br><br>
 
-- Dcorr:  n<sup>2</sup>
-- HHG:  n<sup>2</sup> log n
-- MGC:  n<sup>2</sup> log n
+| Method | Complexity |
+| :---: | :---: |
+| Dcorr |  n<sup>2</sup> |
+ | HHG |  n<sup>2</sup> log n |
+| MGC |  n<sup>2</sup> log n |
 
 
 ---

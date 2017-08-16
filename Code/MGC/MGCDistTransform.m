@@ -15,9 +15,6 @@ if strcmp(option,'mcorDouble')==false && strcmp(option,'dcorDouble')==false
     B=B';
     RY=RY';
 end
-% if strcmp(option,'mgc2')==true
-%     B=Y;
-% end
 
 function [A,RX]=DistCentering(X,option)
 % An auxiliary function that properly centers the distance matrix X,
@@ -31,17 +28,9 @@ RX=DistRanks(X); % the column ranks for X
 switch option
     case 'mgc'
         EX=repmat(sum(X,1)/(n-1),n,1);
-%     case 'mgc1'
-% %         for i=1:min(n,m)
-% %            X(i,i)=NaN;
-% %         end
-%         EX=repmat(median(X,1),n,1);
-%     case 'mgcRank'
-%         X=RX;
-%         EX=repmat(sum(X,1)/(n-1),n,1);
-%     case 'mgcInd'
-%         EX=repmat(median(RX,1,'omitnan'),n,1);
-%         EX=(EX*2-RX*2+1)./(2*EX-1)+X;
+    case 'rank'
+        X=RX;
+        EX=repmat(sum(X,1)/(n-1),n,1);
     case 'dcor' % single centering of dcor
         EX=repmat(mean(X,1),n,1); % column centering
     case 'mcor' % single centering of mcor
@@ -54,9 +43,6 @@ switch option
     case 'mcorDouble' % original double centering of mcor
         EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
         EX=EX+X/n;
-%     case 'mgc2' % original double centering of mcor
-%         EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
-%         EX=EX+X/n;
 end
 A=X-EX;
 

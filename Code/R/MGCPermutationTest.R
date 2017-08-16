@@ -28,11 +28,11 @@ MGCPermutationTest <-function(A,B,rep,option){
   }
   
   sampleIndicator=0;
-  if (option=='mcor'){
+  if (option=='mcor'||option=='mgc'){
     sampleIndicator=1; # only compute sample MGC for mcorr
   } 
   # calculate all local correlations between the two data sets
-  localCorr=MGCLocalCorr(A,B,option)$corr;
+  localCorr=MGCLocalCorr(A,B,option);
   if (sampleIndicator==1){
     statMGC=MGCSampleStat(localCorr) # sample MGC for the observed data
   } 
@@ -47,7 +47,7 @@ MGCPermutationTest <-function(A,B,rep,option){
     # use random permutations on the second data set
     per=sample(n2);
     BN=B[per,per];
-    tmp=MGCLocalCorr(A,BN,option)$corr;
+    tmp=MGCLocalCorr(A,BN,option);
     pLocalCorr=pLocalCorr+(tmp>=localCorr)*1/rep;
     if (sampleIndicator==1){
       tmp2=MGCSampleStat(tmp) # sample MGC for permuted data
@@ -61,19 +61,19 @@ MGCPermutationTest <-function(A,B,rep,option){
   
   # if p-value equals 0, enlarge it to 1/rep, since the identity permutation is always
   # one such permutation.
-  if (min(pLocalCorr)==0){
-    pLocalCorr=pLocalCorr+1/rep;
-  }
-  pLocalCorr[pLocalCorr>1]=1;
-  pLocalCorr[1,]=1;pLocalCorr[,1]=1;
-  if (min(pLocalCorr[2:m,2:n])>pMGC){
-    pMGC=min(pLocalCorr[2:m,2:n]);
-  }
+  # if (min(pLocalCorr)==0){
+    # pLocalCorr=pLocalCorr+1/rep;
+  # }
+  # pLocalCorr[pLocalCorr>1]=1;
+  # pLocalCorr[1,]=1;pLocalCorr[,1]=1;
+  # if (min(pLocalCorr[2:m,2:n])>pMGC){
+    # pMGC=min(pLocalCorr[2:m,2:n]);
+  # }
   
   # estimate the optimal scales
-  optimalInd=FindLargestRectangles((pLocalCorr<=pMGC))$M;
+  optimalInd=FindLargestRectangles((pLocalCorr<=pMGC)&(localCorr>=statMGC))$M;
   optimalInd=which(optimalInd==1);
-  if (pLocalCorr[m,n]<pMGC && length(which(optimalInd==m*n))==0){
+  if (pLocalCorr[m,n]<pMGC || length(which(optimalInd==m*n))>0){
     optimalInd=m*n; # if the global scale is not selected in the largest rectangle while being optimal, we take the global scale instead.
   }
   

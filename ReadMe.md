@@ -1,8 +1,7 @@
 # Multiscale Generalized Correlation
 
-- [repo contents](#repo-contents)
-- [dependencies](#dependencies)
-- [matlab](#matlab)
+- [Repo Contents](#repo-contents)
+- [MATLAB](#matlab)
 - [R](#R)
 
 For pseudocode for all algorithms, see Appendix of draft in `Draft`.
@@ -28,11 +27,7 @@ submitted.
 We have tested in MATLAB R2017a on Windows 10 (on PC with i7 6850k and 64 GB memory) and  OSX Sierra (on MacBook Pro with 3.3 GHz Intel Core i7 and 16 GB RAM).
 
 ### Installation
-Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo` with the path to your local copy of the repo.
-
-### Test on Real Data
-1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
-2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
+Add all folders and subfolders of this repo to the path, you can do so using the command `addpath(genpath('<path-to-repo'))`, replacing `<path-to-repo>` with the path to your local copy of the repo.
 
 ### Demo
 Type  `run_demo`
@@ -49,6 +44,10 @@ To reproduce the results in the manuscript, once installed, type any of the foll
 
 
 Note that the default number of replicates in each experiment is set at 100, which is much smaller than the number used in the draft. This can be increased by the function argument at the cost of linearly increasing the running time.
+
+### Test on Real Data
+1. To run on any given data X and Y, compute the n times n Euclidean distance matrices C for X and D for Y respectively, then type `MGCPermutationTest(C,D)`. If the input are already two distance matrices, use them directly.
+2. The output will be the p-value, test statistic, and optimal scales. See the respective Matlab and R code for the output format.
 
 
 ## R
@@ -68,7 +67,7 @@ install.packages('ecodist')
 install.packages('HHG')
 install.packages('energy')
 install.packages('SDMTools')
-setwd("<path-to-repo>/MGC/Code/R")
+setwd("<path-to-repo>/Code/R")
 source('MGCPermutationTest.R')
 source('run_realData.R')
 ```

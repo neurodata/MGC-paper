@@ -29,6 +29,13 @@ if strncmp(option,'mcor',4) || strncmp(option,'mgc',3)
     sampleIndicator=1; % only compute sample MGC for mcorr
 end
 
+if issymmetric(A)==false
+    A=squareform(pdist(A));
+end
+if issymmetric(B)==false
+    B=squareform(pdist(B));
+end
+
 % calculate all local correlations between the two data sets
 localCorr=MGCLocalCorr(A,B,option);
 [m,n]=size(localCorr);

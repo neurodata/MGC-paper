@@ -412,19 +412,21 @@
 
       <br>
 
-      <!-- $$a_{ij} = \sigma(x_i,x_j)$$
+      $$a_{ij} = \sigma_x(x_i,x_j)$$
 
-      $$b_{ij} = \sigma(y_i,y_j)$$
+      $$b_{ij} = \sigma_y(y_i,y_j)$$
 
       $$C = A \circ B$$
 
       $$ c = \sum_{ij} C $$
-       -->
 
-      .center[
+      <!-- .center[
       <img src="images/gcc.png" alt="Drawing" style="height: 200px;"/>
-      ]
+      ] -->
 
+      --
+
+      <br>
 
       permutation test to obtain p-value
 
@@ -515,14 +517,15 @@
 
       #### Oracle MGC
 
-      - 0 \( \geq \(  MGC \( \geq \( 1
+      - 0 &geq;  MGC &geq; 1
       - MGC = 0 only under independence
       - MGC is rotation, translation, and scale invariant
 
       #### Sample MGC
 
-      - Converges to Oracle MGC as n &rarr; &inft; 
-
+      - For any F<sub>XY</sub> with finite 1st moment
+      - Sample MGC &rarr;  Oracle MGC as n &rarr; &infin;
+      - if and only if &sigma;<sub>x</sub> & &sigma;<sub>y</sub> are of strong negative type
 
       ---
       class: center, middle
@@ -600,7 +603,7 @@
       ### MGC Reveals Structure of Real Data
 
 
-      <img src="images/FigReal.png" style="width: 900px;"/>
+      <img src="images/FigReal.png" style="width: 880px;"/>
 
 
       ---
@@ -667,7 +670,7 @@
 
 
     </textarea>
-    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <!-- <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script> -->
     <script src="remark-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>

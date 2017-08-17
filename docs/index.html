@@ -439,8 +439,11 @@
       ### Our intuition
 
       <br><br>
-      <img src="images/linear.png" alt="Drawing" style="position:absolute;  LEFT: 100px; height: 300px;"/>
-      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  LEFT: 450px; height: 300px;"/>
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 200px;  LEFT: 100px; height: 300px;"/>
+
+      --
+
+      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  TOP: 200px; LEFT: 450px; height: 300px;"/>
 
 
 
@@ -498,7 +501,7 @@
 
       ### MGC Reveals Structure of Dependence
 
-      <img src="images/FigHDHeat.png"  alt="local"  style="width: 100%;"/>
+      <img src="images/FigHDHeat.png"  alt="local"  style="width: 95%;"/>
 
       <!-- .center[
       <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png"  style="width: 900px;"/>
@@ -521,6 +524,8 @@
       - MGC = 0 only under independence
       - MGC is rotation, translation, and scale invariant
 
+      --
+
       #### Sample MGC
 
       - For any F<sub>XY</sub> with finite 1st moment
@@ -528,41 +533,51 @@
       - if and only if &sigma;<sub>x</sub> & &sigma;<sub>y</sub> are of strong negative type
 
       ---
-      class: center, middle
+      class: center
 
+      ### MGC has power 1 for all F<sub>XY</sub>
       <!-- Thm 1: $$\beta_n(c_t^*) \rightarrow 1 \text{ as } n \to \infty$$ -->
       <!-- Oracle MGC is consistent whenever Global Counterpart is
       <br>
        -->
 
-      <img src="images/thm1.png"  style="height: 40px;"/>
+       <!-- Thm: \\( \beta_n (c_t^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\) -->
+
+      <img src="images/thm1.png"  style="position:absolute; LEFT: 200px; TOP: 300px; height: 40px;"/>
 
       ---
-      class: center, middle
+      class: center
+
+      ### Linear: Local < Global
 
       <!-- Thm 2: If x is linearly dependent on y, then for any n it always holds that $\beta_n(c_t^*) = \beta_n(c_t)$ -->
 
-      <img src="images/thm2.png"  style="width: 800px;"/>
+      <img src="images/thm2.png"  style="position:absolute; LEFT: 60px; TOP: 300px; height: 80px;"/>
 
 
       ---
-      class: center, middle
+      class: center
 
+      ### (Certain) Nonlinear: Local > Global
 
       <!-- Thm 3: There exists f and n such that
 
       $$\beta( c^{k,l}_{t} ) > \beta(c_t) $$
        -->
 
+       <br><br>
+
       <img src="images/thm3.png"  style="width: 800px;"/>
 
 
       ---
-      class: center, middle
+      class: center
 
 
       <!-- #### Thm 4: Oracle MGC dominates its global counterpart -->
+      ### MGC > Dcorr
 
+      <br><br><br><br>
 
       <img src="images/thm4.png"  style="width: 800px;"/>
 
@@ -612,10 +627,10 @@
 
       <br><br>
 
-      - Apply ideas to other exploitation tasks
-      - Release R package
-      - Scale up
-      - Prove more stuff about Sample MGC
+      - 2-sample test, effect size
+      - Make R package from open source code (on github now)
+      - Scale up for larger n
+      
 
       ---
       class:   middle, center

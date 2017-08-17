@@ -302,6 +302,7 @@
       #### Motivation
 
       <br>
+      --
 
       - "Understand" the relationship between physical  (brain) and mental properties
       --
@@ -315,7 +316,7 @@
 
       ---
       <!-- class: center, middle -->
-      class:
+      class: left
 
       #### One often desires to test for independence
 
@@ -328,6 +329,10 @@
       | brain connectivity | creativity |
       | brain shape | health |
       | gene expression | cancer |
+      | CLARITY | condition |
+
+      --
+      | anything | anything else |
 
       ---
       class: center
@@ -345,6 +350,59 @@
 
       $$H_0: F_X,_Y = F_X F_X $$
       $$H_A: F_X,_Y \neq F_X F_X $$
+
+
+
+
+      ---
+      class: top, left
+
+
+      ### Desiderata of Testing Procedure
+
+      <br>
+
+      1. Performant under *any* joint distribution
+        - high-dimensional
+        - structured data (eg, sequences, images, networks, shapes)
+        - low sample-sizes
+        - nonlinear relationships
+      <!-- 5. computational efficiency -->
+
+      --
+      6. Reveals the geometry  of dependence
+
+
+      ---
+      class: top, left
+
+      ## Outline of Talk
+
+      <br>
+
+      - intuition
+      - simulations
+      - theory
+      - real data
+      - discussion
+
+
+      ---
+      class: middle, center
+
+      # intuition
+
+      ---
+      class: center
+
+      ### Generalized Correlation Coefficient
+
+      <br>
+
+      <img src="images/spiral.png"  STYLE="position:absolute; TOP:250px; LEFT:130px; HEIGHT:200px;"/>
+      <img src="images/AB.png"  STYLE="position:absolute;  LEFT:350px; HEIGHT:400px;"/>
+      <img src="images/C.png"  STYLE="position:absolute; TOP:250px; LEFT:580px; HEIGHT:200px;"/>
+
 
 
       ---
@@ -372,30 +430,15 @@
 
 
 
+
       ---
       class: top, left
 
-
-      ### Challenges
-
-      1. high-dimensional
-      2. structured data (eg, sequences, images, networks, shapes, text)
-      3. low sample-sizes
-      4. nonlinear relationships
-      5. computational efficiency
-      6. structure of dependence
-
-
-
-
-      ---
-      class: center, middle
-
       ### Our intuition
 
-      .center[
-      <img src="images/spiral.png" alt="Drawing" style="width: 550px;"/>
-      ]
+      <br><br>
+      <img src="images/linear.png" alt="Drawing" style="position:absolute;  LEFT: 100px; height: 300px;"/>
+      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  LEFT: 450px; height: 300px;"/>
 
 
 
@@ -416,7 +459,12 @@
 
 
       ---
-      class: center, middle
+      class: middle, center
+
+      # simulations
+
+      ---
+      class: top, center
 
       ### 20 Different Functions (1D version)
 
@@ -431,10 +479,11 @@
       ### Oracle MGC Outperform Benchmarks
 
 
+      <br><br>
 
-      <img src="images/Fig1DPowerSummarySize.png"  alt="local"  style="height: 300px;"/>
+      <img src="images/Fig1DPowerSummarySize.png"  alt="local"  style="position:absolute;  LEFT: 80px; height: 300px;"/>
       --
-      <img src="images/FigHDPowerSummarySize.png"  alt="local"  style="height: 300px;"/>
+      <img src="images/FigHDPowerSummarySize.png"  alt="local"  style="position:absolute;  LEFT: 500px; height: 300px;"/>
 
 
       <!-- .center[
@@ -453,20 +502,26 @@
       <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png"  style="width: 900px;"/>
       ] -->
 
+
+      ---
+      class: middle, center
+
+      # theory
+
       ---
       class: top, left
 
+      ## Properties of  MGC
 
-      ### Computational Complexity
+      #### Oracle MGC
 
+      - 0 \( \geq \(  MGC \( \geq \( 1
+      - MGC = 0 only under independence
+      - MGC is rotation, translation, and scale invariant
 
-      <br><br><br><br><br>
+      #### Sample MGC
 
-      | Method | Complexity |
-      | :---: | :---: |
-      | Dcorr |  n<sup>2</sup> |
-       | HHG |  n<sup>2</sup> log n |
-      | MGC |  n<sup>2</sup> log n / T  |
+      - Converges to Oracle MGC as n &rarr; &inft; 
 
 
       ---
@@ -508,6 +563,26 @@
 
       <img src="images/thm4.png"  style="width: 800px;"/>
 
+      ---
+      class: top, left
+
+
+      ### Computational Complexity
+
+
+      <br><br><br>
+
+      | Method | Complexity |
+      | :---: | :---: |
+      | Dcorr |  n<sup>2</sup> |
+       | HHG |  n<sup>2</sup> log n |
+      | MGC |  n<sup>2</sup> log n / T  |
+
+
+      ---
+      class: middle, center
+
+      # real data
 
       ---
       class: top, left
@@ -593,6 +668,7 @@
 
     </textarea>
     <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="remark-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">

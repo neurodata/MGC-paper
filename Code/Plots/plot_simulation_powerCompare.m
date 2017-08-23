@@ -55,6 +55,7 @@ for select=0:1
     figure('units','normalized','position',[0 0 1 1])
     x=1:total;
     hold on
+    AUC=AUC./AUC(ind,:);
     for i=1:total-1
         text(x(i),min(AUC(5,i),mi),'A','VerticalAlignment','middle','HorizontalAlignment','left','Color',mantel,'FontSize',fontSize-3);
         text(x(i),min(AUC(4,i),mi),'D','VerticalAlignment','middle','HorizontalAlignment','left','Color',dcorr,'FontSize',fontSize-3);
@@ -101,7 +102,8 @@ for select=0:1
 
     hold off
     xlim([0,20]);
-    ylim([0,1.1*mi]);
+%     ylim([0,1.1*mi]);
+    ylim([0,max(AUC(:))*1.1]);
     set(gca,'FontSize',fontSize);
     set(gca,'XTick',[1,5,10,15],'FontSize',fontSize);
     %ll=[{'0'};{'20'};{'40'};{'60'};{'80'};{'>=100'}];
@@ -113,7 +115,7 @@ for select=0:1
     if opt==1
         ylabel(strcat('Relative Size to Achieve',{' '},num2str(thres*100),'% Power'),'FontSize',fontSize+5)%, ...
     else
-        ylabel(strcat('Sample Size to Achieve',{' '},num2str(thres*100),'% Power'),'FontSize',fontSize+5)%, ...
+        ylabel(strcat('Efficiency to Achieve',{' '},num2str(thres*100),'% Power'),'FontSize',fontSize+5)%, ...
     end
     end
     axis('square');

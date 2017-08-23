@@ -64,7 +64,7 @@ for i=1:6
     left(i)=0.01+(i-1)*(width+hspace);
     bottom(i)=0.06+(i-1)*(height+vspace);
 end
-bottom(3)=bottom(3)+0.025;
+bottom(3)=bottom(3)+0.01;
 bottom(2)=bottom(2);
 bottom(1)=bottom(1)-0.025;
 left(5)=left(5)+0.03;
@@ -123,17 +123,7 @@ pos=[nan, nan, width, height];
 axis('square')
 
 
-%% plot distances
-
-ax=subplot('Position',[left(1), bottom(1), width, height]);
-
-F.k=k;
-F.l=l;
-
-plot_panel2(F,C,D)      
-
-
-%% make table
+% make table
 clc
 
 MantelVec=[C(id(1),id(2)), D(id(1),id(2)), mantelH(id(1),id(2)), C(id(3),id(4)), D(id(3),id(4)), mantelH(id(3),id(4)), mantelH(id(1),id(2))+mantelH(id(3),id(4))];
@@ -195,10 +185,10 @@ imagesc(C(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
-xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
-    'Position', [0 -0.16], 'HorizontalAlignment', 'left')
-ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
-    'Position', [-0.25 0.4], 'VerticalAlignment', 'bottom')
+%xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+ %   'Position', [0 -0.16], 'HorizontalAlignment', 'left')
+%ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+ %   'Position', [-0.25 0.4], 'VerticalAlignment', 'bottom')
 % 'Position', [-0.2 -0.05], 'HorizontalAlignment', 'Left')
 text(45,110,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize-1, 'Units', 'normalized', ...
@@ -374,6 +364,10 @@ pos = get(ax,'position');
 title([{'4. Multiscale Maps'}; {'(all scales)'}; {' ' }],'FontSize',fontSize-1, 'Units', 'normalized', ...
     'Position', [0 1], 'HorizontalAlignment', 'left');
 % title('Local Correlations','fontweight','normal','FontSize',fontSize);
+xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+    'Position', [0 -0.16], 'HorizontalAlignment', 'left')
+ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+    'Position', [-0.25 0.4], 'VerticalAlignment', 'bottom')
 text(10,110,'Test Statistics','FontSize',fontSize)
 axis('square')
 clean_panel(ax,map4,pos,id,n,col,fontSize)
@@ -557,7 +551,7 @@ set(b,'FontSize',fs);
 set(c,'FontSize',fs);
 xlim([minp,maxp+0.1]);
 xlabel('Test Statistic','FontSize',fs,...
-    'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.008, 0], 'HorizontalAlignment', 'left')
 ylabel('Density','FontSize',fs, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 % =======

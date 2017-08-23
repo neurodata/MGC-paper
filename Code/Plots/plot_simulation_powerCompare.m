@@ -34,11 +34,12 @@ ls{1}=':';
 thres=0.85;
 ind=1;
 opt=0;
-if opt==1
-    mi=10;
-else
-    mi=1000;
-end
+mi=10;
+% if opt==1
+%     mi=10;
+% else
+%     mi=1000;
+% end
 for select=0:1
     if select==0
         filename=strcat(pre1,'CorrIndSizeDim1.mat');
@@ -56,6 +57,7 @@ for select=0:1
     x=1:total;
     hold on
     AUC=AUC./AUC(ind,:);
+    AUC=floor(AUC*10)/10;
     for i=1:total-1
         text(x(i),min(AUC(5,i),mi),'A','VerticalAlignment','middle','HorizontalAlignment','left','Color',mantel,'FontSize',fontSize-3);
         text(x(i),min(AUC(4,i),mi),'D','VerticalAlignment','middle','HorizontalAlignment','left','Color',dcorr,'FontSize',fontSize-3);
@@ -76,8 +78,8 @@ for select=0:1
     txt5=strcat('MGC:',{' '},num2str(AUC(ind,total)),'');
     adj=zeros(5,1);
     if select==0
-%         adj(1)=0.05*mi;
-%         adj(2)=0.05*mi;
+        adj(1)=0.05*mi;
+        adj(2)=0.05*mi;
         adj(3)=0.04*mi;
         adj(2)=0.09*mi;
         adj(4)=0;

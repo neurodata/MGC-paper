@@ -123,7 +123,17 @@ pos=[nan, nan, width, height];
 axis('square')
 
 
-% make table
+%% plot distances
+
+ax=subplot('Position',[left(1), bottom(1), width, height]);
+
+F.k=k;
+F.l=l;
+
+plot_panel2(F,C,D)      
+
+
+%% make table
 clc
 
 MantelVec=[C(id(1),id(2)), D(id(1),id(2)), mantelH(id(1),id(2)), C(id(3),id(4)), D(id(3),id(4)), mantelH(id(3),id(4)), mantelH(id(1),id(2))+mantelH(id(3),id(4))];

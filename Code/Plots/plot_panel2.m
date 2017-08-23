@@ -48,7 +48,7 @@ alpha(0.1)
 xlim([min(min(C)),1.05]);
 ylim([min(min(D)),1.05]);
 warning('off','all')
-if F.type==1
+if F.type~=1
     if F.subplot==false
         xpos=[0.5, -0.05];
         ypos=[-0.09 0.5];

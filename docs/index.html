@@ -307,11 +307,17 @@
       - "Understand" the relationship between physical  (brain) and mental properties
       --
 
-      - Simplest question: are the two related at all?
+      - Question 1: are the two related at all?
       --
 
-      - Next question: how are they related?
+      - Question 2: how are they related?
 
+      --
+
+      <br><br>
+
+      - Note: many efforts dedicated to Q1, fewer to Q2.
+      - We will formally address Q1, and address Q2
 
 
       ---
@@ -346,10 +352,10 @@
 
 
 
-      $$(X_i,Y_i) \sim F_X,_Y = F_X|_Y F_Y, \quad i \in \{1,\ldots,n\}$$
+      $$(X\_i,Y\_i) \sim F\_{XY} = F\_{X|Y} F\_Y, \quad i \in \{1,\ldots,n\}$$
 
-      $$H_0: F_X,_Y = F_X F_X $$
-      $$H_A: F_X,_Y \neq F_X F_X $$
+      $$H\_0: F\_{XY} = F\_X F\_Y $$
+      $$H\_A: F\_{XY} \neq F\_X F\_Y $$
 
 
 
@@ -373,6 +379,13 @@
       6. Reveals the geometry  of dependence
 
 
+      --
+
+      Answers the two motivating questions:
+
+      - Question 1: are the two related at all?
+      - Question 2: how are they related?
+
       ---
       class: top, left
 
@@ -392,44 +405,50 @@
 
       # intuition
 
+
+      ---
+      class:  center
+
+      ### correlation coefficient
+
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 350px;  LEFT: 300px; height: 300px;"/>
+
+      <!-- $$ r^2 = \frac{(\sum x\_i - \bar{x}) (y\_i - \bar{y})}{\sum (x\_i - \bar{x})^2 \sum (y\_i- \bar{y})^2 } -->
+
+      $$r\_{XY}^2 =  \frac{(\sum\_{i=1}^n ( x\_i - \bar{x}) (y\_i - \bar{y}))^2}{\sum\_{i=1}^n (x\_i - \bar{x})^2 \sum\_{i=1}^n (y\_i- \bar{y})^2} $$
+
       ---
       class: center
 
-      ### Generalized Correlation Coefficient
+      ### **distance** correlation coefficient
+
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 350px;  LEFT: 300px; height: 300px;"/>
+
+      <!-- $$ r^2 = \frac{(\sum x\_i - \bar{x}) (y\_i - \bar{y})}{\sum (x\_i - \bar{x})^2 \sum (y\_i- \bar{y})^2 } -->
+
+      $$r\_{XY}^2 =  \frac{(\sum\_{i=1}^n ( x\_i - \bar{x}) (y\_i - \bar{y}))^2}{\sum\_{i=1}^n (x\_i - \bar{x})^2 \sum\_{i=1}^n (y\_i- \bar{y})^2} $$
 
       <br>
 
-      <img src="images/spiral.png"  STYLE="position:absolute; TOP:250px; LEFT:130px; HEIGHT:200px;"/>
-      <img src="images/AB.png"  STYLE="position:absolute;  LEFT:350px; HEIGHT:400px;"/>
-      <img src="images/C.png"  STYLE="position:absolute; TOP:250px; LEFT:580px; HEIGHT:200px;"/>
-
-
+      $$d\_{XY}^2 =  \frac{(\sum\_{i,\color{red}{j}=1}^n ( x\_i - \color{red}{x\_j}) (y\_i - \color{red}{y\_j}))^2}{\sum\_{i,\color{red}{j}=1}^n (x\_i - \color{red}{x\_j})^2 \sum\_{i,\color{red}{j}=1}^n (y\_i- \color{red}{y\_j})^2} $$
 
       ---
       class: center
 
-      ### Generalized Correlation Coefficient
+      ### **generalized** correlation coefficient
+
+
+      <!-- $$ r^2 = \frac{(\sum x\_i - \bar{x}) (y\_i - \bar{y})}{\sum (x\_i - \bar{x})^2 \sum (y\_i- \bar{y})^2 } -->
+
+      $$r\_{XY}^2 =  \frac{(\sum\_{i=1}^n ( x\_i - \bar{x}) (y\_i - \bar{y}))^2}{\sum\_{i=1}^n (x\_i - \bar{x})^2 \sum\_{i=1}^n (y\_i- \bar{y})^2} $$
 
       <br>
 
-      $$a_{ij} = \sigma_x(x_i,x_j)$$
-
-      $$b_{ij} = \sigma_y(y_i,y_j)$$
-
-      $$C = A \circ B$$
-
-      $$ c = \sum_{ij} C $$
-
-      <!-- .center[
-      <img src="images/gcc.png" alt="Drawing" style="height: 200px;"/>
-      ] -->
-
-      --
+      $$d\_{XY}^2 =  \frac{(\sum\_{i,\color{red}{j}=1}^n ( x\_i - \color{red}{x\_j}) (y\_i - \color{red}{y\_j}))^2}{\sum\_{i,\color{red}{j}=1}^n (x\_i - \color{red}{x\_j})^2 \sum\_{i,\color{red}{j}=1}^n (y\_i- \color{red}{y\_j})^2} $$
 
       <br>
 
-      permutation test to obtain p-value
-
+      $$c\_{XY}^2 =  \frac{(\sum\_{i,j=1}^n \color{red}{\sigma\_x}(x\_i,x\_j) \color{red}{\sigma\_y}(y\_i,y\_j))^2}{\sum\_{i,j=1}^n \color{red}{\sigma\_x}(x\_i,x\_j)^2 \sum\_{i,j=1}^n \color{red}{\sigma\_y}(y\_i,y\_j)^2} $$
 
 
 
@@ -438,12 +457,59 @@
 
       ### Our intuition
 
-      <br><br>
-      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 200px;  LEFT: 100px; height: 300px;"/>
+      - corr finds **globally** linear relationships
+      - dcorr finds **locally** linear relationships
+      - let's help dcorr!
+
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 250px;  LEFT: 100px; height: 300px;"/>
+
+
+      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  TOP: 250px; LEFT: 450px; height: 300px;"/>
+
+
+      ---
+
+      ### local distance correlation
+
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 100px; height: 200px;"/>
 
       --
 
-      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  TOP: 200px; LEFT: 450px; height: 300px;"/>
+      <img src="images/Fig1B.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 320px; height: 200px;"/>
+
+      --
+
+      <div style="position:absolute; TOP: 150px;  LEFT: 620px; height: 200px;">
+      dcorr(X,Y)=0.15, MGC(X,Y)=0.15
+      </div>
+
+
+      --
+
+      <img src="images/spiral.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 100px; height: 200px;"/>
+
+      --
+
+      <img src="images/Fig8B.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 320px; height: 200px;"/>
+
+      --
+
+      <div style="position:absolute; TOP: 400px;  LEFT: 620px; height: 200px;">
+      dcorr(X,Y)=0.01, MGC(X,Y)=0.13
+      </div>
+
+
+      ---
+
+      ### multiscale distance correlation
+
+      - compute local dcorr **at all scales**
+      - find scale with **max** test statistic
+      - permutation test to determine p-value
+
+
+
+
 
 
 
@@ -454,13 +520,13 @@
 
 
       <!-- <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigA.png" alt="Drawing" style="width: 900px;"/> -->
-      <img src="images/Fig1.png"  style="width: 800px;"/>
+      <img src="images/Fig1.png"  style="width: 780px;"/>
       --
 
-      <img src="images/Fig8.png"  style="width: 800px;"/>
+      <img src="images/Fig8.png"  style="width: 780px;"/>
       --
 
-      <img src="images/flowchart.png"  style="width: 800px;"/>
+      <img src="images/flowchart.png"  style="width: 780px;"/>
 
 
       ---
@@ -481,7 +547,7 @@
       ---
       class: center
 
-      ### Oracle MGC Outperform Benchmarks
+      ###  MGC Outperforms Benchmarks
 
 
       <br><br>
@@ -520,17 +586,19 @@
 
       #### Oracle MGC
 
+      Thm: Oracle MGC has the following properties:
+
       - 0 &geq;  MGC &geq; 1
       - MGC = 0 only under independence
-      - MGC is rotation, translation, and scale invariant
+      - MGC is invariant to rotation, translation, and scale of X and/or Y
 
       --
 
-      #### Sample MGC
+      #### (Sample) MGC
 
-      - For any F<sub>XY</sub> with finite 1st moment
-      - Sample MGC &rarr;  Oracle MGC as n &rarr; &infin;
-      - if and only if &sigma;<sub>x</sub> & &sigma;<sub>y</sub> are of strong negative type
+      Thm: For any  F<sub>XY</sub> with finite 1st moment,
+       Sample MGC &rarr;  Oracle MGC as n &rarr; &infin;
+       if and only if &sigma;<sub>x</sub> & &sigma;<sub>y</sub> are of strong negative type
 
       ---
       class: center
@@ -541,9 +609,11 @@
       <br>
        -->
 
-       <!-- Thm: \\( \beta_n (c_t^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\) -->
+       <br><br>
 
-      <img src="images/thm1.png"  style="position:absolute; LEFT: 200px; TOP: 300px; height: 40px;"/>
+       Thm: \\( \beta_n (c^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\)
+
+      <!-- <img src="images/thm1.png"  style="position:absolute; LEFT: 200px; TOP: 300px; height: 40px;"/> -->
 
       ---
       class: center
@@ -552,7 +622,13 @@
 
       <!-- Thm 2: If x is linearly dependent on y, then for any n it always holds that $\beta_n(c_t^*) = \beta_n(c_t)$ -->
 
-      <img src="images/thm2.png"  style="position:absolute; LEFT: 60px; TOP: 300px; height: 80px;"/>
+      <br><br>
+
+      Thm: If x is linearly dependent on y, then for any n it always holds that \\( \beta_n(c^*) = \beta_n(c) \\)
+
+
+
+      <!-- <img src="images/thm2.png"  style="position:absolute; LEFT: 60px; TOP: 300px; height: 80px;"/> -->
 
 
       ---
@@ -560,26 +636,32 @@
 
       ### (Certain) Nonlinear: Local > Global
 
-      <!-- Thm 3: There exists f and n such that
 
-      $$\beta( c^{k,l}_{t} ) > \beta(c_t) $$
-       -->
+      <br><br>
 
-       <br><br>
+      Thm: There exists f and n such that
 
-      <img src="images/thm3.png"  style="width: 800px;"/>
+      $$\beta_n( c^{k,l} ) > \beta_n(c) $$
+
+
+
+      <!-- <img src="images/thm3.png"  style="width: 800px;"/> -->
 
 
       ---
       class: center
 
 
-      <!-- #### Thm 4: Oracle MGC dominates its global counterpart -->
       ### MGC > Dcorr
 
-      <br><br><br><br>
+      <br><br>
 
-      <img src="images/thm4.png"  style="width: 800px;"/>
+      Thm: Oracle MGC statistically dominates dcorr, that is,
+
+      $$\beta_n( c^* ) \geq \beta_n(c) $$
+
+
+      <!-- <img src="images/thm4.png"  style="width: 800px;"/> -->
 
       ---
       class: top, left
@@ -623,6 +705,19 @@
 
       ---
 
+      ### Summary
+
+
+      - Oracle MGC theoretically dominates, even in finite samples
+      - MGC empirically nearly dominates on extensive simulations
+      - Visual quantitative characterization of arbitrary relationships
+      - MGC reveals geometry of dependence in real data
+
+      <br>
+      - MGC mitigate "post selection inference" problems
+
+      ---
+
       ### Next Steps
 
       <br><br>
@@ -630,7 +725,7 @@
       - 2-sample test, effect size
       - Make R package from open source code (on github now)
       - Scale up for larger n
-      
+
 
       ---
       class:   middle, center

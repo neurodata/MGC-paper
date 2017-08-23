@@ -105,7 +105,7 @@ for select=0:1
     hold off
     xlim([0,20]);
 %     ylim([0,1.1*mi]);
-    ylim([0,max(AUC(:))*1.1]);
+    ylim([0,10]);
     set(gca,'FontSize',fontSize);
     set(gca,'XTick',[1,5,10,15],'FontSize',fontSize);
     %ll=[{'0'};{'20'};{'40'};{'60'};{'80'};{'>=100'}];

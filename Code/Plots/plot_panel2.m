@@ -1,5 +1,6 @@
 function plot_panel2(F,C,D)
 
+%% 
 siz=size(C);
 n=siz(1);
 
@@ -30,7 +31,7 @@ set(groot,'defaultAxesColorOrder',F.map2);
 
 plot(C2,D2,'.','MarkerSize',6,'Color',F.gray);
 % if F.sub==3
-    plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
+plot(C2(ind1==1),D2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
 % end
 
 
@@ -83,6 +84,13 @@ axis('square')
 % pos2(3:4) = F.pos(3:4);
 % set(ax,'position',pos2);
 
+fpath = mfilename('fullpath');
+fpath=strrep(fpath,'\','/');
+findex=strfind(fpath,'/');
+rootDir=fpath(1:findex(end-2));
+pre2=strcat(rootDir,'Figures/');% The folder to save figures
+F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel',num2str(F.sub));
+
 if F.subplot==false
     fpath = mfilename('fullpath');
     fpath=strrep(fpath,'\','/');
@@ -92,3 +100,21 @@ if F.subplot==false
     F.fname=strcat(pre2, 'Fig',num2str(F.type),'Panel',num2str(F.sub));
     print_fig(ax,F);
 end
+
+
+%%
+
+[A,B]=MGCDistTransform(C,D);
+A2=reshape(A,n^2,1);
+B2=reshape(B,n^2,1);
+
+h2=figure(2); clf, hold all
+plot(A2,B2,'.','MarkerSize',6,'Color',F.gray);
+plot(A2(ind1==1),B2(ind1==1),'o','MarkerSize',4,'Color',F.loca);
+axis('square')
+F.fname=strcat(pre2,'Fig_centered',num2str(F.type),'Panel',num2str(F.sub));
+F.wh=[2 2];
+F.png=true;
+F.pdf=false;
+print_fig(h2,F);
+

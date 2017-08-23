@@ -32,7 +32,7 @@ catch
     load(strcat(rootDir,'Data/Results/CorrFigure1Type',num2str(type),'n',num2str(n),'dim',num2str(dim),'.mat')); % The folder to locate data
 end
 
-fontSize=18;
+fontSize=22;
 mkSize=20;
 sameBar=0;
 
@@ -64,7 +64,7 @@ for i=1:6
     left(i)=0.01+(i-1)*(width+hspace);
     bottom(i)=0.06+(i-1)*(height+vspace);
 end
-bottom(3)=bottom(3)+0.025;
+bottom(3)=bottom(3)+0.01;
 bottom(2)=bottom(2);
 bottom(1)=bottom(1)-0.025;
 left(5)=left(5)+0.03;
@@ -123,17 +123,7 @@ pos=[nan, nan, width, height];
 axis('square')
 
 
-%% plot distances
-
-ax=subplot('Position',[left(1), bottom(1), width, height]);
-
-F.k=k;
-F.l=l;
-
-plot_panel2(F,C,D)      
-
-
-%% make table
+% make table
 clc
 
 MantelVec=[C(id(1),id(2)), D(id(1),id(2)), mantelH(id(1),id(2)), C(id(3),id(4)), D(id(3),id(4)), mantelH(id(3),id(4)), mantelH(id(1),id(2))+mantelH(id(3),id(4))];
@@ -195,10 +185,10 @@ imagesc(C(bar,bar)');
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',16); % Remove y axis ticks
-xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
-    'Position', [0 -0.16], 'HorizontalAlignment', 'left')
-ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
-    'Position', [-0.25 0.4], 'VerticalAlignment', 'bottom')
+%xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+ %   'Position', [0 -0.16], 'HorizontalAlignment', 'left')
+%ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+ %   'Position', [-0.25 0.4], 'VerticalAlignment', 'bottom')
 % 'Position', [-0.2 -0.05], 'HorizontalAlignment', 'Left')
 text(45,110,'$\tilde{A}$','interpreter','latex','FontSize',fontSize)
 title([{'1. Mantel'}; {'(pairwise distances)'}; {' ' }],'FontSize',fontSize-1, 'Units', 'normalized', ...
@@ -374,6 +364,10 @@ pos = get(ax,'position');
 title([{'4. Multiscale Maps'}; {'(all scales)'}; {' ' }],'FontSize',fontSize-1, 'Units', 'normalized', ...
     'Position', [0 1], 'HorizontalAlignment', 'left');
 % title('Local Correlations','fontweight','normal','FontSize',fontSize);
+xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+    'Position', [0 -0.1], 'HorizontalAlignment', 'left')
+ylabel('# Y Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
+    'Position', [-0.1 0.4], 'VerticalAlignment', 'bottom')
 text(10,110,'Test Statistics','FontSize',fontSize)
 axis('square')
 clean_panel(ax,map4,pos,id,n,col,fontSize)
@@ -491,7 +485,7 @@ print_fig(gcf,F)
 %% Col 5 p-value
 % subplot(s,t,t)
 fig=figure(2); clf
-fs=fontSize+8;
+fs=fontSize+2;
 %ax=subplot('Position',[left(1), bottom(1)+width/2+0.01, width, height]);
 tN=zeros(rep,n,n);
 % testN=zeros(rep,1);
@@ -524,15 +518,15 @@ plot(xi1,f1,'.-','LineWidth',4,'Color',loca);
 plot(xi2,f2,'.-','LineWidth',4,'Color',mgc);
 set(gca,'FontSize',15);
 % x1=round(tA(end)*100)/100;
-x1=sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro');x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
+x1=abs(sum(sum(mcorrH))/norm(A,'fro')/norm(B,'fro'));x2=sum(sum(C_MGC))/norm((A_MGC-mean(mean(A_MGC))),'fro')/norm((B_MGC--mean(mean(B_MGC))),'fro');
 x1=round(x1*100)/100;x2=round(x2*100)/100;x3=round(test*100)/100;
 plot(x1,0.1,'*','MarkerSize',12,'Color',glob,'linewidth',2);
 plot(x2,0.1,'*','MarkerSize',12,'Color',loca,'linewidth',2);
 plot(x3,0.1,'*','MarkerSize',12,'Color',mgc,'linewidth',2);
 if abs(x2-x3)<0.03
-    set(gca,'XTick',sort([x1+0.02,x2+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
+    set(gca,'XTick',sort([x1,x2]),'TickLength',[0 0],'XTickLabel',sort([x1,x2]));
 else
-    set(gca,'XTick',sort([x1+0.02,x2+0.02,x3+0.02]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
+    set(gca,'XTick',sort([x1,x2,x3]),'TickLength',[0 0],'XTickLabel',sort([x1,x2,x3]));
 end
 % set(gca,'XTickLabel',[x1;x2],'YTick',[]); % Remove x axis ticks
 
@@ -549,15 +543,15 @@ txt2 = strcat('$$p(c^{*}) = ', num2str(pMLocal(k,l)),'$$');
 txt3 = strcat('$$p(\hat{c}^{*}) = ', num2str(pMGC),'$$');
 a=text(x1,y1,txt1,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',glob,'Interpreter','latex');
 b=text(x2,y2,txt2,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',loca,'Interpreter','latex');
-c=text(x3,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
-ylim([0 y1+10]);
+c=text(x2,y3,txt3,'VerticalAlignment','bottom','HorizontalAlignment','left','Color',mgc,'Interpreter','latex');
+ylim([0 y1+15]);
 % <<<<<<< HEAD
 set(a,'FontSize',fs);
 set(b,'FontSize',fs);
 set(c,'FontSize',fs);
-xlim([minp,maxp+0.1]);
+xlim([minp-0.04,maxp+0.04]);
 xlabel('Test Statistic','FontSize',fs,...
-    'Units', 'normalized','Position', [-0.008, -0.1], 'HorizontalAlignment', 'left')
+    'Units', 'normalized','Position', [-0.008, -0.01], 'HorizontalAlignment', 'left')
 ylabel('Density','FontSize',fs, ...
     'Units', 'normalized', 'Position', [-0.02 0], 'HorizontalAlignment', 'left')
 % =======

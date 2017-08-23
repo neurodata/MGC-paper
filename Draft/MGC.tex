@@ -149,7 +149,7 @@ Sample size of different methods to achieve a power of $85\%$ at type 1 error le
 The x-axis is the simulation type, and the y-axis shows the minimal sample size of each method to achieve $85\%$ testing power, the smaller the better.
 For panel (A), the dimension is fixed at $1$ for each relationship,
 % and the minimal size to achieve the required testing power is estimated.
-and for panel (B), the dimension for each relationship is chosen on the basis of the experiments in Supplementary Figure~\ref{f:nDAll}.
+and for panel (B), the dimension for each relationship is chosen at $10$.
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3826013/.
 The sample size always increments by $10$ and is bounded by $1000$ in the experiment, with the median sample size for each method reported in the far right column. The results indicate that \Mgc~is a superior choice for finite-sample dependency testing; for example,  the second best method (\Hhg) requires nearly two and a half times the sample size of \Mgc~to achieve the same median power across high-dimensional settings.}
 \label{f:Summary}
@@ -1110,7 +1110,7 @@ $\delta_x$(1,2)   & \hspace{1.5em} \color{magenta}-2.03  & \hspace{3.5em} \color
 
 \begin{tikzpicture}[remember picture,overlay]
 \node[xshift=-5cm,yshift=-5cm] at (current page.east){%
-    \includegraphics[width=0.35\textwidth,trim={1.5cm 0cm 1.8cm 0},clip]{Figures/FigB}};
+    \includegraphics[width=0.35\textwidth,trim={1.5cm 0cm 0cm 0},clip]{Figures/FigB}};
   %\node[anchor=east,inner sep=0pt] at ($(current page.east)-(10cm,10cm)$) {
    %  \includegraphics[width=0.3\textwidth]{Figures/FigB}
   %};

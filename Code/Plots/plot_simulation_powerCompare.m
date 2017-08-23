@@ -67,11 +67,11 @@ for select=0:1
     end
     text(total,-0.01*mi,'Median','VerticalAlignment','top','HorizontalAlignment','left','FontSize',fontSize);
     
-    if select==1
+%     if select==1
         txt1=strcat('mAntel:',{' >'},num2str(AUC(5,total)),'');
-    else
-    txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
-    end
+%     else
+%     txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
+%     end
     txt2=strcat('Dcorr:',{' '},num2str(AUC(4,total)),'');
     txt3=strcat('mCorr:',{' '},num2str(AUC(3,total)),'');
     txt4=strcat('Hhg:',{' '},num2str(AUC(6,total)),'');

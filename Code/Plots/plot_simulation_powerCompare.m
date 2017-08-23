@@ -67,11 +67,11 @@ for select=0:1
     end
     text(total,-0.01*mi,'Median','VerticalAlignment','top','HorizontalAlignment','left','FontSize',fontSize);
     
-    if select==1
+%     if select==1
         txt1=strcat('mAntel:',{' >'},num2str(AUC(5,total)),'');
-    else
-    txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
-    end
+%     else
+%     txt1=strcat('mAntel:',{' '},num2str(AUC(5,total)),'');
+%     end
     txt2=strcat('Dcorr:',{' '},num2str(AUC(4,total)),'');
     txt3=strcat('mCorr:',{' '},num2str(AUC(3,total)),'');
     txt4=strcat('Hhg:',{' '},num2str(AUC(6,total)),'');
@@ -105,7 +105,7 @@ for select=0:1
     hold off
     xlim([0,20]);
 %     ylim([0,1.1*mi]);
-    ylim([0,max(AUC(:))*1.1]);
+    ylim([0,10]);
     set(gca,'FontSize',fontSize);
     set(gca,'XTick',[1,5,10,15],'FontSize',fontSize);
     %ll=[{'0'};{'20'};{'40'};{'60'};{'80'};{'>=100'}];

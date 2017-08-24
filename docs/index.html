@@ -359,6 +359,27 @@
 
 
 
+      ---
+      class: top, left
+
+
+      ### Desiderata of Testing Procedure
+
+      For any joint distribution $F\_{XY}$ including:
+      (i) high-dimensional data,
+      (ii) structured data such as sequences, images, networks, shapes, and
+      (iii) nonlinear relationships
+
+      1. *boundedness*: $0 \leq t,T \leq 1 $
+      2. *1-determinism*: $ T= 1 \Leftrightarrow H(X|Y) = 0$
+      3. *0-independence*: $T=0 \Leftrightarrow H(X|Y) = H(X)$
+      4. *universal consistency*: $\beta\_n(T) \to 1, \quad \forall \, F\_{XY}$
+      5. *ortho. invariance*: $T(X,Y) = T(a_1 + b_1  C_1  X, a_2 + b_2  C_2  Y)$
+      6. *convergence*: $\beta_n(t) \to \beta_n(T)$ as $n \to \infty$
+      7. *dominance*: $\beta_n(T) \geq \beta_n(T'), \, \forall n, T' \in \mathcal{T}$
+      7. *expected efficiency*: $\mathbb{E}\beta_n(t) \geq \mathbb{E}\beta_n(t'), \, \forall n, t' \in \mathcal{T}$
+      8. *comp. efficiency*: $\mathcal{O}(d n^2 \log n)$ space and time
+      9. "reveal the "geometry/topology" of the relationship"
 
       ---
       class: top, left
@@ -800,12 +821,12 @@
       var renderMath = function() {
         renderMathInElement(document.body);
         // or if you want to use $...$ for math,
-        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
-        //     {left: "$$", right: "$$", display: true},
-        //     {left: "$", right: "$", display: false},
-        //     {left: "\\[", right: "\\]", display: true},
-        //     {left: "\\(", right: "\\)", display: false},
-        // ]});
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false},
+        ]});
       }
       var slideshow = remark.create(options, renderMath);
 

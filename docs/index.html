@@ -359,53 +359,7 @@
 
 
 
-      ---
-      class: top, left
 
-
-      ### Desiderata of Testing Procedure
-
-      For any joint distribution $F\_{XY}$ including:
-      (i) high-dimensional data,
-      (ii) structured data such as sequences, images, networks, shapes, and
-      (iii) nonlinear relationships
-
-      1. *boundedness*: $0 \leq t,T \leq 1 $
-      2. *1-determinism*: $ T= 1 \Leftrightarrow H(X|Y) = 0$
-      3. *0-independence*: $T=0 \Leftrightarrow H(X|Y) = H(X)$
-      4. *universal consistency*: $\beta\_n(T) \to 1, \quad \forall \, F\_{XY}$
-      5. *ortho. invariance*: $T(X,Y) = T(a_1 + b_1  C_1  X, a_2 + b_2  C_2  Y)$
-      6. *convergence*: $\beta_n(t) \to \beta_n(T)$ as $n \to \infty$
-      7. *dominance*: $\beta_n(T) \geq \beta_n(T'), \, \forall n, T' \in \mathcal{T}$
-      7. *expected efficiency*: $\mathbb{E}\beta_n(t) \geq \mathbb{E}\beta_n(t'), \, \forall n, t' \in \mathcal{T}$
-      8. *comp. efficiency*: $\mathcal{O}(d n^2 \log n)$ space and time
-      9. "reveal the "geometry/topology" of the relationship"
-
-      ---
-      class: top, left
-
-
-      ### Desiderata of Testing Procedure
-
-      <br>
-
-      1. Performant under *any* joint distribution
-        - high-dimensional
-        - structured data (eg, sequences, images, networks, shapes)
-        - low sample-sizes
-        - nonlinear relationships
-      <!-- 5. computational efficiency -->
-
-      --
-      6. Reveals the geometry  of dependence
-
-
-      --
-
-      Answers the two motivating questions:
-
-      - Question 1: are the two related at all?
-      - Question 2: how are they related?
 
       ---
       class: top, left
@@ -426,6 +380,32 @@
 
       # intuition
 
+
+
+      ---
+      class: top, left
+
+
+      #### Intuitive Desiderata of Testing Procedure
+
+      <br>
+
+      1. Performant under *any* joint distribution
+        - low- and high-dimensional
+        - Euclidean and structured data (eg, sequences, images, networks, shapes)
+        - linear and nonlinear relationships
+      <!-- 5. computational efficiency -->
+
+      --
+      6. Reveals the geometry  of dependence
+
+
+      --
+
+      Answers the two motivating questions:
+
+      - Question 1: are the two related at all?
+      - Question 2: how are they related?
 
       ---
       class:  center
@@ -539,10 +519,6 @@
 
 
 
-
-
-
-
       ---
       class: top, center
 
@@ -560,9 +536,49 @@
 
 
       ---
+      class: top, left
+
+
+      #### Intuitive Desiderata of Testing Procedure
+
+      <br>
+
+      1. Performant under *any* joint distribution
+        - low- and high-dimensional
+        - Euclidean and structured data (eg, sequences, images, networks, shapes)
+        - linear and nonlinear relationships
+      <!-- 5. computational efficiency -->
+      6. Reveals the geometry  of dependence
+
+      Answers the two motivating questions:
+
+      - Question 1: are the two related at all?
+      - Question 2: how are they related?
+
+
+      ---
       class: middle, center
 
       # simulations
+
+      ---
+      class: top, left
+
+
+      ### Empirical Desiderata
+
+      1. statistical efficiency
+        - **power** is the probability of rejecting the null when the alternative is true
+        <!-- -  $\beta_n(t)$ := power of test statistic $t$ given $n$ samples -->
+        - $N_\beta(t)$ := the # of samples required to achieve power $\beta$ using test statistic $t$
+        - we desire that
+        $$N\_\beta(t') / N\_\beta( \text{MGC}) \geq 1  \text{ for all }
+        n, \, d, \, F\_{XY}, \text{ and } t' $$
+        <!-- $$\beta\_n(\text{MGC}) > \beta\_n(t')  \text{ for all } -->
+        <!-- n, \, t' \in \mathcal{T}, \text{ and } F\_{XY} $$ -->
+      2. quantification of relationship
+
+
 
       ---
       class: top, center
@@ -606,30 +622,65 @@
 
 
       ---
+      class: top, left
+
+
+      ### Empirical Desiderata
+
+      <br>
+
+
+      1. $N\_\beta(t') / N\_\beta( \text{MGC}) \geq 1  \text{ for all }
+        n, \, d, \, F\_{XY}, \text{ and } t' $
+        <!-- $$\beta\_n(\text{MGC}) > \beta\_n(t')  \text{ for all } -->
+        <!-- n, \, t' \in \mathcal{T}, \text{ and } F\_{XY} $$ -->
+      2. quantification of relationship
+
+
+      ---
       class: middle, center
 
       # theory
 
+
       ---
       class: top, left
 
-      ## Properties of  MGC
 
-      #### Oracle MGC
+      ### Theoretical Desiderata
+
+      <br>
+
+      |  name | principle |
+      |  ---   | --- |
+      |  boundedness | $0 \leq t,T \leq 1 $|
+      |  1-determin. | $  T= 1 \Leftrightarrow H(X \lvert Y) = 0 $ |
+      |  0-indep. | $T=0 \Leftrightarrow H(X \lvert Y) = H(X)$ |
+      |  ortho. invar. | $T(X,Y) = T(a_1 + b_1  C_1  X, a_2 + b_2  C_2  Y)$ |
+
+      --
+      |  univ. consist. | $\beta\_n(T) \to 1, \quad \forall \, F\_{XY}$ |
+      |  dominance | $\beta\_n(T) \geq \beta\_n(T'), \, \forall n,\, T' \in \mathcal{T}, \forall F\_{XY}$ |
+      |  convergence | $\beta_n(t) \to \beta_n(T)$ as $n \to \infty$ |
+      <!-- |  efficiency | $\mathbb{E}\beta_n(t) \geq \mathbb{E}\beta_n(t'), \, \forall n, t' \in \mathcal{T}$ | -->
+
+      <!-- | | comp. efficiency | $\mathcal{O}(d n^2 \log n)$ space and time | -->
+      <!-- 9. "reveal the "geometry/topology" of the relationship" -->
+
+      ---
+      class: top, left
+
+      #### MGC is a Reasonable Dependence Statistic
+
+      <br>
 
       Thm: Oracle MGC has the following properties:
 
       - 0 &geq;  MGC &geq; 1
       - MGC = 0 only under independence
+      - MGC = 1 only under deterministic relationship
       - MGC is invariant to rotation, translation, and scale of X and/or Y
 
-      --
-
-      #### (Sample) MGC
-
-      Thm: For any  F<sub>XY</sub> with finite 1st moment,
-       Sample MGC &rarr;  Oracle MGC as n &rarr; &infin;
-       if and only if &sigma;<sub>x</sub> & &sigma;<sub>y</sub> are of strong negative type
 
       ---
       class: center
@@ -642,7 +693,7 @@
 
        <br><br>
 
-       Thm: \\( \beta_n (c^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\)
+       Thm: \\( \beta_n (T^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\)
 
       <!-- <img src="images/thm1.png"  style="position:absolute; LEFT: 200px; TOP: 300px; height: 40px;"/> -->
 
@@ -655,7 +706,8 @@
 
       <br><br>
 
-      Thm: If x is linearly dependent on y, then for any n it always holds that \\( \beta_n(c^*) = \beta_n(c) \\)
+      Thm: If x is linearly dependent on y, then for any n it always holds that
+      $$ \beta_n(T^*) = \beta_n(T) $$
 
 
 
@@ -672,7 +724,7 @@
 
       Thm: There exists f and n such that
 
-      $$\beta_n( c^{k,l} ) > \beta_n(c) $$
+      $$\beta_n( T^{k,l} ) > \beta_n(T) $$
 
 
 
@@ -689,31 +741,65 @@
 
       Thm: Oracle MGC statistically dominates dcorr, that is,
 
-      $$\beta_n( c^* ) \geq \beta_n(c) $$
+      $$\beta_n( T^* ) \geq \beta_n(T) $$
 
 
       <!-- <img src="images/thm4.png"  style="width: 800px;"/> -->
+
+
+      ---
+      class: center
+
+      ### Sample MGC Converges
+
+
+      <br>
+
+      Thm: For any  F<sub>XY</sub> with finite 1st moment,
+
+      $\beta_n(t^*) \to \beta_n(T^\ast)$ as $n \to \infty$
+
+      if and only if  $\sigma_X$ and $\sigma_Y$  are of strong negative type
+
+
 
       ---
       class: top, left
 
 
-      ### Computational Complexity
+      ### Theoretical Desiderata
 
+      <br>
 
-      <br><br><br>
+      |  name | principle |
+      |  ---   | --- |
+      |  boundedness | $0 \leq t,T \leq 1 $|
+      |  1-determin. | $  T= 1 \Leftrightarrow H(X \lvert Y) = 0 $ |
+      |  0-indep. | $T=0 \Leftrightarrow H(X \lvert Y) = H(X)$ |
+      |  ortho. invar. | $T(X,Y) = T(a_1 + b_1  C_1  X, a_2 + b_2  C_2  Y)$ |
+      |  univ. consist. | $\beta\_n(T) \to 1, \quad \forall \, F\_{XY}$ |
+      |  dominance | $\beta\_n(T) \geq \beta\_n(T'), \, \forall n,\, T' \in \mathcal{T}, \forall F\_{XY}$ |
+      |  convergence | $\beta_n(t) \to \beta_n(T)$ as $n \to \infty$ |
 
-      | Method | Complexity |
-      | :---: | :---: |
-      | Dcorr |  n<sup>2</sup> |
-       | HHG |  n<sup>2</sup> log n |
-      | MGC |  n<sup>2</sup> log n / T  |
 
 
       ---
       class: middle, center
 
       # real data
+
+      ---
+      class: top, left
+
+
+      ### Real Data Desiderata
+
+      <br>
+
+      1. when we believe dependence, MGC obtains a small p-value
+      2. MGC provides insight into the geometry of real dependence
+      3. when there is no dependence, MGC correcly controls FPR
+
 
       ---
       class: top, left
@@ -736,7 +822,7 @@
 
       ---
 
-      ### Summary
+      ### Overall Summary
 
 
       - Oracle MGC theoretically dominates, even in finite samples
@@ -784,6 +870,25 @@
       <img src="http://brainx.io/images/funding/kavli_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:550px; HEIGHT:100px;"/>
 
       <img src="http://brainx.io/images/funding/kndi_fpo.png" STYLE="position:absolute; TOP:550px; LEFT:650px; HEIGHT:100px;"/>
+
+
+
+      ---
+
+      ### Computational Desiderata
+
+      1. fast
+      2. open source
+
+      <br>
+
+      | Method | Complexity |
+      | :---: | :---: |
+      | Dcorr |  n<sup>2</sup> |
+       | HHG |  n<sup>2</sup> log n |
+      | MGC |  n<sup>2</sup> log n / T  |
+
+      - MATLAB and R code at [http://neurodata.io/tools/MGC/](http://neurodata.io/tools/MGC/)
 
 
 

@@ -163,7 +163,7 @@ for select=0:1
         title('B. High-Dimensional Settings','FontSize',fontSize+7);
     end
     F.fname=strcat(pre2,figNumber);
-    F.wh=[4.2 3]*2;
+    F.wh=[4.5 3]*2;
     print_fig(gcf,F)
 end
 

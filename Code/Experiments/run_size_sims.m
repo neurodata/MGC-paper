@@ -25,17 +25,20 @@ end
 nMax=1000;
 thres=0.85;
 if dim>1
-    noise=0;
+    noise=1;
+    sz=9;
 else
     noise=1;
+    sz=11;
 end
 alpha=0.05;
 %Ind
-SampleSize=zeros(6,max(type)+1);
+SampleSize=zeros(sz,max(type)+1);
 for i=type
-    for option=0:5
-        SampleSize(option+1,i)=CorrIndTestSize(i,nMax,dim,thres,rep,noise,alpha,option);
-        if option==0 && SampleSize(1,i)==1000
+    i
+    for option=1:sz
+        SampleSize(option,i)=CorrIndTestSize(i,nMax,dim,thres,rep,noise,alpha,option-1);
+        if option==1 && SampleSize(1,i)==1000
             SampleSize(2:end,i)=1000;
             break;
         end

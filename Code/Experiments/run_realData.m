@@ -141,6 +141,25 @@ if select==6 || select==7
         [pMGC(i),pD(i),pM(i),pP(i), pHHG(i),testMGC(i),testD(i),testM(i),testHHG(i)]=CorrPermDistTest(C,D,rep);
     end
     
+    LabelIndAll=LabelIndAll(per)-1;
+    n=length(LabelIndAll);
+    error=zeros(m,1);k=11;
+    for i=1:m
+        tmpLabel=zeros(n,1);
+        C=squareform(pdist(A(i,per)'));
+        [~,~,RX,~]=MGCDistTransform(C,D);
+        RX(RX==1)=0;
+        RX(RX>k+1)=0;
+        RX(RX>0)=1;
+        for j=1:n
+            tmp=sum(RX(:,j).*LabelIndAll);
+            if tmp>floor(k/2)
+                tmpLabel(j)=1;
+            end
+        end
+        error(i)=mean(abs(LabelIndAll-tmpLabel));
+    end
+    
     testMGC(:,6)=pMGC;
     testMGC(:,7)=pP;
     testMGC(:,8)=pD;

@@ -26,7 +26,7 @@ if nargin<7
     alpha=0.05; % Default type 1 error level
 end
 if nargin<8
-    option=0; % Default option, 0 for oracle MGC, 1 for sample mgc, 2 for dcorr, 3 for mcorr, 4 for mantel, 5 for HHG
+    option=0; % Default option, 0 for oracle MGC, 1 for sample mgc, 2 for dcorr, 3 for mcorr, 4 for mantel, 5 for HHG, 6 for HSIC, 7 for Pearson, 8 for Kendall, 9 for Spearman, 10 for MIC
 end
 
 nRange=10:10:nMax;
@@ -118,36 +118,63 @@ for r=1:rep
     [x,y]=CorrSampleGenerator(type,n,d,0, noise);
     C=squareform(pdist(x));
     D=squareform(pdist(y));
-    if option==5
-        dCorN(r)=HHG(C,D);
-    else
-        tmp=MGCLocalCorr(C,D,opt);
-        if option==1
-            tmp=MGCSampleStat(tmp);
-        end
-        if option~=0
-            dCorN(r)=tmp(end);
-        else
+    switch option
+        case 0
+            [~,tmp]=MGCSampleStat(C,D);
             dCorN(:,:,r)=tmp;
-        end
+        case 1
+            dCorN(r)=MGCSampleStat(C,D);
+        case {2,3,4}
+            dCorN(r)=DCorr(C,D,opt);
+        case 5
+            dCorN(r)=HHG(C,D);
+        case 6
+            dCorN(r)=HSIC(x,y);
+        case 7
+            dCorN(r)=RVCorr(x,y);
+        case 8
+            if d==1
+                dCorN(r)=corr(x,y,'type','Spearman');
+            else
+                dCorN(r)=RVCorr(x,y,1);
+            end
+        case 9
+            dCorN(r)=corr(x,y,'type','Kendall');
+        case 10
+            an=mine(x',y');
+            dCorN(r)=an.mic;
     end
+    
     
     % Generate dependent sample data and form the distance matrices
     [x,y]=CorrSampleGenerator(type,n,d,1, noise);
     C=squareform(pdist(x));
     D=squareform(pdist(y));
-    if option==5
-        dCorA(r)=HHG(C,D);
-    else
-        tmp=MGCLocalCorr(C,D,opt);
-        if option==1
-            tmp=MGCSampleStat(tmp);
-        end
-        if option~=0
-            dCorA(r)=tmp(end);
-        else
+    switch option
+        case 0
+            [~,tmp]=MGCSampleStat(C,D);
             dCorA(:,:,r)=tmp;
-        end
+        case 1
+            dCorA(r)=MGCSampleStat(C,D);
+        case {2,3,4}
+            dCorA(r)=DCorr(C,D,opt);
+        case 5
+            dCorA(r)=HHG(C,D);
+        case 6
+            dCorA(r)=HSIC(x,y);
+        case 7
+            dCorA(r)=RVCorr(x,y);
+        case 8
+            if d==1
+                dCorA(r)=corr(x,y,'type','Spearman');
+            else
+                dCorA(r)=RVCorr(x,y,1);
+            end
+        case 9
+            dCorA(r)=corr(x,y,'type','Kendall');
+        case 10
+            an=mine(x',y');
+            dCorA(r)=an.mic;
     end
 end
 
@@ -155,7 +182,7 @@ end
 % calculate the emprical powers and the best scale at type 1 error level alpha
 [power,scale]=calculatePower(dCorN,dCorA,alpha,rep);
 
-function [power1,n1]=calculatePower(dCor1N,dCor1A,alpha,rep)
+function [power1,   n1]=calculatePower(dCor1N,dCor1A,alpha,rep)
 % An auxiliary function to estimate the power based on the distribution of
 % the test statistic under the null and the alternative, and calculate the
 % optimal scale from the estimated power

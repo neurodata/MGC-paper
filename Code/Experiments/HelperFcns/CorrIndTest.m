@@ -26,7 +26,7 @@ if nargin<8
     alpha=0.05; % Default type 1 error level
 end
 if nargin<9
-    option=[1,1,1,1,0]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
+    option=[1,1,1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{dcorr/mcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -39,32 +39,36 @@ lim=length(numRange);
 powerMGCD=zeros(1,lim);powerMGCM=zeros(1,lim);powerMGCP=zeros(1,lim);% Powers for MGC{dcorr/mcorr/Mantel}
 powerD=zeros(1,lim);powerM=zeros(1,lim);powerP=zeros(1,lim);% Powers for global dcorr/mcorr/Mantel.
 powerHSIC=zeros(1,lim);powerHHG=zeros(1,lim);
+powerCorr=zeros(1,lim);powerSpearman=zeros(1,lim);powerKendall=zeros(1,lim);powerMIC=zeros(1,lim);
 neighborhoods=ones(3,lim);
 
 % Run the independence test to first estimate the optimal scale of MGC
-[~,~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
+% [~,~,~,~,~,~,neighborhoods]=IndependenceTest(type,numRange,dim,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
 
 % Run the independence test again for the testing powers
-[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG,powerHSIC]=IndependenceTest(type,numRange,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
+[powerMGC,powerDLocal, powerMLocal, powerPLocal, powerHHG,powerHSIC,powerCorr,powerSpearman,powerKendall,powerMIC]=IndependenceTest(type,numRange,dim,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
     if option(1)~=0
         tmp=powerDLocal(1:numRange(i),1:numRange(i),i);
-        powerMGCD(i)=tmp(neighborhoods(1,i));
-        tmp=tmp(tmp>0);
+        powerMGCD(i)=max(max(tmp));
+%         powerMGCD(i)=tmp(neighborhoods(1,i));
+%         tmp=tmp(tmp>0);
         powerD(i)=tmp(end);
     end
     if option(2)~=0
         tmp=powerMLocal(1:numRange(i),1:numRange(i),i);
-        powerMGCM(i)=tmp(neighborhoods(2,i));
-        tmp=tmp(tmp>0);
+        powerMGCM(i)=max(max(tmp));
+%         powerMGCM(i)=tmp(neighborhoods(2,i));
+%         tmp=tmp(tmp>0);
         powerM(i)=tmp(end);
     end
     if option(3)~=0
         tmp=powerPLocal(1:numRange(i),1:numRange(i),i);
-        powerMGCP(i)=tmp(neighborhoods(3,i));
-        tmp=tmp(tmp>0);
+        powerMGCP(i)=max(max(tmp));
+%         powerMGCP(i)=tmp(neighborhoods(3,i));
+%         tmp=tmp(tmp>0);
         powerP(i)=tmp(end);
     end
 end
@@ -82,9 +86,9 @@ filename=strcat(pre1,'CorrIndTestType',num2str(type),'N',num2str(n),'Dim',num2st
 if type==0;
     filename=strcat(filename,'W',num2str(noise),'.mat');
 end
-save(filename,'powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerHSIC','powerMGC','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
+save(filename,'powerCorr','powerSpearman','powerKendall','powerMIC','powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerHSIC','powerMGC','type','n','rep1','rep2','lim','dim','noise','alpha','option','numRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
 
-function [powerMGC,powerD, powerM, powerP, powerHHG,powerHSIC,neighbor]=IndependenceTest(type,numRange,dim,lim,rep, noise,alpha,option)
+function [powerMGC,powerD, powerM, powerP, powerHHG,powerHSIC,powerCorr,powerSpearman,powerKendall,powerMIC,neighbor]=IndependenceTest(type,numRange,dim,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of
 % all local tests of dcorr/mcorr/Mantel, and the power of HHG.
 %
@@ -92,7 +96,7 @@ function [powerMGC,powerD, powerM, powerP, powerHHG,powerHSIC,neighbor]=Independ
 % distributions, then calculate the test statistics under the null and the
 % alternative, and estimate the testing power of each method.
 if nargin<8
-    option=[1,1,1,0,0]; % Default option. Setting each entry to 0 to disable the calculation of local dcorr/mcorr/Mantel, or HHG.
+    option=[1,1,1,1,1,1,1,1,1]; % Default option. Setting each entry to 0 to disable the calculation of local dcorr/mcorr/Mantel, or HHG.
 end
 
 d=dim;
@@ -104,6 +108,10 @@ dCorDA=zeros(n,n,rep);dCorMA=zeros(n,n,rep);dCorPA=zeros(n,n,rep);
 dCorHHGN=zeros(1,rep);dCorHHGA=zeros(1,rep);
 dCorHSICN=zeros(1,rep);dCorHSICA=zeros(1,rep);
 dCorMGCN=zeros(1,rep);dCorMGCA=zeros(1,rep);
+dCorCorrN=zeros(1,rep);dCorCorrA=zeros(1,rep);
+dCorSpearmanN=zeros(1,rep);dCorSpearmanA=zeros(1,rep);
+dCorKendallN=zeros(1,rep);dCorKendallA=zeros(1,rep);
+dCorMICN=zeros(1,rep);dCorMICA=zeros(1,rep);
 % Store the dependent and independent data
 DataN=zeros(d,2*n,rep);DataA=zeros(d,2*n,rep);
 
@@ -112,6 +120,10 @@ powerD=zeros(n,n,lim);powerM=zeros(n,n,lim);powerP=zeros(n,n,lim);% Powers for a
 powerHHG=zeros(1,lim);% Powers for HHG
 powerHSIC=zeros(1,lim);% Powers for HHG
 powerMGC=zeros(1,lim);% Powers for HHG
+powerCorr=zeros(1,lim);% Powers for HHG
+powerSpearman=zeros(1,lim);% Powers for HHG
+powerKendall=zeros(1,lim);% Powers for HHG
+powerMIC=zeros(1,lim);% Powers for HHG
 neighbor=zeros(3,lim); % Optimal neighborhoods for local dcorr/mcorr/Mantel
 
 for r=1:rep
@@ -138,16 +150,16 @@ for i=1:lim
         C=squareform(pdist(x));
         D=squareform(pdist(y));
         if option(1)~=0
-            tmp=MGCLocalCorr(C,D,'dcor');
+            [~, tmp, ~]=MGCSampleStat(C,D,'dcor');     
             dCorDN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=MGCLocalCorr(C,D,'mcor');
+            [stat, tmp, ~]=MGCSampleStat(C,D,'mcor');     
             dCorMN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
-            dCorMGCN(r)=MGCSampleStat(tmp);
+            dCorMGCN(r)=stat;
         end
         if option(3)~=0
-            tmp=MGCLocalCorr(C,D,'mantel');
+            [~, tmp, ~]=MGCSampleStat(C,D,'mantel');     
             dCorPN(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
@@ -155,6 +167,19 @@ for i=1:lim
         end
         if option(5)~=0
             dCorHSICN(r)=HSIC(x,y);
+        end
+        if option(6)~=0
+            dCorCorrN(r)=corr(x,y);
+        end
+        if option(7)~=0
+            dCorSpearmanN(r)=corr(x,y,'type','Spearman');
+        end
+        if option(8)~=0
+            dCorKendallN(r)=corr(x,y,'type','Kendall');
+        end
+        if option(9)~=0
+            an=mine(x',y');
+            dCorMICN(r)=an.mic;
         end
     end
     
@@ -165,16 +190,16 @@ for i=1:lim
         C=squareform(pdist(x));
         D=squareform(pdist(y));
         if option(1)~=0
-            tmp=MGCLocalCorr(C,D,'dcor');
+            [~, tmp, ~]=MGCSampleStat(C,D,'dcor');     
             dCorDA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(2)~=0
-            tmp=MGCLocalCorr(C,D,'mcor');
+            [stat, tmp, ~]=MGCSampleStat(C,D,'mcor');     
             dCorMA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
-            dCorMGCA(r)=MGCSampleStat(tmp);
+            dCorMGCA(r)=stat;
         end
         if option(3)~=0
-            tmp=MGCLocalCorr(C,D,'mantel');
+            [~, tmp, ~]=MGCSampleStat(C,D,'mantel');     
             dCorPA(1:size(tmp,1),1:size(tmp,2),r)=tmp;
         end
         if option(4)~=0
@@ -182,6 +207,19 @@ for i=1:lim
         end
         if option(5)~=0
             dCorHSICA(r)=HSIC(x,y);
+        end
+        if option(6)~=0
+            dCorCorrA(r)=corr(x,y);
+        end
+        if option(7)~=0
+            dCorSpearmanA(r)=corr(x,y,'type','Spearman');
+        end
+        if option(8)~=0
+            dCorKendallA(r)=corr(x,y,'type','Kendall');
+        end
+        if option(9)~=0
+            an=mine(x',y');
+            dCorMICA(r)=an.mic;
         end
     end
     
@@ -193,6 +231,10 @@ for i=1:lim
     powerHHG(i)=calculatePower(dCorHHGN,dCorHHGA,alpha,rep);
     powerHSIC(i)=calculatePower(dCorHSICN,dCorHSICA,alpha,rep);
     powerMGC(i)=calculatePower(dCorMGCN,dCorMGCA,alpha,rep);
+    powerCorr(i)=calculatePower(dCorCorrN,dCorCorrA,alpha,rep);
+    powerSpearman(i)=calculatePower(dCorSpearmanN,dCorSpearmanA,alpha,rep);
+    powerKendall(i)=calculatePower(dCorKendallN,dCorKendallA,alpha,rep);
+    powerMIC(i)=calculatePower(dCorMICN,dCorMICA,alpha,rep);
 %     figure
 %     hold on
 %     [f,x]=ksdensity(reshape(dCorMN(nn,nn,:),1,rep));

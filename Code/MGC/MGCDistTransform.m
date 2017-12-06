@@ -1,70 +1,100 @@
-function [A,B,RX,RY]=MGCDistTransform(X,Y,option)
-
+%% Transform the distance matrices, with column-wise ranking if needed.
+%%
+%% @param X is a distance matrix;
+%% @param Y is a second distance matrix;
+%% @param option is a string that specifies which global correlation to build up-on, including 'mgc','dcor','mantel', and 'rank';
+%% @param optionRk is a string that specifies whether ranking within column is computed or not.
+%%
+%% @return A list contains the following output:
+%% @return A and B are the centered distance matrices;
+%% @return RX and RY are the column rank matrices of X and Y respectively.
+%%
+%% @export
+%% 
+function [A,B,RX,RY]=MGCDistTransform(X,Y,option,optionRk)
 if nargin<3
-    option='mcor';
+    option='mgc'; % default to mgc transform
 end
-% 
-% RX=DistRanks(X); % the column ranks for X
-% RY=DistRanks(Y); % the column ranks for Y
-
-% depending on the choice of the global correlation, properly center the distance matrices
-[A,RX]=DistCentering(X,option);
-[B,RY]=DistCentering(Y,option);
-
-if strcmp(option,'mcorDouble')==false && strcmp(option,'dcorDouble')==false
-    B=B';
-    RY=RY';
+if nargin<4 || strcmp(option,'rank')
+    optionRk=1; % do ranking or not, 0 to no ranking
 end
 
-function [A,RX]=DistCentering(X,option)
-% An auxiliary function that properly centers the distance matrix X,
-% depending on the choice of global corr.
+% Depending on the choice of the global correlation, properly transform
+% each distance matrix
+if strcmp(option,'ReducedRank')
+    RX=DistRanks(X);
+    RY=DistRanks(Y);
+    A=RX;
+    B=RY;
+    n=size(X,1);
+    for i=1:n
+        [~,aInd]=sort(A(:,i));
+        b=sort(B(:,i));
+        A(aInd,i)=b;
+    end
+    option='mgc'; % default to mgc transform
+    [A,~]=DistCentering(A,option,0);
+    [B,~]=DistCentering(B,option,0);
+else
+    [A,RX]=DistCentering(X,option,optionRk);
+    [B,RY]=DistCentering(Y,option,optionRk);
+end
 
-[n,m]=size(X);
-RX=DistRanks(X); % the column ranks for X
+%% An auxiliary function that properly transforms the distance matrix X
+%%
+%% @param X is a symmetric distance matrix;
+%% @param option is a string that specifies which global correlation to build up-on, including 'mgc','dcor','mantel', and 'rank';
+%% @param optionRk is a string that specifies whether ranking within column is computed or not.
+%%
+%% @return A list contains the following output:
+%% @return A is the centered distance matrices;
+%% @return RX is the column rank matrices of X.
+%%
+function [A,RX]=DistCentering(X,option,optionRk)
+[n]=size(X,1);
+if optionRk~=0
+    RX=DistRanks(X); % the column ranks for X
+else
+    RX=zeros(n,n);
+end
 
-% centering for distance correlation / modified distance correlation /
-% Mantel coefficient
+% If rank transformation, take X as the rank matrix then do default mgc
+% transform
+if strcmp(option,'rank')
+    X=RX;
+end
+
 switch option
-    case 'mgc'
-        EX=repmat(sum(X,1)/(n-1),n,1);
-    case 'rank'
-        X=RX;
-        EX=repmat(sum(X,1)/(n-1),n,1);
-    case 'dcor' % single centering of dcor
-        EX=repmat(mean(X,1),n,1); % column centering
-    case 'mcor' % single centering of mcor
-        EX=repmat(sum(X,1)/n,n,1);
-        EX=EX+X/n;
-    case 'mantel'
+    case 'dcor' % unbiased dcor transform
+        EX=repmat(sum(X,1)/(n-2),n,1)+repmat(sum(X,2)/(n-2),1,n)-sum(sum(X))/(n-1)/(n-2);
+    case 'mantel' % mantel transform
         EX=sum(sum(X))/n/(n-1);
-    case 'dcorDouble' % original double centering of dcor
-        EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
-    case 'mcorDouble' % original double centering of mcor
-        EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
-        EX=EX+X/n;
+    otherwise % Default mgc transform
+        EX=repmat(sum(X,1)/(n-1),n,1);
+        %     case 'dcor' % original dcor that is biased
+        %         EX=repmat(mean(X,1),n,1)+repmat(mean(X,2),1,n)-mean(mean(X));
+        %     case 'dcor' % single centering of dcor
+        %         EX=repmat(mean(X,1),n,1); % column centering
+        %     case 'mcor' % single centering of mcor
+        %         EX=repmat(sum(X,1)/n,n,1);
+        %         EX=EX+X/n;
 end
 A=X-EX;
 
-% for mcor or Mantel, exclude the diagonal entries.
-% This is a simpler diagonal modification than the original mcor
-if strcmp(option,'dcor')==false && strcmp(option,'dcorDouble')==false
-    %%% meanX=sum(sum(X))/n^2;
-    for j=1:m
-        A(j,j)=0;
-        %%% A(j,j)=sqrt(2/(n-2))*(mean(X(:,j))-meanX)*1i;  % the original diagonal modification of mcorr
-    end
+% The diagonal entries are always excluded
+for j=1:n
+    A(j,j)=0;
 end
 
+%% An auxiliary function that sorts the entries within each column by ascending order:
+%% For ties, the minimum ranking is used,
+%% e.g. if there are repeating distance entries, the order is like 1,2,3,3,4,..,n-1.
+%%
+%% @param dis is a symmetric distance matrix.
+%%
+%% @return disRank is the column rank matrices of X.
+%%
 function [disRank]=DistRanks(dis)
-% An auxiliary function that sorts the distance entries within each column by ascending order.
-%
-% The input is assumed to be a distance matrix.
-%
-% The output is column-wise rank, ordered from 1,...,n.
-%
-% For ties, the minimum ranking is used,
-% e.g. if there are repeating distance entries, the order is like 1,2,3,3,4,..,n-1.
 
 [n,m]=size(dis);
 disRank=zeros(n,m);

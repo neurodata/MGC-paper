@@ -18,11 +18,11 @@ end
 % Use the data size and diagonal element to determine if the given data is a distance matrix or not
 if size(X,1)~=size(X,2) || sum(diag(X).^2)>0
     X=squareform(pdist(X));
-    disp('The first data is not a Euclidean distance matrix; transformed to distance matrix instead.')
+%     disp('The first data is not a Euclidean distance matrix; transformed to distance matrix instead.')
 end
 if size(Y,1)~=size(Y,2) || sum(diag(Y).^2)>0
     Y=squareform(pdist(Y));
-    disp('The second data is not a Euclidean distance matrix; transformed to distance matrix instead.')
+%     disp('The second data is not a Euclidean distance matrix; transformed to distance matrix instead.')
 end
 
 [A,B,RX,RY]=MGCDistTransform(X,Y,option);

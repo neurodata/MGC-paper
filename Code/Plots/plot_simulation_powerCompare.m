@@ -39,7 +39,7 @@ ls{1}=':';
 thres=0.85;
 ind=1;
 opt=1;
-mi=1000;
+mi=500;
 % if opt==1
 %     mi=10;
 % else
@@ -89,30 +89,33 @@ for select=0:1
     txt1=strcat('MGC:',{' '},num2str(AUC(ind,total)));
     txt6=strcat('Hsic:',{' '},num2str(AUC(6,total)));
     if select==0
-        txt7=strcat('Pearson:',{' >'},num2str(AUC(7,total)));
-        txt8=strcat('Spearman:',{' >'},num2str(AUC(8,total)));
-        txt9=strcat('Kendall:',{' >'},num2str(AUC(9,total)));
-        txt10=strcat('mIc:',{' >'},num2str(AUC(10,total)));
+        txt7=strcat('Pearson',{'>'},num2str(AUC(7,total)));
+        txt8=strcat('Spearman',{'>'},num2str(AUC(8,total)));
+        txt9=strcat('Kendall',{'>'},num2str(AUC(9,total)));
+        txt10=strcat('mIc:',{' '},num2str(AUC(10,total)));
     else
-        txt7=strcat('RV:',{' >'},num2str(AUC(7,total)));
-        txt8=strcat('ccA:',{' >'},num2str(AUC(8,total)));
+        txt7=strcat('RV',{'>'},num2str(AUC(7,total)));
+        txt8=strcat('ccA',{'>'},num2str(AUC(8,total)));
     end
     adj=zeros(10,1);
     if select==0
-        adj(1)=0;
-        adj(2)=0.2*mi;
-        adj(3)=0.15*mi;
-        adj(4)=0.25*mi;
-        adj(5)=0.05*mi;
-        adj(6)=0.10*mi;
-        adj(7)=0.0*mi;
+        adj(1)=-0.1*mi;
+        adj(2)=0.1*mi;
+        adj(3)=0.0*mi;
+        adj(4)=0.05*mi;
+        adj(5)=-0.05*mi;
+        adj(6)=-0.025*mi;
+        adj(7)=0*mi;
         adj(8)=-0.05*mi;
         adj(9)=-0.1*mi;
-        adj(10)=0.3*mi;
+        adj(10)=0.075*mi;
     else
-        adj(2)=-0.02*mi;
-        adj(5)=-0.03*mi;
+        adj(7)=0*mi;
         adj(8)=-0.05*mi;
+%         adj(2)=-0.02*mi;
+%         adj(5)=-0.03*mi;
+%         adj(7)=-0.5*mi;
+%         adj(8)=-0.55*mi;
     end
 % %     %text(nn,AUC(1,nn)+adj(1),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mantel);
 %     text(total,log10(min(AUC(3,total)+adj(3),mi)),txt3,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mcorr);
@@ -125,10 +128,10 @@ for select=0:1
     text(total,min(AUC(5,total)+adj(5),mi),txt5,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',HHG);
     text(total,min(AUC(ind,total)+adj(1),mi),txt1,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',MGC);
     text(total,min(AUC(6,total)+adj(6),mi),txt6,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',hsic);
-    text(total,min(AUC(7,total)+adj(7),mi),txt7,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',pcorr);
-    text(total,min(AUC(8,total)+adj(8),mi),txt8,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',spearman);
+    text(total,min(AUC(7,total)+adj(7),mi+adj(7)),txt7,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',pcorr);
+    text(total,min(AUC(8,total)+adj(8),mi+adj(8)),txt8,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',spearman);
     if select==0
-    text(total,min(AUC(9,total)+adj(9),mi),txt9,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',kendall);
+    text(total,min(AUC(9,total)+adj(9)+adj(9),mi+adj(9)),txt9,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',kendall);
     text(total,min(AUC(10,total)+adj(10),mi),txt10,'VerticalAlignment','middle','HorizontalAlignment','left','FontSize',fontSize,'Color',mic);
     end
 %     h1=plot(x,AUC(1,:),'s','MarkerSize',10,'Color','red');
@@ -138,7 +141,7 @@ for select=0:1
 
     hold off
     xlim([0,20]);
-    ylim([0,1.1*mi]);
+     ylim([0,mi+10]);
 %     ylim([0,10]);
     set(gca,'FontSize',fontSize);
     set(gca,'XTick',[1,5,10,15],'FontSize',fontSize);

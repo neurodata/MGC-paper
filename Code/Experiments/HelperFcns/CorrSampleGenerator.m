@@ -180,6 +180,20 @@ switch type % In total 20 types of dependency + the type 0 outlier model
     case 20 %Independent clouds
         x=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
         y=mvnrnd(zeros(n,d),eye(d),n)/3+(binornd(1,0.5,n,d)-0.5)*2;
+    case 21 %Independent clouds
+        n1=floor(n*noise);
+        n2=n-n1;
+        x1=unifrnd(-1,1,n2,1);
+        y1=x1;
+        if n1>0
+        x2=mvnrnd(zeros(n1,d),eye(d),n1)/3+(binornd(1,0.5,n1,d)-0.5)*2;
+        y2=mvnrnd(zeros(n1,d),eye(d),n1)/3+(binornd(1,0.5,n1,d)-0.5)*2;
+        x=[x1;x2];
+        y=[y1;y2];
+        else
+        x=x1;
+        y=y1;
+        end
 end
 
 %affine invariant

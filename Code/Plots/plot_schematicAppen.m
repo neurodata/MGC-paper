@@ -47,7 +47,8 @@ map4 = brewermap(128,'BuPu'); % brewmap
 s=3;t=5;
 gr=map2(120,:);
 pu=map2(8,:);
-loca=[0,1,0];
+map3 = brewermap(128,'PiYG'); % brewmap
+loca=map3(100,:);
 glob=[0.5,0.5,0.5];
 mgc='Cyan';
 cmap(1,:) = pu;

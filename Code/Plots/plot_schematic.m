@@ -82,7 +82,8 @@ F.Xmin=min(J)-1;
 F.Xmax=max(J)-1;
 
 % colors
-F.loca=[0,1,0];
+map3 = brewermap(128,'PiYG'); % brewmap
+F.loca=map3(100,:);
 F.mgc=F.loca;
 F.col=[0 0 0];
 F.gray = [0.5,0.5,0.5];

@@ -14,13 +14,14 @@ end
 if nargin<1
     type=1:20;
 end
-total=20;
+% total=20;
 power=zeros(max(type),1);
-rep=100;
+rep=20;
+% K=10;
 % warning('off','all');
 for t=type
     for r=1:rep
-        pcorr=zeros(total,1);
+%         pcorr=zeros(total,1);
         
         % type=1;
         % n=100;
@@ -28,31 +29,42 @@ for t=type
         % noise=0.1;
         
         [x,y]=CorrSampleGenerator(t,n,d,1, noise);
+        [score,ind]=MGCGeometry(x,y);
+%         [~, localCorr, ~]=MGCSampleStat(x,y);
         
-        [~, localCorr, ~]=MGCSampleStat(x,y);
         % [~, ~,~,localCorr]=MGCPermutationTest(x,y,rep);
         % localCorr=double(localCorr<0.05);
-        localCorr=localCorr-mean(mean(localCorr));
+        %         localCorr=localCorr-mean(mean(localCorr));
         % var1=norm(localCorr,'fro');
         % localCorr=reshape(localCorr,size(localCorr,1)*size(localCorr,2),1);
-        
-        for j=1:total;
-%             [y]=CorrSampleGeneratorX(j,x,0);
-                [x,y]=CorrSampleGenerator(j,n,d,1, 0.001);
-            [~, localCorr2, ~]=MGCSampleStat(x,y);
-            %     [~, ~,~,localCorr2]=MGCPermutationTest(x,y,rep);
-            %     localCorr2=double(localCorr2<0.05);
-            localCorr2=localCorr2-mean(mean(localCorr2));
-            %     var2=norm(localCorr2,'fro');
-            %     localCorr2=reshape(localCorr2,size(localCorr2,1)*size(localCorr2,2),1);
-            %     pcorr(j)=sum(sum(localCorr.*localCorr2))/var1/var2;
-            pcorr(j)=DCorr(localCorr,localCorr2);
-            %     pcorr(j)=MGCSampleStat(localCorr,localCorr2);
-            %     pcorr(j)=corr(localCorr,localCorr2,'Spearman');
-        end
-        [~,ind]=sort(pcorr,'descend');
-        ind=find(ind-t,1);
-        if (ind<=2)
+        %
+%         ind2=zeros(K*3,1);
+%         for k=1:K
+%             pcorr=zeros(total,1);
+%             for j=1:total
+% %                             [y]=CorrSampleGeneratorX(j,x,0);
+%                 [x,y]=CorrSampleGenerator(j,n,d,1, 0.001);
+%                 [~, localCorr2, ~]=MGCSampleStat(x,y);
+%                 %     [~, ~,~,localCorr2]=MGCPermutationTest(x,y,rep);
+%                 %     localCorr2=double(localCorr2<0.05);
+%                 %             localCorr2=localCorr2-mean(mean(localCorr2));
+%                 %     var2=norm(localCorr2,'fro');
+%                 %     localCorr2=reshape(localCorr2,size(localCorr2,1)*size(localCorr2,2),1);
+%                 %     pcorr(j)=sum(sum(localCorr.*localCorr2))/var1/var2;
+%                 pcorr(j)=DCorr(localCorr,localCorr2);
+%                 %     pcorr(j)=MGCSampleStat(localCorr,localCorr2);
+%                 %     pcorr(j)=corr(localCorr,localCorr2,'Spearman');
+%             end
+%             [~,ind]=sort(pcorr,'descend');
+%             ind2(k)=ind(1);
+%             ind2(K+k)=ind(2);
+%              ind2(2*K+k)=ind(3);
+%         end
+%         [~,ind2]=hist(ind2,unique(ind2));
+        ind2=find(ind==t);
+% mode(ind2)
+%         if (mode(ind2)==t)
+        if (ind2<=2)
             power(t)=power(t)+1/rep;
         end
     end
@@ -66,15 +78,16 @@ end
 % pre1=strcat(rootDir,'Data/Results/'); % The folder to locate data
 % pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
-MGC=[0,1,0];
-fontSize=18;
-plot(type,power,'.','color',MGC,'markersize',20)
-set(gca,'FontSize',fontSize);
-title('Accuracy of Classifying Dependency','FontSize',fontSize+7);
-xlim([1,20]);
-ylim([0,1]);
-xlabel('Simulation Type');
-ylabel('Accuracy')
+% MGC=[0,1,0];
+% fontSize=18;
+% plot(type,power,'.','color',MGC,'markersize',20)
+% set(gca,'FontSize',fontSize);
+% title('Accuracy of Classifying Dependency','FontSize',fontSize+7);
+% xlim([1,20]);
+% ylim([0,1]);
+% xlabel('Simulation Type');
+% ylabel('Accuracy')
+
 % figNumber='1DPowerSummarySize';
 % F.fname=strcat(pre2,figNumber);
 % F.wh=[4.5 3]*2;
@@ -163,7 +176,7 @@ ylabel('Accuracy')
 %         if type==17
 %             rx=5*ones(n,d);
 %         end
-%         
+% 
 %         if type==8
 %             rx=unifrnd(0,5,n,1);
 %             ry=rx;

@@ -16,14 +16,25 @@ pre2=strcat(rootDir,'Figures/Fig');% The folder to save figures
 
 %%
 if nargin<1
-    select=0;
+    select=1;
 end
 total=20;
 
 %% Set colors
-loca=[0,1,0];
+map3 = brewermap(128,'PiYG'); % brewmap
+MGC='green';
+loca='cyan';
 glob= [0.5,0.5,0.5];
-HHG   = [0.5,0.5,0.5];
+HHG   = 'magenta';
+mcorr='cyan';
+mantel='cyan';
+dcorr='cyan';
+pcorr=[0.8,0.8,0.8];
+mic   = [0.3,0.3,0.3];
+kendall=[0.8,0.8,0.8];
+spearman=[0.8,0.8,0.8];
+hsic='blue';
+
 lw=3;
 ls{1}='-';
 ls{2}='--';
@@ -46,44 +57,56 @@ for j=1:total
     %
     hold on
     if select==1
-        h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
-        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
-        h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
-        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h7=plot(numRange,powerP-powerMGC,ls{3},'LineWidth',3,'Color',mantel);
+        h6=plot(numRange,powerD-powerMGC,ls{2},'LineWidth',3,'Color',dcorr);
+        h5=plot(numRange,powerM-powerMGC,ls{1},'LineWidth',3,'Color',mcorr);
+        %h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        %h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        %h2=plot(numRange,powerMGCM-powerMGC,ls{1},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
+        h8=plot(numRange,powerHHG-powerMGC,ls{4},'LineWidth',3,'Color',HHG);
+        h9=plot(numRange,powerHSIC-powerMGC,ls{3},'LineWidth',3,'Color',hsic);
+        h10=plot(numRange,powerCorr-powerMGC,ls{2},'LineWidth',3,'Color',pcorr);
+        h11=plot(numRange,powerMIC-powerMGC,ls{1},'LineWidth',3,'Color',mic);
     else
-        h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
-        h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
-        h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
-        h3=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
-        h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
-        h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
-        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h7=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
+        h6=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
+        h5=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        h2=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color',MGC);
+        h8=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h9=plot(numRange,powerHSIC,ls{3},'LineWidth',3,'Color',hsic);
+        h10=plot(numRange,powerCorr,ls{2},'LineWidth',3,'Color',pcorr);
+        h11=plot(numRange,powerMIC,ls{1},'LineWidth',3,'Color',mic);
     end
     hold off
     xlim([numRange(1) numRange(end)]);
-    ylim([0 1]);
+    ylim([-1 1]);
     if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
         set(gca,'YTick',[]); % Remove y axis ticks
         set(gca,'XTick',[]); % Remove x axis ticks
     else
         set(gca,'XTick',[numRange(1),numRange(end)]); % Remove x axis ticks
-        set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
+        set(gca,'YTick',[-1,-0.5,0,0.5,1]); % Remove x axis ticks
     end
     set(gca,'FontSize',14);
     title(titlechar,'FontSize',14, ...
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
 end
-xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
-ylabel('Power','position',[-687 2.7],'FontSize',24);
+% xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
+% ylabel('Power','position',[-687 2.7],'FontSize',24);
+xlabel('Sample Size','position',[-270 -1.6],'FontSize',24);
+ylabel('Power','position',[-687 4.5],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
+    h=legend([h1 h6 h5 h8 h9 h7 h10 h11],'MGC','Dcorr','Mcorr','HHG','HSIC','Mantel','Pearson','MIC','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11],'Sample MGC','MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','HSIC','Pearson','MIC','Location',lgdPosition);
 end
 legend boxoff
 set(h,'FontSize',14);
@@ -108,27 +131,37 @@ for j=1:total
     titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     hold on
     if select==1
-        h2=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
-        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
-        h4=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
-        h3=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h7=plot(numRange,powerP-powerMGC,ls{3},'LineWidth',3,'Color',mantel);
+        h6=plot(numRange,powerD-powerMGC,ls{2},'LineWidth',3,'Color',dcorr);
+        h5=plot(numRange,powerM-powerMGC,ls{1},'LineWidth',3,'Color',mcorr);
+        %h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        %h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        %h2=plot(numRange,powerMGCM-powerMGC,ls{1},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
+        h8=plot(numRange,powerHHG-powerMGC,ls{4},'LineWidth',3,'Color',HHG);
+        h9=plot(numRange,powerHSIC-powerMGC,ls{4},'LineWidth',3,'Color',hsic);
+        h10=plot(numRange,powerCorr-powerMGC,ls{4},'LineWidth',3,'Color',pcorr);
+        h11=plot(numRange,powerCCA-powerMGC,ls{3},'LineWidth',3,'Color',pcorr);
     else
-        h6=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
-        h5=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
-        h4=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
-        h3=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
-        h2=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
-        h8=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color','cyan');
-        h7=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h7=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
+        h6=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
+        h5=plot(numRange,powerM,ls{1},'LineWidth',3,'Color',glob);
+        h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
+        h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
+        h2=plot(numRange,powerMGCM,ls{1},'LineWidth',3,'Color',loca);
+        h1=plot(numRange,powerMGC,ls{1},'LineWidth',3,'Color',MGC);
+        h8=plot(numRange,powerHHG,ls{4},'LineWidth',3,'Color',HHG);
+        h9=plot(numRange,powerHSIC,ls{4},'LineWidth',3,'Color',hsic);
+        h10=plot(numRange,powerCorr,ls{4},'LineWidth',3,'Color',pcorr);
+        h11=plot(numRange,powerCCA,ls{3},'LineWidth',3,'Color',pcorr);
     end
     hold off
     xlim([numRange(1) numRange(end)]);
-    ylim([0 1]);
+    ylim([-1 1]);
     if j~=1 % Remove x&y axis ticks except type 16, which is at the left bottom
         set(gca,'YTick',[]); % Remove y axis ticks
     else
-        set(gca,'YTick',[0,0.5,1]); % Remove x axis ticks
+        set(gca,'YTick',[-1,-0.5,0,0.5,1]); % Remove x axis ticks
     end
     set(gca,'XTick',[numRange(1),numRange(end)]); % Remove x axis ticks
     set(gca,'FontSize',14);
@@ -136,15 +169,17 @@ for j=1:total
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
 end
-xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
-ylabel('Power','position',[-720 2.7],'FontSize',24);
+%xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
+%ylabel('Power','position',[-720 2.7],'FontSize',24);
+xlabel('Dimension','position',[-290 -1.6],'FontSize',24);
+ylabel('Power','position',[-720 4.5],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h4 h2 h3],'Oracle MGC','Sample MGC','Mcorr', 'HHG','Location',lgdPosition);
+    h=legend([h1 h6 h5 h8 h9 h7 h10 h11],'MGC','Dcorr','Mcorr','HHG','HSIC','Mantel','Pearson','CCA','Location',lgdPosition);
 else
-    h=legend([h1 h2 h3 h8 h4 h5 h6 h7],'MGC_{M}','MGC_{D}','MGC_{P}','Sample MGC','Mcorr','Dcorr','Mantel','HHG','Location',lgdPosition);
+    h=legend([h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11],'Sample MGC','MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','HSIC','Pearson','CCA','Location',lgdPosition);
 end
 set(h,'FontSize',14);
 legend boxoff

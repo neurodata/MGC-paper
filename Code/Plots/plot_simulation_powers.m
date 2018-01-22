@@ -104,7 +104,7 @@ h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h6 h5 h8 h9 h7 h10 h11],'MGC','Dcorr','Mcorr','HHG','HSIC','Mantel','Pearson','MIC','Location',lgdPosition);
+    h=legend([h1 h6 h5 h7 h8 h9 h10 h11],'MGC','Dcorr','Mcorr','Mantel','HHG','HSIC','Pearson','MIC','Location',lgdPosition);
 else
     h=legend([h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11],'Sample MGC','MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','HSIC','Pearson','MIC','Location',lgdPosition);
 end
@@ -177,7 +177,7 @@ h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
 if select==1;
-    h=legend([h1 h6 h5 h8 h9 h7 h10 h11],'MGC','Dcorr','Mcorr','HHG','HSIC','Mantel','Pearson','CCA','Location',lgdPosition);
+    h=legend([h1 h6 h5 h7 h8 h9 h10 h11],'MGC','Dcorr','Mcorr','Mantel','HHG','HSIC','RV','CCA','Location',lgdPosition);
 else
     h=legend([h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11],'Sample MGC','MGC_{M}','MGC_{D}','MGC_{P}','Mcorr','Dcorr','Mantel','HHG','HSIC','Pearson','CCA','Location',lgdPosition);
 end

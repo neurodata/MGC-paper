@@ -273,28 +273,32 @@
 
 
 
-      class: center, middle
+      class: middle
 
       name:opening
 
-      ### Discovering Relationships and their Structures Across Disparate Data Modalities
+      #### Discovering Relationships and their Geometry Across Disparate Data Modalities
 
-      Cencheng Shen, Youjin Lee, Carey E Priebe, Mauro Maggioni, [Joshua T Vogelstein](mailto:jovo@jhu.edu)
 
+      <!-- .center[ -->
+      presented by,       [joshua t. vogelstein](mailto:jovo@jhu.edu)
       <br>
-
-      .center[
-      <!-- presented by, Joshua T. Vogelstein -->
-      <!-- <br> -->
-      <!-- {[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),kavli,[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/) -->
+      {[bme](http://www.bme.jhu.edu/),[icm](http://icm.jhu.edu/),[cis](http://cis.jhu.edu/),[idies](http://idies.jhu.edu/),[kavli](http://kavlijhu.org/),[cs](http://engineering.jhu.edu/computer-science/), [ams](http://engineering.jhu.edu/ams/), [neuro](http://neuroscience.jhu.edu/)} | [jhu](https://www.jhu.edu/)
       <br>
       please interrupt & ask questions: [jovo@jhu.edu](mailto:jovo at jhu dot edu)!
       <br>
       <br>
 
+      joint work with: Cencheng Shen, Youjin Lee, Shangsi Wang,
+      <br>
+      Qing Wang,
+      Eric Bridgeford,
+      Carey E Priebe, Mauro Maggioni,
+
+      <br>
+
       <http://neurodata.io/tools/MGC/>
 
-      ]
 
       ---
 
@@ -388,21 +392,17 @@
 
       #### Intuitive Desiderata of Testing Procedure
 
-      <br>
+      <!-- <br> -->
 
       1. Performant under *any* joint distribution
         - low- and high-dimensional
         - Euclidean and structured data (eg, sequences, images, networks, shapes)
         - linear and nonlinear relationships
-      <!-- 5. computational efficiency -->
-
-      --
-      6. Reveals the geometry  of dependence
+      6. Reveals the "geometry"  of dependence
+      5. Is computational efficiency
 
 
-      --
-
-      Answers the two motivating questions:
+      Provides a tractable algorithm that addresses the two motivating questions:
 
       - Question 1: are the two related at all?
       - Question 2: how are they related?
@@ -453,59 +453,45 @@
 
 
 
-      ---
-      class: top, left
-
-      ### Our intuition
-
-      - corr finds **globally** linear relationships
-      - gcorr finds **locally** linear relationships
-      - let's help gcorr!
-
-      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 250px;  LEFT: 100px; height: 300px;"/>
-
-
-      <img src="images/spiral.png" alt="Drawing" style="position:absolute;  TOP: 250px; LEFT: 450px; height: 300px;"/>
-
 
       ---
 
       ### local distance correlation
 
-      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 100px; height: 150px;"/>
+      <img src="images/linear.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 100px; height: 180px;"/>
 
       --
 
-      <img src="images/Fig1B.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 270px; height: 150px;"/>
+      <img src="images/Fig1B.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 300px; height: 180px;"/>
+
+      <!-- --
+
+      <img src="images/Fig_centered1Panel2.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 500px; height: 150px;"/> -->
 
       --
 
-      <img src="images/Fig_centered1Panel2.png" alt="Drawing" style="position:absolute; TOP: 150px;  LEFT: 500px; height: 150px;"/>
-
-      --
-
-      <div style="position:absolute; TOP: 150px;  LEFT: 680px; height: 200px;">
-      dcorr(X,Y)=0.15, MGC(X,Y)=0.15
+      <div style="position:absolute; TOP: 150px;  LEFT: 560px; height: 200px;">
+      dcorr(X,Y)=0.15, p-val < 0.001 <br> MGC(X,Y)=0.15,  p-val < 0.001
       </div>
 
 
       --
 
-      <img src="images/spiral.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 100px; height: 150px;"/>
+      <img src="images/spiral.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 100px; height: 180px;"/>
 
       --
 
-      <img src="images/Fig8B.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 270px; height: 150px;"/>
+      <img src="images/Fig8B.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 300px; height: 180px;"/>
+
+      <!-- --
+
+      <img src="images/Fig_centered8Panel2.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 500px; height: 150px;"/> -->
+
 
       --
 
-      <img src="images/Fig_centered8Panel2.png" alt="Drawing" style="position:absolute; TOP: 400px;  LEFT: 500px; height: 150px;"/>
-
-
-      --
-
-      <div style="position:absolute; TOP: 400px;  LEFT: 680px; height: 200px;">
-      dcorr(X,Y)=0.01, MGC(X,Y)= .r[0.13]
+      <div style="position:absolute; TOP: 400px;  LEFT: 560px; height: 200px;">
+      dcorr(X,Y)=0.01, p-val 0.3 <br> MGC(X,Y)= .r[0.13], p-val < .r[0.001]
       </div>
 
 
@@ -514,7 +500,7 @@
       ### multiscale distance correlation
 
       - compute local dcorr **at all scales**
-      - find scale with **max** test statistic
+      - find scale with **max** smoothed test statistic
       - permutation test to determine p-value
 
 
@@ -547,10 +533,11 @@
         - low- and high-dimensional
         - Euclidean and structured data (eg, sequences, images, networks, shapes)
         - linear and nonlinear relationships
-      <!-- 5. computational efficiency -->
-      6. Reveals the geometry  of dependence
+      6. Reveals the "geometry"  of dependence
+      5. Is computational efficiency
 
-      Answers the two motivating questions:
+
+      Provides a tractable algorithm that addresses the two motivating questions:
 
       - Question 1: are the two related at all?
       - Question 2: how are they related?
@@ -564,15 +551,17 @@
       ---
       class: top, left
 
+      ### Definitions
+
+      - **power** is the probability of rejecting the null when the alternative is true
+      <!-- -  $\beta_n(t)$ := power of test statistic $t$ given $n$ samples -->
+      - $N_\beta(t)$ := the # of samples required to achieve power $\beta$ using test statistic $t$
+
+
 
       ### Empirical Desiderata
 
-      1. statistical efficiency
-        - **power** is the probability of rejecting the null when the alternative is true
-        <!-- -  $\beta_n(t)$ := power of test statistic $t$ given $n$ samples -->
-        - $N_\beta(t)$ := the # of samples required to achieve power $\beta$ using test statistic $t$
-        - we desire that
-        $$N\_\beta(t') / N\_\beta( \text{MGC}) \geq 1  \text{ for all }
+      1. statistical efficiency: $$N\_\beta(t') / N\_\beta( \text{MGC}) \geq 1  \text{ for all }
         n, \, d, \, F\_{XY}, \text{ and } t' $$
         <!-- $$\beta\_n(\text{MGC}) > \beta\_n(t')  \text{ for all } -->
         <!-- n, \, t' \in \mathcal{T}, \text{ and } F\_{XY} $$ -->
@@ -599,14 +588,26 @@
       <br><br>
 
 
-      <img src="images/Fig1DPowerSummarySize.png"  alt="local"  style="position:absolute;  LEFT: 60px; height: 280px;"/>
-      --
-      <img src="images/FigHDPowerSummarySize.png"  alt="local"  style="position:absolute;  LEFT: 460px; height: 280px;"/>
+      <img src="images/Fig2_jk.png"  alt="local"  style="position:absolute;  LEFT: 50px; height: 350px;"/>
+      <!-- -- -->
+      <!-- <img src="images/FigHDPowerSummarySize.png"  alt="local"  style="position:absolute;  LEFT: 460px; height: 280px;"/> -->
 
 
       <!-- .center[
       <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPowerMGCM.png" alt="Drawing" style="width: 900px;"/>
       ] -->
+
+      ---
+      class: center
+
+      ###  MGC Outperforms Benchmarks
+
+
+      <br><br>
+
+
+      <img src="images/table_benchmarks.png"  alt="local"  style="position:absolute;  LEFT: 50px; width: 800px;"/>
+
 
 
       ---
@@ -614,7 +615,7 @@
 
       ### MGC Reveals Structure of Dependence
 
-      <img src="images/FigHDHeat.png"  alt="local"  style="width: 95%;"/>
+      <img src="images/Fig1DHeat.png"  alt="local"  style="width: 95%;"/>
 
       <!-- .center[
       <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDHeat.png"  style="width: 900px;"/>
@@ -654,7 +655,8 @@
       |  name | principle |
       |  ---   | --- |
       |  boundedness | $0 \leq t,T \leq 1 $|
-      |  1-determin. | $  T= 1 \Leftrightarrow H(X \lvert Y) = 0 $ |
+      | symmetric   | $T(X,Y) = T(Y,X)$ |
+      |  1-linear. | $  T= 1 \Leftrightarrow y = A x + b$ |
       |  0-indep. | $T=0 \Leftrightarrow H(X \lvert Y) = H(X)$ |
       |  ortho. invar. | $T(X,Y) = T(a_1 + b_1  C_1  X, a_2 + b_2  C_2  Y)$ |
 
@@ -678,7 +680,8 @@
 
       - 0 &geq;  MGC &geq; 1
       - MGC = 0 only under independence
-      - MGC = 1 only under deterministic relationship
+      - MGC is symmetric
+      - MGC = 1 only under linear relationship
       - MGC is invariant to rotation, translation, and scale of X and/or Y
 
 
@@ -693,7 +696,7 @@
 
        <br><br>
 
-       Thm: \\( \beta_n (T^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\)
+       Lemma: \\( \beta_n (T^*) \to 1  \\) as \\( n \to \infty \\) whenever \\( E [X] < \infty \\)
 
       <!-- <img src="images/thm1.png"  style="position:absolute; LEFT: 200px; TOP: 300px; height: 40px;"/> -->
 
@@ -706,7 +709,7 @@
 
       <br><br>
 
-      Thm: If x is linearly dependent on y, then for any n it always holds that
+      Lemma: If x is linearly dependent on y, then for any n it always holds that
       $$ \beta_n(T^*) = \beta_n(T) $$
 
 
@@ -722,7 +725,7 @@
 
       <br><br>
 
-      Thm: There exists f and n such that
+      Lemma: There exists f and n such that
 
       $$\beta_n( T^{k,l} ) > \beta_n(T) $$
 
@@ -774,7 +777,8 @@
       |  name | principle |
       |  ---   | --- |
       |  boundedness | &#x2705;|
-      |  1-determin. | &#x2705; |
+      |  symmetric | &#x2705;|
+      |  linear. | &#x2705; |
       |  0-indep. | &#x2705; |
       |  ortho. invar. | L$_p$ |
       |  univ. consist. | &#x2705;  |
@@ -817,7 +821,7 @@
       ### MGC Reveals Structure of Real Data
 
 
-      <img src="images/FigReal.png" style="width: 880px;"/>
+      <img src="images/Fig4_jk_v5.png" style="width: 880px;"/>
 
 
       ---
@@ -833,14 +837,33 @@
       <br>
       - MGC mitigate "post selection inference" problems
 
+
+      ---
+
+      ### Some Extensions
+
+      <br><br>
+
+      - Foundational theory for MGC [[1]](https://arxiv.org/abs/1710.09768)
+      - MGC for independence between graph topology and attributes [[2](https://arxiv.org/abs/1703.10136)
+      - MGC for signal subgraph detection [[3](https://arxiv.org/abs/1801.07683)
+      - MGC for clustering (ish) [[4]](https://arxiv.org/abs/1710.09859)
+
+      <br>
+
+      - MGC for K-sample testing
+      - MGC for feature selection
+      - MGC for batch effect detection
+      - MGC for effect size characterization
+
+
       ---
 
       ### Next Steps
 
       <br><br>
 
-      - 2-sample test, effect size
-      - Make R package from open source code (on github now)
+      - Make R package from open source code ([github link](https://github.com/neurodata/mgc))
       - Scale up for larger n
 
 
@@ -892,27 +915,27 @@
 
 
 
-      ---
+      <!-- --- -->
 
-      ### 1D Power All
-
-
-      <img src="https://github.com/neurodata/MGC/raw/master/Figures/Fig1DPowerAll.png" alt="Drawing" style="width: 800px;"/>
+      <!-- ### 1D Power All -->
 
 
-      ---
-
-      ### HD Power All
+      <!-- <img src="https://github.com/neurodata/MGC/raw/master/Figures/Fig1DPowerAll.png" alt="Drawing" style="width: 800px;"/> -->
 
 
-      <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPowerAll.png" alt="Drawing" style="width: 800px;"/>
+      <!-- --- -->
+
+      <!-- ### HD Power All -->
 
 
-      ---
+      <!-- <img src="https://github.com/neurodata/MGC/raw/master/Figures/FigHDPowerAll.png" alt="Drawing" style="width: 800px;"/> -->
 
-      ### 1D Heat
 
-      <img src="https://github.com/neurodata/MGC/raw/master/Figures/Fig1DHeat.png" alt="Drawing" style="width: 800px;"/>
+      <!-- --- -->
+
+      <!-- ### 1D Heat -->
+
+      <!-- <img src="https://github.com/neurodata/MGC/raw/master/Figures/Fig1DHeat.png" alt="Drawing" style="width: 800px;"/> -->
 
 
     </textarea>

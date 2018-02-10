@@ -99,7 +99,7 @@ end
 % xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
 % ylabel('Power','position',[-687 2.7],'FontSize',24);
 xlabel('Sample Size','position',[-270 -1.6],'FontSize',24);
-ylabel('Power','position',[-687 4.5],'FontSize',24);
+ylabel('Power Relative to MGC','position',[-687 4.5],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated 1-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position
@@ -172,7 +172,7 @@ end
 %xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
 %ylabel('Power','position',[-720 2.7],'FontSize',24);
 xlabel('Dimension','position',[-290 -1.6],'FontSize',24);
-ylabel('Power','position',[-720 4.5],'FontSize',24);
+ylabel('Power Relative to MGC','position',[-720 4.5],'FontSize',24);
 h=suptitle('Testing Power for 20 Simulated High-Dimensional Settings');
 set(h,'FontSize',24,'FontWeight','normal');
 lgdPosition = [0.03, 0.78, .05, .05]; %Legend Position

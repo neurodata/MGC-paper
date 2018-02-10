@@ -26,9 +26,22 @@ if size(Y,1)~=size(Y,2) || sum(diag(Y).^2)>0
 end
 
 [A,B,RX,RY]=MGCDistTransform(X,Y,option);
-[corr]=LocalCov(A,B',RX,RY'); % compute all local covariances
-[varX]=LocalCov(A,A',RX,RX'); % compute local variances for first data
-[varY]=LocalCov(B,B',RY,RY'); % compute local variances for second data
+% if strcmp(option,'mgc2')
+%     [corr1]=LocalCov(A,B,RX,RY); % compute all local covariances
+%     [varX1]=LocalCov(A,A,RX,RX); % compute local variances for first data
+%     [varY1]=LocalCov(B,B,RY,RY); % compute local variances for second data
+%     [A,B,RX,RY]=MGCDistTransform(X,Y,'mantel');
+%     [corr2]=LocalCov(A,B,RX,RY); % compute all local covariances
+%     [varX2]=LocalCov(A,A,RX,RX); % compute local variances for first data
+%     [varY2]=LocalCov(B,B,RY,RY); % compute local variances for second data
+%     corr=2*corr1-corr2;
+%     varX=2*varX1-varX2;
+%     varY=2*varY1-varY2;
+% else
+    [corr]=LocalCov(A,B',RX,RY'); % compute all local covariances
+    [varX]=LocalCov(A,A',RX,RX'); % compute local variances for first data
+    [varY]=LocalCov(B,B',RY,RY'); % compute local variances for second data
+% end
 varX=diag(varX);
 varY=diag(varY);
 corr=corr./real(sqrt(varX*varY'));

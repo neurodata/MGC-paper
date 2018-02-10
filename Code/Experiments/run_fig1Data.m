@@ -21,7 +21,7 @@ fpath=strrep(fpath,'\','/');
 findex=strfind(fpath,'/');
 rootDir=fpath(1:findex(end-2));
 addpath(genpath(strcat(rootDir,'Code/')));
-
+opt='mgc';
 %type=11;
 %n=50;
 % dim=1;
@@ -34,11 +34,11 @@ for r=1:rep;
     [x, y]=CorrSampleGenerator(type,n,dim,1, noise);
     CA=squareform(pdist(x));
     DA=squareform(pdist(y));
-    tA(:,:,r)=MGCLocalCorr(CA,DA,'mcor');
+    tA(:,:,r)=MGCLocalCorr(CA,DA,opt);
     [x, y]=CorrSampleGenerator(type,n,dim,0, noise);
     CA=squareform(pdist(x));
     DA=squareform(pdist(y));
-    tN(:,:,r)=MGCLocalCorr(CA,DA,'mcor');
+    tN(:,:,r)=MGCLocalCorr(CA,DA,opt);
 end
 powerMLocal=zeros(n,n);
 alpha=0.05;
@@ -66,16 +66,14 @@ C=squareform(pdist(x));
 D=squareform(pdist(y));
 
 % Permutation p-value
-tA=MGCLocalCorr(C,D,'mcor');
-[test]=MGCSampleStat(tA);
+[test, tA]=MGCSampleStat(C,D,opt);
 tN=zeros(rep,n,n);
 testN=zeros(rep,1);
 pMLocal=zeros(n,n);
 pMGC=0;
 for r=1:rep;
     per=randperm(n);
-    tmp=MGCLocalCorr(C,D(per,per),'mcor');
-    tmp2=MGCSampleStat(tmp);
+    [tmp2,tmp]=MGCSampleStat(C,D(per,per),opt);
     tN(r,:,:)=tmp;
     testN(r)=tmp2;
     pMLocal=pMLocal+(tmp>=tA)/rep;

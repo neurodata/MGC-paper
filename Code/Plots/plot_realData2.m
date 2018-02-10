@@ -62,7 +62,7 @@ cmap(4,:) = gr;
 % cmap(3,:) = cy;
 map1=cmap;
 map2 = brewermap(128,'BuPu'); % brewmap
-set(groot,'defaultAxesColorOrder',map2);
+set(groot,'defaultAxesColorOrder',map1);
 
 %% Mantel
 
@@ -96,6 +96,8 @@ end
 minC=min(minC,-maxC);maxC=max(maxC,-minC);
 imagesc(C');
 caxis([minC,maxC]);
+set(groot,'defaultAxesColorOrder',map1);
+colormap(ax,map3);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize); % Remove y axis ticks
 %xlabel('# X Neighbors','FontSize',fontSize, 'Units', 'normalized', ...
@@ -130,7 +132,7 @@ if sameBar~=1
 end
 imagesc(D');
 set(gca,'FontSize',fontSize)
-% colormap(ax,map3);
+colormap(ax,map3);
 caxis([minC,maxC]);
 xlim([1 m]);
 ylim([1 n]);
@@ -147,12 +149,13 @@ mantelH=C.*D;
 % ax=subplot(s,t,9);
 ax=subplot('Position',[left(1), bottom(3), width, height]);
 hold all
-MH=ceil(max(max(mantelH(2:end,2:end))));
-mH=floor(min(min(mantelH(2:end,2:end))));
+MH=ceil(max(max(mantelH(2:end,2:end)))*100)/100;
+mH=floor(min(min(mantelH(2:end,2:end)))*100)/100;
 mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mantelH');
 axis('square')
+colormap(ax,map3);
 % pos = get(ax,'position');
 xlim([1 m]);
 ylim([1 n]);
@@ -183,6 +186,7 @@ minC=min(minC,-maxC);maxC=max(maxC,-minC);
 %ax=subplot('Position',[left(3), bottom(3), width, height]);
 hold all
 imagesc(A');
+colormap(ax,map3);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize); % Remove y axis ticks
 xlim([1 m]);
@@ -208,6 +212,7 @@ else
 end
 minD=min(minD,-maxD);maxD=max(maxD,-minD);
 imagesc(B');
+colormap(ax,map3);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
 xlim([1 m]);
@@ -228,12 +233,14 @@ mH=floor(min(min(mcorrH(2:end,2:end)))*100)/100;
 mH=min(mH,-MH);
 MH=max(MH,-mH);
 imagesc(mcorrH');
+colormap(ax,map3);
 xlim([1 m]);
 ylim([1 n]);
 set(gca,'XTick',[],'YTick',[]); % Remove x axis ticks
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
 title('$$C = A \circ B$$','FontSize',fontSize,'interpreter','latex');
+caxis([mH,MH]);
 %clean_panel(ax,map2,pos,id,n,col,fontSize)
 axis('square')
 
@@ -253,6 +260,7 @@ ax=subplot('Position',[left(3), bottom(1), width, height]);
 %ax=subplot('Position',[left(4), bottom(3), width, height]);
 hold all
 imagesc(A_MGC');
+colormap(ax,map3);
 caxis([minC,maxC]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
@@ -272,6 +280,7 @@ ax=subplot('Position',[left(3), bottom(2), width, height]);
 %ax=subplot('Position',[left(4), bottom(2), width, height]);
 hold all
 imagesc(B_MGC');
+colormap(ax,map3);
 caxis([minD,maxD]);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
@@ -291,6 +300,7 @@ MH=ceil(max(max(C_MGC(2:end,2:end)))*100)/100;
 mH=floor(min(min(C_MGC(2:end,2:end)))*100)/100;
 mH=min(mH,-MH);MH=max(MH,-mH);
 imagesc(C_MGC');
+colormap(ax,map3);
 set(gca,'YDir','normal')
 set(gca,'FontSize',fontSize)
 xlim([1 m]);

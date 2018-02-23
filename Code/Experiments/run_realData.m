@@ -152,7 +152,9 @@ if select==6 || select==7
     
 %     LabelIndAll=LabelIndAll(per)-1;
 %     n=length(LabelIndAll);
-%     error=zeros(m,1);k=11;
+%     error1=zeros(m,1);
+%     error2=zeros(m,1);
+%     k=3;
 %     for i=1:m
 %         tmpLabel=zeros(n,1);
 %         C=squareform(pdist(A(i,per)'));
@@ -165,8 +167,14 @@ if select==6 || select==7
 %             if tmp>floor(k/2)
 %                 tmpLabel(j)=1;
 %             end
+%             if tmpLabel(j)~=LabelIndAll(j)
+%                 if LabelIndAll(j)==1
+%                     error2(i)=error2(i)+1;
+%                 else
+%                     error1(i)=error1(i)+1;
+%                 end
+%             end
 %         end
-%         error(i)=mean(abs(LabelIndAll-tmpLabel));
 %     end
     
     testMGC(:,6)=pMGC;

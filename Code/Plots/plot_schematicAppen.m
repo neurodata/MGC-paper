@@ -340,8 +340,8 @@ ph=tA(kmin:n,kmin:n)';
 %indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
-plot(n-1,n-1,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
-plot(k-1,l-1,'go','markerSize',10,'linewidth',5)
+plot(n-1,n-1,'.','markerSize',40,'MarkerFaceColor',glob,'Color',glob)
+plot(k-1,l-1,'g.','markerSize',40)
 hold off
 
 set(gca,'FontSize',fontSize)
@@ -387,8 +387,8 @@ ph=powerMLocal(kmin:n,kmin:n)';
 indPower=find(ph>=(max(max(ph))-0.03));% All scales of 0.03 power diff with max
 % ph(indPower)=2;
 imagesc(ph);
-plot(n-1,n-1,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
-plot(k-1,l-1,'go','markerSize',10,'linewidth',5)
+plot(n-1,n-1,'.','markerSize',40,'MarkerFaceColor',glob,'Color',glob)
+plot(k-1,l-1,'g.','markerSize',40)
 hold off
 
 set(gca,'FontSize',fontSize)
@@ -445,8 +445,8 @@ set(gca,'XTick',[],'YTick',[])
 % plot([n-1:n-1],[n-2:n-1],'-m','linewidth',12)
 % plot(k,l,'s','color',glob,'markerSize',5,'MarkerFaceColor',glob)
 % plot(k,l,'s','color',loca,'markerSize',5,'MarkerFaceColor',loca)
-plot(n-1,n-1,'.','markerSize',30,'MarkerFaceColor',glob,'Color',glob)
-plot(k-1,l-1,'go','markerSize',10,'linewidth',5)
+plot(n-1,n-1,'.','markerSize',40,'MarkerFaceColor',glob,'Color',glob)
+plot(k-1,l-1,'g.','markerSize',40)
 
 % draw boundary around optimal scale
 %[pval,indP]=MGCScaleVerify(ph,1000);

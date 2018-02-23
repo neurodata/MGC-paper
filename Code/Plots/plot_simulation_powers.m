@@ -25,15 +25,15 @@ map3 = brewermap(128,'PiYG'); % brewmap
 MGC='green';
 loca='cyan';
 glob= [0.5,0.5,0.5];
-HHG   = 'magenta';
-mcorr='cyan';
-mantel='cyan';
-dcorr='cyan';
-pcorr=[0.8,0.8,0.8];
-mic   = [0.3,0.3,0.3];
-kendall=[0.8,0.8,0.8];
-spearman=[0.8,0.8,0.8];
-hsic='blue';
+HHG   = [0.6,0.6,0.6];
+mcorr=[0.3,0.3,0.3];
+mantel=[0.3,0.3,0.3];
+dcorr=[0.3,0.3,0.3];
+pcorr=[0.9,0.9,0.9];
+mic   = [0.9,0.9,0.9];
+kendall=[0.9,0.9,0.9];
+spearman=[0.9,0.9,0.9];
+hsic=[0.6,0.6,0.6];
 
 lw=3;
 ls{1}='-';
@@ -57,17 +57,17 @@ for j=1:total
     %
     hold on
     if select==1
-        h7=plot(numRange,powerP-powerMGC,ls{3},'LineWidth',3,'Color',mantel);
-        h6=plot(numRange,powerD-powerMGC,ls{2},'LineWidth',3,'Color',dcorr);
-        h5=plot(numRange,powerM-powerMGC,ls{1},'LineWidth',3,'Color',mcorr);
+        h7=plot(numRange,powerP-powerMGC,ls{4},'LineWidth',3,'Color',mantel);
+        h6=plot(numRange,powerD-powerMGC,ls{3},'LineWidth',3,'Color',dcorr);
+        h5=plot(numRange,powerM-powerMGC,ls{2},'LineWidth',3,'Color',mcorr);
         %h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
         %h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
         %h2=plot(numRange,powerMGCM-powerMGC,ls{1},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
-        h8=plot(numRange,powerHHG-powerMGC,ls{4},'LineWidth',3,'Color',HHG);
-        h9=plot(numRange,powerHSIC-powerMGC,ls{3},'LineWidth',3,'Color',hsic);
+        h8=plot(numRange,powerHHG-powerMGC,ls{2},'LineWidth',3,'Color',HHG);
+        h9=plot(numRange,powerHSIC-powerMGC,ls{4},'LineWidth',3,'Color',hsic);
         h10=plot(numRange,powerCorr-powerMGC,ls{2},'LineWidth',3,'Color',pcorr);
-        h11=plot(numRange,powerMIC-powerMGC,ls{1},'LineWidth',3,'Color',mic);
+        h11=plot(numRange,powerMIC-powerMGC,ls{4},'LineWidth',3,'Color',mic);
+        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
     else
         h7=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
         h6=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);
@@ -131,17 +131,18 @@ for j=1:total
     titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     hold on
     if select==1
-        h7=plot(numRange,powerP-powerMGC,ls{3},'LineWidth',3,'Color',mantel);
-        h6=plot(numRange,powerD-powerMGC,ls{2},'LineWidth',3,'Color',dcorr);
-        h5=plot(numRange,powerM-powerMGC,ls{1},'LineWidth',3,'Color',mcorr);
+        h7=plot(numRange,powerP-powerMGC,ls{4},'LineWidth',3,'Color',mantel);
+        h6=plot(numRange,powerD-powerMGC,ls{3},'LineWidth',3,'Color',dcorr);
+        h5=plot(numRange,powerM-powerMGC,ls{2},'LineWidth',3,'Color',mcorr);
         %h4=plot(numRange,powerMGCP,ls{3},'LineWidth',3,'Color',loca);
         %h3=plot(numRange,powerMGCD,ls{2},'LineWidth',3,'Color',loca);
         %h2=plot(numRange,powerMGCM-powerMGC,ls{1},'LineWidth',3,'Color',loca);
-        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
-        h8=plot(numRange,powerHHG-powerMGC,ls{4},'LineWidth',3,'Color',HHG);
+        
+        h8=plot(numRange,powerHHG-powerMGC,ls{2},'LineWidth',3,'Color',HHG);
         h9=plot(numRange,powerHSIC-powerMGC,ls{4},'LineWidth',3,'Color',hsic);
-        h10=plot(numRange,powerCorr-powerMGC,ls{4},'LineWidth',3,'Color',pcorr);
-        h11=plot(numRange,powerCCA-powerMGC,ls{3},'LineWidth',3,'Color',pcorr);
+        h10=plot(numRange,powerCorr-powerMGC,ls{2},'LineWidth',3,'Color',pcorr);
+        h11=plot(numRange,powerCCA-powerMGC,ls{4},'LineWidth',3,'Color',pcorr);
+        h1=plot(numRange,powerMGC-powerMGC,ls{1},'LineWidth',3,'Color',MGC);
     else
         h7=plot(numRange,powerP,ls{3},'LineWidth',3,'Color',glob);
         h6=plot(numRange,powerD,ls{2},'LineWidth',3,'Color',glob);

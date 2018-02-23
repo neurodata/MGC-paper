@@ -76,7 +76,7 @@ for j=1:total
             %             plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
             %             plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
             %             plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-            plot(I-1,J-1,'go','markerSize',6,'linewidth',3)
+            plot(I-1,J-1,'g.','markerSize',20,'linewidth',3)
         end
     end
     %plot(nn-1,nn-1,'.','markerSize',24,'MarkerFaceColor',glob,'Color',glob)
@@ -175,7 +175,7 @@ for j=1:total
             %             plot([Xmax,Xmax],[Ymin,Ymax],'g','linewidth',lw)
             %             plot([Xmin,Xmax],[Ymin,Ymin],'g','linewidth',lw)
             %             plot([Xmin,Xmax],[Ymax,Ymax],'g','linewidth',lw)
-            plot(I-1,J-1,'go','markerSize',6,'linewidth',3)
+            plot(I-1,J-1,'g.','markerSize',20,'linewidth',3)
         end
     end
     hold off

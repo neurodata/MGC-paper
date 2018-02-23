@@ -1,4 +1,4 @@
-function [powerMGC,powerDLocal,powerMLocal,powerPLocal,powerD,powerM,powerP,powerHHG,powerHSIC]=CorrIndTestDim(type,n,dim,lim,rep1, rep2,noise,alpha,option)
+function [powerMGC,powerDLocal,powerMLocal,powerPLocal,powerD,powerM,powerP,powerHHG,powerHSIC]=CorrIndTestDim(type,n,dim,lim,rep,noise,alpha,option)
 % Author: Cencheng Shen
 % Independence Tests for identifying dependency, with respect to increasing dimension at a fixed sample size.
 % The output are the empirical powers of MGC{dcorr/mcorr/Mantel}, and global dcorr/mcorr/Mantel/HHG.
@@ -13,20 +13,17 @@ function [powerMGC,powerDLocal,powerMLocal,powerPLocal,powerD,powerM,powerP,powe
 % noise specifies the noise level, by default 1,
 % alpha specifies the type 1 error level,
 % option specifies whether each test statistic is calculated or not.
-if nargin<5 || rep1<=0;
-    rep1=1000;
+if nargin<5 || rep<=0;
+    rep=1000;
 end
-if nargin<6 || rep2<=0;
-    rep2=1000;
-end
-if nargin<7
+if nargin<6
     noise=0; % Default noise level
 end
-if nargin<8
+if nargin<7
     alpha=0.05; % Default type 1 error level
 end
-if nargin<9
-    option=[1,0,1,0,0,0,0]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} or HHG.
+if nargin<8
+    option=[1,1,1,1,1,1,1]; % Default option. Setting any to 0 to disable the calculation of MGC{mcorr/dcorr/Mantel} or HHG.
 end
 
 if lim==0
@@ -49,7 +46,7 @@ neighborhoods=ones(3,lim);
 % [~,~,~,~,~,~,neighborhoods]=IndependenceTestDim(type,n,dimRange,lim,rep1, noise,alpha); % Estimated optimal neighborhoods at each sample size.
 
 % Run the independence test again for the testing powers
-[powerMGC,powerMGC2, powerMGC3,powerDLocal, powerMLocal, powerPLocal, powerHHG,powerHSIC,powerCorr,powerCCA]=IndependenceTestDim(type,n,dimRange,lim,rep2, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
+[powerMGC,powerMGC2, powerMGC3,powerDLocal, powerMLocal, powerPLocal, powerHHG,powerHSIC,powerCorr,powerCCA]=IndependenceTestDim(type,n,dimRange,lim,rep, noise,alpha,option); % Powers for all local tests of dcorr/mcorr/Mantel, and HHG
 
 % From the powers of all local tests, get the powers of MGC based on the optimal neighborhood estimation, and the powers of the respective global test
 for i=1:lim
@@ -86,7 +83,7 @@ addpath(genpath(strcat(rootDir,'Code/')));
 
 pre1=strcat(rootDir,'Data/Results/');% The folder to save figures
 filename=strcat(pre1,'CorrIndTestDimType',num2str(type),'N',num2str(n),'Dim');
-save(filename,'powerCorr','powerMGC2', 'powerMGC3','powerCCA','powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerHSIC','powerMGC','type','n','rep1','rep2','lim','dim','noise','alpha','option','dimRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
+save(filename,'powerCorr','powerMGC2', 'powerMGC3','powerCCA','powerMGCD','powerMGCM','powerMGCP','powerD','powerM','powerP','powerHHG','powerHSIC','powerMGC','type','n','rep','lim','dim','noise','alpha','option','dimRange','neighborhoods','powerDLocal','powerMLocal','powerPLocal');
 
 function [powerMGC,powerMGC2, powerMGC3,powerD, powerM, powerP, powerHHG,powerHSIC,powerCorr,powerCCA,neighbor]=IndependenceTestDim(type,n,dimRange,lim,rep, noise,alpha,option)
 % This is an auxiliary function of the main function to calculate the powers of

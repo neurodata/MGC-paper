@@ -49,10 +49,28 @@ end
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
+% power_Mantel=zeros(20,20);
+% power_DCorr=zeros(20,20);
+% power_MCorr=zeros(20,20);
+% power_MGC=zeros(20,20);
+% power_MGC_Mantel=zeros(20,20);
+% power_HHG=zeros(20,20);
+% power_HSIC=zeros(20,20);
+% power_Corr=zeros(20,20);
+% power_MIC=zeros(20,20);
 for j=1:total
     filename=strcat(pre1,'CorrIndTestType',num2str(j),'N100Dim1.mat');
     load(filename)
-    subplot(s,t,j)
+%         power_Mantel(j,:)=powerP;
+%     power_DCorr(j,:)=powerD;
+%     power_MCorr(j,:)=powerM;
+%     power_MGC(j,:)=powerMGC;
+%     power_MGC_Mantel(j,:)=powerMGC3;
+%     power_HHG(j,:)=powerHHG;
+%     power_HSIC(j,:)=powerHSIC;
+%     power_Corr(j,:)=powerCorr;
+%     power_MIC(j,:)=powerMIC;
+%     subplot(s,t,j)
     titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     %
     hold on
@@ -96,6 +114,7 @@ for j=1:total
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
 end
+% save(strcat(pre1,'data1.mat'));
 % xlabel('Sample Size','position',[-270 -0.2],'FontSize',24);
 % ylabel('Power','position',[-687 2.7],'FontSize',24);
 xlabel('Sample Size','position',[-270 -1.6],'FontSize',24);
@@ -123,10 +142,28 @@ end
 figure('units','normalized','position',[0 0 1 1])
 s=4;
 t=5;
-for j=1:total
+% power_Mantel=zeros(20,21);
+% power_DCorr=zeros(20,21);
+% power_MCorr=zeros(20,21);
+% power_MGC=zeros(20,21);
+% power_MGC_Mantel=zeros(20,21);
+% power_HHG=zeros(20,21);
+% power_HSIC=zeros(20,21);
+% power_Corr=zeros(20,21);
+% power_MIC=zeros(20,21);
+for j=1:total   
     filename=strcat(pre1,'CorrIndTestDimType',num2str(j),'N100Dim.mat');
     load(filename)
     numRange=dimRange;
+%         power_Mantel(j,1:length(numRange))=powerP;
+%     power_DCorr(j,1:length(numRange))=powerD;
+%     power_MCorr(j,1:length(numRange))=powerM;
+%     power_MGC(j,1:length(numRange))=powerMGC;
+%     power_MGC_Mantel(j,1:length(numRange))=powerMGC3;
+%     power_HHG(j,1:length(numRange))=powerHHG;
+%     power_HSIC(j,1:length(numRange))=powerHSIC;
+%     power_Corr(j,1:length(numRange))=powerCorr;
+%     power_MIC(j,1:20)=powerMIC;
     subplot(s,t,j)
     titlechar=strcat(num2str(j),'.',{' '},CorrSimuTitle(j));
     hold on
@@ -170,6 +207,7 @@ for j=1:total
         'Units', 'normalized','Position', [0 1.05], 'HorizontalAlignment', 'left')
     axis('square');
 end
+% save(strcat(pre1,'data2.mat'));
 %xlabel('Dimension','position',[-290 -0.2],'FontSize',24);
 %ylabel('Power','position',[-720 2.7],'FontSize',24);
 xlabel('Dimension','position',[-290 -1.6],'FontSize',24);
